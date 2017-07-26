@@ -33,4 +33,4 @@ xyz/openbmc_project/Power/Fault/error.cpp: ${srcdir}/xyz/openbmc_project/Power/F
 	@mkdir -p `dirname $@`
 	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-cpp xyz.openbmc_project.Power.Fault > $@
 
-SUBDIRS = . power-sequencer test
+SUBDIRS = . power-sequencer power-supply test
