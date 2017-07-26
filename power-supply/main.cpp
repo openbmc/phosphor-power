@@ -18,17 +18,20 @@
 #include <systemd/sd-daemon.h>
 #include "argument.hpp"
 #include "event.hpp"
+#include "power_supply.hpp"
+#include "device_monitor.hpp"
 
 using namespace witherspoon::power;
 using namespace phosphor::logging;
 
 int main(int argc, char* argv[])
 {
-    auto rc = -1;
     auto options = ArgumentParser(argc, argv);
 
     auto objpath = (options)["path"];
-    if (argc < 2)
+    auto instnum = (options)["instance"];
+    auto invpath = (options)["inventory"];
+    if (argc < 4)
     {
         std::cerr << std::endl << "Too few arguments" << std::endl;
         options.usage(argv);
@@ -41,6 +44,24 @@ int main(int argc, char* argv[])
         return -2;
     }
 
+    if (instnum == ArgumentParser::emptyString)
+    {
+        log<level::ERR>("Device monitoring instance number argument required");
+        return -3;
+    }
+
+    if (invpath == ArgumentParser::emptyString)
+    {
+        log<level::ERR>("Device monitoring inventory path argument required");
+        return -4;
+    }
+
+    auto objname = "power_supply" + instnum;
+    auto instance = std::stoul(instnum);
+    auto psuDevice = std::make_unique<psu::PowerSupply>(objname,
+                                                        std::move(instance),
+                                                        std::move(objpath),
+                                                        std::move(invpath));
     auto bus = sdbusplus::bus::new_default();
     sd_event* events = nullptr;
 
@@ -49,7 +70,7 @@ int main(int argc, char* argv[])
     {
         log<level::ERR>("Failed call to sd_event_default()",
                         entry("ERROR=%s", strerror(-r)));
-        return -3;
+        return -5;
     }
 
     witherspoon::power::event::Event eventPtr{events};
@@ -58,14 +79,11 @@ int main(int argc, char* argv[])
     //handle both sd_events (for the timers) and dbus signals.
     bus.attach_event(eventPtr.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    r = sd_event_loop(eventPtr.get());
-    if (r < 0)
-    {
-        log<level::ERR>("Failed call to sd_event_loop",
-                        entry("ERROR=%s", strerror(-r)));
-    }
+    // TODO: Use inventory path to subscribe to signal change for power supply presence.
 
-    rc = 0;
+    auto pollInterval = std::chrono::milliseconds(1000);
+    DeviceMonitor mainloop(std::move(psuDevice), eventPtr, pollInterval);
+    mainloop.run();
 
-    return rc;
+    return 0;
 }

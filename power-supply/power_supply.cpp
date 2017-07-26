@@ -15,12 +15,24 @@
  */
 #include "power_supply.hpp"
 
-namespace phosphor
+namespace witherspoon
 {
 namespace power
 {
 namespace psu
 {
+
+void PowerSupply::analyze()
+{
+    //TODO analyze() needs to be implemented in this class.
+    return;
+}
+
+void PowerSupply::clearFaults()
+{
+    //TODO
+    return;
+}
 
 }
 }

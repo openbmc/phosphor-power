@@ -65,19 +65,26 @@ void ArgumentParser::usage(char** argv)
 {
     std::cerr << "Usage: " << argv[0] << " [options]\n";
     std::cerr << "Options:\n";
-    std::cerr << "    --help               print this menu\n";
-    std::cerr << "    --path=<objpath>     path to location to monitor\n";
+    std::cerr << "    --help                           print this menu\n";
+    std::cerr << "    --path=<objpath>                 path to location to "
+                 "monitor\n";
+    std::cerr << "    --instance=<instance number>     Instance number for this"
+                 " power supply\n";
+    std::cerr << "    --inventory=<inventory path>     Inventory path for this"
+                 " power supply\n";
     std::cerr << std::flush;
 }
 
 const option ArgumentParser::options[] =
 {
-    { "path",   required_argument,  NULL,   'p' },
-    { "help",   no_argument,        NULL,   'h' },
+    { "path",       required_argument,  NULL,   'p' },
+    { "instance",   required_argument,  NULL,   'n' },
+    { "inventory",  required_argument,  NULL,   'i' },
+    { "help",       no_argument,        NULL,   'h' },
     { 0, 0, 0, 0},
 };
 
-const char* ArgumentParser::optionStr = "p:h";
+const char* ArgumentParser::optionStr = "p:n:i:h";
 
 const std::string ArgumentParser::trueString = "true";
 const std::string ArgumentParser::emptyString = "";
