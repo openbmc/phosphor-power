@@ -10,6 +10,7 @@ libpower_la_CXXFLAGS = \
 	$(SDBUSPLUS_CFLAGS)
 
 libpower_la_SOURCES = \
+	pmbus.cpp \
 	timer.cpp \
 	utility.cpp
 
