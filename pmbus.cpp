@@ -48,17 +48,24 @@ std::string PMBus::insertPageNum(const std::string& templateName,
     return name;
 }
 
-bool PMBus::readBitInPage(const std::string& name, size_t page)
+bool PMBus::readBitInPage(const std::string& name,
+                          size_t page,
+                          Type type)
 {
     auto pagedBit = insertPageNum(name, page);
-    return readBit(pagedBit);
+    return readBit(pagedBit, type);
 }
 
-bool PMBus::readBit(const std::string& name)
+bool PMBus::readBit(const std::string& name, Type type)
 {
     unsigned long int value = 0;
     std::ifstream file;
     fs::path path{basePath};
+
+    if (type == Type::Hwmon)
+    {
+        path /= hwmonRelPath;
+    }
 
     path /= name;
 
@@ -103,10 +110,15 @@ bool PMBus::readBit(const std::string& name)
     return value != 0;
 }
 
-void PMBus::write(const std::string& name, int value)
+void PMBus::write(const std::string& name, int value, Type type)
 {
     std::ofstream file;
     fs::path path{basePath};
+
+    if (type == Type::Hwmon)
+    {
+        path /= hwmonRelPath;
+    }
 
     path /= name;
 
@@ -132,6 +144,35 @@ void PMBus::write(const std::string& name, int value)
                            WriteFailure::CALLOUT_DEVICE_PATH(
                                fs::canonical(basePath).c_str()));
     }
+}
+
+void PMBus::findHwmonRelativePath()
+{
+    fs::path path{basePath};
+    path /= "hwmon";
+
+    //look for <basePath>/hwmon/hwmonN/
+    for (auto& f : fs::directory_iterator(path))
+    {
+        if ((f.path().filename().string().find("hwmon") !=
+            std::string::npos) &&
+            (fs::is_directory(f.path())))
+        {
+            hwmonRelPath = "hwmon";
+            hwmonRelPath /= f.path().filename();
+            break;
+        }
+    }
+
+    //Don't really want to crash here, just log it
+    //and let accesses fail later
+    if (hwmonRelPath.empty())
+    {
+        log<level::ERR>("Unable to find hwmon directory "
+                        "in device base path",
+                        entry("DEVICE_PATH=%s", basePath.c_str()));
+    }
+
 }
 
 }
