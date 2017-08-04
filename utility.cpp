@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include "elog-errors.hpp"
 #include "utility.hpp"
 
 namespace witherspoon
@@ -25,8 +27,14 @@ namespace util
 constexpr auto MAPPER_BUSNAME = "xyz.openbmc_project.ObjectMapper";
 constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
+constexpr auto SYSTEMD_SERVICE   = "org.freedesktop.systemd1";
+constexpr auto SYSTEMD_ROOT      = "/org/freedesktop/systemd1";
+constexpr auto SYSTEMD_INTERFACE = "org.freedesktop.systemd1.Manager";
+constexpr auto POWEROFF_TARGET   = "obmc-chassis-hard-poweroff@0.target";
 
 using namespace phosphor::logging;
+using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
+
 
 std::string getService(const std::string& path,
                        const std::string& interface,
@@ -65,6 +73,24 @@ std::string getService(const std::string& path,
 
     return response.begin()->first;
 }
+
+
+void powerOff(sdbusplus::bus::bus& bus)
+{
+    log<level::INFO>("Powering off due to a power fault");
+    report<Shutdown>();
+
+    auto method = bus.new_method_call(SYSTEMD_SERVICE,
+            SYSTEMD_ROOT,
+            SYSTEMD_INTERFACE,
+            "StartUnit");
+
+    method.append(POWEROFF_TARGET);
+    method.append("replace");
+
+    bus.call_noreply(method);
+}
+
 
 }
 }
