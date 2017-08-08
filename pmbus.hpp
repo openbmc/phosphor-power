@@ -12,6 +12,8 @@ namespace pmbus
 namespace fs = std::experimental::filesystem;
 
 constexpr auto STATUS_WORD = "status0";
+// The file name Linux uses to capture the VIN_UV_FAULT bit from the STATUS_WORD
+constexpr auto VIN_UV_FAULT = "in1_alarm";
 
 // Uses Page substitution
 constexpr auto STATUS_VOUT = "statusP_vout";
