@@ -1,4 +1,5 @@
 #pragma once
+#include <sdbusplus/bus/match.hpp>
 #include "device.hpp"
 #include "pmbus.hpp"
 
@@ -8,6 +9,8 @@ namespace power
 {
 namespace psu
 {
+
+namespace sdbusRule = sdbusplus::bus::match::rules;
 
 /**
  * @class PowerSupply
@@ -35,11 +38,7 @@ class PowerSupply : public Device
         PowerSupply(const std::string& name, size_t inst,
                     const std::string& objpath,
                     const std::string& invpath,
-                    sdbusplus::bus::bus& bus)
-            : Device(name, inst), monitorPath(objpath), inventoryPath(invpath),
-            bus(bus), pmbusIntf(objpath)
-        {
-        }
+                    sdbusplus::bus::bus& bus);
 
         /**
          * Power supply specific function to analyze for faults/errors.
@@ -84,6 +83,14 @@ class PowerSupply : public Device
         witherspoon::pmbus::PMBus pmbusIntf;
 
         /**
+         * @brief True if the power supply is present.
+         */
+        bool present = false;
+
+        /** @brief Used to subscribe to dbus pcap propety changes **/
+        std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
+
+        /**
          * @brief Has a PMBus read failure already been logged?
          */
         bool readFailLogged = false;
@@ -103,6 +110,24 @@ class PowerSupply : public Device
          * STATUS_WORD command response.
          */
         bool inputFault = false;
+
+        /** @brief Callback for inventory property changes
+         *
+         * Process change of Present property for power supply.
+         *
+         * @param[in]  msg - Data associated with Present change signal
+         *
+         */
+        void inventoryChanged(sdbusplus::message::message& msg);
+
+        /**
+         * Updates the presence status by querying D-Bus
+         *
+         * The D-Bus inventory properties for this power supply will be read to
+         * determine if the power supply is present or not and update this
+         * objects present member variable to reflect current status.
+         */
+        void updatePresence();
 };
 
 }

@@ -544,13 +544,22 @@ namespace Fault
 namespace _PowerSupplyUnderVoltageFault
 {
 
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
 
 }  // namespace _PowerSupplyUnderVoltageFault
 
 struct PowerSupplyUnderVoltageFault
 {
     static constexpr auto L = level::ERR;
-    using metadata_types = std::tuple<>;
+    using RAW_STATUS = _PowerSupplyUnderVoltageFault::RAW_STATUS;
+    using metadata_types = std::tuple<RAW_STATUS>;
 
 };
 

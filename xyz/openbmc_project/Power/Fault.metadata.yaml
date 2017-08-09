@@ -1,5 +1,8 @@
 - name: PowerSupplyUnderVoltageFault
   level: ERR
+  meta:
+    - str: "RAW_STATUS=%s"
+      type: string
 - name: Shutdown
   level: ERR
 
