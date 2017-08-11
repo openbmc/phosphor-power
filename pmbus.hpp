@@ -9,14 +9,18 @@ namespace witherspoon
 namespace pmbus
 {
 
+namespace fs = std::experimental::filesystem;
+
 /**
  * If the access should be done in the base
- * device directory or the hwmon directory.
+ * device directory, the hwmon directory, or
+ * the debug director.
  */
 enum class Type
 {
     Base,
-    Hwmon
+    Hwmon,
+    Debug
 };
 
 /**
@@ -48,7 +52,7 @@ class PMBus
         PMBus(const std::string& path) :
             basePath(path)
         {
-            findHwmonRelativePath();
+            findHwmonDir();
         }
 
         /**
@@ -57,7 +61,7 @@ class PMBus
          *
          * @param[in] name - path concatenated to
          *                   basePath to read
-         * @param[in] type - either Base or Hwmon
+         * @param[in] type - one of Base, Hwmon, or Debug
          *
          * @return bool - false if result was 0, else true
          */
@@ -71,7 +75,7 @@ class PMBus
          * @param[in] name - path concatenated to
          *                   basePath to read
          * @param[in] page - page number
-         * @param[in] type - either Base or Hwmon
+         * @param[in] type - one of Base, Hwmon, or Debug
          *
          * @return bool - false if result was 0, else true
          */
@@ -86,7 +90,7 @@ class PMBus
          * @param[in] name - path concatenated to
          *                   basePath to write
          * @param[in] value - the value to write
-         * @param[in] type - either Base or Hwmon
+         * @param[in] type - one of Base, Hwmon, or Debug
          */
         void write(const std::string& name, int value, Type type);
 
@@ -118,19 +122,33 @@ class PMBus
          * Finds the path relative to basePath to the hwmon directory
          * for the device and stores it in hwmonRelPath.
          */
-         void findHwmonRelativePath();
+         void findHwmonDir();
+
+        /**
+         * Returns the path to use for the passed in type.
+         *
+         * @param[in] type - one of Base, Hwmon, or Debug
+         *
+         * @return fs::path - the full path to Base, Hwmon, or Debug path
+         */
+         fs::path getPath(Type type);
 
     private:
 
         /**
          * The sysfs device path
          */
-        std::experimental::filesystem::path basePath;
+        fs::path basePath;
 
         /**
-         * The relative (to basePath) path to the hwmon directory
+         * The directory name under the basePath hwmon directory
          */
-        std::experimental::filesystem::path hwmonRelPath;
+        fs::path hwmonDir;
+
+        /**
+         * The pmbus debug path with status files
+         */
+        const fs::path debugPath = "/sys/kernel/debug/pmbus/";
 
 };
 

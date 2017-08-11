@@ -48,6 +48,24 @@ std::string PMBus::insertPageNum(const std::string& templateName,
     return name;
 }
 
+fs::path PMBus::getPath(Type type)
+{
+    switch (type)
+    {
+        default:
+            /* fall through */
+        case Type::Base:
+            return basePath;
+            break;
+        case Type::Hwmon:
+            return basePath / "hwmon" / hwmonDir;
+            break;
+        case Type::Debug:
+            return debugPath / hwmonDir;
+            break;
+    }
+}
+
 bool PMBus::readBitInPage(const std::string& name,
                           size_t page,
                           Type type)
@@ -60,12 +78,7 @@ bool PMBus::readBit(const std::string& name, Type type)
 {
     unsigned long int value = 0;
     std::ifstream file;
-    fs::path path{basePath};
-
-    if (type == Type::Hwmon)
-    {
-        path /= hwmonRelPath;
-    }
+    fs::path path = getPath(type);
 
     path /= name;
 
@@ -113,12 +126,7 @@ bool PMBus::readBit(const std::string& name, Type type)
 void PMBus::write(const std::string& name, int value, Type type)
 {
     std::ofstream file;
-    fs::path path{basePath};
-
-    if (type == Type::Hwmon)
-    {
-        path /= hwmonRelPath;
-    }
+    fs::path path = getPath(type);
 
     path /= name;
 
@@ -146,7 +154,7 @@ void PMBus::write(const std::string& name, int value, Type type)
     }
 }
 
-void PMBus::findHwmonRelativePath()
+void PMBus::findHwmonDir()
 {
     fs::path path{basePath};
     path /= "hwmon";
@@ -158,15 +166,14 @@ void PMBus::findHwmonRelativePath()
             std::string::npos) &&
             (fs::is_directory(f.path())))
         {
-            hwmonRelPath = "hwmon";
-            hwmonRelPath /= f.path().filename();
+            hwmonDir = f.path().filename();
             break;
         }
     }
 
     //Don't really want to crash here, just log it
     //and let accesses fail later
-    if (hwmonRelPath.empty())
+    if (hwmonDir.empty())
     {
         log<level::ERR>("Unable to find hwmon directory "
                         "in device base path",
