@@ -1,5 +1,7 @@
 - name: PowerSupplyUnderVoltageFault
   description: The power supply has indicated an input or under voltage fault condition.
+- name: PowerSupplyInputFault
+  description: The power supply has indicated an input fault or warn condition.
 - name: Shutdown
   description: A power off was issued because a power fault was detected
 

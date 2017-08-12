@@ -46,8 +46,6 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     : Device(name, inst), monitorPath(objpath), inventoryPath(invpath),
       bus(bus), pmbusIntf(objpath)
 {
-    updatePresence();
-
     using namespace sdbusplus::bus;
     auto present_obj_path = INVENTORY_OBJ_PATH + inventoryPath;
     presentMatch = std::make_unique<match_t>(bus,
@@ -58,6 +56,8 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     {
         this->inventoryChanged(msg);
     });
+
+    updatePresence();
 }
 
 void PowerSupply::analyze()
@@ -76,11 +76,12 @@ void PowerSupply::analyze()
             // If count reaches 3, we have fault. If count reaches 0, fault is
             // cleared.
 
-            //TODO: INPUT FAULT or WARNING bit to check from STATUS_WORD
-            // pmbus-core update to read high byte of STATUS_WORD?
+            auto curInputFault = pmbusIntf.readBit(INPUT_FAULT_WARN,
+                                                   Type::Hwmon);
 
-            if ((curUVFault != vinUVFault) || inputFault)
+            if (curUVFault != vinUVFault)
             {
+                vinUVFault = curUVFault;
 
                 if (curUVFault)
                 {
@@ -103,8 +104,37 @@ void PowerSupply::analyze()
                     log<level::INFO>("VIN_UV_FAULT cleared",
                                      entry("POWERSUPPLY=%s",
                                            inventoryPath.c_str()));
-                    vinUVFault = false;
                 }
+
+            }
+
+            if (curInputFault != inputFault)
+            {
+                if (curInputFault)
+                {
+                    std::uint16_t statusWord = 0;
+                    std::uint8_t  statusInput = 0;
+
+                    statusWord = pmbusIntf.read(STATUS_WORD, Type::Debug);
+                    statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
+
+                    util::NamesValues nv;
+                    nv.add("STATUS_WORD", statusWord);
+                    nv.add("STATUS_INPUT", statusInput);
+
+                    using metadata = xyz::openbmc_project::Power::Fault::
+                            PowerSupplyInputFault;
+
+                    report<PowerSupplyInputFault>(
+                            metadata::RAW_STATUS(nv.get().c_str()));
+
+                    inputFault = true;
+                }
+                else
+                {
+                    inputFault = false;
+                }
+
             }
         }
     }
@@ -138,6 +168,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         {
             readFailLogged = false;
             vinUVFault = false;
+            inputFault = false;
         }
     }
 
