@@ -21,6 +21,26 @@ namespace Fault
 {
 namespace Error
 {
+    struct PowerOnFailure;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
     struct Shutdown;
 } // namespace Error
 } // namespace Fault
@@ -70,6 +90,44 @@ template <>
 struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::Shutdown>
 {
     using type = xyz::openbmc_project::Power::Fault::Shutdown;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _PowerOnFailure
+{
+
+
+}  // namespace _PowerOnFailure
+
+struct PowerOnFailure
+{
+    static constexpr auto L = level::ERR;
+    using metadata_types = std::tuple<>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerOnFailure>
+{
+    using type = xyz::openbmc_project::Power::Fault::PowerOnFailure;
 };
 
 }

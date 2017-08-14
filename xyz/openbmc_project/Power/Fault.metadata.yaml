@@ -1,2 +1,4 @@
 - name: Shutdown
   level: ERR
+- name: PowerOnFailure
+  level: ERR

@@ -1,2 +1,4 @@
 - name: Shutdown
   description: A power off was issued because a power fault was detected
+- name: PowerOnFailure
+  description: System power failed to turn on
