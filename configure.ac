@@ -32,5 +32,5 @@ AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
 LT_INIT # Required for systemd linking
 
 # Create configured output
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile power-sequencer/Makefile])
 AC_OUTPUT

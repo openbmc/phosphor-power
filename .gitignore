@@ -24,3 +24,5 @@ i586-openbmc-linux-libtool
 ltmain.sh
 missing
 stamp-h1
+witherspoon-pseq-monitor
+xyz/openbmc_project/Power/Fault/
