@@ -15,9 +15,12 @@
  */
 #include <chrono>
 #include <iostream>
+#include <phosphor-logging/log.hpp>
 #include "argument.hpp"
+#include "pgood_monitor.hpp"
 
 using namespace witherspoon::power;
+using namespace phosphor::logging;
 
 int main(int argc, char** argv)
 {
@@ -40,5 +43,20 @@ int main(int argc, char** argv)
 
     std::chrono::seconds interval{i};
 
-    return EXIT_SUCCESS;
+    sd_event* e = nullptr;
+    auto r = sd_event_default(&e);
+    if (r < 0)
+    {
+        log<level::ERR>("sd_event_default() failed",
+                        entry("ERROR=%s", strerror(-r)));
+        exit(EXIT_FAILURE);
+    }
+
+    event::Event event{e};
+    auto bus = sdbusplus::bus::new_default();
+    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+
+    PGOODMonitor monitor{bus, event, interval};
+
+    return monitor.run();
 }
