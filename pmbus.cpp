@@ -195,15 +195,21 @@ void PMBus::findHwmonDir()
     fs::path path{basePath};
     path /= "hwmon";
 
-    //look for <basePath>/hwmon/hwmonN/
-    for (auto& f : fs::directory_iterator(path))
+    // Make sure the directory exists, otherwise for things that can be
+    // dynamically present or not present an exception will be thrown if the
+    // hwmon directory is not there, resulting in a program termination.
+    if (fs::is_directory(path))
     {
-        if ((f.path().filename().string().find("hwmon") !=
-             std::string::npos) &&
-            (fs::is_directory(f.path())))
+        //look for <basePath>/hwmon/hwmonN/
+        for (auto& f : fs::directory_iterator(path))
         {
-            hwmonDir = f.path().filename();
-            break;
+            if ((f.path().filename().string().find("hwmon") !=
+                 std::string::npos) &&
+                (fs::is_directory(f.path())))
+            {
+                hwmonDir = f.path().filename();
+                break;
+            }
         }
     }
 
@@ -211,9 +217,9 @@ void PMBus::findHwmonDir()
     //and let accesses fail later
     if (hwmonDir.empty())
     {
-        log<level::ERR>("Unable to find hwmon directory "
-                        "in device base path",
-                        entry("DEVICE_PATH=%s", basePath.c_str()));
+        log<level::INFO>("Unable to find hwmon directory "
+                         "in device base path",
+                         entry("DEVICE_PATH=%s", basePath.c_str()));
     }
 
 }
