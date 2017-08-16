@@ -180,8 +180,20 @@ void PowerSupply::updatePresence()
     // Use getProperty utility function to get presence status.
     std::string path = INVENTORY_OBJ_PATH + inventoryPath;
     std::string service = "xyz.openbmc_project.Inventory.Manager";
-    util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, path,
-                      service, bus, this->present);
+
+    try
+    {
+        util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, path,
+                          service, bus, this->present);
+    }
+    catch (std::exception& e)
+    {
+        // If we happen to be trying to update presence just as it is being
+        // updated, we may encounter a runtime_error. Just catch that for
+        // now, let the inventoryChanged signal handler update presence later.
+        present = false;
+    }
+
 }
 
 void PowerSupply::clearFaults()
