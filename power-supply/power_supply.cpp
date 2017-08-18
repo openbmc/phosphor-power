@@ -39,12 +39,21 @@ namespace psu
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 constexpr auto INVENTORY_INTERFACE = "xyz.openbmc_project.Inventory.Item";
 constexpr auto PRESENT_PROP = "Present";
+constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
+constexpr auto POWER_INTERFACE = "org.openbmc.control.Power";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
-                         const std::string& objpath, const std::string& invpath,
-                         sdbusplus::bus::bus& bus)
-    : Device(name, inst), monitorPath(objpath), inventoryPath(invpath),
-      bus(bus), pmbusIntf(objpath)
+                         const std::string& objpath,
+                         const std::string& invpath,
+                         sdbusplus::bus::bus& bus,
+                         event::Event& e,
+                         std::chrono::seconds& t)
+    : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
+      inventoryPath(invpath), bus(bus), event(e), powerOnInterval(t),
+      powerOnTimer(e, [this]()
+                   {
+                       this->powerOn = true;
+                   })
 {
     using namespace sdbusplus::bus;
     auto present_obj_path = INVENTORY_OBJ_PATH + inventoryPath;
@@ -53,12 +62,25 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                                                      present_obj_path,
                                                      INVENTORY_INTERFACE),
                                              [this](auto& msg)
-    {
-        this->inventoryChanged(msg);
-    });
-
+                                             {
+                                                 this->inventoryChanged(msg);
+                                             });
+    // Get initial presence state.
     updatePresence();
+
+    // Subscribe to power state changes
+    powerOnMatch = std::make_unique<match_t>(bus,
+                                             match::rules::propertiesChanged(
+                                                     POWER_OBJ_PATH,
+                                                     POWER_INTERFACE),
+                                             [this](auto& msg)
+                                             {
+                                                 this->powerStateChanged(msg);
+                                             });
+    // Get initial power state.
+    updatePowerState();
 }
+
 
 void PowerSupply::analyze()
 {
@@ -192,6 +214,74 @@ void PowerSupply::updatePresence()
         // updated, we may encounter a runtime_error. Just catch that for
         // now, let the inventoryChanged signal handler update presence later.
         present = false;
+    }
+
+}
+
+void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
+{
+    int32_t state = 0;
+    std::string msgSensor;
+    std::map<std::string, sdbusplus::message::variant<int32_t, int32_t>>
+            msgData;
+    msg.read(msgSensor, msgData);
+
+    // Check if it was the Present property that changed.
+    auto valPropMap = msgData.find("state");
+    if (valPropMap != msgData.end())
+    {
+        state = sdbusplus::message::variant_ns::get<int32_t>(valPropMap->second);
+
+        // Power is on when state=1. Set the fault logged variables to false
+        // and start the power on timer when the state changes to 1.
+        if (state)
+        {
+            readFailLogged = false;
+            vinUVFault = false;
+            inputFault = false;
+            powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
+        }
+        else
+        {
+            powerOnTimer.stop();
+            powerOn = false;
+        }
+    }
+
+}
+
+void PowerSupply::updatePowerState()
+{
+    // When state = 1, system is powered on
+    int32_t state = 0;
+
+    try
+    {
+        auto service = util::getService(POWER_OBJ_PATH,
+                                        POWER_INTERFACE,
+                                        bus);
+
+        // Use getProperty utility function to get power state.
+        util::getProperty<int32_t>(POWER_INTERFACE,
+                                   "state",
+                                   POWER_OBJ_PATH,
+                                   service,
+                                   bus,
+                                   state);
+
+        if (state)
+        {
+            powerOn = true;
+        }
+        else
+        {
+            powerOn = false;
+        }
+    }
+    catch (std::exception& e)
+    {
+        log<level::INFO>("Failed to get power state. Assuming it is off.");
+        powerOn = false;
     }
 
 }
