@@ -41,6 +41,66 @@ namespace Fault
 {
 namespace Error
 {
+    struct PowerSequencerPGOODFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSequencerVoltageFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSequencerFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
     struct Shutdown;
 } // namespace Error
 } // namespace Fault
@@ -128,6 +188,183 @@ template <>
 struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerOnFailure>
 {
     using type = xyz::openbmc_project::Power::Fault::PowerOnFailure;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _PowerSequencerVoltageFault
+{
+
+struct RAIL
+{
+    static constexpr auto str = "RAIL=%d";
+    static constexpr auto str_short = "RAIL";
+    using type = std::tuple<std::decay_t<decltype(str)>,uint16_t>;
+    explicit constexpr RAIL(uint16_t a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct RAIL_NAME
+{
+    static constexpr auto str = "RAIL_NAME=%s";
+    static constexpr auto str_short = "RAIL_NAME";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAIL_NAME(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _PowerSequencerVoltageFault
+
+struct PowerSequencerVoltageFault
+{
+    static constexpr auto L = level::ERR;
+    using RAIL = _PowerSequencerVoltageFault::RAIL;
+    using RAIL_NAME = _PowerSequencerVoltageFault::RAIL_NAME;
+    using RAW_STATUS = _PowerSequencerVoltageFault::RAW_STATUS;
+    using metadata_types = std::tuple<RAIL, RAIL_NAME, RAW_STATUS>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerVoltageFault>
+{
+    using type = xyz::openbmc_project::Power::Fault::PowerSequencerVoltageFault;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _PowerSequencerPGOODFault
+{
+
+struct INPUT_NUM
+{
+    static constexpr auto str = "INPUT_NUM=%d";
+    static constexpr auto str_short = "INPUT_NUM";
+    using type = std::tuple<std::decay_t<decltype(str)>,uint16_t>;
+    explicit constexpr INPUT_NUM(uint16_t a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct INPUT_NAME
+{
+    static constexpr auto str = "INPUT_NAME=%s";
+    static constexpr auto str_short = "INPUT_NAME";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr INPUT_NAME(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _PowerSequencerPGOODFault
+
+struct PowerSequencerPGOODFault
+{
+    static constexpr auto L = level::ERR;
+    using INPUT_NUM = _PowerSequencerPGOODFault::INPUT_NUM;
+    using INPUT_NAME = _PowerSequencerPGOODFault::INPUT_NAME;
+    using RAW_STATUS = _PowerSequencerPGOODFault::RAW_STATUS;
+    using metadata_types = std::tuple<INPUT_NUM, INPUT_NAME, RAW_STATUS>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerPGOODFault>
+{
+    using type = xyz::openbmc_project::Power::Fault::PowerSequencerPGOODFault;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _PowerSequencerFault
+{
+
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _PowerSequencerFault
+
+struct PowerSequencerFault
+{
+    static constexpr auto L = level::ERR;
+    using RAW_STATUS = _PowerSequencerFault::RAW_STATUS;
+    using metadata_types = std::tuple<RAW_STATUS>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerFault>
+{
+    using type = xyz::openbmc_project::Power::Fault::PowerSequencerFault;
 };
 
 }
