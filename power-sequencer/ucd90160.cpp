@@ -261,7 +261,15 @@ bool UCD90160::checkPGOODFaults(bool polling)
 
 void UCD90160::createPowerFaultLog()
 {
+    util::NamesValues nv;
+    nv.add("STATUS_WORD", readStatusWord());
+    nv.add("MFR_STATUS", readMFRStatus());
 
+    using metadata = xyz::openbmc_project::Power::Fault::
+        PowerSequencerFault;
+
+    report<PowerSequencerFault>(
+            metadata::RAW_STATUS(nv.get().c_str()));
 }
 
 void UCD90160::findGPIODevice()
