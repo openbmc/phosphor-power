@@ -39,6 +39,7 @@ const auto DRIVER_NAME = "ucd9000"s;
 constexpr auto NUM_PAGES = 16;
 
 namespace fs = std::experimental::filesystem;
+using namespace gpio;
 using namespace pmbus;
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
@@ -178,7 +179,84 @@ bool UCD90160::checkVOUTFaults()
 
 bool UCD90160::checkPGOODFaults(bool polling)
 {
-    return false;
+    bool errorCreated = false;
+
+    //While PGOOD faults could show up in MFR_STATUS (and we could then
+    //check the summary bit in STATUS_WORD first), they are edge triggered,
+    //and as the device driver sends a clear faults command every time we
+    //do a read, we will never see them.  So, we'll have to just read the
+    //real time GPI status GPIO.
+
+    //Check only the GPIs configured on this system.
+    auto& gpiConfigs = std::get<ucd90160::gpiConfigField>(
+            deviceMap.find(getInstance())->second);
+
+    for (const auto& gpiConfig : gpiConfigs)
+    {
+        auto gpiNum = std::get<ucd90160::gpiNumField>(gpiConfig);
+        auto doPoll = std::get<ucd90160::pollField>(gpiConfig);
+
+        //Can skip this one if there is already an error on this input,
+        //or we are polling and these inputs don't need to be polled
+        //(because errors on them are fatal).
+        if (isPGOODFaultLogged(gpiNum) || (polling && !doPoll))
+        {
+            continue;
+        }
+
+        //The real time status is read via the pin ID
+        auto pinID = std::get<ucd90160::pinIDField>(gpiConfig);
+        auto gpio = gpios.find(pinID);
+        Value gpiStatus;
+
+        try
+        {
+            //The first time through, create the GPIO objects
+            if (gpio == gpios.end())
+            {
+                gpios.emplace(
+                        pinID,
+                        std::make_unique<GPIO>(
+                                gpioDevice, pinID, Direction::input));
+                gpio = gpios.find(pinID);
+            }
+
+            gpiStatus = gpio->second->read();
+        }
+        catch (std::exception& e)
+        {
+            if (!accessError)
+            {
+                log<level::ERR>(e.what());
+                accessError = true;
+            }
+            continue;
+        }
+
+        if (gpiStatus == Value::low)
+        {
+            auto& gpiName = std::get<ucd90160::gpiNameField>(gpiConfig);
+            auto status = (gpiStatus == Value::low) ? 0 : 1;
+
+            util::NamesValues nv;
+            nv.add("STATUS_WORD", readStatusWord());
+            nv.add("MFR_STATUS", readMFRStatus());
+            nv.add("INPUT_STATUS", status);
+
+            using metadata =  xyz::openbmc_project::Power::Fault::
+                    PowerSequencerPGOODFault;
+
+            report<PowerSequencerPGOODFault>(
+                    metadata::INPUT_NUM(gpiNum),
+                    metadata::INPUT_NAME(gpiName.c_str()),
+                    metadata::RAW_STATUS(nv.get().c_str()));
+
+            setPGOODFaultLogged(gpiNum);
+            errorCreated = true;
+        }
+    }
+
+    return errorCreated;
 }
 
 void UCD90160::createPowerFaultLog()

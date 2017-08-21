@@ -48,6 +48,15 @@ const DeviceMap UCD90160::deviceMap
                 "VDD-B"s,
                 "VCS-A"s,
                 "VCS-B"s
+            },
+
+            GPIConfigs{
+                GPIConfig{1, 8,  "PGOOD_5P0V"s, false},
+                GPIConfig{2, 9,  "MEM_GOOD0"s, false},
+                GPIConfig{3, 10, "MEM_GOOD1"s, false},
+                GPIConfig{4, 14, "GPU_PGOOD"s, true},
+                GPIConfig{5, 17, "GPU_TH_OVERT"s, true},
+                GPIConfig{6, 11, "SOFTWARE_PGOOD"s, false}
             }
         }
     }

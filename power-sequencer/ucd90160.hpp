@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include "device.hpp"
+#include "gpio.hpp"
 #include "pmbus.hpp"
 #include "types.hpp"
 
@@ -136,15 +137,55 @@ class UCD90160 : public Device
         }
 
         /**
+         * Says if we've already logged a PGOOD fault
+         *
+         * The policy is only 1 of the same errors will
+         * be logged for the duration of a class instance.
+         *
+         * @param[in] input - the input to check
+         *
+         * @return bool - if we've already logged a fault against
+         *                this input
+         */
+        inline bool isPGOODFaultLogged(uint32_t input) const
+        {
+            return std::find(pgoodErrors.begin(),
+                             pgoodErrors.end(),
+                             input) != pgoodErrors.end();
+        }
+
+        /**
+         * Saves that a PGOOD fault has been logged
+         *
+         * @param[in] input - the input the error was logged against
+         */
+        inline void setPGOODFaultLogged(uint32_t input)
+        {
+            pgoodErrors.push_back(input);
+        }
+
+        /**
          * List of pages that Vout errors have
          * already been logged against
          */
         std::vector<uint32_t> voutErrors;
 
         /**
+         * List of inputs that PGOOD errors have
+         * already been logged against
+         */
+        std::vector<uint32_t> pgoodErrors;
+
+        /**
          * The read/write interface to this hardware
          */
         pmbus::PMBus interface;
+
+        /**
+         * A map of GPI pin IDs to the GPIO object
+         * used to access them
+         */
+        std::map<size_t, std::unique_ptr<gpio::GPIO>> gpios;
 
         /**
          * Keeps track of device access errors to avoid repeatedly
