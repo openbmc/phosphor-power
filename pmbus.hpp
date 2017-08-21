@@ -11,6 +11,16 @@ namespace pmbus
 
 namespace fs = std::experimental::filesystem;
 
+constexpr auto STATUS_WORD = "status0";
+
+// Uses Page substitution
+constexpr auto STATUS_VOUT = "statusP_vout";
+
+namespace status_word
+{
+constexpr auto VOUT_FAULT = 0x8000;
+}
+
 /**
  * If the access should be done in the base
  * device directory, the hwmon directory, the

@@ -29,7 +29,27 @@ const DeviceMap UCD90160::deviceMap
 {
     {0, DeviceDefinition{
             "/sys/devices/platform/ahb/ahb:apb/ahb:apb:i2c@1e78a000/"
-                "1e78a400.i2c-bus/i2c-11/11-0064"}
+                "1e78a400.i2c-bus/i2c-11/11-0064",
+
+            RailNames{
+                "5.0VCS"s,
+                "12.0V"s,
+                "3.3V"s,
+                "1.8V"s,
+                "1.1V"s,
+                "1.0V"s,
+                "0.9V"s,
+                "VDN-A"s,
+                "VDN-B"s,
+                "AVDD"s,
+                "VIO-A"s,
+                "VIO-B"s,
+                "VDD-A"s,
+                "VDD-B"s,
+                "VCS-A"s,
+                "VCS-B"s
+            }
+        }
     }
 };
 
