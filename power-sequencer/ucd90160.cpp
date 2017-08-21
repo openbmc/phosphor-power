@@ -38,6 +38,7 @@ const auto DEVICE_NAME = "UCD90160"s;
 const auto DRIVER_NAME = "ucd9000"s;
 constexpr auto NUM_PAGES = 16;
 
+namespace fs = std::experimental::filesystem;
 using namespace pmbus;
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
@@ -51,6 +52,7 @@ UCD90160::UCD90160(size_t instance) :
               DRIVER_NAME,
               instance)
 {
+    findGPIODevice();
 }
 
 void UCD90160::onFailure()
@@ -182,6 +184,33 @@ bool UCD90160::checkPGOODFaults(bool polling)
 void UCD90160::createPowerFaultLog()
 {
 
+}
+
+void UCD90160::findGPIODevice()
+{
+    auto& path = interface.path();
+
+    //In the driver directory, look for a subdirectory
+    //named gpiochipX, where X is some number.  Then
+    //we'll access the GPIO at /dev/gpiochipX.
+    if (fs::is_directory(path))
+    {
+        for (auto& f : fs::directory_iterator(path))
+        {
+            if (f.path().filename().string().find("gpiochip") !=
+                    std::string::npos)
+            {
+                gpioDevice = "/dev" / f.path().filename();
+                break;
+            }
+        }
+    }
+
+    if (gpioDevice.empty())
+    {
+        log<level::ERR>("Could not find UCD90160 GPIO device path",
+                entry("BASE_PATH=%s", path.c_str()));
+    }
 }
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <experimental/filesystem>
 #include <map>
 #include <vector>
 #include "device.hpp"
@@ -55,6 +56,11 @@ class UCD90160 : public Device
         void clearFaults() override;
 
     private:
+
+        /**
+         * Finds the GPIO device path for this device
+         */
+        void findGPIODevice();
 
         /**
          * Checks for VOUT faults on the device.
@@ -145,6 +151,12 @@ class UCD90160 : public Device
          * logging errors for bad hardware
          */
         bool accessError = false;
+
+        /**
+         * The path to the GPIO device used to read
+         * the GPI (PGOOD) status
+         */
+        std::experimental::filesystem::path gpioDevice;
 
         /**
          * Map of device instance to the instance specific data
