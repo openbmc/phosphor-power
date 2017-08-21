@@ -61,7 +61,11 @@ fs::path PMBus::getPath(Type type)
             return basePath / "hwmon" / hwmonDir;
             break;
         case Type::Debug:
-            return debugPath / hwmonDir;
+            return debugPath / "pmbus" / hwmonDir;
+            break;
+        case Type::DeviceDebug:
+            auto dir = driverName + "." + std::to_string(instance);
+            return debugPath / dir;
             break;
     }
 }
