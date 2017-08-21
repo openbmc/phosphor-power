@@ -59,6 +59,15 @@ class Device
         virtual void analyze() = 0;
 
         /**
+         * Stubbed virtual function to call when it's known
+         * the chip is in error state.  Override if functionality
+         * is required
+         */
+        virtual void onFailure()
+        {
+        }
+
+        /**
          * Pure virtual function to clear faults on the device
          */
         virtual void clearFaults() = 0;

@@ -7,7 +7,9 @@ sbin_PROGRAMS = \
 witherspoon_pseq_monitor_SOURCES = \
 	argument.cpp \
 	main.cpp \
-	pgood_monitor.cpp
+	pgood_monitor.cpp \
+	ucd90160.cpp \
+	ucd90160_defs.cpp
 
 witherspoon_pseq_monitor_LDADD = \
 	$(top_builddir)/libpower.la \

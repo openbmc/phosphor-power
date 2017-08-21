@@ -3,6 +3,7 @@ AM_DEFAULT_SOURCE_EXT = .cpp
 noinst_LTLIBRARIES = libpower.la
 libpower_la_LDFLAGS = -static
 libpower_la_LIBADD = \
+	-lstdc++fs \
 	$(PHOSPHOR_LOGGING_LIBS) \
 	$(SDBUSPLUS_LIBS) \
 	$(PHOSPHOR_DBUS_INTERFACES_LIBS)
