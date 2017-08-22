@@ -9,6 +9,7 @@ witherspoon_pseq_monitor_SOURCES = \
 	gpio.cpp \
 	main.cpp \
 	pgood_monitor.cpp \
+	runtime_monitor.cpp \
 	ucd90160.cpp \
 	ucd90160_defs.cpp
 

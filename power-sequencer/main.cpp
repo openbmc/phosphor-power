@@ -18,6 +18,7 @@
 #include <phosphor-logging/log.hpp>
 #include "argument.hpp"
 #include "pgood_monitor.hpp"
+#include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
 
 using namespace witherspoon::power;
@@ -28,7 +29,7 @@ int main(int argc, char** argv)
     ArgumentParser args{argc, argv};
     auto action = args["action"];
 
-    if (action != "pgood-monitor")
+    if ((action != "pgood-monitor") && (action != "runtime-monitor"))
     {
         std::cerr << "Invalid action\n";
         args.usage(argv);
@@ -59,7 +60,22 @@ int main(int argc, char** argv)
 
     auto device = std::make_unique<UCD90160>(0);
 
-    PGOODMonitor monitor{std::move(device), bus, event, interval};
+    std::unique_ptr<DeviceMonitor> monitor;
 
-    return monitor.run();
+    if (action == "pgood-monitor")
+    {
+        //If PGOOD doesn't turn on within a certain
+        //time, analyze the device for errors
+        monitor = std::make_unique<PGOODMonitor>(
+                std::move(device), bus, event, interval);
+    }
+    else //runtime-monitor
+    {
+        //Continuously monitor this device both by polling
+        //and on 'power lost' signals.
+        monitor = std::make_unique<RuntimeMonitor>(
+                std::move(device), bus, event, interval);
+    }
+
+    return monitor->run();
 }

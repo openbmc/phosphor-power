@@ -28,8 +28,12 @@ void ArgumentParser::usage(char** argv)
     std::cerr << "Usage: " << argv[0] << " [options]\n";
     std::cerr << "Options:\n";
     std::cerr << "    --help                Print this menu\n";
-    std::cerr << "    --action=<action>     Action: pgood-monitor\n";
-    std::cerr << "    --interval=<interval> Time to allow PGOOD to come up\n";
+    std::cerr << "    --action=<action>     Action: pgood-monitor "
+                 "or runtime-monitor\n";
+    std::cerr << "    --interval=<interval> Interval in seconds:\n";
+    std::cerr << "      PGOOD monitor:   time allowed for PGOOD to come up\n";
+    std::cerr << "      Runtime monitor: polling interval.\n";
+
     std::cerr << std::flush;
 }
 
