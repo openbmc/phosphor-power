@@ -15,6 +15,7 @@
  */
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include "config.h"
 #include "elog-errors.hpp"
 #include "pgood_monitor.hpp"
 #include "utility.hpp"
@@ -84,7 +85,9 @@ void PGOODMonitor::analyze()
 
     if (pgoodPending())
     {
+#ifdef UCD90160_DEVICE_ACCESS
         device->onFailure();
+#endif
         report<PowerOnFailure>();
     }
 

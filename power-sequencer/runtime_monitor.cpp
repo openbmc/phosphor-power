@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <phosphor-logging/log.hpp>
+#include "config.h"
 #include "runtime_monitor.hpp"
 #include "utility.hpp"
 
@@ -26,9 +27,13 @@ using namespace phosphor::logging;
 
 int RuntimeMonitor::run()
 {
+#ifdef UCD90160_DEVICE_ACCESS
     device->clearFaults();
 
     return DeviceMonitor::run();
+#else
+    return EXIT_SUCCESS;
+#endif
 }
 
 void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
@@ -39,8 +44,9 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
     {
         timer.stop();
 
+#ifdef UCD90160_DEVICE_ACCESS
         device->onFailure();
-
+#endif
         //Note: This application only runs when the system has
         //power, so it will be killed by systemd sometime shortly
         //after this power off is issued.

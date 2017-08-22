@@ -38,6 +38,18 @@ AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
 # Checks for library functions.
 LT_INIT # Required for systemd linking
 
+AC_ARG_ENABLE([turn-off-ucd90160-access],
+    AS_HELP_STRING([--enable-turn-off-ucd90160-access], [Turn off UCD90160 hardware access])
+)
+
+AC_ARG_VAR(UCD90160_DEVICE_ACCESS, [Turn off UCD90160 hardware access])
+
+# Always define UCD90160_DEVICE_ACCESS unless explicitly turned off
+AS_IF([test "x$enable_turn_off_ucd90160_access" != "xyes"],
+      [UCD90160_DEVICE_ACCESS="yes"]
+      AC_DEFINE_UNQUOTED([UCD90160_DEVICE_ACCESS], ["$UCD90160_DEVICE_ACCESS"], [Turn off UCD90160 hardware access])
+)
+
 # Create configured output
 AC_CONFIG_FILES([Makefile power-sequencer/Makefile])
 AC_OUTPUT
