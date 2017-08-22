@@ -11,25 +11,46 @@ namespace pmbus
 
 namespace fs = std::experimental::filesystem;
 
-// The file name Linux uses to capture the VIN_UV_FAULT bit from the STATUS_WORD
-constexpr auto VIN_UV_FAULT = "in1_alarm";
-
-// The file name Linux uses to capture the input fault or warning bit from the
-// STATUS_WORD
-constexpr auto INPUT_FAULT_WARN = "power1_alarm";
-
 // The file name Linux uses to capture the STATUS_WORD from pmbus.
 constexpr auto STATUS_WORD = "status0";
 
 // The file name Linux uses to capture the STATUS_INPUT from pmbus.
 constexpr auto STATUS_INPUT = "status0_input";
 
+// Voltage out status.
+// Overvoltage fault or warning, Undervoltage fault or warning, maximum or
+// minimum warning, ....
 // Uses Page substitution
 constexpr auto STATUS_VOUT = "statusP_vout";
+
+// Current output status bits.
+constexpr auto STATUS_IOUT = "status0_iout";
+
+// Manufacturing specific status bits
+constexpr auto STATUS_MFR = "status0_mfr";
 
 namespace status_word
 {
 constexpr auto VOUT_FAULT = 0x8000;
+
+// The IBM CFF power supply driver does map this bit to power1_alarm in the
+// hwmon space, but since the other bits that need to be checked do not have
+// a similar mapping, the code will just read STATUS_WORD and use bit masking
+// to see if the INPUT FAULT OR WARNING bit is on.
+constexpr auto INPUT_FAULT_WARN = 0x2000;
+
+// The bit mask representing the POWER_GOOD Negated bit of the STATUS_WORD.
+constexpr auto POWER_GOOD_NEGATED = 0x0800;
+
+// The bit mask representing the UNITI_IS_OFF bit of the STATUS_WORD.
+constexpr auto UNIT_IS_OFF = 0x0040;
+
+// The IBM CFF power supply driver does map this bit to in1_alarm, however,
+// since a number of the other bits are not mapped that way for STATUS_WORD,
+// this code will just read the entire STATUS_WORD and use bit masking to find
+// out if that fault is on.
+constexpr auto VIN_UV_FAULT = 0x0008;
+
 }
 
 /**
@@ -174,7 +195,7 @@ class PMBus
          * Finds the path relative to basePath to the hwmon directory
          * for the device and stores it in hwmonRelPath.
          */
-         void findHwmonDir();
+        void findHwmonDir();
 
         /**
          * Returns the path to use for the passed in type.
@@ -183,7 +204,7 @@ class PMBus
          *
          * @return fs::path - the full path
          */
-         fs::path getPath(Type type);
+        fs::path getPath(Type type);
 
     private:
 

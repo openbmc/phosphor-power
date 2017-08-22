@@ -2,6 +2,8 @@
   description: The power supply has indicated an input or under voltage fault condition.
 - name: PowerSupplyInputFault
   description: The power supply has indicated an input fault or warn condition.
+- name: PowerSupplyShouldBeOn
+  description: The power supply indicated that it is not on when it should be.
 - name: Shutdown
   description: A power off was issued because a power fault was detected
 
