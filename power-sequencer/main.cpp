@@ -18,6 +18,7 @@
 #include <phosphor-logging/log.hpp>
 #include "argument.hpp"
 #include "pgood_monitor.hpp"
+#include "ucd90160.hpp"
 
 using namespace witherspoon::power;
 using namespace phosphor::logging;
@@ -56,7 +57,9 @@ int main(int argc, char** argv)
     auto bus = sdbusplus::bus::new_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    PGOODMonitor monitor{bus, event, interval};
+    auto device = std::make_unique<UCD90160>(0);
+
+    PGOODMonitor monitor{std::move(device), bus, event, interval};
 
     return monitor.run();
 }

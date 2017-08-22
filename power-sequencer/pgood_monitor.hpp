@@ -2,7 +2,9 @@
 
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server.hpp>
+#include "device.hpp"
 #include "event.hpp"
+#include "device_monitor.hpp"
 #include "timer.hpp"
 
 namespace witherspoon
@@ -13,7 +15,8 @@ namespace power
 /**
  * @class PGOODMonitor
  *
- * Monitors PGOOD and creates an error if it doesn't come on in time.
+ * Monitors PGOOD and checks for errors on the power sequencer
+ * if it doesn't come on in time.
  *
  * The run() function is designed to be called right after the
  * power sequencer device is told to kick off a power on.
@@ -21,7 +24,7 @@ namespace power
  * Future commits will analyze the power sequencer chip for errors
  * on a PGOOD fail.
  */
-class PGOODMonitor
+class PGOODMonitor : public DeviceMonitor
 {
     public:
 
@@ -35,35 +38,39 @@ class PGOODMonitor
         /**
          * Constructor
          *
+         * @param[in] d - the device to monitor
          * @param[in] b - D-Bus bus object
          * @param[in] e - event object
          * @param[in] t - time to allow PGOOD to come up
          */
-        PGOODMonitor(sdbusplus::bus::bus& b,
-                event::Event& e,
+        PGOODMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
+                sdbusplus::bus::bus& b,
+                witherspoon::power::event::Event& e,
                 std::chrono::seconds& t) :
-            bus(b),
-            event(e),
-            interval(t),
-            timer(e, [this]() { this->analyze(); })
-            {
-            }
+            DeviceMonitor(std::move(d), e, t),
+            bus(b)
+        {
+        }
 
         /**
-         * The timer callback.
+         * Analyzes the power sequencer for fails and then
+         * notifies the event loop that it can exit.
          *
-         * Creates a PGOOD failure error log.
+         * The timer callback.
          */
-        void analyze();
+        void analyze() override;
 
         /**
          * Waits a specified amount of time for PGOOD to
          * come on, and if it fails to come on in that time
-         * an error log will be created.
+         * it will analyze the power sequencer for faults.
+         *
+         * It will exit after either PGOOD is asserted or
+         * the device is analyzed for faults.
          *
          * @return - the return value from sd_event_loop()
          */
-        int run();
+        int run() override;
 
     private:
 
@@ -100,21 +107,6 @@ class PGOODMonitor
          * The match object for the properties changed signal
          */
         std::unique_ptr<sdbusplus::bus::match_t> match;
-
-        /**
-         * The sd_event structure used by the timer
-         */
-        event::Event& event;
-
-        /**
-         * The amount of time to wait for PGOOD to turn on
-         */
-        std::chrono::seconds interval;
-
-        /**
-         * The timer used to do the callback
-         */
-        Timer timer;
 };
 
 }

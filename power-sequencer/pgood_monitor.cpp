@@ -84,6 +84,7 @@ void PGOODMonitor::analyze()
 
     if (pgoodPending())
     {
+        device->onFailure();
         report<PowerOnFailure>();
     }
 
