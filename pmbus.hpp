@@ -45,6 +45,9 @@ constexpr auto POWER_GOOD_NEGATED = 0x0800;
 // The bit mask representing the UNITI_IS_OFF bit of the STATUS_WORD.
 constexpr auto UNIT_IS_OFF = 0x0040;
 
+// The bit mask representing that an output overcurrent fault has occurred.
+constexpr auto IOUT_OC_FAULT = 0x0010;
+
 // The IBM CFF power supply driver does map this bit to in1_alarm, however,
 // since a number of the other bits are not mapped that way for STATUS_WORD,
 // this code will just read the entire STATUS_WORD and use bit masking to find

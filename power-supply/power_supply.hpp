@@ -142,6 +142,14 @@ class PowerSupply : public Device
         bool inputFault = false;
 
         /**
+         * @brief Set to true when an output over current fault is detected
+         *
+         * This is the "IOUT_OC_FAULT" bit in the low byte from the STATUS_WORD
+         * command response.
+         */
+        bool outputOCFault = false;
+
+        /**
          * @brief Callback for inventory property changes
          *
          * Process change of Present property for power supply.

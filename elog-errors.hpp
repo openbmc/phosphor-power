@@ -241,6 +241,26 @@ namespace Fault
 {
 namespace Error
 {
+    struct PowerSupplyOutputOvercurrent;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
     struct GPUOverTemp;
 } // namespace Error
 } // namespace Fault
@@ -711,6 +731,54 @@ template <>
 struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyShouldBeOn>
 {
     using type = xyz::openbmc_project::Power::Fault::PowerSupplyShouldBeOn;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _PowerSupplyOutputOvercurrent
+{
+
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _PowerSupplyOutputOvercurrent
+
+struct PowerSupplyOutputOvercurrent
+{
+    static constexpr auto L = level::ERR;
+    using RAW_STATUS = _PowerSupplyOutputOvercurrent::RAW_STATUS;
+    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
+    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyOutputOvercurrent>
+{
+    using type = xyz::openbmc_project::Power::Fault::PowerSupplyOutputOvercurrent;
 };
 
 }

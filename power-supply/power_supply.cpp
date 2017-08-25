@@ -105,8 +105,6 @@ void PowerSupply::analyze()
 
             if ((statusWord & status_word::VIN_UV_FAULT) && !vinUVFault)
             {
-                vinUVFault = true;
-
                 util::NamesValues nv;
                 nv.add("STATUS_WORD", statusWord);
 
@@ -161,6 +159,10 @@ void PowerSupply::analyze()
 
             if (powerOn)
             {
+                std::uint8_t statusVout = 0;
+                std::uint8_t statusIout = 0;
+                std::uint8_t statusMFR  = 0;
+
                 // Check PG# and UNIT_IS_OFF
                 if (((statusWord & status_word::POWER_GOOD_NEGATED) ||
                      (statusWord & status_word::UNIT_IS_OFF)) &&
@@ -193,6 +195,33 @@ void PowerSupply::analyze()
                                     inventoryPath.c_str()));
 
                     powerOnFault = true;
+                }
+
+                // Check for an output overcurrent fault.
+                if ((statusWord & status_word::IOUT_OC_FAULT) &&
+                    !outputOCFault)
+                {
+                    statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
+                    statusVout = pmbusIntf.read(STATUS_VOUT, Type::Debug);
+                    statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
+                    statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
+
+                    util::NamesValues nv;
+                    nv.add("STATUS_WORD", statusWord);
+                    nv.add("STATUS_INPUT", statusInput);
+                    nv.add("STATUS_VOUT", statusVout);
+                    nv.add("STATUS_IOUT", statusIout);
+                    nv.add("MFR_SPECIFIC", statusMFR);
+
+                    using metadata = xyz::openbmc_project::Power::Fault::
+                            PowerSupplyOutputOvercurrent;
+
+                    report<PowerSupplyOutputOvercurrent>(
+                            metadata::RAW_STATUS(nv.get().c_str()),
+                            metadata::CALLOUT_INVENTORY_PATH(
+                                    inventoryPath.c_str()));
+
+                    outputOCFault = true;
                 }
 
             }
@@ -229,6 +258,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             readFailLogged = false;
             vinUVFault = false;
             inputFault = false;
+            outputOCFault = false;
         }
     }
 
@@ -278,6 +308,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
             vinUVFault = false;
             inputFault = false;
             powerOnFault = false;
+            outputOCFault = false;
             powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
         }
         else
