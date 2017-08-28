@@ -185,6 +185,32 @@ class PowerSupply : public Device
          */
         void powerStateChanged(sdbusplus::message::message& msg);
 
+        /**
+         * @brief Checks for input voltage faults and logs error if needed.
+         *
+         * Check for voltage input under voltage fault (VIN_UV_FAULT) and/or
+         * input fault or warning (INPUT_FAULT), and logs appropriate error(s).
+         *
+         * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
+         */
+        void checkInputFault(const uint16_t statusWord);
+
+        /**
+         * @brief Checks for power good negated or unit is off in wrong state
+         *
+         * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
+         */
+        void checkPGOrUnitOffFault(const uint16_t statusWord);
+
+        /**
+         * @brief Checks for output current over current fault.
+         *
+         * IOUT_OC_FAULT is checked, if on, appropriate error is logged.
+         *
+         * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
+         */
+        void checkCurrentOutOverCurrentFault(const uint16_t statusWord);
+
 };
 
 }
