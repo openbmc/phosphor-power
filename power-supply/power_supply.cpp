@@ -108,6 +108,7 @@ void PowerSupply::analyze()
             {
                 checkPGOrUnitOffFault(statusWord);
                 checkCurrentOutOverCurrentFault(statusWord);
+                checkOutputOvervoltageFault(statusWord);
             }
         }
     }
@@ -141,6 +142,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             vinUVFault = false;
             inputFault = false;
             outputOCFault = false;
+            outputOVFault = false;
         }
     }
 
@@ -191,6 +193,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
             inputFault = false;
             powerOnFault = false;
             outputOCFault = false;
+            outputOVFault = false;
             powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
         }
         else
@@ -375,6 +378,43 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
                                                      inventoryPath.c_str()));
 
         outputOCFault = true;
+    }
+}
+
+void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
+{
+    using namespace witherspoon::pmbus;
+
+    std::uint8_t  statusInput = 0;
+    std::uint8_t  statusVout = 0;
+    std::uint8_t  statusIout = 0;
+    std::uint8_t  statusMFR  = 0;
+
+    // Check for an output overvoltage fault.
+    if ((statusWord & status_word::VOUT_OV_FAULT) &&
+        !outputOVFault)
+    {
+        statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
+        statusVout = pmbusIntf.read(STATUS_VOUT, Type::Debug);
+        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
+        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
+
+        util::NamesValues nv;
+        nv.add("STATUS_WORD", statusWord);
+        nv.add("STATUS_INPUT", statusInput);
+        nv.add("STATUS_VOUT", statusVout);
+        nv.add("STATUS_IOUT", statusIout);
+        nv.add("MFR_SPECIFIC", statusMFR);
+
+        using metadata = xyz::openbmc_project::Power::Fault::
+                PowerSupplyOutputOvervoltage;
+
+        report<PowerSupplyOutputOvervoltage>(metadata::RAW_STATUS(
+                                                     nv.get().c_str()),
+                                             metadata::CALLOUT_INVENTORY_PATH(
+                                                     inventoryPath.c_str()));
+
+        outputOVFault = true;
     }
 }
 

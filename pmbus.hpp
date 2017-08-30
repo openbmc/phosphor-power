@@ -45,6 +45,10 @@ constexpr auto POWER_GOOD_NEGATED = 0x0800;
 // The bit mask representing the UNITI_IS_OFF bit of the STATUS_WORD.
 constexpr auto UNIT_IS_OFF = 0x0040;
 
+// Bit 5 of the STATUS_BYTE, or lower byte of STATUS_WORD is used to indicate
+// an output overvoltage fault.
+constexpr auto VOUT_OV_FAULT = 0x0020;
+
 // The bit mask representing that an output overcurrent fault has occurred.
 constexpr auto IOUT_OC_FAULT = 0x0010;
 

@@ -150,6 +150,11 @@ class PowerSupply : public Device
         bool outputOCFault = false;
 
         /**
+         * @brief Set to true when the output overvoltage fault is detected
+         */
+        bool outputOVFault = false;
+
+        /**
          * @brief Callback for inventory property changes
          *
          * Process change of Present property for power supply.
@@ -210,6 +215,15 @@ class PowerSupply : public Device
          * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
          */
         void checkCurrentOutOverCurrentFault(const uint16_t statusWord);
+
+        /**
+         * @brief Checks for output overvoltage fault.
+         *
+         * VOUT_OV_FAULT is checked, if on, appropriate error is logged.
+         *
+         * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
+         */
+        void checkOutputOvervoltageFault(const uint16_t statusWord);
 
 };
 
