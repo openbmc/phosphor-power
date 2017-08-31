@@ -8,6 +8,8 @@
   description: The power supply detected an output overcurrent fault condition.
 - name: PowerSupplyOutputOvervoltage
   description: The power supply detected an output overvoltage fault condition.
+- name: PowerSupplyFanFault
+  description: The power supply detected bad fan operation.
 - name: Shutdown
   description: A power off was issued because a power fault was detected
 

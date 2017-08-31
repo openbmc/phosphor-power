@@ -155,6 +155,11 @@ class PowerSupply : public Device
         bool outputOVFault = false;
 
         /**
+         * @brief Set to true when a fan fault or warning condition is detected
+         */
+        bool fanFault = false;
+
+        /**
          * @brief Callback for inventory property changes
          *
          * Process change of Present property for power supply.
@@ -224,6 +229,16 @@ class PowerSupply : public Device
          * @param[in] statusWord  - 2 byte STATUS_WORD value read from sysfs
          */
         void checkOutputOvervoltageFault(const uint16_t statusWord);
+
+        /**
+         * @brief Checks for a fan fault or warning condition.
+         *
+         * The high byte of STATUS_WORD is checked to see if the "FAN FAULT OR
+         * WARNING" bit is turned on. If it is on, log an error.
+         *
+         * @param[in] statusWord - 2 byte STATUS_WORD value read from sysfs
+         */
+        void checkFanFault(const uint16_t statusWord);
 
 };
 

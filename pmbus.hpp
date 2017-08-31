@@ -29,6 +29,13 @@ constexpr auto STATUS_IOUT = "status0_iout";
 // Manufacturing specific status bits
 constexpr auto STATUS_MFR = "status0_mfr";
 
+// Reports on the status of any fans installed in position 1 and 2.
+constexpr auto STATUS_FANS_1_2 = "status0_fans12";
+
+// Reports on temperature faults or warnings. Overtemperature fault,
+// overtemperature warning, undertemperature warning, undertemperature fault.
+constexpr auto STATUS_TEMPERATURE = "status0_temp";
+
 namespace status_word
 {
 constexpr auto VOUT_FAULT = 0x8000;
@@ -41,6 +48,10 @@ constexpr auto INPUT_FAULT_WARN = 0x2000;
 
 // The bit mask representing the POWER_GOOD Negated bit of the STATUS_WORD.
 constexpr auto POWER_GOOD_NEGATED = 0x0800;
+
+// The bit mask representing the FAN FAULT or WARNING bit of the STATUS_WORD.
+// Bit 2 of the high byte of STATUS_WORD.
+constexpr auto FAN_FAULT = 0x0400;
 
 // The bit mask representing the UNITI_IS_OFF bit of the STATUS_WORD.
 constexpr auto UNIT_IS_OFF = 0x0040;
