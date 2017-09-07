@@ -54,7 +54,9 @@ class UCD90160 : public Device
         /**
          * Clears faults in the device
          */
-        void clearFaults() override;
+        void clearFaults() override
+        {
+        }
 
     private:
 

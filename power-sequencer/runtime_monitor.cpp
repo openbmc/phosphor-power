@@ -28,8 +28,6 @@ using namespace phosphor::logging;
 int RuntimeMonitor::run()
 {
 #ifdef UCD90160_DEVICE_ACCESS
-    device->clearFaults();
-
     return DeviceMonitor::run();
 #else
     return EXIT_SUCCESS;
