@@ -110,6 +110,7 @@ void PowerSupply::analyze()
                 checkCurrentOutOverCurrentFault(statusWord);
                 checkOutputOvervoltageFault(statusWord);
                 checkFanFault(statusWord);
+                checkTemperatureFault(statusWord);
             }
         }
     }
@@ -145,6 +146,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             outputOCFault = false;
             outputOVFault = false;
             fanFault = false;
+            temperatureFault = false;
         }
     }
 
@@ -197,6 +199,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
             outputOCFault = false;
             outputOVFault = false;
             fanFault = false;
+            temperatureFault = false;
             powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
         }
         else
@@ -398,7 +401,8 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
         !outputOVFault)
     {
         statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-        statusVout = pmbusIntf.read(STATUS_VOUT, Type::Debug);
+        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+        statusVout = pmbusIntf.read(status0Vout, Type::Debug);
         statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
         statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
 
@@ -429,7 +433,7 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
     std::uint8_t statusTemperature = 0;
     std::uint8_t statusFans12 = 0;
 
-    // Check for an output overcurrent fault.
+    // Check for a fan fault or warning condition
     if ((statusWord & status_word::FAN_FAULT) &&
         !fanFault)
     {
@@ -451,6 +455,55 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
                 metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
         fanFault = true;
+    }
+}
+
+void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
+{
+    using namespace witherspoon::pmbus;
+
+    // Due to how the PMBus core device driver sends a clear faults command
+    // the bit in STATUS_WORD will likely be cleared when we attempt to examine
+    // it for a Thermal Fault or Warning. So, check the STATUS_WORD and the
+    // STATUS_TEMPERATURE bits. If either indicates a fault, proceed with
+    // logging the over-temperature condition.
+    std::uint8_t statusTemperature = 0;
+    statusTemperature = pmbusIntf.read(STATUS_TEMPERATURE, Type::Debug);
+    if (((statusWord & status_word::TEMPERATURE_FAULT_WARN) ||
+         (statusTemperature & status_temperature::OT_FAULT)) &&
+        !temperatureFault)
+    {
+        // The power supply has had an over-temperature condition.
+        // This may not result in a shutdown if experienced for a short
+        // duration.
+        // This should not occur under normal conditions.
+        // The power supply may be faulty, or the paired supply may be putting
+        // out less current.
+        // Capture command responses with potentially relevant information,
+        // and call out the power supply reporting the condition.
+        std::uint8_t statusMFR = 0;
+        std::uint8_t statusIout = 0;
+        std::uint8_t statusFans12 = 0;
+
+        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
+        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
+        statusFans12 = pmbusIntf.read(STATUS_FANS_1_2, Type::Debug);
+
+        util::NamesValues nv;
+        nv.add("STATUS_WORD", statusWord);
+        nv.add("MFR_SPECIFIC", statusMFR);
+        nv.add("STATUS_IOUT", statusIout);
+        nv.add("STATUS_TEMPERATURE", statusTemperature);
+        nv.add("STATUS_FANS_1_2", statusFans12);
+
+        using metadata = xyz::openbmc_project::Power::Fault::
+                PowerSupplyTemperatureFault;
+
+        report<PowerSupplyTemperatureFault>(
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+
+        temperatureFault = true;
     }
 }
 

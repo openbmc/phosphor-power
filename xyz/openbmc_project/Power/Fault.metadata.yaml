@@ -36,6 +36,13 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+- name: PowerSupplyTemperatureFault
+  level: ERR
+  meta:
+    - str: "RAW_STATUS=%s"
+      type: string
+  inherits:
+    - xyz.openbmc_project.Common.Callout.Inventory
 - name: Shutdown
   level: ERR
 
