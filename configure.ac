@@ -38,6 +38,29 @@ AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
 # Checks for library functions.
 LT_INIT # Required for systemd linking
 
+# Check/set gtest specific functions.
+AX_PTHREAD([GTEST_CPPFLAGS="-DGTEST_HAS_PTHREAD=1"],[GTEST_CPPFLAGS="-DGTEST_HAS_PTHREAD=0"])
+AC_SUBST(GTEST_CPPFLAGS)
+
+# Test cases require SDK so only build if we're told to (and SDK is available)
+AC_ARG_ENABLE([oe-sdk],
+    AS_HELP_STRING([--enable-oe-sdk], [Link testcases absolutely against OE SDK so they can be ran within it.])
+)
+AC_ARG_VAR(OECORE_TARGET_SYSROOT,
+    [Path to the OE SDK SYSROOT])
+AS_IF([test "x$enable_oe_sdk" == "xyes"],
+    AS_IF([test "x$OECORE_TARGET_SYSROOT" == "x"],
+          AC_MSG_ERROR([OECORE_TARGET_SYSROOT must be set with --enable-oe-sdk])
+    )
+    AC_MSG_NOTICE([Enabling OE-SDK at $OECORE_TARGET_SYSROOT])
+    [
+        testcase_flags="-Wl,-rpath,\${OECORE_TARGET_SYSROOT}/lib"
+        testcase_flags="${testcase_flags} -Wl,-rpath,\${OECORE_TARGET_SYSROOT}/usr/lib"
+        testcase_flags="${testcase_flags} -Wl,-dynamic-linker,`find \${OECORE_TARGET_SYSROOT}/lib/ld-*.so | sort -r -n | head -n1`"
+    ]
+    AC_SUBST([OESDK_TESTCASE_FLAGS], [$testcase_flags])
+)
+
 AC_ARG_ENABLE([turn-off-ucd90160-access],
     AS_HELP_STRING([--enable-turn-off-ucd90160-access], [Turn off UCD90160 hardware access])
 )
@@ -51,5 +74,5 @@ AS_IF([test "x$enable_turn_off_ucd90160_access" != "xyes"],
 )
 
 # Create configured output
-AC_CONFIG_FILES([Makefile power-sequencer/Makefile])
+AC_CONFIG_FILES([Makefile power-sequencer/Makefile test/Makefile])
 AC_OUTPUT
