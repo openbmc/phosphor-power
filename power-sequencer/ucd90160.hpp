@@ -61,9 +61,17 @@ class UCD90160 : public Device
     private:
 
         /**
-         * Finds the GPIO device path for this device
+         * Given the device path for a chip, find its gpiochip
+         * path
+         *
+         * @param[in] path - device path, like
+         *                   /sys/devices/.../i2c-11/11-0064
+         *
+         * @return fs::path - The gpiochip path, like
+         *                   /dev/gpiochip1
          */
-        void findGPIODevice();
+        static std::experimental::filesystem::path findGPIODevice(
+                const std::experimental::filesystem::path& path);
 
         /**
          * Checks for VOUT faults on the device.

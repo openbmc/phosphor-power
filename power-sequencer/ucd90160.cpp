@@ -46,13 +46,13 @@ using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
 using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
 
 UCD90160::UCD90160(size_t instance) :
-    Device(DEVICE_NAME, instance),
-    interface(std::get<ucd90160::pathField>(
-                      deviceMap.find(instance)->second),
-              DRIVER_NAME,
-              instance)
+        Device(DEVICE_NAME, instance),
+        interface(std::get<ucd90160::pathField>(
+                          deviceMap.find(instance)->second),
+                  DRIVER_NAME,
+                  instance),
+        gpioDevice(findGPIODevice(interface.path()))
 {
-    findGPIODevice();
 }
 
 void UCD90160::onFailure()
@@ -254,9 +254,9 @@ void UCD90160::createPowerFaultLog()
             metadata::RAW_STATUS(nv.get().c_str()));
 }
 
-void UCD90160::findGPIODevice()
+fs::path UCD90160::findGPIODevice(const fs::path& path)
 {
-    auto& path = interface.path();
+    fs::path gpioDevicePath;
 
     //In the driver directory, look for a subdirectory
     //named gpiochipX, where X is some number.  Then
@@ -268,17 +268,19 @@ void UCD90160::findGPIODevice()
             if (f.path().filename().string().find("gpiochip") !=
                     std::string::npos)
             {
-                gpioDevice = "/dev" / f.path().filename();
+                gpioDevicePath = "/dev" / f.path().filename();
                 break;
             }
         }
     }
 
-    if (gpioDevice.empty())
+    if (gpioDevicePath.empty())
     {
-        log<level::ERR>("Could not find UCD90160 GPIO device path",
+        log<level::ERR>("Could not find GPIO device path",
                 entry("BASE_PATH=%s", path.c_str()));
     }
+
+    return gpioDevicePath;
 }
 
 }
