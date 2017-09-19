@@ -41,6 +41,26 @@ namespace Fault
 {
 namespace Error
 {
+    struct PowerSequencerFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
     struct PowerSequencerPGOODFault;
 } // namespace Error
 } // namespace Fault
@@ -61,7 +81,7 @@ namespace Fault
 {
 namespace Error
 {
-    struct PowerSequencerVoltageFault;
+    struct GPUPowerFault;
 } // namespace Error
 } // namespace Fault
 } // namespace Power
@@ -81,7 +101,27 @@ namespace Fault
 {
 namespace Error
 {
-    struct PowerSequencerFault;
+    struct GPUOverTemp;
+} // namespace Error
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSequencerVoltageFault;
 } // namespace Error
 } // namespace Fault
 } // namespace Power
@@ -365,6 +405,118 @@ template <>
 struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerFault>
 {
     using type = xyz::openbmc_project::Power::Fault::PowerSequencerFault;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _GPUPowerFault
+{
+
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct GPU
+{
+    static constexpr auto str = "GPU=%s";
+    static constexpr auto str_short = "GPU";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr GPU(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _GPUPowerFault
+
+struct GPUPowerFault
+{
+    static constexpr auto L = level::ERR;
+    using RAW_STATUS = _GPUPowerFault::RAW_STATUS;
+    using GPU = _GPUPowerFault::GPU;
+    using metadata_types = std::tuple<RAW_STATUS, GPU>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::GPUPowerFault>
+{
+    using type = xyz::openbmc_project::Power::Fault::GPUPowerFault;
+};
+
+}
+
+namespace xyz
+{
+namespace openbmc_project
+{
+namespace Power
+{
+namespace Fault
+{
+namespace _GPUOverTemp
+{
+
+struct RAW_STATUS
+{
+    static constexpr auto str = "RAW_STATUS=%s";
+    static constexpr auto str_short = "RAW_STATUS";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+struct GPU
+{
+    static constexpr auto str = "GPU=%s";
+    static constexpr auto str_short = "GPU";
+    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
+    explicit constexpr GPU(const char* a) : _entry(entry(str, a)) {};
+    type _entry;
+};
+
+}  // namespace _GPUOverTemp
+
+struct GPUOverTemp
+{
+    static constexpr auto L = level::ERR;
+    using RAW_STATUS = _GPUOverTemp::RAW_STATUS;
+    using GPU = _GPUOverTemp::GPU;
+    using metadata_types = std::tuple<RAW_STATUS, GPU>;
+
+};
+
+} // namespace Fault
+} // namespace Power
+} // namespace openbmc_project
+} // namespace xyz
+
+
+namespace details
+{
+
+template <>
+struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::GPUOverTemp>
+{
+    using type = xyz::openbmc_project::Power::Fault::GPUOverTemp;
 };
 
 }
