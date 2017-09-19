@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <experimental/filesystem>
 #include <map>
+#include <sdbusplus/bus.hpp>
 #include <vector>
 #include "device.hpp"
 #include "gpio.hpp"
@@ -40,8 +41,9 @@ class UCD90160 : public Device
          * Constructor
          *
          * @param[in] instance - the device instance number
+         * @param[in] bus - D-Bus bus object
          */
-        UCD90160(size_t instance);
+        UCD90160(size_t instance, sdbusplus::bus::bus& bus);
 
         /**
          * Analyzes the device for errors when the device is
@@ -293,6 +295,11 @@ class UCD90160 : public Device
          * the GPI (PGOOD) status
          */
         std::experimental::filesystem::path gpioDevice;
+
+        /**
+         * The D-Bus bus object
+         */
+        sdbusplus::bus::bus& bus;
 
         /**
          * Map of device instance to the instance specific data

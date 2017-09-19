@@ -23,6 +23,7 @@
 #include <xyz/openbmc_project/Power/Fault/error.hpp>
 #include "names_values.hpp"
 #include "ucd90160.hpp"
+#include "utility.hpp"
 
 namespace witherspoon
 {
@@ -45,13 +46,14 @@ using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
 using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
 using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
 
-UCD90160::UCD90160(size_t instance) :
+UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
         Device(DEVICE_NAME, instance),
         interface(std::get<ucd90160::pathField>(
                           deviceMap.find(instance)->second),
                   DRIVER_NAME,
                   instance),
-        gpioDevice(findGPIODevice(interface.path()))
+        gpioDevice(findGPIODevice(interface.path())),
+        bus(bus)
 {
 }
 
@@ -309,6 +311,7 @@ bool UCD90160::doExtraAnalysis(const ucd90160::GPIConfig& config)
 bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 {
     bool errorFound = false;
+    bool shutdown = false;
 
     const auto& analysisConfig = std::get<ucd90160::gpioAnalysisField>(
             deviceMap.find(getInstance())->second);
@@ -379,7 +382,22 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
             //Save the part callout so we don't call it out again
             setPartCallout(callout);
+
+            //Some errors (like overtemps) require a shutdown
+            auto actions = static_cast<uint32_t>(
+                    std::get<ucd90160::optionFlagsField>(gpioConfig->second));
+
+            if (actions & static_cast<decltype(actions)>(
+                        ucd90160::optionFlags::shutdownOnFault))
+            {
+                shutdown = true;
+            }
         }
+    }
+
+    if (shutdown)
+    {
+        util::powerOff(bus);
     }
 
     return errorFound;

@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     auto bus = sdbusplus::bus::new_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    auto device = std::make_unique<UCD90160>(0);
+    auto device = std::make_unique<UCD90160>(0, bus);
 
     std::unique_ptr<DeviceMonitor> monitor;
 
