@@ -217,6 +217,16 @@ bool UCD90160::checkPGOODFaults(bool polling)
 
         if (gpiStatus == Value::low)
         {
+            //There may be some extra analysis we can do to narrow the
+            //error down further.  Note that finding an error here won't
+            //prevent us from checking this GPI again.
+            errorCreated = doExtraAnalysis(gpiConfig);
+
+            if (errorCreated)
+            {
+                continue;
+            }
+
             auto& gpiName = std::get<ucd90160::gpiNameField>(gpiConfig);
             auto status = (gpiStatus == Value::low) ? 0 : 1;
 
@@ -281,6 +291,98 @@ fs::path UCD90160::findGPIODevice(const fs::path& path)
     }
 
     return gpioDevicePath;
+}
+
+bool UCD90160::doExtraAnalysis(const ucd90160::GPIConfig& config)
+{
+
+    auto type = std::get<ucd90160::extraAnalysisField>(config);
+    if (type == ucd90160::extraAnalysisType::none)
+    {
+        return false;
+    }
+
+    //Currently the only extra analysis to do is to check other GPIOs.
+    return doGPIOAnalysis(type);
+}
+
+bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
+{
+    bool errorFound = false;
+
+    const auto& analysisConfig = std::get<ucd90160::gpioAnalysisField>(
+            deviceMap.find(getInstance())->second);
+
+    auto gpioConfig = analysisConfig.find(type);
+    if (gpioConfig == analysisConfig.end())
+    {
+        return errorFound;
+    }
+
+    auto path = std::get<ucd90160::gpioDevicePathField>(
+            gpioConfig->second);
+
+    //The /dev/gpiochipX device
+    auto device = findGPIODevice(path);
+
+    //The GPIO value of the fault condition
+    auto polarity = std::get<ucd90160::gpioPolarityField>(
+            gpioConfig->second);
+
+    //The GPIOs to check
+    auto& gpios = std::get<ucd90160::gpioDefinitionField>(
+            gpioConfig->second);
+
+    for (const auto& gpio : gpios)
+    {
+        gpio::Value value;
+
+        try
+        {
+            GPIO g{device,
+                   std::get<ucd90160::gpioNumField>(gpio),
+                   Direction::input};
+
+            value = g.read();
+        }
+        catch (std::exception& e)
+        {
+            if (!gpioAccessError)
+            {
+                //GPIO only throws InternalErrors - not worth committing.
+                log<level::ERR>(
+                        "GPIO read failed while analyzing a power fault",
+                        entry("CHIP_PATH=%s", path.c_str()));
+
+                gpioAccessError = true;
+            }
+            continue;
+        }
+
+        if (value == polarity)
+        {
+            errorFound = true;
+
+            auto part = std::get<ucd90160::gpioCalloutField>(gpio);
+            PartCallout callout{type, part};
+
+            if (isPartCalledOut(callout))
+            {
+                continue;
+            }
+
+            //Look up and call the error creation function
+            auto logError = std::get<ucd90160::errorFunctionField>(
+                    gpioConfig->second);
+
+            logError(*this, part);
+
+            //Save the part callout so we don't call it out again
+            setPartCallout(callout);
+        }
+    }
+
+    return errorFound;
 }
 
 void UCD90160::gpuPGOODError(const std::string& callout)

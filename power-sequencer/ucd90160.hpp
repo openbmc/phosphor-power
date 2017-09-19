@@ -14,6 +14,10 @@ namespace witherspoon
 namespace power
 {
 
+//Error type, callout
+using PartCallout =
+        std::tuple<ucd90160::extraAnalysisType, std::string>;
+
 /**
  * @class UCD90160
  *
@@ -133,6 +137,35 @@ class UCD90160 : public Device
         uint32_t readMFRStatus();
 
         /**
+         * Does any additional fault analysis based on the
+         * value of the extraAnalysisType field in the GPIOConfig
+         * entry.
+         *
+         * Used to get better callouts.
+         *
+         * @param[in] config - the GPIOConfig entry to use
+         *
+         * @return bool - true if a HW error was found, false else
+         */
+        bool doExtraAnalysis(const ucd90160::GPIConfig& config);
+
+        /**
+         * Does additional fault analysis using GPIOs to
+         * specifically identify the failing part.
+         *
+         * Used when there are too many PGOOD inputs for
+         * the UCD90160 to handle, so just a summary bit
+         * is wired into the chip, and then the specific
+         * fault GPIOs are off of a different GPIO device,
+         * like an IO expander.
+         *
+         * @param[in] type - the type of analysis to do
+         *
+         * @return bool - true if a HW error was found, false else
+         */
+        bool doGPIOAnalysis(ucd90160::extraAnalysisType type);
+
+        /**
          * Says if we've already logged a Vout fault
          *
          * The policy is only 1 of the same error will
@@ -179,6 +212,22 @@ class UCD90160 : public Device
         }
 
         /**
+         * Says if we've already logged a specific fault
+         * against a specific part
+         *
+         * @param[in] callout - error type and name tuple
+         *
+         * @return bool - if we've already logged this fault
+         *                against this part
+         */
+        inline bool isPartCalledOut(const PartCallout& callout) const
+        {
+            return std::find(callouts.begin(),
+                             callouts.end(),
+                             callout) != callouts.end();
+        }
+
+        /**
          * Saves that a PGOOD fault has been logged
          *
          * @param[in] input - the input the error was logged against
@@ -186,6 +235,16 @@ class UCD90160 : public Device
         inline void setPGOODFaultLogged(uint32_t input)
         {
             pgoodErrors.push_back(input);
+        }
+
+        /**
+         * Saves that a specific fault on a specific part has been done
+         *
+         * @param[in] callout - error type and name tuple
+         */
+        inline void setPartCallout(const PartCallout& callout)
+        {
+            callouts.push_back(callout);
         }
 
         /**
@@ -199,6 +258,11 @@ class UCD90160 : public Device
          * already been logged against
          */
         std::vector<uint32_t> pgoodErrors;
+
+        /**
+         * List of callouts that already been done
+         */
+        std::vector<PartCallout> callouts;
 
         /**
          * The read/write interface to this hardware
@@ -216,6 +280,13 @@ class UCD90160 : public Device
          * logging errors for bad hardware
          */
         bool accessError = false;
+
+        /**
+         * Keeps track of GPIO access errors when doing the in depth
+         * PGOOD fault analysis to avoid repeatedly logging errors
+         * for bad hardware
+         */
+        bool gpioAccessError = false;
 
         /**
          * The path to the GPIO device used to read
