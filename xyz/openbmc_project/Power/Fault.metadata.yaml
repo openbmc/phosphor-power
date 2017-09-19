@@ -29,3 +29,19 @@
   meta:
     - str: "RAW_STATUS=%s"
       type: string
+
+- name: GPUPowerFault
+  level: ERR
+  meta:
+    - str: "RAW_STATUS=%s"
+      type: string
+    - str: "GPU=%s"
+      type: string
+
+- name: GPUOverTemp
+  level: ERR
+  meta:
+    - str: "RAW_STATUS=%s"
+      type: string
+    - str: "GPU=%s"
+      type: string

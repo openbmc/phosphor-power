@@ -12,3 +12,9 @@
 
 - name: PowerSequencerFault
   description: The power sequencer chip detected a fault
+
+- name: GPUPowerFault
+  description: A GPU suffered a power fault
+
+- name: GPUOverTemp
+  description: A GPU suffered an over-temperature fault
