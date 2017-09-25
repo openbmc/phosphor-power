@@ -175,6 +175,16 @@ class PMBus
                            size_t page,
                            Type type);
         /**
+         * Checks if the file for the given name and type exists.
+         *
+         * @param[in] name   - path concatenated to basePath to read
+         * @param[in] type   - Path type
+         *
+         * @return bool - True if file exists, false if it does not.
+         */
+        bool exists(const std::string& name, Type type);
+
+        /**
          * Read byte(s) from file in sysfs.
          *
          * @param[in] name   - path concatenated to basePath to read
