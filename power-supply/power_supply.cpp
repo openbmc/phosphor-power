@@ -81,6 +81,23 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     updatePowerState();
 }
 
+void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
+                             witherspoon::pmbus::Type type)
+{
+    if (pmbusIntf.exists(cmd, type))
+    {
+        try
+        {
+            auto val = pmbusIntf.read(cmd, type);
+            nv.add(cmd, val);
+        }
+        catch (std::exception& e)
+        {
+            log<level::INFO>("Unable to capture metadata", entry("CMD=%s",
+                                                                 cmd));
+        }
+    }
+}
 
 void PowerSupply::analyze()
 {
@@ -281,11 +298,9 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
     {
         inputFault = true;
 
-        statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("STATUS_INPUT", statusInput);
+        captureCmd(nv, STATUS_INPUT, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyInputFault;
@@ -313,28 +328,18 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    std::uint8_t  statusInput = 0;
-    std::uint8_t  statusVout = 0;
-    std::uint8_t  statusIout = 0;
-    std::uint8_t  statusMFR  = 0;
-
     // Check PG# and UNIT_IS_OFF
     if (((statusWord & status_word::POWER_GOOD_NEGATED) ||
          (statusWord & status_word::UNIT_IS_OFF)) &&
         !powerOnFault)
     {
-        statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
-        statusVout = pmbusIntf.read(status0Vout, Type::Debug);
-        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
-        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("STATUS_INPUT", statusInput);
-        nv.add("STATUS_VOUT", statusVout);
-        nv.add("STATUS_IOUT", statusIout);
-        nv.add("MFR_SPECIFIC", statusMFR);
+        captureCmd(nv, STATUS_INPUT, Type::Debug);
+        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+        captureCmd(nv, status0Vout, Type::Debug);
+        captureCmd(nv, STATUS_IOUT, Type::Debug);
+        captureCmd(nv, STATUS_MFR, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyShouldBeOn;
@@ -353,27 +358,17 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    std::uint8_t  statusInput = 0;
-    std::uint8_t  statusVout = 0;
-    std::uint8_t  statusIout = 0;
-    std::uint8_t  statusMFR  = 0;
-
     // Check for an output overcurrent fault.
     if ((statusWord & status_word::IOUT_OC_FAULT) &&
         !outputOCFault)
     {
-        statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
-        statusVout = pmbusIntf.read(status0Vout, Type::Debug);
-        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
-        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("STATUS_INPUT", statusInput);
-        nv.add("STATUS_VOUT", statusVout);
-        nv.add("STATUS_IOUT", statusIout);
-        nv.add("MFR_SPECIFIC", statusMFR);
+        captureCmd(nv, STATUS_INPUT, Type::Debug);
+        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+        captureCmd(nv, status0Vout, Type::Debug);
+        captureCmd(nv, STATUS_IOUT, Type::Debug);
+        captureCmd(nv, STATUS_MFR, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyOutputOvercurrent;
@@ -391,27 +386,17 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    std::uint8_t  statusInput = 0;
-    std::uint8_t  statusVout = 0;
-    std::uint8_t  statusIout = 0;
-    std::uint8_t  statusMFR  = 0;
-
     // Check for an output overvoltage fault.
     if ((statusWord & status_word::VOUT_OV_FAULT) &&
         !outputOVFault)
     {
-        statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
-        statusVout = pmbusIntf.read(status0Vout, Type::Debug);
-        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
-        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("STATUS_INPUT", statusInput);
-        nv.add("STATUS_VOUT", statusVout);
-        nv.add("STATUS_IOUT", statusIout);
-        nv.add("MFR_SPECIFIC", statusMFR);
+        captureCmd(nv, STATUS_INPUT, Type::Debug);
+        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+        captureCmd(nv, status0Vout, Type::Debug);
+        captureCmd(nv, STATUS_IOUT, Type::Debug);
+        captureCmd(nv, STATUS_MFR, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyOutputOvervoltage;
@@ -429,23 +414,15 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    std::uint8_t statusMFR  = 0;
-    std::uint8_t statusTemperature = 0;
-    std::uint8_t statusFans12 = 0;
-
     // Check for a fan fault or warning condition
     if ((statusWord & status_word::FAN_FAULT) &&
         !fanFault)
     {
-        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
-        statusTemperature = pmbusIntf.read(STATUS_TEMPERATURE, Type::Debug);
-        statusFans12 = pmbusIntf.read(STATUS_FANS_1_2, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("MFR_SPECIFIC", statusMFR);
-        nv.add("STATUS_TEMPERATURE", statusTemperature);
-        nv.add("STATUS_FANS_1_2", statusFans12);
+        captureCmd(nv, STATUS_MFR, Type::Debug);
+        captureCmd(nv, STATUS_TEMPERATURE, Type::Debug);
+        captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyFanFault;
@@ -481,20 +458,12 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
         // out less current.
         // Capture command responses with potentially relevant information,
         // and call out the power supply reporting the condition.
-        std::uint8_t statusMFR = 0;
-        std::uint8_t statusIout = 0;
-        std::uint8_t statusFans12 = 0;
-
-        statusMFR = pmbusIntf.read(STATUS_MFR, Type::Debug);
-        statusIout = pmbusIntf.read(STATUS_IOUT, Type::Debug);
-        statusFans12 = pmbusIntf.read(STATUS_FANS_1_2, Type::Debug);
-
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
-        nv.add("MFR_SPECIFIC", statusMFR);
-        nv.add("STATUS_IOUT", statusIout);
+        captureCmd(nv, STATUS_MFR, Type::Debug);
+        captureCmd(nv, STATUS_IOUT, Type::Debug);
         nv.add("STATUS_TEMPERATURE", statusTemperature);
-        nv.add("STATUS_FANS_1_2", statusFans12);
+        captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
         using metadata = xyz::openbmc_project::Power::Fault::
                 PowerSupplyTemperatureFault;

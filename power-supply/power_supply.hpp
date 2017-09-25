@@ -3,6 +3,7 @@
 #include "device.hpp"
 #include "pmbus.hpp"
 #include "timer.hpp"
+#include "names_values.hpp"
 
 namespace witherspoon
 {
@@ -199,6 +200,16 @@ class PowerSupply : public Device
          * @param[in] msg - Data associated with the power state signal
          */
         void powerStateChanged(sdbusplus::message::message& msg);
+
+        /**
+         * @brief Wrapper for PMBus::read() and adding metadata
+         *
+         * @param[out] nv - NamesValues instance to store cmd string and value
+         * @param[in] cmd - String for the command to read data from.
+         * @param[in] type - The type of file to read the command from.
+         */
+        void captureCmd(util::NamesValues& nv, const std::string& cmd,
+                        witherspoon::pmbus::Type type);
 
         /**
          * @brief Checks for input voltage faults and logs error if needed.
