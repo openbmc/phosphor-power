@@ -174,19 +174,8 @@ void PowerSupply::updatePresence()
     std::string path = INVENTORY_OBJ_PATH + inventoryPath;
     std::string service = "xyz.openbmc_project.Inventory.Manager";
 
-    try
-    {
-        util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, path,
-                          service, bus, this->present);
-    }
-    catch (std::exception& e)
-    {
-        // If we happen to be trying to update presence just as it is being
-        // updated, we may encounter a runtime_error. Just catch that for
-        // now, let the inventoryChanged signal handler update presence later.
-        present = false;
-    }
-
+    util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, path,service, bus,
+                      this->present);
 }
 
 void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
