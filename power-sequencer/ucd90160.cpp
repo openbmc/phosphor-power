@@ -398,7 +398,8 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
     if (shutdown)
     {
-        util::powerOff(bus);
+        //Will be replaced with a GPU specific error in a future commit
+        util::powerOff<power_error::Shutdown>(bus);
     }
 
     return errorFound;

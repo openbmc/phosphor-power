@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
 #include "config.h"
+#include "elog-errors.hpp"
 #include "runtime_monitor.hpp"
 #include "utility.hpp"
 
@@ -24,6 +26,7 @@ namespace power
 {
 
 using namespace phosphor::logging;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 int RuntimeMonitor::run()
 {
@@ -49,7 +52,7 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
         //power, so it will be killed by systemd sometime shortly
         //after this power off is issued.
 
-        util::powerOff(bus);
+        util::powerOff<Shutdown>(bus);
     }
     catch (std::exception& e)
     {
