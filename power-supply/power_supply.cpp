@@ -15,9 +15,8 @@
  */
 #include <phosphor-logging/log.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <xyz/openbmc_project/Sensor/Device/error.hpp>
-#include <xyz/openbmc_project/Control/Device/error.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
 #include "elog-errors.hpp"
 #include "names_values.hpp"
 #include "power_supply.hpp"
@@ -25,9 +24,8 @@
 #include "utility.hpp"
 
 using namespace phosphor::logging;
-using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
-using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
+using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 namespace witherspoon
 {

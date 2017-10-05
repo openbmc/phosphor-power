@@ -18,8 +18,7 @@
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/elog-errors.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
-#include <xyz/openbmc_project/Control/Device/error.hpp>
-#include <xyz/openbmc_project/Sensor/Device/error.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
 #include "pmbus.hpp"
 
 namespace witherspoon
@@ -29,8 +28,7 @@ namespace pmbus
 
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Error;
-using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
-using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
+using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace fs = std::experimental::filesystem;
 
 std::string PMBus::insertPageNum(const std::string& templateName,
@@ -117,11 +115,11 @@ bool PMBus::readBit(const std::string& name, Type type)
         log<level::ERR>("Failed to read sysfs file",
                         entry("FILENAME=%s", path.c_str()));
 
-        elog<ReadFailure>(xyz::openbmc_project::Sensor::Device::
-                          ReadFailure::CALLOUT_ERRNO(rc),
-                          xyz::openbmc_project::Sensor::Device::
-                          ReadFailure::CALLOUT_DEVICE_PATH(
-                              fs::canonical(basePath).c_str()));
+        using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
+
+        elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
+                          metadata::CALLOUT_DEVICE_PATH(
+                                  fs::canonical(basePath).c_str()));
     }
 
     return value != 0;
@@ -156,7 +154,7 @@ uint64_t PMBus::read(const std::string& name, Type type)
         log<level::ERR>("Failed to read sysfs file",
                         entry("FILENAME=%s", path.c_str()));
 
-        using metadata = xyz::openbmc_project::Sensor::Device::ReadFailure;
+        using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
         elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
                           metadata::CALLOUT_DEVICE_PATH(
@@ -189,11 +187,11 @@ void PMBus::write(const std::string& name, int value, Type type)
         log<level::ERR>("Failed to write sysfs file",
                         entry("FILENAME=%s", path.c_str()));
 
-        elog<WriteFailure>(xyz::openbmc_project::Control::Device::
-                           WriteFailure::CALLOUT_ERRNO(rc),
-                           xyz::openbmc_project::Control::Device::
-                           WriteFailure::CALLOUT_DEVICE_PATH(
-                               fs::canonical(basePath).c_str()));
+        using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
+
+        elog<WriteFailure>(metadata::CALLOUT_ERRNO(rc),
+                           metadata::CALLOUT_DEVICE_PATH(
+                                   fs::canonical(basePath).c_str()));
     }
 }
 

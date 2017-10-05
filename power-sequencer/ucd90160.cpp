@@ -18,9 +18,8 @@
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 #include <elog-errors.hpp>
-#include <xyz/openbmc_project/Sensor/Device/error.hpp>
-#include <xyz/openbmc_project/Control/Device/error.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
 #include "names_values.hpp"
 #include "ucd90160.hpp"
 #include "utility.hpp"
@@ -42,9 +41,11 @@ namespace fs = std::experimental::filesystem;
 using namespace gpio;
 using namespace pmbus;
 using namespace phosphor::logging;
-using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
-using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
-using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
+
+namespace device_error = sdbusplus::xyz::openbmc_project::
+        Common::Device::Error;
+namespace power_error = sdbusplus::org::open_power::
+        Witherspoon::Fault::Error;
 
 UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
         Device(DEVICE_NAME, instance),
@@ -72,11 +73,11 @@ void UCD90160::onFailure()
             createPowerFaultLog();
         }
     }
-    catch (ReadFailure& e)
+    catch (device_error::ReadFailure& e)
     {
         if (!accessError)
         {
-            commit<ReadFailure>();
+            commit<device_error::ReadFailure>();
             accessError = true;
         }
     }
@@ -91,11 +92,11 @@ void UCD90160::analyze()
 
         checkPGOODFaults(true);
     }
-    catch (ReadFailure& e)
+    catch (device_error::ReadFailure& e)
     {
         if (!accessError)
         {
-            commit<ReadFailure>();
+            commit<device_error::ReadFailure>();
             accessError = true;
         }
     }
@@ -148,7 +149,7 @@ bool UCD90160::checkVOUTFaults()
             using metadata = org::open_power::Witherspoon::Fault::
                     PowerSequencerVoltageFault;
 
-            report<PowerSequencerVoltageFault>(
+            report<power_error::PowerSequencerVoltageFault>(
                     metadata::RAIL(page),
                     metadata::RAIL_NAME(railName.c_str()),
                     metadata::RAW_STATUS(nv.get().c_str()));
@@ -240,7 +241,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
             using metadata =  org::open_power::Witherspoon::Fault::
                     PowerSequencerPGOODFault;
 
-            report<PowerSequencerPGOODFault>(
+            report<power_error::PowerSequencerPGOODFault>(
                     metadata::INPUT_NUM(gpiNum),
                     metadata::INPUT_NAME(gpiName.c_str()),
                     metadata::RAW_STATUS(nv.get().c_str()));
@@ -262,7 +263,7 @@ void UCD90160::createPowerFaultLog()
     using metadata = org::open_power::Witherspoon::Fault::
         PowerSequencerFault;
 
-    report<PowerSequencerFault>(
+    report<power_error::PowerSequencerFault>(
             metadata::RAW_STATUS(nv.get().c_str()));
 }
 
@@ -411,7 +412,7 @@ void UCD90160::gpuPGOODError(const std::string& callout)
 
     using metadata = org::open_power::Witherspoon::Fault::GPUPowerFault;
 
-    report<GPUPowerFault>(
+    report<power_error::GPUPowerFault>(
             metadata::RAW_STATUS(nv.get().c_str()),
             metadata::GPU(callout.c_str()));
 }
@@ -424,7 +425,7 @@ void UCD90160::gpuOverTempError(const std::string& callout)
 
     using metadata = org::open_power::Witherspoon::Fault::GPUOverTemp;
 
-    report<GPUOverTemp>(
+    report<power_error::GPUOverTemp>(
             metadata::RAW_STATUS(nv.get().c_str()),
             metadata::GPU(callout.c_str()));
 }
