@@ -27,5 +27,5 @@ missing
 stamp-h1
 witherspoon-pseq-monitor
 witherspoon-psu-monitor
-xyz/openbmc_project/Power/Fault/
+org/open_power/Witherspoon/Fault/
 test-driver

@@ -20,7 +20,7 @@
 #include <elog-errors.hpp>
 #include <xyz/openbmc_project/Sensor/Device/error.hpp>
 #include <xyz/openbmc_project/Control/Device/error.hpp>
-#include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include "names_values.hpp"
 #include "ucd90160.hpp"
 #include "utility.hpp"
@@ -44,7 +44,7 @@ using namespace pmbus;
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
 using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
-using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
         Device(DEVICE_NAME, instance),
@@ -145,7 +145,7 @@ bool UCD90160::checkVOUTFaults()
             nv.add("STATUS_VOUT", vout);
             nv.add("MFR_STATUS", readMFRStatus());
 
-            using metadata = xyz::openbmc_project::Power::Fault::
+            using metadata = org::open_power::Witherspoon::Fault::
                     PowerSequencerVoltageFault;
 
             report<PowerSequencerVoltageFault>(
@@ -237,7 +237,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
             nv.add("MFR_STATUS", readMFRStatus());
             nv.add("INPUT_STATUS", status);
 
-            using metadata =  xyz::openbmc_project::Power::Fault::
+            using metadata =  org::open_power::Witherspoon::Fault::
                     PowerSequencerPGOODFault;
 
             report<PowerSequencerPGOODFault>(
@@ -259,7 +259,7 @@ void UCD90160::createPowerFaultLog()
     nv.add("STATUS_WORD", readStatusWord());
     nv.add("MFR_STATUS", readMFRStatus());
 
-    using metadata = xyz::openbmc_project::Power::Fault::
+    using metadata = org::open_power::Witherspoon::Fault::
         PowerSequencerFault;
 
     report<PowerSequencerFault>(
@@ -409,7 +409,7 @@ void UCD90160::gpuPGOODError(const std::string& callout)
     nv.add("STATUS_WORD", readStatusWord());
     nv.add("MFR_STATUS", readMFRStatus());
 
-    using metadata = xyz::openbmc_project::Power::Fault::GPUPowerFault;
+    using metadata = org::open_power::Witherspoon::Fault::GPUPowerFault;
 
     report<GPUPowerFault>(
             metadata::RAW_STATUS(nv.get().c_str()),
@@ -422,7 +422,7 @@ void UCD90160::gpuOverTempError(const std::string& callout)
     nv.add("STATUS_WORD", readStatusWord());
     nv.add("MFR_STATUS", readMFRStatus());
 
-    using metadata = xyz::openbmc_project::Power::Fault::GPUOverTemp;
+    using metadata = org::open_power::Witherspoon::Fault::GPUOverTemp;
 
     report<GPUOverTemp>(
             metadata::RAW_STATUS(nv.get().c_str()),

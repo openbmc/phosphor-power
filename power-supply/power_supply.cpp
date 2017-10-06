@@ -17,7 +17,7 @@
 #include <phosphor-logging/elog.hpp>
 #include <xyz/openbmc_project/Sensor/Device/error.hpp>
 #include <xyz/openbmc_project/Control/Device/error.hpp>
-#include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include "elog-errors.hpp"
 #include "names_values.hpp"
 #include "power_supply.hpp"
@@ -27,7 +27,7 @@
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Control::Device::Error;
 using namespace sdbusplus::xyz::openbmc_project::Sensor::Device::Error;
-using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 namespace witherspoon
 {
@@ -277,7 +277,7 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
         util::NamesValues nv;
         nv.add("STATUS_WORD", statusWord);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyUnderVoltageFault;
 
         report<PowerSupplyUnderVoltageFault>(metadata::RAW_STATUS(
@@ -302,7 +302,7 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
         nv.add("STATUS_WORD", statusWord);
         captureCmd(nv, STATUS_INPUT, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyInputFault;
 
         report<PowerSupplyInputFault>(
@@ -341,7 +341,7 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
         captureCmd(nv, STATUS_IOUT, Type::Debug);
         captureCmd(nv, STATUS_MFR, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyShouldBeOn;
 
         // A power supply is OFF (or pgood low) but should be on.
@@ -370,7 +370,7 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
         captureCmd(nv, STATUS_IOUT, Type::Debug);
         captureCmd(nv, STATUS_MFR, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyOutputOvercurrent;
 
         report<PowerSupplyOutputOvercurrent>(metadata::RAW_STATUS(
@@ -398,7 +398,7 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
         captureCmd(nv, STATUS_IOUT, Type::Debug);
         captureCmd(nv, STATUS_MFR, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyOutputOvervoltage;
 
         report<PowerSupplyOutputOvervoltage>(metadata::RAW_STATUS(
@@ -424,7 +424,7 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
         captureCmd(nv, STATUS_TEMPERATURE, Type::Debug);
         captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyFanFault;
 
         report<PowerSupplyFanFault>(
@@ -465,7 +465,7 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
         nv.add("STATUS_TEMPERATURE", statusTemperature);
         captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
-        using metadata = xyz::openbmc_project::Power::Fault::
+        using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyTemperatureFault;
 
         report<PowerSupplyTemperatureFault>(

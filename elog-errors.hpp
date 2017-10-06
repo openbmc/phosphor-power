@@ -11,42 +11,22 @@
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
-{
-namespace Fault
-{
-namespace Error
-{
-    struct PowerOnFailure;
-} // namespace Error
-} // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSequencerFault;
+    struct PowerSequencerPGOODFault;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -71,22 +51,22 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSupplyTemperatureFault;
+    struct PowerOnFailure;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -131,42 +111,62 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSequencerPGOODFault;
+    struct GPUPowerFault;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSupplyShouldBeOn;
+    struct Shutdown;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace org
+{
+namespace open_power
+{
+namespace Witherspoon
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSupplyInputFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -191,111 +191,31 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
-{
-namespace Fault
-{
-namespace Error
-{
-    struct PowerSupplyUnderVoltageFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSupplyFanFault;
+    struct PowerSequencerFault;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
-{
-namespace Fault
-{
-namespace Error
-{
-    struct PowerSupplyInputFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Power
-{
-namespace Fault
-{
-namespace Error
-{
-    struct GPUPowerFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Power
-{
-namespace Fault
-{
-namespace Error
-{
-    struct PowerSupplyOutputOvervoltage;
-} // namespace Error
-} // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -304,29 +224,89 @@ namespace Error
     struct PowerSupplyOutputOvercurrent;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct GPUOverTemp;
+    struct PowerSupplyOutputOvervoltage;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace org
+{
+namespace open_power
+{
+namespace Witherspoon
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSupplyFanFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace org
+{
+namespace open_power
+{
+namespace Witherspoon
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSequencerVoltageFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace org
+{
+namespace open_power
+{
+namespace Witherspoon
+{
+namespace Fault
+{
+namespace Error
+{
+    struct PowerSupplyUnderVoltageFault;
+} // namespace Error
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -351,42 +331,62 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct PowerSequencerVoltageFault;
+    struct PowerSupplyTemperatureFault;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
 namespace Error
 {
-    struct Shutdown;
+    struct PowerSupplyShouldBeOn;
 } // namespace Error
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
+} // namespace sdbusplus
+
+namespace sdbusplus
+{
+namespace org
+{
+namespace open_power
+{
+namespace Witherspoon
+{
+namespace Fault
+{
+namespace Error
+{
+    struct GPUOverTemp;
+} // namespace Error
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 
@@ -653,11 +653,11 @@ struct map_exception_type<sdbusplus::xyz::openbmc_project::Common::Callout::Erro
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -684,27 +684,27 @@ struct PowerSupplyUnderVoltageFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyUnderVoltageFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyUnderVoltageFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyUnderVoltageFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyUnderVoltageFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -731,27 +731,27 @@ struct PowerSupplyInputFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyInputFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyInputFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyInputFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyInputFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -779,27 +779,27 @@ struct PowerSupplyShouldBeOn
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyShouldBeOn>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyShouldBeOn>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyShouldBeOn;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyShouldBeOn;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -827,27 +827,27 @@ struct PowerSupplyOutputOvercurrent
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyOutputOvercurrent>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyOutputOvercurrent>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyOutputOvercurrent;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyOutputOvercurrent;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -875,27 +875,27 @@ struct PowerSupplyOutputOvervoltage
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyOutputOvervoltage>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyOutputOvervoltage>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyOutputOvervoltage;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyOutputOvervoltage;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -923,27 +923,27 @@ struct PowerSupplyFanFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyFanFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyFanFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyFanFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyFanFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -971,27 +971,27 @@ struct PowerSupplyTemperatureFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSupplyTemperatureFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyTemperatureFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSupplyTemperatureFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSupplyTemperatureFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1009,27 +1009,27 @@ struct Shutdown
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::Shutdown>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::Shutdown>
 {
-    using type = xyz::openbmc_project::Power::Fault::Shutdown;
+    using type = org::open_power::Witherspoon::Fault::Shutdown;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1047,27 +1047,27 @@ struct PowerOnFailure
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerOnFailure>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerOnFailure>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerOnFailure;
+    using type = org::open_power::Witherspoon::Fault::PowerOnFailure;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1112,27 +1112,27 @@ struct PowerSequencerVoltageFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerVoltageFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSequencerVoltageFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSequencerVoltageFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSequencerVoltageFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1177,27 +1177,27 @@ struct PowerSequencerPGOODFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerPGOODFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSequencerPGOODFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSequencerPGOODFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSequencerPGOODFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1224,27 +1224,27 @@ struct PowerSequencerFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::PowerSequencerFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSequencerFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::PowerSequencerFault;
+    using type = org::open_power::Witherspoon::Fault::PowerSequencerFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1280,27 +1280,27 @@ struct GPUPowerFault
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::GPUPowerFault>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::GPUPowerFault>
 {
-    using type = xyz::openbmc_project::Power::Fault::GPUPowerFault;
+    using type = org::open_power::Witherspoon::Fault::GPUPowerFault;
 };
 
 }
 
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Power
+namespace Witherspoon
 {
 namespace Fault
 {
@@ -1336,18 +1336,18 @@ struct GPUOverTemp
 };
 
 } // namespace Fault
-} // namespace Power
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::xyz::openbmc_project::Power::Fault::Error::GPUOverTemp>
+struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::GPUOverTemp>
 {
-    using type = xyz::openbmc_project::Power::Fault::GPUOverTemp;
+    using type = org::open_power::Witherspoon::Fault::GPUOverTemp;
 };
 
 }

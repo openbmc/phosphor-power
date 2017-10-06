@@ -16,21 +16,21 @@ libpower_la_SOURCES = \
 	pmbus.cpp \
 	timer.cpp \
 	utility.cpp \
-	xyz/openbmc_project/Power/Fault/error.cpp
+	org/open_power/Witherspoon/Fault/error.cpp
 
 nobase_nodist_include_HEADERS = \
-	xyz/openbmc_project/Power/Fault/error.hpp
+	org/open_power/Witherspoon/Fault/error.hpp
 
 BUILT_SOURCES = \
-	xyz/openbmc_project/Power/Fault/error.cpp \
-	xyz/openbmc_project/Power/Fault/error.hpp
+	org/open_power/Witherspoon/Fault/error.cpp \
+	org/open_power/Witherspoon/Fault/error.hpp
 
-xyz/openbmc_project/Power/Fault/error.hpp: ${srcdir}/xyz/openbmc_project/Power/Fault.errors.yaml
+org/open_power/Witherspoon/Fault/error.hpp: ${srcdir}/org/open_power/Witherspoon/Fault.errors.yaml
 	@mkdir -p `dirname $@`
-	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-header xyz.openbmc_project.Power.Fault > $@
+	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-header org.open_power.Witherspoon.Fault > $@
 
-xyz/openbmc_project/Power/Fault/error.cpp: ${srcdir}/xyz/openbmc_project/Power/Fault.errors.yaml
+org/open_power/Witherspoon/Fault/error.cpp: ${srcdir}/org/open_power/Witherspoon/Fault.errors.yaml
 	@mkdir -p `dirname $@`
-	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-cpp xyz.openbmc_project.Power.Fault > $@
+	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-cpp org.open_power.Witherspoon.Fault > $@
 
 SUBDIRS = . power-sequencer power-supply test

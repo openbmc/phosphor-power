@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include "elog-errors.hpp"
 #include "utility.hpp"
 
@@ -33,7 +33,7 @@ constexpr auto SYSTEMD_INTERFACE = "org.freedesktop.systemd1.Manager";
 constexpr auto POWEROFF_TARGET   = "obmc-chassis-hard-poweroff@0.target";
 
 using namespace phosphor::logging;
-using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 
 std::string getService(const std::string& path,

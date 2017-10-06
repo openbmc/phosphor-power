@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include <phosphor-logging/log.hpp>
-#include <xyz/openbmc_project/Power/Fault/error.hpp>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include "config.h"
 #include "elog-errors.hpp"
 #include "pgood_monitor.hpp"
@@ -29,7 +29,7 @@ constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
 constexpr auto POWER_INTERFACE = "org.openbmc.control.Power";
 
 using namespace phosphor::logging;
-using namespace sdbusplus::xyz::openbmc_project::Power::Fault::Error;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 bool PGOODMonitor::pgoodPending()
 {
