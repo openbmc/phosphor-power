@@ -75,8 +75,16 @@ int main(int argc, char* argv[])
 
     auto objname = "power_supply" + instnum;
     auto instance = std::stoul(instnum);
-    // The Witherspoon power supply can delay DC_GOOD active for 1 second.
-    std::chrono::seconds powerOnDelay(1);
+    // The state changes from 0 to 1 when the BMC_POWER_UP line to the power
+    // sequencer is asserted. It can take 50ms for the sequencer to assert the
+    // ENABLE# line that goes to the power supplies. The Witherspoon power
+    // supply can take a max of 100ms from ENABLE# asserted to 12V in spec.
+    // Once 12V in spec., the power supply will nominally take 1 second to
+    // assert DC_GOOD (and update POWER_GOOD Negated), +/1 100ms. That would
+    // give us a 1250ms delay from state=1 to checking STATUS_WORD, however,
+    // the sysfs files will only be updated by the ibm-cffps device driver once
+    // a second, so round up that delay to 2 seconds.
+    std::chrono::seconds powerOnDelay(2);
     auto psuDevice = std::make_unique<psu::PowerSupply>(objname,
                                                         std::move(instance),
                                                         std::move(objpath),
