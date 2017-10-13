@@ -14,6 +14,8 @@ namespace psu
 
 namespace sdbusRule = sdbusplus::bus::match::rules;
 
+constexpr auto FAULT_COUNT = 3;
+
 /**
  * @class PowerSupply
  * Represents a PMBus power supply device.
@@ -97,8 +99,11 @@ class PowerSupply : public Device
         /** @brief True if the power is on. */
         bool powerOn = false;
 
-        /** @brief True if power on fault has been detected/reported. */
-        bool powerOnFault = false;
+        /**
+         * @brief Equal to FAULT_COUNT if power on fault has been
+         * detected.
+         */
+        size_t powerOnFault = 0;
 
         /** @brief The sd_event structure used by the power on timer. */
         event::Event& event;

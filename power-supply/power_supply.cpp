@@ -199,7 +199,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
             readFailLogged = false;
             vinUVFault = false;
             inputFault = false;
-            powerOnFault = false;
+            powerOnFault = 0;
             outputOCFault = false;
             outputOVFault = false;
             fanFault = false;
@@ -315,28 +315,44 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    // Check PG# and UNIT_IS_OFF
-    if (((statusWord & status_word::POWER_GOOD_NEGATED) ||
-         (statusWord & status_word::UNIT_IS_OFF)) &&
-        !powerOnFault)
+    if (powerOnFault < FAULT_COUNT)
     {
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-        captureCmd(nv, STATUS_INPUT, Type::Debug);
-        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
-        captureCmd(nv, status0Vout, Type::Debug);
-        captureCmd(nv, STATUS_IOUT, Type::Debug);
-        captureCmd(nv, STATUS_MFR, Type::Debug);
+        // Check PG# and UNIT_IS_OFF
+        if ((statusWord & status_word::POWER_GOOD_NEGATED) ||
+            (statusWord & status_word::UNIT_IS_OFF))
+        {
+            log<level::INFO>("PGOOD or UNIT_IS_OFF bit bad",
+                             entry("STATUS_WORD=0x%04X", statusWord));
+            powerOnFault++;
+        }
+        else
+        {
+            if (powerOnFault > 0)
+            {
+                log<level::INFO>("PGOOD and UNIT_IS_OFF bits good");
+                powerOnFault = 0;
+            }
+        }
 
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyShouldBeOn;
+        if (powerOnFault >= FAULT_COUNT)
+        {
+            util::NamesValues nv;
+            nv.add("STATUS_WORD", statusWord);
+            captureCmd(nv, STATUS_INPUT, Type::Debug);
+            auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+            captureCmd(nv, status0Vout, Type::Debug);
+            captureCmd(nv, STATUS_IOUT, Type::Debug);
+            captureCmd(nv, STATUS_MFR, Type::Debug);
 
-        // A power supply is OFF (or pgood low) but should be on.
-        report<PowerSupplyShouldBeOn>(metadata::RAW_STATUS(nv.get().c_str()),
-                                      metadata::CALLOUT_INVENTORY_PATH(
-                                              inventoryPath.c_str()));
+            using metadata = org::open_power::Witherspoon::Fault::
+                    PowerSupplyShouldBeOn;
 
-        powerOnFault = true;
+            // A power supply is OFF (or pgood low) but should be on.
+            report<PowerSupplyShouldBeOn>(
+                    metadata::RAW_STATUS(nv.get().c_str()),
+                    metadata::CALLOUT_INVENTORY_PATH(
+                            inventoryPath.c_str()));
+        }
     }
 
 }
