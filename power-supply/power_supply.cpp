@@ -155,13 +155,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
 
         if (present)
         {
-            readFailLogged = false;
-            vinUVFault = false;
-            inputFault = false;
-            outputOCFault = false;
-            outputOVFault = false;
-            fanFault = false;
-            temperatureFault = false;
+            clearFaults();
         }
     }
 
@@ -196,14 +190,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
         // and start the power on timer when the state changes to 1.
         if (state)
         {
-            readFailLogged = false;
-            vinUVFault = false;
-            inputFault = false;
-            powerOnFault = 0;
-            outputOCFault = false;
-            outputOVFault = false;
-            fanFault = false;
-            temperatureFault = false;
+            clearFaults();
             powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
         }
         else
@@ -481,7 +468,15 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
 
 void PowerSupply::clearFaults()
 {
-    //TODO - Clear faults at pre-poweron. openbmc/openbmc#1736
+    readFailLogged = false;
+    vinUVFault = false;
+    inputFault = false;
+    powerOnFault = 0;
+    outputOCFault = false;
+    outputOVFault = false;
+    fanFault = false;
+    temperatureFault = false;
+
     return;
 }
 
