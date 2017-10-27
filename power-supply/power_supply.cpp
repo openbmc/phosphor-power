@@ -254,8 +254,9 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
         using metadata = org::open_power::Witherspoon::Fault::
                 PowerSupplyUnderVoltageFault;
 
-        report<PowerSupplyUnderVoltageFault>(metadata::RAW_STATUS(
-                                                     nv.get().c_str()));
+        report<PowerSupplyUnderVoltageFault>(
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
     }
     else
     {
@@ -280,7 +281,8 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
                 PowerSupplyInputFault;
 
         report<PowerSupplyInputFault>(
-                metadata::RAW_STATUS(nv.get().c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
     }
     else
     {

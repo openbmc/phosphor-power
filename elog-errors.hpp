@@ -679,7 +679,8 @@ struct PowerSupplyUnderVoltageFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyUnderVoltageFault::RAW_STATUS;
-    using metadata_types = std::tuple<RAW_STATUS>;
+    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
+    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 
 };
 
@@ -726,7 +727,8 @@ struct PowerSupplyInputFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyInputFault::RAW_STATUS;
-    using metadata_types = std::tuple<RAW_STATUS>;
+    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
+    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 
 };
 
