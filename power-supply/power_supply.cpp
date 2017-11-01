@@ -267,12 +267,23 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
             !(statusWord & status_word::VIN_UV_FAULT))
         {
             inputFault = false;
+
             statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
 
             log<level::INFO>("INPUT_FAULT_WARN cleared",
                              entry("POWERSUPPLY=%s", inventoryPath.c_str()),
                              entry("STATUS_WORD=0x%04X", statusWord),
                              entry("STATUS_INPUT=0x%02X", statusInput));
+
+            if (powerOn)
+            {
+                // The power supply will not be immediately powered on after
+                // the input power is restored.
+                powerOn = false;
+                // Start up the timer that will set the state to indicate we
+                // are ready for the powered on fault checks.
+                powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
+            }
         }
     }
 }
