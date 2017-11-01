@@ -119,7 +119,7 @@ void PowerSupply::analyze()
 
             checkInputFault(statusWord);
 
-            if (powerOn && !vinUVFault && !inputFault)
+            if (powerOn && !inputFault)
             {
                 checkFanFault(statusWord);
                 checkTemperatureFault(statusWord);
@@ -244,32 +244,8 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
 
     std::uint8_t  statusInput = 0;
 
-    if ((statusWord & status_word::VIN_UV_FAULT) && !vinUVFault)
-    {
-        vinUVFault = true;
-
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyUnderVoltageFault;
-
-        report<PowerSupplyUnderVoltageFault>(
-                metadata::RAW_STATUS(nv.get().c_str()),
-                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
-    }
-    else
-    {
-        if (vinUVFault)
-        {
-            vinUVFault = false;
-            log<level::INFO>("VIN_UV_FAULT cleared",
-                             entry("POWERSUPPLY=%s",
-                                     inventoryPath.c_str()));
-        }
-    }
-
-    if ((statusWord & status_word::INPUT_FAULT_WARN) && !inputFault)
+    if (!inputFault && ((statusWord & status_word::INPUT_FAULT_WARN) ||
+        (statusWord & status_word::VIN_UV_FAULT)))
     {
         inputFault = true;
 
@@ -287,7 +263,8 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
     else
     {
         if ((inputFault) &&
-            !(statusWord & status_word::INPUT_FAULT_WARN))
+            !(statusWord & status_word::INPUT_FAULT_WARN) &&
+            !(statusWord & status_word::VIN_UV_FAULT))
         {
             inputFault = false;
             statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
@@ -471,7 +448,6 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
 void PowerSupply::clearFaults()
 {
     readFailLogged = false;
-    vinUVFault = false;
     inputFault = false;
     powerOnFault = 0;
     outputOCFault = false;

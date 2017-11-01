@@ -132,14 +132,6 @@ class PowerSupply : public Device
         bool readFailLogged = false;
 
         /**
-         * @brief Set to true when a VIN UV fault has been detected
-         *
-         * This is the VIN_UV_FAULT bit in the low byte from the STATUS_WORD
-         * command response.
-         */
-        bool vinUVFault = false;
-
-        /**
          * @brief Set to true when an input fault or warning is detected
          *
          * This is the "INPUT FAULT OR WARNING" bit in the high byte from the
