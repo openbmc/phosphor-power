@@ -48,7 +48,8 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          std::chrono::seconds& t,
                          std::chrono::seconds& p)
     : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
-      inventoryPath(invpath), bus(bus), event(e), presentInterval(p),
+      inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus), event(e),
+      presentInterval(p),
       presentTimer(e, [this]()
                    {
                        this->present = true;
@@ -60,10 +61,9 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                    })
 {
     using namespace sdbusplus::bus;
-    auto present_obj_path = INVENTORY_OBJ_PATH + inventoryPath;
     presentMatch = std::make_unique<match_t>(bus,
                                              match::rules::propertiesChanged(
-                                                     present_obj_path,
+                                                     inventoryPath,
                                                      INVENTORY_INTERFACE),
                                              [this](auto& msg)
                                              {
@@ -177,11 +177,9 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
 void PowerSupply::updatePresence()
 {
     // Use getProperty utility function to get presence status.
-    std::string path = INVENTORY_OBJ_PATH + inventoryPath;
     std::string service = "xyz.openbmc_project.Inventory.Manager";
-
-    util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, path,service, bus,
-                      this->present);
+    util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, inventoryPath,
+                      service, bus, this->present);
 }
 
 void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
