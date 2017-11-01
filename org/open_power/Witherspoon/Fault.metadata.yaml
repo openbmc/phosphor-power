@@ -5,6 +5,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: PowerSupplyShouldBeOn
   level: ERR
   meta:
@@ -12,6 +13,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: PowerSupplyOutputOvercurrent
   level: ERR
   meta:
@@ -19,6 +21,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: PowerSupplyOutputOvervoltage
   level: ERR
   meta:
@@ -26,6 +29,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: PowerSupplyFanFault
   level: ERR
   meta:
@@ -33,6 +37,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: PowerSupplyTemperatureFault
   level: ERR
   meta:
@@ -40,6 +45,7 @@
       type: string
   inherits:
     - xyz.openbmc_project.Common.Callout.Inventory
+
 - name: Shutdown
   level: ERR
 
