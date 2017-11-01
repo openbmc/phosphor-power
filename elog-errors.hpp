@@ -71,22 +71,22 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace xyz
+namespace org
 {
-namespace openbmc_project
+namespace open_power
 {
-namespace Common
+namespace Witherspoon
 {
-namespace Callout
+namespace Fault
 {
 namespace Error
 {
-    struct Inventory;
+    struct PowerSupplyInputFault;
 } // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace Fault
+} // namespace Witherspoon
+} // namespace open_power
+} // namespace org
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -151,22 +151,22 @@ namespace Error
 
 namespace sdbusplus
 {
-namespace org
+namespace xyz
 {
-namespace open_power
+namespace openbmc_project
 {
-namespace Witherspoon
+namespace Common
 {
-namespace Fault
+namespace Callout
 {
 namespace Error
 {
-    struct PowerSupplyInputFault;
+    struct Inventory;
 } // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace Callout
+} // namespace Common
+} // namespace openbmc_project
+} // namespace xyz
 } // namespace sdbusplus
 
 namespace sdbusplus
@@ -282,26 +282,6 @@ namespace Fault
 namespace Error
 {
     struct PowerSequencerVoltageFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-    struct PowerSupplyUnderVoltageFault;
 } // namespace Error
 } // namespace Fault
 } // namespace Witherspoon
@@ -649,54 +629,6 @@ template <>
 struct map_exception_type<sdbusplus::xyz::openbmc_project::Common::Callout::Error::IPMISensor>
 {
     using type = xyz::openbmc_project::Common::Callout::IPMISensor;
-};
-
-}
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _PowerSupplyUnderVoltageFault
-{
-
-struct RAW_STATUS
-{
-    static constexpr auto str = "RAW_STATUS=%s";
-    static constexpr auto str_short = "RAW_STATUS";
-    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
-    explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
-    type _entry;
-};
-
-}  // namespace _PowerSupplyUnderVoltageFault
-
-struct PowerSupplyUnderVoltageFault
-{
-    static constexpr auto L = level::ERR;
-    using RAW_STATUS = _PowerSupplyUnderVoltageFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
-    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
-
-};
-
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-
-
-namespace details
-{
-
-template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyUnderVoltageFault>
-{
-    using type = org::open_power::Witherspoon::Fault::PowerSupplyUnderVoltageFault;
 };
 
 }
