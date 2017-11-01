@@ -116,7 +116,8 @@ void PowerSupply::analyze()
             // Read the 2 byte STATUS_WORD value to check for faults.
             statusWord = pmbusIntf.read(STATUS_WORD, Type::Debug);
 
-            //TODO: 3 consecutive reads should be performed.
+            //TODO: openbmc/openbmc#2484 Three consecutive reads should be
+            // performed.
             // If 3 consecutive reads are seen, log the fault.
             // Driver gives cached value, read once a second.
             // increment for fault on, decrement for fault off, to deglitch.
