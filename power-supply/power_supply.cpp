@@ -45,9 +45,15 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& invpath,
                          sdbusplus::bus::bus& bus,
                          event::Event& e,
-                         std::chrono::seconds& t)
+                         std::chrono::seconds& t,
+                         std::chrono::seconds& p)
     : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
-      inventoryPath(invpath), bus(bus), event(e), powerOnInterval(t),
+      inventoryPath(invpath), bus(bus), event(e), presentInterval(p),
+      presentTimer(e, [this]()
+                   {
+                       this->present = true;
+                   }),
+      powerOnInterval(t),
       powerOnTimer(e, [this]()
                    {
                        this->powerOn = true;
@@ -156,6 +162,11 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         if (present)
         {
             clearFaults();
+            presentTimer.start(presentInterval, Timer::TimerType::oneshot);
+        }
+        else
+        {
+            presentTimer.stop();
         }
     }
 

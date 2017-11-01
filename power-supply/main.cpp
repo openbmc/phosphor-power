@@ -85,13 +85,17 @@ int main(int argc, char* argv[])
     // the sysfs files will only be updated by the ibm-cffps device driver once
     // a second, so round up that delay to 2 seconds.
     std::chrono::seconds powerOnDelay(2);
+    // Timer to delay setting internal presence tracking. Allows for servicing
+    // the power supply.
+    std::chrono::seconds presentDelay(2);
     auto psuDevice = std::make_unique<psu::PowerSupply>(objname,
                                                         std::move(instance),
                                                         std::move(objpath),
                                                         std::move(invpath),
                                                         bus,
                                                         eventPtr,
-                                                        powerOnDelay);
+                                                        powerOnDelay,
+                                                        presentDelay);
 
     auto pollInterval = std::chrono::milliseconds(1000);
     DeviceMonitor mainloop(std::move(psuDevice), eventPtr, pollInterval);
