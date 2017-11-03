@@ -121,6 +121,9 @@ class PowerSupply : public Device
          */
         Timer presentTimer;
 
+        /** @brief True if a fault has already been found and not cleared */
+        bool faultFound = false;
+
         /** @brief True if the power is on. */
         bool powerOn = false;
 
