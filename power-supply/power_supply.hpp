@@ -181,9 +181,13 @@ class PowerSupply : public Device
         size_t outputOVFault = 0;
 
         /**
-         * @brief Set to true when a fan fault or warning condition is detected
+         * @brief Indicates a fan fault or warning condition was detected if
+         *        equal to FAULT_COUNT.
+         *
+         * @details This is incremented when the 'FAN_FAULT' bit in the
+         *          STATUS_WORD command response is on.
          */
-        bool fanFault = false;
+        size_t fanFault = 0;
 
         /**
          * @brief Set to true during a temperature fault or warn condition.
