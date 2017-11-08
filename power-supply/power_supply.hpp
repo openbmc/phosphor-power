@@ -173,9 +173,12 @@ class PowerSupply : public Device
         size_t outputOCFault = 0;
 
         /**
-         * @brief Set to true when the output overvoltage fault is detected
+         * @brief Indicates output overvoltage fault if equal to FAULT_COUNT.
+         *
+         * @details This is incremented when the "VOUT_OV_FAULT" bit in the
+         *          STATUS_WORD command response is on.
          */
-        bool outputOVFault = false;
+        size_t outputOVFault = 0;
 
         /**
          * @brief Set to true when a fan fault or warning condition is detected
