@@ -352,28 +352,40 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    // Check for an output overcurrent fault.
-    if ((statusWord & status_word::IOUT_OC_FAULT) &&
-        !outputOCFault)
+    if (outputOCFault < FAULT_COUNT)
     {
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-        captureCmd(nv, STATUS_INPUT, Type::Debug);
-        auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
-        captureCmd(nv, status0Vout, Type::Debug);
-        captureCmd(nv, STATUS_IOUT, Type::Debug);
-        captureCmd(nv, STATUS_MFR, Type::Debug);
+        // Check for an output overcurrent fault.
+        if ((statusWord & status_word::IOUT_OC_FAULT))
+        {
+            outputOCFault++;
+        }
+        else
+        {
+            if (outputOCFault > 0)
+            {
+                outputOCFault = 0;
+            }
+        }
 
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyOutputOvercurrent;
+        if (outputOCFault >= FAULT_COUNT)
+        {
+            util::NamesValues nv;
+            nv.add("STATUS_WORD", statusWord);
+            captureCmd(nv, STATUS_INPUT, Type::Debug);
+            auto status0Vout = pmbusIntf.insertPageNum(STATUS_VOUT, 0);
+            captureCmd(nv, status0Vout, Type::Debug);
+            captureCmd(nv, STATUS_IOUT, Type::Debug);
+            captureCmd(nv, STATUS_MFR, Type::Debug);
 
-        report<PowerSupplyOutputOvercurrent>(metadata::RAW_STATUS(
-                                                     nv.get().c_str()),
-                                             metadata::CALLOUT_INVENTORY_PATH(
-                                                     inventoryPath.c_str()));
+            using metadata = org::open_power::Witherspoon::Fault::
+                    PowerSupplyOutputOvercurrent;
 
-        faultFound = true;
-        outputOCFault = true;
+            report<PowerSupplyOutputOvercurrent>(
+                    metadata::RAW_STATUS(nv.get().c_str()),
+                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+
+            faultFound = true;
+        }
     }
 }
 
@@ -479,7 +491,7 @@ void PowerSupply::clearFaults()
     readFailLogged = false;
     inputFault = false;
     powerOnFault = 0;
-    outputOCFault = false;
+    outputOCFault = 0;
     outputOVFault = false;
     fanFault = false;
     temperatureFault = false;

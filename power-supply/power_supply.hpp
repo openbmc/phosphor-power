@@ -165,12 +165,12 @@ class PowerSupply : public Device
         bool inputFault = false;
 
         /**
-         * @brief Set to true when an output over current fault is detected
+         * @brief Indicates output over current fault if equal to FAULT_COUNT
          *
-         * This is the "IOUT_OC_FAULT" bit in the low byte from the STATUS_WORD
-         * command response.
+         * @details This is incremented when the "IOUT_OC_FAULT" bit in the low
+         *          byte from the STATUS_WORD command response is on.
          */
-        bool outputOCFault = false;
+        size_t outputOCFault = 0;
 
         /**
          * @brief Set to true when the output overvoltage fault is detected
