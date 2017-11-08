@@ -190,9 +190,15 @@ class PowerSupply : public Device
         size_t fanFault = 0;
 
         /**
-         * @brief Set to true during a temperature fault or warn condition.
+         * @brief Indicates a temperature fault or warn condition was detected
+         *        if equal to FAULT_COUNT.
+         *
+         * @details This is incremented when the 'TEMPERATURE_FAULT_WARN' bit
+         *          in the STATUS_WORD command response is on, or if the
+         *          'OT_FAULT' bit in the STATUS_TEMPERATURE command response
+         *          is on.
          */
-        bool temperatureFault = false;
+        size_t temperatureFault = 0;
 
         /**
          * @brief Callback for inventory property changes

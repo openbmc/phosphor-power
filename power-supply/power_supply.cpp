@@ -480,34 +480,47 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
     // logging the over-temperature condition.
     std::uint8_t statusTemperature = 0;
     statusTemperature = pmbusIntf.read(STATUS_TEMPERATURE, Type::Debug);
-    if (((statusWord & status_word::TEMPERATURE_FAULT_WARN) ||
-         (statusTemperature & status_temperature::OT_FAULT)) &&
-        !temperatureFault)
+    if (temperatureFault < FAULT_COUNT)
     {
-        // The power supply has had an over-temperature condition.
-        // This may not result in a shutdown if experienced for a short
-        // duration.
-        // This should not occur under normal conditions.
-        // The power supply may be faulty, or the paired supply may be putting
-        // out less current.
-        // Capture command responses with potentially relevant information,
-        // and call out the power supply reporting the condition.
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-        captureCmd(nv, STATUS_MFR, Type::Debug);
-        captureCmd(nv, STATUS_IOUT, Type::Debug);
-        nv.add("STATUS_TEMPERATURE", statusTemperature);
-        captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
+        if ((statusWord & status_word::TEMPERATURE_FAULT_WARN) ||
+            (statusTemperature & status_temperature::OT_FAULT))
+        {
+            temperatureFault++;
+        }
+        else
+        {
+            if (temperatureFault > 0)
+            {
+                temperatureFault = 0;
+            }
+        }
 
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyTemperatureFault;
+        if (temperatureFault >= FAULT_COUNT)
+        {
+            // The power supply has had an over-temperature condition.
+            // This may not result in a shutdown if experienced for a short
+            // duration.
+            // This should not occur under normal conditions.
+            // The power supply may be faulty, or the paired supply may be
+            // putting out less current.
+            // Capture command responses with potentially relevant information,
+            // and call out the power supply reporting the condition.
+            util::NamesValues nv;
+            nv.add("STATUS_WORD", statusWord);
+            captureCmd(nv, STATUS_MFR, Type::Debug);
+            captureCmd(nv, STATUS_IOUT, Type::Debug);
+            nv.add("STATUS_TEMPERATURE", statusTemperature);
+            captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
-        report<PowerSupplyTemperatureFault>(
-                metadata::RAW_STATUS(nv.get().c_str()),
-                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+            using metadata = org::open_power::Witherspoon::Fault::
+                    PowerSupplyTemperatureFault;
 
-        faultFound = true;
-        temperatureFault = true;
+            report<PowerSupplyTemperatureFault>(
+                    metadata::RAW_STATUS(nv.get().c_str()),
+                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+
+            faultFound = true;
+        }
     }
 }
 
@@ -519,7 +532,7 @@ void PowerSupply::clearFaults()
     outputOCFault = 0;
     outputOVFault = 0;
     fanFault = 0;
-    temperatureFault = false;
+    temperatureFault = 0;
     faultFound = false;
 
     return;
