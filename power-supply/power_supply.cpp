@@ -52,6 +52,8 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
       presentInterval(p),
       presentTimer(e, [this]()
                    {
+                       // The hwmon path may have changed.
+                       pmbusIntf.findHwmonDir();
                        this->present = true;
                    }),
       powerOnInterval(t),
