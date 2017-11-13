@@ -328,7 +328,7 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
             }
         }
 
-        if (powerOnFault >= FAULT_COUNT)
+        if (!faultFound && (powerOnFault >= FAULT_COUNT))
         {
             faultFound = true;
 
@@ -372,7 +372,7 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
             }
         }
 
-        if (outputOCFault >= FAULT_COUNT)
+        if (!faultFound && (outputOCFault >= FAULT_COUNT))
         {
             util::NamesValues nv;
             nv.add("STATUS_WORD", statusWord);
@@ -413,7 +413,7 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
             }
         }
 
-        if (outputOVFault >= FAULT_COUNT)
+        if (!faultFound && (outputOVFault >= FAULT_COUNT))
         {
             util::NamesValues nv;
             nv.add("STATUS_WORD", statusWord);
@@ -454,7 +454,7 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
             }
         }
 
-        if (fanFault >= FAULT_COUNT)
+        if (!faultFound && (fanFault >= FAULT_COUNT))
         {
             util::NamesValues nv;
             nv.add("STATUS_WORD", statusWord);
@@ -500,7 +500,7 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
             }
         }
 
-        if (temperatureFault >= FAULT_COUNT)
+        if (!faultFound && (temperatureFault >= FAULT_COUNT))
         {
             // The power supply has had an over-temperature condition.
             // This may not result in a shutdown if experienced for a short
