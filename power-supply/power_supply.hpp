@@ -153,6 +153,14 @@ class PowerSupply : public Device
         /** @brief Used to subscribe to D-Bus power on state changes */
         std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
 
+        /** @brief Indicates that a read failure has occurred.
+         *
+         * @details This will be incremented each time a read failure is
+         *          encountered. If it is incremented to FAULT_COUNT, an error
+         *          will be logged.
+         */
+        size_t readFail = 0;
+
         /** @brief Has a PMBus read failure already been logged? */
         bool readFailLogged = false;
 

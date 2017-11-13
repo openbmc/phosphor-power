@@ -115,6 +115,7 @@ void PowerSupply::analyze()
 
             // Read the 2 byte STATUS_WORD value to check for faults.
             statusWord = pmbusIntf.read(STATUS_WORD, Type::Debug);
+            readFail = 0;
 
             //TODO: openbmc/openbmc#2484 Three consecutive reads should be
             // performed.
@@ -138,7 +139,12 @@ void PowerSupply::analyze()
     }
     catch (ReadFailure& e)
     {
-        if (!readFailLogged)
+        if (readFail < FAULT_COUNT)
+        {
+            readFail++;
+        }
+
+        if (!readFailLogged && readFail >= FAULT_COUNT)
         {
             commit<ReadFailure>();
             readFailLogged = true;
@@ -526,6 +532,7 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
 
 void PowerSupply::clearFaults()
 {
+    readFail = 0;
     readFailLogged = false;
     inputFault = false;
     powerOnFault = 0;
