@@ -165,12 +165,14 @@ class PowerSupply : public Device
         bool readFailLogged = false;
 
         /**
-         * @brief Set to true when an input fault or warning is detected
+         * @brief Indicates an input fault or warning if equal to FAULT_COUNT.
          *
-         * This is the "INPUT FAULT OR WARNING" bit in the high byte from the
-         * STATUS_WORD command response.
+         * @details This is the "INPUT FAULT OR WARNING" bit in the high byte,
+         *          or the VIN_UV_FAULT bit in the low byte in the STATUS_WORD
+         *          command response. If either of those bits are on, this will
+         *          be incremented.
          */
-        bool inputFault = false;
+        size_t inputFault = 0;
 
         /**
          * @brief Indicates output over current fault if equal to FAULT_COUNT

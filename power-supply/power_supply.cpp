@@ -258,40 +258,23 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
 {
     using namespace witherspoon::pmbus;
 
-    std::uint8_t  statusInput = 0;
-
-    if (!inputFault && ((statusWord & status_word::INPUT_FAULT_WARN) ||
-        (statusWord & status_word::VIN_UV_FAULT)))
+    if ((inputFault < FAULT_COUNT) &&
+        ((statusWord & status_word::INPUT_FAULT_WARN) ||
+         (statusWord & status_word::VIN_UV_FAULT)))
     {
-        faultFound = true;
-        inputFault = true;
-
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-        captureCmd(nv, STATUS_INPUT, Type::Debug);
-
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyInputFault;
-
-        report<PowerSupplyInputFault>(
-                metadata::RAW_STATUS(nv.get().c_str()),
-                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+        inputFault++;
     }
     else
     {
-        if ((inputFault) &&
+        if ((inputFault > 0) &&
             !(statusWord & status_word::INPUT_FAULT_WARN) &&
             !(statusWord & status_word::VIN_UV_FAULT))
         {
-            inputFault = false;
+            inputFault = 0;
             faultFound = false;
 
-            statusInput = pmbusIntf.read(STATUS_INPUT, Type::Debug);
-
             log<level::INFO>("INPUT_FAULT_WARN cleared",
-                             entry("POWERSUPPLY=%s", inventoryPath.c_str()),
-                             entry("STATUS_WORD=0x%04X", statusWord),
-                             entry("STATUS_INPUT=0x%02X", statusInput));
+                             entry("POWERSUPPLY=%s", inventoryPath.c_str()));
 
             if (powerOn)
             {
@@ -304,6 +287,22 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
             }
         }
     }
+
+    if (!faultFound && (inputFault >= FAULT_COUNT))
+    {
+        util::NamesValues nv;
+        nv.add("STATUS_WORD", statusWord);
+        captureCmd(nv, STATUS_INPUT, Type::Debug);
+
+        using metadata = org::open_power::Witherspoon::Fault::
+                PowerSupplyInputFault;
+
+        report<PowerSupplyInputFault>(
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+        faultFound = true;
+    }
+
 }
 
 void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
@@ -534,7 +533,7 @@ void PowerSupply::clearFaults()
 {
     readFail = 0;
     readFailLogged = false;
-    inputFault = false;
+    inputFault = 0;
     powerOnFault = 0;
     outputOCFault = 0;
     outputOVFault = 0;
