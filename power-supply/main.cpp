@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
     // assert DC_GOOD (and update POWER_GOOD Negated), +/1 100ms. That would
     // give us a 1250ms delay from state=1 to checking STATUS_WORD, however,
     // the sysfs files will only be updated by the ibm-cffps device driver once
-    // a second, so round up that delay to 2 seconds.
-    std::chrono::seconds powerOnDelay(2);
+    // a second, so rounding up from 1 to 5 seconds.
+    std::chrono::seconds powerOnDelay(5);
     // Timer to delay setting internal presence tracking. Allows for servicing
     // the power supply.
     std::chrono::seconds presentDelay(2);
