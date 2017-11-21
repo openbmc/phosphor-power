@@ -166,15 +166,14 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
     auto valPropMap = msgData.find(PRESENT_PROP);
     if (valPropMap != msgData.end())
     {
-        present = sdbusplus::message::variant_ns::get<bool>(valPropMap->second);
-
-        if (present)
+        if (sdbusplus::message::variant_ns::get<bool>(valPropMap->second))
         {
             clearFaults();
             presentTimer.start(presentInterval, Timer::TimerType::oneshot);
         }
         else
         {
+            present = false;
             presentTimer.stop();
         }
     }
