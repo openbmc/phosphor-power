@@ -269,6 +269,9 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
             log<level::INFO>("INPUT_FAULT_WARN cleared",
                              entry("POWERSUPPLY=%s", inventoryPath.c_str()));
 
+            resolveError(inventoryPath,
+                         std::string(PowerSupplyInputFault::errName));
+
             if (powerOn)
             {
                 // The power supply will not be immediately powered on after
