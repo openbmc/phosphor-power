@@ -76,6 +76,48 @@ void getProperty(const std::string& interface,
 }
 
 /**
+ * @brief Write a D-Bus property
+ *
+ * @param[in] interface - the interface the property is on
+ * @param[in] propertName - the name of the property
+ * @param[in] path - the D-Bus path
+ * @param[in] service - the D-Bus service
+ * @param[in] bus - the D-Bus object
+ * @param[in] value - the value to set the property to
+ */
+template<typename T>
+void setProperty(const std::string& interface,
+                 const std::string& propertyName,
+                 const std::string& path,
+                 const std::string& service,
+                 sdbusplus::bus::bus& bus,
+                 T& value)
+{
+    sdbusplus::message::variant<T> propertyValue(value);
+
+    auto method = bus.new_method_call(service.c_str(),
+                                      path.c_str(),
+                                      PROPERTY_INTF,
+                                      "Set");
+
+    method.append(interface, propertyName, propertyValue);
+
+    auto reply = bus.call(method);
+    if (reply.is_method_error())
+    {
+        using namespace phosphor::logging;
+        log<level::ERR>("Error in property set call",
+                        entry("SERVICE=%s", service.c_str()),
+                        entry("PATH=%s", path.c_str()),
+                        entry("PROPERTY=%s", propertyName.c_str()));
+
+        // TODO openbmc/openbmc#851 - Once available, throw returned error
+        throw std::runtime_error("Error in property set call");
+    }
+
+}
+
+/**
  * Logs an error and powers off the system.
  *
  * @tparam T - error that will be logged before the power off
