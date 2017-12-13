@@ -57,7 +57,7 @@ const DeviceMap UCD90160::deviceMap
                           extraAnalysisType::none},
                 GPIConfig{3, 10, "MEM_GOOD1"s, false,
                           extraAnalysisType::none},
-                GPIConfig{4, 14, "GPU_PGOOD"s, true,
+                GPIConfig{4, 14, "GPU_PGOOD"s, false,
                           extraAnalysisType::gpuPGOOD},
                 GPIConfig{5, 17, "GPU_TH_OVERT"s, true,
                           extraAnalysisType::gpuOverTemp},
