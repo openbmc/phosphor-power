@@ -134,8 +134,17 @@ bool UCD90160::checkVOUTFaults()
         auto statusVout = interface.insertPageNum(STATUS_VOUT, page);
         uint8_t vout = interface.read(statusVout, Type::Debug);
 
-        //Any bit on is an error
+        //If any bits are on log them, though some are just
+        //warnings so they won't cause errors
         if (vout)
+        {
+            log<level::INFO>("A voltage rail has bits on in STATUS_VOUT",
+                    entry("STATUS_VOUT=0x%X", vout),
+                    entry("PAGE=%d", page));
+        }
+
+        //Log errors if any non-warning bits on
+        if (vout & ~status_vout::WARNING_MASK)
         {
             auto& railNames = std::get<ucd90160::railNamesField>(
                     deviceMap.find(getInstance())->second);

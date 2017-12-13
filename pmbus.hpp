@@ -23,6 +23,12 @@ constexpr auto STATUS_INPUT = "status0_input";
 // Uses Page substitution
 constexpr auto STATUS_VOUT = "statusP_vout";
 
+namespace status_vout
+{
+// Mask of bits that are only warnings
+constexpr auto WARNING_MASK = 0x6A;
+}
+
 // Current output status bits.
 constexpr auto STATUS_IOUT = "status0_iout";
 
