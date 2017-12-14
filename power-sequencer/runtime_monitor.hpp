@@ -52,7 +52,7 @@ class RuntimeMonitor : public DeviceMonitor
         RuntimeMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
                 sdbusplus::bus::bus& b,
                 witherspoon::power::event::Event& e,
-                std::chrono::seconds& i) :
+                std::chrono::milliseconds& i) :
             DeviceMonitor(std::move(d), e, i),
             bus(b),
             match(bus,

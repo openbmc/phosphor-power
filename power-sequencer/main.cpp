@@ -43,7 +43,7 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    std::chrono::seconds interval{i};
+    std::chrono::milliseconds interval{i};
 
     sd_event* e = nullptr;
     auto r = sd_event_default(&e);

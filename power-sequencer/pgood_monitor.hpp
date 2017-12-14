@@ -46,7 +46,7 @@ class PGOODMonitor : public DeviceMonitor
         PGOODMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
                 sdbusplus::bus::bus& b,
                 witherspoon::power::event::Event& e,
-                std::chrono::seconds& t) :
+                std::chrono::milliseconds& t) :
             DeviceMonitor(std::move(d), e, t),
             bus(b)
         {
