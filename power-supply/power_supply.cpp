@@ -17,6 +17,7 @@
 #include <phosphor-logging/elog.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
+#include <xyz/openbmc_project/Software/Version/server.hpp>
 #include "elog-errors.hpp"
 #include "names_values.hpp"
 #include "power_supply.hpp"
@@ -33,19 +34,33 @@ namespace psu
 using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
+namespace version = sdbusplus::xyz::openbmc_project::Software::server;
 
 constexpr auto ASSOCIATION_IFACE = "org.openbmc.Association";
 constexpr auto LOGGING_IFACE = "xyz.openbmc_project.Logging.Entry";
 constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
 constexpr auto POWER_IFACE = "org.openbmc.control.Power";
+constexpr auto INVENTORY_MGR_IFACE = "xyz.openbmc_project.Inventory.Manager";
+constexpr auto ASSET_IFACE = "xyz.openbmc_project.Inventory.Decorator.Asset";
+constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
 
 constexpr auto ENDPOINTS_PROP = "endpoints";
 constexpr auto MESSAGE_PROP = "Message";
 constexpr auto RESOLVED_PROP = "Resolved";
 constexpr auto PRESENT_PROP = "Present";
+constexpr auto SN_PROP = "SerialNumber";
+constexpr auto PN_PROP = "PartNumber";
+constexpr auto MODEL_PROP = "Model";
+constexpr auto VERSION_PROP = "Version";
+constexpr auto VERSION_PURPOSE_PROP = "Purpose";
 
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
+
+constexpr auto SERIAL_NUMBER = "serial_number";
+constexpr auto PART_NUMBER = "part_number";
+constexpr auto FW_VERSION = "fw_version";
+constexpr auto CCIN = "ccin";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath,
@@ -618,6 +633,120 @@ void PowerSupply::resolveError(const std::string& callout,
 
 void PowerSupply::updateInventory()
 {
+    using namespace witherspoon::pmbus;
+    using namespace sdbusplus::message;
+
+    // If any of these accesses fail, the fields will just be
+    // blank in the inventory.  Leave logging ReadFailure errors
+    // to analyze() as it runs continuously and will most
+    // likely hit and threshold them first anyway.  The
+    // readString() function will do the tracing of the failing
+    // path so this code doesn't need to.
+    std::string pn;
+    std::string sn;
+    std::string ccin;
+    std::string version;
+
+    if (present)
+    {
+        try
+        {
+            sn = pmbusIntf.readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
+        }
+        catch (ReadFailure& e) { }
+
+        try
+        {
+            pn = pmbusIntf.readString(PART_NUMBER, Type::HwmonDeviceDebug);
+        }
+        catch (ReadFailure& e) { }
+
+        try
+        {
+            ccin = pmbusIntf.readString(CCIN, Type::HwmonDeviceDebug);
+        }
+        catch (ReadFailure& e) { }
+
+        try
+        {
+            version = pmbusIntf.readString(FW_VERSION, Type::HwmonDeviceDebug);
+        }
+        catch (ReadFailure& e) { }
+    }
+
+    // Build the object map and send it to the inventory
+    using Properties = std::map<std::string, variant<std::string>>;
+    using Interfaces = std::map<std::string, Properties>;
+    using Object = std::map<object_path, Interfaces>;
+    Properties assetProps;
+    Properties versionProps;
+    Interfaces interfaces;
+    Object object;
+
+    assetProps.emplace(SN_PROP, sn);
+    assetProps.emplace(PN_PROP, pn);
+    assetProps.emplace(MODEL_PROP, ccin);
+    interfaces.emplace(ASSET_IFACE, std::move(assetProps));
+
+    versionProps.emplace(VERSION_PROP, version);
+    interfaces.emplace(VERSION_IFACE, std::move(versionProps));
+
+    //For Notify(), just send the relative path of the inventory
+    //object so remove the INVENTORY_OBJ_PATH prefix
+    auto path = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+
+    object.emplace(path, std::move(interfaces));
+
+    try
+    {
+        auto service = util::getService(
+                INVENTORY_OBJ_PATH,
+                INVENTORY_MGR_IFACE,
+                bus);
+
+        if (service.empty())
+        {
+            log<level::ERR>("Unable to get inventory manager service");
+            return;
+        }
+
+        auto method = bus.new_method_call(
+                service.c_str(),
+                INVENTORY_OBJ_PATH,
+                INVENTORY_MGR_IFACE,
+                "Notify");
+
+        method.append(std::move(object));
+
+        auto reply = bus.call(method);
+        if (reply.is_method_error())
+        {
+            log<level::ERR>(
+                    "Unable to update power supply inventory properties",
+                    entry("PATH=%s", path.c_str()));
+        }
+
+        // TODO: openbmc/openbmc#2756
+        // Calling Notify() with an enumerated property crashes inventory
+        // manager, so let it default to Unknown and now set it to the
+        // right value.
+        auto purpose = version::convertForMessage(
+                version::Version::VersionPurpose::Other);
+
+        util::setProperty(
+                VERSION_IFACE,
+                VERSION_PURPOSE_PROP,
+                inventoryPath,
+                service,
+                bus,
+                purpose);
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>(
+                e.what(),
+                entry("PATH=%s", inventoryPath));
+    }
 }
 
 }
