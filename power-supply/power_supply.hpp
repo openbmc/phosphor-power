@@ -321,6 +321,23 @@ class PowerSupply : public Device
          */
         void checkTemperatureFault(const uint16_t statusWord);
 
+        /**
+         * @brief Adds properties to the inventory.
+         *
+         * Reads the values from the device and writes them to the
+         * associated power supply D-Bus inventory object.
+         *
+         * This needs to be done on startup, and each time the presence
+         * state changes.
+         *
+         * Properties added:
+         * - Serial Number
+         * - Part Number
+         * - CCIN (Customer Card Identification Number) - added as the Model
+         * - Firmware version
+         */
+        void updateInventory();
+
 };
 
 }

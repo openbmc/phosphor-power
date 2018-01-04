@@ -61,6 +61,9 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                        // The hwmon path may have changed.
                        pmbusIntf.findHwmonDir();
                        this->present = true;
+
+                       // Update the inventory for the new device
+                       updateInventory();
                    }),
       powerOnInterval(t),
       powerOnTimer(e, [this]()
@@ -79,6 +82,9 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                                              });
     // Get initial presence state.
     updatePresence();
+
+    // Write the SN, PN, etc to the inventory
+    updateInventory();
 
     // Subscribe to power state changes
     powerOnMatch = std::make_unique<match_t>(bus,
@@ -173,6 +179,9 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         {
             present = false;
             presentTimer.stop();
+
+            //Clear out the now outdated inventory properties
+            updateInventory();
         }
     }
 
@@ -604,6 +613,10 @@ void PowerSupply::resolveError(const std::string& callout,
                          entry("MESSAGE=%s", message.c_str()));
     }
 
+}
+
+void PowerSupply::updateInventory()
+{
 }
 
 }
