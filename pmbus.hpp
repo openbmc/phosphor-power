@@ -88,17 +88,15 @@ constexpr auto OT_FAULT = 0x80;
 }
 
 /**
- * If the access should be done in the base
- * device directory, the hwmon directory, the
- * pmbus debug directory, or the device debug
- * directory.
+ * Where the access should be done
  */
 enum class Type
 {
-    Base,
-    Hwmon,
-    Debug,
-    DeviceDebug
+    Base,             // base device directory
+    Hwmon,            // hwmon directory
+    Debug,            // pmbus debug directory
+    DeviceDebug,      // device debug directory
+    HwmonDeviceDebug  // hwmon device debug directory
 };
 
 /**
