@@ -192,6 +192,38 @@ uint64_t PMBus::read(const std::string& name, Type type)
     return data;
 }
 
+std::string PMBus::readString(const std::string& name, Type type)
+{
+    std::string data;
+    std::ifstream file;
+    auto path = getPath(type);
+    path /= name;
+
+    file.exceptions(std::ifstream::failbit |
+                    std::ifstream::badbit |
+                    std::ifstream::eofbit);
+
+    try
+    {
+        file.open(path);
+        file >> data;
+    }
+    catch (std::exception& e)
+    {
+        auto rc = errno;
+        log<level::ERR>("Failed to read sysfs file",
+                        entry("FILENAME=%s", path.c_str()));
+
+        using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
+
+        elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
+                          metadata::CALLOUT_DEVICE_PATH(
+                                  fs::canonical(basePath).c_str()));
+    }
+
+    return data;
+}
+
 void PMBus::write(const std::string& name, int value, Type type)
 {
     std::ofstream file;

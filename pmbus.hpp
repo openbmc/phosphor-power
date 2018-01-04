@@ -199,6 +199,16 @@ class PMBus
         uint64_t read(const std::string& name, Type type);
 
         /**
+         * Read a string from file in sysfs.
+         *
+         * @param[in] name   - path concatenated to basePath to read
+         * @param[in] type   - Path type
+         *
+         * @return string - The data read from the file.
+         */
+        std::string readString(const std::string& name, Type type);
+
+        /**
          * Writes an integer value to the file, therefore doing
          * a PMBus write.
          *
