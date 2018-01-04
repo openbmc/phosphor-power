@@ -68,6 +68,29 @@ fs::path PMBus::getPath(Type type)
     }
 }
 
+std::string PMBus::getDeviceName()
+{
+    std::string name;
+    std::ifstream file;
+    auto path = basePath / "name";
+
+    file.exceptions(std::ifstream::failbit |
+                    std::ifstream::badbit |
+                    std::ifstream::eofbit);
+    try
+    {
+        file.open(path);
+        file >> name;
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>("Unable to read PMBus device name",
+                        entry("PATH=%s", path.c_str()));
+    }
+
+    return name;
+}
+
 bool PMBus::readBitInPage(const std::string& name,
                           size_t page,
                           Type type)

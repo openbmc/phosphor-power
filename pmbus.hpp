@@ -253,6 +253,15 @@ class PMBus
     private:
 
         /**
+         * Returns the device name
+         *
+         * This is found in the 'name' file in basePath.
+         *
+         * @return string - the device name
+         */
+        std::string getDeviceName();
+
+        /**
          * The sysfs device path
          */
         fs::path basePath;
