@@ -23,16 +23,6 @@
 #include "pmbus.hpp"
 #include "utility.hpp"
 
-using namespace phosphor::logging;
-using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
-using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
-
-constexpr auto ASSOCIATION_IFACE = "org.openbmc.Association";
-constexpr auto ENDPOINTS_PROPERTY = "endpoints";
-constexpr auto LOGGING_IFACE = "xyz.openbmc_project.Logging.Entry";
-constexpr auto MESSAGE_PROPERTY = "Message";
-constexpr auto RESOLVED_PROPERTY = "Resolved";
-
 namespace witherspoon
 {
 namespace power
@@ -40,11 +30,22 @@ namespace power
 namespace psu
 {
 
-constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
-constexpr auto INVENTORY_INTERFACE = "xyz.openbmc_project.Inventory.Item";
+using namespace phosphor::logging;
+using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
+using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
+
+constexpr auto ASSOCIATION_IFACE = "org.openbmc.Association";
+constexpr auto LOGGING_IFACE = "xyz.openbmc_project.Logging.Entry";
+constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
+constexpr auto POWER_IFACE = "org.openbmc.control.Power";
+
+constexpr auto ENDPOINTS_PROP = "endpoints";
+constexpr auto MESSAGE_PROP = "Message";
+constexpr auto RESOLVED_PROP = "Resolved";
 constexpr auto PRESENT_PROP = "Present";
+
+constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
-constexpr auto POWER_INTERFACE = "org.openbmc.control.Power";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath,
@@ -75,7 +76,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     presentMatch = std::make_unique<match_t>(bus,
                                              match::rules::propertiesChanged(
                                                      inventoryPath,
-                                                     INVENTORY_INTERFACE),
+                                                     INVENTORY_IFACE),
                                              [this](auto& msg)
                                              {
                                                  this->inventoryChanged(msg);
@@ -90,7 +91,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     powerOnMatch = std::make_unique<match_t>(bus,
                                              match::rules::propertiesChanged(
                                                      POWER_OBJ_PATH,
-                                                     POWER_INTERFACE),
+                                                     POWER_IFACE),
                                              [this](auto& msg)
                                              {
                                                  this->powerStateChanged(msg);
@@ -192,7 +193,7 @@ void PowerSupply::updatePresence()
 {
     // Use getProperty utility function to get presence status.
     std::string service = "xyz.openbmc_project.Inventory.Manager";
-    util::getProperty(INVENTORY_INTERFACE, PRESENT_PROP, inventoryPath,
+    util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
                       service, bus, this->present);
 }
 
@@ -234,11 +235,11 @@ void PowerSupply::updatePowerState()
     try
     {
         auto service = util::getService(POWER_OBJ_PATH,
-                                        POWER_INTERFACE,
+                                        POWER_IFACE,
                                         bus);
 
         // Use getProperty utility function to get power state.
-        util::getProperty<int32_t>(POWER_INTERFACE,
+        util::getProperty<int32_t>(POWER_IFACE,
                                    "state",
                                    POWER_OBJ_PATH,
                                    service,
@@ -570,7 +571,7 @@ void PowerSupply::resolveError(const std::string& callout,
 
         // Use getProperty utility function to get log entries (endpoints)
         EndpointList logEntries;
-        util::getProperty(ASSOCIATION_IFACE, ENDPOINTS_PROPERTY, path, service,
+        util::getProperty(ASSOCIATION_IFACE, ENDPOINTS_PROP, path, service,
                           bus, logEntries);
 
         // It is possible that all such entries for this callout have since
@@ -592,14 +593,14 @@ void PowerSupply::resolveError(const std::string& callout,
         for (const auto& logEntry : logEntries)
         {
             // Check to see if this logEntry has a message that matches.
-            util::getProperty(LOGGING_IFACE, MESSAGE_PROPERTY, logEntry,
+            util::getProperty(LOGGING_IFACE, MESSAGE_PROP, logEntry,
                               logEntryService, bus, logMessage);
 
             if (message == logMessage)
             {
                 // Log entry matches call out and message, set Resolved to true
                 bool resolved = true;
-                util::setProperty(LOGGING_IFACE, RESOLVED_PROPERTY, logEntry,
+                util::setProperty(LOGGING_IFACE, RESOLVED_PROP, logEntry,
                                   logEntryService, bus, resolved);
             }
 
