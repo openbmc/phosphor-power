@@ -749,6 +749,25 @@ void PowerSupply::updateInventory()
     }
 }
 
+void PowerSupply::enableHistory(const std::string& objectPath,
+                                size_t numRecords,
+                                const std::string& syncGPIOPath,
+                                size_t syncGPIONum)
+{
+    historyObjectPath = objectPath;
+    syncGPIODevPath = syncGPIOPath;
+    syncGPIONumber = syncGPIONum;
+
+    recordManager = std::make_unique<history::RecordManager>(numRecords);
+
+    auto avgPath = historyObjectPath + '/' + history::Average::name;
+    auto maxPath = historyObjectPath + '/' + history::Maximum::name;
+
+    average = std::make_unique<history::Average>(bus, avgPath);
+
+    maximum = std::make_unique<history::Maximum>(bus, maxPath);
+}
+
 }
 }
 }

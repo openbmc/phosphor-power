@@ -1,9 +1,12 @@
 #pragma once
 #include <sdbusplus/bus/match.hpp>
+#include "average.hpp"
 #include "device.hpp"
-#include "pmbus.hpp"
-#include "timer.hpp"
+#include "maximum.hpp"
 #include "names_values.hpp"
+#include "pmbus.hpp"
+#include "record_manager.hpp"
+#include "timer.hpp"
 
 namespace witherspoon
 {
@@ -79,6 +82,20 @@ class PowerSupply : public Device
          */
         void resolveError(const std::string& callout,
                           const std::string& message);
+
+        /**
+         * Enables making the input power history available on D-Bus
+         *
+         * @param[in] objectPath - the D-Bus object path to use
+         * @param[in] maxRecords - the number of history records to keep
+         * @param[in] syncGPIOPath - The gpiochip device path to use for
+         *                           sending the sync command
+         * @paramp[in] syncGPIONum - the GPIO number for the sync command
+         */
+        void enableHistory(const std::string& objectPath,
+                           size_t numRecords,
+                           const std::string& syncGPIOPath,
+                           size_t syncGPIONum);
 
     private:
         /**
@@ -218,6 +235,39 @@ class PowerSupply : public Device
          *          is on.
          */
         size_t temperatureFault = 0;
+
+        /**
+         * @brief Class that manages the input power history records.
+         */
+        std::unique_ptr<history::RecordManager> recordManager;
+
+        /**
+         * @brief The D-Bus object for the average input power history
+         */
+        std::unique_ptr<history::Average> average;
+
+        /**
+         * @brief The D-Bus object for the maximum input power history
+         */
+        std::unique_ptr<history::Maximum> maximum;
+
+        /**
+         * @brief The base D-Bus object path to use for the average
+         *        and maximum objects.
+         */
+        std::string historyObjectPath;
+
+        /**
+         * @brief The GPIO device path to use for sending the 'sync'
+         *        command to the PS.
+         */
+        std::string syncGPIODevPath;
+
+        /**
+         * @brief The GPIO number to use for sending the 'sync'
+         *        command to the PS.
+         */
+        size_t syncGPIONumber = 0;
 
         /**
          * @brief Callback for inventory property changes
