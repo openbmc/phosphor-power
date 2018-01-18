@@ -65,13 +65,19 @@ void ArgumentParser::usage(char** argv)
 {
     std::cerr << "Usage: " << argv[0] << " [options]\n";
     std::cerr << "Options:\n";
-    std::cerr << "    --help                           print this menu\n";
-    std::cerr << "    --path=<objpath>                 path to location to "
-                 "monitor\n";
-    std::cerr << "    --instance=<instance number>     Instance number for this"
-                 " power supply\n";
-    std::cerr << "    --inventory=<inventory path>     Inventory path for this"
-                 " power supply\n";
+    std::cerr << "    --help                              Print this menu\n";
+    std::cerr << "    --path=<objpath>                    Path to location to"
+                 " monitor\n";
+    std::cerr << "    --instance=<instance number>        Instance number for"
+                 " this power supply\n";
+    std::cerr << "    --inventory=<inventory path>        Inventory path for"
+                 " this power supply\n";
+    std::cerr << "    --num-history-records=<num records> Number of input"
+                 " power history records to provide on D-Bus\n";
+    std::cerr << "    --sync-gpio-path=<path>             GPIO chip device"
+                 " for the GPIO that performs the sync function\n";
+    std::cerr << "    --sync-gpio-num=<path>              GPIO number for the"
+                 " GPIO that performs the sync function\n";
     std::cerr << std::flush;
 }
 
@@ -80,11 +86,14 @@ const option ArgumentParser::options[] =
     { "path",       required_argument,  NULL,   'p' },
     { "instance",   required_argument,  NULL,   'n' },
     { "inventory",  required_argument,  NULL,   'i' },
+    { "num-history-records",  required_argument,  NULL,   'r' },
+    { "sync-gpio-path",  required_argument,  NULL,   'a' },
+    { "sync-gpio-num",  required_argument,  NULL,   'u' },
     { "help",       no_argument,        NULL,   'h' },
     { 0, 0, 0, 0},
 };
 
-const char* ArgumentParser::optionStr = "p:n:i:h";
+const char* ArgumentParser::optionStr = "p:n:i:r:a:u:h";
 
 const std::string ArgumentParser::trueString = "true";
 const std::string ArgumentParser::emptyString = "";
