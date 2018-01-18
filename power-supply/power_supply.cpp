@@ -19,6 +19,7 @@
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Software/Version/server.hpp>
 #include "elog-errors.hpp"
+#include "gpio.hpp"
 #include "names_values.hpp"
 #include "power_supply.hpp"
 #include "pmbus.hpp"
@@ -78,6 +79,9 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                        // The hwmon path may have changed.
                        pmbusIntf.findHwmonDir();
                        this->present = true;
+
+                       // Sync the INPUT_HISTORY data for all PSs
+                       syncHistory();
 
                        // Update the inventory for the new device
                        updateInventory();
@@ -749,6 +753,36 @@ void PowerSupply::updateInventory()
         log<level::ERR>(
                 e.what(),
                 entry("PATH=%s", inventoryPath));
+    }
+}
+
+void PowerSupply::syncHistory()
+{
+    using namespace witherspoon::gpio;
+
+    if (syncGPIODevPath.empty())
+    {
+        //Sync not implemented
+        return;
+    }
+
+    GPIO gpio{syncGPIODevPath,
+              static_cast<gpioNum_t>(syncGPIONumber),
+              Direction::output};
+
+    try
+    {
+        gpio.set(Value::low);
+
+        std::this_thread::sleep_for(std::chrono::milliseconds{5});
+
+        gpio.set(Value::high);
+
+        recordManager->clear();
+    }
+    catch (std::exception& e)
+    {
+        //Do nothing.  There would already be a journal entry.
     }
 }
 
