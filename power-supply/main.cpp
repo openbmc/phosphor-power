@@ -17,6 +17,7 @@
 #include <phosphor-logging/log.hpp>
 #include <systemd/sd-daemon.h>
 #include "argument.hpp"
+#include "config.h"
 #include "event.hpp"
 #include "power_supply.hpp"
 #include "device_monitor.hpp"
@@ -96,6 +97,58 @@ int main(int argc, char* argv[])
                                                         eventPtr,
                                                         powerOnDelay,
                                                         presentDelay);
+
+    // Get the number of input power history records to keep in D-Bus.
+    long int numRecords = 0;
+    auto records = (options)["num-history-records"];
+    if (records != ArgumentParser::emptyString)
+    {
+        numRecords = std::stol(records);
+        if (numRecords < 0)
+        {
+            std::cerr << "Invalid number of history records specified.\n";
+            return -6;
+        }
+    }
+
+    if (numRecords != 0)
+    {
+        // Get the GPIO information for controlling the SYNC signal.
+        // If one is there, they both must be.
+        auto syncGPIOPath = (options)["sync-gpio-path"];
+        auto syncGPIONum = (options)["sync-gpio-num"];
+
+        if (((syncGPIOPath == ArgumentParser::emptyString) &&
+            (syncGPIONum != ArgumentParser::emptyString)) ||
+            ((syncGPIOPath != ArgumentParser::emptyString) &&
+            (syncGPIONum == ArgumentParser::emptyString)))
+        {
+            std::cerr << "Invalid sync GPIO number or path\n";
+            return -7;
+        }
+
+        size_t gpioNum = 0;
+        if (syncGPIONum != ArgumentParser::emptyString)
+        {
+            gpioNum = stoul(syncGPIONum);
+        }
+
+        std::string name{"ps" + instnum + "_input_power"};
+        std::string basePath =
+            std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
+
+        psuDevice->enableHistory(basePath,
+                                 numRecords,
+                                 syncGPIOPath,
+                                 gpioNum);
+
+        // Systemd object manager
+        sdbusplus::server::manager::manager objManager{bus, basePath.c_str()};
+
+        std::string busName =
+                std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' + name;
+        bus.request_name(busName.c_str());
+    }
 
     auto pollInterval = std::chrono::milliseconds(1000);
     DeviceMonitor mainloop(std::move(psuDevice), eventPtr, pollInterval);

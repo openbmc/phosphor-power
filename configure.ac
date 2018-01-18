@@ -75,6 +75,20 @@ AS_IF([test "x$enable_turn_off_ucd90160_access" != "xyes"],
       AC_DEFINE_UNQUOTED([UCD90160_DEVICE_ACCESS], ["$UCD90160_DEVICE_ACCESS"], [Turn off UCD90160 hardware access])
 )
 
+AC_ARG_VAR(INPUT_HISTORY_BUSNAME_ROOT, [The D-Bus busname root for the PS input history.])
+AS_IF([test "x$INPUT_HISTORY_BUSNAME_ROOT" == "x"],
+      [INPUT_HISTORY_BUSNAME_ROOT="org.open_power.powersupply"])
+AC_DEFINE_UNQUOTED([INPUT_HISTORY_BUSNAME_ROOT],
+                   ["$INPUT_HISTORY_BUSNAME_ROOT"],
+                   [The D-Bus busname root for the PS input history.])
+
+AC_ARG_VAR(INPUT_HISTORY_SENSOR_ROOT, [The D-Bus power sensors namespace root])
+AS_IF([test "x$INPUT_HISTORY_SENSOR_ROOT" == "x"],
+      [INPUT_HISTORY_SENSOR_ROOT="/org/open_power/sensors/aggregation/per_30s"])
+AC_DEFINE_UNQUOTED([INPUT_HISTORY_SENSOR_ROOT],
+                   ["$INPUT_HISTORY_SENSOR_ROOT"],
+                   [The D-Bus power sensors namespace root])
+
 # Create configured output
 AC_CONFIG_FILES([Makefile power-sequencer/Makefile power-supply/Makefile test/Makefile power-supply/test/Makefile])
 AC_OUTPUT
