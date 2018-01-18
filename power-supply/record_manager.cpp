@@ -94,6 +94,32 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
     return true;
 }
 
+auto RecordManager::getAverageRecords() -> DBusRecordList
+{
+    DBusRecordList list;
+
+    for (const auto& r : records)
+    {
+        list.emplace_back(std::get<recTimePos>(r),
+                          std::get<recAvgPos>(r));
+    }
+
+    return list;
+}
+
+auto RecordManager::getMaximumRecords() -> DBusRecordList
+{
+    DBusRecordList list;
+
+    for (const auto& r : records)
+    {
+        list.emplace_back(std::get<recTimePos>(r),
+                          std::get<recMaxPos>(r));
+    }
+
+    return list;
+}
+
 size_t RecordManager::getRawRecordID(
         const std::vector<uint8_t>& data) const
 {

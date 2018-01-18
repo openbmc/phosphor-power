@@ -108,6 +108,24 @@ class RecordManager
         bool add(const std::vector<uint8_t>& rawRecord);
 
         /**
+         * @brief Returns the history of average input power
+         *        in a representation used by D-Bus.
+         *
+         * @return DBusRecordList - A list of averages with
+         *         a timestamp for each entry.
+         */
+        DBusRecordList getAverageRecords();
+
+        /**
+         * @brief Returns the history of maximum input power
+         *        in a representation used by D-Bus.
+         *
+         * @return DBusRecordList - A list of maximums with
+         *         a timestamp for each entry.
+         */
+        DBusRecordList getMaximumRecords();
+
+        /**
          * @brief Converts a Linear Format power number to an integer
          *
          * The PMBus spec describes a 2 byte Linear Format
