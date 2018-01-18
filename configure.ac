@@ -30,6 +30,8 @@ PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging],,\
     AC_MSG_ERROR(["Requires phosphor-logging package."]))
 PKG_CHECK_MODULES([PHOSPHOR_DBUS_INTERFACES], [phosphor-dbus-interfaces],,\
     AC_MSG_ERROR(["Requires phosphor-dbus-interfaces package."]))
+PKG_CHECK_MODULES([OPENPOWER_DBUS_INTERFACES], [openpower-dbus-interfaces],,\
+    AC_MSG_ERROR(["Requires openpower-dbus-interfaces package."]))
 # Check for sdbus++
 AC_PATH_PROG([SDBUSPLUSPLUS], [sdbus++])
 AS_IF([test "x$SDBUSPLUSPLUS" == "x"],
