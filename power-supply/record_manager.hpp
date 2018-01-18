@@ -53,6 +53,7 @@ class RecordManager
 
         static constexpr auto RAW_RECORD_SIZE = 5;
         static constexpr auto RAW_RECORD_ID_OFFSET = 0;
+        static constexpr auto FIRST_SEQUENCE_ID = 0;
         static constexpr auto LAST_SEQUENCE_ID = 0xFF;
 
         using DBusRecord = std::tuple<uint64_t, int64_t>;
@@ -89,6 +90,22 @@ class RecordManager
                 lastSequenceID(lastSequenceID)
         {
         }
+
+        /**
+         * @brief Adds a new entry to the history
+         *
+         * Also checks to see if the old history should be
+         * cleared, such as when there is an invalid record
+         * sequence ID or if there was no data from the PS.
+         *
+         * @param[in] rawRecord - the record data straight
+         *                    from the power supply
+         *
+         * @return bool - If there has been a change to the
+         *                history records that needs to be
+         *                reflected in D-Bus.
+         */
+        bool add(const std::vector<uint8_t>& rawRecord);
 
         /**
          * @brief Converts a Linear Format power number to an integer

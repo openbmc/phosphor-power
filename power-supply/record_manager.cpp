@@ -27,6 +27,73 @@ namespace history
 
 using namespace phosphor::logging;
 
+bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
+{
+    if (rawRecord.size() == 0)
+    {
+        //The PS has no data - either the power supply just started up,
+        //or it just got a SYNC.  Clear the history.
+        records.clear();
+        return true;
+    }
+
+    try
+    {
+        //Peek at the ID to see if more processing is needed.
+        auto id = getRawRecordID(rawRecord);
+
+        if (!records.empty())
+        {
+            auto previousID = std::get<recIDPos>(records.front());
+
+            //Already have this record.  Done.
+            if (previousID == id)
+            {
+                return false;
+            }
+
+            //Check that the sequence ID is in order.
+            //If not, clear out current list.
+            if ((previousID + 1) != id)
+            {
+                //If it just rolled over from 0xFF to 0x00, then no
+                //need to clear.  If we see a 0 seemingly out of nowhere,
+                //then it was a sync so clear the old records.
+                auto rolledOver =
+                    (previousID == lastSequenceID) &&
+                    (id == FIRST_SEQUENCE_ID);
+
+                if (!rolledOver)
+                {
+                    if (id != FIRST_SEQUENCE_ID)
+                    {
+                        log<level::INFO>(
+                                "Noncontiguous INPUT_HISTORY sequence ID "
+                                "found. Clearing old entries",
+                                entry("OLD_ID=%ld", previousID),
+                                entry("NEW_ID=%ld", id));
+                    }
+                    records.clear();
+                }
+            }
+        }
+
+        records.push_front(std::move(createRecord(rawRecord)));
+
+        //If no more should be stored, prune the oldest
+        if (records.size() > maxRecords)
+        {
+            records.pop_back();
+        }
+    }
+    catch (InvalidRecordException& e)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 size_t RecordManager::getRawRecordID(
         const std::vector<uint8_t>& data) const
 {
