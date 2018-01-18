@@ -209,6 +209,19 @@ class PMBus
         std::string readString(const std::string& name, Type type);
 
         /**
+         * Read data from a binary file in sysfs.
+         *
+         * @param[in] name   - path concatenated to basePath to read
+         * @param[in] type   - Path type
+         * @param[in] length - length of data to read, in bytes
+         *
+         * @return vector<uint8_t> - The data read from the file.
+         */
+        std::vector<uint8_t> readBinary(const std::string& name,
+                                        Type type,
+                                        size_t length);
+
+        /**
          * Writes an integer value to the file, therefore doing
          * a PMBus write.
          *

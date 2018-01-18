@@ -31,6 +31,17 @@ using namespace sdbusplus::xyz::openbmc_project::Common::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace fs = std::experimental::filesystem;
 
+/**
+ * @brief Helper to close a file handle
+ */
+struct FileCloser
+{
+    void operator()(FILE* fp) const
+    {
+        fclose(fp);
+    }
+};
+
 std::string PMBus::insertPageNum(const std::string& templateName,
                                  size_t page)
 {
@@ -222,6 +233,52 @@ std::string PMBus::readString(const std::string& name, Type type)
     }
 
     return data;
+}
+
+std::vector<uint8_t> PMBus::readBinary(const std::string& name,
+                                       Type type,
+                                       size_t length)
+{
+    auto path = getPath(type) / name;
+
+    //Use C style IO because it's easier to handle telling the difference
+    //between hitting EOF or getting an actual error.
+    std::unique_ptr<FILE, FileCloser> file{fopen(path.c_str(), "rb")};
+
+    if (file)
+    {
+        std::vector<uint8_t> data(length, 0);
+
+        auto bytes = fread(data.data(),
+                           sizeof(decltype(data[0])),
+                           length,
+                           file.get());
+
+        if (bytes != length)
+        {
+            //If hit EOF, just return the amount of data that was read.
+            if (feof(file.get()))
+            {
+               data.erase(data.begin() + bytes, data.end());
+            }
+            else if (ferror(file.get()))
+            {
+                auto rc = errno;
+                log<level::ERR>("Failed to read sysfs file",
+                                entry("FILENAME=%s", path.c_str()));
+
+                using metadata = xyz::openbmc_project::Common::
+                        Device::ReadFailure;
+
+                elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
+                                  metadata::CALLOUT_DEVICE_PATH(
+                                          fs::canonical(basePath).c_str()));
+            }
+        }
+        return data;
+    }
+
+    return std::vector<uint8_t>{};
 }
 
 void PMBus::write(const std::string& name, int value, Type type)
