@@ -73,6 +73,19 @@ class RecordManager
         }
 
         /**
+         * @brief Converts a Linear Format power number to an integer
+         *
+         * The PMBus spec describes a 2 byte Linear Format
+         * number that is composed of an exponent and mantissa
+         * in two's complement notation.
+         *
+         * Value = Mantissa * 2**Exponent
+         *
+         * @return int64_t the converted value
+         */
+        static int64_t linearToInteger(uint16_t data);
+
+        /**
          * @brief Returns the number of records
          *
          * @return size_t - the number of records

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <math.h>
 #include "record_manager.hpp"
 
 namespace witherspoon
@@ -22,6 +23,31 @@ namespace power
 namespace history
 {
 
+int64_t RecordManager::linearToInteger(uint16_t data)
+{
+    //The exponent is the first 5 bits, followed by 11 bits of mantissa.
+    int8_t exponent = (data & 0xF800) >> 11;
+    int16_t mantissa = (data & 0x07FF);
+
+    //If exponent's MSB on, then it's negative.
+    //Convert from two's complement.
+    if (exponent & 0x10)
+    {
+        exponent = (~exponent) & 0x1F;
+        exponent = (exponent + 1) * -1;
+    }
+
+    //If mantissa's MSB on, then it's negative.
+    //Convert from two's complement.
+    if (mantissa & 0x400)
+    {
+        mantissa = (~mantissa) & 0x07FF;
+        mantissa = (mantissa + 1) * -1;
+    }
+
+    auto value = static_cast<float>(mantissa) * pow(2, exponent);
+    return value;
+}
 
 }
 }
