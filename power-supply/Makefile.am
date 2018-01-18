@@ -7,7 +7,8 @@ sbin_PROGRAMS = \
 witherspoon_psu_monitor_SOURCES = \
 	main.cpp \
 	argument.cpp \
-	power_supply.cpp
+	power_supply.cpp \
+	record_manager.cpp
 
 witherspoon_psu_monitor_CXXFLAGS = \
 	$(SDBUSPLUS_CFLAGS) \
