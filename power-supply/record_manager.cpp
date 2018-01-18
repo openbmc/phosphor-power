@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <chrono>
 #include <math.h>
+#include <phosphor-logging/log.hpp>
 #include "record_manager.hpp"
 
 namespace witherspoon
@@ -22,6 +24,44 @@ namespace power
 {
 namespace history
 {
+
+using namespace phosphor::logging;
+
+size_t RecordManager::getRawRecordID(
+        const std::vector<uint8_t>& data) const
+{
+    if (data.size() != RAW_RECORD_SIZE)
+    {
+        log<level::ERR>("Invalid INPUT_HISTORY size",
+                entry("SIZE=%d", data.size()));
+        throw InvalidRecordException{};
+    }
+
+    return data[RAW_RECORD_ID_OFFSET];
+}
+
+Record RecordManager::createRecord(const std::vector<uint8_t>& data)
+{
+    //The raw record format is:
+    //  0xAABBCCDDEE
+    //
+    //  where:
+    //    0xAA = sequence ID
+    //    0xBBCC = average power in linear format (0xCC = MSB)
+    //    0xDDEE = maximum power in linear format (0xEE = MSB)
+    auto id = getRawRecordID(data);
+
+    auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count();
+
+    auto val = static_cast<uint16_t>(data[2]) << 8 | data[1];
+    auto averagePower = linearToInteger(val);
+
+    val = static_cast<uint16_t>(data[4]) << 8 | data[3];
+    auto maxPower = linearToInteger(val);
+
+    return Record{id, time, averagePower, maxPower};
+}
 
 int64_t RecordManager::linearToInteger(uint16_t data)
 {

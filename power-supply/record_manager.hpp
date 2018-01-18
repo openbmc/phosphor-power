@@ -18,6 +18,22 @@ static constexpr auto recMaxPos = 3;
 using Record = std::tuple<size_t, int64_t, int64_t, int64_t>;
 
 /**
+ * @class InvalidRecordException
+ *
+ * The exception that is thrown when a raw history record
+ * cannot be parsed.
+ */
+class InvalidRecordException : public std::runtime_error
+{
+    public:
+
+        InvalidRecordException() :
+            std::runtime_error("Invalid history record")
+        {
+        }
+};
+
+/**
  * @class RecordManager
  *
  * This class manages the records for the input power history of
@@ -35,6 +51,8 @@ class RecordManager
 {
     public:
 
+        static constexpr auto RAW_RECORD_SIZE = 5;
+        static constexpr auto RAW_RECORD_ID_OFFSET = 0;
         static constexpr auto LAST_SEQUENCE_ID = 0xFF;
 
         using DBusRecord = std::tuple<uint64_t, int64_t>;
@@ -105,6 +123,26 @@ class RecordManager
         }
 
     private:
+
+        /**
+         * @brief returns the sequence ID from a raw history record
+         *
+         * Throws InvalidRecordException if the data is the wrong length.
+         *
+         * @param[in] data - the raw record data as the PS returns it
+         *
+         * @return size_t - the ID from byte 0
+         */
+        size_t getRawRecordID(const std::vector<uint8_t>& data) const;
+
+        /**
+         * @brief Creates an instance of a Record from the raw PS data
+         *
+         * @param[in] data - the raw record data as the PS returns it
+         *
+         * @return Record - A filled in Record instance
+         */
+        Record createRecord(const std::vector<uint8_t>& data);
 
         /**
          * @brief The maximum number of entries to keep in the history.
