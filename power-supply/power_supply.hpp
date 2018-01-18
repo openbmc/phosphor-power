@@ -388,6 +388,20 @@ class PowerSupply : public Device
          */
         void updateInventory();
 
+        /**
+         * @brief Reads the most recent input history record from the power
+         *        supply and updates the average and maximum properties in
+         *        D-Bus if there is a new reading available.
+         *
+         * This will still run every time analyze() is called so code can
+         * post new data as soon as possible and the timestamp will more
+         * accurately reflect the correct time.
+         *
+         * D-Bus is only updated if there is a change and the oldest record
+         * will be pruned if the property already contains the max number of
+         * records.
+         */
+        void updateHistory();
 };
 
 }

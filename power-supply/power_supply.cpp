@@ -61,6 +61,7 @@ constexpr auto SERIAL_NUMBER = "serial_number";
 constexpr auto PART_NUMBER = "part_number";
 constexpr auto FW_VERSION = "fw_version";
 constexpr auto CCIN = "ccin";
+constexpr auto INPUT_HISTORY = "input_history";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath,
@@ -157,6 +158,8 @@ void PowerSupply::analyze()
                 checkCurrentOutOverCurrentFault(statusWord);
                 checkPGOrUnitOffFault(statusWord);
             }
+
+            updateHistory();
         }
     }
     catch (ReadFailure& e)
@@ -766,6 +769,29 @@ void PowerSupply::enableHistory(const std::string& objectPath,
     average = std::make_unique<history::Average>(bus, avgPath);
 
     maximum = std::make_unique<history::Maximum>(bus, maxPath);
+}
+
+void PowerSupply::updateHistory()
+{
+    if (!recordManager)
+    {
+        //Not enabled
+        return;
+    }
+
+    //Read just the most recent average/max record
+    auto data = pmbusIntf.readBinary(
+            INPUT_HISTORY,
+            pmbus::Type::HwmonDeviceDebug,
+            history::RecordManager::RAW_RECORD_SIZE);
+
+    //Update D-Bus only if something changed (a new record ID, or cleared out)
+    auto changed = recordManager->add(data);
+    if (changed)
+    {
+        average->values(std::move(recordManager->getAverageRecords()));
+        maximum->values(std::move(recordManager->getMaximumRecords()));
+    }
 }
 
 }
