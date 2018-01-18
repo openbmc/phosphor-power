@@ -75,12 +75,24 @@ class GPIO
          */
         Value read();
 
+        /**
+         * Sets the GPIO value to low or high
+         *
+         * Requests the GPIO line if it hasn't been done already.
+         *
+         * @param[in] Value - the value to set
+         */
+        void set(Value value);
+
     private:
 
         /**
          * Requests a GPIO line from the GPIO device
+         *
+         * @param[in] defaultValue - The default value, required for
+         *                           output GPIOs only.
          */
-        void requestLine();
+        void requestLine(Value defaultValue = Value::high);
 
         /**
          * The GPIO device name, like /dev/gpiochip0

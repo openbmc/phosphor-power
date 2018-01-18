@@ -54,8 +54,26 @@ Value GPIO::read()
     return (data.values[0] == 0) ? Value::low : Value::high;
 }
 
+void GPIO::set(Value value)
+{
+    assert(direction == Direction::output);
 
-void GPIO::requestLine()
+    requestLine(value);
+
+    gpiohandle_data data{};
+    data.values[0] = static_cast<gpioValue_t>(value);
+
+    auto rc = ioctl(lineFD(), GPIOHANDLE_SET_LINE_VALUES_IOCTL, &data);
+    if (rc == -1)
+    {
+        auto e = errno;
+        log<level::ERR>("Failed SET_LINE_VALUES ioctl",
+                        entry("ERRNO=%d", e));
+        elog<InternalFailure>();
+    }
+}
+
+void GPIO::requestLine(Value defaultValue)
 {
     //Only need to do this once
     if (lineFD)
@@ -85,6 +103,11 @@ void GPIO::requestLine()
 
     request.lineoffsets[0] = gpio;
     request.lines = 1;
+
+    if (direction == Direction::output)
+    {
+        request.default_values[0] = static_cast<gpioValue_t>(defaultValue);
+    }
 
     auto rc = ioctl(fd(), GPIO_GET_LINEHANDLE_IOCTL, &request);
     if (rc == -1)
