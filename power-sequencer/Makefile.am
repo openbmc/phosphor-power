@@ -6,7 +6,6 @@ sbin_PROGRAMS = \
 
 witherspoon_pseq_monitor_SOURCES = \
 	argument.cpp \
-	gpio.cpp \
 	main.cpp \
 	pgood_monitor.cpp \
 	runtime_monitor.cpp \

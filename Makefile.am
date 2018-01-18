@@ -13,6 +13,7 @@ libpower_la_CXXFLAGS = \
 	$(PHOSPHOR_DBUS_INTERFACES_CFLAGS)
 
 libpower_la_SOURCES = \
+	gpio.cpp \
 	pmbus.cpp \
 	timer.cpp \
 	utility.cpp \
