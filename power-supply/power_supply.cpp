@@ -293,6 +293,12 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
         ((statusWord & status_word::INPUT_FAULT_WARN) ||
          (statusWord & status_word::VIN_UV_FAULT)))
     {
+        if (inputFault == 0)
+        {
+            log<level::INFO>("INPUT or VIN_UV fault",
+                             entry("STATUS_WORD=0x%04X", statusWord));
+        }
+
         inputFault++;
     }
     else
@@ -324,17 +330,22 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
 
     if (!faultFound && (inputFault >= FAULT_COUNT))
     {
-        util::NamesValues nv;
-        nv.add("STATUS_WORD", statusWord);
-        captureCmd(nv, STATUS_INPUT, Type::Debug);
+        // If the power is on, report the fault in an error log entry.
+        if (powerOn)
+        {
+            util::NamesValues nv;
+            nv.add("STATUS_WORD", statusWord);
+            captureCmd(nv, STATUS_INPUT, Type::Debug);
 
-        using metadata = org::open_power::Witherspoon::Fault::
-                PowerSupplyInputFault;
+            using metadata = org::open_power::Witherspoon::Fault::
+                    PowerSupplyInputFault;
 
-        report<PowerSupplyInputFault>(
-                metadata::RAW_STATUS(nv.get().c_str()),
-                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
-        faultFound = true;
+            report<PowerSupplyInputFault>(
+                    metadata::RAW_STATUS(nv.get().c_str()),
+                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+
+            faultFound = true;
+        }
     }
 
 }
