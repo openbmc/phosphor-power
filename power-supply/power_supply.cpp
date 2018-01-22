@@ -626,7 +626,7 @@ void PowerSupply::resolveError(const std::string& callout,
     {
         log<level::INFO>("Failed to resolve error",
                          entry("CALLOUT=%s", callout.c_str()),
-                         entry("MESSAGE=%s", message.c_str()));
+                         entry("ERROR=%s", message.c_str()));
     }
 
 }
