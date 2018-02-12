@@ -71,15 +71,22 @@ const DeviceMap UCD90160::deviceMap
                         "/sys/devices/platform/ahb/ahb:apb/ahb:apb:i2c@"
                         "1e78a000/1e78a400.i2c-bus/i2c-11/11-0060",
                         gpio::Value::low,
-                        [](auto& ucd, const auto& callout) { ucd.gpuPGOODError(callout); },
+                        [](auto& ucd, const auto& callout)
+                                { ucd.gpuPGOODError(callout); },
                         optionFlags::none,
                         GPIODefinitions{
-                            GPIODefinition{8, "GPU0"s},
-                            GPIODefinition{9, "GPU1"s},
-                            GPIODefinition{10, "GPU2"s},
-                            GPIODefinition{11, "GPU3"s},
-                            GPIODefinition{12, "GPU4"s},
-                            GPIODefinition{13, "GPU5"s}}
+                            GPIODefinition{8,
+                                "/system/chassis/motherboard/gv100card0"s},
+                            GPIODefinition{9,
+                                "/system/chassis/motherboard/gv100card1"s},
+                            GPIODefinition{10,
+                                "/system/chassis/motherboard/gv100card2"s},
+                            GPIODefinition{11,
+                                "/system/chassis/motherboard/gv100card3"s},
+                            GPIODefinition{12,
+                                "/system/chassis/motherboard/gv100card4"s},
+                            GPIODefinition{13,
+                                "/system/chassis/motherboard/gv100card5"s}}
                     }},
 
                 {extraAnalysisType::gpuOverTemp,
@@ -87,15 +94,22 @@ const DeviceMap UCD90160::deviceMap
                         "/sys/devices/platform/ahb/ahb:apb/ahb:apb:i2c@"
                         "1e78a000/1e78a400.i2c-bus/i2c-11/11-0060",
                         gpio::Value::low,
-                        [](auto& ucd, const auto& callout) { ucd.gpuOverTempError(callout); },
+                        [](auto& ucd, const auto& callout)
+                                { ucd.gpuOverTempError(callout); },
                         optionFlags::shutdownOnFault,
                         GPIODefinitions{
-                            GPIODefinition{2, "GPU0"s},
-                            GPIODefinition{3, "GPU1"s},
-                            GPIODefinition{4, "GPU2"s},
-                            GPIODefinition{5, "GPU3"s},
-                            GPIODefinition{6, "GPU4"s},
-                            GPIODefinition{7, "GPU5"s}}
+                            GPIODefinition{2,
+                                "/system/chassis/motherboard/gv100card0"s},
+                            GPIODefinition{3,
+                                "/system/chassis/motherboard/gv100card1"s},
+                            GPIODefinition{4,
+                                "/system/chassis/motherboard/gv100card2"s},
+                            GPIODefinition{5,
+                                "/system/chassis/motherboard/gv100card3"s},
+                            GPIODefinition{6,
+                                "/system/chassis/motherboard/gv100card4"s},
+                            GPIODefinition{7,
+                                "/system/chassis/motherboard/gv100card5"s}}
                     }}
             }
         }

@@ -83,13 +83,13 @@
   meta:
     - str: "RAW_STATUS=%s"
       type: string
-    - str: "GPU=%s"
-      type: string
+  inherits:
+    - xyz.openbmc_project.Common.Callout.Inventory
 
 - name: GPUOverTemp
   level: ERR
   meta:
     - str: "RAW_STATUS=%s"
       type: string
-    - str: "GPU=%s"
-      type: string
+  inherits:
+    - xyz.openbmc_project.Common.Callout.Inventory

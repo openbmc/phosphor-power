@@ -37,6 +37,8 @@ const auto DEVICE_NAME = "UCD90160"s;
 const auto DRIVER_NAME = "ucd9000"s;
 constexpr auto NUM_PAGES = 16;
 
+constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
+
 namespace fs = std::experimental::filesystem;
 using namespace gpio;
 using namespace pmbus;
@@ -376,7 +378,8 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
         {
             errorFound = true;
 
-            auto part = std::get<ucd90160::gpioCalloutField>(gpio);
+            std::string part{INVENTORY_OBJ_PATH};
+            part = part + std::get<ucd90160::gpioCalloutField>(gpio);
             PartCallout callout{type, part};
 
             if (isPartCalledOut(callout))
@@ -424,7 +427,7 @@ void UCD90160::gpuPGOODError(const std::string& callout)
 
     report<power_error::GPUPowerFault>(
             metadata::RAW_STATUS(nv.get().c_str()),
-            metadata::GPU(callout.c_str()));
+            metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
 }
 
 void UCD90160::gpuOverTempError(const std::string& callout)
@@ -437,7 +440,7 @@ void UCD90160::gpuOverTempError(const std::string& callout)
 
     report<power_error::GPUOverTemp>(
             metadata::RAW_STATUS(nv.get().c_str()),
-            metadata::GPU(callout.c_str()));
+            metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
 }
 
 }

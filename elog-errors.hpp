@@ -1193,14 +1193,6 @@ struct RAW_STATUS
     explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
     type _entry;
 };
-struct GPU
-{
-    static constexpr auto str = "GPU=%s";
-    static constexpr auto str_short = "GPU";
-    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
-    explicit constexpr GPU(const char* a) : _entry(entry(str, a)) {};
-    type _entry;
-};
 
 }  // namespace _GPUPowerFault
 
@@ -1208,8 +1200,8 @@ struct GPUPowerFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _GPUPowerFault::RAW_STATUS;
-    using GPU = _GPUPowerFault::GPU;
-    using metadata_types = std::tuple<RAW_STATUS, GPU>;
+    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
+    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 
 };
 
@@ -1249,14 +1241,6 @@ struct RAW_STATUS
     explicit constexpr RAW_STATUS(const char* a) : _entry(entry(str, a)) {};
     type _entry;
 };
-struct GPU
-{
-    static constexpr auto str = "GPU=%s";
-    static constexpr auto str_short = "GPU";
-    using type = std::tuple<std::decay_t<decltype(str)>,const char*>;
-    explicit constexpr GPU(const char* a) : _entry(entry(str, a)) {};
-    type _entry;
-};
 
 }  // namespace _GPUOverTemp
 
@@ -1264,8 +1248,8 @@ struct GPUOverTemp
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _GPUOverTemp::RAW_STATUS;
-    using GPU = _GPUOverTemp::GPU;
-    using metadata_types = std::tuple<RAW_STATUS, GPU>;
+    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::Inventory::CALLOUT_INVENTORY_PATH;
+    using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 
 };
 
