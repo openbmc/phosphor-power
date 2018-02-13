@@ -309,6 +309,12 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
         {
             inputFault = 0;
             faultFound = false;
+            // When an input fault occurs, the power supply cannot be on.
+            // However, the check for the case where the power supply should be
+            // on will stop when there is a fault found.
+            // Clear the powerOnFault when the inputFault is cleared to reset
+            // the powerOnFault de-glitching.
+            powerOnFault = 0;
 
             log<level::INFO>("INPUT_FAULT_WARN cleared",
                              entry("POWERSUPPLY=%s", inventoryPath.c_str()));
