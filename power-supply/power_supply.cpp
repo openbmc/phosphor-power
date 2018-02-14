@@ -154,7 +154,7 @@ void PowerSupply::analyze()
 
             checkInputFault(statusWord);
 
-            if (powerOn && !faultFound)
+            if (powerOn && (inputFault == 0) && !faultFound)
             {
                 checkFanFault(statusWord);
                 checkTemperatureFault(statusWord);
