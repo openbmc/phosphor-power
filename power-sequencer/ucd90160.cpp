@@ -153,9 +153,17 @@ bool UCD90160::checkVOUTFaults()
             auto railName = railNames.at(page);
 
             util::NamesValues nv;
-            nv.add("STATUS_WORD", statusWord);
-            nv.add("STATUS_VOUT", vout);
-            nv.add("MFR_STATUS", readMFRStatus());
+            try
+            {
+                nv.add("STATUS_WORD", statusWord);
+                nv.add("STATUS_VOUT", vout);
+                nv.add("MFR_STATUS", readMFRStatus());
+            }
+            catch (device_error::ReadFailure& e)
+            {
+                log<level::ERR>("ReadFailure when collecting metadata");
+                commit<device_error::ReadFailure>();
+            }
 
             using metadata = org::open_power::Witherspoon::Fault::
                     PowerSequencerVoltageFault;
@@ -245,9 +253,18 @@ bool UCD90160::checkPGOODFaults(bool polling)
             auto status = (gpiStatus == Value::low) ? 0 : 1;
 
             util::NamesValues nv;
-            nv.add("STATUS_WORD", readStatusWord());
-            nv.add("MFR_STATUS", readMFRStatus());
-            nv.add("INPUT_STATUS", status);
+
+            try
+            {
+                nv.add("STATUS_WORD", readStatusWord());
+                nv.add("MFR_STATUS", readMFRStatus());
+                nv.add("INPUT_STATUS", status);
+            }
+            catch (device_error::ReadFailure& e)
+            {
+                log<level::ERR>("ReadFailure when collecting metadata");
+                commit<device_error::ReadFailure>();
+            }
 
             using metadata =  org::open_power::Witherspoon::Fault::
                     PowerSequencerPGOODFault;
@@ -268,8 +285,17 @@ bool UCD90160::checkPGOODFaults(bool polling)
 void UCD90160::createPowerFaultLog()
 {
     util::NamesValues nv;
-    nv.add("STATUS_WORD", readStatusWord());
-    nv.add("MFR_STATUS", readMFRStatus());
+
+    try
+    {
+        nv.add("STATUS_WORD", readStatusWord());
+        nv.add("MFR_STATUS", readMFRStatus());
+    }
+    catch (device_error::ReadFailure& e)
+    {
+        log<level::ERR>("ReadFailure when collecting metadata");
+        commit<device_error::ReadFailure>();
+    }
 
     using metadata = org::open_power::Witherspoon::Fault::
         PowerSequencerFault;
@@ -420,8 +446,17 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 void UCD90160::gpuPGOODError(const std::string& callout)
 {
     util::NamesValues nv;
-    nv.add("STATUS_WORD", readStatusWord());
-    nv.add("MFR_STATUS", readMFRStatus());
+
+    try
+    {
+        nv.add("STATUS_WORD", readStatusWord());
+        nv.add("MFR_STATUS", readMFRStatus());
+    }
+    catch (device_error::ReadFailure& e)
+    {
+        log<level::ERR>("ReadFailure when collecting metadata");
+        commit<device_error::ReadFailure>();
+    }
 
     using metadata = org::open_power::Witherspoon::Fault::GPUPowerFault;
 
@@ -433,8 +468,17 @@ void UCD90160::gpuPGOODError(const std::string& callout)
 void UCD90160::gpuOverTempError(const std::string& callout)
 {
     util::NamesValues nv;
-    nv.add("STATUS_WORD", readStatusWord());
-    nv.add("MFR_STATUS", readMFRStatus());
+
+    try
+    {
+        nv.add("STATUS_WORD", readStatusWord());
+        nv.add("MFR_STATUS", readMFRStatus());
+    }
+    catch (device_error::ReadFailure& e)
+    {
+        log<level::ERR>("ReadFailure when collecting metadata");
+        commit<device_error::ReadFailure>();
+    }
 
     using metadata = org::open_power::Witherspoon::Fault::GPUOverTemp;
 
