@@ -86,7 +86,7 @@ void GPIO::requestLine(Value defaultValue)
     {
         auto e = errno;
         log<level::ERR>("Failed opening GPIO device",
-                        entry("DEVICE=%s", device),
+                        entry("DEVICE=%s", device.c_str()),
                         entry("ERRNO=%d", e));
         elog<InternalFailure>();
     }
