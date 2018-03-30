@@ -111,7 +111,7 @@ uint16_t UCD90160::readStatusWord()
 
 uint32_t UCD90160::readMFRStatus()
 {
-    return interface.read(MFR_STATUS, Type::DeviceDebug);
+    return interface.read(MFR_STATUS, Type::HwmonDeviceDebug);
 }
 
 bool UCD90160::checkVOUTFaults()
