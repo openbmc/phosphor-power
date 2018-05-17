@@ -132,8 +132,8 @@ void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
         }
         catch (std::exception& e)
         {
-            log<level::INFO>("Unable to capture metadata", entry("CMD=%s",
-                                                                 cmd));
+            log<level::INFO>("Unable to capture metadata",
+                             entry("CMD=%s", cmd.c_str()));
         }
     }
 }
@@ -769,7 +769,7 @@ void PowerSupply::updateInventory()
     {
         log<level::ERR>(
                 e.what(),
-                entry("PATH=%s", inventoryPath));
+                entry("PATH=%s", inventoryPath.c_str()));
     }
 }
 
