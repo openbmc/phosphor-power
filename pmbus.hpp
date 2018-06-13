@@ -302,7 +302,7 @@ class PMBus
         /**
          * The device instance number.
          *
-         * Used in conjuction with the driver name for finding
+         * Used in conjunction with the driver name for finding
          * the debug directory.  Not required if that directory
          * isn't used.
          */

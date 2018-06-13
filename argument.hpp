@@ -22,7 +22,7 @@ class ArgumentParser
         ArgumentParser(ArgumentParser&&) = default;
         ArgumentParser& operator=(ArgumentParser&&) = default;
 
-        /** @brief Contructs Argument object
+        /** @brief Constructs Argument object
          *
          *  @param[in] argc - the main function's argc passed as is
          *  @param[in] argv - the main function's argv passed as is

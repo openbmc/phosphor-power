@@ -42,7 +42,7 @@ class InvalidRecordException : public std::runtime_error
  * The history is the average and maximum power values across 30s
  * intervals.  Every 30s, a new record will be available from the
  * PS.  This class takes that raw PS data and converts it into
- * something useable by D-Bus.  It ensures the readings are always
+ * something usable by D-Bus.  It ensures the readings are always
  * sorted newest to oldest, and prunes out the oldest entries when
  * necessary.  If there is a problem with the ordering IDs coming
  * from the PS, it will clear out the old records and start over.
