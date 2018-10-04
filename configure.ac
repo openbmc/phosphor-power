@@ -14,7 +14,7 @@ AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
 # Checks for typedefs, structures, and compiler characteristics.
-AX_CXX_COMPILE_STDCXX_14([noext])
+AX_CXX_COMPILE_STDCXX_17([noext])
 AX_APPEND_COMPILE_FLAGS([-Wall -Werror], [CXXFLAGS])
 
 # Download gpio.h from github if necessary.
