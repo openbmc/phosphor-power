@@ -22,6 +22,7 @@ config.sub
 depcomp
 install-sh
 i586-openbmc-linux-libtool
+libtool
 ltmain.sh
 missing
 stamp-h1
