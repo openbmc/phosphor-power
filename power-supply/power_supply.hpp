@@ -1,5 +1,6 @@
 #pragma once
 #include <sdbusplus/bus/match.hpp>
+#include <sdeventplus/event.hpp>
 #include "average.hpp"
 #include "device.hpp"
 #include "maximum.hpp"
@@ -51,7 +52,7 @@ class PowerSupply : public Device
                     const std::string& objpath,
                     const std::string& invpath,
                     sdbusplus::bus::bus& bus,
-                    event::Event& e,
+                    const sdeventplus::Event& e,
                     std::chrono::seconds& t,
                     std::chrono::seconds& p);
 
@@ -125,10 +126,6 @@ class PowerSupply : public Device
 
         /** @brief Used to subscribe to D-Bus property changes for Present */
         std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
-
-        /** @brief The sd_event structure used by the power on and present
-         *  timers. */
-        event::Event& event;
 
         /**
          * @brief Interval for setting present to true.

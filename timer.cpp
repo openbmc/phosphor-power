@@ -30,17 +30,15 @@ using namespace phosphor::logging;
 using InternalFailure = sdbusplus::xyz::openbmc_project::Common::
                             Error::InternalFailure;
 
-Timer::Timer(event::Event& events,
+Timer::Timer(const sdeventplus::Event& event,
              std::function<void()> callbackFunc) :
-    timeEvent(events),
+    eventSource(nullptr),
     callback(callbackFunc),
     timeout(0)
 {
-    sd_event_source* source = nullptr;
-
     // Start with an infinite expiration time
-    auto r = sd_event_add_time(timeEvent.get(),
-                               &source,
+    auto r = sd_event_add_time(event.get(),
+                               &eventSource,
                                CLOCK_MONOTONIC, // Time base
                                UINT64_MAX,      // Expire time - way long time
                                0,               // Use default event accuracy
@@ -53,8 +51,6 @@ Timer::Timer(event::Event& events,
         elog<InternalFailure>();
     }
 
-    eventSource.reset(source);
-
     //Ensure timer isn't running
     setTimer(SD_EVENT_OFF);
 }
@@ -63,6 +59,7 @@ Timer::Timer(event::Event& events,
 Timer::~Timer()
 {
     setTimer(SD_EVENT_OFF);
+    sd_event_source_unref(eventSource);
 }
 
 
@@ -93,7 +90,7 @@ std::chrono::microseconds Timer::getTime()
 
 void Timer::setTimer(int action)
 {
-    auto r = sd_event_source_set_enabled(eventSource.get(), action);
+    auto r = sd_event_source_set_enabled(eventSource, action);
     if (r < 0)
     {
         log<level::ERR>("Failed call to sd_event_source_set_enabled",
@@ -115,7 +112,7 @@ bool Timer::running()
     int status = 0;
 
     //returns SD_EVENT_OFF, SD_EVENT_ON, or SD_EVENT_ONESHOT
-    auto r = sd_event_source_get_enabled(eventSource.get(), &status);
+    auto r = sd_event_source_get_enabled(eventSource, &status);
     if (r < 0)
     {
         log<level::ERR>("Failed call to sd_event_source_get_enabled",
@@ -140,7 +137,7 @@ void Timer::setTimeout()
     auto expireTime = getTime() + timeout;
 
     //Set the time
-    auto r = sd_event_source_set_time(eventSource.get(), expireTime.count());
+    auto r = sd_event_source_set_time(eventSource, expireTime.count());
     if (r < 0)
     {
         log<level::ERR>("Failed call to sd_event_source_set_time",

@@ -68,11 +68,11 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath,
                          const std::string& invpath,
                          sdbusplus::bus::bus& bus,
-                         event::Event& e,
+                         const sdeventplus::Event& e,
                          std::chrono::seconds& t,
                          std::chrono::seconds& p)
     : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
-      inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus), event(e),
+      inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus),
       presentInterval(p),
       presentTimer(e, [this]()
                    {

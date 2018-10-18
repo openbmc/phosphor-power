@@ -3,7 +3,8 @@
 #include <chrono>
 #include <functional>
 #include <memory>
-#include "event.hpp"
+#include <sdeventplus/event.hpp>
+#include <systemd/sd-event.h>
 
 namespace witherspoon
 {
@@ -44,10 +45,10 @@ class Timer
         /**
          * @brief Constructs timer object
          *
-         * @param[in] events - sd_event pointer, previously created
+         * @param[in] event - sd_event pointer, previously created
          * @param[in] callbackFunc - The function to call on timer expiration
          */
-        Timer(event::Event& events,
+        Timer(const sdeventplus::Event& event,
               std::function<void()> callbackFunc);
 
         /**
@@ -130,14 +131,9 @@ class Timer
         void setTimeout();
 
         /**
-         * @brief The sd_event structure
-         */
-        event::Event& timeEvent;
-
-        /**
          * @brief Source of events
          */
-        event::EventSource eventSource;
+        sd_event_source* eventSource;
 
         /**
          * @brief Either 'repeating' or 'oneshot'

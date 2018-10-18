@@ -16,6 +16,7 @@
 #include <chrono>
 #include <iostream>
 #include <phosphor-logging/log.hpp>
+#include <sdeventplus/event.hpp>
 #include "argument.hpp"
 #include "pgood_monitor.hpp"
 #include "runtime_monitor.hpp"
@@ -45,16 +46,7 @@ int main(int argc, char** argv)
 
     std::chrono::milliseconds interval{i};
 
-    sd_event* e = nullptr;
-    auto r = sd_event_default(&e);
-    if (r < 0)
-    {
-        log<level::ERR>("sd_event_default() failed",
-                        entry("ERROR=%s", strerror(-r)));
-        exit(EXIT_FAILURE);
-    }
-
-    event::Event event{e};
+	auto event = sdeventplus::Event::get_default();
     auto bus = sdbusplus::bus::new_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 

@@ -2,8 +2,8 @@
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server.hpp>
+#include <sdeventplus/event.hpp>
 #include "device.hpp"
-#include "event.hpp"
 #include "timer.hpp"
 
 namespace witherspoon
@@ -39,7 +39,7 @@ class DeviceMonitor
          * @param[in] i - polling interval in ms
          */
         DeviceMonitor(std::unique_ptr<Device>&& d,
-                      event::Event& e,
+                      const sdeventplus::Event& e,
                       std::chrono::milliseconds i) :
             device(std::move(d)),
             event(e),
@@ -57,15 +57,7 @@ class DeviceMonitor
         virtual int run()
         {
             timer.start(interval, Timer::TimerType::repeating);
-
-            auto r = sd_event_loop(event.get());
-            if (r < 0)
-            {
-                log<level::ERR>("sd_event_loop() failed",
-                                entry("ERROR=%s", strerror(-r)));
-            }
-
-            return r;
+            return event.loop();
         }
 
     protected:
@@ -88,9 +80,9 @@ class DeviceMonitor
         std::unique_ptr<Device> device;
 
         /**
-         * The sd_event structure used by the timer
+         * The event loop used by the timer
          */
-        event::Event& event;
+        sdeventplus::Event event;
 
         /**
          * The polling interval in milliseconds

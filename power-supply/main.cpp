@@ -15,10 +15,9 @@
  */
 #include <iostream>
 #include <phosphor-logging/log.hpp>
-#include <systemd/sd-daemon.h>
+#include <sdeventplus/event.hpp>
 #include "argument.hpp"
 #include "config.h"
-#include "event.hpp"
 #include "power_supply.hpp"
 #include "device_monitor.hpp"
 
@@ -57,22 +56,12 @@ int main(int argc, char* argv[])
         return -4;
     }
 
-    sd_event* events = nullptr;
-
-    auto r = sd_event_default(&events);
-    if (r < 0)
-    {
-        log<level::ERR>("Failed call to sd_event_default()",
-                        entry("ERROR=%s", strerror(-r)));
-        return -5;
-    }
-
     auto bus = sdbusplus::bus::new_default();
-    witherspoon::power::event::Event eventPtr{events};
+    auto event = sdeventplus::Event::get_default();
 
-    //Attach the event object to the bus object so we can
-    //handle both sd_events (for the timers) and dbus signals.
-    bus.attach_event(eventPtr.get(), SD_EVENT_PRIORITY_NORMAL);
+    // Attach the event object to the bus object so we can
+    // handle both sd_events (for the timers) and dbus signals.
+    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
     auto objname = "power_supply" + instnum;
     auto instance = std::stoul(instnum);
@@ -94,7 +83,7 @@ int main(int argc, char* argv[])
                                                         std::move(objpath),
                                                         std::move(invpath),
                                                         bus,
-                                                        eventPtr,
+                                                        event,
                                                         powerOnDelay,
                                                         presentDelay);
 
@@ -151,8 +140,5 @@ int main(int argc, char* argv[])
     }
 
     auto pollInterval = std::chrono::milliseconds(1000);
-    DeviceMonitor mainloop(std::move(psuDevice), eventPtr, pollInterval);
-    mainloop.run();
-
-    return 0;
+    return DeviceMonitor(std::move(psuDevice), event, pollInterval).run();
 }

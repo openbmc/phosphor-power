@@ -2,8 +2,8 @@
 
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server.hpp>
+#include <sdeventplus/event.hpp>
 #include "device.hpp"
-#include "event.hpp"
 #include "device_monitor.hpp"
 #include "timer.hpp"
 
@@ -51,7 +51,7 @@ class RuntimeMonitor : public DeviceMonitor
          */
         RuntimeMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
                 sdbusplus::bus::bus& b,
-                witherspoon::power::event::Event& e,
+                const sdeventplus::Event& e,
                 std::chrono::milliseconds& i) :
             DeviceMonitor(std::move(d), e, i),
             bus(b),

@@ -66,16 +66,6 @@ bool PGOODMonitor::pgoodPending()
 }
 
 
-void PGOODMonitor::exitEventLoop()
-{
-    auto r = sd_event_exit(event.get(), EXIT_SUCCESS);
-    if (r < 0)
-    {
-        log<level::ERR>("sd_event_exit failed",
-                entry("RC = %d", r));
-    }
-}
-
 void PGOODMonitor::analyze()
 {
     //Timer callback.
@@ -93,8 +83,7 @@ void PGOODMonitor::analyze()
 
     //The pgood-wait service (with a longer timeout)
     //will handle powering off the system.
-
-    exitEventLoop();
+    event.exit(EXIT_SUCCESS);
 }
 
 void PGOODMonitor::propertyChanged()
@@ -104,8 +93,7 @@ void PGOODMonitor::propertyChanged()
     if (!pgoodPending())
     {
         //PGOOD is on, or system is off, so we are done.
-        timer.stop();
-        exitEventLoop();
+        event.exit(EXIT_SUCCESS);
     }
 }
 
@@ -134,13 +122,7 @@ int PGOODMonitor::run()
         }
 
         timer.start(interval);
-
-        auto r = sd_event_loop(event.get());
-        if (r < 0)
-        {
-            log<level::ERR>("sd_event_loop() failed",
-                    entry("ERROR=%d", r));
-        }
+        return event.loop();
     }
     catch (std::exception& e)
     {

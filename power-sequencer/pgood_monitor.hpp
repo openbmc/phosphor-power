@@ -2,8 +2,8 @@
 
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server.hpp>
+#include <sdeventplus/event.hpp>
 #include "device.hpp"
-#include "event.hpp"
 #include "device_monitor.hpp"
 #include "timer.hpp"
 
@@ -45,7 +45,7 @@ class PGOODMonitor : public DeviceMonitor
          */
         PGOODMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
                 sdbusplus::bus::bus& b,
-                witherspoon::power::event::Event& e,
+                const sdeventplus::Event& e,
                 std::chrono::milliseconds& t) :
             DeviceMonitor(std::move(d), e, t),
             bus(b)
