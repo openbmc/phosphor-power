@@ -1,13 +1,14 @@
 #pragma once
 #include <sdbusplus/bus/match.hpp>
+#include <sdeventplus/clock.hpp>
 #include <sdeventplus/event.hpp>
+#include <sdeventplus/utility/timer.hpp>
 #include "average.hpp"
 #include "device.hpp"
 #include "maximum.hpp"
 #include "names_values.hpp"
 #include "pmbus.hpp"
 #include "record_manager.hpp"
-#include "timer.hpp"
 
 namespace witherspoon
 {
@@ -142,7 +143,7 @@ class PowerSupply : public Device
          * The timer used to do the callback after the present property has
          * changed.
          */
-        Timer presentTimer;
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> presentTimer;
 
         /** @brief True if a fault has already been found and not cleared */
         bool faultFound = false;
@@ -171,7 +172,7 @@ class PowerSupply : public Device
          * The timer used to do the callback after the power state has been on
          * long enough.
          */
-        Timer powerOnTimer;
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> powerOnTimer;
 
         /** @brief Used to subscribe to D-Bus power on state changes */
         std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;

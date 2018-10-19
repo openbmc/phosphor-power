@@ -19,7 +19,6 @@ libpower_la_CXXFLAGS = \
 libpower_la_SOURCES = \
 	gpio.cpp \
 	pmbus.cpp \
-	timer.cpp \
 	utility.cpp \
 	org/open_power/Witherspoon/Fault/error.cpp
 

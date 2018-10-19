@@ -83,7 +83,7 @@ void PGOODMonitor::analyze()
 
     //The pgood-wait service (with a longer timeout)
     //will handle powering off the system.
-    event.exit(EXIT_SUCCESS);
+    timer.get_event().exit(EXIT_SUCCESS);
 }
 
 void PGOODMonitor::propertyChanged()
@@ -93,7 +93,7 @@ void PGOODMonitor::propertyChanged()
     if (!pgoodPending())
     {
         //PGOOD is on, or system is off, so we are done.
-        event.exit(EXIT_SUCCESS);
+        timer.get_event().exit(EXIT_SUCCESS);
     }
 }
 
@@ -121,8 +121,7 @@ int PGOODMonitor::run()
             return EXIT_SUCCESS;
         }
 
-        timer.start(interval);
-        return event.loop();
+        return timer.get_event().loop();
     }
     catch (std::exception& e)
     {

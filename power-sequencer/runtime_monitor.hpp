@@ -5,7 +5,6 @@
 #include <sdeventplus/event.hpp>
 #include "device.hpp"
 #include "device_monitor.hpp"
-#include "timer.hpp"
 
 namespace witherspoon
 {

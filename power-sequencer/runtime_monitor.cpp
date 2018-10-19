@@ -43,7 +43,7 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
 
     try
     {
-        timer.stop();
+        timer.setEnabled(false);
 
 #ifdef UCD90160_DEVICE_ACCESS
         device->onFailure();

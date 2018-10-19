@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <functional>
 #include <phosphor-logging/log.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
@@ -74,7 +75,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
       inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus),
       presentInterval(p),
-      presentTimer(e, [this]()
+      presentTimer(e, std::bind([this]()
                    {
                        // The hwmon path may have changed.
                        pmbusIntf.findHwmonDir();
@@ -85,12 +86,12 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
 
                        // Update the inventory for the new device
                        updateInventory();
-                   }),
+                   })),
       powerOnInterval(t),
-      powerOnTimer(e, [this]()
+      powerOnTimer(e, std::bind([this]()
                    {
                        this->powerOn = true;
-                   })
+                   }))
 {
     using namespace sdbusplus::bus;
     presentMatch = std::make_unique<match_t>(bus,
@@ -196,12 +197,12 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         if (sdbusplus::message::variant_ns::get<bool>(valPropMap->second))
         {
             clearFaults();
-            presentTimer.start(presentInterval, Timer::TimerType::oneshot);
+            presentTimer.restartOnce(presentInterval);
         }
         else
         {
             present = false;
-            presentTimer.stop();
+            presentTimer.setEnabled(false);
 
             //Clear out the now outdated inventory properties
             updateInventory();
@@ -238,11 +239,11 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             clearFaults();
-            powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
+            powerOnTimer.restartOnce(powerOnInterval);
         }
         else
         {
-            powerOnTimer.stop();
+            powerOnTimer.setEnabled(false);
             powerOn = false;
         }
     }
@@ -329,7 +330,7 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
                 powerOn = false;
                 // Start up the timer that will set the state to indicate we
                 // are ready for the powered on fault checks.
-                powerOnTimer.start(powerOnInterval, Timer::TimerType::oneshot);
+                powerOnTimer.restartOnce(powerOnInterval);
             }
         }
     }
