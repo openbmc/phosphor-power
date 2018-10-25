@@ -38,15 +38,6 @@ std::string getService(const std::string& path, const std::string& interface,
     method.append(std::vector<std::string>({interface}));
 
     auto reply = bus.call(method);
-    if (reply.is_method_error())
-    {
-        log<level::ERR>("Error in mapper call to get service name",
-                        entry("PATH=%s", path.c_str()),
-                        entry("INTERFACE=%s", interface.c_str()));
-
-        // TODO openbmc/openbmc#851 - Once available, throw returned error
-        throw std::runtime_error("Error in mapper call to get service name");
-    }
 
     std::map<std::string, std::vector<std::string>> response;
     reply.read(response);

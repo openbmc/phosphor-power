@@ -54,16 +54,6 @@ void getProperty(const std::string& interface, const std::string& propertyName,
     method.append(interface, propertyName);
 
     auto reply = bus.call(method);
-    if (reply.is_method_error())
-    {
-        using namespace phosphor::logging;
-        log<level::ERR>("Error in property get call",
-                        entry("PATH=%s", path.c_str()),
-                        entry("PROPERTY=%s", propertyName.c_str()));
-
-        // TODO openbmc/openbmc#851 - Once available, throw returned error
-        throw std::runtime_error("Error in property get call");
-    }
 
     reply.read(property);
     value = sdbusplus::message::variant_ns::get<T>(property);
@@ -92,17 +82,6 @@ void setProperty(const std::string& interface, const std::string& propertyName,
     method.append(interface, propertyName, propertyValue);
 
     auto reply = bus.call(method);
-    if (reply.is_method_error())
-    {
-        using namespace phosphor::logging;
-        log<level::ERR>("Error in property set call",
-                        entry("SERVICE=%s", service.c_str()),
-                        entry("PATH=%s", path.c_str()),
-                        entry("PROPERTY=%s", propertyName.c_str()));
-
-        // TODO openbmc/openbmc#851 - Once available, throw returned error
-        throw std::runtime_error("Error in property set call");
-    }
 }
 
 /**

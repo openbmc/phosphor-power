@@ -716,12 +716,6 @@ void PowerSupply::updateInventory()
         method.append(std::move(object));
 
         auto reply = bus.call(method);
-        if (reply.is_method_error())
-        {
-            log<level::ERR>(
-                "Unable to update power supply inventory properties",
-                entry("PATH=%s", path.c_str()));
-        }
 
         // TODO: openbmc/openbmc#2756
         // Calling Notify() with an enumerated property crashes inventory
