@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "pmbus.hpp"
+
 #include <experimental/filesystem>
 #include <fstream>
-#include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/elog-errors.hpp>
-#include <xyz/openbmc_project/Common/error.hpp>
+#include <phosphor-logging/elog.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
-#include "pmbus.hpp"
+#include <xyz/openbmc_project/Common/error.hpp>
 
 namespace witherspoon
 {
@@ -42,12 +43,11 @@ struct FileCloser
     }
 };
 
-std::string PMBus::insertPageNum(const std::string& templateName,
-                                 size_t page)
+std::string PMBus::insertPageNum(const std::string& templateName, size_t page)
 {
     auto name = templateName;
 
-    //insert the page where the P was
+    // insert the page where the P was
     auto pos = name.find('P');
     if (pos != std::string::npos)
     {
@@ -90,8 +90,7 @@ std::string PMBus::getDeviceName()
     std::ifstream file;
     auto path = basePath / "name";
 
-    file.exceptions(std::ifstream::failbit |
-                    std::ifstream::badbit |
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit |
                     std::ifstream::eofbit);
     try
     {
@@ -107,9 +106,7 @@ std::string PMBus::getDeviceName()
     return name;
 }
 
-bool PMBus::readBitInPage(const std::string& name,
-                          size_t page,
-                          Type type)
+bool PMBus::readBitInPage(const std::string& name, size_t page, Type type)
 {
     auto pagedBit = insertPageNum(name, page);
     return readBit(pagedBit, type);
@@ -123,8 +120,7 @@ bool PMBus::readBit(const std::string& name, Type type)
 
     path /= name;
 
-    file.exceptions(std::ifstream::failbit |
-                    std::ifstream::badbit |
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit |
                     std::ifstream::eofbit);
 
     try
@@ -143,7 +139,7 @@ bool PMBus::readBit(const std::string& name, Type type)
                             entry("FILE=%s", path.c_str()),
                             entry("CONTENTS=%s", val.c_str()));
 
-            //Catch below and handle as a read failure
+            // Catch below and handle as a read failure
             elog<InternalFailure>();
         }
     }
@@ -156,9 +152,9 @@ bool PMBus::readBit(const std::string& name, Type type)
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
-        elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
-                          metadata::CALLOUT_DEVICE_PATH(
-                                  fs::canonical(basePath).c_str()));
+        elog<ReadFailure>(
+            metadata::CALLOUT_ERRNO(rc),
+            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
     }
 
     return value != 0;
@@ -178,8 +174,7 @@ uint64_t PMBus::read(const std::string& name, Type type)
     auto path = getPath(type);
     path /= name;
 
-    file.exceptions(std::ifstream::failbit |
-                    std::ifstream::badbit |
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit |
                     std::ifstream::eofbit);
 
     try
@@ -195,9 +190,9 @@ uint64_t PMBus::read(const std::string& name, Type type)
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
-        elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
-                          metadata::CALLOUT_DEVICE_PATH(
-                                  fs::canonical(basePath).c_str()));
+        elog<ReadFailure>(
+            metadata::CALLOUT_ERRNO(rc),
+            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
     }
 
     return data;
@@ -210,8 +205,7 @@ std::string PMBus::readString(const std::string& name, Type type)
     auto path = getPath(type);
     path /= name;
 
-    file.exceptions(std::ifstream::failbit |
-                    std::ifstream::badbit |
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit |
                     std::ifstream::eofbit);
 
     try
@@ -227,39 +221,36 @@ std::string PMBus::readString(const std::string& name, Type type)
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
-        elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
-                          metadata::CALLOUT_DEVICE_PATH(
-                                  fs::canonical(basePath).c_str()));
+        elog<ReadFailure>(
+            metadata::CALLOUT_ERRNO(rc),
+            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
     }
 
     return data;
 }
 
-std::vector<uint8_t> PMBus::readBinary(const std::string& name,
-                                       Type type,
+std::vector<uint8_t> PMBus::readBinary(const std::string& name, Type type,
                                        size_t length)
 {
     auto path = getPath(type) / name;
 
-    //Use C style IO because it's easier to handle telling the difference
-    //between hitting EOF or getting an actual error.
+    // Use C style IO because it's easier to handle telling the difference
+    // between hitting EOF or getting an actual error.
     std::unique_ptr<FILE, FileCloser> file{fopen(path.c_str(), "rb")};
 
     if (file)
     {
         std::vector<uint8_t> data(length, 0);
 
-        auto bytes = fread(data.data(),
-                           sizeof(decltype(data[0])),
-                           length,
-                           file.get());
+        auto bytes =
+            fread(data.data(), sizeof(decltype(data[0])), length, file.get());
 
         if (bytes != length)
         {
-            //If hit EOF, just return the amount of data that was read.
+            // If hit EOF, just return the amount of data that was read.
             if (feof(file.get()))
             {
-               data.erase(data.begin() + bytes, data.end());
+                data.erase(data.begin() + bytes, data.end());
             }
             else if (ferror(file.get()))
             {
@@ -267,12 +258,12 @@ std::vector<uint8_t> PMBus::readBinary(const std::string& name,
                 log<level::ERR>("Failed to read sysfs file",
                                 entry("FILENAME=%s", path.c_str()));
 
-                using metadata = xyz::openbmc_project::Common::
-                        Device::ReadFailure;
+                using metadata =
+                    xyz::openbmc_project::Common::Device::ReadFailure;
 
                 elog<ReadFailure>(metadata::CALLOUT_ERRNO(rc),
                                   metadata::CALLOUT_DEVICE_PATH(
-                                          fs::canonical(basePath).c_str()));
+                                      fs::canonical(basePath).c_str()));
             }
         }
         return data;
@@ -288,8 +279,7 @@ void PMBus::write(const std::string& name, int value, Type type)
 
     path /= name;
 
-    file.exceptions(std::ofstream::failbit |
-                    std::ofstream::badbit |
+    file.exceptions(std::ofstream::failbit | std::ofstream::badbit |
                     std::ofstream::eofbit);
 
     try
@@ -306,9 +296,9 @@ void PMBus::write(const std::string& name, int value, Type type)
 
         using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
 
-        elog<WriteFailure>(metadata::CALLOUT_ERRNO(rc),
-                           metadata::CALLOUT_DEVICE_PATH(
-                                   fs::canonical(basePath).c_str()));
+        elog<WriteFailure>(
+            metadata::CALLOUT_ERRNO(rc),
+            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
     }
 }
 
@@ -322,7 +312,7 @@ void PMBus::findHwmonDir()
     // hwmon directory is not there, resulting in a program termination.
     if (fs::is_directory(path))
     {
-        //look for <basePath>/hwmon/hwmonN/
+        // look for <basePath>/hwmon/hwmonN/
         for (auto& f : fs::directory_iterator(path))
         {
             if ((f.path().filename().string().find("hwmon") !=
@@ -335,16 +325,15 @@ void PMBus::findHwmonDir()
         }
     }
 
-    //Don't really want to crash here, just log it
-    //and let accesses fail later
+    // Don't really want to crash here, just log it
+    // and let accesses fail later
     if (hwmonDir.empty())
     {
         log<level::INFO>("Unable to find hwmon directory "
                          "in device base path",
                          entry("DEVICE_PATH=%s", basePath.c_str()));
     }
-
 }
 
-}
-}
+} // namespace pmbus
+} // namespace witherspoon

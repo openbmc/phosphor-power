@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <chrono>
-#include <iostream>
-#include <phosphor-logging/log.hpp>
-#include <sdeventplus/event.hpp>
 #include "argument.hpp"
 #include "pgood_monitor.hpp"
 #include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
+
+#include <chrono>
+#include <iostream>
+#include <phosphor-logging/log.hpp>
+#include <sdeventplus/event.hpp>
 
 using namespace witherspoon::power;
 using namespace phosphor::logging;
@@ -46,7 +47,7 @@ int main(int argc, char** argv)
 
     std::chrono::milliseconds interval{i};
 
-	auto event = sdeventplus::Event::get_default();
+    auto event = sdeventplus::Event::get_default();
     auto bus = sdbusplus::bus::new_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
@@ -56,17 +57,17 @@ int main(int argc, char** argv)
 
     if (action == "pgood-monitor")
     {
-        //If PGOOD doesn't turn on within a certain
-        //time, analyze the device for errors
-        monitor = std::make_unique<PGOODMonitor>(
-                std::move(device), bus, event, interval);
+        // If PGOOD doesn't turn on within a certain
+        // time, analyze the device for errors
+        monitor = std::make_unique<PGOODMonitor>(std::move(device), bus, event,
+                                                 interval);
     }
-    else //runtime-monitor
+    else // runtime-monitor
     {
-        //Continuously monitor this device both by polling
-        //and on 'power lost' signals.
-        monitor = std::make_unique<RuntimeMonitor>(
-                std::move(device), bus, event, interval);
+        // Continuously monitor this device both by polling
+        // and on 'power lost' signals.
+        monitor = std::make_unique<RuntimeMonitor>(std::move(device), bus,
+                                                   event, interval);
     }
 
     return monitor->run();

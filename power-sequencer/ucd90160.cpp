@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "ucd90160.hpp"
+
+#include "names_values.hpp"
+#include "utility.hpp"
+
+#include <elog-errors.hpp>
 #include <map>
 #include <memory>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
-#include <elog-errors.hpp>
-#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
-#include "names_values.hpp"
-#include "ucd90160.hpp"
-#include "utility.hpp"
 
 namespace witherspoon
 {
@@ -44,19 +46,14 @@ using namespace gpio;
 using namespace pmbus;
 using namespace phosphor::logging;
 
-namespace device_error = sdbusplus::xyz::openbmc_project::
-        Common::Device::Error;
-namespace power_error = sdbusplus::org::open_power::
-        Witherspoon::Fault::Error;
+namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
+namespace power_error = sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
-        Device(DEVICE_NAME, instance),
-        interface(std::get<ucd90160::pathField>(
-                          deviceMap.find(instance)->second),
-                  DRIVER_NAME,
-                  instance),
-        gpioDevice(findGPIODevice(interface.path())),
-        bus(bus)
+    Device(DEVICE_NAME, instance),
+    interface(std::get<ucd90160::pathField>(deviceMap.find(instance)->second),
+              DRIVER_NAME, instance),
+    gpioDevice(findGPIODevice(interface.path())), bus(bus)
 {
 }
 
@@ -68,8 +65,8 @@ void UCD90160::onFailure()
 
         auto pgoodError = checkPGOODFaults(false);
 
-        //Not a voltage or PGOOD fault, but we know something
-        //failed so still create an error log.
+        // Not a voltage or PGOOD fault, but we know something
+        // failed so still create an error log.
         if (!voutError && !pgoodError)
         {
             createPowerFaultLog();
@@ -89,8 +86,8 @@ void UCD90160::analyze()
 {
     try
     {
-        //Note: Voltage faults are always fatal, so they just
-        //need to be analyzed in onFailure().
+        // Note: Voltage faults are always fatal, so they just
+        // need to be analyzed in onFailure().
 
         checkPGOODFaults(true);
     }
@@ -119,8 +116,8 @@ bool UCD90160::checkVOUTFaults()
     bool errorCreated = false;
     auto statusWord = readStatusWord();
 
-    //The status_word register has a summary bit to tell us
-    //if each page even needs to be checked
+    // The status_word register has a summary bit to tell us
+    // if each page even needs to be checked
     if (!(statusWord & status_word::VOUT_FAULT))
     {
         return errorCreated;
@@ -136,20 +133,20 @@ bool UCD90160::checkVOUTFaults()
         auto statusVout = interface.insertPageNum(STATUS_VOUT, page);
         uint8_t vout = interface.read(statusVout, Type::Debug);
 
-        //If any bits are on log them, though some are just
-        //warnings so they won't cause errors
+        // If any bits are on log them, though some are just
+        // warnings so they won't cause errors
         if (vout)
         {
             log<level::INFO>("A voltage rail has bits on in STATUS_VOUT",
-                    entry("STATUS_VOUT=0x%X", vout),
-                    entry("PAGE=%d", page));
+                             entry("STATUS_VOUT=0x%X", vout),
+                             entry("PAGE=%d", page));
         }
 
-        //Log errors if any non-warning bits on
+        // Log errors if any non-warning bits on
         if (vout & ~status_vout::WARNING_MASK)
         {
             auto& railNames = std::get<ucd90160::railNamesField>(
-                    deviceMap.find(getInstance())->second);
+                deviceMap.find(getInstance())->second);
             auto railName = railNames.at(page);
 
             util::NamesValues nv;
@@ -165,13 +162,12 @@ bool UCD90160::checkVOUTFaults()
                 commit<device_error::ReadFailure>();
             }
 
-            using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSequencerVoltageFault;
+            using metadata =
+                org::open_power::Witherspoon::Fault::PowerSequencerVoltageFault;
 
             report<power_error::PowerSequencerVoltageFault>(
-                    metadata::RAIL(page),
-                    metadata::RAIL_NAME(railName.c_str()),
-                    metadata::RAW_STATUS(nv.get().c_str()));
+                metadata::RAIL(page), metadata::RAIL_NAME(railName.c_str()),
+                metadata::RAW_STATUS(nv.get().c_str()));
 
             setVoutFaultLogged(page);
             errorCreated = true;
@@ -185,43 +181,41 @@ bool UCD90160::checkPGOODFaults(bool polling)
 {
     bool errorCreated = false;
 
-    //While PGOOD faults could show up in MFR_STATUS (and we could then
-    //check the summary bit in STATUS_WORD first), they are edge triggered,
-    //and as the device driver sends a clear faults command every time we
-    //do a read, we will never see them.  So, we'll have to just read the
-    //real time GPI status GPIO.
+    // While PGOOD faults could show up in MFR_STATUS (and we could then
+    // check the summary bit in STATUS_WORD first), they are edge triggered,
+    // and as the device driver sends a clear faults command every time we
+    // do a read, we will never see them.  So, we'll have to just read the
+    // real time GPI status GPIO.
 
-    //Check only the GPIs configured on this system.
+    // Check only the GPIs configured on this system.
     auto& gpiConfigs = std::get<ucd90160::gpiConfigField>(
-            deviceMap.find(getInstance())->second);
+        deviceMap.find(getInstance())->second);
 
     for (const auto& gpiConfig : gpiConfigs)
     {
         auto gpiNum = std::get<ucd90160::gpiNumField>(gpiConfig);
         auto doPoll = std::get<ucd90160::pollField>(gpiConfig);
 
-        //Can skip this one if there is already an error on this input,
-        //or we are polling and these inputs don't need to be polled
+        // Can skip this one if there is already an error on this input,
+        // or we are polling and these inputs don't need to be polled
         //(because errors on them are fatal).
         if (isPGOODFaultLogged(gpiNum) || (polling && !doPoll))
         {
             continue;
         }
 
-        //The real time status is read via the pin ID
+        // The real time status is read via the pin ID
         auto pinID = std::get<ucd90160::pinIDField>(gpiConfig);
         auto gpio = gpios.find(pinID);
         Value gpiStatus;
 
         try
         {
-            //The first time through, create the GPIO objects
+            // The first time through, create the GPIO objects
             if (gpio == gpios.end())
             {
-                gpios.emplace(
-                        pinID,
-                        std::make_unique<GPIO>(
-                                gpioDevice, pinID, Direction::input));
+                gpios.emplace(pinID, std::make_unique<GPIO>(gpioDevice, pinID,
+                                                            Direction::input));
                 gpio = gpios.find(pinID);
             }
 
@@ -239,9 +233,9 @@ bool UCD90160::checkPGOODFaults(bool polling)
 
         if (gpiStatus == Value::low)
         {
-            //There may be some extra analysis we can do to narrow the
-            //error down further.  Note that finding an error here won't
-            //prevent us from checking this GPI again.
+            // There may be some extra analysis we can do to narrow the
+            // error down further.  Note that finding an error here won't
+            // prevent us from checking this GPI again.
             errorCreated = doExtraAnalysis(gpiConfig);
 
             if (errorCreated)
@@ -266,13 +260,13 @@ bool UCD90160::checkPGOODFaults(bool polling)
                 commit<device_error::ReadFailure>();
             }
 
-            using metadata =  org::open_power::Witherspoon::Fault::
-                    PowerSequencerPGOODFault;
+            using metadata =
+                org::open_power::Witherspoon::Fault::PowerSequencerPGOODFault;
 
             report<power_error::PowerSequencerPGOODFault>(
-                    metadata::INPUT_NUM(gpiNum),
-                    metadata::INPUT_NAME(gpiName.c_str()),
-                    metadata::RAW_STATUS(nv.get().c_str()));
+                metadata::INPUT_NUM(gpiNum),
+                metadata::INPUT_NAME(gpiName.c_str()),
+                metadata::RAW_STATUS(nv.get().c_str()));
 
             setPGOODFaultLogged(gpiNum);
             errorCreated = true;
@@ -297,26 +291,25 @@ void UCD90160::createPowerFaultLog()
         commit<device_error::ReadFailure>();
     }
 
-    using metadata = org::open_power::Witherspoon::Fault::
-        PowerSequencerFault;
+    using metadata = org::open_power::Witherspoon::Fault::PowerSequencerFault;
 
     report<power_error::PowerSequencerFault>(
-            metadata::RAW_STATUS(nv.get().c_str()));
+        metadata::RAW_STATUS(nv.get().c_str()));
 }
 
 fs::path UCD90160::findGPIODevice(const fs::path& path)
 {
     fs::path gpioDevicePath;
 
-    //In the driver directory, look for a subdirectory
-    //named gpiochipX, where X is some number.  Then
-    //we'll access the GPIO at /dev/gpiochipX.
+    // In the driver directory, look for a subdirectory
+    // named gpiochipX, where X is some number.  Then
+    // we'll access the GPIO at /dev/gpiochipX.
     if (fs::is_directory(path))
     {
         for (auto& f : fs::directory_iterator(path))
         {
             if (f.path().filename().string().find("gpiochip") !=
-                    std::string::npos)
+                std::string::npos)
             {
                 gpioDevicePath = "/dev" / f.path().filename();
                 break;
@@ -327,7 +320,7 @@ fs::path UCD90160::findGPIODevice(const fs::path& path)
     if (gpioDevicePath.empty())
     {
         log<level::ERR>("Could not find GPIO device path",
-                entry("BASE_PATH=%s", path.c_str()));
+                        entry("BASE_PATH=%s", path.c_str()));
     }
 
     return gpioDevicePath;
@@ -342,7 +335,7 @@ bool UCD90160::doExtraAnalysis(const ucd90160::GPIConfig& config)
         return false;
     }
 
-    //Currently the only extra analysis to do is to check other GPIOs.
+    // Currently the only extra analysis to do is to check other GPIOs.
     return doGPIOAnalysis(type);
 }
 
@@ -352,7 +345,7 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
     bool shutdown = false;
 
     const auto& analysisConfig = std::get<ucd90160::gpioAnalysisField>(
-            deviceMap.find(getInstance())->second);
+        deviceMap.find(getInstance())->second);
 
     auto gpioConfig = analysisConfig.find(type);
     if (gpioConfig == analysisConfig.end())
@@ -360,19 +353,16 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
         return errorFound;
     }
 
-    auto path = std::get<ucd90160::gpioDevicePathField>(
-            gpioConfig->second);
+    auto path = std::get<ucd90160::gpioDevicePathField>(gpioConfig->second);
 
-    //The /dev/gpiochipX device
+    // The /dev/gpiochipX device
     auto device = findGPIODevice(path);
 
-    //The GPIO value of the fault condition
-    auto polarity = std::get<ucd90160::gpioPolarityField>(
-            gpioConfig->second);
+    // The GPIO value of the fault condition
+    auto polarity = std::get<ucd90160::gpioPolarityField>(gpioConfig->second);
 
-    //The GPIOs to check
-    auto& gpios = std::get<ucd90160::gpioDefinitionField>(
-            gpioConfig->second);
+    // The GPIOs to check
+    auto& gpios = std::get<ucd90160::gpioDefinitionField>(gpioConfig->second);
 
     for (const auto& gpio : gpios)
     {
@@ -380,8 +370,7 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
         try
         {
-            GPIO g{device,
-                   std::get<ucd90160::gpioNumField>(gpio),
+            GPIO g{device, std::get<ucd90160::gpioNumField>(gpio),
                    Direction::input};
 
             value = g.read();
@@ -390,10 +379,10 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
         {
             if (!gpioAccessError)
             {
-                //GPIO only throws InternalErrors - not worth committing.
+                // GPIO only throws InternalErrors - not worth committing.
                 log<level::ERR>(
-                        "GPIO read failed while analyzing a power fault",
-                        entry("CHIP_PATH=%s", path.c_str()));
+                    "GPIO read failed while analyzing a power fault",
+                    entry("CHIP_PATH=%s", path.c_str()));
 
                 gpioAccessError = true;
             }
@@ -413,21 +402,21 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
                 continue;
             }
 
-            //Look up and call the error creation function
-            auto logError = std::get<ucd90160::errorFunctionField>(
-                    gpioConfig->second);
+            // Look up and call the error creation function
+            auto logError =
+                std::get<ucd90160::errorFunctionField>(gpioConfig->second);
 
             logError(*this, part);
 
-            //Save the part callout so we don't call it out again
+            // Save the part callout so we don't call it out again
             setPartCallout(callout);
 
-            //Some errors (like overtemps) require a shutdown
+            // Some errors (like overtemps) require a shutdown
             auto actions = static_cast<uint32_t>(
-                    std::get<ucd90160::optionFlagsField>(gpioConfig->second));
+                std::get<ucd90160::optionFlagsField>(gpioConfig->second));
 
             if (actions & static_cast<decltype(actions)>(
-                        ucd90160::optionFlags::shutdownOnFault))
+                              ucd90160::optionFlags::shutdownOnFault))
             {
                 shutdown = true;
             }
@@ -436,7 +425,7 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
     if (shutdown)
     {
-        //Will be replaced with a GPU specific error in a future commit
+        // Will be replaced with a GPU specific error in a future commit
         util::powerOff<power_error::Shutdown>(bus);
     }
 
@@ -461,8 +450,8 @@ void UCD90160::gpuPGOODError(const std::string& callout)
     using metadata = org::open_power::Witherspoon::Fault::GPUPowerFault;
 
     report<power_error::GPUPowerFault>(
-            metadata::RAW_STATUS(nv.get().c_str()),
-            metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
+        metadata::RAW_STATUS(nv.get().c_str()),
+        metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
 }
 
 void UCD90160::gpuOverTempError(const std::string& callout)
@@ -483,9 +472,9 @@ void UCD90160::gpuOverTempError(const std::string& callout)
     using metadata = org::open_power::Witherspoon::Fault::GPUOverTemp;
 
     report<power_error::GPUOverTemp>(
-            metadata::RAW_STATUS(nv.get().c_str()),
-            metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
+        metadata::RAW_STATUS(nv.get().c_str()),
+        metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
 }
 
-}
-}
+} // namespace power
+} // namespace witherspoon

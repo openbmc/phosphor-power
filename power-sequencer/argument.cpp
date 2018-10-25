@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "argument.hpp"
+
+#include <algorithm>
 #include <iostream>
 #include <iterator>
-#include <algorithm>
-#include "argument.hpp"
 
 namespace witherspoon
 {
@@ -37,11 +38,10 @@ void ArgumentParser::usage(char** argv)
     std::cerr << std::flush;
 }
 
-const option ArgumentParser::options[] =
-{
-    {"action",   required_argument, NULL, 'a'},
+const option ArgumentParser::options[] = {
+    {"action", required_argument, NULL, 'a'},
     {"interval", required_argument, NULL, 'i'},
-    {"help",     no_argument,       NULL, 'h'},
+    {"help", no_argument, NULL, 'h'},
     {0, 0, 0, 0},
 };
 
@@ -86,5 +86,5 @@ const std::string& ArgumentParser::operator[](const std::string& opt)
 const std::string ArgumentParser::trueString = "true";
 const std::string ArgumentParser::emptyString = "";
 
-}
-}
+} // namespace power
+} // namespace witherspoon

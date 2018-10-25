@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
+#include "argument.hpp"
+#include "device_monitor.hpp"
+#include "power_supply.hpp"
+
 #include <iostream>
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
-#include "argument.hpp"
-#include "config.h"
-#include "power_supply.hpp"
-#include "device_monitor.hpp"
 
 using namespace witherspoon::power;
 using namespace phosphor::logging;
@@ -78,14 +80,9 @@ int main(int argc, char* argv[])
     // Timer to delay setting internal presence tracking. Allows for servicing
     // the power supply.
     std::chrono::seconds presentDelay(2);
-    auto psuDevice = std::make_unique<psu::PowerSupply>(objname,
-                                                        std::move(instance),
-                                                        std::move(objpath),
-                                                        std::move(invpath),
-                                                        bus,
-                                                        event,
-                                                        powerOnDelay,
-                                                        presentDelay);
+    auto psuDevice = std::make_unique<psu::PowerSupply>(
+        objname, std::move(instance), std::move(objpath), std::move(invpath),
+        bus, event, powerOnDelay, presentDelay);
 
     // Get the number of input power history records to keep in D-Bus.
     long int numRecords = 0;
@@ -108,9 +105,9 @@ int main(int argc, char* argv[])
         auto syncGPIONum = (options)["sync-gpio-num"];
 
         if (((syncGPIOPath == ArgumentParser::emptyString) &&
-            (syncGPIONum != ArgumentParser::emptyString)) ||
+             (syncGPIONum != ArgumentParser::emptyString)) ||
             ((syncGPIOPath != ArgumentParser::emptyString) &&
-            (syncGPIONum == ArgumentParser::emptyString)))
+             (syncGPIONum == ArgumentParser::emptyString)))
         {
             std::cerr << "Invalid sync GPIO number or path\n";
             return -7;
@@ -126,16 +123,13 @@ int main(int argc, char* argv[])
         std::string basePath =
             std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
 
-        psuDevice->enableHistory(basePath,
-                                 numRecords,
-                                 syncGPIOPath,
-                                 gpioNum);
+        psuDevice->enableHistory(basePath, numRecords, syncGPIOPath, gpioNum);
 
         // Systemd object manager
         sdbusplus::server::manager::manager objManager{bus, basePath.c_str()};
 
         std::string busName =
-                std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' + name;
+            std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' + name;
         bus.request_name(busName.c_str());
     }
 

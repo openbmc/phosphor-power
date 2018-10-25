@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <gtest/gtest.h>
 #include "names_values.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(NamesValuesTest, TestValues)
 {
     witherspoon::power::util::NamesValues nv;
 
     std::string expected;
-    EXPECT_EQ(nv.get(), expected); //empty
+    EXPECT_EQ(nv.get(), expected); // empty
 
     nv.add("name1", 0);
     nv.add("name2", 0xC0FFEE);
@@ -32,4 +33,3 @@ TEST(NamesValuesTest, TestValues)
 
     EXPECT_EQ(nv.get(), expected);
 }
-

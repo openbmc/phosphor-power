@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <functional>
-#include <phosphor-logging/log.hpp>
-#include <phosphor-logging/elog.hpp>
-#include <org/open_power/Witherspoon/Fault/error.hpp>
-#include <xyz/openbmc_project/Common/Device/error.hpp>
-#include <xyz/openbmc_project/Software/Version/server.hpp>
+#include "power_supply.hpp"
+
 #include "elog-errors.hpp"
 #include "gpio.hpp"
 #include "names_values.hpp"
-#include "power_supply.hpp"
 #include "pmbus.hpp"
 #include "utility.hpp"
+
+#include <functional>
+#include <org/open_power/Witherspoon/Fault/error.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
+#include <xyz/openbmc_project/Software/Version/server.hpp>
 
 namespace witherspoon
 {
@@ -66,42 +68,30 @@ constexpr auto CCIN = "ccin";
 constexpr auto INPUT_HISTORY = "input_history";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
-                         const std::string& objpath,
-                         const std::string& invpath,
-                         sdbusplus::bus::bus& bus,
-                         const sdeventplus::Event& e,
-                         std::chrono::seconds& t,
-                         std::chrono::seconds& p)
-    : Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
-      inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus),
-      presentInterval(p),
-      presentTimer(e, std::bind([this]()
-                   {
-                       // The hwmon path may have changed.
-                       pmbusIntf.findHwmonDir();
-                       this->present = true;
+                         const std::string& objpath, const std::string& invpath,
+                         sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
+                         std::chrono::seconds& t, std::chrono::seconds& p) :
+    Device(name, inst),
+    monitorPath(objpath), pmbusIntf(objpath),
+    inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus), presentInterval(p),
+    presentTimer(e, std::bind([this]() {
+                     // The hwmon path may have changed.
+                     pmbusIntf.findHwmonDir();
+                     this->present = true;
 
-                       // Sync the INPUT_HISTORY data for all PSs
-                       syncHistory();
+                     // Sync the INPUT_HISTORY data for all PSs
+                     syncHistory();
 
-                       // Update the inventory for the new device
-                       updateInventory();
-                   })),
-      powerOnInterval(t),
-      powerOnTimer(e, std::bind([this]()
-                   {
-                       this->powerOn = true;
-                   }))
+                     // Update the inventory for the new device
+                     updateInventory();
+                 })),
+    powerOnInterval(t),
+    powerOnTimer(e, std::bind([this]() { this->powerOn = true; }))
 {
     using namespace sdbusplus::bus;
-    presentMatch = std::make_unique<match_t>(bus,
-                                             match::rules::propertiesChanged(
-                                                     inventoryPath,
-                                                     INVENTORY_IFACE),
-                                             [this](auto& msg)
-                                             {
-                                                 this->inventoryChanged(msg);
-                                             });
+    presentMatch = std::make_unique<match_t>(
+        bus, match::rules::propertiesChanged(inventoryPath, INVENTORY_IFACE),
+        [this](auto& msg) { this->inventoryChanged(msg); });
     // Get initial presence state.
     updatePresence();
 
@@ -109,14 +99,9 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     updateInventory();
 
     // Subscribe to power state changes
-    powerOnMatch = std::make_unique<match_t>(bus,
-                                             match::rules::propertiesChanged(
-                                                     POWER_OBJ_PATH,
-                                                     POWER_IFACE),
-                                             [this](auto& msg)
-                                             {
-                                                 this->powerStateChanged(msg);
-                                             });
+    powerOnMatch = std::make_unique<match_t>(
+        bus, match::rules::propertiesChanged(POWER_OBJ_PATH, POWER_IFACE),
+        [this](auto& msg) { this->powerStateChanged(msg); });
     // Get initial power state.
     updatePowerState();
 }
@@ -204,7 +189,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             present = false;
             presentTimer.setEnabled(false);
 
-            //Clear out the now outdated inventory properties
+            // Clear out the now outdated inventory properties
             updateInventory();
         }
     }
@@ -216,8 +201,8 @@ void PowerSupply::updatePresence()
 {
     // Use getProperty utility function to get presence status.
     std::string service = "xyz.openbmc_project.Inventory.Manager";
-    util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
-                      service, bus, this->present);
+    util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath, service,
+                      bus, this->present);
 }
 
 void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
@@ -225,14 +210,15 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
     int32_t state = 0;
     std::string msgSensor;
     std::map<std::string, sdbusplus::message::variant<int32_t, int32_t>>
-            msgData;
+        msgData;
     msg.read(msgSensor, msgData);
 
     // Check if it was the Present property that changed.
     auto valPropMap = msgData.find("state");
     if (valPropMap != msgData.end())
     {
-        state = sdbusplus::message::variant_ns::get<int32_t>(valPropMap->second);
+        state =
+            sdbusplus::message::variant_ns::get<int32_t>(valPropMap->second);
 
         // Power is on when state=1. Set the fault logged variables to false
         // and start the power on timer when the state changes to 1.
@@ -247,7 +233,6 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
             powerOn = false;
         }
     }
-
 }
 
 void PowerSupply::updatePowerState()
@@ -257,17 +242,11 @@ void PowerSupply::updatePowerState()
 
     try
     {
-        auto service = util::getService(POWER_OBJ_PATH,
-                                        POWER_IFACE,
-                                        bus);
+        auto service = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
 
         // Use getProperty utility function to get power state.
-        util::getProperty<int32_t>(POWER_IFACE,
-                                   "state",
-                                   POWER_OBJ_PATH,
-                                   service,
-                                   bus,
-                                   state);
+        util::getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH,
+                                   service, bus, state);
 
         if (state)
         {
@@ -283,7 +262,6 @@ void PowerSupply::updatePowerState()
         log<level::INFO>("Failed to get power state. Assuming it is off.");
         powerOn = false;
     }
-
 }
 
 void PowerSupply::checkInputFault(const uint16_t statusWord)
@@ -304,8 +282,7 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
     }
     else
     {
-        if ((inputFault > 0) &&
-            !(statusWord & status_word::INPUT_FAULT_WARN) &&
+        if ((inputFault > 0) && !(statusWord & status_word::INPUT_FAULT_WARN) &&
             !(statusWord & status_word::VIN_UV_FAULT))
         {
             inputFault = 0;
@@ -344,17 +321,16 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
             nv.add("STATUS_WORD", statusWord);
             captureCmd(nv, STATUS_INPUT, Type::Debug);
 
-            using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyInputFault;
+            using metadata =
+                org::open_power::Witherspoon::Fault::PowerSupplyInputFault;
 
             report<PowerSupplyInputFault>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
             faultFound = true;
         }
     }
-
 }
 
 void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
@@ -392,17 +368,15 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
             captureCmd(nv, STATUS_IOUT, Type::Debug);
             captureCmd(nv, STATUS_MFR, Type::Debug);
 
-            using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyShouldBeOn;
+            using metadata =
+                org::open_power::Witherspoon::Fault::PowerSupplyShouldBeOn;
 
             // A power supply is OFF (or pgood low) but should be on.
             report<PowerSupplyShouldBeOn>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(
-                            inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
         }
     }
-
 }
 
 void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
@@ -435,11 +409,11 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
             captureCmd(nv, STATUS_MFR, Type::Debug);
 
             using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyOutputOvercurrent;
+                PowerSupplyOutputOvercurrent;
 
             report<PowerSupplyOutputOvercurrent>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
             faultFound = true;
         }
@@ -476,11 +450,11 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
             captureCmd(nv, STATUS_MFR, Type::Debug);
 
             using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyOutputOvervoltage;
+                PowerSupplyOutputOvervoltage;
 
             report<PowerSupplyOutputOvervoltage>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
             faultFound = true;
         }
@@ -514,12 +488,12 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
             captureCmd(nv, STATUS_TEMPERATURE, Type::Debug);
             captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
-            using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyFanFault;
+            using metadata =
+                org::open_power::Witherspoon::Fault::PowerSupplyFanFault;
 
             report<PowerSupplyFanFault>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
             faultFound = true;
         }
@@ -570,11 +544,11 @@ void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
             captureCmd(nv, STATUS_FANS_1_2, Type::Debug);
 
             using metadata = org::open_power::Witherspoon::Fault::
-                    PowerSupplyTemperatureFault;
+                PowerSupplyTemperatureFault;
 
             report<PowerSupplyTemperatureFault>(
-                    metadata::RAW_STATUS(nv.get().c_str()),
-                    metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
+                metadata::RAW_STATUS(nv.get().c_str()),
+                metadata::CALLOUT_INVENTORY_PATH(inventoryPath.c_str()));
 
             faultFound = true;
         }
@@ -605,14 +579,12 @@ void PowerSupply::resolveError(const std::string& callout,
     {
         auto path = callout + "/fault";
         // Get the service name from the mapper for the fault callout
-        auto service = util::getService(path,
-                                        ASSOCIATION_IFACE,
-                                        bus);
+        auto service = util::getService(path, ASSOCIATION_IFACE, bus);
 
         // Use getProperty utility function to get log entries (endpoints)
         EndpointList logEntries;
-        util::getProperty(ASSOCIATION_IFACE, ENDPOINTS_PROP, path, service,
-                          bus, logEntries);
+        util::getProperty(ASSOCIATION_IFACE, ENDPOINTS_PROP, path, service, bus,
+                          logEntries);
 
         // It is possible that all such entries for this callout have since
         // been deleted.
@@ -621,8 +593,8 @@ void PowerSupply::resolveError(const std::string& callout,
             return;
         }
 
-        auto logEntryService = util::getService(logEntries[0], LOGGING_IFACE,
-                                                bus);
+        auto logEntryService =
+            util::getService(logEntries[0], LOGGING_IFACE, bus);
         if (logEntryService.empty())
         {
             return;
@@ -643,9 +615,7 @@ void PowerSupply::resolveError(const std::string& callout,
                 util::setProperty(LOGGING_IFACE, RESOLVED_PROP, logEntry,
                                   logEntryService, bus, resolved);
             }
-
         }
-
     }
     catch (std::exception& e)
     {
@@ -653,7 +623,6 @@ void PowerSupply::resolveError(const std::string& callout,
                          entry("CALLOUT=%s", callout.c_str()),
                          entry("ERROR=%s", message.c_str()));
     }
-
 }
 
 void PowerSupply::updateInventory()
@@ -678,25 +647,33 @@ void PowerSupply::updateInventory()
         {
             sn = pmbusIntf.readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
         }
-        catch (ReadFailure& e) { }
+        catch (ReadFailure& e)
+        {
+        }
 
         try
         {
             pn = pmbusIntf.readString(PART_NUMBER, Type::HwmonDeviceDebug);
         }
-        catch (ReadFailure& e) { }
+        catch (ReadFailure& e)
+        {
+        }
 
         try
         {
             ccin = pmbusIntf.readString(CCIN, Type::HwmonDeviceDebug);
         }
-        catch (ReadFailure& e) { }
+        catch (ReadFailure& e)
+        {
+        }
 
         try
         {
             version = pmbusIntf.readString(FW_VERSION, Type::HwmonDeviceDebug);
         }
-        catch (ReadFailure& e) { }
+        catch (ReadFailure& e)
+        {
+        }
     }
 
     // Build the object map and send it to the inventory
@@ -716,18 +693,16 @@ void PowerSupply::updateInventory()
     versionProps.emplace(VERSION_PROP, version);
     interfaces.emplace(VERSION_IFACE, std::move(versionProps));
 
-    //For Notify(), just send the relative path of the inventory
-    //object so remove the INVENTORY_OBJ_PATH prefix
+    // For Notify(), just send the relative path of the inventory
+    // object so remove the INVENTORY_OBJ_PATH prefix
     auto path = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
 
     object.emplace(path, std::move(interfaces));
 
     try
     {
-        auto service = util::getService(
-                INVENTORY_OBJ_PATH,
-                INVENTORY_MGR_IFACE,
-                bus);
+        auto service =
+            util::getService(INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
 
         if (service.empty())
         {
@@ -735,11 +710,8 @@ void PowerSupply::updateInventory()
             return;
         }
 
-        auto method = bus.new_method_call(
-                service.c_str(),
-                INVENTORY_OBJ_PATH,
-                INVENTORY_MGR_IFACE,
-                "Notify");
+        auto method = bus.new_method_call(service.c_str(), INVENTORY_OBJ_PATH,
+                                          INVENTORY_MGR_IFACE, "Notify");
 
         method.append(std::move(object));
 
@@ -747,30 +719,23 @@ void PowerSupply::updateInventory()
         if (reply.is_method_error())
         {
             log<level::ERR>(
-                    "Unable to update power supply inventory properties",
-                    entry("PATH=%s", path.c_str()));
+                "Unable to update power supply inventory properties",
+                entry("PATH=%s", path.c_str()));
         }
 
         // TODO: openbmc/openbmc#2756
         // Calling Notify() with an enumerated property crashes inventory
         // manager, so let it default to Unknown and now set it to the
         // right value.
-        auto purpose = version::convertForMessage(
-                version::Version::VersionPurpose::Other);
+        auto purpose =
+            version::convertForMessage(version::Version::VersionPurpose::Other);
 
-        util::setProperty(
-                VERSION_IFACE,
-                VERSION_PURPOSE_PROP,
-                inventoryPath,
-                service,
-                bus,
-                purpose);
+        util::setProperty(VERSION_IFACE, VERSION_PURPOSE_PROP, inventoryPath,
+                          service, bus, purpose);
     }
     catch (std::exception& e)
     {
-        log<level::ERR>(
-                e.what(),
-                entry("PATH=%s", inventoryPath.c_str()));
+        log<level::ERR>(e.what(), entry("PATH=%s", inventoryPath.c_str()));
     }
 }
 
@@ -780,12 +745,11 @@ void PowerSupply::syncHistory()
 
     if (syncGPIODevPath.empty())
     {
-        //Sync not implemented
+        // Sync not implemented
         return;
     }
 
-    GPIO gpio{syncGPIODevPath,
-              static_cast<gpioNum_t>(syncGPIONumber),
+    GPIO gpio{syncGPIODevPath, static_cast<gpioNum_t>(syncGPIONumber),
               Direction::output};
 
     try
@@ -800,7 +764,7 @@ void PowerSupply::syncHistory()
     }
     catch (std::exception& e)
     {
-        //Do nothing.  There would already be a journal entry.
+        // Do nothing.  There would already be a journal entry.
     }
 }
 
@@ -827,17 +791,16 @@ void PowerSupply::updateHistory()
 {
     if (!recordManager)
     {
-        //Not enabled
+        // Not enabled
         return;
     }
 
-    //Read just the most recent average/max record
-    auto data = pmbusIntf.readBinary(
-            INPUT_HISTORY,
-            pmbus::Type::HwmonDeviceDebug,
-            history::RecordManager::RAW_RECORD_SIZE);
+    // Read just the most recent average/max record
+    auto data =
+        pmbusIntf.readBinary(INPUT_HISTORY, pmbus::Type::HwmonDeviceDebug,
+                             history::RecordManager::RAW_RECORD_SIZE);
 
-    //Update D-Bus only if something changed (a new record ID, or cleared out)
+    // Update D-Bus only if something changed (a new record ID, or cleared out)
     auto changed = recordManager->add(data);
     if (changed)
     {
@@ -846,6 +809,6 @@ void PowerSupply::updateHistory()
     }
 }
 
-}
-}
-}
+} // namespace psu
+} // namespace power
+} // namespace witherspoon

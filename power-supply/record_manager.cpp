@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <chrono>
-#include <math.h>
-#include <phosphor-logging/log.hpp>
 #include "record_manager.hpp"
+
+#include <math.h>
+
+#include <chrono>
+#include <phosphor-logging/log.hpp>
 
 namespace witherspoon
 {
@@ -31,47 +33,46 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
 {
     if (rawRecord.size() == 0)
     {
-        //The PS has no data - either the power supply just started up,
-        //or it just got a SYNC.  Clear the history.
+        // The PS has no data - either the power supply just started up,
+        // or it just got a SYNC.  Clear the history.
         records.clear();
         return true;
     }
 
     try
     {
-        //Peek at the ID to see if more processing is needed.
+        // Peek at the ID to see if more processing is needed.
         auto id = getRawRecordID(rawRecord);
 
         if (!records.empty())
         {
             auto previousID = std::get<recIDPos>(records.front());
 
-            //Already have this record.  Done.
+            // Already have this record.  Done.
             if (previousID == id)
             {
                 return false;
             }
 
-            //Check that the sequence ID is in order.
-            //If not, clear out current list.
+            // Check that the sequence ID is in order.
+            // If not, clear out current list.
             if ((previousID + 1) != id)
             {
-                //If it just rolled over from 0xFF to 0x00, then no
-                //need to clear.  If we see a 0 seemingly out of nowhere,
-                //then it was a sync so clear the old records.
+                // If it just rolled over from 0xFF to 0x00, then no
+                // need to clear.  If we see a 0 seemingly out of nowhere,
+                // then it was a sync so clear the old records.
                 auto rolledOver =
-                    (previousID == lastSequenceID) &&
-                    (id == FIRST_SEQUENCE_ID);
+                    (previousID == lastSequenceID) && (id == FIRST_SEQUENCE_ID);
 
                 if (!rolledOver)
                 {
                     if (id != FIRST_SEQUENCE_ID)
                     {
                         log<level::INFO>(
-                                "Noncontiguous INPUT_HISTORY sequence ID "
-                                "found. Clearing old entries",
-                                entry("OLD_ID=%ld", previousID),
-                                entry("NEW_ID=%ld", id));
+                            "Noncontiguous INPUT_HISTORY sequence ID "
+                            "found. Clearing old entries",
+                            entry("OLD_ID=%ld", previousID),
+                            entry("NEW_ID=%ld", id));
                     }
                     records.clear();
                 }
@@ -80,7 +81,7 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
 
         records.push_front(std::move(createRecord(rawRecord)));
 
-        //If no more should be stored, prune the oldest
+        // If no more should be stored, prune the oldest
         if (records.size() > maxRecords)
         {
             records.pop_back();
@@ -100,8 +101,7 @@ auto RecordManager::getAverageRecords() -> DBusRecordList
 
     for (const auto& r : records)
     {
-        list.emplace_back(std::get<recTimePos>(r),
-                          std::get<recAvgPos>(r));
+        list.emplace_back(std::get<recTimePos>(r), std::get<recAvgPos>(r));
     }
 
     return list;
@@ -113,20 +113,18 @@ auto RecordManager::getMaximumRecords() -> DBusRecordList
 
     for (const auto& r : records)
     {
-        list.emplace_back(std::get<recTimePos>(r),
-                          std::get<recMaxPos>(r));
+        list.emplace_back(std::get<recTimePos>(r), std::get<recMaxPos>(r));
     }
 
     return list;
 }
 
-size_t RecordManager::getRawRecordID(
-        const std::vector<uint8_t>& data) const
+size_t RecordManager::getRawRecordID(const std::vector<uint8_t>& data) const
 {
     if (data.size() != RAW_RECORD_SIZE)
     {
         log<level::ERR>("Invalid INPUT_HISTORY size",
-                entry("SIZE=%d", data.size()));
+                        entry("SIZE=%d", data.size()));
         throw InvalidRecordException{};
     }
 
@@ -135,7 +133,7 @@ size_t RecordManager::getRawRecordID(
 
 Record RecordManager::createRecord(const std::vector<uint8_t>& data)
 {
-    //The raw record format is:
+    // The raw record format is:
     //  0xAABBCCDDEE
     //
     //  where:
@@ -145,7 +143,8 @@ Record RecordManager::createRecord(const std::vector<uint8_t>& data)
     auto id = getRawRecordID(data);
 
     auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::system_clock::now().time_since_epoch()).count();
+                    std::chrono::system_clock::now().time_since_epoch())
+                    .count();
 
     auto val = static_cast<uint16_t>(data[2]) << 8 | data[1];
     auto averagePower = linearToInteger(val);
@@ -158,20 +157,20 @@ Record RecordManager::createRecord(const std::vector<uint8_t>& data)
 
 int64_t RecordManager::linearToInteger(uint16_t data)
 {
-    //The exponent is the first 5 bits, followed by 11 bits of mantissa.
+    // The exponent is the first 5 bits, followed by 11 bits of mantissa.
     int8_t exponent = (data & 0xF800) >> 11;
     int16_t mantissa = (data & 0x07FF);
 
-    //If exponent's MSB on, then it's negative.
-    //Convert from two's complement.
+    // If exponent's MSB on, then it's negative.
+    // Convert from two's complement.
     if (exponent & 0x10)
     {
         exponent = (~exponent) & 0x1F;
         exponent = (exponent + 1) * -1;
     }
 
-    //If mantissa's MSB on, then it's negative.
-    //Convert from two's complement.
+    // If mantissa's MSB on, then it's negative.
+    // Convert from two's complement.
     if (mantissa & 0x400)
     {
         mantissa = (~mantissa) & 0x07FF;
@@ -182,6 +181,6 @@ int64_t RecordManager::linearToInteger(uint16_t data)
     return value;
 }
 
-}
-}
-}
+} // namespace history
+} // namespace power
+} // namespace witherspoon

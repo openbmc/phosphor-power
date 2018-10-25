@@ -28,15 +28,11 @@ constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
 using namespace phosphor::logging;
 
-
-std::string getService(const std::string& path,
-                       const std::string& interface,
+std::string getService(const std::string& path, const std::string& interface,
                        sdbusplus::bus::bus& bus)
 {
-    auto method = bus.new_method_call(MAPPER_BUSNAME,
-            MAPPER_PATH,
-            MAPPER_INTERFACE,
-            "GetObject");
+    auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
+                                      MAPPER_INTERFACE, "GetObject");
 
     method.append(path);
     method.append(std::vector<std::string>({interface}));
@@ -45,8 +41,8 @@ std::string getService(const std::string& path,
     if (reply.is_method_error())
     {
         log<level::ERR>("Error in mapper call to get service name",
-                entry("PATH=%s", path.c_str()),
-                entry("INTERFACE=%s", interface.c_str()));
+                        entry("PATH=%s", path.c_str()),
+                        entry("INTERFACE=%s", interface.c_str()));
 
         // TODO openbmc/openbmc#851 - Once available, throw returned error
         throw std::runtime_error("Error in mapper call to get service name");
@@ -57,16 +53,15 @@ std::string getService(const std::string& path,
 
     if (response.empty())
     {
-        log<level::ERR>(
-                "Error in mapper response for getting service name",
-                entry("PATH=%s", path.c_str()),
-                entry("INTERFACE=%s", interface.c_str()));
+        log<level::ERR>("Error in mapper response for getting service name",
+                        entry("PATH=%s", path.c_str()),
+                        entry("INTERFACE=%s", interface.c_str()));
         return std::string{};
     }
 
     return response.begin()->first;
 }
 
-}
-}
-}
+} // namespace util
+} // namespace power
+} // namespace witherspoon

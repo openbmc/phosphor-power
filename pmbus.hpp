@@ -27,7 +27,7 @@ namespace status_vout
 {
 // Mask of bits that are only warnings
 constexpr auto WARNING_MASK = 0x6A;
-}
+} // namespace status_vout
 
 // Current output status bits.
 constexpr auto STATUS_IOUT = "status0_iout";
@@ -79,24 +79,24 @@ constexpr auto VIN_UV_FAULT = 0x0008;
 // STATUS_WORD. Bit 2 of the low byte (STATUS_BYTE).
 constexpr auto TEMPERATURE_FAULT_WARN = 0x0004;
 
-}
+} // namespace status_word
 
 namespace status_temperature
 {
 // Overtemperature Fault
 constexpr auto OT_FAULT = 0x80;
-}
+} // namespace status_temperature
 
 /**
  * Where the access should be done
  */
 enum class Type
 {
-    Base,             // base device directory
-    Hwmon,            // hwmon directory
-    Debug,            // pmbus debug directory
-    DeviceDebug,      // device debug directory
-    HwmonDeviceDebug  // hwmon device debug directory
+    Base,            // base device directory
+    Hwmon,           // hwmon directory
+    Debug,           // pmbus debug directory
+    DeviceDebug,     // device debug directory
+    HwmonDeviceDebug // hwmon device debug directory
 };
 
 /**
@@ -111,209 +111,200 @@ enum class Type
  */
 class PMBus
 {
-    public:
+  public:
+    PMBus() = delete;
+    ~PMBus() = default;
+    PMBus(const PMBus&) = default;
+    PMBus& operator=(const PMBus&) = default;
+    PMBus(PMBus&&) = default;
+    PMBus& operator=(PMBus&&) = default;
 
-        PMBus() = delete;
-        ~PMBus() = default;
-        PMBus(const PMBus&) = default;
-        PMBus& operator=(const PMBus&) = default;
-        PMBus(PMBus&&) = default;
-        PMBus& operator=(PMBus&&) = default;
+    /**
+     * Constructor
+     *
+     * @param[in] path - path to the sysfs directory
+     */
+    PMBus(const std::string& path) : basePath(path)
+    {
+        findHwmonDir();
+    }
 
-        /**
-         * Constructor
-         *
-         * @param[in] path - path to the sysfs directory
-         */
-        PMBus(const std::string& path) :
-            basePath(path)
-        {
-            findHwmonDir();
-        }
+    /**
+     * Constructor
+     *
+     * This version is required when DeviceDebug
+     * access will be used.
+     *
+     * @param[in] path - path to the sysfs directory
+     * @param[in] driverName - the device driver name
+     * @param[in] instance - chip instance number
+     */
+    PMBus(const std::string& path, const std::string& driverName,
+          size_t instance) :
+        basePath(path),
+        driverName(driverName), instance(instance)
+    {
+        findHwmonDir();
+    }
 
-        /**
-         * Constructor
-         *
-         * This version is required when DeviceDebug
-         * access will be used.
-         *
-         * @param[in] path - path to the sysfs directory
-         * @param[in] driverName - the device driver name
-         * @param[in] instance - chip instance number
-         */
-        PMBus(const std::string& path,
-              const std::string& driverName,
-              size_t instance) :
-            basePath(path),
-            driverName(driverName),
-            instance(instance)
-        {
-            findHwmonDir();
-        }
+    /**
+     * Reads a file in sysfs that represents a single bit,
+     * therefore doing a PMBus read.
+     *
+     * @param[in] name - path concatenated to
+     *                   basePath to read
+     * @param[in] type - Path type
+     *
+     * @return bool - false if result was 0, else true
+     */
+    bool readBit(const std::string& name, Type type);
 
-        /**
-         * Reads a file in sysfs that represents a single bit,
-         * therefore doing a PMBus read.
-         *
-         * @param[in] name - path concatenated to
-         *                   basePath to read
-         * @param[in] type - Path type
-         *
-         * @return bool - false if result was 0, else true
-         */
-        bool readBit(const std::string& name, Type type);
+    /**
+     * Reads a file in sysfs that represents a single bit,
+     * where the page number passed in is substituted
+     * into the name in place of the 'P' character in it.
+     *
+     * @param[in] name - path concatenated to
+     *                   basePath to read
+     * @param[in] page - page number
+     * @param[in] type - Path type
+     *
+     * @return bool - false if result was 0, else true
+     */
+    bool readBitInPage(const std::string& name, size_t page, Type type);
+    /**
+     * Checks if the file for the given name and type exists.
+     *
+     * @param[in] name   - path concatenated to basePath to read
+     * @param[in] type   - Path type
+     *
+     * @return bool - True if file exists, false if it does not.
+     */
+    bool exists(const std::string& name, Type type);
 
-        /**
-         * Reads a file in sysfs that represents a single bit,
-         * where the page number passed in is substituted
-         * into the name in place of the 'P' character in it.
-         *
-         * @param[in] name - path concatenated to
-         *                   basePath to read
-         * @param[in] page - page number
-         * @param[in] type - Path type
-         *
-         * @return bool - false if result was 0, else true
-         */
-        bool readBitInPage(const std::string& name,
-                           size_t page,
-                           Type type);
-        /**
-         * Checks if the file for the given name and type exists.
-         *
-         * @param[in] name   - path concatenated to basePath to read
-         * @param[in] type   - Path type
-         *
-         * @return bool - True if file exists, false if it does not.
-         */
-        bool exists(const std::string& name, Type type);
+    /**
+     * Read byte(s) from file in sysfs.
+     *
+     * @param[in] name   - path concatenated to basePath to read
+     * @param[in] type   - Path type
+     *
+     * @return uint64_t - Up to 8 bytes of data read from file.
+     */
+    uint64_t read(const std::string& name, Type type);
 
-        /**
-         * Read byte(s) from file in sysfs.
-         *
-         * @param[in] name   - path concatenated to basePath to read
-         * @param[in] type   - Path type
-         *
-         * @return uint64_t - Up to 8 bytes of data read from file.
-         */
-        uint64_t read(const std::string& name, Type type);
+    /**
+     * Read a string from file in sysfs.
+     *
+     * @param[in] name   - path concatenated to basePath to read
+     * @param[in] type   - Path type
+     *
+     * @return string - The data read from the file.
+     */
+    std::string readString(const std::string& name, Type type);
 
-        /**
-         * Read a string from file in sysfs.
-         *
-         * @param[in] name   - path concatenated to basePath to read
-         * @param[in] type   - Path type
-         *
-         * @return string - The data read from the file.
-         */
-        std::string readString(const std::string& name, Type type);
+    /**
+     * Read data from a binary file in sysfs.
+     *
+     * @param[in] name   - path concatenated to basePath to read
+     * @param[in] type   - Path type
+     * @param[in] length - length of data to read, in bytes
+     *
+     * @return vector<uint8_t> - The data read from the file.
+     */
+    std::vector<uint8_t> readBinary(const std::string& name, Type type,
+                                    size_t length);
 
-        /**
-         * Read data from a binary file in sysfs.
-         *
-         * @param[in] name   - path concatenated to basePath to read
-         * @param[in] type   - Path type
-         * @param[in] length - length of data to read, in bytes
-         *
-         * @return vector<uint8_t> - The data read from the file.
-         */
-        std::vector<uint8_t> readBinary(const std::string& name,
-                                        Type type,
-                                        size_t length);
+    /**
+     * Writes an integer value to the file, therefore doing
+     * a PMBus write.
+     *
+     * @param[in] name - path concatenated to
+     *                   basePath to write
+     * @param[in] value - the value to write
+     * @param[in] type - Path type
+     */
+    void write(const std::string& name, int value, Type type);
 
-        /**
-         * Writes an integer value to the file, therefore doing
-         * a PMBus write.
-         *
-         * @param[in] name - path concatenated to
-         *                   basePath to write
-         * @param[in] value - the value to write
-         * @param[in] type - Path type
-         */
-        void write(const std::string& name, int value, Type type);
+    /**
+     * Returns the sysfs base path of this device
+     */
+    inline const auto& path() const
+    {
+        return basePath;
+    }
 
-        /**
-         * Returns the sysfs base path of this device
-         */
-        inline const auto& path() const
-        {
-            return basePath;
-        }
+    /**
+     * Replaces the 'P' in the string passed in with
+     * the page number passed in.
+     *
+     * For example:
+     *   insertPageNum("inP_enable", 42)
+     *   returns "in42_enable"
+     *
+     * @param[in] templateName - the name string, with a 'P' in it
+     * @param[in] page - the page number to insert where the P was
+     *
+     * @return string - the new string with the page number in it
+     */
+    static std::string insertPageNum(const std::string& templateName,
+                                     size_t page);
 
-        /**
-         * Replaces the 'P' in the string passed in with
-         * the page number passed in.
-         *
-         * For example:
-         *   insertPageNum("inP_enable", 42)
-         *   returns "in42_enable"
-         *
-         * @param[in] templateName - the name string, with a 'P' in it
-         * @param[in] page - the page number to insert where the P was
-         *
-         * @return string - the new string with the page number in it
-         */
-        static std::string insertPageNum(const std::string& templateName,
-                                         size_t page);
+    /**
+     * Finds the path relative to basePath to the hwmon directory
+     * for the device and stores it in hwmonRelPath.
+     */
+    void findHwmonDir();
 
-        /**
-         * Finds the path relative to basePath to the hwmon directory
-         * for the device and stores it in hwmonRelPath.
-         */
-        void findHwmonDir();
+    /**
+     * Returns the path to use for the passed in type.
+     *
+     * @param[in] type - Path type
+     *
+     * @return fs::path - the full path
+     */
+    fs::path getPath(Type type);
 
-        /**
-         * Returns the path to use for the passed in type.
-         *
-         * @param[in] type - Path type
-         *
-         * @return fs::path - the full path
-         */
-        fs::path getPath(Type type);
+  private:
+    /**
+     * Returns the device name
+     *
+     * This is found in the 'name' file in basePath.
+     *
+     * @return string - the device name
+     */
+    std::string getDeviceName();
 
-    private:
+    /**
+     * The sysfs device path
+     */
+    fs::path basePath;
 
-        /**
-         * Returns the device name
-         *
-         * This is found in the 'name' file in basePath.
-         *
-         * @return string - the device name
-         */
-        std::string getDeviceName();
+    /**
+     * The directory name under the basePath hwmon directory
+     */
+    fs::path hwmonDir;
 
-        /**
-         * The sysfs device path
-         */
-        fs::path basePath;
+    /**
+     * The device driver name.  Used for finding the device
+     * debug directory.  Not required if that directory
+     * isn't used.
+     */
+    std::string driverName;
 
-        /**
-         * The directory name under the basePath hwmon directory
-         */
-        fs::path hwmonDir;
+    /**
+     * The device instance number.
+     *
+     * Used in conjunction with the driver name for finding
+     * the debug directory.  Not required if that directory
+     * isn't used.
+     */
+    size_t instance = 0;
 
-        /**
-         * The device driver name.  Used for finding the device
-         * debug directory.  Not required if that directory
-         * isn't used.
-         */
-        std::string driverName;
-
-        /**
-         * The device instance number.
-         *
-         * Used in conjunction with the driver name for finding
-         * the debug directory.  Not required if that directory
-         * isn't used.
-         */
-        size_t instance = 0;
-
-        /**
-         * The pmbus debug path with status files
-         */
-        const fs::path debugPath = "/sys/kernel/debug/";
-
+    /**
+     * The pmbus debug path with status files
+     */
+    const fs::path debugPath = "/sys/kernel/debug/";
 };
 
-}
-}
+} // namespace pmbus
+} // namespace witherspoon

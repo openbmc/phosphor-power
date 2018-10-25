@@ -34,8 +34,8 @@ enum class extraAnalysisType
  */
 enum class optionFlags
 {
-    none             = 0,
-    shutdownOnFault  = 1
+    none = 0,
+    shutdownOnFault = 1
 };
 
 constexpr auto gpioNumField = 0;
@@ -51,8 +51,8 @@ constexpr auto gpioDefinitionField = 4;
 
 using ErrorFunction = std::function<void(UCD90160&, const std::string&)>;
 
-using GPIOGroup = std::tuple<
-        std::string, gpio::Value, ErrorFunction, optionFlags, GPIODefinitions>;
+using GPIOGroup = std::tuple<std::string, gpio::Value, ErrorFunction,
+                             optionFlags, GPIODefinitions>;
 
 using GPIOAnalysis = std::map<extraAnalysisType, GPIOGroup>;
 
@@ -62,8 +62,8 @@ constexpr auto gpiNameField = 2;
 constexpr auto pollField = 3;
 constexpr auto extraAnalysisField = 4;
 
-using GPIConfig = std::tuple<
-        size_t, size_t, std::string, bool, extraAnalysisType>;
+using GPIConfig =
+    std::tuple<size_t, size_t, std::string, bool, extraAnalysisType>;
 
 using GPIConfigs = std::vector<GPIConfig>;
 
@@ -74,12 +74,12 @@ constexpr auto railNamesField = 1;
 constexpr auto gpiConfigField = 2;
 constexpr auto gpioAnalysisField = 3;
 
-using DeviceDefinition = std::tuple<
-        std::string, RailNames, GPIConfigs, GPIOAnalysis>;
+using DeviceDefinition =
+    std::tuple<std::string, RailNames, GPIConfigs, GPIOAnalysis>;
 
-//Maps a device instance to its definition
+// Maps a device instance to its definition
 using DeviceMap = std::map<size_t, DeviceDefinition>;
 
-}
-}
-}
+} // namespace ucd90160
+} // namespace power
+} // namespace witherspoon

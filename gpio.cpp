@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <cassert>
-#include <fcntl.h>
-#include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/elog-errors.hpp>
-#include <phosphor-logging/log.hpp>
-#include <sys/ioctl.h>
-#include <xyz/openbmc_project/Common/error.hpp>
 #include "gpio.hpp"
+
+#include <fcntl.h>
+#include <sys/ioctl.h>
+
+#include <cassert>
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
 
 namespace witherspoon
 {
@@ -29,8 +31,8 @@ namespace gpio
 
 using namespace phosphor::logging;
 
-using InternalFailure = sdbusplus::xyz::openbmc_project::Common::
-                        Error::InternalFailure;
+using InternalFailure =
+    sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure;
 
 Value GPIO::read()
 {
@@ -40,15 +42,12 @@ Value GPIO::read()
 
     gpiohandle_data data{};
 
-    auto rc = ioctl(lineFD(),
-                    GPIOHANDLE_GET_LINE_VALUES_IOCTL,
-                    &data);
+    auto rc = ioctl(lineFD(), GPIOHANDLE_GET_LINE_VALUES_IOCTL, &data);
 
     if (rc < 0)
     {
         auto e = errno;
-        log<level::ERR>("Failed GET_LINE_VALUES ioctl",
-                        entry("ERRNO=%d", e));
+        log<level::ERR>("Failed GET_LINE_VALUES ioctl", entry("ERRNO=%d", e));
         elog<InternalFailure>();
     }
 
@@ -68,15 +67,14 @@ void GPIO::set(Value value)
     if (rc == -1)
     {
         auto e = errno;
-        log<level::ERR>("Failed SET_LINE_VALUES ioctl",
-                        entry("ERRNO=%d", e));
+        log<level::ERR>("Failed SET_LINE_VALUES ioctl", entry("ERRNO=%d", e));
         elog<InternalFailure>();
     }
 }
 
 void GPIO::requestLine(Value defaultValue)
 {
-    //Only need to do this once
+    // Only need to do this once
     if (lineFD)
     {
         return;
@@ -92,15 +90,14 @@ void GPIO::requestLine(Value defaultValue)
         elog<InternalFailure>();
     }
 
-    //Make an ioctl call to request the GPIO line, which will
-    //return the descriptor to use to access it.
+    // Make an ioctl call to request the GPIO line, which will
+    // return the descriptor to use to access it.
     gpiohandle_request request{};
-    strncpy(request.consumer_label,
-            "witherspoon-pfault-analysis",
+    strncpy(request.consumer_label, "witherspoon-pfault-analysis",
             sizeof(request.consumer_label));
 
-    request.flags = (direction == Direction::input) ?
-                    GPIOHANDLE_REQUEST_INPUT : GPIOHANDLE_REQUEST_OUTPUT;
+    request.flags = (direction == Direction::input) ? GPIOHANDLE_REQUEST_INPUT
+                                                    : GPIOHANDLE_REQUEST_OUTPUT;
 
     request.lineoffsets[0] = gpio;
     request.lines = 1;
@@ -114,8 +111,7 @@ void GPIO::requestLine(Value defaultValue)
     if (rc == -1)
     {
         auto e = errno;
-        log<level::ERR>("Failed GET_LINEHANDLE ioctl",
-                        entry("GPIO=%d", gpio),
+        log<level::ERR>("Failed GET_LINEHANDLE ioctl", entry("GPIO=%d", gpio),
                         entry("ERRNO=%d", e));
         elog<InternalFailure>();
     }
@@ -123,5 +119,5 @@ void GPIO::requestLine(Value defaultValue)
     lineFD.set(request.fd);
 }
 
-}
-}
+} // namespace gpio
+} // namespace witherspoon

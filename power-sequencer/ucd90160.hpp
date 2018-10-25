@@ -1,23 +1,23 @@
 #pragma once
 
+#include "device.hpp"
+#include "gpio.hpp"
+#include "pmbus.hpp"
+#include "types.hpp"
+
 #include <algorithm>
 #include <experimental/filesystem>
 #include <map>
 #include <sdbusplus/bus.hpp>
 #include <vector>
-#include "device.hpp"
-#include "gpio.hpp"
-#include "pmbus.hpp"
-#include "types.hpp"
 
 namespace witherspoon
 {
 namespace power
 {
 
-//Error type, callout
-using PartCallout =
-        std::tuple<ucd90160::extraAnalysisType, std::string>;
+// Error type, callout
+using PartCallout = std::tuple<ucd90160::extraAnalysisType, std::string>;
 
 /**
  * @class UCD90160
@@ -28,284 +28,279 @@ using PartCallout =
  */
 class UCD90160 : public Device
 {
-    public:
+  public:
+    UCD90160() = delete;
+    ~UCD90160() = default;
+    UCD90160(const UCD90160&) = delete;
+    UCD90160& operator=(const UCD90160&) = delete;
+    UCD90160(UCD90160&&) = default;
+    UCD90160& operator=(UCD90160&&) = default;
 
-        UCD90160() = delete;
-        ~UCD90160() = default;
-        UCD90160(const UCD90160&) = delete;
-        UCD90160& operator=(const UCD90160&) = delete;
-        UCD90160(UCD90160&&) = default;
-        UCD90160& operator=(UCD90160&&) = default;
+    /**
+     * Constructor
+     *
+     * @param[in] instance - the device instance number
+     * @param[in] bus - D-Bus bus object
+     */
+    UCD90160(size_t instance, sdbusplus::bus::bus& bus);
 
-        /**
-         * Constructor
-         *
-         * @param[in] instance - the device instance number
-         * @param[in] bus - D-Bus bus object
-         */
-        UCD90160(size_t instance, sdbusplus::bus::bus& bus);
+    /**
+     * Analyzes the device for errors when the device is
+     * known to be in an error state.  A log will be created.
+     */
+    void onFailure() override;
 
-        /**
-         * Analyzes the device for errors when the device is
-         * known to be in an error state.  A log will be created.
-         */
-        void onFailure() override;
+    /**
+     * Checks the device for errors and only creates a log
+     * if one is found.
+     */
+    void analyze() override;
 
-        /**
-         * Checks the device for errors and only creates a log
-         * if one is found.
-         */
-        void analyze() override;
+    /**
+     * Clears faults in the device
+     */
+    void clearFaults() override
+    {
+    }
 
-        /**
-         * Clears faults in the device
-         */
-        void clearFaults() override
-        {
-        }
+  private:
+    /**
+     * Reports an error for a GPU PGOOD failure
+     *
+     * @param[in] callout - the GPU callout string
+     */
+    void gpuPGOODError(const std::string& callout);
 
-    private:
+    /**
+     * Reports an error for a GPU OverTemp failure
+     *
+     * @param[in] callout - the GPU callout string
+     */
+    void gpuOverTempError(const std::string& callout);
 
-        /**
-         * Reports an error for a GPU PGOOD failure
-         *
-         * @param[in] callout - the GPU callout string
-         */
-        void gpuPGOODError(const std::string& callout);
+    /**
+     * Given the device path for a chip, find its gpiochip
+     * path
+     *
+     * @param[in] path - device path, like
+     *                   /sys/devices/.../i2c-11/11-0064
+     *
+     * @return fs::path - The gpiochip path, like
+     *                   /dev/gpiochip1
+     */
+    static std::experimental::filesystem::path
+        findGPIODevice(const std::experimental::filesystem::path& path);
 
-        /**
-         * Reports an error for a GPU OverTemp failure
-         *
-         * @param[in] callout - the GPU callout string
-         */
-        void gpuOverTempError(const std::string& callout);
+    /**
+     * Checks for VOUT faults on the device.
+     *
+     * This device can monitor voltages of its dependent
+     * devices, and VOUT faults are voltage faults
+     * on these devices.
+     *
+     * @return bool - true if an error log was created
+     */
+    bool checkVOUTFaults();
 
-        /**
-         * Given the device path for a chip, find its gpiochip
-         * path
-         *
-         * @param[in] path - device path, like
-         *                   /sys/devices/.../i2c-11/11-0064
-         *
-         * @return fs::path - The gpiochip path, like
-         *                   /dev/gpiochip1
-         */
-        static std::experimental::filesystem::path findGPIODevice(
-                const std::experimental::filesystem::path& path);
+    /**
+     * Checks for PGOOD faults on the device.
+     *
+     * This device can monitor the PGOOD signals of its dependent
+     * devices, and this check will look for faults of
+     * those PGOODs.
+     *
+     * @param[in] polling - If this is running while polling for errors,
+     *                      as opposing to analyzing a fail condition.
+     *
+     * @return bool - true if an error log was created
+     */
+    bool checkPGOODFaults(bool polling);
 
-        /**
-         * Checks for VOUT faults on the device.
-         *
-         * This device can monitor voltages of its dependent
-         * devices, and VOUT faults are voltage faults
-         * on these devices.
-         *
-         * @return bool - true if an error log was created
-         */
-        bool checkVOUTFaults();
+    /**
+     * Creates an error log when the device has an error
+     * but it isn't a PGOOD or voltage failure.
+     */
+    void createPowerFaultLog();
 
-        /**
-         * Checks for PGOOD faults on the device.
-         *
-         * This device can monitor the PGOOD signals of its dependent
-         * devices, and this check will look for faults of
-         * those PGOODs.
-         *
-         * @param[in] polling - If this is running while polling for errors,
-         *                      as opposing to analyzing a fail condition.
-         *
-         * @return bool - true if an error log was created
-         */
-         bool checkPGOODFaults(bool polling);
+    /**
+     * Reads the status_word register
+     *
+     * @return uint16_t - the register contents
+     */
+    uint16_t readStatusWord();
 
-        /**
-         * Creates an error log when the device has an error
-         * but it isn't a PGOOD or voltage failure.
-         */
-        void createPowerFaultLog();
+    /**
+     * Reads the mfr_status register
+     *
+     * @return uint32_t - the register contents
+     */
+    uint32_t readMFRStatus();
 
-        /**
-         * Reads the status_word register
-         *
-         * @return uint16_t - the register contents
-         */
-        uint16_t readStatusWord();
+    /**
+     * Does any additional fault analysis based on the
+     * value of the extraAnalysisType field in the GPIOConfig
+     * entry.
+     *
+     * Used to get better callouts.
+     *
+     * @param[in] config - the GPIOConfig entry to use
+     *
+     * @return bool - true if a HW error was found, false else
+     */
+    bool doExtraAnalysis(const ucd90160::GPIConfig& config);
 
-        /**
-         * Reads the mfr_status register
-         *
-         * @return uint32_t - the register contents
-         */
-        uint32_t readMFRStatus();
+    /**
+     * Does additional fault analysis using GPIOs to
+     * specifically identify the failing part.
+     *
+     * Used when there are too many PGOOD inputs for
+     * the UCD90160 to handle, so just a summary bit
+     * is wired into the chip, and then the specific
+     * fault GPIOs are off of a different GPIO device,
+     * like an IO expander.
+     *
+     * @param[in] type - the type of analysis to do
+     *
+     * @return bool - true if a HW error was found, false else
+     */
+    bool doGPIOAnalysis(ucd90160::extraAnalysisType type);
 
-        /**
-         * Does any additional fault analysis based on the
-         * value of the extraAnalysisType field in the GPIOConfig
-         * entry.
-         *
-         * Used to get better callouts.
-         *
-         * @param[in] config - the GPIOConfig entry to use
-         *
-         * @return bool - true if a HW error was found, false else
-         */
-        bool doExtraAnalysis(const ucd90160::GPIConfig& config);
+    /**
+     * Says if we've already logged a Vout fault
+     *
+     * The policy is only 1 of the same error will
+     * be logged for the duration of a class instance.
+     *
+     * @param[in] page - the page to check
+     *
+     * @return bool - if we've already logged a fault against
+     *                this page
+     */
+    inline bool isVoutFaultLogged(uint32_t page) const
+    {
+        return std::find(voutErrors.begin(), voutErrors.end(), page) !=
+               voutErrors.end();
+    }
 
-        /**
-         * Does additional fault analysis using GPIOs to
-         * specifically identify the failing part.
-         *
-         * Used when there are too many PGOOD inputs for
-         * the UCD90160 to handle, so just a summary bit
-         * is wired into the chip, and then the specific
-         * fault GPIOs are off of a different GPIO device,
-         * like an IO expander.
-         *
-         * @param[in] type - the type of analysis to do
-         *
-         * @return bool - true if a HW error was found, false else
-         */
-        bool doGPIOAnalysis(ucd90160::extraAnalysisType type);
+    /**
+     * Saves that a Vout fault has been logged
+     *
+     * @param[in] page - the page the error was logged against
+     */
+    inline void setVoutFaultLogged(uint32_t page)
+    {
+        voutErrors.push_back(page);
+    }
 
-        /**
-         * Says if we've already logged a Vout fault
-         *
-         * The policy is only 1 of the same error will
-         * be logged for the duration of a class instance.
-         *
-         * @param[in] page - the page to check
-         *
-         * @return bool - if we've already logged a fault against
-         *                this page
-         */
-        inline bool isVoutFaultLogged(uint32_t page) const
-        {
-            return std::find(voutErrors.begin(),
-                             voutErrors.end(),
-                             page) != voutErrors.end();
-        }
+    /**
+     * Says if we've already logged a PGOOD fault
+     *
+     * The policy is only 1 of the same errors will
+     * be logged for the duration of a class instance.
+     *
+     * @param[in] input - the input to check
+     *
+     * @return bool - if we've already logged a fault against
+     *                this input
+     */
+    inline bool isPGOODFaultLogged(uint32_t input) const
+    {
+        return std::find(pgoodErrors.begin(), pgoodErrors.end(), input) !=
+               pgoodErrors.end();
+    }
 
-        /**
-         * Saves that a Vout fault has been logged
-         *
-         * @param[in] page - the page the error was logged against
-         */
-        inline void setVoutFaultLogged(uint32_t page)
-        {
-            voutErrors.push_back(page);
-        }
+    /**
+     * Says if we've already logged a specific fault
+     * against a specific part
+     *
+     * @param[in] callout - error type and name tuple
+     *
+     * @return bool - if we've already logged this fault
+     *                against this part
+     */
+    inline bool isPartCalledOut(const PartCallout& callout) const
+    {
+        return std::find(callouts.begin(), callouts.end(), callout) !=
+               callouts.end();
+    }
 
-        /**
-         * Says if we've already logged a PGOOD fault
-         *
-         * The policy is only 1 of the same errors will
-         * be logged for the duration of a class instance.
-         *
-         * @param[in] input - the input to check
-         *
-         * @return bool - if we've already logged a fault against
-         *                this input
-         */
-        inline bool isPGOODFaultLogged(uint32_t input) const
-        {
-            return std::find(pgoodErrors.begin(),
-                             pgoodErrors.end(),
-                             input) != pgoodErrors.end();
-        }
+    /**
+     * Saves that a PGOOD fault has been logged
+     *
+     * @param[in] input - the input the error was logged against
+     */
+    inline void setPGOODFaultLogged(uint32_t input)
+    {
+        pgoodErrors.push_back(input);
+    }
 
-        /**
-         * Says if we've already logged a specific fault
-         * against a specific part
-         *
-         * @param[in] callout - error type and name tuple
-         *
-         * @return bool - if we've already logged this fault
-         *                against this part
-         */
-        inline bool isPartCalledOut(const PartCallout& callout) const
-        {
-            return std::find(callouts.begin(),
-                             callouts.end(),
-                             callout) != callouts.end();
-        }
+    /**
+     * Saves that a specific fault on a specific part has been done
+     *
+     * @param[in] callout - error type and name tuple
+     */
+    inline void setPartCallout(const PartCallout& callout)
+    {
+        callouts.push_back(callout);
+    }
 
-        /**
-         * Saves that a PGOOD fault has been logged
-         *
-         * @param[in] input - the input the error was logged against
-         */
-        inline void setPGOODFaultLogged(uint32_t input)
-        {
-            pgoodErrors.push_back(input);
-        }
+    /**
+     * List of pages that Vout errors have
+     * already been logged against
+     */
+    std::vector<uint32_t> voutErrors;
 
-        /**
-         * Saves that a specific fault on a specific part has been done
-         *
-         * @param[in] callout - error type and name tuple
-         */
-        inline void setPartCallout(const PartCallout& callout)
-        {
-            callouts.push_back(callout);
-        }
+    /**
+     * List of inputs that PGOOD errors have
+     * already been logged against
+     */
+    std::vector<uint32_t> pgoodErrors;
 
-        /**
-         * List of pages that Vout errors have
-         * already been logged against
-         */
-        std::vector<uint32_t> voutErrors;
+    /**
+     * List of callouts that already been done
+     */
+    std::vector<PartCallout> callouts;
 
-        /**
-         * List of inputs that PGOOD errors have
-         * already been logged against
-         */
-        std::vector<uint32_t> pgoodErrors;
+    /**
+     * The read/write interface to this hardware
+     */
+    pmbus::PMBus interface;
 
-        /**
-         * List of callouts that already been done
-         */
-        std::vector<PartCallout> callouts;
+    /**
+     * A map of GPI pin IDs to the GPIO object
+     * used to access them
+     */
+    std::map<size_t, std::unique_ptr<gpio::GPIO>> gpios;
 
-        /**
-         * The read/write interface to this hardware
-         */
-        pmbus::PMBus interface;
+    /**
+     * Keeps track of device access errors to avoid repeatedly
+     * logging errors for bad hardware
+     */
+    bool accessError = false;
 
-        /**
-         * A map of GPI pin IDs to the GPIO object
-         * used to access them
-         */
-        std::map<size_t, std::unique_ptr<gpio::GPIO>> gpios;
+    /**
+     * Keeps track of GPIO access errors when doing the in depth
+     * PGOOD fault analysis to avoid repeatedly logging errors
+     * for bad hardware
+     */
+    bool gpioAccessError = false;
 
-        /**
-         * Keeps track of device access errors to avoid repeatedly
-         * logging errors for bad hardware
-         */
-        bool accessError = false;
+    /**
+     * The path to the GPIO device used to read
+     * the GPI (PGOOD) status
+     */
+    std::experimental::filesystem::path gpioDevice;
 
-        /**
-         * Keeps track of GPIO access errors when doing the in depth
-         * PGOOD fault analysis to avoid repeatedly logging errors
-         * for bad hardware
-         */
-        bool gpioAccessError = false;
+    /**
+     * The D-Bus bus object
+     */
+    sdbusplus::bus::bus& bus;
 
-        /**
-         * The path to the GPIO device used to read
-         * the GPI (PGOOD) status
-         */
-        std::experimental::filesystem::path gpioDevice;
-
-        /**
-         * The D-Bus bus object
-         */
-        sdbusplus::bus::bus& bus;
-
-        /**
-         * Map of device instance to the instance specific data
-         */
-        static const ucd90160::DeviceMap deviceMap;
+    /**
+     * Map of device instance to the instance specific data
+     */
+    static const ucd90160::DeviceMap deviceMap;
 };
 
-}
-}
+} // namespace power
+} // namespace witherspoon

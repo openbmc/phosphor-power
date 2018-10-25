@@ -1,7 +1,7 @@
 #pragma once
 
-#include <phosphor-logging/log.hpp>
 #include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <string>
 
@@ -12,10 +12,10 @@ namespace power
 namespace util
 {
 
-constexpr auto SYSTEMD_SERVICE   = "org.freedesktop.systemd1";
-constexpr auto SYSTEMD_ROOT      = "/org/freedesktop/systemd1";
+constexpr auto SYSTEMD_SERVICE = "org.freedesktop.systemd1";
+constexpr auto SYSTEMD_ROOT = "/org/freedesktop/systemd1";
 constexpr auto SYSTEMD_INTERFACE = "org.freedesktop.systemd1.Manager";
-constexpr auto POWEROFF_TARGET   = "obmc-chassis-hard-poweroff@0.target";
+constexpr auto POWEROFF_TARGET = "obmc-chassis-hard-poweroff@0.target";
 constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
 
 /**
@@ -28,8 +28,7 @@ constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
  *
  * @return The service name
  */
-std::string getService(const std::string& path,
-                       const std::string& interface,
+std::string getService(const std::string& path, const std::string& interface,
                        sdbusplus::bus::bus& bus);
 
 /**
@@ -42,20 +41,15 @@ std::string getService(const std::string& path,
  * @param[in] bus - the D-Bus object
  * @param[out] value - filled in with the property value
  */
-template<typename T>
-void getProperty(const std::string& interface,
-                 const std::string& propertyName,
-                 const std::string& path,
-                 const std::string& service,
-                 sdbusplus::bus::bus& bus,
-                 T& value)
+template <typename T>
+void getProperty(const std::string& interface, const std::string& propertyName,
+                 const std::string& path, const std::string& service,
+                 sdbusplus::bus::bus& bus, T& value)
 {
     sdbusplus::message::variant<T> property;
 
-    auto method = bus.new_method_call(service.c_str(),
-                                      path.c_str(),
-                                      PROPERTY_INTF,
-                                      "Get");
+    auto method = bus.new_method_call(service.c_str(), path.c_str(),
+                                      PROPERTY_INTF, "Get");
 
     method.append(interface, propertyName);
 
@@ -85,20 +79,15 @@ void getProperty(const std::string& interface,
  * @param[in] bus - the D-Bus object
  * @param[in] value - the value to set the property to
  */
-template<typename T>
-void setProperty(const std::string& interface,
-                 const std::string& propertyName,
-                 const std::string& path,
-                 const std::string& service,
-                 sdbusplus::bus::bus& bus,
-                 T& value)
+template <typename T>
+void setProperty(const std::string& interface, const std::string& propertyName,
+                 const std::string& path, const std::string& service,
+                 sdbusplus::bus::bus& bus, T& value)
 {
     sdbusplus::message::variant<T> propertyValue(value);
 
-    auto method = bus.new_method_call(service.c_str(),
-                                      path.c_str(),
-                                      PROPERTY_INTF,
-                                      "Set");
+    auto method = bus.new_method_call(service.c_str(), path.c_str(),
+                                      PROPERTY_INTF, "Set");
 
     method.append(interface, propertyName, propertyValue);
 
@@ -114,7 +103,6 @@ void setProperty(const std::string& interface,
         // TODO openbmc/openbmc#851 - Once available, throw returned error
         throw std::runtime_error("Error in property set call");
     }
-
 }
 
 /**
@@ -123,15 +111,13 @@ void setProperty(const std::string& interface,
  * @tparam T - error that will be logged before the power off
  * @param[in] bus - D-Bus object
  */
-template<typename T>
+template <typename T>
 void powerOff(sdbusplus::bus::bus& bus)
 {
     phosphor::logging::report<T>();
 
-    auto method = bus.new_method_call(SYSTEMD_SERVICE,
-                                      SYSTEMD_ROOT,
-                                      SYSTEMD_INTERFACE,
-                                      "StartUnit");
+    auto method = bus.new_method_call(SYSTEMD_SERVICE, SYSTEMD_ROOT,
+                                      SYSTEMD_INTERFACE, "StartUnit");
 
     method.append(POWEROFF_TARGET);
     method.append("replace");
@@ -139,6 +125,6 @@ void powerOff(sdbusplus::bus::bus& bus)
     bus.call_noreply(method);
 }
 
-}
-}
-}
+} // namespace util
+} // namespace power
+} // namespace witherspoon

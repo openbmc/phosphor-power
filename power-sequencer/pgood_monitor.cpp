@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <phosphor-logging/log.hpp>
-#include <org/open_power/Witherspoon/Fault/error.hpp>
 #include "config.h"
-#include "elog-errors.hpp"
+
 #include "pgood_monitor.hpp"
+
+#include "elog-errors.hpp"
 #include "utility.hpp"
+
+#include <org/open_power/Witherspoon/Fault/error.hpp>
+#include <phosphor-logging/log.hpp>
 
 namespace witherspoon
 {
@@ -37,26 +40,16 @@ bool PGOODMonitor::pgoodPending()
     int32_t state = 0;
     int32_t pgood = 0;
 
-    auto service = util::getService(POWER_OBJ_PATH,
-            POWER_INTERFACE,
-            bus);
+    auto service = util::getService(POWER_OBJ_PATH, POWER_INTERFACE, bus);
 
-    util::getProperty<int32_t>(POWER_INTERFACE,
-            "pgood",
-            POWER_OBJ_PATH,
-            service,
-            bus,
-            pgood);
+    util::getProperty<int32_t>(POWER_INTERFACE, "pgood", POWER_OBJ_PATH,
+                               service, bus, pgood);
 
-    //When state = 1, system was switched on
-    util::getProperty<int32_t>(POWER_INTERFACE,
-            "state",
-            POWER_OBJ_PATH,
-            service,
-            bus,
-            state);
+    // When state = 1, system was switched on
+    util::getProperty<int32_t>(POWER_INTERFACE, "state", POWER_OBJ_PATH,
+                               service, bus, state);
 
-    //On but no PGOOD
+    // On but no PGOOD
     if (state && !pgood)
     {
         pending = true;
@@ -65,13 +58,12 @@ bool PGOODMonitor::pgoodPending()
     return pending;
 }
 
-
 void PGOODMonitor::analyze()
 {
-    //Timer callback.
-    //The timer expired before it was stopped.
-    //If PGOOD is still pending (it should be),
-    //then there is a real failure.
+    // Timer callback.
+    // The timer expired before it was stopped.
+    // If PGOOD is still pending (it should be),
+    // then there is a real failure.
 
     if (pgoodPending())
     {
@@ -81,18 +73,18 @@ void PGOODMonitor::analyze()
         report<PowerOnFailure>();
     }
 
-    //The pgood-wait service (with a longer timeout)
-    //will handle powering off the system.
+    // The pgood-wait service (with a longer timeout)
+    // will handle powering off the system.
     timer.get_event().exit(EXIT_SUCCESS);
 }
 
 void PGOODMonitor::propertyChanged()
 {
-    //Multiple properties could have changed here.
-    //Keep things simple and just recheck the important ones.
+    // Multiple properties could have changed here.
+    // Keep things simple and just recheck the important ones.
     if (!pgoodPending())
     {
-        //PGOOD is on, or system is off, so we are done.
+        // PGOOD is on, or system is off, so we are done.
         timer.get_event().exit(EXIT_SUCCESS);
     }
 }
@@ -100,11 +92,10 @@ void PGOODMonitor::propertyChanged()
 void PGOODMonitor::startListening()
 {
     match = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::propertiesChanged(
-                POWER_OBJ_PATH,
-                POWER_INTERFACE),
-            [this](auto& msg){this->propertyChanged();});
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                        POWER_INTERFACE),
+        [this](auto& msg) { this->propertyChanged(); });
 }
 
 int PGOODMonitor::run()
@@ -113,9 +104,9 @@ int PGOODMonitor::run()
     {
         startListening();
 
-        //If PGOOD came up before we got here, we're done.
-        //Otherwise if PGOOD doesn't get asserted before
-        //the timer expires, it's a failure.
+        // If PGOOD came up before we got here, we're done.
+        // Otherwise if PGOOD doesn't get asserted before
+        // the timer expires, it's a failure.
         if (!pgoodPending())
         {
             return EXIT_SUCCESS;
@@ -129,10 +120,9 @@ int PGOODMonitor::run()
         log<level::ERR>("Unexpected failure prevented PGOOD checking");
     }
 
-    //Letting the service fail won't help anything, so don't do it.
+    // Letting the service fail won't help anything, so don't do it.
     return EXIT_SUCCESS;
 }
 
-
-}
-}
+} // namespace power
+} // namespace witherspoon

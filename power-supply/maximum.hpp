@@ -12,8 +12,8 @@ namespace history
 template <typename T>
 using ServerObject = typename sdbusplus::server::object::object<T>;
 
-using MaximumInterface = sdbusplus::org::open_power::
-        Sensor::Aggregation::History::server::Maximum;
+using MaximumInterface =
+    sdbusplus::org::open_power::Sensor::Aggregation::History::server::Maximum;
 
 /**
  * @class Maximum
@@ -25,33 +25,30 @@ using MaximumInterface = sdbusplus::org::open_power::
  */
 class Maximum : public ServerObject<MaximumInterface>
 {
-    public:
+  public:
+    static constexpr auto name = "maximum";
 
-        static constexpr auto name = "maximum";
+    Maximum() = delete;
+    Maximum(const Maximum&) = delete;
+    Maximum& operator=(const Maximum&) = delete;
+    Maximum(Maximum&&) = delete;
+    Maximum& operator=(Maximum&&) = delete;
+    ~Maximum() = default;
 
-        Maximum() = delete;
-        Maximum(const Maximum&) = delete;
-        Maximum& operator=(const Maximum&) = delete;
-        Maximum(Maximum&&) = delete;
-        Maximum& operator=(Maximum&&) = delete;
-        ~Maximum() = default;
-
-        /**
-         * @brief Constructor
-         *
-         * @param[in] bus - D-Bus object
-         * @param[in] objectPath - the D-Bus object path
-         */
-        Maximum(sdbusplus::bus::bus& bus,
-                const std::string& objectPath) :
-                ServerObject<MaximumInterface>(bus, objectPath.c_str())
-        {
-            unit(Maximum::Unit::Watts);
-            scale(0);
-        }
+    /**
+     * @brief Constructor
+     *
+     * @param[in] bus - D-Bus object
+     * @param[in] objectPath - the D-Bus object path
+     */
+    Maximum(sdbusplus::bus::bus& bus, const std::string& objectPath) :
+        ServerObject<MaximumInterface>(bus, objectPath.c_str())
+    {
+        unit(Maximum::Unit::Watts);
+        scale(0);
+    }
 };
 
-
-}
-}
-}
+} // namespace history
+} // namespace power
+} // namespace witherspoon

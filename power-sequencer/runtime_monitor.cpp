@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
+#include "runtime_monitor.hpp"
+
+#include "elog-errors.hpp"
+#include "utility.hpp"
+
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
-#include "config.h"
-#include "elog-errors.hpp"
-#include "runtime_monitor.hpp"
-#include "utility.hpp"
 
 namespace witherspoon
 {
@@ -48,18 +51,18 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
 #ifdef UCD90160_DEVICE_ACCESS
         device->onFailure();
 #endif
-        //Note: This application only runs when the system has
-        //power, so it will be killed by systemd sometime shortly
-        //after this power off is issued.
+        // Note: This application only runs when the system has
+        // power, so it will be killed by systemd sometime shortly
+        // after this power off is issued.
 
         util::powerOff<Shutdown>(bus);
     }
     catch (std::exception& e)
     {
-        //No need to crash
+        // No need to crash
         log<level::ERR>(e.what());
     }
 }
 
-}
-}
+} // namespace power
+} // namespace witherspoon

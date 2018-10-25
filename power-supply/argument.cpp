@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <iostream>
-#include <iterator>
+#include "argument.hpp"
+
 #include <algorithm>
 #include <cassert>
-#include "argument.hpp"
+#include <iostream>
+#include <iterator>
 
 namespace witherspoon
 {
@@ -81,16 +82,15 @@ void ArgumentParser::usage(char** argv)
     std::cerr << std::flush;
 }
 
-const option ArgumentParser::options[] =
-{
-    { "path",       required_argument,  NULL,   'p' },
-    { "instance",   required_argument,  NULL,   'n' },
-    { "inventory",  required_argument,  NULL,   'i' },
-    { "num-history-records",  required_argument,  NULL,   'r' },
-    { "sync-gpio-path",  required_argument,  NULL,   'a' },
-    { "sync-gpio-num",  required_argument,  NULL,   'u' },
-    { "help",       no_argument,        NULL,   'h' },
-    { 0, 0, 0, 0},
+const option ArgumentParser::options[] = {
+    {"path", required_argument, NULL, 'p'},
+    {"instance", required_argument, NULL, 'n'},
+    {"inventory", required_argument, NULL, 'i'},
+    {"num-history-records", required_argument, NULL, 'r'},
+    {"sync-gpio-path", required_argument, NULL, 'a'},
+    {"sync-gpio-num", required_argument, NULL, 'u'},
+    {"help", no_argument, NULL, 'h'},
+    {0, 0, 0, 0},
 };
 
 const char* ArgumentParser::optionStr = "p:n:i:r:a:u:h";
@@ -98,5 +98,5 @@ const char* ArgumentParser::optionStr = "p:n:i:r:a:u:h";
 const std::string ArgumentParser::trueString = "true";
 const std::string ArgumentParser::emptyString = "";
 
-}
-}
+} // namespace power
+} // namespace witherspoon
