@@ -9,7 +9,9 @@ pseq_monitor_SOURCES = \
 	main.cpp \
 	pgood_monitor.cpp \
 	runtime_monitor.cpp \
-	ucd90160.cpp \
+	ucd90160.cpp
+
+nodist_pseq_monitor_SOURCES = \
 	ucd90160_defs.cpp
 
 pseq_monitor_LDADD = \
@@ -24,3 +26,8 @@ pseq_monitor_CXXFLAGS = \
 	${PHOSPHOR_DBUS_INTERFACES_CFLAGS} \
 	$(SDBUSPLUS_CFLAGS) \
 	$(SDEVENTPLUS_CFLAGS)
+
+BUILT_SOURCES = ucd90160_defs.cpp
+
+ucd90160_defs.cpp: ${srcdir}/gen-ucd90160-defs.py templates/ucd90160_defs.mako.cpp
+	$(AM_V_GEN)$(GEN_UCD90160_DEFS)

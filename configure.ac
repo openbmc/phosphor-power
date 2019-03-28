@@ -72,6 +72,26 @@ AS_IF([test "x$enable_turn_off_ucd90160_access" != "xyes"],
       AC_DEFINE_UNQUOTED([UCD90160_DEVICE_ACCESS], ["$UCD90160_DEVICE_ACCESS"], [Turn off UCD90160 hardware access])
 )
 
+AC_ARG_VAR(UCD90160_DEF_YAML_FILE,
+           [The sequencer definition file to use])
+AS_IF([test "x$UCD90160_DEF_YAML_FILE" == "x"],
+      [UCD90160_DEF_YAML_FILE="\${top_srcdir}/power-sequencer/example/ucd90160.yaml"])
+AC_DEFINE_UNQUOTED([UCD90160_DEF_YAML_FILE], ["$UCD90160_DEF_YAML_FILE"],
+                   [The sequencer definition file to use])
+
+AC_ARG_VAR(UCD90160_DEF_OUTPUT_DIR,
+           [The output directory for the generated UCD90160 definition file])
+AS_IF([test "x$UCD90160_DEF_OUTPUT_DIR" == "x"],
+      [UCD90160_DEF_OUTPUT_DIR="\${top_srcdir}/power-sequencer/"])
+AC_DEFINE_UNQUOTED([UCD90160_DEF_OUTPUT_DIR], ["$UCD90160_DEF_OUTPUT_DIR"],
+                   [The output directory for the generated UCD90160 definition file])
+
+AC_SUBST([GEN_UCD90160_DEFS],
+         ["$PYTHON \${top_srcdir}/power-sequencer/gen-ucd90160-defs.py \
+                  -i $UCD90160_DEF_YAML_FILE \
+                  -o $UCD90160_DEF_OUTPUT_DIR"])
+
+
 AC_ARG_VAR(INPUT_HISTORY_BUSNAME_ROOT, [The D-Bus busname root for the PS input history.])
 AS_IF([test "x$INPUT_HISTORY_BUSNAME_ROOT" == "x"],
       [INPUT_HISTORY_BUSNAME_ROOT="org.open_power.powersupply"])
