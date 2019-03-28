@@ -1,7 +1,7 @@
 AM_DEFAULT_SOURCE_EXT = .cpp
 AM_CPPFLAGS = -iquote ${top_srcdir}
 
-sbin_PROGRAMS = \
+bin_PROGRAMS = \
 	witherspoon-psu-monitor
 
 witherspoon_psu_monitor_SOURCES = \

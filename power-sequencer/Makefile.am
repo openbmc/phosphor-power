@@ -1,7 +1,7 @@
 AM_DEFAULT_SOURCE_EXT = .cpp
 AM_CPPFLAGS = -I$(top_srcdir)
 
-sbin_PROGRAMS = \
+bin_PROGRAMS = \
 	witherspoon-pseq-monitor
 
 witherspoon_pseq_monitor_SOURCES = \
