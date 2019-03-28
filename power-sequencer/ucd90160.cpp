@@ -41,7 +41,7 @@ constexpr auto NUM_PAGES = 16;
 
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 using namespace gpio;
 using namespace pmbus;
 using namespace phosphor::logging;

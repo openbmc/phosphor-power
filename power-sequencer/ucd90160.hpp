@@ -6,7 +6,7 @@
 #include "types.hpp"
 
 #include <algorithm>
-#include <experimental/filesystem>
+#include <filesystem>
 #include <map>
 #include <sdbusplus/bus.hpp>
 #include <vector>
@@ -88,8 +88,8 @@ class UCD90160 : public Device
      * @return fs::path - The gpiochip path, like
      *                   /dev/gpiochip1
      */
-    static std::experimental::filesystem::path
-        findGPIODevice(const std::experimental::filesystem::path& path);
+    static std::filesystem::path
+        findGPIODevice(const std::filesystem::path& path);
 
     /**
      * Checks for VOUT faults on the device.
@@ -289,7 +289,7 @@ class UCD90160 : public Device
      * The path to the GPIO device used to read
      * the GPI (PGOOD) status
      */
-    std::experimental::filesystem::path gpioDevice;
+    std::filesystem::path gpioDevice;
 
     /**
      * The D-Bus bus object

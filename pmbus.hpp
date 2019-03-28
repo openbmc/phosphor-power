@@ -1,6 +1,6 @@
 #pragma once
 
-#include <experimental/filesystem>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -9,7 +9,7 @@ namespace witherspoon
 namespace pmbus
 {
 
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 // The file name Linux uses to capture the STATUS_WORD from pmbus.
 constexpr auto STATUS_WORD = "status0";
