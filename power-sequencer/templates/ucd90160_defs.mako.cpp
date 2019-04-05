@@ -11,10 +11,10 @@ using namespace ucd90160;
 using namespace std::string_literals;
 
 const DeviceMap UCD90160::deviceMap{
-    {0,
+%for ucd_data in ucd90160s:
+    {${ucd_data['index']},
      DeviceDefinition{
-         "/sys/devices/platform/ahb/ahb:apb/ahb:apb:bus@1e78a000/"
-         "1e78a400.i2c-bus/i2c-11/11-0064",
+         "${ucd_data['path']}",
 
          RailNames{"5.0VCS"s, "12.0V"s, "3.3V"s, "1.8V"s, "1.1V"s, "1.0V"s,
                    "0.9V"s, "VDN-A"s, "VDN-B"s, "AVDD"s, "VIO-A"s, "VIO-B"s,
@@ -74,7 +74,10 @@ const DeviceMap UCD90160::deviceMap{
                       GPIODefinition{6,
                                      "/system/chassis/motherboard/gv100card4"s},
                       GPIODefinition{
-                          7, "/system/chassis/motherboard/gv100card5"s}}}}}}}};
+                          7, "/system/chassis/motherboard/gv100card5"s}}}}}}
+    },
+%endfor
+};
 
 } // namespace power
 } // namespace witherspoon
