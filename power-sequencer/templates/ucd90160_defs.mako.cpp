@@ -22,15 +22,14 @@ const DeviceMap UCD90160::deviceMap{
         %endfor
         },
 
-         GPIConfigs{
-             GPIConfig{1, 8, "PGOOD_5P0V"s, false, extraAnalysisType::none},
-             GPIConfig{2, 9, "MEM_GOOD0"s, false, extraAnalysisType::none},
-             GPIConfig{3, 10, "MEM_GOOD1"s, false, extraAnalysisType::none},
-             GPIConfig{4, 14, "GPU_PGOOD"s, false, extraAnalysisType::gpuPGOOD},
-             GPIConfig{5, 17, "GPU_TH_OVERT"s, true,
-                       extraAnalysisType::gpuOverTemp},
-             GPIConfig{6, 11, "SOFTWARE_PGOOD"s, false,
-                       extraAnalysisType::none}},
+        GPIConfigs{
+        %for gpi_config in ucd_data['GPIConfigs']:
+        <%
+            poll = str(gpi_config['poll']).lower()
+        %>\
+            GPIConfig{${gpi_config['gpi']}, ${gpi_config['pinID']}, "${gpi_config['name']}"s, ${poll}, extraAnalysisType::${gpi_config['analysis']}},
+        %endfor
+        },
 
          GPIOAnalysis{
              {extraAnalysisType::gpuPGOOD,
