@@ -31,51 +31,26 @@ const DeviceMap UCD90160::deviceMap{
         %endfor
         },
 
-         GPIOAnalysis{
-             {extraAnalysisType::gpuPGOOD,
+        GPIOAnalysis{
+        %for gpio_analysis in ucd_data['GPIOAnalysis']:
+             {extraAnalysisType::${gpio_analysis['type']},
               GPIOGroup{
-                  "/sys/devices/platform/ahb/ahb:apb/ahb:apb:bus@"
-                  "1e78a000/1e78a400.i2c-bus/i2c-11/11-0060",
-                  gpio::Value::low,
+                  "${gpio_analysis['path']}",
+                  gpio::Value::${gpio_analysis['gpio_value']},
                   [](auto& ucd, const auto& callout) {
-                      ucd.gpuPGOODError(callout);
+                      ucd.${gpio_analysis['error_function']}(callout);
                   },
-                  optionFlags::none,
+                  optionFlags::${gpio_analysis['option_flags']},
                   GPIODefinitions{
-                      GPIODefinition{8,
-                                     "/system/chassis/motherboard/gv100card0"s},
-                      GPIODefinition{9,
-                                     "/system/chassis/motherboard/gv100card1"s},
-                      GPIODefinition{10,
-                                     "/system/chassis/motherboard/gv100card2"s},
-                      GPIODefinition{11,
-                                     "/system/chassis/motherboard/gv100card3"s},
-                      GPIODefinition{12,
-                                     "/system/chassis/motherboard/gv100card4"s},
-                      GPIODefinition{
-                          13, "/system/chassis/motherboard/gv100card5"s}}}},
-
-             {extraAnalysisType::gpuOverTemp,
-              GPIOGroup{
-                  "/sys/devices/platform/ahb/ahb:apb/ahb:apb:bus@"
-                  "1e78a000/1e78a400.i2c-bus/i2c-11/11-0060",
-                  gpio::Value::low,
-                  [](auto& ucd,
-                     const auto& callout) { ucd.gpuOverTempError(callout); },
-                  optionFlags::shutdownOnFault,
-                  GPIODefinitions{
-                      GPIODefinition{2,
-                                     "/system/chassis/motherboard/gv100card0"s},
-                      GPIODefinition{3,
-                                     "/system/chassis/motherboard/gv100card1"s},
-                      GPIODefinition{4,
-                                     "/system/chassis/motherboard/gv100card2"s},
-                      GPIODefinition{5,
-                                     "/system/chassis/motherboard/gv100card3"s},
-                      GPIODefinition{6,
-                                     "/system/chassis/motherboard/gv100card4"s},
-                      GPIODefinition{
-                          7, "/system/chassis/motherboard/gv100card5"s}}}}}}
+                  %for gpio_defs in gpio_analysis['GPIODefinitions']:
+                      GPIODefinition{${gpio_defs['gpio']}, "${gpio_defs['callout']}"s},
+                  %endfor
+                  }
+              }
+             },
+        %endfor
+        }
+     }
     },
 %endfor
 };
