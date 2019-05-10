@@ -24,7 +24,9 @@ enum class extraAnalysisType
 {
     none,
     gpuPGOOD,
-    gpuOverTemp
+    gpuOverTemp,
+    memGOOD0,
+    memGOOD1
 };
 
 /**

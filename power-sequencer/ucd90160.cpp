@@ -476,5 +476,27 @@ void UCD90160::gpuOverTempError(const std::string& callout)
         metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
 }
 
+void UCD90160::memGoodError(const std::string& callout)
+{
+    util::NamesValues nv;
+
+    try
+    {
+        nv.add("STATUS_WORD", readStatusWord());
+        nv.add("MFR_STATUS", readMFRStatus());
+    }
+    catch (device_error::ReadFailure& e)
+    {
+        log<level::ERR>("ReadFailure when collecting metadata");
+        commit<device_error::ReadFailure>();
+    }
+
+    using metadata = org::open_power::Witherspoon::Fault::MemoryPowerFault;
+
+    report<power_error::MemoryPowerFault>(
+        metadata::RAW_STATUS(nv.get().c_str()),
+        metadata::CALLOUT_INVENTORY_PATH(callout.c_str()));
+}
+
 } // namespace power
 } // namespace witherspoon

@@ -79,6 +79,13 @@ class UCD90160 : public Device
     void gpuOverTempError(const std::string& callout);
 
     /**
+     * Reports an error for a MEM_GOODx failure.
+     *
+     * @param[in] callout - The MEM callout string
+     */
+    void memGoodError(const std::string& callout);
+
+    /**
      * Given the device path for a chip, find its gpiochip
      * path
      *

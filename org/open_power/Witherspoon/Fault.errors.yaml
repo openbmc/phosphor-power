@@ -38,3 +38,6 @@
 
 - name: GPUOverTemp
   description: A GPU suffered an over-temperature fault
+
+- name: MemoryPowerFault
+  description: A memory device suffered a power fault
