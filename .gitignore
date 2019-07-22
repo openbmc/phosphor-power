@@ -26,7 +26,8 @@ libtool
 ltmain.sh
 missing
 stamp-h1
-witherspoon-pseq-monitor
-witherspoon-psu-monitor
+pseq-monitor
+psu-monitor
+ucd90160_defs.cpp
 org/open_power/Witherspoon/Fault/
 test-driver
