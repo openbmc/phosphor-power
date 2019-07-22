@@ -358,6 +358,14 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
     // The /dev/gpiochipX device
     auto device = findGPIODevice(path);
 
+    if (device.empty())
+    {
+        log<level::ERR>(
+            "Missing GPIO device - cannot do GPIO analysis of fault",
+            entry("ANALYSIS_TYPE=%d\n", type));
+        return errorFound;
+    }
+
     // The GPIO value of the fault condition
     auto polarity = std::get<ucd90160::gpioPolarityField>(gpioConfig->second);
 
