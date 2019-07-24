@@ -40,7 +40,7 @@ using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace version = sdbusplus::xyz::openbmc_project::Software::server;
 
-constexpr auto ASSOCIATION_IFACE = "org.openbmc.Association";
+constexpr auto ASSOCIATION_IFACE = "xyz.openbmc_project.Association";
 constexpr auto LOGGING_IFACE = "xyz.openbmc_project.Logging.Entry";
 constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
 constexpr auto POWER_IFACE = "org.openbmc.control.Power";
