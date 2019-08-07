@@ -89,6 +89,24 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     powerOnTimer(e, std::bind([this]() { this->powerOn = true; }))
 {
     using namespace sdbusplus::bus;
+    using namespace witherspoon::pmbus;
+    std::uint16_t statusWord = 0;
+    try
+    {
+        // Read the 2 byte STATUS_WORD value to check for faults.
+        statusWord = pmbusIntf.read(STATUS_WORD, Type::Debug);
+        if (!((statusWord & status_word::INPUT_FAULT_WARN) ||
+              (statusWord & status_word::VIN_UV_FAULT)))
+        {
+            resolveError(inventoryPath,
+                         std::string(PowerSupplyInputFault::errName));
+        }
+    }
+    catch (ReadFailure& e)
+    {
+        log<level::INFO>("Unable to read the 2 byte STATUS_WORD value to check "
+                         "for power-supply input faults.");
+    }
     presentMatch = std::make_unique<match_t>(
         bus, match::rules::propertiesChanged(inventoryPath, INVENTORY_IFACE),
         [this](auto& msg) { this->inventoryChanged(msg); });
