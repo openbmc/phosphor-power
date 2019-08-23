@@ -1,5 +1,5 @@
 project(
-    'witherspoon-pfault-analysis',
+    'phosphor-power',
     'cpp',
     default_options: [
         'warning_level=3',
@@ -28,6 +28,8 @@ conf.set_quoted(
     'INPUT_HISTORY_BUSNAME_ROOT', get_option('input-history-busname-root'))
 conf.set_quoted(
     'INPUT_HISTORY_SENSOR_ROOT', get_option('input-history-sensor-root'))
+conf.set_quoted(
+    'PSU_FRU_FILE_PATH', '/usr/share/phosphor-power/psu_fru.json')
 conf.set10(
     'UCD90160_DEVICE_ACCESS', get_option('ucd90160-access'))
 
