@@ -14,16 +14,33 @@
  * limitations under the License.
  */
 #include <CLI/CLI.hpp>
+#include <phosphor-logging/log.hpp>
+
+#include <filesystem>
 
 int main(int argc, char* argv[])
 {
-    auto rc = -1;
+    using namespace phosphor::logging;
 
     CLI::App app{"OpenBMC Power Supply Unit Monitor"};
+
+    std::string configfile;
+    app.add_option("-c,--config", configfile, "JSON configuration file path")
+        ->check(CLI::ExistingFile);
+
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
+    if (configfile.empty())
+    {
+        configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+    }
 
-    rc = 0;
+    if (!std::filesystem::exists(configfile))
+    {
+        log<level::ERR>("Configuration file does not exist",
+                        entry("FILENAME=%s", configfile.c_str()));
+        return -1;
+    }
 
-    return rc;
+    return 0;
 }
