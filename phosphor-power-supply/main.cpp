@@ -20,8 +20,17 @@ int main(int argc, char* argv[])
     auto rc = -1;
 
     CLI::App app{"OpenBMC Power Supply Unit Monitor"};
+
+    std::string configfile;
+    app.add_option("-c,--config", configfile, "JSON configuration file path")
+        ->check(CLI::ExistingFile);
+
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
+    if (configfile.empty())
+    {
+        configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+    }
 
     rc = 0;
 
