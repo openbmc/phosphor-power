@@ -20,6 +20,10 @@ int main(int argc, char* argv[])
     auto rc = -1;
 
     CLI::App app{"OpenBMC Power Supply Unit Monitor"};
+
+    std::string configfile;
+    app.add_option("-c,--config", configfile, "JSON configuration file path");
+
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
 
