@@ -37,4 +37,4 @@ org/open_power/Witherspoon/Fault/error.cpp: ${srcdir}/org/open_power/Witherspoon
 	@mkdir -p `dirname $@`
 	$(SDBUSPLUSPLUS) -r $(srcdir) error exception-cpp org.open_power.Witherspoon.Fault > $@
 
-SUBDIRS = . power-sequencer power-supply test power-supply/test
+SUBDIRS = . power-sequencer power-supply power-utils test power-supply/test

@@ -31,3 +31,4 @@ psu-monitor
 ucd90160_defs.cpp
 org/open_power/Witherspoon/Fault/
 test-driver
+psutils

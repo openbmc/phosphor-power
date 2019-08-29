@@ -1,0 +1,6 @@
+{
+    "PSU_DEVICES": {
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0" : "/sys/bus/i2c/devices/3-0069",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1" : "/sys/bus/i2c/devices/3-0068"
+    }
+}

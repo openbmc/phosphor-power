@@ -108,6 +108,13 @@ AC_DEFINE_UNQUOTED([INPUT_HISTORY_SENSOR_ROOT],
                    ["$INPUT_HISTORY_SENSOR_ROOT"],
                    [The D-Bus power sensors namespace root])
 
+AC_ARG_VAR(PSU_UTILS_CONFIG_FILE,
+           [The json config file for psu utils])
+AS_IF([test "x$PSU_UTILS_CONFIG_FILE" == "x"],
+      [PSU_UTILS_CONFIG_FILE="/etc/default/obmc/psu/psu.json"])
+AC_DEFINE_UNQUOTED([PSU_UTILS_CONFIG_FILE], ["$PSU_UTILS_CONFIG_FILE"],
+                   [The json config file for psu utils])
+
 # Create configured output
-AC_CONFIG_FILES([Makefile power-sequencer/Makefile power-supply/Makefile test/Makefile power-supply/test/Makefile])
+AC_CONFIG_FILES([Makefile power-sequencer/Makefile power-supply/Makefile power-utils/Makefile test/Makefile power-supply/test/Makefile])
 AC_OUTPUT
