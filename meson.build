@@ -62,4 +62,5 @@ libpower = static_library(
 
 subdir('power-sequencer')
 subdir('power-supply')
+subdir('power-utils')
 subdir('test')
