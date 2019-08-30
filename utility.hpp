@@ -1,5 +1,6 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
@@ -103,6 +104,15 @@ void powerOff(sdbusplus::bus::bus& bus)
 
     bus.call_noreply(method);
 }
+
+/**
+ * Load json from a file
+ *
+ * @param[in] path - The path of the json file
+ *
+ * @return The nlohmann::json object
+ */
+nlohmann::json loadJsonFromFile(const char* path);
 
 } // namespace util
 } // namespace power
