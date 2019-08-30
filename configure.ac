@@ -24,6 +24,8 @@ AS_IF([test "$HAVE_LINUX_GPIO_H" != ""],
     AC_SUBST([BT_BMC_DL],[`mkdir -p linux;wget https://raw.githubusercontent.com/torvalds/linux/master/include/uapi/linux/gpio.h -O linux/gpio.h`])
 )
 
+AC_CHECK_HEADER([nlohmann/json.hpp], [], [AC_MSG_ERROR([Could not find nlohmann/json.hpp])])
+
 PKG_CHECK_MODULES([SDBUSPLUS], [sdbusplus])
 PKG_CHECK_MODULES([SDEVENTPLUS], [sdeventplus])
 PKG_CHECK_MODULES([PHOSPHOR_LOGGING], [phosphor-logging])

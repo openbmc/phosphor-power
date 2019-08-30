@@ -15,6 +15,8 @@
  */
 #include "utility.hpp"
 
+#include <fstream>
+
 namespace witherspoon
 {
 namespace power
@@ -27,6 +29,7 @@ constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
 using namespace phosphor::logging;
+using json = nlohmann::json;
 
 std::string getService(const std::string& path, const std::string& interface,
                        sdbusplus::bus::bus& bus)
@@ -51,6 +54,23 @@ std::string getService(const std::string& path, const std::string& interface,
     }
 
     return response.begin()->first;
+}
+
+json loadJsonFromFile(const char* path)
+{
+    std::ifstream ifs(path);
+    if (!ifs.good())
+    {
+        log<level::ERR>("Unable to open file", entry("PATH=%s", path));
+        return nullptr;
+    }
+    auto data = json::parse(ifs, nullptr, false);
+    if (data.is_discarded())
+    {
+        log<level::ERR>("Failed to parse json", entry("PATH=%s", path));
+        return nullptr;
+    }
+    return data;
 }
 
 } // namespace util
