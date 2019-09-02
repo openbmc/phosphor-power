@@ -29,5 +29,4 @@ stamp-h1
 pseq-monitor
 psu-monitor
 ucd90160_defs.cpp
-org/open_power/Witherspoon/Fault/
 test-driver
