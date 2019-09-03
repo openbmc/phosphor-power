@@ -95,7 +95,7 @@ void PGOODMonitor::startListening()
         bus,
         sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
                                                         POWER_INTERFACE),
-        [this](auto& msg) { this->propertyChanged(); });
+        [this](auto&) { this->propertyChanged(); });
 }
 
 int PGOODMonitor::run()

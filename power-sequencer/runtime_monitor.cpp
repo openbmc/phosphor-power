@@ -40,7 +40,7 @@ int RuntimeMonitor::run()
 #endif
 }
 
-void RuntimeMonitor::onPowerLost(sdbusplus::message::message& msg)
+void RuntimeMonitor::onPowerLost(sdbusplus::message::message&)
 {
     log<level::INFO>("PGOOD failure detected.  Checking for faults.");
 

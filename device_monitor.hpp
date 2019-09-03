@@ -26,7 +26,7 @@ class DeviceMonitor
 {
   public:
     DeviceMonitor() = delete;
-    ~DeviceMonitor() = default;
+    virtual ~DeviceMonitor() = default;
     DeviceMonitor(const DeviceMonitor&) = delete;
     DeviceMonitor& operator=(const DeviceMonitor&) = delete;
     DeviceMonitor(DeviceMonitor&&) = delete;
