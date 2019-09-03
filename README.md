@@ -4,9 +4,8 @@ Code for detecting and analyzing power faults on Witherspoon.
 ```
 To build this package, do the following steps:
 
-    1. ./bootstrap.sh
-    2. ./configure ${CONFIGURE_FLAGS}
-    3. make
+    1. meson build
+    2. ninja -C build
 
-To full clean the repository again run `./bootstrap.sh clean`.
+To clean the repository again run `rm -rf build`.
 ```
