@@ -67,7 +67,7 @@ void PGOODMonitor::analyze()
 
     if (pgoodPending())
     {
-#ifdef UCD90160_DEVICE_ACCESS
+#ifdef DEVICE_ACCESS
         device->onFailure();
 #endif
         report<PowerOnFailure>();
