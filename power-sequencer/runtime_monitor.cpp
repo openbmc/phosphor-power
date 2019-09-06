@@ -33,7 +33,7 @@ using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 int RuntimeMonitor::run()
 {
-#ifdef UCD90160_DEVICE_ACCESS
+#ifdef DEVICE_ACCESS
     return DeviceMonitor::run();
 #else
     return EXIT_SUCCESS;
@@ -48,7 +48,7 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message&)
     {
         timer.setEnabled(false);
 
-#ifdef UCD90160_DEVICE_ACCESS
+#ifdef DEVICE_ACCESS
         device->onFailure();
 #endif
         // Note: This application only runs when the system has

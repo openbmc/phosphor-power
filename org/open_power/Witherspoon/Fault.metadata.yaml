@@ -52,6 +52,123 @@
 - name: PowerOnFailure
   level: ERR
 
+- name: PowerOnError
+  level: ERR
+
+- name: PSUPresentError
+  level: ERR
+
+- name: PowerOnErrorPSU0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorPSU1PGOODFail
+  level: ERR
+
+- name: PowerOnError240VaFaultAFail
+  level: ERR
+
+- name: PowerOnError240VaFaultBFail
+  level: ERR
+
+- name: PowerOnError240VaFaultCFail
+  level: ERR
+
+- name: PowerOnError240VaFaultDFail
+  level: ERR
+
+- name: PowerOnError240VaFaultEFail
+  level: ERR
+
+- name: PowerOnError240VaFaultFFail
+  level: ERR
+
+- name: PowerOnError240VaFaultGFail
+  level: ERR
+
+- name: PowerOnError240VaFaultHFail
+  level: ERR
+
+- name: PowerOnError240VaFaultJFail
+  level: ERR
+
+- name: PowerOnError240VaFaultKFail
+  level: ERR
+
+- name: PowerOnError240VaFaultLFail
+  level: ERR
+
+- name: PowerOnErrorP5VPGOODFail
+  level: ERR
+
+- name: PowerOnErrorP3V3PGOODFail
+  level: ERR
+
+- name: PowerOnErrorP1V8PGOODFail
+  level: ERR
+
+- name: PowerOnErrorP1V1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorP0V9PGOODFail
+  level: ERR
+
+- name: PowerOnErrorP2V5APGOODFail
+  level: ERR
+
+- name: PowerOnErrorP2V5BPGOODFail
+  level: ERR
+
+- name: PowerOnErrorVdn0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVdn1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorP1V5PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVio0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVio1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVdd0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVcs0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVdd1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVcs1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVddr0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVtt0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVddr1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorVtt1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorGPU0PGOODFail
+  level: ERR
+
+- name: PowerOnErrorGPU1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorPSU0PSU1PGOODFail
+  level: ERR
+
+- name: PowerOnErrorCPLDRegisterFail
+  level: ERR
+
 - name: PowerSequencerVoltageFault
   level: ERR
   meta:
