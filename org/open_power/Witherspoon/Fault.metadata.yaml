@@ -52,6 +52,117 @@
 - name: PowerOnFailure
   level: ERR
 
+- name: ErrorCode0
+  level: ERR
+
+- name: ErrorCode1
+  level: ERR
+
+- name: ErrorCode2
+  level: ERR
+
+- name: ErrorCode3
+  level: ERR
+
+- name: ErrorCode4
+  level: ERR
+
+- name: ErrorCode5
+  level: ERR
+
+- name: ErrorCode6
+  level: ERR
+
+- name: ErrorCode7
+  level: ERR
+
+- name: ErrorCode8
+  level: ERR
+
+- name: ErrorCode9
+  level: ERR
+
+- name: ErrorCode10
+  level: ERR
+
+- name: ErrorCode11
+  level: ERR
+
+- name: ErrorCode12
+  level: ERR
+
+- name: ErrorCode13
+  level: ERR
+
+- name: ErrorCode14
+  level: ERR
+
+- name: ErrorCode15
+  level: ERR
+
+- name: ErrorCode16
+  level: ERR
+
+- name: ErrorCode17
+  level: ERR
+
+- name: ErrorCode18
+  level: ERR
+
+- name: ErrorCode19
+  level: ERR
+
+- name: ErrorCode20
+  level: ERR
+
+- name: ErrorCode21
+  level: ERR
+
+- name: ErrorCode22
+  level: ERR
+
+- name: ErrorCode23
+  level: ERR
+
+- name: ErrorCode24
+  level: ERR
+
+- name: ErrorCode25
+  level: ERR
+
+- name: ErrorCode26
+  level: ERR
+
+- name: ErrorCode27
+  level: ERR
+
+- name: ErrorCode28
+  level: ERR
+
+- name: ErrorCode29
+  level: ERR
+
+- name: ErrorCode30
+  level: ERR
+
+- name: ErrorCode31
+  level: ERR
+
+- name: ErrorCode32
+  level: ERR
+
+- name: ErrorCode33
+  level: ERR
+
+- name: ErrorCode34
+  level: ERR
+
+- name: ErrorCode35
+  level: ERR
+
+- name: ErrorCode36
+  level: ERR
+
 - name: PowerSequencerVoltageFault
   level: ERR
   meta:

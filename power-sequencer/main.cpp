@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
 #include "argument.hpp"
+#include "mihawk-cpld.hpp"
 #include "pgood_monitor.hpp"
 #include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
@@ -52,7 +55,7 @@ int main(int argc, char** argv)
     auto bus = sdbusplus::bus::new_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    auto device = std::make_unique<UCD90160>(0, bus);
+    auto device = std::make_unique<SEQUENCER>(0, bus);
 
     std::unique_ptr<DeviceMonitor> monitor;
 

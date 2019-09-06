@@ -11,8 +11,15 @@ option(
 option(
     'tests', type: 'feature', description: 'Build tests.',
 )
+
+# Supported power sequencers are: ucd90160, mihawk-cpld
 option(
-    'ucd90160-access', type: 'boolean', value: true,
+    'power_sequencer', type: 'string', value: 'ucd90160',
+    description: 'The power sequencer',
+)
+
+option(
+    'device-access', type: 'boolean', value: true,
     description: 'Enable UCD90160 hardware access.',
 )
 option(
