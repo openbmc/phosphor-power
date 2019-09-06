@@ -24,6 +24,123 @@
 - name: PowerOnFailure
   description: System power failed to turn on
 
+- name: PowerOnError
+  description: Power failed to turn on
+
+- name: PSUPresentError
+  description: PSU failed to detect
+
+- name: PowerOnErrorPSU0PGOODFail
+  description: Power on error reason is PSU0_PGOOD fail
+
+- name: PowerOnErrorPSU1PGOODFail
+  description: Power on error reason is PSU1_PGOOD fail
+
+- name: PowerOnError240VaFaultAFail
+  description: Power on error reason is 240Va_Fault_A fail
+
+- name: PowerOnError240VaFaultBFail
+  description: Power on error reason is 240Va_Fault_B fail
+
+- name: PowerOnError240VaFaultCFail
+  description: Power on error reason is 240Va_Fault_C fail
+
+- name: PowerOnError240VaFaultDFail
+  description: Power on error reason is 240Va_Fault_D fail
+
+- name: PowerOnError240VaFaultEFail
+  description: Power on error reason is 240Va_Fault_E fail
+
+- name: PowerOnError240VaFaultFFail
+  description: Power on error reason is 240Va_Fault_F fail
+
+- name: PowerOnError240VaFaultGFail
+  description: Power on error reason is 240Va_Fault_G fail
+
+- name: PowerOnError240VaFaultHFail
+  description: Power on error reason is 240Va_Fault_H fail
+
+- name: PowerOnError240VaFaultJFail
+  description: Power on error reason is 240Va_Fault_J fail
+
+- name: PowerOnError240VaFaultKFail
+  description: Power on error reason is 240Va_Fault_K fail
+
+- name: PowerOnError240VaFaultLFail
+  description: Power on error reason is 240Va_Fault_L fail
+
+- name: PowerOnErrorP5VPGOODFail
+  description: Power on error reason is P5V_pgood fail
+
+- name: PowerOnErrorP3V3PGOODFail
+  description: Power on error reason is P3V3_pgood fail
+
+- name: PowerOnErrorP1V8PGOODFail
+  description: Power on error reason is P1V8_pgood fail
+
+- name: PowerOnErrorP1V1PGOODFail
+  description: Power on error reason is P1V1_pgood fail
+
+- name: PowerOnErrorP0V9PGOODFail
+  description: Power on error reason is P0V9_pgood fail
+
+- name: PowerOnErrorP2V5APGOODFail
+  description: Power on error reason is P2V5A_pgood fail
+
+- name: PowerOnErrorP2V5BPGOODFail
+  description: Power on error reason is P2V5B_pgood fail
+
+- name: PowerOnErrorVdn0PGOODFail
+  description: Power on error reason is Vdn0_pgood fail
+
+- name: PowerOnErrorVdn1PGOODFail
+  description: Power on error reason is Vdn1_pgood fail
+
+- name: PowerOnErrorP1V5PGOODFail
+  description: Power on error reason is P1V5_pgood fail
+
+- name: PowerOnErrorVio0PGOODFail
+  description: Power on error reason is Vio0_pgood fail
+
+- name: PowerOnErrorVio1PGOODFail
+  description: Power on error reason is Vio1_pgood fail
+
+- name: PowerOnErrorVdd0PGOODFail
+  description: Power on error reason is Vdd0_pgood fail
+
+- name: PowerOnErrorVcs0PGOODFail
+  description: Power on error reason is Vcs0_pgood fail
+
+- name: PowerOnErrorVdd1PGOODFail
+  description: Power on error reason is Vdd1_pgood fail
+
+- name: PowerOnErrorVcs1PGOODFail
+  description: Power on error reason is Vcs1_pgood fail
+
+- name: PowerOnErrorVddr0PGOODFail
+  description: Power on error reason is Vddr0_pgood fail
+
+- name: PowerOnErrorVtt0PGOODFail
+  description: Power on error reason is Vtt0_pgood fail
+
+- name: PowerOnErrorVddr1PGOODFail
+  description: Power on error reason is Vddr1_pgood fail
+
+- name: PowerOnErrorVtt1PGOODFail
+  description: Power on error reason is Vtt1_pgood fail
+
+- name: PowerOnErrorGPU0PGOODFail
+  description: Power on error reason is GPU0_pgood fail
+
+- name: PowerOnErrorGPU1PGOODFail
+  description: Power on error reason is GPU1_pgood fail
+
+- name: PowerOnErrorPSU0PSU1PGOODFail
+  description: Power on error reason is PSU0&PSU1_pgood fail
+
+- name: PowerOnErrorCPLDRegisterFail
+  description: Read CPLD-register fail
+
 - name: PowerSequencerVoltageFault
   description: The power sequencer chip detected a voltage fault
 
