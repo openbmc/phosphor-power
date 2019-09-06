@@ -52,6 +52,123 @@
 - name: PowerOnFailure
   level: ERR
 
+- name: PowerOnErrorCode0
+  level: ERR
+
+- name: PowerOnErrorCode1
+  level: ERR
+
+- name: PowerOnErrorCode2
+  level: ERR
+
+- name: PowerOnErrorCode3
+  level: ERR
+
+- name: PowerOnErrorCode4
+  level: ERR
+
+- name: PowerOnErrorCode5
+  level: ERR
+
+- name: PowerOnErrorCode6
+  level: ERR
+
+- name: PowerOnErrorCode7
+  level: ERR
+
+- name: PowerOnErrorCode8
+  level: ERR
+
+- name: PowerOnErrorCode9
+  level: ERR
+
+- name: PowerOnErrorCode10
+  level: ERR
+
+- name: PowerOnErrorCode11
+  level: ERR
+
+- name: PowerOnErrorCode12
+  level: ERR
+
+- name: PowerOnErrorCode13
+  level: ERR
+
+- name: PowerOnErrorCode14
+  level: ERR
+
+- name: PowerOnErrorCode15
+  level: ERR
+
+- name: PowerOnErrorCode16
+  level: ERR
+
+- name: PowerOnErrorCode17
+  level: ERR
+
+- name: PowerOnErrorCode18
+  level: ERR
+
+- name: PowerOnErrorCode19
+  level: ERR
+
+- name: PowerOnErrorCode20
+  level: ERR
+
+- name: PowerOnErrorCode21
+  level: ERR
+
+- name: PowerOnErrorCode22
+  level: ERR
+
+- name: PowerOnErrorCode23
+  level: ERR
+
+- name: PowerOnErrorCode24
+  level: ERR
+
+- name: PowerOnErrorCode25
+  level: ERR
+
+- name: PowerOnErrorCode26
+  level: ERR
+
+- name: PowerOnErrorCode27
+  level: ERR
+
+- name: PowerOnErrorCode28
+  level: ERR
+
+- name: PowerOnErrorCode29
+  level: ERR
+
+- name: PowerOnErrorCode30
+  level: ERR
+
+- name: PowerOnErrorCode31
+  level: ERR
+
+- name: PowerOnErrorCode32
+  level: ERR
+
+- name: PowerOnErrorCode33
+  level: ERR
+
+- name: PowerOnErrorCode34
+  level: ERR
+
+- name: PowerOnErrorCode35
+  level: ERR
+
+- name: PowerOnErrorCode36
+  level: ERR
+
+- name: PsuErrorCode0
+  level: ERR
+
+- name: PsuErrorCode1
+  level: ERR
+
 - name: PowerSequencerVoltageFault
   level: ERR
   meta:
