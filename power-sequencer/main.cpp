@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
 #include "argument.hpp"
 #include "pgood_monitor.hpp"
 #include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
+#include "mihawk-cpld.hpp"
 
 #include <chrono>
 #include <iostream>
