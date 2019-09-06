@@ -24,6 +24,117 @@
 - name: PowerOnFailure
   description: System power failed to turn on
 
+- name: ErrorCode0
+  description: Read CPLD-register fail
+  
+- name: ErrorCode1
+  description: CPLD's error reason is PSU1_PGOOD fail
+
+- name: ErrorCode2
+  description: CPLD's error reason is PSU0_PGOOD fail
+
+- name: ErrorCode3
+  description: CPLD's error reason is 240Va_Fault_A fail
+
+- name: ErrorCode4
+  description: CPLD's error reason is 240Va_Fault_B fail
+
+- name: ErrorCode5
+  description: CPLD's error reason is 240Va_Fault_C fail
+
+- name: ErrorCode6
+  description: CPLD's error reason is 240Va_Fault_D fail
+
+- name: ErrorCode7
+  description: CPLD's error reason is 240Va_Fault_E fail
+
+- name: ErrorCode8
+  description: CPLD's error reason is 240Va_Fault_F fail
+
+- name: ErrorCode9
+  description: CPLD's error reason is 240Va_Fault_G fail
+
+- name: ErrorCode10
+  description: CPLD's error reason is 240Va_Fault_H fail
+
+- name: ErrorCode11
+  description: CPLD's error reason is 240Va_Fault_J fail
+
+- name: ErrorCode12
+  description: CPLD's error reason is 240Va_Fault_K fail
+
+- name: ErrorCode13
+  description: CPLD's error reason is 240Va_Fault_L fail
+
+- name: ErrorCode14
+  description: CPLD's error reason is P5V_pgood fail
+
+- name: ErrorCode15
+  description: CPLD's error reason is P3V3_pgood fail
+
+- name: ErrorCode16
+  description: CPLD's error reason is P1V8_pgood fail
+
+- name: ErrorCode17
+  description: CPLD's error reason is P1V1_pgood fail
+
+- name: ErrorCode18
+  description: CPLD's error reason is P0V9_pgood fail
+
+- name: ErrorCode19
+  description: CPLD's error reason is P2V5A_pgood fail
+
+- name: ErrorCode20
+  description: CPLD's error reason is P2V5B_pgood fail
+
+- name: ErrorCode21
+  description: CPLD's error reason is Vdn0_pgood fail
+
+- name: ErrorCode22
+  description: CPLD's error reason is Vdn1_pgood fail
+
+- name: ErrorCode23
+  description: CPLD's error reason is P1V5_pgood fail
+
+- name: ErrorCode24
+  description: CPLD's error reason is Vio0_pgood fail
+
+- name: ErrorCode25
+  description: CPLD's error reason is Vio1_pgood fail
+
+- name: ErrorCode26
+  description: CPLD's error reason is Vdd0_pgood fail
+
+- name: ErrorCode27
+  description: CPLD's error reason is Vcs0_pgood fail
+
+- name: ErrorCode28
+  description: CPLD's error reason is Vdd1_pgood fail
+
+- name: ErrorCode29
+  description: CPLD's error reason is Vcs1_pgood fail
+
+- name: ErrorCode30
+  description: CPLD's error reason is Vddr0_pgood fail
+
+- name: ErrorCode31
+  description: CPLD's error reason is Vtt0_pgood fail
+
+- name: ErrorCode32
+  description: CPLD's error reason is Vddr1_pgood fail
+
+- name: ErrorCode33
+  description: CPLD's error reason is Vtt1_pgood fail
+
+- name: ErrorCode34
+  description: CPLD's error reason is GPU0_pgood fail
+
+- name: ErrorCode35
+  description: CPLD's error reason is GPU1_pgood fail
+
+- name: ErrorCode36
+  description: CPLD's error reason is PSU0&PSU1_pgood fail
+
 - name: PowerSequencerVoltageFault
   description: The power sequencer chip detected a voltage fault
 
