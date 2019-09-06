@@ -32,7 +32,7 @@ const DeviceMap UCD90160::deviceMap{
         },
 
         GPIOAnalysis{
-        %for gpio_analysis in ucd_data['GPIOAnalysis']:
+        %for gpio_analysis in ucd_data.get('GPIOAnalysis', []):
              {extraAnalysisType::${gpio_analysis['type']},
               GPIOGroup{
                   "${gpio_analysis['path']}",
