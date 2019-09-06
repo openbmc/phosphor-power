@@ -39,6 +39,17 @@ foreach service : services
                  install_dir: servicedir)
 endforeach
 
+# Get the power sequencer class name
+sequencer = get_option('power_sequencer')
+if sequencer == 'ucd90160'
+    sequencer_class = 'UCD90160'
+elif sequencer == 'mihawk-cpld'
+    sequencer_class = 'MIHAWKCPLD'
+else
+    # power sequencer is incorrect
+    error('power sequencer is incorrect')
+endif
+
 conf = configuration_data()
 conf.set_quoted(
     'INPUT_HISTORY_BUSNAME_ROOT', get_option('input-history-busname-root'))
@@ -46,8 +57,10 @@ conf.set_quoted(
     'INPUT_HISTORY_SENSOR_ROOT', get_option('input-history-sensor-root'))
 conf.set_quoted(
     'PSU_JSON_PATH', '/usr/share/phosphor-power/psu.json')
+conf.set(
+    'SEQUENCER', sequencer_class)
 conf.set10(
-    'UCD90160_DEVICE_ACCESS', get_option('ucd90160-access'))
+    'DEVICE_ACCESS', get_option('device-access'))
 
 configure_file(output: 'config.h', configuration: conf)
 
@@ -76,6 +89,14 @@ libpower = static_library(
     ],
 )
 
+libpower_inc = include_directories('.')
+
+# Build the tools/i2c sub-directory first.  Other sub-directories depend on
+# Meson variables defined there.
+subdir('tools/i2c')
+
+subdir('phosphor-regulators')
 subdir('power-sequencer')
 subdir('power-supply')
+subdir('tools/power-utils')
 subdir('test')
