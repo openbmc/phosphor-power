@@ -4,5 +4,6 @@ executable(
     'main.cpp',
     dependencies: [
         sdbusplus,
+        sdeventplus,
     ],
     install: true)
