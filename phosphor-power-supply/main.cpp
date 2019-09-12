@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "psu_manager.hpp"
+
 #include <CLI/CLI.hpp>
+#include <sdbusplus/bus.hpp>
+#include <sdeventplus/event.hpp>
 
 int main(int argc, char* argv[])
 {
-    auto rc = -1;
-
     CLI::App app{"OpenBMC Power Supply Unit Monitor"};
 
     std::string configfile;
@@ -29,7 +31,15 @@ int main(int argc, char* argv[])
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
 
-    rc = 0;
+    auto bus = sdbusplus::bus::new_default();
+    auto event = sdeventplus::Event::get_default();
 
-    return rc;
+    // Attach the event object to the bus object so we can
+    // handle both sd_events (for the timers) and dbus signals.
+    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+
+    // TODO: Should get polling interval from JSON file.
+    auto pollInterval = std::chrono::milliseconds(1000);
+
+    return phosphor::power::manager::PSUManager(bus, event, pollInterval).run();
 }
