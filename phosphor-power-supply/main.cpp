@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "psu_manager.hpp"
+
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
+#include <sdbusplus/bus.hpp>
+#include <sdeventplus/event.hpp>
 
 #include <filesystem>
 
@@ -42,5 +46,15 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    return 0;
+    auto bus = sdbusplus::bus::new_default();
+    auto event = sdeventplus::Event::get_default();
+
+    // Attach the event object to the bus object so we can
+    // handle both sd_events (for the timers) and dbus signals.
+    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+
+    // TODO: Should get polling interval from JSON file.
+    auto pollInterval = std::chrono::milliseconds(1000);
+
+    return phosphor::power::manager::PSUManager(bus, event, pollInterval).run();
 }
