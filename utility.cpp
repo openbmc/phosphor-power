@@ -73,6 +73,36 @@ json loadJsonFromFile(const char* path)
     return data;
 }
 
+phosphor::pmbus::Type getPmBusAccessType(const json& json)
+{
+    using namespace phosphor::pmbus;
+    Type type;
+
+    auto typeStr = json.at("inventoryPMBusAccessType");
+
+    if (typeStr == "Hwmon")
+    {
+        type = Type::Hwmon;
+    }
+    else if (typeStr == "DeviceDebug")
+    {
+        type = Type::DeviceDebug;
+    }
+    else if (typeStr == "Debug")
+    {
+        type = Type::Debug;
+    }
+    else if (typeStr == "HwmonDeviceDebug")
+    {
+        type = Type::HwmonDeviceDebug;
+    }
+    else
+    {
+        type = Type::Base;
+    }
+    return type;
+}
+
 } // namespace util
 } // namespace power
 } // namespace phosphor

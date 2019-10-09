@@ -1,5 +1,7 @@
 #pragma once
 
+#include "pmbus.hpp"
+
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
@@ -113,6 +115,15 @@ void powerOff(sdbusplus::bus::bus& bus)
  * @return The nlohmann::json object
  */
 nlohmann::json loadJsonFromFile(const char* path);
+
+/**
+ * Get PmBus access type from the json config
+ *
+ * @param[in] json - The json object
+ *
+ * @return The pmbus access type
+ */
+phosphor::pmbus::Type getPmBusAccessType(const nlohmann::json& json);
 
 } // namespace util
 } // namespace power
