@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unistd.h>
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -68,4 +68,4 @@ class FileDescriptor
 
 } // namespace util
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

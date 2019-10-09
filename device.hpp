@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -82,4 +82,4 @@ class Device
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

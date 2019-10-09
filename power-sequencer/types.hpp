@@ -6,7 +6,7 @@
 #include <tuple>
 #include <vector>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -84,4 +84,4 @@ using DeviceMap = std::map<size_t, DeviceDefinition>;
 
 } // namespace ucd90160
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

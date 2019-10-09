@@ -23,7 +23,7 @@
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -65,4 +65,4 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message&)
 }
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

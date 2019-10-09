@@ -6,7 +6,7 @@
 #include <sdbusplus/bus.hpp>
 #include <string>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -116,4 +116,4 @@ nlohmann::json loadJsonFromFile(const char* path);
 
 } // namespace util
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

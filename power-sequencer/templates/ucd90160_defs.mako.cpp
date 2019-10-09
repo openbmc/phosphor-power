@@ -2,7 +2,7 @@
 
 #include "ucd90160.hpp"
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -56,4 +56,4 @@ const DeviceMap UCD90160::deviceMap{
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

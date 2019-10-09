@@ -7,7 +7,7 @@
 #include <sdbusplus/server.hpp>
 #include <sdeventplus/event.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -48,7 +48,7 @@ class RuntimeMonitor : public DeviceMonitor
      * @param[in] e - event object
      * @param[in] i - poll interval
      */
-    RuntimeMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
+    RuntimeMonitor(std::unique_ptr<phosphor::power::Device>&& d,
                    sdbusplus::bus::bus& b, const sdeventplus::Event& e,
                    std::chrono::milliseconds& i) :
         DeviceMonitor(std::move(d), e, i),
@@ -104,4 +104,4 @@ class RuntimeMonitor : public DeviceMonitor
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

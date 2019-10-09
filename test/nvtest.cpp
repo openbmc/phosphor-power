@@ -19,7 +19,7 @@
 
 TEST(NamesValuesTest, TestValues)
 {
-    witherspoon::power::util::NamesValues nv;
+    phosphor::power::util::NamesValues nv;
 
     std::string expected;
     EXPECT_EQ(nv.get(), expected); // empty

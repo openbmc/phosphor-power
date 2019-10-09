@@ -2,7 +2,7 @@
 #include <functional>
 #include <org/open_power/Sensor/Aggregation/History/Maximum/server.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -51,4 +51,4 @@ class Maximum : public ServerObject<MaximumInterface>
 
 } // namespace history
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

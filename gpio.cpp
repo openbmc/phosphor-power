@@ -24,7 +24,7 @@
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace gpio
 {
@@ -93,7 +93,7 @@ void GPIO::requestLine(Value defaultValue)
     // Make an ioctl call to request the GPIO line, which will
     // return the descriptor to use to access it.
     gpiohandle_request request{};
-    strncpy(request.consumer_label, "witherspoon-pfault-analysis",
+    strncpy(request.consumer_label, "phosphor-pfault-analysis",
             sizeof(request.consumer_label));
 
     request.flags = (direction == Direction::input) ? GPIOHANDLE_REQUEST_INPUT
@@ -120,4 +120,4 @@ void GPIO::requestLine(Value defaultValue)
 }
 
 } // namespace gpio
-} // namespace witherspoon
+} // namespace phosphor

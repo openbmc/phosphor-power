@@ -2,7 +2,7 @@
 #include <sstream>
 #include <string>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -107,4 +107,4 @@ class NamesValues
 
 } // namespace util
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor
