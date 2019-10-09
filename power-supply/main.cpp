@@ -23,7 +23,7 @@
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
 
-using namespace witherspoon::power;
+using namespace phosphor::power;
 using namespace phosphor::logging;
 
 int main(int argc, char* argv[])

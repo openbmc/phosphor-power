@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace pmbus
 {
@@ -307,4 +307,4 @@ class PMBus
 };
 
 } // namespace pmbus
-} // namespace witherspoon
+} // namespace phosphor

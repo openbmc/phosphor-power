@@ -23,7 +23,7 @@
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -125,4 +125,4 @@ int PGOODMonitor::run()
 }
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

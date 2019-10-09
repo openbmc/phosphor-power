@@ -11,7 +11,7 @@
 #include <sdbusplus/bus.hpp>
 #include <vector>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -310,4 +310,4 @@ class UCD90160 : public Device
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

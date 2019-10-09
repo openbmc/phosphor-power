@@ -29,7 +29,7 @@
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Software/Version/server.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -84,7 +84,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     getAccessType();
 
     using namespace sdbusplus::bus;
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
     std::uint16_t statusWord = 0;
     try
     {
@@ -121,8 +121,8 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
 
 void PowerSupply::getAccessType()
 {
-    using namespace witherspoon::pmbus;
-    using namespace witherspoon::power::util;
+    using namespace phosphor::pmbus;
+    using namespace phosphor::power::util;
     fruJson = loadJSONFromFile(PSU_JSON_PATH);
     if (fruJson == nullptr)
     {
@@ -155,7 +155,7 @@ void PowerSupply::getAccessType()
 }
 
 void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
-                             witherspoon::pmbus::Type type)
+                             phosphor::pmbus::Type type)
 {
     if (pmbusIntf.exists(cmd, type))
     {
@@ -174,7 +174,7 @@ void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
 
 void PowerSupply::analyze()
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     try
     {
@@ -313,7 +313,7 @@ void PowerSupply::updatePowerState()
 
 void PowerSupply::checkInputFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     if ((inputFault < FAULT_COUNT) &&
         ((statusWord & status_word::INPUT_FAULT_WARN) ||
@@ -382,7 +382,7 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
 
 void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     if (powerOnFault < FAULT_COUNT)
     {
@@ -428,7 +428,7 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
 
 void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     if (outputOCFault < FAULT_COUNT)
     {
@@ -469,7 +469,7 @@ void PowerSupply::checkCurrentOutOverCurrentFault(const uint16_t statusWord)
 
 void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     if (outputOVFault < FAULT_COUNT)
     {
@@ -510,7 +510,7 @@ void PowerSupply::checkOutputOvervoltageFault(const uint16_t statusWord)
 
 void PowerSupply::checkFanFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     if (fanFault < FAULT_COUNT)
     {
@@ -549,7 +549,7 @@ void PowerSupply::checkFanFault(const uint16_t statusWord)
 
 void PowerSupply::checkTemperatureFault(const uint16_t statusWord)
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
 
     // Due to how the PMBus core device driver sends a clear faults command
     // the bit in STATUS_WORD will likely be cleared when we attempt to examine
@@ -674,7 +674,7 @@ void PowerSupply::resolveError(const std::string& callout,
 
 void PowerSupply::updateInventory()
 {
-    using namespace witherspoon::pmbus;
+    using namespace phosphor::pmbus;
     using namespace sdbusplus::message;
 
     // Build the object map and send it to the inventory
@@ -769,7 +769,7 @@ void PowerSupply::updateInventory()
 
 void PowerSupply::syncHistory()
 {
-    using namespace witherspoon::gpio;
+    using namespace phosphor::gpio;
 
     if (syncGPIODevPath.empty())
     {
@@ -839,4 +839,4 @@ void PowerSupply::updateHistory()
 
 } // namespace psu
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

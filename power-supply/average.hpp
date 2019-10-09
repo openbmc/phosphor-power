@@ -2,7 +2,7 @@
 #include <functional>
 #include <org/open_power/Sensor/Aggregation/History/Average/server.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -51,4 +51,4 @@ class Average : public ServerObject<AverageInterface>
 
 } // namespace history
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

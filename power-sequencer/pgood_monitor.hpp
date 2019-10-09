@@ -7,7 +7,7 @@
 #include <sdbusplus/server.hpp>
 #include <sdeventplus/event.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -42,7 +42,7 @@ class PGOODMonitor : public DeviceMonitor
      * @param[in] e - event object
      * @param[in] t - time to allow PGOOD to come up
      */
-    PGOODMonitor(std::unique_ptr<witherspoon::power::Device>&& d,
+    PGOODMonitor(std::unique_ptr<phosphor::power::Device>&& d,
                  sdbusplus::bus::bus& b, const sdeventplus::Event& e,
                  std::chrono::milliseconds& t) :
         DeviceMonitor(std::move(d), e, t),
@@ -107,4 +107,4 @@ class PGOODMonitor : public DeviceMonitor
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor
