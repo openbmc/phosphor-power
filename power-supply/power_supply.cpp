@@ -121,7 +121,6 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
 
 void PowerSupply::getAccessType()
 {
-    using namespace phosphor::pmbus;
     using namespace phosphor::power::util;
     fruJson = loadJSONFromFile(PSU_JSON_PATH);
     if (fruJson == nullptr)
@@ -129,29 +128,7 @@ void PowerSupply::getAccessType()
         log<level::ERR>("InternalFailure when parsing the JSON file");
         return;
     }
-
-    auto type = fruJson.at("inventoryPMBusAccessType");
-
-    if (type == "Hwmon")
-    {
-        inventoryPMBusAccessType = Type::Hwmon;
-    }
-    else if (type == "DeviceDebug")
-    {
-        inventoryPMBusAccessType = Type::DeviceDebug;
-    }
-    else if (type == "Debug")
-    {
-        inventoryPMBusAccessType = Type::Debug;
-    }
-    else if (type == "HwmonDeviceDebug")
-    {
-        inventoryPMBusAccessType = Type::HwmonDeviceDebug;
-    }
-    else
-    {
-        inventoryPMBusAccessType = Type::Base;
-    }
+    inventoryPMBusAccessType = getPMBusAccessType(fruJson);
 }
 
 void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
