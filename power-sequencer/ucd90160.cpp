@@ -26,7 +26,7 @@
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -507,4 +507,4 @@ void UCD90160::memGoodError(const std::string& callout)
 }
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

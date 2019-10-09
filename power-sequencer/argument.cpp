@@ -19,7 +19,7 @@
 #include <iostream>
 #include <iterator>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -87,4 +87,4 @@ const std::string ArgumentParser::trueString = "true";
 const std::string ArgumentParser::emptyString = "";
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

@@ -8,7 +8,7 @@
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -79,4 +79,4 @@ class DeviceMonitor
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

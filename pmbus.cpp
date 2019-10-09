@@ -22,7 +22,7 @@
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace pmbus
 {
@@ -336,4 +336,4 @@ void PMBus::findHwmonDir()
 }
 
 } // namespace pmbus
-} // namespace witherspoon
+} // namespace phosphor

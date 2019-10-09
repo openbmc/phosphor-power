@@ -20,7 +20,7 @@
 #include <chrono>
 #include <phosphor-logging/log.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -183,4 +183,4 @@ int64_t RecordManager::linearToInteger(uint16_t data)
 
 } // namespace history
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

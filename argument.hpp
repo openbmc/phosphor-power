@@ -5,7 +5,7 @@
 #include <map>
 #include <string>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -63,4 +63,4 @@ class ArgumentParser
 };
 
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

@@ -17,7 +17,7 @@
 
 #include <fstream>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -75,4 +75,4 @@ json loadJSONFromFile(const char* path)
 
 } // namespace util
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

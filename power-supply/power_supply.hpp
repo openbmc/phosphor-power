@@ -12,7 +12,7 @@
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -107,7 +107,7 @@ class PowerSupply : public Device
      * that a device driver monitors the PMBus interface to the power
      * supplies.
      */
-    witherspoon::pmbus::PMBus pmbusIntf;
+    phosphor::pmbus::PMBus pmbusIntf;
 
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
@@ -265,7 +265,7 @@ class PowerSupply : public Device
     /**
      * @brief The type of the power supply inventory pmbus access.
      */
-    witherspoon::pmbus::Type inventoryPMBusAccessType;
+    phosphor::pmbus::Type inventoryPMBusAccessType;
 
     /**
      * @brief The JSON from the parsed power supply FRU JSON File.
@@ -322,7 +322,7 @@ class PowerSupply : public Device
      * @param[in] type - The type of file to read the command from.
      */
     void captureCmd(util::NamesValues& nv, const std::string& cmd,
-                    witherspoon::pmbus::Type type);
+                    phosphor::pmbus::Type type);
 
     /**
      * @brief Checks for input voltage faults and logs error if needed.
@@ -430,4 +430,4 @@ class PowerSupply : public Device
 
 } // namespace psu
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

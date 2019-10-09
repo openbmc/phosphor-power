@@ -4,7 +4,7 @@
 #include <tuple>
 #include <vector>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace power
 {
@@ -196,4 +196,4 @@ class RecordManager
 
 } // namespace history
 } // namespace power
-} // namespace witherspoon
+} // namespace phosphor

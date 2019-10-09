@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace witherspoon::power::history;
+using namespace phosphor::power::history;
 
 /**
  * Test the linearToInteger function with different

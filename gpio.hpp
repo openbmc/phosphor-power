@@ -7,7 +7,7 @@
 #include <string>
 #include <type_traits>
 
-namespace witherspoon
+namespace phosphor
 {
 namespace gpio
 {
@@ -114,4 +114,4 @@ class GPIO
 };
 
 } // namespace gpio
-} // namespace witherspoon
+} // namespace phosphor
