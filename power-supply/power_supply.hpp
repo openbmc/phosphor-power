@@ -265,7 +265,8 @@ class PowerSupply : public Device
     /**
      * @brief The type of the power supply inventory pmbus access.
      */
-    phosphor::pmbus::Type inventoryPMBusAccessType;
+    phosphor::pmbus::Type inventoryPMBusAccessType =
+        phosphor::pmbus::Type::Base;
 
     /**
      * @brief The JSON from the parsed power supply FRU JSON File.
