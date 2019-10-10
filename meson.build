@@ -23,6 +23,22 @@ sdbusplus = dependency('sdbusplus')
 sdbuspp = find_program('sdbus++')
 sdeventplus = dependency('sdeventplus')
 
+systemd = dependency('systemd')
+servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
+
+services = [
+    'power-supply-monitor@.service',
+    'pseq-monitor-pgood.service',
+    'pseq-monitor.service'
+]
+
+foreach service : services
+  configure_file(input: 'services/' + service,
+                 output: service,
+                 copy: true,
+                 install_dir: servicedir)
+endforeach
+
 conf = configuration_data()
 conf.set_quoted(
     'INPUT_HISTORY_BUSNAME_ROOT', get_option('input-history-busname-root'))
