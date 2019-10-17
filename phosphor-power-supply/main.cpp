@@ -22,39 +22,56 @@
 
 #include <filesystem>
 
+using namespace phosphor::power::manager;
+
 int main(int argc, char* argv[])
 {
-    using namespace phosphor::logging;
-
-    CLI::App app{"OpenBMC Power Supply Unit Monitor"};
-
-    std::string configfile;
-    app.add_option("-c,--config", configfile, "JSON configuration file path")
-        ->check(CLI::ExistingFile);
-
-    // Read the arguments.
-    CLI11_PARSE(app, argc, argv);
-    if (configfile.empty())
+    try
     {
-        configfile = "/etc/phosphor-psu-monitor/psu_config.json";
-    }
+        using namespace phosphor::logging;
 
-    if (!std::filesystem::exists(configfile))
+        CLI::App app{"OpenBMC Power Supply Unit Monitor"};
+
+        std::string configfile;
+        app.add_option("-c,--config", configfile,
+                       "JSON configuration file path")
+            ->check(CLI::ExistingFile);
+
+        // Read the arguments.
+        CLI11_PARSE(app, argc, argv);
+        if (configfile.empty())
+        {
+            configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+        }
+
+        if (!std::filesystem::exists(configfile))
+        {
+            log<level::ERR>("Configuration file does not exist",
+                            entry("FILENAME=%s", configfile.c_str()));
+            return -1;
+        }
+
+        auto bus = sdbusplus::bus::new_default();
+        auto event = sdeventplus::Event::get_default();
+
+        // Attach the event object to the bus object so we can
+        // handle both sd_events (for the timers) and dbus signals.
+        bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+
+        // TODO: Should get polling interval from JSON file.
+        auto pollInterval = std::chrono::milliseconds(1000);
+        PSUManager manager(bus, event, pollInterval);
+
+        return manager.run();
+    }
+    catch (const std::exception& e)
     {
-        log<level::ERR>("Configuration file does not exist",
-                        entry("FILENAME=%s", configfile.c_str()));
-        return -1;
+        log<level::ERR>(e.what());
+        return -2;
     }
-
-    auto bus = sdbusplus::bus::new_default();
-    auto event = sdeventplus::Event::get_default();
-
-    // Attach the event object to the bus object so we can
-    // handle both sd_events (for the timers) and dbus signals.
-    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
-
-    // TODO: Should get polling interval from JSON file.
-    auto pollInterval = std::chrono::milliseconds(1000);
-
-    return phosphor::power::manager::PSUManager(bus, event, pollInterval).run();
+    catch (...)
+    {
+        log<level::ERR>("Caught unexpected exception type");
+        return -3;
+    }
 }
