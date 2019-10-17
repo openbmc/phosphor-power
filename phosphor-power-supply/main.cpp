@@ -19,6 +19,8 @@
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
 
+using namespace phosphor::power::manager;
+
 int main(int argc, char* argv[])
 {
     CLI::App app{"OpenBMC Power Supply Unit Monitor"};
@@ -40,6 +42,7 @@ int main(int argc, char* argv[])
 
     // TODO: Should get polling interval from JSON file.
     auto pollInterval = std::chrono::milliseconds(1000);
+    PSUManager manager(bus, event, pollInterval);
 
-    return phosphor::power::manager::PSUManager(bus, event, pollInterval).run();
+    return manager.run();
 }
