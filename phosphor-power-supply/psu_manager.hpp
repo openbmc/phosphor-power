@@ -1,8 +1,14 @@
 #pragma once
 
+#include "power_supply.hpp"
+
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+
+using namespace phosphor::power::psu;
+using namespace phosphor::logging;
 
 namespace phosphor
 {
@@ -10,6 +16,9 @@ namespace power
 {
 namespace manager
 {
+
+constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
+constexpr auto POWER_IFACE = "org.openbmc.control.Power";
 
 /**
  * @class PSUManager
@@ -39,6 +48,15 @@ class PSUManager
         bus(bus),
         timer(e, std::bind(&PSUManager::analyze, this), i)
     {
+        initialize();
+        // Subscribe to power state changes
+        powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                            POWER_IFACE),
+            [this](auto& msg) { this->powerStateChanged(msg); });
+        // Get initial power state.
+        updatePowerState();
     }
 
     /**
@@ -48,6 +66,8 @@ class PSUManager
      */
     void initialize()
     {
+        clearFaults();
+        updateInventory();
     }
 
     /**
@@ -66,6 +86,10 @@ class PSUManager
      */
     void clearFaults()
     {
+        for (auto& psu : psus)
+        {
+            psu.clearFaults();
+        }
     }
 
   protected:
@@ -74,6 +98,10 @@ class PSUManager
      */
     void analyze()
     {
+        for (auto& psu : psus)
+        {
+            psu.analyze();
+        }
     }
 
   private:
@@ -119,7 +147,18 @@ class PSUManager
      * This needs to be done on startup, and each time the presence state
      * changes.
      */
-    void updateInventory();
+    void updateInventory()
+    {
+        for (auto& psu : psus)
+        {
+            psu.updateInventory();
+        }
+    }
+
+    /**
+     * @brief The list/array/vector for power supplies.
+     */
+    std::vector<PowerSupply> psus;
 };
 
 } // namespace manager
