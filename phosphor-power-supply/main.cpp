@@ -15,9 +15,13 @@
  */
 #include "psu_manager.hpp"
 
+#include <stdio.h>
+
 #include <CLI/CLI.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
+
+using namespace phosphor::power::manager;
 
 int main(int argc, char* argv[])
 {
@@ -38,6 +42,7 @@ int main(int argc, char* argv[])
 
     // TODO: Should get polling interval from JSON file.
     auto pollInterval = std::chrono::milliseconds(1000);
+    psuManager manager(bus, event, pollInterval);
 
-    return phosphor::power::manager::psuManager(bus, event, pollInterval).run();
+    return manager.run();
 }
