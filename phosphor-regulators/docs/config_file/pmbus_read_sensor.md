@@ -47,7 +47,7 @@ found in the device documentation (data sheet).
 
 ### D-Bus Sensor
 A [D-Bus sensor
-object](https://github.com/openbmc/docs/blob/master/sensor-architecture.md)
+object](https://github.com/openbmc/docs/blob/master/architecture/sensor-architecture.md)
 will be created on the BMC to store the sensor value.  This makes the sensor
 available to external interfaces like Redfish.
 
