@@ -1,8 +1,14 @@
 #pragma once
 
+#include "power_supply.hpp"
+
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+
+using namespace phosphor::power::psu;
+using namespace phosphor::logging;
 
 namespace phosphor
 {
@@ -10,6 +16,9 @@ namespace power
 {
 namespace manager
 {
+
+constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
+constexpr auto POWER_IFACE = "org.openbmc.control.Power";
 
 /**
  * @class psuManager
@@ -38,6 +47,15 @@ class psuManager
         bus(bus),
         timer(e, std::bind(&psuManager::analyze, this), i)
     {
+        initialize();
+        // Subscribe to power state changes
+        powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                            POWER_IFACE),
+            [this](auto& msg) { this->powerStateChanged(msg); });
+        // Get initial power state.
+        updatePowerState();
     }
 
     /**
@@ -47,6 +65,8 @@ class psuManager
      */
     void initialize()
     {
+        clearFaults();
+        updateInventory();
     }
 
     /**
@@ -65,6 +85,11 @@ class psuManager
      */
     void clearFaults()
     {
+        log<level::INFO>("clearFaults");
+        for (auto psu = psus.begin(); psu != psus.end(); psu++)
+        {
+            psu->clearFaults();
+        }
     }
 
   protected:
@@ -73,6 +98,10 @@ class psuManager
      */
     void analyze()
     {
+        for (auto psu = psus.begin(); psu != psus.end(); psu++)
+        {
+            psu->analyze();
+        }
     }
 
   private:
@@ -118,7 +147,18 @@ class psuManager
      * This needs to be done on startup, and each time the presence state
      * changes.
      */
-    void updateInventory();
+    void updateInventory()
+    {
+        for (auto psu = psus.begin(); psu != psus.end(); psu++)
+        {
+            psu->updateInventory();
+        }
+    }
+
+    /**
+     * @brief The list/array/vector for power supplies.
+     */
+    std::vector<PowerSupply> psus;
 };
 
 } // namespace manager
