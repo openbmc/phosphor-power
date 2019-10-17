@@ -1,8 +1,16 @@
 #pragma once
 
+#include "power_supply.hpp"
+#include "types.hpp"
+#include "utility.hpp"
+
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+
+using namespace phosphor::power::psu;
+using namespace phosphor::logging;
 
 namespace phosphor
 {
@@ -39,6 +47,15 @@ class PSUManager
         bus(bus),
         timer(e, std::bind(&PSUManager::analyze, this), i)
     {
+        // Subscribe to power state changes
+        powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+        powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                            POWER_IFACE),
+            [this](auto& msg) { this->powerStateChanged(msg); });
+
+        initialize();
     }
 
     /**
@@ -48,6 +65,32 @@ class PSUManager
      */
     void initialize()
     {
+        // When state = 1, system is powered on
+        int32_t state = 0;
+
+        try
+        {
+            // Use getProperty utility function to get power state.
+            util::getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH,
+                                       powerService, bus, state);
+
+            if (state)
+            {
+                powerOn = true;
+            }
+            else
+            {
+                powerOn = false;
+            }
+        }
+        catch (std::exception& e)
+        {
+            log<level::INFO>("Failed to get power state. Assuming it is off.");
+            powerOn = false;
+        }
+
+        clearFaults();
+        updateInventory();
     }
 
     /**
@@ -66,6 +109,10 @@ class PSUManager
      */
     void clearFaults()
     {
+        for (auto& psu : psus)
+        {
+            psu.clearFaults();
+        }
     }
 
   private:
@@ -84,21 +131,20 @@ class PSUManager
      */
     void analyze()
     {
+        for (auto& psu : psus)
+        {
+            psu.analyze();
+        }
     }
 
     /** @brief True if the power is on. */
     bool powerOn = false;
 
+    /** @brief Used as part of subscribing to power on state changes*/
+    std::string powerService;
+
     /** @brief Used to subscribe to D-Bus power on state changes */
     std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
-
-    /**
-     * @brief Updates the poweredOn status by querying D-Bus
-     *
-     * The D-Bus property for the system power state will be read to determine
-     * if the system is powered on or not.
-     */
-    void updatePowerState();
 
     /**
      * @brief Callback for power state property changes
@@ -118,7 +164,18 @@ class PSUManager
      * This needs to be done on startup, and each time the presence state
      * changes.
      */
-    void updateInventory();
+    void updateInventory()
+    {
+        for (auto& psu : psus)
+        {
+            psu.updateInventory();
+        }
+    }
+
+    /**
+     * @brief The vector for power supplies.
+     */
+    std::vector<PowerSupply> psus;
 };
 
 } // namespace manager
