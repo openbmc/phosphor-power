@@ -74,6 +74,21 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
     }
     return std::make_tuple(*devicePath, type, versionStr);
 }
+
+// A default implemention compare the string itself
+std::string getLatestDefault(const std::vector<std::string>& versions)
+{
+    std::string latest;
+    for (const auto& version : versions)
+    {
+        if (latest < version)
+        {
+            latest = version;
+        }
+    }
+    return latest;
+}
+
 } // namespace utils
 
 namespace version
@@ -98,6 +113,27 @@ std::string getVersion(const std::string& psuInventoryPath)
         log<level::ERR>(ex.what());
     }
     return version;
+}
+
+std::string getLatest(const std::vector<std::string>& versions)
+{
+    // TODO: when multiple PSU/Machines are supported, add configuration options
+    // to implement machine-specific logic.
+    // For now IBM AC Servers and Inspur FP5280G2 are supported.
+    //
+    // IBM AC servers' PSU version has two types:
+    // * XXXXYYYYZZZZ: XXXX is the primary version
+    //                 YYYY is the secondary version
+    //                 ZZZZ is the communication version
+    //
+    // * XXXXYYYY:     XXXX is the primary version
+    //                 YYYY is the seconday version
+    //
+    // Inspur FP5280G2 PSU version is human readable text and a larger string
+    // means a newer version.
+    //
+    // So just compare by strings is OK for these cases
+    return utils::getLatestDefault(versions);
 }
 
 } // namespace version
