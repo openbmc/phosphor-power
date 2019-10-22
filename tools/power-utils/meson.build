@@ -1,6 +1,5 @@
 psutils = executable(
     'psutils',
-    'argument.cpp',
     'version.cpp',
     'main.cpp',
     dependencies: [
@@ -13,3 +12,5 @@ psutils = executable(
         libpower,
     ]
 )
+
+subdir('test')
