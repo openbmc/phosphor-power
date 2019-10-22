@@ -16,6 +16,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace version
 {
@@ -24,7 +25,18 @@ namespace version
  * Get the software version of the PSU
  *
  * @param[in] psuInventoryPath - The inventory path of the PSU
+ *
+ * @return The version of the PSU
  */
 std::string getVersion(const std::string& psuInventoryPath);
+
+/**
+ * Get the latest version from a list of versions
+ *
+ * @param[in] versions - The list of PSU version strings
+ *
+ * @return The latest version
+ */
+std::string getLatest(const std::vector<std::string>& versions);
 
 } // namespace version
