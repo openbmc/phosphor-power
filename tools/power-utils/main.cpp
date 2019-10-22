@@ -13,27 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "argument.hpp"
 #include "version.hpp"
 
+#include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
 
-using namespace phosphor::power;
 using namespace phosphor::logging;
 
 int main(int argc, char** argv)
 {
-    ArgumentParser args{argc, argv};
-    auto psuPath = args["get-version"];
-    if (psuPath.empty())
+
+    std::string psuPath;
+    std::vector<std::string> versions;
+
+    CLI::App app{"PSU utils app for OpenBMC"};
+    app.add_option("-g,--get-version", psuPath,
+                   "Get PSU version from inventory path");
+    app.add_option("-c,--compare", versions,
+                   "Compare and get the latest version");
+    app.require_option(1); // Only one option is supported
+    CLI11_PARSE(app, argc, argv);
+
+    std::string ret;
+
+    if (!psuPath.empty())
     {
-        log<level::ERR>("PSU Inventory path argument required");
-        args.usage(argv);
-        exit(1);
+        ret = version::getVersion(psuPath);
+    }
+    if (!versions.empty())
+    {
+        ret = version::getLatest(versions);
     }
 
-    // For now only get-version is supported
-    auto version = version::getVersion(psuPath);
-    printf("%s", version.c_str());
-    return version.empty() ? 1 : 0;
+    printf("%s", ret.c_str());
+    return ret.empty() ? 1 : 0;
 }
