@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "updater.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
+#include <cassert>
 #include <phosphor-logging/log.hpp>
 
 using namespace phosphor::logging;
@@ -25,12 +27,17 @@ int main(int argc, char** argv)
 
     std::string psuPath;
     std::vector<std::string> versions;
+    std::vector<std::string> updateArguments;
 
     CLI::App app{"PSU utils app for OpenBMC"};
     app.add_option("-g,--get-version", psuPath,
                    "Get PSU version from inventory path");
     app.add_option("-c,--compare", versions,
                    "Compare and get the latest version");
+    app.add_option("-u,--update", updateArguments,
+                   "Update PSU firmware, expeting two arguments: "
+                   "<PSU inventory path> <image-dir>")
+        ->expected(2);
     app.require_option(1); // Only one option is supported
     CLI11_PARSE(app, argc, argv);
 
@@ -43,6 +50,11 @@ int main(int argc, char** argv)
     if (!versions.empty())
     {
         ret = version::getLatest(versions);
+    }
+    if (!updateArguments.empty())
+    {
+        assert(updateArguments.size() == 2);
+        ret = updater::update(updateArguments[0], updateArguments[1]);
     }
 
     printf("%s", ret.c_str());
