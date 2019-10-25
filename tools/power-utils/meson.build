@@ -1,6 +1,7 @@
 psutils = executable(
     'psutils',
     'version.cpp',
+    'updater.cpp',
     'main.cpp',
     dependencies: [
         phosphor_dbus_interfaces,
