@@ -22,11 +22,11 @@ using namespace phosphor::power::regulators;
 TEST(DeviceTests, Constructor)
 {
     Device device("vdd_vrm2");
-    EXPECT_EQ(device.getId(), "vdd_vrm2");
+    EXPECT_EQ(device.getID(), "vdd_vrm2");
 }
 
-TEST(DeviceTests, GetId)
+TEST(DeviceTests, GetID)
 {
     Device device("vio_vrm");
-    EXPECT_EQ(device.getId(), "vio_vrm");
+    EXPECT_EQ(device.getID(), "vio_vrm");
 }

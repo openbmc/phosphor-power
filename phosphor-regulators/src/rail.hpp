@@ -57,7 +57,7 @@ class Rail
      *
      * @return rail ID
      */
-    const std::string& getId() const
+    const std::string& getID() const
     {
         return id;
     }
