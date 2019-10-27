@@ -48,7 +48,7 @@ class Device
      *
      * @return device ID
      */
-    const string& getId() const
+    const string& getID() const
     {
         return id;
     }

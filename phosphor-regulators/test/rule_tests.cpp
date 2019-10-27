@@ -22,11 +22,11 @@ using namespace phosphor::power::regulators;
 TEST(RuleTests, Constructor)
 {
     Rule rule("set_voltage_rule");
-    EXPECT_EQ(rule.getId(), "set_voltage_rule");
+    EXPECT_EQ(rule.getID(), "set_voltage_rule");
 }
 
-TEST(RuleTests, GetId)
+TEST(RuleTests, GetID)
 {
     Rule rule("read_sensor_values");
-    EXPECT_EQ(rule.getId(), "read_sensor_values");
+    EXPECT_EQ(rule.getID(), "read_sensor_values");
 }

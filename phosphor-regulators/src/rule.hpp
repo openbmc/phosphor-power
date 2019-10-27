@@ -55,7 +55,7 @@ class Rule
      *
      * @return rule ID
      */
-    const string& getId() const
+    const string& getID() const
     {
         return id;
     }

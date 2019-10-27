@@ -51,7 +51,7 @@ class Rail
      *
      * @return rail ID
      */
-    const string& getId() const
+    const string& getID() const
     {
         return id;
     }
