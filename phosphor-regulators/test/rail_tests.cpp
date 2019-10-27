@@ -22,11 +22,11 @@ using namespace phosphor::power::regulators;
 TEST(RailTests, Constructor)
 {
     Rail rail("vdd0");
-    EXPECT_EQ(rail.getId(), "vdd0");
+    EXPECT_EQ(rail.getID(), "vdd0");
 }
 
-TEST(RailTests, GetId)
+TEST(RailTests, GetID)
 {
     Rail rail("vio2");
-    EXPECT_EQ(rail.getId(), "vio2");
+    EXPECT_EQ(rail.getID(), "vio2");
 }
