@@ -46,7 +46,7 @@ class Rule
      *
      * @param id unique rule ID
      */
-    Rule(const string& id) : id{id}
+    explicit Rule(const string& id) : id{id}
     {
     }
 

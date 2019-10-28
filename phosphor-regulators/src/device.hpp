@@ -39,7 +39,7 @@ class Device
      *
      * @param id unique device ID
      */
-    Device(const string& id) : id{id}
+    explicit Device(const string& id) : id{id}
     {
     }
 

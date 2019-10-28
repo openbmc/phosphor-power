@@ -42,7 +42,7 @@ class Rail
      *
      * @param id unique rail ID
      */
-    Rail(const string& id) : id{id}
+    explicit Rail(const string& id) : id{id}
     {
     }
 
