@@ -17,15 +17,139 @@
 
 #include "updater.hpp"
 
+#include "utility.hpp"
+
+#include <fstream>
+#include <phosphor-logging/log.hpp>
+
+using namespace phosphor::logging;
+namespace util = phosphor::power::util;
+
 namespace updater
 {
 
+constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
+constexpr auto PRESENT_PROP = "Present";
+
+namespace internal
+{
+
+/* Get the device name from the device path */
+std::string getDeviceName(std::string devPath)
+{
+    if (devPath.back() == '/')
+    {
+        devPath.pop_back();
+    }
+    return fs::path(devPath).stem().string();
+}
+
+std::string getDevicePath(const std::string& psuInventoryPath)
+{
+    auto data = util::loadJSONFromFile(PSU_JSON_PATH);
+
+    if (data == nullptr)
+    {
+        return {};
+    }
+
+    auto devicePath = data["psuDevices"][psuInventoryPath];
+    if (devicePath.empty())
+    {
+        log<level::WARNING>("Unable to find psu devices or path");
+    }
+    return devicePath;
+}
+
+} // namespace internal
+
 bool update(const std::string& psuInventoryPath, const std::string& imageDir)
 {
+    auto devPath = internal::getDevicePath(psuInventoryPath);
+    if (devPath.empty())
+    {
+        return false;
+    }
+
+    // TODO: check if it is ready to update
+    // and return if not ready
+
+    Updater updater(psuInventoryPath, devPath, imageDir);
+    int ret = updater.doUpdate();
+    return ret == 0;
+}
+
+Updater::Updater(const std::string& psuInventoryPath,
+                 const std::string& devPath, const std::string& imageDir) :
+    bus(sdbusplus::bus::new_default()),
+    psuInventoryPath(psuInventoryPath), devPath(devPath),
+    devName(internal::getDeviceName(devPath)), imageDir(imageDir)
+{
+    fs::path p = fs::path(devPath) / "driver";
+    try
+    {
+        driverPath =
+            fs::canonical(p); // Get the path that points to the driver dir
+    }
+    catch (const fs::filesystem_error& e)
+    {
+        log<level::ERR>("Failed to get canonical path",
+                        entry("DEVPATH=%s", devPath.c_str()),
+                        entry("ERROR=%s", e.what()));
+        throw;
+    }
+    bindUnbind(false);
+}
+
+Updater::~Updater()
+{
+    bindUnbind(true);
+}
+
+// During PSU update, it needs to access the PSU i2c device directly, so it
+// needs to unbind the driver during the update, and re-bind after it's done.
+// After unbind, the hwmon sysfs will be gone, and the psu-monitor will report
+// errors. So set the PSU inventory's Present property to false so that
+// psu-monitor will not report any errors.
+void Updater::bindUnbind(bool doBind)
+{
+    if (!doBind)
+    {
+        // Set non-present before unbind the driver
+        setPresent(doBind);
+    }
+    auto p = driverPath;
+    p /= doBind ? "bind" : "unbind";
+    std::ofstream out(p.string());
+    out << devName;
+
+    if (doBind)
+    {
+        // Set to present after bind the driver
+        setPresent(doBind);
+    }
+}
+
+void Updater::setPresent(bool present)
+{
+    try
+    {
+        auto service = util::getService(psuInventoryPath, INVENTORY_IFACE, bus);
+        util::setProperty(INVENTORY_IFACE, PRESENT_PROP, psuInventoryPath,
+                          service, bus, present);
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>("Failed to set present property",
+                        entry("PSU=%s", psuInventoryPath.c_str()),
+                        entry("PRESENT=%d", present));
+    }
+}
+
+int Updater::doUpdate()
+{
     // TODO
-    fprintf(stderr, "psu: %s, image: %s\n", psuInventoryPath.c_str(),
-            imageDir.c_str());
-    return true;
+    return 0;
 }
 
 } // namespace updater
