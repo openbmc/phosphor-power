@@ -48,7 +48,7 @@ class Rail
      *
      * @param id unique rail ID
      */
-    Rail(const std::string& id) : id{id}
+    explicit Rail(const std::string& id) : id{id}
     {
     }
 

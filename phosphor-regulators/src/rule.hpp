@@ -52,7 +52,7 @@ class Rule
      *
      * @param id unique rule ID
      */
-    Rule(const std::string& id) : id{id}
+    explicit Rule(const std::string& id) : id{id}
     {
     }
 
