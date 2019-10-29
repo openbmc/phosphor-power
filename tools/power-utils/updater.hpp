@@ -54,7 +54,7 @@ class Updater
             const std::string& imageDir);
 
     /** @brief Destructor */
-    ~Updater();
+    ~Updater() = default;
 
     /** @brief Bind or unbind the driver
      *
@@ -67,6 +67,12 @@ class Updater
      * @param present - The present state to set
      */
     void setPresent(bool present);
+
+    /** @brief Check if it's ready to update the PSU
+     *
+     * @return true if it's ready, otherwise false
+     */
+    bool isReadyToUpdate();
 
     /** @brief Do the PSU update
      *

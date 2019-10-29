@@ -69,11 +69,17 @@ bool update(const std::string& psuInventoryPath, const std::string& imageDir)
         return false;
     }
 
-    // TODO: check if it is ready to update
-    // and return if not ready
-
     Updater updater(psuInventoryPath, devPath, imageDir);
+    if (!updater.isReadyToUpdate())
+    {
+        log<level::ERR>("PSU not ready to update",
+                        entry("PSU=%s", psuInventoryPath.c_str()));
+        return false;
+    }
+
+    updater.bindUnbind(false);
     int ret = updater.doUpdate();
+    updater.bindUnbind(true);
     return ret == 0;
 }
 
@@ -96,12 +102,6 @@ Updater::Updater(const std::string& psuInventoryPath,
                         entry("ERROR=%s", e.what()));
         throw;
     }
-    bindUnbind(false);
-}
-
-Updater::~Updater()
-{
-    bindUnbind(true);
 }
 
 // During PSU update, it needs to access the PSU i2c device directly, so it
@@ -142,6 +142,20 @@ void Updater::setPresent(bool present)
                         entry("PSU=%s", psuInventoryPath.c_str()),
                         entry("PRESENT=%d", present));
     }
+}
+
+bool Updater::isReadyToUpdate()
+{
+    // Pre-condition for updating PSU:
+    // * Host is powered off
+    // * All other PSUs are having AC input
+    // * All other PSUs are having standby output
+    if (util::isPoweredOn(bus))
+    {
+        return false;
+    }
+    // TODO
+    return true;
 }
 
 int Updater::doUpdate()
