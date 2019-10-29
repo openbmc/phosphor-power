@@ -15,6 +15,8 @@
  */
 #include "utility.hpp"
 
+#include "types.hpp"
+
 #include <fstream>
 
 namespace phosphor
@@ -101,6 +103,26 @@ phosphor::pmbus::Type getPMBusAccessType(const json& json)
         type = Type::Base;
     }
     return type;
+}
+
+bool isPoweredOn(sdbusplus::bus::bus& bus)
+{
+    // When state = 1, system is powered on
+    int32_t state = 0;
+
+    try
+    {
+        auto service = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+
+        // Use getProperty utility function to get power state.
+        getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH, service, bus,
+                             state);
+    }
+    catch (std::exception& e)
+    {
+        log<level::INFO>("Failed to get power state. Assuming it is off.");
+    }
+    return state != 0;
 }
 
 } // namespace util

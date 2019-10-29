@@ -17,6 +17,7 @@
 
 #include "updater.hpp"
 
+#include "types.hpp"
 #include "utility.hpp"
 
 #include <fstream>
@@ -27,9 +28,6 @@ namespace util = phosphor::power::util;
 
 namespace updater
 {
-
-constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
-constexpr auto PRESENT_PROP = "Present";
 
 namespace internal
 {

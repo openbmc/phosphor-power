@@ -21,6 +21,7 @@
 #include "gpio.hpp"
 #include "names_values.hpp"
 #include "pmbus.hpp"
+#include "types.hpp"
 #include "utility.hpp"
 
 #include <functional>
@@ -40,25 +41,6 @@ using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace version = sdbusplus::xyz::openbmc_project::Software::server;
-
-constexpr auto ASSOCIATION_IFACE = "xyz.openbmc_project.Association";
-constexpr auto LOGGING_IFACE = "xyz.openbmc_project.Logging.Entry";
-constexpr auto INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item";
-constexpr auto POWER_IFACE = "org.openbmc.control.Power";
-constexpr auto INVENTORY_MGR_IFACE = "xyz.openbmc_project.Inventory.Manager";
-constexpr auto ASSET_IFACE = "xyz.openbmc_project.Inventory.Decorator.Asset";
-constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
-
-constexpr auto ENDPOINTS_PROP = "endpoints";
-constexpr auto MESSAGE_PROP = "Message";
-constexpr auto RESOLVED_PROP = "Resolved";
-constexpr auto PRESENT_PROP = "Present";
-constexpr auto VERSION_PURPOSE_PROP = "Purpose";
-
-constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
-constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
-
-constexpr auto INPUT_HISTORY = "input_history";
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath, const std::string& invpath,
@@ -261,31 +243,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
 
 void PowerSupply::updatePowerState()
 {
-    // When state = 1, system is powered on
-    int32_t state = 0;
-
-    try
-    {
-        auto service = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
-
-        // Use getProperty utility function to get power state.
-        util::getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH,
-                                   service, bus, state);
-
-        if (state)
-        {
-            powerOn = true;
-        }
-        else
-        {
-            powerOn = false;
-        }
-    }
-    catch (std::exception& e)
-    {
-        log<level::INFO>("Failed to get power state. Assuming it is off.");
-        powerOn = false;
-    }
+    powerOn = util::isPoweredOn(bus);
 }
 
 void PowerSupply::checkInputFault(const uint16_t statusWord)
