@@ -125,6 +125,13 @@ nlohmann::json loadJSONFromFile(const char* path);
  */
 phosphor::pmbus::Type getPMBusAccessType(const nlohmann::json& json);
 
+/**
+ * Check if power is on
+ *
+ * @return true if power is on, otherwise false
+ */
+bool isPoweredOn(sdbusplus::bus::bus& bus);
+
 } // namespace util
 } // namespace power
 } // namespace phosphor
