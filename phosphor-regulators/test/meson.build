@@ -13,4 +13,4 @@ test('phosphor-regulators-tests',
      )
 )
 
-# subdir('actions')
+subdir('actions')
