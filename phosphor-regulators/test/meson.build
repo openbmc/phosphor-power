@@ -1,3 +1,8 @@
+phosphor_regulators_tests_include_directories = include_directories(
+    '.',
+    'actions'
+)
+
 test('phosphor-regulators-tests',
      executable('phosphor-regulators-tests',
                 'device_tests.cpp',
@@ -9,7 +14,10 @@ test('phosphor-regulators-tests',
                     gtest,
                 ],
                 implicit_include_directories: false,
-                include_directories: phosphor_regulators_includes,
+                include_directories: [
+                    phosphor_regulators_include_directories,
+                    phosphor_regulators_tests_include_directories
+                ]
      )
 )
 
