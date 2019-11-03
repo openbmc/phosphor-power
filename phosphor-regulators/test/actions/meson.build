@@ -7,6 +7,9 @@ test('phosphor-regulators-actions-tests',
                     gtest,
                 ],
                 implicit_include_directories: false,
-                include_directories: phosphor_regulators_includes,
+                include_directories: [
+                    phosphor_regulators_include_directories,
+                    phosphor_regulators_tests_include_directories
+                ]
      )
 )
