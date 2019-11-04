@@ -3,12 +3,19 @@ phosphor_regulators_tests_include_directories = include_directories(
     'actions'
 )
 
+phosphor_regulators_tests_source_files = [
+    'device_tests.cpp',
+    'id_map_tests.cpp',
+    'rail_tests.cpp',
+    'rule_tests.cpp',
+
+    'actions/action_environment_tests.cpp',
+    'actions/set_device_action_tests.cpp'
+]
+
 test('phosphor-regulators-tests',
      executable('phosphor-regulators-tests',
-                'device_tests.cpp',
-                'id_map_tests.cpp',
-                'rail_tests.cpp',
-                'rule_tests.cpp',
+                phosphor_regulators_tests_source_files,
                 dependencies: [
                     gmock,
                     gtest,
@@ -20,5 +27,3 @@ test('phosphor-regulators-tests',
                 ]
      )
 )
-
-subdir('actions')
