@@ -105,22 +105,36 @@ phosphor::pmbus::Type getPMBusAccessType(const json& json)
     return type;
 }
 
-bool isPoweredOn(sdbusplus::bus::bus& bus)
+bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState)
 {
-    // When state = 1, system is powered on
-    int32_t state = 0;
+    int32_t state = defaultState;
 
     try
     {
+        // When state = 1, system is powered on
         auto service = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
         getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH, service, bus,
                              state);
     }
     catch (std::exception& e)
     {
-        log<level::INFO>("Failed to get power state. Assuming it is off.");
+        log<level::INFO>("Failed to get power state.");
     }
     return state != 0;
+}
+
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus)
+{
+    std::vector<std::string> paths;
+    auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
+                                      MAPPER_INTERFACE, "GetSubTreePaths");
+    method.append(INVENTORY_OBJ_PATH);
+    method.append(0); // Depth 0 to search all
+    method.append(std::vector<std::string>({PSU_INVENTORY_IFACE}));
+    auto reply = bus.call(method);
+
+    reply.read(paths);
+    return paths;
 }
 
 } // namespace util
