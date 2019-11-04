@@ -81,6 +81,16 @@ constexpr auto TEMPERATURE_FAULT_WARN = 0x0004;
 
 } // namespace status_word
 
+namespace status_vout
+{
+// The IBM CFF power supply driver maps MFR's OV_FAULT and VAUX_FAULT to this
+// bit.
+constexpr auto OV_FAULT = 0x80;
+
+// The IBM CFF power supply driver maps MFR's UV_FAULT to this bit.
+constexpr auto UV_FAULT = 0x10;
+} // namespace status_vout
+
 namespace status_temperature
 {
 // Overtemperature Fault

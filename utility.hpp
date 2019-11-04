@@ -128,9 +128,23 @@ phosphor::pmbus::Type getPMBusAccessType(const nlohmann::json& json);
 /**
  * Check if power is on
  *
- * @return true if power is on, otherwise false
+ * @param[in] bus - D-Bus object
+ * @param[in] defaultState - The default state if the function fails to get
+ *                           the power state.
+ *
+ * @return true if power is on, otherwise false;
+ *         defaultState if it fails to get the power state.
  */
-bool isPoweredOn(sdbusplus::bus::bus& bus);
+bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState = false);
+
+/**
+ * Get all PSU inventory paths from D-Bus
+ *
+ * @param[in] bus - D-Bus object
+ *
+ * @return The list of PSU inventory paths
+ */
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus);
 
 } // namespace util
 } // namespace power
