@@ -79,5 +79,6 @@ libpower = static_library(
 subdir('phosphor-regulators')
 subdir('power-sequencer')
 subdir('power-supply')
+subdir('tools/i2c')
 subdir('tools/power-utils')
 subdir('test')
