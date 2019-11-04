@@ -9,6 +9,7 @@ constexpr auto POWER_IFACE = "org.openbmc.control.Power";
 constexpr auto INVENTORY_MGR_IFACE = "xyz.openbmc_project.Inventory.Manager";
 constexpr auto ASSET_IFACE = "xyz.openbmc_project.Inventory.Decorator.Asset";
 constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
+constexpr auto PSU_INVENTORY_IFACE = "xyz.openbmc_project.Inventory.Item.PowerSupply";
 
 constexpr auto ENDPOINTS_PROP = "endpoints";
 constexpr auto MESSAGE_PROP = "Message";
