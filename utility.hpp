@@ -132,6 +132,13 @@ phosphor::pmbus::Type getPMBusAccessType(const nlohmann::json& json);
  */
 bool isPoweredOn(sdbusplus::bus::bus& bus);
 
+/**
+ * Get all PSU inventory paths from D-Bus
+ *
+ * @return The list of PSU inventory paths
+ */
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus);
+
 } // namespace util
 } // namespace power
 } // namespace phosphor

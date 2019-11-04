@@ -17,6 +17,7 @@
 
 #include "updater.hpp"
 
+#include "pmbus.hpp"
 #include "types.hpp"
 #include "utility.hpp"
 
@@ -146,15 +147,52 @@ void Updater::setPresent(bool present)
 
 bool Updater::isReadyToUpdate()
 {
+    using namespace phosphor::pmbus;
+
     // Pre-condition for updating PSU:
     // * Host is powered off
-    // * All other PSUs are having AC input
-    // * All other PSUs are having standby output
+    // * All other PSUs are having AC input and DC standby output
+
     if (util::isPoweredOn(bus))
     {
+        log<level::WARNING>("Unable to update PSU when host is on");
         return false;
     }
-    // TODO
+
+    auto paths = util::getPSUInventoryPaths(bus);
+    for (const auto& p : paths)
+    {
+        if (p == psuInventoryPath)
+        {
+            // Skip check for itself
+            continue;
+        }
+        // Typically the driver is still bind here, so it is possible to
+        // directly read the debugfs to get the status.
+        auto devPath = internal::getDevicePath(p);
+        try
+        {
+            PMBus pmbus(devPath);
+            uint16_t statusWord = pmbus.read(STATUS_WORD, Type::Debug);
+            if ((statusWord & status_word::VOUT_FAULT) ||
+                (statusWord & status_word::INPUT_FAULT_WARN) ||
+                (statusWord & status_word::VIN_UV_FAULT))
+            {
+                log<level::WARNING>(
+                    "Unable to update PSU when other PSU has input/ouput fault",
+                    entry("PSU=%s", p.c_str()),
+                    entry("STATUS_WORD=0x%04x", statusWord));
+                return false;
+            }
+        }
+        catch (const std::exception& ex)
+        {
+            // If error occurs on accessing the debugfs, it means something went
+            // wrong, e.g. PSU is not present, and it's not ready to update.
+            log<level::ERR>(ex.what());
+            return false;
+        }
+    }
     return true;
 }
 
