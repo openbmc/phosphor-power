@@ -123,6 +123,20 @@ bool isPoweredOn(sdbusplus::bus::bus& bus)
     return state != 0;
 }
 
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus)
+{
+    std::vector<std::string> paths;
+    auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
+                                      MAPPER_INTERFACE, "GetSubTreePaths");
+    method.append(INVENTORY_OBJ_PATH);
+    method.append(0); // Depth 0 to search all
+    method.append(std::vector<std::string>({PSU_INVENTORY_IFACE}));
+    auto reply = bus.call(method);
+
+    reply.read(paths);
+    return paths;
+}
+
 } // namespace util
 } // namespace power
 } // namespace phosphor
