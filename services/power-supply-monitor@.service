@@ -4,11 +4,11 @@ Wants=mapper-wait@-xyz-openbmc_project-inventory-system-chassis-motherboard-powe
 After=mapper-wait@-xyz-openbmc_project-inventory-system-chassis-motherboard-powersupply%i.service
 Wants=mapper-wait@-org-openbmc-control-power0.service
 After=mapper-wait@-org-openbmc-control-power0.service
-ConditionPathExists={envfiledir}/obmc/power-supply-monitor/power-supply-monitor-%i.conf
+ConditionPathExists=/etc/default/obmc/power-supply-monitor/power-supply-monitor-%i.conf
 
 [Service]
-EnvironmentFile={envfiledir}/obmc/power-supply-monitor/power-supply-monitor-%i.conf
-ExecStart=/usr/bin/env psu-monitor --path=${{DEVPATH}} --instance=${{INSTANCE}} --inventory=${{INVENTORY}} --num-history-records=${{NUM_HISTORY_RECORDS}} --sync-gpio-path=${{SYNC_GPIO_PATH}} --sync-gpio-num=${{SYNC_GPIO_NUM}}
+EnvironmentFile=/etc/default/obmc/power-supply-monitor/power-supply-monitor-%i.conf
+ExecStart=/usr/bin/env psu-monitor --path=${DEVPATH} --instance=${INSTANCE} --inventory=${INVENTORY} --num-history-records=${NUM_HISTORY_RECORDS} --sync-gpio-path=${SYNC_GPIO_PATH} --sync-gpio-num=${SYNC_GPIO_NUM}
 SyslogIdentifier=psu-monitor
 
 [Install]
