@@ -19,8 +19,8 @@
 #include "action_environment.hpp"
 
 #include <cstddef> // for size_t
-#include <exception>
 #include <memory>
+#include <stdexcept>
 #include <utility>
 
 namespace phosphor
@@ -64,6 +64,16 @@ class StubAction : public Action
     }
 
     /**
+     * Clears the state of this action.
+     */
+    void clear()
+    {
+        except = nullptr;
+        executeCount = 0;
+        exceptionCount = 0;
+    }
+
+    /**
      * Executes this action.
      *
      * Throws an exception if setException() was called.  Otherwise returns the
@@ -72,7 +82,7 @@ class StubAction : public Action
      * @param environment action execution environment
      * @return value of returnValue data member
      */
-    virtual bool execute(ActionEnvironment& environment) override
+    virtual bool execute(ActionEnvironment& /*environment*/) override
     {
         ++executeCount;
 
@@ -121,7 +131,7 @@ class StubAction : public Action
      *
      * @param except exception to throw, or nullptr to throw no exception
      */
-    void setException(std::unique_ptr<std::exception> except)
+    void setException(std::unique_ptr<std::logic_error> except)
     {
         this->except = std::move(except);
     }
@@ -135,7 +145,7 @@ class StubAction : public Action
     /**
      * Exception to throw (if any) when execute() is called.
      */
-    std::unique_ptr<std::exception> except{nullptr};
+    std::unique_ptr<std::logic_error> except{nullptr};
 
     /**
      * Number of times execute() has been called on this action.
