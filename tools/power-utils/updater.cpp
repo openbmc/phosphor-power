@@ -211,8 +211,10 @@ bool Updater::isReadyToUpdate()
 int Updater::doUpdate()
 {
     // TODO
-    int32_t data;
+    int32_t data = 0;
     i2c->read(0x00, 11, data);
+    auto ret = i2c->read(0xf1, 0x01, data);
+    printf("First read of 0x%02x, ret: %d, 0x%02x\n", 0xf1, ret, data);
     return 0;
 }
 

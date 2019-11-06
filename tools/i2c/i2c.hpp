@@ -76,6 +76,17 @@ class I2CDevice : public I2CInterface
      * @return The unique_ptr holding the I2CInterface
      */
     static std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr);
+
+    /* @brief Check i2c adapter functionality
+     *
+     * Check if the i2c adapter has the functionality specified by the SMBus
+     * transaction type
+     *
+     * @param[in] type - The SMBus transaction type defined in linux/i2c.h
+     *
+     * @return true if it supports the functionality, false otherwise
+     */
+    bool checkFuncs(int size);
 };
 
 } // namespace i2c
