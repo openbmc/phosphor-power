@@ -7,10 +7,11 @@ psutils = executable(
         phosphor_dbus_interfaces,
         phosphor_logging,
     ],
-    include_directories: '../..',
+    include_directories: [libpower_inc, libi2c_inc],
     install: true,
     link_with: [
         libpower,
+        libi2c_dev,
     ]
 )
 
