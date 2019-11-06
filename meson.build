@@ -76,6 +76,8 @@ libpower = static_library(
     ],
 )
 
+libpower_inc = include_directories('.')
+
 subdir('phosphor-regulators')
 subdir('power-sequencer')
 subdir('power-supply')
