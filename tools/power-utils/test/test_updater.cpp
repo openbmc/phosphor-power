@@ -94,7 +94,7 @@ TEST_F(TestUpdater, doUpdate)
     updater = std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
     updater->getI2CDevice();
     auto& i2c = getMockedI2c();
-    EXPECT_CALL(i2c, read(_, _, _));
+    EXPECT_CALL(i2c, read(_, _, _, _));
     updater->doUpdate();
 }
 

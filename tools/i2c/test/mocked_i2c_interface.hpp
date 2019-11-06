@@ -12,10 +12,11 @@ class MockedI2CInterface : public I2CInterface
   public:
     virtual ~MockedI2CInterface() = default;
 
-    MOCK_METHOD3(read,
-                 void(uint8_t addr, uint8_t size, std::vector<uint8_t>& data));
+    MOCK_METHOD4(read,
+                 bool(uint8_t addr, uint8_t size, int32_t& data, bool pec));
 
-    MOCK_METHOD3(write, bool(uint8_t addr, uint8_t size, const uint8_t* data));
+    MOCK_METHOD4(write, bool(uint8_t addr, uint8_t size, const uint8_t* data,
+                             bool pec));
 };
 
 std::unique_ptr<I2CInterface> Create(uint8_t /*busId*/, uint8_t /*devAddr*/)
