@@ -236,7 +236,14 @@ int Updater::doUpdate()
 {
     // TODO
     uint8_t data;
-    i2c->read(0x00, data);
+    uint16_t word;
+    i2c->read(0xf1, data);
+    printf("First read of 0x%02x, 0x%02x\n", 0xf1, data);
+
+    i2c->read(0xbd, word);
+    printf("Read word of 0x%02x, 0x%04x\n", 0xbd, word);
+
+    i2c->read(0xfa, 8, nullptr); // This will throw for now
     return 0;
 }
 
