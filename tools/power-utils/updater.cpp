@@ -236,7 +236,21 @@ int Updater::doUpdate()
 {
     // TODO
     uint8_t data;
-    i2c->read(0x00, data);
+    uint8_t size;
+    uint16_t word;
+    std::vector<uint8_t> blockData(32);
+
+    i2c->read(data);
+    printf("Read byte 0x%02x\n", data);
+
+    i2c->read(0xf1, data);
+    printf("First read of 0x%02x, 0x%02x\n", 0xf1, data);
+
+    i2c->read(0xbd, word);
+    printf("Read word of 0x%02x, 0x%04x\n", 0xbd, word);
+
+    i2c->read(0x00, size, blockData.data()); // This throws on the device
+    printf("Read block data, size: %d\n", size);
     return 0;
 }
 
