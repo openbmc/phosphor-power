@@ -15,9 +15,13 @@
  */
 #pragma once
 
+#include "i2c_interface.hpp"
+
 #include <filesystem>
 #include <sdbusplus/bus.hpp>
 #include <string>
+
+class TestUpdater;
 
 namespace updater
 {
@@ -37,6 +41,7 @@ bool update(const std::string& psuInventoryPath, const std::string& imageDir);
 class Updater
 {
   public:
+    friend TestUpdater;
     Updater() = delete;
     Updater(const Updater&) = delete;
     Updater& operator=(const Updater&) = delete;
@@ -80,6 +85,13 @@ class Updater
      */
     int doUpdate();
 
+    /** @brief Create I2C device
+     *
+     * Creates the I2C device based on the device name.
+     * e.g. It opens busId 3, address 0x68 for "3-0068"
+     */
+    void createI2CDevice();
+
   private:
     /** @brief The sdbusplus DBus bus connection */
     sdbusplus::bus::bus bus;
@@ -110,6 +122,9 @@ class Updater
      *   /sys/bus/i2c/drivers/ibm-cffps
      */
     fs::path driverPath;
+
+    /** @brief The i2c device interface */
+    std::unique_ptr<i2c::I2CInterface> i2c;
 };
 
 } // namespace updater

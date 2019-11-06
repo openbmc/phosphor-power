@@ -60,6 +60,17 @@ std::string getDevicePath(const std::string& psuInventoryPath)
     return devicePath;
 }
 
+std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
+{
+    // Get I2C bus id and device address, e.g. 3-0068
+    // is parsed to bus id 3, device address 0x68
+    auto pos = devName.find('-');
+    assert(pos != std::string::npos);
+    uint8_t busId = std::stoi(devName.substr(0, pos));
+    uint8_t devAddr = std::stoi(devName.substr(pos + 1), nullptr, 16);
+    return {busId, devAddr};
+}
+
 } // namespace internal
 
 bool update(const std::string& psuInventoryPath, const std::string& imageDir)
@@ -79,6 +90,7 @@ bool update(const std::string& psuInventoryPath, const std::string& imageDir)
     }
 
     updater.bindUnbind(false);
+    updater.createI2CDevice();
     int ret = updater.doUpdate();
     updater.bindUnbind(true);
     return ret == 0;
@@ -228,7 +240,15 @@ bool Updater::isReadyToUpdate()
 int Updater::doUpdate()
 {
     // TODO
+    uint8_t data;
+    i2c->read(0x00, data);
     return 0;
+}
+
+void Updater::createI2CDevice()
+{
+    auto [id, addr] = internal::parseDeviceName(devName);
+    i2c = i2c::create(id, addr);
 }
 
 } // namespace updater
