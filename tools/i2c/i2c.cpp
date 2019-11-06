@@ -1,7 +1,27 @@
 #include "i2c.hpp"
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include <cerrno>
+
 namespace i2c
 {
+
+void I2CDevice::open()
+{
+    fd = ::open(busStr.c_str(), O_RDWR);
+    if (fd == -1)
+    {
+        throw I2CException(busStr, devAddr, errno);
+    }
+}
+
+void I2CDevice::close()
+{
+    ::close(fd);
+}
 
 void I2CDevice::read(uint8_t addr, uint8_t& data)
 {
