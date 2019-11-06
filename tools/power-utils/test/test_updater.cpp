@@ -96,6 +96,7 @@ TEST_F(TestUpdater, doUpdate)
     updater->getI2CDevice();
     auto& i2c = getMockedI2c();
     EXPECT_CALL(i2c, read(_, An<uint8_t&>()));
+    EXPECT_CALL(i2c, read(_, An<uint16_t&>()));
     updater->doUpdate();
 }
 

@@ -15,13 +15,15 @@ namespace i2c
 class I2CException : public std::system_error
 {
   public:
-    explicit I2CException(const std::string& bus, uint8_t addr, int errorCode) :
-        bus(bus), addr(addr), errorCode(errorCode)
+    explicit I2CException(const std::string& bus, uint8_t addr, int errorCode,
+                          const char* extInfo) :
+        bus(bus),
+        addr(addr), errorCode(errorCode)
     {
         std::stringstream ss;
         ss << "I2CException: bus " << bus << ", addr 0x" << std::hex
            << static_cast<int>(addr) << std::dec << ", errno " << errorCode
-           << ": " << strerror(errorCode);
+           << ": " << strerror(errorCode) << ", extInfo " << extInfo;
         errStr = ss.str();
     }
     virtual ~I2CException() = default;
