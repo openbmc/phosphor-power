@@ -10,15 +10,43 @@ class I2CDevice : public I2CInterface
   private:
     I2CDevice() = delete;
 
-    explicit I2CDevice(uint8_t busId, uint8_t devAddr)
+    /* @brief Constructor
+     *
+     * Construct I2CDevice object from the bus id and device address
+     *
+     * @param[in] busId - The i2c bus ID
+     * @param[in] devAddr - The device address of the i2c
+     */
+    explicit I2CDevice(uint8_t busId, uint8_t devAddr) :
+        busId(busId), devAddr(devAddr)
     {
-        // TODO
-        (void)busId;
-        (void)devAddr;
+        busStr = "/dev/i2c-" + std::to_string(busId);
+        open();
     }
 
+    /** @brief Open the i2c device */
+    void open();
+
+    /** @brief Close the i2c device */
+    void close();
+
+    /** @brief The i2c device id */
+    uint8_t busId;
+
+    /** @brief The i2c device address in the bus */
+    uint8_t devAddr;
+
+    /** @brief The file descriptor of the opened i2c device */
+    int fd;
+
+    /** @brief The i2c bus path in /dev */
+    std::string busStr;
+
   public:
-    virtual ~I2CDevice() = default;
+    ~I2CDevice()
+    {
+        close();
+    }
 
     /* @brief Read data from i2c
      *

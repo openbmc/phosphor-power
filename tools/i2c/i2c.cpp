@@ -1,7 +1,35 @@
 #include "i2c.hpp"
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/log.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
+
+using namespace phosphor::logging;
+using namespace sdbusplus::xyz::openbmc_project::Common::Error;
+
 namespace i2c
 {
+
+void I2CDevice::open()
+{
+    fd = ::open(busStr.c_str(), O_RDWR);
+    if (fd == -1)
+    {
+        log<level::ERR>("Failed to open device",
+                        entry("DEV=%s", busStr.c_str()));
+        elog<InternalFailure>();
+    }
+}
+
+void I2CDevice::close()
+{
+    ::close(fd);
+}
 
 void I2CDevice::read(uint8_t addr, uint8_t size, std::vector<uint8_t>& data)
 {
