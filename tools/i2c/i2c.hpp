@@ -42,6 +42,17 @@ class I2CDevice : public I2CInterface
     /** @brief The i2c bus path in /dev */
     std::string busStr;
 
+    /* @brief Check i2c adapter read functionality
+     *
+     * Check if the i2c adapter has the functionality specified by the SMBus
+     * transaction type
+     *
+     * @param[in] type - The SMBus transaction type defined in linux/i2c.h
+     *
+     * @throw I2CException if the function is not supported
+     */
+    void checkReadFuncs(int type);
+
   public:
     ~I2CDevice()
     {
