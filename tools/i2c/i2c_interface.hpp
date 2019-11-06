@@ -15,21 +15,25 @@ class I2CInterface
     /* @brief Read data from i2c
      *
      * @param[in] addr - The register address of the i2c device
-     * @param[in] size - The size of data to read
-     * @param[out] data - The data read from the i2c device
+     * @param[in] size - The size of data to read, only 1 or 2 are supported
+     * @param[in] pec - Whether or not enable packet error checking
+     *
+     * @return - The data read from the i2c device
      */
-    virtual void read(uint8_t addr, uint8_t size,
-                      std::vector<uint8_t>& data) = 0;
+    virtual bool read(uint8_t addr, uint8_t size, int32_t& data,
+                      bool pec = false) = 0;
 
     /* @brief Write data to i2c
      *
      * @param[in] addr - The register address of the i2c device
      * @param[in] size - The size of data to read
      * @param[in] data - The data to write to the i2c device
+     * @param[in] pec - Whether or not enable packet error checking
      *
      * @return true if write is successful, false otherwise
      */
-    virtual bool write(uint8_t addr, uint8_t size, const uint8_t* data) = 0;
+    virtual bool write(uint8_t addr, uint8_t size, const uint8_t* data,
+                       bool pec = false) = 0;
 };
 
 /* @brief Create an I2CInterface instance
