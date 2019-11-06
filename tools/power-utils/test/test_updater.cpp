@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 #include "../updater.hpp"
+#include "test/mocked_i2c_interface.hpp"
+
+#include <filesystem>
 
 #include <gtest/gtest.h>
+
+namespace fs = std::filesystem;
+
+using ::testing::_;
+using ::testing::An;
 
 namespace updater
 {
@@ -23,13 +31,75 @@ namespace internal
 {
 
 std::string getDeviceName(std::string devPath);
+std::pair<uint8_t, uint8_t> getI2CAddr(const std::string& devName);
 
 } // namespace internal
 } // namespace updater
 
 using namespace updater;
 
-TEST(Updater, getDeviceName)
+class TestUpdater : public ::testing::Test
+{
+  public:
+    using MockedI2CInterface = i2c::MockedI2CInterface;
+    using I2CInterface = i2c::I2CInterface;
+
+    TestUpdater()
+    {
+        setupDeviceSysfs();
+    }
+    ~TestUpdater()
+    {
+        fs::remove_all(tmpDir);
+    }
+
+    void setupDeviceSysfs()
+    {
+        auto tmpPath = fs::temp_directory_path();
+        tmpDir = (tmpPath / "test_XXXXXX");
+        if (!mkdtemp(tmpDir.data()))
+        {
+            throw "Failed to create temp dir";
+        }
+        // Create device path with symbol link
+        realDevicePath = fs::path(tmpDir) / "devices/3-0068";
+        devPath = fs::path(tmpDir) / "i2c";
+        fs::create_directories(realDevicePath);
+        fs::create_directories(realDevicePath / "driver");
+        fs::create_directories(devPath);
+        devPath /= "3-0068";
+        fs::create_directory_symlink(realDevicePath, devPath);
+    }
+
+    MockedI2CInterface& getMockedI2c()
+    {
+        return *reinterpret_cast<MockedI2CInterface*>(updater->i2c.get());
+    }
+
+    std::shared_ptr<I2CInterface> stolenI2C;
+    std::unique_ptr<Updater> updater;
+    fs::path realDevicePath;
+    fs::path devPath;
+    std::string tmpDir;
+    std::string psuInventoryPath = "/com/example/psu";
+    std::string imageDir = "/tmp/image/xxx";
+};
+
+TEST_F(TestUpdater, ctordtor)
+{
+    updater = std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
+}
+
+TEST_F(TestUpdater, doUpdate)
+{
+    updater = std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
+    updater->getI2CDevice();
+    auto& i2c = getMockedI2c();
+    EXPECT_CALL(i2c, read(_, An<uint8_t&>()));
+    updater->doUpdate();
+}
+
+TEST_F(TestUpdater, getDeviceName)
 {
     auto ret = internal::getDeviceName("");
     EXPECT_TRUE(ret.empty());
@@ -39,4 +109,19 @@ TEST(Updater, getDeviceName)
 
     ret = internal::getDeviceName("/sys/bus/i2c/devices/3-0069/");
     EXPECT_EQ("3-0069", ret);
+}
+
+TEST_F(TestUpdater, getI2CAddr)
+{
+    auto [id, addr] = internal::getI2CAddr("3-0068");
+    EXPECT_EQ(3, id);
+    EXPECT_EQ(0x68, addr);
+
+    std::tie(id, addr) = internal::getI2CAddr("11-0069");
+    EXPECT_EQ(11, id);
+    EXPECT_EQ(0x69, addr);
+
+    EXPECT_THROW(internal::getI2CAddr("no-number"), std::invalid_argument);
+
+    EXPECT_DEATH(internal::getI2CAddr("invalid"), "");
 }

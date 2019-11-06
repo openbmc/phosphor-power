@@ -9,7 +9,7 @@ test(
             phosphor_logging,
         ],
         implicit_include_directories: false,
-        include_directories: '../../..',
+        include_directories: libpower_inc,
         link_with: [
             libpower,
         ],
@@ -25,10 +25,11 @@ test(
         '../updater.cpp',
         dependencies: [
             gtest,
+            gmock,
             phosphor_logging,
         ],
         implicit_include_directories: false,
-        include_directories: '../../..',
+        include_directories: [libpower_inc, libi2c_inc],
         link_with: [
             libpower,
         ],
