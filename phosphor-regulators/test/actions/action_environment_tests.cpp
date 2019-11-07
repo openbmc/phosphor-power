@@ -117,7 +117,8 @@ TEST(ActionEnvironmentTests, GetRule)
 {
     // Create IDMap
     IDMap idMap{};
-    Rule setVoltageRule{"set_voltage_rule"};
+    Rule setVoltageRule{"set_voltage_rule",
+                        std::vector<std::unique_ptr<Action>>{}};
     idMap.addRule(setVoltageRule);
 
     ActionEnvironment env{idMap, ""};

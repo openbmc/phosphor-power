@@ -92,7 +92,7 @@ TEST(IDMapTests, AddRule)
 
     // Create rule
     std::string id{"set_voltage_rule"};
-    Rule rule{id};
+    Rule rule{id, std::vector<std::unique_ptr<Action>>{}};
 
     // Verify rule is not initially in map
     EXPECT_THROW(idMap.getRule(id), std::invalid_argument);
@@ -198,7 +198,7 @@ TEST(IDMapTests, GetRule)
 
     // Add a rule to the map
     std::string id{"set_voltage_rule"};
-    Rule rule{id};
+    Rule rule{id, std::vector<std::unique_ptr<Action>>{}};
     idMap.addRule(rule);
 
     // Test where ID found in map

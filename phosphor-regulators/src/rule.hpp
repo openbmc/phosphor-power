@@ -15,7 +15,14 @@
  */
 #pragma once
 
+#include "action.hpp"
+#include "action_environment.hpp"
+#include "action_utils.hpp"
+
+#include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -47,9 +54,39 @@ class Rule
      * Constructor.
      *
      * @param id unique rule ID
+     * @param actions actions in the rule
      */
-    explicit Rule(const std::string& id) : id{id}
+    explicit Rule(const std::string& id,
+                  std::vector<std::unique_ptr<Action>> actions) :
+        id{id},
+        actions{std::move(actions)}
     {
+    }
+
+    /**
+     * Executes the actions in this rule.
+     *
+     * Returns the return value from the last action.
+     *
+     * Throws an exception if an error occurs and an action cannot be
+     * successfully executed.
+     *
+     * @param environment action execution environment
+     * @return return value from last action in rule
+     */
+    bool execute(ActionEnvironment& environment)
+    {
+        return action_utils::execute(actions, environment);
+    }
+
+    /**
+     * Returns the actions in this rule.
+     *
+     * @return actions in rule
+     */
+    const std::vector<std::unique_ptr<Action>>& getActions() const
+    {
+        return actions;
     }
 
     /**
@@ -67,6 +104,11 @@ class Rule
      * Unique ID of this rule.
      */
     const std::string id{};
+
+    /**
+     * Actions in this rule.
+     */
+    std::vector<std::unique_ptr<Action>> actions{};
 };
 
 } // namespace phosphor::power::regulators
