@@ -53,6 +53,17 @@ class I2CDevice : public I2CInterface
      */
     void checkReadFuncs(int type);
 
+    /* @brief Check i2c adapter write functionality
+     *
+     * Check if the i2c adapter has the functionality specified by the SMBus
+     * transaction type
+     *
+     * @param[in] type - The SMBus transaction type defined in linux/i2c.h
+     *
+     * @throw I2CException if the function is not supported
+     */
+    void checkWriteFuncs(int type);
+
   public:
     ~I2CDevice()
     {
