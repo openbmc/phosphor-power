@@ -15,16 +15,17 @@
  */
 #pragma once
 
-#include "device.hpp"
-#include "rail.hpp"
-#include "rule.hpp"
-
 #include <map>
 #include <stdexcept>
 #include <string>
 
 namespace phosphor::power::regulators
 {
+
+// Forward declarations to avoid circular dependencies
+class Device;
+class Rail;
+class Rule;
 
 /**
  * @class IDMap
@@ -48,30 +49,21 @@ class IDMap
      *
      * @param device device to add
      */
-    void addDevice(Device& device)
-    {
-        deviceMap[device.getID()] = &device;
-    }
+    void addDevice(Device& device);
 
     /**
      * Adds the specified rail to this IDMap.
      *
      * @param rail rail to add
      */
-    void addRail(Rail& rail)
-    {
-        railMap[rail.getID()] = &rail;
-    }
+    void addRail(Rail& rail);
 
     /**
      * Adds the specified rule to this IDMap.
      *
      * @param rule rule to add
      */
-    void addRule(Rule& rule)
-    {
-        ruleMap[rule.getID()] = &rule;
-    }
+    void addRule(Rule& rule);
 
     /**
      * Returns the device with the specified ID.

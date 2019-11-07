@@ -15,9 +15,7 @@
  */
 #pragma once
 
-#include "device.hpp"
 #include "id_map.hpp"
-#include "rule.hpp"
 
 #include <cstddef> // for size_t
 #include <stdexcept>
@@ -25,6 +23,10 @@
 
 namespace phosphor::power::regulators
 {
+
+// Forward declarations to avoid circular dependencies
+class Device;
+class Rule;
 
 /**
  * @class ActionEnvironment
@@ -198,7 +200,7 @@ class ActionEnvironment
     /**
      * Mapping from string IDs to the associated Device and Rule objects.
      */
-    const IDMap& idMap{};
+    const IDMap& idMap;
 
     /**
      * Current device ID.

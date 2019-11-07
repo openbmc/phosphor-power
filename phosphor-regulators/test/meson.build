@@ -21,6 +21,7 @@ test('phosphor-regulators-tests',
                     gmock,
                     gtest,
                 ],
+                link_with: phosphor_regulators_library,
                 implicit_include_directories: false,
                 include_directories: [
                     phosphor_regulators_include_directories,

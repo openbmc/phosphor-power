@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "device.hpp"
 #include "id_map.hpp"
+#include "rail.hpp"
+#include "rule.hpp"
 
 #include <exception>
 #include <stdexcept>
