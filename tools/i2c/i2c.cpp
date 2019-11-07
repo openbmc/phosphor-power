@@ -128,24 +128,85 @@ void I2CDevice::read(uint8_t addr, uint8_t size, uint8_t* data)
 
 void I2CDevice::write(uint8_t addr, uint8_t data)
 {
-    // TODO
-    (void)addr;
-    (void)data;
+    int i2cSize = (addr == 0) ? I2C_SMBUS_BYTE : I2C_SMBUS_BYTE_DATA;
+    int ret = -1;
+
+    if (!checkWriteFuncs(i2cSize))
+    {
+        throw I2CException("Unsupported function", busStr, devAddr);
+    }
+
+    if (i2cSize == I2C_SMBUS_BYTE)
+    {
+        ret = i2c_smbus_write_byte(fd, data);
+    }
+    else
+    {
+        ret = i2c_smbus_write_byte_data(fd, addr, data);
+    }
+    if (ret == -1)
+    {
+        throw I2CException("Failed to write", busStr, devAddr, errno);
+    }
 }
 
 void I2CDevice::write(uint8_t addr, uint16_t data)
 {
-    // TODO
-    (void)addr;
-    (void)data;
+    int i2cSize = I2C_SMBUS_WORD_DATA;
+    int ret = -1;
+
+    if (!checkWriteFuncs(i2cSize))
+    {
+        throw I2CException("Unsupported function", busStr, devAddr);
+    }
+
+    ret = i2c_smbus_write_word_data(fd, addr, data); // TODO: check endianness?
+    if (ret == -1)
+    {
+        throw I2CException("Failed to write", busStr, devAddr, errno);
+    }
 }
 
 void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data)
 {
-    // TODO
-    (void)addr;
-    (void)size;
-    (void)data;
+    int i2cSize;
+    int ret = -1;
+    switch (size)
+    {
+        case 0:
+            throw I2CException("Invalid write size 0", busStr, devAddr);
+        case 1:
+            i2cSize = I2C_SMBUS_BYTE_DATA;
+            break;
+        default:
+            // Size > 2 means it's block data, and it shall be less than or
+            // equal to I2C_SMBUS_BLOCK_MAX (32)
+            if (size > I2C_SMBUS_BLOCK_MAX)
+            {
+                throw I2CException("Invalid write size", busStr, devAddr);
+            }
+            i2cSize = I2C_SMBUS_BLOCK_DATA;
+            break;
+    }
+
+    if (!checkWriteFuncs(i2cSize))
+    {
+        throw I2CException("Unsupported function", busStr, devAddr);
+    }
+
+    if (i2cSize == I2C_SMBUS_BYTE_DATA)
+    {
+        ret = i2c_smbus_write_byte_data(fd, addr, data[0]);
+    }
+    else
+    {
+        ret = i2c_smbus_write_block_data(fd, addr, size, data);
+    }
+
+    if (ret == -1)
+    {
+        throw I2CException("Failed to write", busStr, devAddr, errno);
+    }
 }
 
 std::unique_ptr<I2CInterface> I2CDevice::create(uint8_t busId, uint8_t devAddr)
@@ -199,6 +260,55 @@ bool I2CDevice::checkReadFuncs(int size)
             if (!(funcs & I2C_FUNC_SMBUS_READ_BLOCK_DATA))
             {
                 fprintf(stderr, "Missing SMBUS_READ_BLOCK_DATA");
+                ret = false;
+            }
+            break;
+        default:
+            ret = false;
+    }
+    return ret;
+}
+
+bool I2CDevice::checkWriteFuncs(int size)
+{
+    bool ret = true;
+    unsigned long funcs;
+
+    /* Check adapter functionality */
+    if (ioctl(fd, I2C_FUNCS, &funcs) < 0)
+    {
+        perror("Failed to get funcs");
+        return false;
+    }
+
+    switch (size)
+    {
+        case I2C_SMBUS_BYTE:
+            if (!(funcs & I2C_FUNC_SMBUS_WRITE_BYTE))
+            {
+                fprintf(stderr, "Missing SMBUS_WRITE_BYTE");
+                ret = false;
+            }
+            break;
+        case I2C_SMBUS_BYTE_DATA:
+            if (!(funcs & I2C_FUNC_SMBUS_WRITE_BYTE_DATA))
+            {
+                fprintf(stderr, "Missing SMBUS_WRITE_BYTE_DATA");
+                ret = false;
+            }
+            break;
+
+        case I2C_SMBUS_WORD_DATA:
+            if (!(funcs & I2C_FUNC_SMBUS_WRITE_WORD_DATA))
+            {
+                fprintf(stderr, "Missing SMBUS_WRITE_WORD_DATA");
+                ret = false;
+            }
+            break;
+        case I2C_SMBUS_BLOCK_DATA:
+            if (!(funcs & I2C_FUNC_SMBUS_WRITE_BLOCK_DATA))
+            {
+                fprintf(stderr, "Missing SMBUS_WRITE_BLOCK_DATA");
                 ret = false;
             }
             break;
