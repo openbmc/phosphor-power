@@ -84,11 +84,61 @@ bool I2CDevice::read(uint8_t addr, uint8_t size, int32_t& data)
 
 bool I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data)
 {
-    // TODO
-    (void)addr;
-    (void)size;
-    (void)data;
-    return false;
+    int i2cSize;
+    int ret;
+    switch (size)
+    {
+        case 0:
+            return false;
+        case 1:
+            i2cSize = I2C_SMBUS_BYTE_DATA;
+            break;
+        case 2:
+            i2cSize = I2C_SMBUS_WORD_DATA;
+            break;
+        default:
+            // Size > 2 means it's block data, and it shall be less than
+            // I2C_SMBUS_BLOCK_MAX (32)
+            if (size > I2C_SMBUS_BLOCK_MAX)
+            {
+                log<level::ERR>(
+                    "Invalid i2c write size, it shall be less than 32",
+                    entry("ADDR=%x", addr), entry("SIZE=%u", size));
+                return false;
+            }
+            i2cSize = I2C_SMBUS_BLOCK_DATA;
+            break;
+    }
+
+    if (!checkFuncs(i2cSize))
+    {
+        return false;
+    }
+    if (ioctl(fd, I2C_SLAVE_FORCE, devAddr) < 0)
+    {
+        log<level::ERR>("Failed to set address", entry("ADDR=%x", addr));
+        return false;
+    }
+    if (i2cSize == I2C_SMBUS_BYTE_DATA)
+    {
+        ret = i2c_smbus_write_byte_data(fd, addr, data[0]);
+    }
+    else if (i2cSize == I2C_SMBUS_WORD_DATA)
+    {
+        uint16_t word = *reinterpret_cast<const uint16_t*>(data);
+        ret = i2c_smbus_write_word_data(fd, addr, word);
+    }
+    else if (i2cSize == I2C_SMBUS_BLOCK_DATA)
+    {
+        ret = i2c_smbus_write_block_data(fd, addr, size, data);
+    }
+    if (ret == -1)
+    {
+        log<level::ERR>("Failed to write i2c",
+                        entry("ERR=%s", strerror(errno)));
+        return false;
+    }
+    return true;
 }
 
 std::unique_ptr<I2CInterface> I2CDevice::create(uint8_t busId, uint8_t devAddr)
