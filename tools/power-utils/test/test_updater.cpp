@@ -23,6 +23,7 @@
 namespace fs = std::filesystem;
 
 using ::testing::_;
+using ::testing::Pointee;
 
 namespace updater
 {
@@ -94,7 +95,11 @@ TEST_F(TestUpdater, doUpdate)
     updater = std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
     updater->getI2CDevice();
     auto& i2c = getMockedI2c();
-    EXPECT_CALL(i2c, read(_, _, _, _));
+
+    EXPECT_CALL(i2c, write(0xf0, 12, _, _));
+    EXPECT_CALL(i2c, write(0xf1, 1, Pointee(0x01), _));
+    EXPECT_CALL(i2c, read(0xf1, 1, _, _));
+
     updater->doUpdate();
 }
 

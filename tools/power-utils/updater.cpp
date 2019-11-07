@@ -21,8 +21,10 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <chrono>
 #include <fstream>
 #include <phosphor-logging/log.hpp>
+#include <thread>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -206,10 +208,27 @@ bool Updater::isReadyToUpdate()
 
 int Updater::doUpdate()
 {
-    // TODO
+    using namespace std::chrono;
+
     int32_t data = 0;
-    auto ret = i2c->read(0xf1, 0x01, data);
-    printf("First read of 0x%02x, ret: %d, 0x%02x\n", 0xf1, ret, data);
+    uint8_t unlockData[12] = {0x45, 0x43, 0x44, 0x31, 0x36, 0x30,
+                              0x33, 0x30, 0x30, 0x30, 0x34, 0x01};
+    uint8_t bootFlag = 0x01;
+    bool ret;
+    static_assert(sizeof(unlockData) == 12);
+
+    ret = i2c->write(0xf0, sizeof(unlockData), unlockData);
+    printf("Unlock PSU ret: %d\n", ret);
+
+    std::this_thread::sleep_for(milliseconds(5));
+
+    ret = i2c->write(0xf1, sizeof(bootFlag), &bootFlag);
+    printf("Set boot flag ret: %d\n", ret);
+
+    std::this_thread::sleep_for(seconds(3));
+
+    ret = i2c->read(0xf1, 0x01, data);
+    printf("Read of 0x%02x, ret: %d, 0x%02x\n", 0xf1, ret, data);
     return 0;
 }
 
