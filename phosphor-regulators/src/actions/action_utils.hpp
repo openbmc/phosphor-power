@@ -21,13 +21,7 @@
 #include <memory>
 #include <vector>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
-{
-namespace action_utils
+namespace phosphor::power::regulators::action_utils
 {
 
 /**
@@ -58,7 +52,4 @@ inline bool execute(std::vector<std::unique_ptr<Action>>& actions,
     return returnValue;
 }
 
-} // namespace action_utils
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators::action_utils

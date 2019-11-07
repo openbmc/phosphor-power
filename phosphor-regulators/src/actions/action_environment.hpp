@@ -23,11 +23,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 /**
@@ -225,6 +221,4 @@ class ActionEnvironment
     size_t ruleDepth{0};
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators

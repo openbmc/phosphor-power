@@ -20,11 +20,7 @@
 
 #include <gmock/gmock.h>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 class MockAction : public Action
@@ -41,6 +37,4 @@ class MockAction : public Action
     MOCK_METHOD(bool, execute, (ActionEnvironment & environment), (override));
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators

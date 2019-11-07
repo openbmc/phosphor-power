@@ -17,11 +17,7 @@
 
 #include <string>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 /**
@@ -69,6 +65,4 @@ class Rail
     const std::string id{};
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators

@@ -23,11 +23,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 /**
@@ -151,6 +147,4 @@ class IDMap
     std::map<std::string, Rule*> ruleMap{};
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators

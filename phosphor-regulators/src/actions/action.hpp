@@ -17,11 +17,7 @@
 
 #include "action_environment.hpp"
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 /**
@@ -60,6 +56,4 @@ class Action
     virtual bool execute(ActionEnvironment& environment) = 0;
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators

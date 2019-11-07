@@ -20,11 +20,7 @@
 
 #include <string>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 /**
@@ -86,6 +82,4 @@ class SetDeviceAction : public Action
     const std::string deviceID{};
 };
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators
