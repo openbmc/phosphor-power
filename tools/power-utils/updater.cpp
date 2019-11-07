@@ -21,8 +21,10 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <chrono>
 #include <fstream>
 #include <phosphor-logging/log.hpp>
+#include <thread>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -239,23 +241,26 @@ bool Updater::isReadyToUpdate()
 
 int Updater::doUpdate()
 {
-    // TODO
-    uint8_t data;
-    uint8_t size;
-    uint16_t word;
-    std::vector<uint8_t> blockData(32);
+    using namespace std::chrono;
 
-    i2c->read(data);
-    printf("Read byte 0x%02x\n", data);
+    uint8_t data;
+    uint8_t unlockData[12] = {0x45, 0x43, 0x44, 0x31, 0x36, 0x30,
+                              0x33, 0x30, 0x30, 0x30, 0x34, 0x01};
+    uint8_t bootFlag = 0x01;
+    static_assert(sizeof(unlockData) == 12);
+
+    i2c->write(0xf0, sizeof(unlockData), unlockData);
+    printf("Unlock PSU\n");
+
+    std::this_thread::sleep_for(milliseconds(5));
+
+    i2c->write(0xf1, bootFlag);
+    printf("Set boot flag ret\n");
+
+    std::this_thread::sleep_for(seconds(3));
 
     i2c->read(0xf1, data);
-    printf("First read of 0x%02x, 0x%02x\n", 0xf1, data);
-
-    i2c->read(0xbd, word);
-    printf("Read word of 0x%02x, 0x%04x\n", 0xbd, word);
-
-    i2c->read(0x00, size, blockData.data()); // This throws on the device
-    printf("Read block data, size: %d\n", size);
+    printf("Read of 0x%02x, 0x%02x\n", 0xf1, data);
     return 0;
 }
 
