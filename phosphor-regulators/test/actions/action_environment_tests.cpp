@@ -20,7 +20,9 @@
 
 #include <cstddef> // for size_t
 #include <exception>
+#include <memory>
 #include <stdexcept>
+#include <vector>
 
 #include <gtest/gtest.h>
 
@@ -54,8 +56,8 @@ TEST(ActionEnvironmentTests, DecrementRuleDepth)
     IDMap idMap{};
     ActionEnvironment env{idMap, ""};
     EXPECT_EQ(env.getRuleDepth(), 0);
-    env.incrementRuleDepth();
-    env.incrementRuleDepth();
+    env.incrementRuleDepth("set_voltage_rule");
+    env.incrementRuleDepth("set_voltage_rule");
     EXPECT_EQ(env.getRuleDepth(), 2);
     env.decrementRuleDepth();
     EXPECT_EQ(env.getRuleDepth(), 1);
@@ -157,9 +159,9 @@ TEST(ActionEnvironmentTests, GetRuleDepth)
     IDMap idMap{};
     ActionEnvironment env{idMap, ""};
     EXPECT_EQ(env.getRuleDepth(), 0);
-    env.incrementRuleDepth();
+    env.incrementRuleDepth("set_voltage_rule");
     EXPECT_EQ(env.getRuleDepth(), 1);
-    env.incrementRuleDepth();
+    env.incrementRuleDepth("set_voltage_rule");
     EXPECT_EQ(env.getRuleDepth(), 2);
     env.decrementRuleDepth();
     EXPECT_EQ(env.getRuleDepth(), 1);
@@ -220,7 +222,7 @@ TEST(ActionEnvironmentTests, IncrementRuleDepth)
     {
         for (size_t i = 1; i <= env.maxRuleDepth; ++i)
         {
-            env.incrementRuleDepth();
+            env.incrementRuleDepth("set_voltage_rule");
             EXPECT_EQ(env.getRuleDepth(), i);
         }
     }
@@ -232,11 +234,12 @@ TEST(ActionEnvironmentTests, IncrementRuleDepth)
     // Test where rule depth has exceeded maximum
     try
     {
-        env.incrementRuleDepth();
+        env.incrementRuleDepth("set_voltage_rule");
     }
     catch (const std::runtime_error& r_error)
     {
-        EXPECT_STREQ(r_error.what(), "Maximum rule depth exceeded.");
+        EXPECT_STREQ(r_error.what(),
+                     "Maximum rule depth exceeded by rule set_voltage_rule.");
     }
     catch (const std::exception& error)
     {

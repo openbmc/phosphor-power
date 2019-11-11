@@ -165,12 +165,15 @@ class ActionEnvironment
      * Throws runtime_error if the new depth exceeds maxRuleDepth.  This
      * indicates that infinite recursion has probably occurred (rule A -> rule B
      * -> rule A).
+     *
+     * @param ruleID ID of the rule that is being called
      */
-    void incrementRuleDepth()
+    void incrementRuleDepth(const std::string& ruleID)
     {
         if (ruleDepth >= maxRuleDepth)
         {
-            throw std::runtime_error("Maximum rule depth exceeded.");
+            throw std::runtime_error("Maximum rule depth exceeded by rule " +
+                                     ruleID + '.');
         }
         ++ruleDepth;
     }
