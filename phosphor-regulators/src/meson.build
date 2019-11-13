@@ -4,7 +4,9 @@ phosphor_regulators_include_directories = include_directories(
 )
 
 phosphor_regulators_source_files = [
-    'id_map.cpp'
+    'id_map.cpp',
+
+    'actions/if_action.cpp'
 ]
 
 phosphor_regulators_library = static_library(
