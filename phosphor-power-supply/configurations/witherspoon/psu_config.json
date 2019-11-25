@@ -1,0 +1,4 @@
+{
+    "description" : "Required entry that indicates delay between polling in milliseconds",
+    "pollInterval" : 1000
+}
