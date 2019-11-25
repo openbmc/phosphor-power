@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "psu_manager.hpp"
+#include "utility.hpp"
 
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
@@ -22,7 +23,7 @@
 
 #include <filesystem>
 
-using namespace phosphor::power::manager;
+using namespace phosphor::power;
 
 int main(int argc, char* argv[])
 {
@@ -58,9 +59,7 @@ int main(int argc, char* argv[])
         // handle both sd_events (for the timers) and dbus signals.
         bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-        // TODO: Should get polling interval from JSON file.
-        auto pollInterval = std::chrono::milliseconds(1000);
-        PSUManager manager(bus, event, pollInterval);
+        manager::PSUManager manager(bus, event, configfile);
 
         return manager.run();
     }
