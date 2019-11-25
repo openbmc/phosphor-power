@@ -19,6 +19,11 @@ namespace power
 namespace manager
 {
 
+struct json_properties
+{
+    int pollInterval;
+};
+
 /**
  * @class PSUManager
  *
@@ -40,13 +45,21 @@ class PSUManager
      *
      * @param[in] bus - D-Bus bus object
      * @param[in] e - event object
-     * @param[in] i - polling interval in milliseconds
+     * @param[in] configfile - string path to the configuration file
      */
     PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
-               std::chrono::milliseconds i) :
-        bus(bus),
-        timer(e, std::bind(&PSUManager::analyze, this), i)
+               const std::string& configfile) :
+        bus(bus)
     {
+        // Parse out the JSON properties needed to pass down to the PSU manager.
+        json_properties properties = {0};
+        getJSONProperties(configfile, properties);
+
+        using namespace sdeventplus;
+        auto pollInterval = std::chrono::milliseconds(properties.pollInterval);
+        timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+            e, std::bind(&PSUManager::analyze, this), pollInterval);
+
         // Subscribe to power state changes
         powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
         powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
@@ -56,6 +69,25 @@ class PSUManager
             [this](auto& msg) { this->powerStateChanged(msg); });
 
         initialize();
+    }
+
+    void getJSONProperties(const std::string& path, json_properties& p)
+    {
+        using namespace phosphor::logging;
+
+        nlohmann::json configFileJSON = util::loadJSONFromFile(path.c_str());
+
+        if (configFileJSON == nullptr)
+        {
+            throw std::runtime_error("Failed to load JSON configuration file");
+        }
+
+        if (!configFileJSON.contains("pollInterval"))
+        {
+            throw std::runtime_error("Missing required pollInterval property");
+        }
+
+        p.pollInterval = configFileJSON.at("pollInterval");
     }
 
     /**
@@ -98,7 +130,7 @@ class PSUManager
      */
     int run()
     {
-        return timer.get_event().loop();
+        return timer->get_event().loop();
     }
 
     /**
@@ -124,7 +156,9 @@ class PSUManager
     /**
      * The timer that runs to periodically check the power supplies.
      */
-    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> timer;
+    std::unique_ptr<
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
+        timer;
 
     /**
      * Analyze the status of each of the power supplies.
