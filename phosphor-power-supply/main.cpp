@@ -14,12 +14,35 @@
  * limitations under the License.
  */
 #include "psu_manager.hpp"
+#include "utility.hpp"
 
 #include <CLI/CLI.hpp>
+#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
 
-using namespace phosphor::power::manager;
+using namespace phosphor::power;
+
+struct json_properties
+{
+    int pollInterval;
+};
+
+void getJSONProperties(const std::string& path, json_properties& p)
+{
+    using namespace phosphor::logging;
+
+    nlohmann::json psuJSON = util::loadJSONFromFile(path.c_str());
+
+    if (psuJSON == nullptr)
+    {
+        log<level::ERR>("Failed to parse JSON configuration file");
+        p.pollInterval = 1000;
+        return;
+    }
+
+    p.pollInterval = psuJSON.at("pollInterval");
+}
 
 int main(int argc, char* argv[])
 {
@@ -33,6 +56,10 @@ int main(int argc, char* argv[])
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
 
+    // Parse out the JSON properties needed to pass down to the PSU manager.
+    json_properties properties = {0};
+    getJSONProperties(configfile, properties);
+
     auto bus = sdbusplus::bus::new_default();
     auto event = sdeventplus::Event::get_default();
 
@@ -40,9 +67,8 @@ int main(int argc, char* argv[])
     // handle both sd_events (for the timers) and dbus signals.
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    // TODO: Should get polling interval from JSON file.
-    auto pollInterval = std::chrono::milliseconds(1000);
-    PSUManager manager(bus, event, pollInterval);
+    auto pollInterval = std::chrono::milliseconds(properties.pollInterval);
+    manager::PSUManager manager(bus, event, pollInterval);
 
     return manager.run();
 }
