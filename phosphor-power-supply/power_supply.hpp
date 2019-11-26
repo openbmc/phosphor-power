@@ -1,5 +1,6 @@
 #pragma once
 #include "device.hpp"
+#include <sdbusplus/bus/match.hpp>
 
 namespace phosphor
 {
@@ -60,10 +61,48 @@ class PowerSupply : public Device
     {
     }
 
+    /**
+     * @brief Accessor function to indicate present status
+     */
+    bool isPresent()
+    {
+        return present;
+    }
+
   private:
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
 
+    /**
+     * @brief D-Bus path to use for this power supply's inventory status.
+     **/
+    std::string inventoryPath;
+
+    /** @brief True if the power supply is present. */
+    bool present = false;
+
+    /** @brief D-Bus match variable used to subscribe to Present property
+     * changes.
+     **/
+    std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
+
+    /**
+     *  @brief Updates the presence status by querying D-Bus
+     *
+     * The D-Bus inventory properties for this power supply will be read to
+     * determine if the power supply is present or not and update this
+     * objects present member variable to reflect current status.
+     **/
+    void updatePresence(sdbusplus::bus::bus& bus);
+
+    /**
+     * @brief Callback for inventory property changes
+     *
+     * Process change of Present property for power supply.
+     *
+     * @param[in]  msg - Data associated with Present change signal
+     **/
+    void inventoryChanged(sdbusplus::message::message& msg);
 };
 
 } // namespace psu

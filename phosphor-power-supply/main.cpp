@@ -23,12 +23,7 @@
 
 using namespace phosphor::power;
 
-struct json_properties
-{
-    int pollInterval;
-};
-
-void get_json_properties(const std::string& path, json_properties& p)
+void get_json_properties(const std::string& path, int& i, sys_properties& p)
 {
     using namespace phosphor::logging;
 
@@ -37,12 +32,15 @@ void get_json_properties(const std::string& path, json_properties& p)
     if (psuJSON == nullptr)
     {
         log<level::ERR>("Failed to parse JSON configuration file");
-        p.pollInterval = 1000;
+        i = 1000;
         return;
     }
 
-    p.pollInterval = psuJSON.at("pollInterval");
-    printf("pollInterval = %d\n", p.pollInterval);
+    i = psuJSON.at("pollInterval");
+    printf("pollInterval = %d\n", i);
+
+    p.minPowerSupplies = psuJSON["SystemProperties"]["MinPowerSupplies"];
+    p.maxPowerSupplies = psuJSON["SystemProperties"]["MaxPowerSupplies"];
 }
 
 int main(int argc, char* argv[])
@@ -56,8 +54,9 @@ int main(int argc, char* argv[])
     CLI11_PARSE(app, argc, argv);
 
     // Parse out the JSON properties needed to pass down to the PSU manager.
-    json_properties properties = {0};
-    get_json_properties(configfile, properties);
+    auto interval = 1000;
+    sys_properties properties;
+    get_json_properties(configfile, interval, properties);
 
     auto bus = sdbusplus::bus::new_default();
     auto event = sdeventplus::Event::get_default();
@@ -66,8 +65,8 @@ int main(int argc, char* argv[])
     // handle both sd_events (for the timers) and dbus signals.
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    auto pollInterval = std::chrono::milliseconds(properties.pollInterval);
-    manager::psuManager manager(bus, event, pollInterval);
+    auto pollInterval = std::chrono::milliseconds(interval);
+    manager::psuManager manager(bus, event, pollInterval, properties);
 
     return manager.run();
 }
