@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "power_supply.hpp"
 #include "psu_manager.hpp"
 #include "utility.hpp"
 
@@ -23,12 +24,9 @@
 
 using namespace phosphor::power;
 
-struct json_properties
-{
-    int pollInterval;
-};
-
-void get_json_properties(const std::string& path, json_properties& p)
+void get_json_properties(const std::string& path, sdbusplus::bus::bus& bus,
+                         int& i, sys_properties& p,
+                         std::vector<std::unique_ptr<PowerSupply>>& psus)
 {
     using namespace phosphor::logging;
 
@@ -37,11 +35,23 @@ void get_json_properties(const std::string& path, json_properties& p)
     if (psuJSON == nullptr)
     {
         log<level::ERR>("Failed to parse JSON configuration file");
-        p.pollInterval = 1000;
+        i = 1000;
         return;
     }
 
-    p.pollInterval = psuJSON.at("pollInterval");
+    i = psuJSON.at("pollInterval");
+
+    p.minPowerSupplies = psuJSON["SystemProperties"]["MinPowerSupplies"];
+    p.maxPowerSupplies = psuJSON["SystemProperties"]["MaxPowerSupplies"];
+
+    for (auto& jsonpsu : psuJSON["PowerSupplies"].items())
+    {
+        auto invpath = jsonpsu.value()["Inventory"].get<std::string>();
+        auto psu = std::make_unique<PowerSupply>(bus, invpath);
+        psus.emplace_back(std::move(psu));
+    }
+
+    std::cout << "psus.size() : " << psus.size() << "\n";
 }
 
 int main(int argc, char* argv[])
@@ -54,19 +64,21 @@ int main(int argc, char* argv[])
     // Read the arguments.
     CLI11_PARSE(app, argc, argv);
 
-    // Parse out the JSON properties needed to pass down to the PSU manager.
-    json_properties properties = {0};
-    get_json_properties(configfile, properties);
-
     auto bus = sdbusplus::bus::new_default();
+    // Parse out the JSON properties needed to pass down to the PSU manager.
+    auto interval = 1000;
+    sys_properties properties;
+    std::vector<std::unique_ptr<PowerSupply>> psus;
+    get_json_properties(configfile, bus, interval, properties, psus);
+
     auto event = sdeventplus::Event::get_default();
 
     // Attach the event object to the bus object so we can
     // handle both sd_events (for the timers) and dbus signals.
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    auto pollInterval = std::chrono::milliseconds(properties.pollInterval);
-    manager::PSUManager manager(bus, event, pollInterval);
+    auto pollInterval = std::chrono::milliseconds(interval);
+    manager::PSUManager manager(bus, event, pollInterval, properties, psus);
 
     return manager.run();
 }
