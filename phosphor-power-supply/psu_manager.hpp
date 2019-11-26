@@ -9,6 +9,13 @@
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
+struct sys_properties
+{
+    int pollInterval;
+    int minPowerSupplies;
+    int maxPowerSupplies;
+};
+
 using namespace phosphor::power::psu;
 using namespace phosphor::logging;
 
@@ -18,11 +25,6 @@ namespace power
 {
 namespace manager
 {
-
-struct json_properties
-{
-    int pollInterval;
-};
 
 /**
  * @class PSUManager
@@ -48,42 +50,11 @@ class PSUManager
      * @param[in] configfile - string path to the configuration file
      */
     PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
-               const std::string& configfile) :
-        bus(bus)
-    {
-        // Parse out the JSON properties needed to pass down to the PSU manager.
-        json_properties properties = {0};
-        getJSONProperties(configfile, properties);
+               const std::string& configfile);
 
-        using namespace sdeventplus;
-        auto pollInterval = std::chrono::milliseconds(properties.pollInterval);
-        timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
-            e, std::bind(&PSUManager::analyze, this), pollInterval);
-
-        // Subscribe to power state changes
-        powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
-        powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
-                                                            POWER_IFACE),
-            [this](auto& msg) { this->powerStateChanged(msg); });
-
-        initialize();
-    }
-
-    void getJSONProperties(const std::string& path, json_properties& p)
-    {
-        using namespace phosphor::logging;
-
-        nlohmann::json configFileJSON = util::loadJSONFromFile(path.c_str());
-
-        if (configFileJSON == nullptr)
-        {
-            throw std::runtime_error("Failed to load JSON configuration file");
-        }
-
-        p.pollInterval = configFileJSON.at("pollInterval");
-    }
+    void getJSONProperties(const std::string& path, sdbusplus::bus::bus& bus,
+                           sys_properties& p,
+                           std::vector<std::unique_ptr<PowerSupply>>& psus);
 
     /**
      * Initializes the manager.
@@ -138,7 +109,7 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.clearFaults();
+            psu->clearFaults();
         }
     }
 
@@ -162,7 +133,7 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.analyze();
+            psu->analyze();
         }
     }
 
@@ -197,14 +168,24 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.updateInventory();
+            psu->updateInventory();
         }
     }
 
     /**
+     * @brief Minimum number of power supplies to operate.
+     */
+    int minPSUs = 1;
+
+    /**
+     * @brief Maximum number of power supplies possible.
+     */
+    int maxPSUs = 1;
+
+    /**
      * @brief The vector for power supplies.
      */
-    std::vector<PowerSupply> psus;
+    std::vector<std::unique_ptr<PowerSupply>> psus;
 };
 
 } // namespace manager
