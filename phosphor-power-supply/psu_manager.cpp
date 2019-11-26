@@ -9,7 +9,7 @@ namespace power
 namespace manager
 {
 
-void psuManager::updatePowerState()
+void PSUManager::updatePowerState()
 {
     // When state = 1, system is powered on
     int32_t state = 0;
@@ -40,7 +40,7 @@ void psuManager::updatePowerState()
     }
 }
 
-void psuManager::powerStateChanged(sdbusplus::message::message& msg)
+void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
 {
     int32_t state = 0;
     std::string msgSensor;
@@ -58,13 +58,13 @@ void psuManager::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             powerOn = true;
-            log<level::INFO>("psuManager::powerStateChanged power is on");
+            log<level::INFO>("PSUManager::powerStateChanged power is on");
             clearFaults();
         }
         else
         {
             powerOn = false;
-            log<level::INFO>("psuManager::powerStateChanged power is off");
+            log<level::INFO>("PSUManager::powerStateChanged power is off");
         }
     }
 }

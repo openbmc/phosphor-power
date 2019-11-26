@@ -7,6 +7,12 @@
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
+struct sys_properties
+{
+    int minPowerSupplies;
+    int maxPowerSupplies;
+};
+
 using namespace phosphor::power::psu;
 using namespace phosphor::logging;
 
@@ -44,11 +50,18 @@ class PSUManager
      * @param[in] i - polling interval in milliseconds
      */
     PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
-               std::chrono::milliseconds i) :
+               std::chrono::milliseconds i, struct sys_properties& p,
+               std::vector<std::unique_ptr<PowerSupply>>& jsonpsus) :
         bus(bus),
         timer(e, std::bind(&PSUManager::analyze, this), i)
     {
+
+        minPSUs = p.minPowerSupplies;
+        minPSUs = p.maxPowerSupplies;
+        psus = std::move(jsonpsus);
+
         initialize();
+
         // Subscribe to power state changes
         powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
             bus,
@@ -88,7 +101,7 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.clearFaults();
+            psu->clearFaults();
         }
     }
 
@@ -100,7 +113,7 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.analyze();
+            psu->analyze();
         }
     }
 
@@ -151,14 +164,24 @@ class PSUManager
     {
         for (auto& psu : psus)
         {
-            psu.updateInventory();
+            psu->updateInventory();
         }
     }
 
     /**
-     * @brief The list/array/vector for power supplies.
+     * @brief Minimum number of power supplies to operate.
      */
-    std::vector<PowerSupply> psus;
+    int minPSUs = 1;
+
+    /**
+     * @brief Maximum number of power supplies possible.
+     */
+    int maxPSUs = 1;
+
+    /**
+     * @brief The vector for power supplies.
+     */
+    std::vector<std::unique_ptr<PowerSupply>> psus;
 };
 
 } // namespace manager
