@@ -7,6 +7,12 @@
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
+struct sys_properties
+{
+    int minPowerSupplies;
+    int maxPowerSupplies;
+};
+
 using namespace phosphor::power::psu;
 using namespace phosphor::logging;
 
@@ -43,11 +49,16 @@ class psuManager
      * @param[in] i - polling interval in milliseconds
      */
     psuManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
-               std::chrono::milliseconds i) :
+               std::chrono::milliseconds i, struct sys_properties& p) :
         bus(bus),
         timer(e, std::bind(&psuManager::analyze, this), i)
     {
+
+        minPSUs = p.minPowerSupplies;
+        minPSUs = p.maxPowerSupplies;
+
         initialize();
+
         // Subscribe to power state changes
         powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
             bus,
@@ -154,6 +165,16 @@ class psuManager
             psu->updateInventory();
         }
     }
+
+    /**
+     * @brief Minimum number of power supplies to operate.
+     */
+    int minPSUs = 1;
+
+    /**
+     * @brief Maximum number of power supplies possible.
+     */
+    int maxPSUs = 1;
 
     /**
      * @brief The list/array/vector for power supplies.
