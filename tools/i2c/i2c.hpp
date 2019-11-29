@@ -79,8 +79,9 @@ class I2CDevice : public I2CInterface
     /** @copydoc I2CInterface::read(uint8_t,uint16_t&) */
     void read(uint8_t addr, uint16_t& data) override;
 
-    /** @copydoc I2CInterface::read(uint8_t,uint8_t&,uint8_t*) */
-    void read(uint8_t addr, uint8_t& size, uint8_t* data) override;
+    /** @copydoc I2CInterface::read(uint8_t,uint8_t&,uint8_t*,Mode) */
+    void read(uint8_t addr, uint8_t& size, uint8_t* data,
+              Mode mode = Mode::SMBUS) override;
 
     /** @copydoc I2CInterface::write(uint8_t) */
     void write(uint8_t data) override;
@@ -91,8 +92,9 @@ class I2CDevice : public I2CInterface
     /** @copydoc I2CInterface::write(uint8_t,uint16_t) */
     void write(uint8_t addr, uint16_t data) override;
 
-    /** @copydoc I2CInterface::write(uint8_t,uint8_t,const uint8_t*) */
-    void write(uint8_t addr, uint8_t size, const uint8_t* data) override;
+    /** @copydoc I2CInterface::write(uint8_t,uint8_t,const uint8_t*,Mode) */
+    void write(uint8_t addr, uint8_t size, const uint8_t* data,
+               Mode mode = Mode::SMBUS) override;
 
     /** @brief Create an I2CInterface instance
      *

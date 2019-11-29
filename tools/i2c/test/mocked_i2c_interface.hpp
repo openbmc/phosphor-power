@@ -15,13 +15,15 @@ class MockedI2CInterface : public I2CInterface
     MOCK_METHOD(void, read, (uint8_t & data), (override));
     MOCK_METHOD(void, read, (uint8_t addr, uint8_t& data), (override));
     MOCK_METHOD(void, read, (uint8_t addr, uint16_t& data), (override));
-    MOCK_METHOD(void, read, (uint8_t addr, uint8_t& size, uint8_t* data),
+    MOCK_METHOD(void, read,
+                (uint8_t addr, uint8_t& size, uint8_t* data, Mode mode),
                 (override));
 
     MOCK_METHOD(void, write, (uint8_t data), (override));
     MOCK_METHOD(void, write, (uint8_t addr, uint8_t data), (override));
     MOCK_METHOD(void, write, (uint8_t addr, uint16_t data), (override));
-    MOCK_METHOD(void, write, (uint8_t addr, uint8_t size, const uint8_t* data),
+    MOCK_METHOD(void, write,
+                (uint8_t addr, uint8_t size, const uint8_t* data, Mode mode),
                 (override));
 };
 
