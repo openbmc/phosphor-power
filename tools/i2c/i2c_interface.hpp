@@ -47,6 +47,13 @@ class I2CInterface
   public:
     virtual ~I2CInterface() = default;
 
+    /** @brief The block transaction mode */
+    enum class Mode
+    {
+        SMBUS,
+        I2C,
+    };
+
     /** @brief Read byte data from i2c
      *
      * @param[out] data - The data read from the i2c device
@@ -81,10 +88,12 @@ class I2CInterface
      *                    the buffer shall be big enough to hold the data
      *                    returned by the device. SMBus allows at most 32
      *                    bytes.
+     * @param[in] mode - The block read mode, either SMBus or I2C.
      *
      * @throw I2CException on error
      */
-    virtual void read(uint8_t addr, uint8_t& size, uint8_t* data) = 0;
+    virtual void read(uint8_t addr, uint8_t& size, uint8_t* data,
+                      Mode mode = Mode::SMBUS) = 0;
 
     /** @brief Write byte data to i2c
      *
@@ -118,10 +127,12 @@ class I2CInterface
      * @param[in] size - The size of data to write, SMBus allows at most 32
      *                   bytes
      * @param[in] data - The data to write to the i2c device
+     * @param[in] mode - The block write mode, either SMBus or I2C.
      *
      * @throw I2CException on error
      */
-    virtual void write(uint8_t addr, uint8_t size, const uint8_t* data) = 0;
+    virtual void write(uint8_t addr, uint8_t size, const uint8_t* data,
+                       Mode mode = Mode::SMBUS) = 0;
 };
 
 /** @brief Create an I2CInterface instance

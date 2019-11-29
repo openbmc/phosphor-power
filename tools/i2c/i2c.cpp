@@ -164,11 +164,25 @@ void I2CDevice::read(uint8_t addr, uint16_t& data)
     data = static_cast<uint16_t>(ret);
 }
 
-void I2CDevice::read(uint8_t addr, uint8_t& size, uint8_t* data)
+void I2CDevice::read(uint8_t addr, uint8_t& size, uint8_t* data, Mode mode)
 {
     checkReadFuncs(I2C_SMBUS_BLOCK_DATA);
 
-    int ret = i2c_smbus_read_block_data(fd, addr, data);
+    int ret;
+    switch (mode)
+    {
+        case Mode::SMBUS:
+            ret = i2c_smbus_read_block_data(fd, addr, data);
+            break;
+        case Mode::I2C:
+            ret = i2c_smbus_read_i2c_block_data(fd, addr, size, data);
+            if (ret != size)
+            {
+                throw I2CException("Failed to read i2c block data", busStr,
+                                   devAddr, errno);
+            }
+            break;
+    }
     if (ret < 0)
     {
         throw I2CException("Failed to read block data", busStr, devAddr, errno);
@@ -206,11 +220,24 @@ void I2CDevice::write(uint8_t addr, uint16_t data)
     }
 }
 
-void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data)
+void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data,
+                      Mode mode)
 {
     checkWriteFuncs(I2C_SMBUS_BLOCK_DATA);
+    using i2c_write_func = int32_t (*)(int, uint8_t, uint8_t, const uint8_t*);
+    i2c_write_func func = nullptr;
 
-    if (i2c_smbus_write_block_data(fd, addr, size, data) < 0)
+    switch (mode)
+    {
+        case Mode::SMBUS:
+            func = i2c_smbus_write_block_data;
+            break;
+        case Mode::I2C:
+            func = i2c_smbus_write_i2c_block_data;
+            break;
+    }
+
+    if (func(fd, addr, size, data) < 0)
     {
         throw I2CException("Failed to write block data", busStr, devAddr,
                            errno);
