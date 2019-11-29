@@ -47,6 +47,13 @@ class I2CInterface
   public:
     virtual ~I2CInterface() = default;
 
+    /** @brief The block transaction mode */
+    enum class Mode
+    {
+        SMBUS,
+        I2C,
+    };
+
     /** @brief Read byte data from i2c
      *
      * @param[out] data - The data read from the i2c device
@@ -76,15 +83,22 @@ class I2CInterface
     /** @brief Read block data from i2c
      *
      * @param[in] addr - The register address of the i2c device
-     * @param[out] size - The size of data read from i2c device
+     * @param[in,out] size - The out parameter to indicate the size of data read
+     *                       from i2c device; when mode is I2C, it is also the
+     *                       input parameter to indicate how many bytes to read
      * @param[out] data - The pointer to buffer to read from the i2c device,
      *                    the buffer shall be big enough to hold the data
      *                    returned by the device. SMBus allows at most 32
      *                    bytes.
+     * @param[in] mode - The block read mode, either SMBus or I2C.
+     *                   Internally, it invokes functions from libi2c:
+     *                    * For SMBus: i2c_smbus_read_block_data()
+     *                    * For I2C: i2c_smbus_read_i2c_block_data()
      *
      * @throw I2CException on error
      */
-    virtual void read(uint8_t addr, uint8_t& size, uint8_t* data) = 0;
+    virtual void read(uint8_t addr, uint8_t& size, uint8_t* data,
+                      Mode mode = Mode::SMBUS) = 0;
 
     /** @brief Write byte data to i2c
      *
@@ -118,10 +132,15 @@ class I2CInterface
      * @param[in] size - The size of data to write, SMBus allows at most 32
      *                   bytes
      * @param[in] data - The data to write to the i2c device
+     * @param[in] mode - The block write mode, either SMBus or I2C.
+     *                   Internally, it invokes functions from libi2c:
+     *                    * For SMBus: i2c_smbus_write_block_data()
+     *                    * For I2C: i2c_smbus_write_i2c_block_data()
      *
      * @throw I2CException on error
      */
-    virtual void write(uint8_t addr, uint8_t size, const uint8_t* data) = 0;
+    virtual void write(uint8_t addr, uint8_t size, const uint8_t* data,
+                       Mode mode = Mode::SMBUS) = 0;
 };
 
 /** @brief Create an I2CInterface instance
