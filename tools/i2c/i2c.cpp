@@ -17,16 +17,24 @@ extern "C" {
 namespace i2c
 {
 
-void I2CDevice::checkReadFuncs(int type)
+unsigned long I2CDevice::getFuncs()
 {
-    unsigned long funcs;
-
-    /* Check adapter functionality */
-    if (ioctl(fd, I2C_FUNCS, &funcs) < 0)
+    // If functionality has not been cached
+    if (cachedFuncs == NO_FUNCS)
     {
-        throw I2CException("Failed to get funcs", busStr, devAddr, errno);
+        // Get functionality from adapter
+        if (ioctl(fd, I2C_FUNCS, &cachedFuncs) < 0)
+        {
+            throw I2CException("Failed to get funcs", busStr, devAddr, errno);
+        }
     }
 
+    return cachedFuncs;
+}
+
+void I2CDevice::checkReadFuncs(int type)
+{
+    unsigned long funcs = getFuncs();
     switch (type)
     {
         case I2C_SMBUS_BYTE:
@@ -73,14 +81,7 @@ void I2CDevice::checkReadFuncs(int type)
 
 void I2CDevice::checkWriteFuncs(int type)
 {
-    unsigned long funcs;
-
-    /* Check adapter functionality */
-    if (ioctl(fd, I2C_FUNCS, &funcs) < 0)
-    {
-        throw I2CException("Failed to get funcs", busStr, devAddr, errno);
-    }
-
+    unsigned long funcs = getFuncs();
     switch (type)
     {
         case I2C_SMBUS_BYTE:
@@ -154,6 +155,7 @@ void I2CDevice::close()
         throw I2CException("Failed to close", busStr, devAddr, errno);
     }
     fd = INVALID_FD;
+    cachedFuncs = NO_FUNCS;
 }
 
 void I2CDevice::read(uint8_t& data)

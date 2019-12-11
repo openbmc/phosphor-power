@@ -23,7 +23,7 @@ class I2CDevice : public I2CInterface
     explicit I2CDevice(uint8_t busId, uint8_t devAddr,
                        InitialState initialState = InitialState::OPEN) :
         busId(busId),
-        devAddr(devAddr), fd(INVALID_FD)
+        devAddr(devAddr)
     {
         busStr = "/dev/i2c-" + std::to_string(busId);
         if (initialState == InitialState::OPEN)
@@ -35,6 +35,9 @@ class I2CDevice : public I2CInterface
     /** @brief Invalid file descriptor */
     static constexpr int INVALID_FD = -1;
 
+    /** @brief Empty adapter functionality value with no bit flags set */
+    static constexpr unsigned long NO_FUNCS = 0;
+
     /** @brief The I2C bus ID */
     uint8_t busId;
 
@@ -42,10 +45,13 @@ class I2CDevice : public I2CInterface
     uint8_t devAddr;
 
     /** @brief The file descriptor of the opened i2c device */
-    int fd;
+    int fd = INVALID_FD;
 
     /** @brief The i2c bus path in /dev */
     std::string busStr;
+
+    /** @brief Cached I2C adapter functionality value */
+    unsigned long cachedFuncs = NO_FUNCS;
 
     /** @brief Check that device interface is open
      *
@@ -70,6 +76,16 @@ class I2CDevice : public I2CInterface
         {
         }
     }
+
+    /** @brief Get I2C adapter functionality
+     *
+     * Caches the adapter functionality value since it shouldn't change after
+     * opening the device.
+     *
+     * @throw I2CException on error
+     * @return Adapter functionality value
+     */
+    unsigned long getFuncs();
 
     /** @brief Check i2c adapter read functionality
      *
