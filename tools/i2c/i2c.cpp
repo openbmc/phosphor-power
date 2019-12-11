@@ -17,25 +17,6 @@ extern "C" {
 namespace i2c
 {
 
-void I2CDevice::open()
-{
-    fd = ::open(busStr.c_str(), O_RDWR);
-    if (fd == -1)
-    {
-        throw I2CException("Failed to open", busStr, devAddr, errno);
-    }
-
-    if (ioctl(fd, I2C_SLAVE, devAddr) < 0)
-    {
-        throw I2CException("Failed to set I2C_SLAVE", busStr, devAddr, errno);
-    }
-}
-
-void I2CDevice::close()
-{
-    ::close(fd);
-}
-
 void I2CDevice::checkReadFuncs(int type)
 {
     unsigned long funcs;
@@ -143,8 +124,41 @@ void I2CDevice::checkWriteFuncs(int type)
     }
 }
 
+void I2CDevice::open()
+{
+    if (isOpen())
+    {
+        throw I2CException("Device already open", busStr, devAddr);
+    }
+
+    fd = ::open(busStr.c_str(), O_RDWR);
+    if (fd == -1)
+    {
+        throw I2CException("Failed to open", busStr, devAddr, errno);
+    }
+
+    if (ioctl(fd, I2C_SLAVE, devAddr) < 0)
+    {
+        // Close device since setting slave address failed
+        closeWithoutException();
+
+        throw I2CException("Failed to set I2C_SLAVE", busStr, devAddr, errno);
+    }
+}
+
+void I2CDevice::close()
+{
+    checkIsOpen();
+    if (::close(fd) == -1)
+    {
+        throw I2CException("Failed to close", busStr, devAddr, errno);
+    }
+    fd = INVALID_FD;
+}
+
 void I2CDevice::read(uint8_t& data)
 {
+    checkIsOpen();
     checkReadFuncs(I2C_SMBUS_BYTE);
 
     int ret = i2c_smbus_read_byte(fd);
@@ -157,6 +171,7 @@ void I2CDevice::read(uint8_t& data)
 
 void I2CDevice::read(uint8_t addr, uint8_t& data)
 {
+    checkIsOpen();
     checkReadFuncs(I2C_SMBUS_BYTE_DATA);
 
     int ret = i2c_smbus_read_byte_data(fd, addr);
@@ -169,6 +184,7 @@ void I2CDevice::read(uint8_t addr, uint8_t& data)
 
 void I2CDevice::read(uint8_t addr, uint16_t& data)
 {
+    checkIsOpen();
     checkReadFuncs(I2C_SMBUS_WORD_DATA);
     int ret = i2c_smbus_read_word_data(fd, addr);
     if (ret < 0)
@@ -180,6 +196,7 @@ void I2CDevice::read(uint8_t addr, uint16_t& data)
 
 void I2CDevice::read(uint8_t addr, uint8_t& size, uint8_t* data, Mode mode)
 {
+    checkIsOpen();
     int ret;
     switch (mode)
     {
@@ -206,6 +223,7 @@ void I2CDevice::read(uint8_t addr, uint8_t& size, uint8_t* data, Mode mode)
 
 void I2CDevice::write(uint8_t data)
 {
+    checkIsOpen();
     checkWriteFuncs(I2C_SMBUS_BYTE);
 
     if (i2c_smbus_write_byte(fd, data) < 0)
@@ -216,6 +234,7 @@ void I2CDevice::write(uint8_t data)
 
 void I2CDevice::write(uint8_t addr, uint8_t data)
 {
+    checkIsOpen();
     checkWriteFuncs(I2C_SMBUS_BYTE_DATA);
 
     if (i2c_smbus_write_byte_data(fd, addr, data) < 0)
@@ -226,6 +245,7 @@ void I2CDevice::write(uint8_t addr, uint8_t data)
 
 void I2CDevice::write(uint8_t addr, uint16_t data)
 {
+    checkIsOpen();
     checkWriteFuncs(I2C_SMBUS_WORD_DATA);
 
     if (i2c_smbus_write_word_data(fd, addr, data) < 0)
@@ -237,6 +257,7 @@ void I2CDevice::write(uint8_t addr, uint16_t data)
 void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data,
                       Mode mode)
 {
+    checkIsOpen();
     int ret;
     switch (mode)
     {
@@ -256,15 +277,17 @@ void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data,
     }
 }
 
-std::unique_ptr<I2CInterface> I2CDevice::create(uint8_t busId, uint8_t devAddr)
+std::unique_ptr<I2CInterface> I2CDevice::create(uint8_t busId, uint8_t devAddr,
+                                                InitialState initialState)
 {
-    std::unique_ptr<I2CDevice> dev(new I2CDevice(busId, devAddr));
+    std::unique_ptr<I2CDevice> dev(new I2CDevice(busId, devAddr, initialState));
     return dev;
 }
 
-std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr)
+std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr,
+                                     I2CInterface::InitialState initialState)
 {
-    return I2CDevice::create(busId, devAddr);
+    return I2CDevice::create(busId, devAddr, initialState);
 }
 
 } // namespace i2c

@@ -45,7 +45,18 @@ class I2CException : public std::exception
 class I2CInterface
 {
   public:
+    /** @brief Destructor
+     *
+     * Closes the I2C interface to the device if necessary.
+     */
     virtual ~I2CInterface() = default;
+
+    /** @brief Initial state when an I2CInterface object is created */
+    enum class InitialState
+    {
+        OPEN,
+        CLOSED
+    };
 
     /** @brief The block transaction mode */
     enum class Mode
@@ -53,6 +64,33 @@ class I2CInterface
         SMBUS,
         I2C,
     };
+
+    /** @brief Open the I2C interface to the device
+     *
+     * Throws an I2CException if the interface is already open.  See isOpen().
+     *
+     * @throw I2CException on error
+     */
+    virtual void open() = 0;
+
+    /** @brief Indicates whether the I2C interface to the device is open
+     *
+     * @return true if interface is open, false otherwise
+     */
+    virtual bool isOpen() const = 0;
+
+    /** @brief Close the I2C interface to the device
+     *
+     * The interface can later be re-opened by calling open().
+     *
+     * Note that the destructor will automatically close the I2C interface if
+     * necessary.
+     *
+     * Throws an I2CException if the interface is not open.  See isOpen().
+     *
+     * @throw I2CException on error
+     */
+    virtual void close() = 0;
 
     /** @brief Read byte data from i2c
      *
@@ -145,11 +183,16 @@ class I2CInterface
 
 /** @brief Create an I2CInterface instance
  *
+ * Automatically opens the I2CInterface if initialState is OPEN.
+ *
  * @param[in] busId - The i2c bus ID
  * @param[in] devAddr - The device address of the i2c
+ * @param[in] initialState - Initial state of the I2CInterface object
  *
  * @return The unique_ptr holding the I2CInterface
  */
-std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr);
+std::unique_ptr<I2CInterface> create(
+    uint8_t busId, uint8_t devAddr,
+    I2CInterface::InitialState initialState = I2CInterface::InitialState::OPEN);
 
 } // namespace i2c

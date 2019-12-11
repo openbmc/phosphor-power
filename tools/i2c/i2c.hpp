@@ -14,21 +14,26 @@ class I2CDevice : public I2CInterface
      *
      * Construct I2CDevice object from the bus id and device address
      *
+     * Automatically opens the I2CDevice if initialState is OPEN.
+     *
      * @param[in] busId - The i2c bus ID
      * @param[in] devAddr - The device address of the I2C device
+     * @param[in] initialState - Initial state of the I2CDevice object
      */
-    explicit I2CDevice(uint8_t busId, uint8_t devAddr) :
-        busId(busId), devAddr(devAddr)
+    explicit I2CDevice(uint8_t busId, uint8_t devAddr,
+                       InitialState initialState = InitialState::OPEN) :
+        busId(busId),
+        devAddr(devAddr), fd(INVALID_FD)
     {
         busStr = "/dev/i2c-" + std::to_string(busId);
-        open();
+        if (initialState == InitialState::OPEN)
+        {
+            open();
+        }
     }
 
-    /** @brief Open the i2c device */
-    void open();
-
-    /** @brief Close the i2c device */
-    void close();
+    /** @brief Invalid file descriptor */
+    static constexpr int INVALID_FD = -1;
 
     /** @brief The I2C bus ID */
     uint8_t busId;
@@ -41,6 +46,30 @@ class I2CDevice : public I2CInterface
 
     /** @brief The i2c bus path in /dev */
     std::string busStr;
+
+    /** @brief Check that device interface is open
+     *
+     * @throw I2CException if device is not open
+     */
+    void checkIsOpen() const
+    {
+        if (!isOpen())
+        {
+            throw I2CException("Device not open", busStr, devAddr);
+        }
+    }
+
+    /** @brief Close device without throwing an exception if an error occurs */
+    void closeWithoutException() noexcept
+    {
+        try
+        {
+            close();
+        }
+        catch (...)
+        {
+        }
+    }
 
     /** @brief Check i2c adapter read functionality
      *
@@ -65,10 +94,27 @@ class I2CDevice : public I2CInterface
     void checkWriteFuncs(int type);
 
   public:
+    /** @copydoc I2CInterface::~I2CInterface() */
     ~I2CDevice()
     {
-        close();
+        if (isOpen())
+        {
+            // Note: destructors must not throw exceptions
+            closeWithoutException();
+        }
     }
+
+    /** @copydoc I2CInterface::open() */
+    void open();
+
+    /** @copydoc I2CInterface::isOpen() */
+    bool isOpen() const
+    {
+        return (fd != INVALID_FD);
+    }
+
+    /** @copydoc I2CInterface::close() */
+    void close();
 
     /** @copydoc I2CInterface::read(uint8_t&) */
     void read(uint8_t& data) override;
@@ -98,12 +144,17 @@ class I2CDevice : public I2CInterface
 
     /** @brief Create an I2CInterface instance
      *
+     * Automatically opens the I2CInterface if initialState is OPEN.
+     *
      * @param[in] busId - The i2c bus ID
      * @param[in] devAddr - The device address of the i2c
+     * @param[in] initialState - Initial state of the I2CInterface object
      *
      * @return The unique_ptr holding the I2CInterface
      */
-    static std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr);
+    static std::unique_ptr<I2CInterface>
+        create(uint8_t busId, uint8_t devAddr,
+               InitialState initialState = InitialState::OPEN);
 };
 
 } // namespace i2c
