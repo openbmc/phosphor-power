@@ -23,7 +23,7 @@ class I2CDevice : public I2CInterface
     explicit I2CDevice(uint8_t busId, uint8_t devAddr,
                        InitialState initialState = InitialState::OPEN) :
         busId(busId),
-        devAddr(devAddr), fd(INVALID_FD)
+        devAddr(devAddr)
     {
         busStr = "/dev/i2c-" + std::to_string(busId);
         if (initialState == InitialState::OPEN)
@@ -35,6 +35,9 @@ class I2CDevice : public I2CInterface
     /** @brief Invalid file descriptor */
     static constexpr int INVALID_FD = -1;
 
+    /** @brief Invalid adapter functionality */
+    static constexpr unsigned long INVALID_FUNCS = 0;
+
     /** @brief The I2C bus ID */
     uint8_t busId;
 
@@ -42,10 +45,13 @@ class I2CDevice : public I2CInterface
     uint8_t devAddr;
 
     /** @brief The file descriptor of the opened i2c device */
-    int fd;
+    int fd = INVALID_FD;
 
     /** @brief The i2c bus path in /dev */
     std::string busStr;
+
+    /** @brief The I2C adapter functionality */
+    unsigned long funcs = INVALID_FUNCS;
 
     /** @brief Check that device interface is open
      *
@@ -70,6 +76,16 @@ class I2CDevice : public I2CInterface
         {
         }
     }
+
+    /** @brief Cache I2C adapter functionality in the funcs data member
+     *
+     * Checks to see if the I2C adapter functionality has been cached in the
+     * funcs data member.  If not, it gets the I2C adapter functionality and
+     * stores it in the funcs data member.
+     *
+     * @throw I2CException on error
+     */
+    void cacheFuncs();
 
     /** @brief Check i2c adapter read functionality
      *
