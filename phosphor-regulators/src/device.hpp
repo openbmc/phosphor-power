@@ -15,7 +15,11 @@
  */
 #pragma once
 
+#include "i2c_interface.hpp"
+
+#include <memory>
 #include <string>
+#include <utility>
 
 namespace phosphor::power::regulators
 {
@@ -40,8 +44,16 @@ class Device
      * Constructor.
      *
      * @param id unique device ID
+     * @param isRegulator indicates whether this device is a voltage regulator
+     * @param fru Field-Replaceable Unit (FRU) for this device
+     * @param i2cInterface I2C interface to this device
      */
-    explicit Device(const std::string& id) : id{id}
+    explicit Device(const std::string& id, bool isRegulator,
+                    const std::string& fru,
+                    std::unique_ptr<i2c::I2CInterface> i2cInterface) :
+        id{id},
+        isRegulatorDevice{isRegulator}, fru{fru}, i2cInterface{
+                                                      std::move(i2cInterface)}
     {
     }
 
@@ -55,11 +67,62 @@ class Device
         return id;
     }
 
+    /**
+     * Returns whether this device is a voltage regulator.
+     *
+     * @return true if device is a voltage regulator, false otherwise
+     */
+    bool isRegulator() const
+    {
+        return isRegulatorDevice;
+    }
+
+    /**
+     * Returns the Field-Replaceable Unit (FRU) for this device.
+     *
+     * Returns the D-Bus inventory path of the FRU.  If the device itself is not
+     * a FRU, returns the FRU that contains the device.
+     *
+     * @return FRU for this device
+     */
+    const std::string& getFRU() const
+    {
+        return fru;
+    }
+
+    /**
+     * Gets the I2C interface to this device.
+     *
+     * @return I2C interface to device
+     */
+    i2c::I2CInterface& getI2CInterface()
+    {
+        return *i2cInterface;
+    }
+
   private:
     /**
      * Unique ID of this device.
      */
     const std::string id{};
+
+    /**
+     * Indicates whether this device is a voltage regulator.
+     */
+    const bool isRegulatorDevice{false};
+
+    /**
+     * Field-Replaceable Unit (FRU) for this device.
+     *
+     * Set to the D-Bus inventory path of the FRU.  If the device itself is not
+     * a FRU, set to the FRU that contains the device.
+     */
+    const std::string fru{};
+
+    /**
+     * I2C interface to this device.
+     */
+    std::unique_ptr<i2c::I2CInterface> i2cInterface{};
 };
 
 } // namespace phosphor::power::regulators

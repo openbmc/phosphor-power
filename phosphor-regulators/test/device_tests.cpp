@@ -14,19 +14,66 @@
  * limitations under the License.
  */
 #include "device.hpp"
+#include "i2c_interface.hpp"
+#include "mocked_i2c_interface.hpp"
+
+#include <memory>
+#include <utility>
 
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
 
+/**
+ * Create an I2CInterface object with hard-coded bus and address values.
+ *
+ * @return I2CInterface object wrapped in a unique_ptr
+ */
+std::unique_ptr<i2c::I2CInterface> createI2CInterface()
+{
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
+    return i2cInterface;
+}
+
 TEST(DeviceTests, Constructor)
 {
-    Device device("vdd_vrm2");
-    EXPECT_EQ(device.getID(), "vdd_vrm2");
+    std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+    i2c::I2CInterface* i2cInterfacePtr = i2cInterface.get();
+    Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                  std::move(i2cInterface)};
+    EXPECT_EQ(device.getID(), "vdd_reg");
+    EXPECT_EQ(device.isRegulator(), true);
+    EXPECT_EQ(device.getFRU(), "/system/chassis/motherboard/reg2");
+    EXPECT_EQ(&(device.getI2CInterface()), i2cInterfacePtr);
 }
 
 TEST(DeviceTests, GetID)
 {
-    Device device("vio_vrm");
-    EXPECT_EQ(device.getID(), "vio_vrm");
+    Device device{"vdd_reg", false, "/system/chassis/motherboard/reg2",
+                  std::move(createI2CInterface())};
+    EXPECT_EQ(device.getID(), "vdd_reg");
+}
+
+TEST(DeviceTests, IsRegulator)
+{
+    Device device{"vdd_reg", false, "/system/chassis/motherboard/reg2",
+                  std::move(createI2CInterface())};
+    EXPECT_EQ(device.isRegulator(), false);
+}
+
+TEST(DeviceTests, GetFRU)
+{
+    Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                  std::move(createI2CInterface())};
+    EXPECT_EQ(device.getFRU(), "/system/chassis/motherboard/reg2");
+}
+
+TEST(DeviceTests, GetI2CInterface)
+{
+    std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+    i2c::I2CInterface* i2cInterfacePtr = i2cInterface.get();
+    Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                  std::move(i2cInterface)};
+    EXPECT_EQ(&(device.getI2CInterface()), i2cInterfacePtr);
 }

@@ -26,11 +26,16 @@ test('phosphor-regulators-tests',
                     gmock,
                     gtest,
                 ],
-                link_with: phosphor_regulators_library,
+                link_with: [
+                    phosphor_regulators_library,
+                    libi2c_dev_mock
+                ],
                 implicit_include_directories: false,
                 include_directories: [
                     phosphor_regulators_include_directories,
-                    phosphor_regulators_tests_include_directories
+                    phosphor_regulators_tests_include_directories,
+                    libi2c_inc,
+                    libi2c_dev_mock_inc
                 ]
      )
 )
