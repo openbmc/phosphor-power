@@ -15,13 +15,16 @@
  */
 #include "action_environment.hpp"
 #include "device.hpp"
+#include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mocked_i2c_interface.hpp"
 #include "rule.hpp"
 
 #include <cstddef> // for size_t
 #include <exception>
 #include <memory>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -32,7 +35,12 @@ TEST(ActionEnvironmentTests, Constructor)
 {
     // Create IDMap
     IDMap idMap{};
-    Device reg1{"regulator1"};
+
+    // Create Device and add to IDMap
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
+    Device reg1{"regulator1", true, "/system/chassis/motherboard/reg1",
+                std::move(i2cInterface)};
     idMap.addDevice(reg1);
 
     // Verify object state after constructor
@@ -71,7 +79,12 @@ TEST(ActionEnvironmentTests, GetDevice)
 {
     // Create IDMap
     IDMap idMap{};
-    Device reg1{"regulator1"};
+
+    // Create Device and add to IDMap
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
+    Device reg1{"regulator1", true, "/system/chassis/motherboard/reg1",
+                std::move(i2cInterface)};
     idMap.addDevice(reg1);
 
     ActionEnvironment env{idMap, "regulator1"};
@@ -250,10 +263,7 @@ TEST(ActionEnvironmentTests, IncrementRuleDepth)
 TEST(ActionEnvironmentTests, SetDeviceID)
 {
     IDMap idMap{};
-    Device reg1{"regulator1"};
-    idMap.addDevice(reg1);
     ActionEnvironment env{idMap, "regulator1"};
-
     EXPECT_EQ(env.getDeviceID(), "regulator1");
     env.setDeviceID("regulator2");
     EXPECT_EQ(env.getDeviceID(), "regulator2");

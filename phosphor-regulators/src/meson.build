@@ -13,7 +13,10 @@ phosphor_regulators_library = static_library(
     'phosphor-regulators',
     phosphor_regulators_library_source_files,
     implicit_include_directories: false,
-    include_directories: phosphor_regulators_include_directories
+    include_directories: [
+        phosphor_regulators_include_directories,
+        libi2c_inc
+    ]
 )
 
 phosphor_regulators = executable(

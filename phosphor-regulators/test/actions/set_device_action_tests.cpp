@@ -15,10 +15,14 @@
  */
 #include "action_environment.hpp"
 #include "device.hpp"
+#include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mocked_i2c_interface.hpp"
 #include "set_device_action.hpp"
 
 #include <exception>
+#include <memory>
+#include <utility>
 
 #include <gtest/gtest.h>
 
@@ -34,9 +38,19 @@ TEST(SetDeviceActionTests, Execute)
 {
     // Create IDMap
     IDMap idMap{};
-    Device reg1{"regulator1"};
+
+    // Create Device regulator1 and add to IDMap
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
+    Device reg1{"regulator1", true, "/system/chassis/motherboard/reg1",
+                std::move(i2cInterface)};
     idMap.addDevice(reg1);
-    Device reg2{"regulator2"};
+
+    // Create Device regulator2 and add to IDMap
+    i2cInterface =
+        i2c::create(1, 0x72, i2c::I2CInterface::InitialState::CLOSED);
+    Device reg2{"regulator2", true, "/system/chassis/motherboard/reg2",
+                std::move(i2cInterface)};
     idMap.addDevice(reg2);
 
     // Create ActionEnvironment

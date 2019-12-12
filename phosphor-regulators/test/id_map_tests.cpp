@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 #include "device.hpp"
+#include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mocked_i2c_interface.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
 
@@ -22,6 +24,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -33,8 +36,11 @@ TEST(IDMapTests, AddDevice)
     IDMap idMap{};
 
     // Create device
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
     std::string id{"vio_reg"};
-    Device device{id};
+    Device device{id, true, "/system/chassis/motherboard/vio_reg",
+                  std::move(i2cInterface)};
 
     // Verify device is not initially in map
     EXPECT_THROW(idMap.getDevice(id), std::invalid_argument);
@@ -123,9 +129,14 @@ TEST(IDMapTests, GetDevice)
 {
     IDMap idMap{};
 
-    // Add a device to the map
+    // Create device
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
     std::string id{"vio_reg"};
-    Device device{id};
+    Device device{id, true, "/system/chassis/motherboard/vio_reg",
+                  std::move(i2cInterface)};
+
+    // Add a device to the map
     idMap.addDevice(device);
 
     // Test where ID found in map
