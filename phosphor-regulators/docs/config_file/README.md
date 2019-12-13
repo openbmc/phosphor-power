@@ -110,7 +110,7 @@ Example:
 ## Validation
 
 After creating or modifying a config file, you need to validate it using the
-tool [validate-regulators-config](../../tools/validate-regulators-config).
+tool [validate-regulators-config.py](../../tools/validate-regulators-config.py).
 
 The validation tool checks the config file for errors, such as:
 * Invalid JSON syntax (like a missing brace)
@@ -121,11 +121,11 @@ The validation tool checks the config file for errors, such as:
 
 The tool requires two input files:
 * config file to validate
-* [config_schema.json](../../tools/config_schema.json)
+* [config_schema.json](../../schema/config_schema.json)
 
 The tool has the following command line syntax:
 ```
-validate-regulators-config -c <config file> -s config_schema.json
+validate-regulators-config.py -c <config file> -s config_schema.json
 ```
 where `<config file>` is the name of the config file to validate.
 
