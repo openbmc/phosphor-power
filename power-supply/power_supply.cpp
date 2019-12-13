@@ -24,11 +24,12 @@
 #include "types.hpp"
 #include "utility.hpp"
 
-#include <functional>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Software/Version/server.hpp>
+
+#include <functional>
 
 namespace phosphor
 {

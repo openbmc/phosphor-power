@@ -1,6 +1,7 @@
 #pragma once
-#include <functional>
 #include <org/open_power/Sensor/Aggregation/History/Maximum/server.hpp>
+
+#include <functional>
 
 namespace phosphor
 {

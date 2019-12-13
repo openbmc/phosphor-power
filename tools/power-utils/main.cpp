@@ -17,8 +17,9 @@
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
-#include <cassert>
 #include <phosphor-logging/log.hpp>
+
+#include <cassert>
 
 using namespace phosphor::logging;
 
