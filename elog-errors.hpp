@@ -5,6 +5,7 @@
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/exception.hpp>
+
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -1033,7 +1034,6 @@ namespace Fault
 {
 namespace _Shutdown
 {
-
 } // namespace _Shutdown
 
 struct Shutdown
@@ -1069,7 +1069,6 @@ namespace Fault
 {
 namespace _PowerOnFailure
 {
-
 } // namespace _PowerOnFailure
 
 struct PowerOnFailure

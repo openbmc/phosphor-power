@@ -18,10 +18,11 @@
 #include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
 
-#include <chrono>
-#include <iostream>
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
+
+#include <chrono>
+#include <iostream>
 
 using namespace phosphor::power;
 using namespace phosphor::logging;

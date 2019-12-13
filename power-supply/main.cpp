@@ -19,9 +19,10 @@
 #include "device_monitor.hpp"
 #include "power_supply.hpp"
 
-#include <iostream>
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
+
+#include <iostream>
 
 using namespace phosphor::power;
 using namespace phosphor::logging;
