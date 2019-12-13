@@ -43,8 +43,7 @@ class DeviceMonitor
                   std::chrono::milliseconds i) :
         device(std::move(d)),
         timer(e, std::bind(&DeviceMonitor::analyze, this), i)
-    {
-    }
+    {}
 
     /**
      * Starts the timer to monitor the device on an interval.

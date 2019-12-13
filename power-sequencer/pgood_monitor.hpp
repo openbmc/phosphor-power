@@ -47,8 +47,7 @@ class PGOODMonitor : public DeviceMonitor
                  std::chrono::milliseconds& t) :
         DeviceMonitor(std::move(d), e, t),
         bus(b)
-    {
-    }
+    {}
 
     /**
      * Analyzes the power sequencer for fails and then

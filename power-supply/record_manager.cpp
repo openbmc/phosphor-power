@@ -17,8 +17,9 @@
 
 #include <math.h>
 
-#include <chrono>
 #include <phosphor-logging/log.hpp>
+
+#include <chrono>
 
 namespace phosphor
 {

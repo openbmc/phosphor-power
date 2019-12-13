@@ -45,8 +45,7 @@ class Rail
      * @param id unique rail ID
      */
     explicit Rail(const std::string& id) : id{id}
-    {
-    }
+    {}
 
     /**
      * Returns the unique ID of this rail.
