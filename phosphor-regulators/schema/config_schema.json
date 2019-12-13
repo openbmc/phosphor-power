@@ -1,0 +1,582 @@
+{
+    "title": "phosphor-power config.json registry schema",
+    "$id": "https://github.com/openbmc/phosphor-power/blob/master/phosphor-regulators/",
+    "description": "This schema describes JSON used for creating rules and chassis from OpenBMC phosphor-power power config.",
+    "type": "object",
+
+    "properties":
+    {
+        "comments":
+        {
+            "title": "This is an array of entries that specify comments for phosphor-power",
+            "$ref": "#/definitions/comments"
+        },
+        "rules":
+        {
+            "title": "This is an array of entries that specify rules fields for phosphor-power",
+            "$ref": "#/definitions/rules"
+        },
+        "chassis":
+        {
+            "title": "This is an array of entries that specify chassis fields for phosphor-power",
+            "$ref": "#/definitions/chassis"
+        }
+    },
+
+    "additionalProperties": false,
+    "minItems": 1,
+    "uniqueItems": true,
+
+    "definitions":
+    {
+        "rules":
+        {
+            "description": "Each entry in this array is for converting a rule",
+            "type": "array",
+            "items":
+            {
+                "description": "The schema for a single rule registry entry",
+                "type": "object",
+                "properties":
+                {
+                    "comments": {"$ref": "#/definitions/comments" },
+
+                    "id": {"$ref": "#/definitions/id" },
+
+                    "actions": {"$ref": "#/definitions/actions" }
+                },
+
+                "required": ["id", "actions"],
+                "additionalProperties": false
+            }
+        },
+
+        "comments":
+        {
+            "description": "The comments property",
+            "type": "array",
+            "items":
+            {
+                "type": "string"
+            }
+        },
+
+        "id":
+        {
+            "description": "The ID of the rule.",
+            "type": "string"
+        },
+
+        "action":
+        {
+            "type": "object",
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+
+                "and": {"$ref": "#/definitions/actions" },
+
+                "compare_presence": {"$ref": "#/definitions/comparePresence" },
+
+                "compare_vpd": {"$ref": "#/definitions/compareVpd" },
+
+                "i2c_compare_bit": {"$ref": "#/definitions/i2cBit" },
+
+                "i2c_compare_byte": {"$ref": "#/definitions/i2cByte" },
+
+                "i2c_compare_bytes": {"$ref": "#/definitions/i2cBytes" },
+
+                "i2c_write_bit": {"$ref": "#/definitions/i2cBit" },
+
+                "i2c_write_byte": {"$ref": "#/definitions/i2cByte" },
+
+                "i2c_write_bytes": {"$ref": "#/definitions/i2cBytes" },
+
+                "if": {"$ref": "#/definitions/if" },
+
+                "not": {"$ref": "#/definitions/action" },
+
+                "or": {"$ref": "#/definitions/actions" },
+
+                "pmbus_write_vout_command": {"$ref": "#/definitions/pmbusWriteVoutCommand" },
+
+                "pmbus_read_sensor": {"$ref": "#/definitions/pmbusReadSensor" },
+
+                "run_rule": {"$ref": "#/definitions/runRule" },
+
+                "set_device": {"$ref": "#/definitions/setDevice" }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {"required": ["and"]},
+                {"required": ["compare_presence"]},
+                {"required": ["compare_vpd"]},
+                {"required": ["i2c_compare_bit"]},
+                {"required": ["i2c_compare_byte"]},
+                {"required": ["i2c_compare_bytes"]},
+                {"required": ["i2c_write_bit"]},
+                {"required": ["i2c_write_byte"]},
+                {"required": ["i2c_write_bytes"]},
+                {"required": ["if"]},
+                {"required": ["not"]},
+                {"required": ["or"]},
+                {"required": ["pmbus_write_vout_command"]},
+                {"required": ["pmbus_read_sensor"]},
+                {"required": ["run_rule"]},
+                {"required": ["set_device"]}
+            ]
+        },
+
+        "actions":
+        {
+            "description": "The action of a rule",
+            "type": "array",
+            "items": {"$ref": "#/definitions/action" },
+            "additionalItems": false
+        },
+
+        "comparePresence":
+        {
+            "description": "compare presence action.",
+            "type": "object",
+            "properties":
+            {
+                "fru": {"$ref": "#/definitions/fru" },
+
+                "value": {"$ref": "#/definitions/booleanValue" }
+            },
+            "required": ["fru", "value"],
+            "additionalProperties": false
+        },
+
+        "fru":
+        {
+            "description": "The fru of the device.",
+            "type": "string"
+        },
+
+        "booleanValue":
+        {
+            "type": "boolean"
+        },
+
+        "compareVpd":
+        {
+            "description": "compare VPD action.",
+            "type": "object",
+            "properties":
+            {
+                "fru": {"$ref": "#/definitions/fru" },
+
+                "keyword": {"$ref": "#/definitions/keyword" },
+
+                "value": {"$ref": "#/definitions/stringValue" }
+            },
+            "required": ["fru", "keyword","value"],
+            "additionalProperties": false
+        },
+
+        "keyword":
+        {
+            "description": "keyword of compare VPD.",
+            "type": "string",
+            "enum": ["CCIN", "Manufacturer", "Model", "PartNumber"]
+        },
+
+        "stringValue":
+        {
+            "description": "value of string type.",
+            "type": "string"
+        },
+
+        "i2cBit":
+        {
+            "description": "i2c compare/write bit action data.",
+            "type": "object",
+            "properties":
+            {
+                "register": {"$ref": "#/definitions/register" },
+
+                "position": {"$ref": "#/definitions/position" },
+
+                "value": {"$ref": "#/definitions/bitValue" }
+            },
+            "required": ["register", "position","value"],
+            "additionalProperties": false
+        },
+
+        "register":
+        {
+            "description": "register of i2c_write_bytes.",
+            "type": "string"
+        },
+
+        "position":
+        {
+            "type": "number"
+        },
+
+        "bitValue":
+        {
+            "type": "number"
+        },
+
+        "i2cByte":
+        {
+            "description": "i2c compare/write Byte action data.",
+            "type": "object",
+            "properties":
+            {
+                "register": {"$ref": "#/definitions/register" },
+
+                "value": {"$ref": "#/definitions/byteValue" },
+
+                "mask": {"$ref": "#/definitions/byteMask" }
+            },
+            "required": ["register", "value"],
+            "additionalProperties": false
+        },
+
+        "byteValue":
+        {
+            "type": "string"
+        },
+
+        "byteMask":
+        {
+            "type": "string"
+        },
+
+        "i2cBytes":
+        {
+            "description": "i2c compare/write Byte action data.",
+            "type": "object",
+            "properties":
+            {
+                "register": {"$ref": "#/definitions/register" },
+
+                "values": {"$ref": "#/definitions/bytesValues" },
+
+                "masks": {"$ref": "#/definitions/bytesMasks" }
+            },
+            "required": ["register", "values"],
+            "additionalProperties": false
+        },
+
+        "bytesValues":
+        {
+            "description": "values of i2c_write_bytes.",
+            "type": "array",
+            "items":
+            {
+                "type": "string"
+            }
+        },
+
+        "bytesMasks":
+        {
+            "description": "masks of i2c_write_bytes.",
+            "type": "array",
+            "items":
+            {
+                "type": "string"
+            }
+        },
+
+        "if":
+        {
+            "description": "if of the action.",
+            "type": "object",
+            "properties":
+            {
+                "condition": {"$ref": "#/definitions/action" },
+
+                "then": {"$ref": "#/definitions/actions" },
+
+                "else": {"$ref": "#/definitions/actions" }
+            },
+            "required": ["condition", "then"],
+            "additionalProperties": false
+        },
+
+        "pmbusWriteVoutCommand":
+        {
+            "description": "pmbus_write_vout_command",
+            "type": "object",
+            "properties":
+            {
+                "volts": {"$ref": "#/definitions/volts" },
+
+                "format": {"$ref": "#/definitions/writeVoutFormat" },
+
+                "exponent": {"$ref": "#/definitions/exponent" },
+
+                "is_verified": {"$ref": "#/definitions/isVerified" }
+            },
+            "required": ["format"],
+            "additionalProperties": false
+        },
+
+        "volts":
+        {
+            "type": "number"
+        },
+
+        "writeVoutFormat":
+        {
+            "description": "format of the action.",
+            "type": "string",
+            "enum": ["linear", "vid", "direct", "IEEE Half-Precision Floating Point"]
+        },
+
+        "exponent":
+        {
+            "type": "number"
+        },
+
+        "isVerified":
+        {
+            "type": "boolean"
+        },
+
+        "pmbusReadSensor":
+        {
+            "description": "pmbus_read_sensor",
+            "type": "object",
+            "properties":
+            {
+                "type": {"$ref": "#/definitions/pmbusReadSensorType" },
+
+                "command": {"$ref": "#/definitions/pmbusReadSensorCommand" },
+
+                "format": {"$ref": "#/definitions/readSensorFormat" },
+
+                "exponent": {"$ref": "#/definitions/exponent" }
+            },
+            "required": ["format"],
+            "additionalProperties": false
+        },
+
+        "pmbusReadSensorType":
+        {
+            "description": "pmbus_read_sensor_type.",
+            "type": "string",
+            "enum": ["iout", "iout_peak", "iout_valley", "pout", "temperature", "temperature_peak", "vout", "vout_peak", "vout_valley"]
+        },
+
+        "pmbusReadSensorCommand":
+        {
+            "description": "pmbus_read_sensor_command.",
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{2}$"
+        },
+
+        "readSensorFormat":
+        {
+            "description": "format of the action.",
+            "type": "string",
+            "enum": ["linear_11", "linear_16"]
+        },
+
+        "runRule":
+        {
+            "description": "run rule of the action.",
+            "type": "string"
+        },
+
+        "setDevice":
+        {
+            "description": "set device of the action.",
+            "type": "string"
+        },
+
+        "chassis":
+        {
+            "description": "Each entry in this array is for converting a chassis",
+            "type": "array",
+            "items":
+            {
+                "description": "The schema for a single chassis registry entry",
+                "type": "object",
+                "properties":
+                {
+                    "comments": {"$ref": "#/definitions/comments" },
+
+                    "number": {"$ref": "#/definitions/number" },
+
+                    "devices": {"$ref": "#/definitions/devices" }
+                },
+
+                "required": ["number"],
+                "additionalProperties": false
+            }
+        },
+
+        "number":
+        {
+            "description": "The number of the chassis.",
+            "type": "number"
+        },
+
+        "devices":
+        {
+            "description": "The device of a chassis",
+            "type": "array",
+            "items":
+            {
+                "description": "One or more devices.",
+                "type": "object",
+                "properties":
+                {
+                    "comments": {"$ref": "#/definitions/comments" },
+
+                    "id": {"$ref": "#/definitions/id" },
+
+                    "is_regulator": {"$ref": "#/definitions/isRegulator" },
+
+                    "fru": {"$ref": "#/definitions/fru" },
+
+                    "i2c_interface": {"$ref": "#/definitions/i2cInterface" },
+
+                    "presence_detection": {"$ref": "#/definitions/presenceDetection" },
+
+                    "configuration": {"$ref": "#/definitions/configuration" },
+
+                    "rails": {"$ref": "#/definitions/rails" }
+                },
+                "required": ["id", "is_regulator", "fru", "i2c_interface"],
+                "additionalProperties": false
+            },
+            "additionalItems": false
+        },
+
+        "isRegulator":
+        {
+            "type": "boolean"
+        },
+
+        "i2cInterface":
+        {
+            "description": "I2C Interface.",
+            "type": "object",
+
+            "properties":
+            {
+                "bus": {"$ref": "#/definitions/bus" },
+
+                "address": {"$ref": "#/definitions/address" }
+            },
+
+            "required": ["bus", "address"],
+            "additionalProperties": false
+        },
+
+        "bus":
+        {
+            "description": "The bus of the I2C Interface.",
+            "type": "number"
+        },
+
+        "address":
+        {
+            "description": "The address of the I2C Interface.",
+            "type": "string"
+        },
+
+        "presenceDetection":
+        {
+            "description": "presence detection.",
+            "type": "object",
+
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+
+                "rule_id": {"$ref": "#/definitions/ruleID" },
+
+                "actions": {"$ref": "#/definitions/actions" }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {"required": ["rule_id"]},
+                {"required": ["actions"]}
+            ]
+        },
+
+        "ruleID":
+        {
+            "description": "the rule id of presence detection.",
+            "type": "string"
+        },
+
+        "configuration":
+        {
+            "description": "configuration.",
+            "type": "object",
+
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+
+                "volts": {"$ref": "#/definitions/volts" },
+
+                "rule_id": {"$ref": "#/definitions/ruleID" },
+
+                "actions": {"$ref": "#/definitions/actions" }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {"required": ["rule_id"]},
+                {"required": ["actions"]}
+            ]
+        },
+
+        "rail":
+        {
+            "description": "The schema for a single rail registry entry",
+            "type": "object",
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+
+                "id": {"$ref": "#/definitions/id" },
+
+                "configuration": {"$ref": "#/definitions/configuration" },
+
+                "sensor_monitoring": {"$ref": "#/definitions/sensorMonitoring" }
+            },
+
+            "required": ["id"],
+            "additionalProperties": false
+        },
+
+        "rails":
+        {
+            "description": "Each entry in this array is for converting a rails",
+            "type": "array",
+            "items": {"$ref": "#/definitions/rail" },
+            "additionalItems": false
+        },
+
+        "sensorMonitoring":
+        {
+            "description": "sensor monitoring.",
+            "type": "object",
+
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+
+                "rule_id": {"$ref": "#/definitions/ruleID" },
+
+                "actions": {"$ref": "#/definitions/actions" }
+            },
+            "additionalProperties": false,
+            "oneOf": [
+                {"required": ["rule_id"]},
+                {"required": ["actions"]}
+            ]
+        }
+
+    }
+}
