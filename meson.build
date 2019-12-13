@@ -78,9 +78,12 @@ libpower = static_library(
 
 libpower_inc = include_directories('.')
 
+# Build the tools/i2c sub-directory first.  Other sub-directories depend on
+# Meson variables defined there.
+subdir('tools/i2c')
+
 subdir('phosphor-regulators')
 subdir('power-sequencer')
 subdir('power-supply')
-subdir('tools/i2c')
 subdir('tools/power-utils')
 subdir('test')
