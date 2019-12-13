@@ -21,6 +21,7 @@
 #include "utility.hpp"
 
 #include <phosphor-logging/log.hpp>
+
 #include <tuple>
 
 using json = nlohmann::json;
