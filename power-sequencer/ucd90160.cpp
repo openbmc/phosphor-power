@@ -19,12 +19,13 @@
 #include "utility.hpp"
 
 #include <elog-errors.hpp>
-#include <map>
-#include <memory>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
+
+#include <map>
+#include <memory>
 
 namespace phosphor
 {
@@ -54,8 +55,7 @@ UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
     interface(std::get<ucd90160::pathField>(deviceMap.find(instance)->second),
               DRIVER_NAME, instance),
     gpioDevice(findGPIODevice(interface.path())), bus(bus)
-{
-}
+{}
 
 void UCD90160::onFailure()
 {

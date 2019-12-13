@@ -15,12 +15,13 @@
  */
 #include "pmbus.hpp"
 
-#include <filesystem>
-#include <fstream>
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
+
+#include <filesystem>
+#include <fstream>
 
 namespace phosphor
 {
@@ -72,8 +73,7 @@ fs::path PMBus::getPath(Type type)
         case Type::Debug:
             return debugPath / "pmbus" / hwmonDir;
             break;
-        case Type::DeviceDebug:
-        {
+        case Type::DeviceDebug: {
             auto dir = driverName + "." + std::to_string(instance);
             return debugPath / dir;
             break;

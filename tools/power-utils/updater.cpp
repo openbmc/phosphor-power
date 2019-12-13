@@ -21,9 +21,10 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <phosphor-logging/log.hpp>
+
 #include <chrono>
 #include <fstream>
-#include <phosphor-logging/log.hpp>
 #include <thread>
 
 using namespace phosphor::logging;

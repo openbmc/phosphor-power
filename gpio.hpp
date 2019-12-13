@@ -62,8 +62,7 @@ class GPIO
      */
     GPIO(const std::string& device, gpioNum_t gpio, Direction direction) :
         device(device), gpio(gpio), direction(direction)
-    {
-    }
+    {}
 
     /**
      * Reads the GPIO value

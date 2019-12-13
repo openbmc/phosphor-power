@@ -65,8 +65,7 @@ class ActionEnvironment
                                const std::string& deviceID) :
         idMap{idMap},
         deviceID{deviceID}
-    {
-    }
+    {}
 
     /**
      * Decrements the rule call stack depth by one.

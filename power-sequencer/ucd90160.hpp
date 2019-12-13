@@ -5,10 +5,11 @@
 #include "pmbus.hpp"
 #include "types.hpp"
 
+#include <sdbusplus/bus.hpp>
+
 #include <algorithm>
 #include <filesystem>
 #include <map>
-#include <sdbusplus/bus.hpp>
 #include <vector>
 
 namespace phosphor
@@ -60,8 +61,7 @@ class UCD90160 : public Device
      * Clears faults in the device
      */
     void clearFaults() override
-    {
-    }
+    {}
 
   private:
     /**
