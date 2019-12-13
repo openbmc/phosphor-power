@@ -50,8 +50,7 @@ class AndAction : public Action
      */
     explicit AndAction(std::vector<std::unique_ptr<Action>> actions) :
         actions{std::move(actions)}
-    {
-    }
+    {}
 
     /**
      * Executes the actions specified in the constructor.

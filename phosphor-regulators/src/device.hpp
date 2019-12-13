@@ -42,8 +42,7 @@ class Device
      * @param id unique device ID
      */
     explicit Device(const std::string& id) : id{id}
-    {
-    }
+    {}
 
     /**
      * Returns the unique ID of this device.

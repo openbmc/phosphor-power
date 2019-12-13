@@ -49,8 +49,7 @@ class NotAction : public Action
      */
     explicit NotAction(std::unique_ptr<Action> action) :
         action{std::move(action)}
-    {
-    }
+    {}
 
     /**
      * Executes the action specified in the constructor.
