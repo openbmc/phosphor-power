@@ -31,7 +31,8 @@ services = [
     'power-supply-monitor@.service',
     'pseq-monitor-pgood.service',
     'pseq-monitor.service',
-    'phosphor-regulators@.service'
+    'phosphor-regulators@.service',
+    'phosphor-regulators-config@.service'
 ]
 
 foreach service : services
