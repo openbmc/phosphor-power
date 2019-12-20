@@ -48,7 +48,8 @@ services = [
     'pseq-monitor-pgood.service',
     'pseq-monitor.service',
     'phosphor-psu-monitor.service',
-    'phosphor-regulators.service'
+    'phosphor-regulators.service',
+    'phosphor-regulators-config.service'
 ]
 
 foreach service : services
