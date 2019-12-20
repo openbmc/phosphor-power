@@ -1,0 +1,11 @@
+[Unit]
+Description=Phosphor Power Regulators Daemon
+Conflicts=obmc-chassis-poweroff@%i.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/bin/env phosphor-regulators
+SyslogIdentifier=phosphor-regulators
+
+[Install]
+RequiredBy=obmc-chassis-poweron@%i.target
