@@ -1,0 +1,12 @@
+[Unit]
+Description=Phosphor Power Regulators Monitor
+After=phosphor-power-regulators.service
+Conflicts=obmc-chassis-poweroff@%i.target
+
+[Service]
+Restart=on-failure
+ExecStart=busctl call xyz.openbmc_project.Manager.Regulators /xyz/openbmc_project/manager/regulators xyz.openbmc_project.manager.regulators monitor
+SyslogIdentifier=phosphor-regulators-monitor
+
+[Install]
+RequiredBy=obmc-chassis-poweron@%i.target
