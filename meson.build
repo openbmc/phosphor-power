@@ -22,6 +22,7 @@ prog_python = import('python').find_installation('python')
 sdbusplus = dependency('sdbusplus')
 sdbuspp = find_program('sdbus++')
 sdeventplus = dependency('sdeventplus')
+pthread = dependency('threads')
 
 systemd = dependency('systemd')
 servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
@@ -78,6 +79,7 @@ libpower = static_library(
 
 libpower_inc = include_directories('.')
 
+subdir('cold-redundancy')
 subdir('phosphor-regulators')
 subdir('power-sequencer')
 subdir('power-supply')
