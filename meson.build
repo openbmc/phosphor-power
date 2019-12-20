@@ -31,7 +31,8 @@ servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
 services = [
     'power-supply-monitor@.service',
     'pseq-monitor-pgood.service',
-    'pseq-monitor.service'
+    'pseq-monitor.service',
+    'phosphor-regulators.service'
 ]
 
 foreach service : services

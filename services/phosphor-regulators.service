@@ -1,0 +1,11 @@
+[Unit]
+Description=Phosphor Power Regulators Daemon
+Wants=obmc-mapper.target
+After=obmc-mapper.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/bin/phosphor-regulators
+
+[Install]
+WantedBy=multi-user.target
