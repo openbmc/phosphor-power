@@ -1,0 +1,15 @@
+[Unit]
+Description=Phosphor Power Regulators Config
+Wants=obmc-power-start-pre@0.target
+Before=obmc-power-start-pre@0.target
+Conflicts=obmc-chassis-poweroff@0.target
+# No need to run again if BMC reboots at runtime
+ConditionPathExists=!/run/openbmc/chassis@0-on
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=regsctl --config
+
+[Install]
+RequiredBy=obmc-chassis-poweron@0.target
