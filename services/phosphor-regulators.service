@@ -1,0 +1,9 @@
+[Unit]
+Description=Phosphor Power Regulators Daemon
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/bin/phosphor-regulators
+
+[Install]
+WantedBy=multi-user.target
