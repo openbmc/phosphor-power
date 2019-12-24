@@ -1,5 +1,5 @@
 #pragma once
-
+#include <array>
 /* const expressions shared in this repository */
 
 constexpr auto ASSOCIATION_IFACE = "xyz.openbmc_project.Association";
@@ -22,3 +22,6 @@ constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
 
 constexpr auto INPUT_HISTORY = "input_history";
+
+constexpr std::array<const char*, 1> psuEventInterface = {
+    "xyz.openbmc_project.State.Decorator.OperationalStatus"};
