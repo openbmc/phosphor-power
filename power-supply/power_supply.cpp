@@ -28,7 +28,6 @@
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
-#include <xyz/openbmc_project/Software/Version/server.hpp>
 
 namespace phosphor
 {
@@ -40,7 +39,6 @@ namespace psu
 using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
-namespace version = sdbusplus::xyz::openbmc_project::Software::server;
 
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath, const std::string& invpath,
@@ -617,7 +615,6 @@ void PowerSupply::updateInventory()
     using Interfaces = std::map<std::string, Properties>;
     using Object = std::map<object_path, Interfaces>;
     Properties assetProps;
-    Properties versionProps;
     Interfaces interfaces;
     Object object;
 
@@ -643,24 +640,9 @@ void PowerSupply::updateInventory()
             {
             }
         }
-        else if (fru.at("interface") == VERSION_IFACE)
-        {
-            try
-            {
-                versionProps.emplace(
-                    fru.at("propertyName"),
-                    present ? pmbusIntf.readString(fru.at("fileName"),
-                                                   inventoryPMBusAccessType)
-                            : "");
-            }
-            catch (const std::exception& e)
-            {
-            }
-        }
     }
 
     interfaces.emplace(ASSET_IFACE, std::move(assetProps));
-    interfaces.emplace(VERSION_IFACE, std::move(versionProps));
 
     // For Notify(), just send the relative path of the inventory
     // object so remove the INVENTORY_OBJ_PATH prefix
@@ -685,16 +667,6 @@ void PowerSupply::updateInventory()
         method.append(std::move(object));
 
         auto reply = bus.call(method);
-
-        // TODO: openbmc/openbmc#2756
-        // Calling Notify() with an enumerated property crashes inventory
-        // manager, so let it default to Unknown and now set it to the
-        // right value.
-        auto purpose =
-            version::convertForMessage(version::Version::VersionPurpose::Other);
-
-        util::setProperty(VERSION_IFACE, VERSION_PURPOSE_PROP, inventoryPath,
-                          service, bus, purpose);
     }
     catch (std::exception& e)
     {

@@ -395,7 +395,6 @@ class PowerSupply : public Device
      * - Part Number
      * - Manufacturer
      * - Model
-     * - Firmware version
      */
     void updateInventory();
 
