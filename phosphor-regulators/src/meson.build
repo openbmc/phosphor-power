@@ -1,5 +1,6 @@
 phosphor_regulators_include_directories = include_directories(
     '.',
+    '../..',
     'actions'
 )
 
@@ -22,6 +23,8 @@ phosphor_regulators_library = static_library(
 phosphor_regulators = executable(
     'phosphor-regulators',
     'main.cpp',
+    gen_intf_cpp,
+    gen_intf_hpp,
     dependencies: [
         sdbusplus,
         sdeventplus,
