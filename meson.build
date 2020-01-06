@@ -63,6 +63,7 @@ configure_file(output: 'config.h', configuration: conf)
 # the directory where the artifacts need to be placed.  Do that now, because
 # the generated source (cpp) is needed to define the library target.
 subdir('org/open_power/Witherspoon/Fault')
+subdir('xyz/openbmc_project/Power/Regulators/Manager')
 
 libpower = static_library(
     'power',

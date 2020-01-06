@@ -1,0 +1,13 @@
+description: >
+    Implement to provide regulator management features.
+    This interface should be instantiated for the phosphor::regulators
+    namespace and only one is required.
+methods:
+    - name: Configure
+      description: >
+          Request to configure the regulators according to the machine's
+          regulators configuration json.
+    - name: Monitor
+      description: >
+          Begin to monitor the regulators according to the machine's regulators
+          configuration json.
