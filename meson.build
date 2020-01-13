@@ -15,7 +15,6 @@ build_tests = get_option('tests')
 cppfs = meson.get_compiler('cpp').find_library('stdc++fs')
 gmock = dependency('gmock', disabler: true, required: build_tests)
 gtest = dependency('gtest', main: true, disabler: true, required: build_tests)
-openpower_dbus_interfaces = dependency('openpower-dbus-interfaces')
 phosphor_dbus_interfaces = dependency('phosphor-dbus-interfaces')
 phosphor_logging = dependency('phosphor-logging')
 prog_python = import('python').find_installation('python')
@@ -69,7 +68,6 @@ libpower = static_library(
     'utility.cpp',
     dependencies: [
         cppfs,
-        openpower_dbus_interfaces,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
