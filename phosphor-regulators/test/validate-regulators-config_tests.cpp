@@ -387,3 +387,89 @@ TEST(ValidateRegulatorsConfigTest, RuleComparePresence)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleCompareVpd)
+{
+    // test rule actions compare_vpd valid
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // test rule actions compare_vpd with no FRU invalid
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'fru' is a required property");
+    }
+
+    // test rule actions compare_vpd with no keyword invalid
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'keyword' is a required property");
+    }
+
+    // test rule actions compare_vpd with no value invalid
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'value' is a required property");
+    }
+
+    // test rule actions compare_vpd with FRU not string invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = 1;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "1 is not of type u'string'");
+    }
+
+    // test rule actions compare_vpd with FRU string less than 1 invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = "";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'' is too short");
+    }
+
+    // test rule actions compare_vpd with keyword not "CCIN", "Manufacturer",
+    // "Model", "PartNumber" invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] =
+            "Number";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'Number' is not one of [u'CCIN', "
+                            "u'Manufacturer', u'Model', u'PartNumber']");
+    }
+
+    // test rule actions compare_vpd with value not string invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "1 is not of type u'string'");
+    }
+}
