@@ -380,3 +380,75 @@ TEST(ValidateRegulatorsConfigTest, RuleComparePresence)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleCompareVpd)
+{
+    json compareVpdFile = validConfigFile;
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+        "/system/chassis/motherboard/regulator2";
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+    // test rule actions compare_vpd valid
+    {
+        json configFile = compareVpdFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // test rule actions compare_vpd with no FRU invalid
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'fru' is a required property");
+    }
+
+    // test rule actions compare_vpd with no keyword invalid
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("keyword");
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'keyword' is a required property");
+    }
+
+    // test rule actions compare_vpd with no value invalid
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'value' is a required property");
+    }
+
+    // test rule actions compare_vpd with FRU not string invalid.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "1 is not of type u'string'");
+    }
+
+    // test rule actions compare_vpd with FRU string less than 1 invalid.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'' is too short");
+    }
+
+    // test rule actions compare_vpd with keyword not "CCIN", "Manufacturer",
+    // "Model", "PartNumber" invalid.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] =
+            "Number";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'Number' is not one of [u'CCIN', "
+                            "u'Manufacturer', u'Model', u'PartNumber']");
+    }
+
+    // test rule actions compare_vpd with value not string invalid.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "1 is not of type u'string'");
+    }
+}
