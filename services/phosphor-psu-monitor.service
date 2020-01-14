@@ -1,0 +1,13 @@
+[Unit]
+Description=Phosphor Power Supply Monitor
+Wants=obmc-mapper.target
+After=obmc-mapper.target
+Wants=mapper-wait@-org-openbmc-control-power0.service
+After=mapper-wait@-org-openbmc-control-power0.service
+
+[Service]
+Restart=on-failure
+ExecStart=phosphor-psu-monitor
+
+[Install]
+WantedBy=multi-user.target
