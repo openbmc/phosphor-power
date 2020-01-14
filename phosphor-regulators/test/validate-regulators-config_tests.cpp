@@ -287,3 +287,43 @@ TEST(ValidateRegulatorsConfigTest, Rule)
                             "[] is too short");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleAnd)
+{
+    // test rule actions and valid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["and"][0]["i2c_compare_byte"]
+                  ["register"] = "0xA0";
+        configFile["rules"][0]["actions"][1]["and"][0]["i2c_compare_byte"]
+                  ["value"] = "0x00";
+        configFile["rules"][0]["actions"][1]["and"][1]["i2c_compare_byte"]
+                  ["register"] = "0xA1";
+        configFile["rules"][0]["actions"][1]["and"][1]["i2c_compare_byte"]
+                  ["value"] = "0x00";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // test rule actions and with no property invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["and"][0] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "[] is not of type u'object'");
+    }
+
+    // test rule actions and with value not array invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["and"] = true;
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "True is not of type u'array'");
+    }
+
+    // test rule actions and with wrong action value invalid.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["and"][0] = "foo";
+        EXPECT_JSON_INVALID(configFile, "Schema validation failed",
+                            "u'foo' is not of type u'object'");
+    }
+}
