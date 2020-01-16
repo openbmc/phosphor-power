@@ -871,3 +871,120 @@ TEST(ValidateRegulatorsConfigTest, RuleOr)
                             "1 is not of type u'array'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RulePmbusReadSensor)
+{
+    json pmbusReadSensorFile = validConfigFile;
+    pmbusReadSensorFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["type"] =
+        "vout";
+    pmbusReadSensorFile["rules"][0]["actions"][1]["pmbus_read_sensor"]
+                       ["command"] = "0x8B";
+    pmbusReadSensorFile["rules"][0]["actions"][1]["pmbus_read_sensor"]
+                       ["format"] = "linear_16";
+    pmbusReadSensorFile["rules"][0]["actions"][1]["pmbus_read_sensor"]
+                       ["exponent"] = -8;
+    // Valid: test rule actions pmbus_read_sensor.
+    {
+        json configFile = pmbusReadSensorFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test rule actions pmbus_read_sensor with required properties.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase(
+            "exponent");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test rule actions pmbus_read_sensor with no type.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase("type");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'type' is a required property");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with no command.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase(
+            "command");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'command' is a required property");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with no format.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase(
+            "format");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'format' is a required property");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property type wrong
+    // type.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["type"] =
+            true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "True is not one of [u'iout', u'iout_peak', u'iout_valley', "
+            "u'pout', u'temperature', u'temperature_peak', u'vout', "
+            "u'vout_peak', u'vout_valley']");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property command wrong
+    // type.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["command"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property format wrong
+    // type.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["format"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not one of [u'linear_11', u'linear_16']");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property exponent wrong
+    // type.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["exponent"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'integer'");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property type wrong
+    // format.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["type"] =
+            "foo";
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is not one of [u'iout', u'iout_peak', u'iout_valley', "
+            "u'pout', u'temperature', u'temperature_peak', u'vout', "
+            "u'vout_peak', u'vout_valley']");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property command wrong
+    // format.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["command"] =
+            "0x8B0";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x8B0' does not match u'^0x[0-9a-fA-F]{2}$'");
+    }
+    // Invalid: test rule actions pmbus_read_sensor with property format wrong
+    // format.
+    {
+        json configFile = pmbusReadSensorFile;
+        configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["format"] =
+            "foo";
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is not one of [u'linear_11', u'linear_16']");
+    }
+}
