@@ -1095,3 +1095,28 @@ TEST(ValidateRegulatorsConfigTest, RuleRunRule)
             "u'set_voltage_rule%' does not match u'^[A-Za-z0-9_]+$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleSetDevice)
+{
+    json setDeviceFile = validConfigFile;
+    setDeviceFile["rules"][0]["actions"][1]["set_device"] = "io_expander2";
+    // Valid: test rule actions set_device.
+    {
+        json configFile = setDeviceFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test rule actions set_device wrong type.
+    {
+        json configFile = setDeviceFile;
+        configFile["rules"][0]["actions"][1]["set_device"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test rule actions set_device wrong format.
+    {
+        json configFile = setDeviceFile;
+        configFile["rules"][0]["actions"][1]["set_device"] = "io_expander2%";
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'io_expander2%' does not match u'^[A-Za-z0-9_]+$'");
+    }
+}
