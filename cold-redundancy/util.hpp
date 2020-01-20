@@ -16,10 +16,11 @@
 
 #pragma once
 #include <boost/container/flat_map.hpp>
+#include <sdbusplus/asio/connection.hpp>
+
 #include <chrono>
 #include <cstdint>
 #include <iostream>
-#include <sdbusplus/asio/connection.hpp>
 
 namespace CR
 {

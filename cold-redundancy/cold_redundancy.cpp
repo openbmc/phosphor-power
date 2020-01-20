@@ -16,21 +16,22 @@
 
 #include "types.hpp"
 
-#include <array>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/asio/post.hpp>
 #include <boost/container/flat_set.hpp>
 #include <cold_redundancy.hpp>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
 #include <phosphor-logging/elog-errors.hpp>
-#include <regex>
 #include <sdbusplus/asio/connection.hpp>
 #include <sdbusplus/asio/object_server.hpp>
 #include <sdbusplus/asio/sd_event.hpp>
 #include <sdbusplus/bus/match.hpp>
+
+#include <array>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <regex>
 
 namespace
 {
