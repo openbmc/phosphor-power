@@ -18,8 +18,9 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
-#include <fstream>
 #include <nlohmann/json.hpp>
+
+#include <fstream>
 
 #include <gtest/gtest.h>
 
