@@ -13,6 +13,38 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_duplicate_global_id(config_json):
+    r"""
+    Check that there aren't any entries with the same 'id' field.
+    config_json: Configuration file JSON
+    """
+
+    ids = []
+    if 'rules' in config_json:
+        for rule in config_json['rules']:
+            ids.append(rule['id'])
+
+    if 'chassis' in config_json:
+        for chassis in config_json['chassis']:
+            if 'devices' in chassis:
+                for chassis in chassis['devices']:
+                    chassis_id = chassis['id']
+                    if chassis_id in ids:
+                        sys.stderr.write("Error: Duplicate global ID.\n"+\
+                        "Found multiple global with the ID "+chassis_id+'\n')
+                        handle_validation_error()
+                    else:
+                        ids.append(chassis_id)
+                    if 'rails' in chassis:
+                        for rail in chassis['rails']:
+                            rail_id = rail['id']
+                            if rail_id in ids:
+                                sys.stderr.write("Error: Duplicate global ID.\n"+\
+                                "Found multiple global with the ID "+rail_id+'\n')
+                                handle_validation_error()
+                            else:
+                                ids.append(rail_id)
+
 def check_duplicate_rule_id(config_json):
     r"""
     Check that there aren't any "rule" elements with the same 'id' field.
@@ -95,6 +127,8 @@ def check_for_duplicates(config_json):
     check_duplicate_device_id(config_json)
 
     check_duplicate_rail_id(config_json)
+
+    check_duplicate_global_id(config_json)
 
 def validate_schema(config, schema):
     r"""
