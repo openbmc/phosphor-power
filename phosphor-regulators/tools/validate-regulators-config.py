@@ -13,6 +13,25 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_duplicate_object_id(config_json):
+    r"""
+    Check that there aren't any JSON objects with the same 'id' property value.
+    config_json: Configuration file JSON
+    """
+
+    JSON_ids = []
+    JSON_ids = check_duplicate_rule_id(config_json)+\
+               check_duplicate_device_id(config_json)+\
+               check_duplicate_rail_id(config_json)
+    JSON_set = set()
+    for ids in JSON_ids:
+        if ids in JSON_set:
+           sys.stderr.write("Error: Duplicate ID.\n"+\
+           "Found multiple objects with the ID "+ids+'\n')
+           handle_validation_error()
+        else:
+            JSON_set.add(ids)
+
 def check_duplicate_rule_id(config_json):
     r"""
     Check that there aren't any "rule" elements with the same 'id' field.
@@ -27,6 +46,7 @@ def check_duplicate_rule_id(config_json):
             handle_validation_error()
         else:
             rule_ids.append(rule_id)
+    return rule_ids
 
 def check_duplicate_chassis_number(config_json):
     r"""
@@ -58,6 +78,7 @@ def check_duplicate_device_id(config_json):
                 handle_validation_error()
             else:
                 device_ids.append(device_id)
+    return device_ids
 
 def check_duplicate_rail_id(config_json):
     r"""
@@ -75,6 +96,7 @@ def check_duplicate_rail_id(config_json):
                     handle_validation_error()
                 else:
                     rail_ids.append(rail_id)
+    return rail_ids
 
 def check_for_duplicates(config_json):
     r"""
@@ -87,6 +109,8 @@ def check_for_duplicates(config_json):
     check_duplicate_device_id(config_json)
 
     check_duplicate_rail_id(config_json)
+
+    check_duplicate_object_id(config_json)
 
 def validate_schema(config, schema):
     r"""
