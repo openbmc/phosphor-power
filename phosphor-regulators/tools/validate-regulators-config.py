@@ -12,6 +12,45 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_infinite_loops(config_json, callStack=[]):
+    r"""
+    Check if rule on call stack multiple times indicating infinite recursion.
+    Check 'rule' object and call check_infinite_loops_for_run_rule.
+    config_json: Configuration file JSON
+    callStack: Current call stack of rules.
+    """
+
+    def check_infinite_loops_for_run_rule(config_json_origin, config_json, \
+    callStack=[]):
+        r"""
+        Check if 'run_rule' on call stack multiple times indicating infinite 
+        recursion
+        config_json_origin: Original platform config JSON.
+        config_json: Configuration file JSON which be excuted.
+        callStack: Current call stack of rules.
+        """
+
+        callStack.append(config_json['id'])
+        if 'actions' in config_json:
+            for action in config_json['actions']:
+                if 'run_rule' in action:
+                    run_rule_id = action['run_rule']
+                    if run_rule_id in callStack:
+                        sys.stderr.write("Error: Infinite loops.\n"+\
+                        "Found rule called multiple times "+run_rule_id+'\n')
+                        handle_validation_error()
+                    else:
+                        for rule in config_json_origin['rules']:
+                            if rule['id'] == action['run_rule']:
+                                check_infinite_loops_for_run_rule(\
+                                config_json_origin, rule, callStack)
+        callStack[:] = []
+        # end of function check_infinite_loops_for_run_rule.
+
+    if 'rules' in config_json:
+        for rule in config_json['rules']:
+            check_infinite_loops_for_run_rule(config_json, rule, callStack)
+
 def check_duplicate_global_id(config_json):
     r"""
     Check that there aren't any entries with the same 'id' field.
@@ -129,6 +168,8 @@ def check_for_duplicates(config_json):
     check_duplicate_rail_id(config_json)
 
     check_duplicate_global_id(config_json)
+
+    check_infinite_loops(config_json)
 
 def validate_schema(config, schema):
     r"""
