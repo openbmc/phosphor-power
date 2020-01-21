@@ -1708,6 +1708,76 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
                             "[] is too short");
     }
 }
+TEST(ValidateRegulatorsConfigTest, Rail)
+{
+    // Valid: test rail.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test rail with required properties.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0].erase("comments");
+        configFile["chassis"][0]["devices"][0]["rails"][0].erase(
+            "configuration");
+        configFile["chassis"][0]["devices"][0]["rails"][0].erase(
+            "sensor_monitoring");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test rail with no id.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0].erase("id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id' is a required property");
+    }
+    // Invalid: test rail with comments wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test rail with id wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test rail with configuration wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["configuration"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test rail with sensor_monitoring wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]
+                  ["sensor_monitoring"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test rail with comments empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["comments"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test rail with id wrong format.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["id"] = "id~";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id~' does not match u'^[A-Za-z0-9_]+$'");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, RunRule)
 {
     json runRuleFile = validConfigFile;
