@@ -1109,3 +1109,67 @@ TEST(ValidateRegulatorsConfigTest, SetDevice)
             "u'io_expander2%' does not match u'^[A-Za-z0-9_]+$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, Chassis)
+{
+    // Valid: test chassis.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test chassis with required properties.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0].erase("comments");
+        configFile["chassis"][0].erase("devices");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test chassis with no number.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0].erase("number");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'number' is a required property");
+    }
+    // Invalid: test chassis with property comments wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test chassis with property number wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["number"] = 1.3;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1.3 is not of type u'integer'");
+    }
+    // Invalid: test chassis with property devices wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test chassis with property comments empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test chassis with property devices empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test chassis with property number less than 1.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["number"] = 0;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "0 is less than the minimum of 1");
+    }
+}
