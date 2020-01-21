@@ -1183,3 +1183,80 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
             "u'foo' is not one of [u'linear_11', u'linear_16']");
     }
 }
+TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
+{
+    json pmbusWriteVoutCommandFile = validConfigFile;
+    pmbusWriteVoutCommandFile["rules"][0]["actions"][1]
+                             ["pmbus_write_vout_command"]["volts"] = 1.03;
+    pmbusWriteVoutCommandFile["rules"][0]["actions"][1]
+                             ["pmbus_write_vout_command"]["format"] = "linear";
+    pmbusWriteVoutCommandFile["rules"][0]["actions"][1]
+                             ["pmbus_write_vout_command"]["exponent"] = -8;
+    pmbusWriteVoutCommandFile["rules"][0]["actions"][1]
+                             ["pmbus_write_vout_command"]["is_verified"] = true;
+    // Valid: test pmbus_write_vout_command.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test pmbus_write_vout_command with required properties.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"].erase(
+            "volts");
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"].erase(
+            "exponent");
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"].erase(
+            "is_verified");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test pmbus_write_vout_command with no format.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"].erase(
+            "format");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'format' is a required property");
+    }
+    // Invalid: test pmbus_write_vout_command with property volts wrong type.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
+                  ["volts"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'number'");
+    }
+    // Invalid: test pmbus_write_vout_command with property format wrong type.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
+                  ["format"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not one of [u'linear']");
+    }
+    // Invalid: test pmbus_write_vout_command with property exponent wrong type.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
+                  ["exponent"] = 1.3;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1.3 is not of type u'integer'");
+    }
+    // Invalid: test pmbus_write_vout_command with property is_verified wrong
+    // type.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
+                  ["is_verified"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'boolean'");
+    }
+    // Invalid: test pmbus_write_vout_command with property format wrong format.
+    {
+        json configFile = pmbusWriteVoutCommandFile;
+        configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
+                  ["format"] = "foo";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'foo' is not one of [u'linear']");
+    }
+}
