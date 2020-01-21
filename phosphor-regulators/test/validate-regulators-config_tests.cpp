@@ -401,3 +401,75 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, CompareVpd)
+{
+    json compareVpdFile = validConfigFile;
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+        "/system/chassis/motherboard/regulator2";
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+    compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+    // Valid.
+    {
+        json configFile = compareVpdFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: no FRU property.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'fru' is a required property");
+    }
+
+    // Invalid: no keyword property.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("keyword");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'keyword' is a required property");
+    }
+
+    // Invalid: no value property.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+
+    // Invalid: property FRU wrong type.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+
+    // Invalid: property FRU is string less than 1.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'' is too short");
+    }
+
+    // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
+    // "PartNumber"
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] =
+            "Number";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'Number' is not one of [u'CCIN', "
+                            "u'Manufacturer', u'Model', u'PartNumber']");
+    }
+
+    // Invalid: property value wrong type.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+}
