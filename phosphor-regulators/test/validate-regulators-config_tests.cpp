@@ -854,3 +854,34 @@ TEST(ValidateRegulatorsConfigTest, RuleNot)
                             "1 is not of type u'object'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleOr)
+{
+    json orFile = validConfigFile;
+    orFile["rules"][0]["actions"][1]["or"][0]["i2c_compare_byte"]["register"] =
+        "0xA0";
+    orFile["rules"][0]["actions"][1]["or"][0]["i2c_compare_byte"]["value"] =
+        "0x00";
+    orFile["rules"][0]["actions"][1]["or"][1]["i2c_compare_byte"]["register"] =
+        "0xA1";
+    orFile["rules"][0]["actions"][1]["or"][1]["i2c_compare_byte"]["value"] =
+        "0x00";
+    // Valid: test rule actions or.
+    {
+        json configFile = orFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test rule actions or with empty array.
+    {
+        json configFile = orFile;
+        configFile["rules"][0]["actions"][1]["or"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test rule actions or with wrong type.
+    {
+        json configFile = orFile;
+        configFile["rules"][0]["actions"][1]["or"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+}
