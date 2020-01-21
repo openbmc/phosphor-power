@@ -821,3 +821,23 @@ TEST(ValidateRegulatorsConfigTest, If)
                             "1 is not of type u'array'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, Not)
+{
+    json notFile = validConfigFile;
+    notFile["rules"][0]["actions"][1]["not"]["i2c_compare_byte"]["register"] =
+        "0xA0";
+    notFile["rules"][0]["actions"][1]["not"]["i2c_compare_byte"]["value"] =
+        "0xFF";
+    // Valid: test not.
+    {
+        json configFile = notFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test not with wrong type.
+    {
+        json configFile = notFile;
+        configFile["rules"][0]["actions"][1]["not"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'object'");
+    }
+}
