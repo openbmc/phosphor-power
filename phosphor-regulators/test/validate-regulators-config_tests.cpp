@@ -348,3 +348,56 @@ TEST(ValidateRegulatorsConfigTest, And)
                             "u'foo' is not of type u'object'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleComparePresence)
+{
+    json comparePresenceFile = validConfigFile;
+    comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["fru"] =
+        "/system/chassis/motherboard/regulator2";
+    comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["value"] =
+        true;
+    // test rule actions compare_presence valid.
+    {
+        json configFile = comparePresenceFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // test rule actions compare_presence with no fru invalid.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'fru' is a required property");
+    }
+
+    // test rule actions compare_presence with FRU string less than 1 invalid.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'' is too short");
+    }
+
+    // test rule actions compare_presence with no value invalid.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+
+    // test rule actions compare_presence with value data not boolean invalid.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["value"] = "1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'1' is not of type u'boolean'");
+    }
+
+    // test rule actions compare_presence with FRU not string invalid.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+}
