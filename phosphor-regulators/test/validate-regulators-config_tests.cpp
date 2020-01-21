@@ -1059,3 +1059,28 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
                             "u'foo' is not one of [u'linear']");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RunRule)
+{
+    json runRuleFile = validConfigFile;
+    runRuleFile["rules"][0]["actions"][1]["run_rule"] = "set_voltage_rule1";
+    // Valid: test run_rule.
+    {
+        json configFile = runRuleFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test run_rule wrong type.
+    {
+        json configFile = runRuleFile;
+        configFile["rules"][0]["actions"][1]["run_rule"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test run_rule wrong format.
+    {
+        json configFile = runRuleFile;
+        configFile["rules"][0]["actions"][1]["run_rule"] = "set_voltage_rule%";
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'set_voltage_rule%' does not match u'^[A-Za-z0-9_]+$'");
+    }
+}
