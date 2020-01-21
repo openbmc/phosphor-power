@@ -31,11 +31,4 @@ class MockedI2CInterface : public I2CInterface
                 (override));
 };
 
-std::unique_ptr<I2CInterface>
-    create(uint8_t /*busId*/, uint8_t /*devAddr*/,
-           I2CInterface::InitialState /*initialState*/)
-{
-    return std::make_unique<MockedI2CInterface>();
-}
-
 } // namespace i2c
