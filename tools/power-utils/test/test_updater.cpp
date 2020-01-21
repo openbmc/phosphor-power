@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include "../updater.hpp"
-#include "test/mocked_i2c_interface.hpp"
+#include "mocked_i2c_interface.hpp"
 
 #include <filesystem>
 

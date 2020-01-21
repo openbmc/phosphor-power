@@ -29,9 +29,14 @@ test(
             phosphor_logging,
         ],
         implicit_include_directories: false,
-        include_directories: [libpower_inc, libi2c_inc],
+        include_directories: [
+            libpower_inc,
+            libi2c_inc,
+            libi2c_dev_mock_inc
+        ],
         link_with: [
             libpower,
+            libi2c_dev_mock
         ],
         objects: record_manager,
     )
