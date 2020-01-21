@@ -288,3 +288,63 @@ TEST(ValidateRegulatorsConfigTest, Rule)
                             "[] is too short");
     }
 }
+TEST(ValidateRegulatorsConfigTest, And)
+{
+    // Valid.
+    {
+        json configFile = validConfigFile;
+        json andAction =
+            R"(
+                {
+                 "and": [
+                    { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+                    { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+                  ]
+                }
+            )"_json;
+        configFile["rules"][0]["actions"].push_back(andAction);
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: actions property value is an empty array.
+    {
+        json configFile = validConfigFile;
+        json andAction =
+            R"(
+                {
+                 "and": []
+                }
+            )"_json;
+        configFile["rules"][0]["actions"].push_back(andAction);
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+
+    // Invalid: actions property has incorrect value data type.
+    {
+        json configFile = validConfigFile;
+        json andAction =
+            R"(
+                {
+                 "and": true
+                }
+            )"_json;
+        configFile["rules"][0]["actions"].push_back(andAction);
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+
+    // Invalid: actions property value contains wrong element type
+    {
+        json configFile = validConfigFile;
+        json andAction =
+            R"(
+                {
+                 "and": ["foo"]
+                }
+            )"_json;
+        configFile["rules"][0]["actions"].push_back(andAction);
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'foo' is not of type u'object'");
+    }
+}
