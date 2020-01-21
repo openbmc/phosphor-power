@@ -1783,3 +1783,69 @@ TEST(ValidateRegulatorsConfigTest, ChassisDevicesRailSensorMonitoring)
                             "[] is too short");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleDuplicateRuleID)
+{
+    // Invalid: test duplicate ID in rule.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][1]["id"] = "set_voltage_rule";
+        configFile["rules"][1]["actions"][0]["pmbus_write_vout_command"]
+                  ["format"] = "linear";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate rule ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, RuleDuplicateChassisNumber)
+{
+    // Invalid: test duplicate number in chassis.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][1]["number"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate chassis number.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, RuleDuplicateDeviceID)
+{
+    // Invalid: test duplicate ID in device.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][1]["id"] = "vdd_regulator";
+        configFile["chassis"][0]["devices"][1]["is_regulator"] = true;
+        configFile["chassis"][0]["devices"][1]["fru"] =
+            "/system/chassis/motherboard/regulator1";
+        configFile["chassis"][0]["devices"][1]["i2c_interface"]["bus"] = 2;
+        configFile["chassis"][0]["devices"][1]["i2c_interface"]["address"] =
+            "0x71";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate device ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, RuleDuplicateRailID)
+{
+    // Invalid: test duplicate ID in rail.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][1]["id"] = "vdd";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate rail ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, RuleDuplicateGlobalID)
+{
+    // Invalid: test duplicate ID in global.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][1]["id"] =
+            "vdd_regulator";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate global ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, RuleInfinitLoops)
+{
+    // Invalid: test rule actions run_rule with infinite loops.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][1]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][1]["id"] = "set_voltage_rule1";
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][2]["id"] = "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile, "Error: Infinite loops.", "");
+    }
+}
