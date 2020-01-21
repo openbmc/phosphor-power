@@ -348,3 +348,56 @@ TEST(ValidateRegulatorsConfigTest, And)
                             "u'foo' is not of type u'object'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, ComparePresence)
+{
+    json comparePresenceFile = validConfigFile;
+    comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["fru"] =
+        "/system/chassis/motherboard/regulator2";
+    comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["value"] =
+        true;
+    // Valid.
+    {
+        json configFile = comparePresenceFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: no FRU property.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'fru' is a required property");
+    }
+
+    // Invalid: FRU property length is string less than 1.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'' is too short");
+    }
+
+    // Invalid: no value property.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+
+    // Invalid: value property type is not boolean.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["value"] = "1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'1' is not of type u'boolean'");
+    }
+
+    // Invalid: FRU property type is not string.
+    {
+        json configFile = comparePresenceFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+}
