@@ -474,3 +474,99 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, I2cCompareBit)
+{
+    json i2cCompareBitFile = validConfigFile;
+    i2cCompareBitFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] =
+        "0xA0";
+    i2cCompareBitFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] =
+        3;
+    i2cCompareBitFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = 1;
+    // Valid: test rule actions i2c_compare_bit.
+    {
+        json configFile = i2cCompareBitFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test i2c_compare_bit with no register.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase(
+            "register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'register' is a required property");
+    }
+    // Invalid: test i2c_compare_bit with no position.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase(
+            "position");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'position' is a required property");
+    }
+    // Invalid: test i2c_compare_bit with no value.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+    // Invalid: test i2c_compare_bit with register wrong type.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_compare_bit with register wrong format.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] =
+            "0xA00";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0xA00' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bit with position wrong type.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] =
+            3.1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "3.1 is not of type u'integer'");
+    }
+    // Invalid: test i2c_compare_bit with position greater than 7.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] = 8;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "8 is greater than the maximum of 7");
+    }
+    // Invalid: test i2c_compare_bit with position less than 0.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] =
+            -1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "-1 is less than the minimum of 0");
+    }
+    // Invalid: test i2c_compare_bit with value wrong type.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = "1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'1' is not of type u'integer'");
+    }
+    // Invalid: test i2c_compare_bit with value greater than 1.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = 2;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "2 is greater than the maximum of 1");
+    }
+    // Invalid: test i2c_compare_bit with value less than 0.
+    {
+        json configFile = i2cCompareBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = -1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "-1 is less than the minimum of 0");
+    }
+}
