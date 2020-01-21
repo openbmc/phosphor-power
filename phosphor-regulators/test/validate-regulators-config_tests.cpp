@@ -726,3 +726,181 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
                             "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
+{
+    json i2cCompareBytesFile = validConfigFile;
+    i2cCompareBytesFile["rules"][0]["actions"][1]["i2c_compare_bytes"]
+                       ["register"] = "0x82";
+    i2cCompareBytesFile["rules"][0]["actions"][1]["i2c_compare_bytes"]
+                       ["values"] = {"0x02", "0x73"};
+    i2cCompareBytesFile["rules"][0]["actions"][1]["i2c_compare_bytes"]
+                       ["masks"] = {"0x7F", "0x7F"};
+    // Valid: test i2c_compare_bytes.
+    {
+        json configFile = i2cCompareBytesFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test i2c_compare_bytes with all required properties.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"].erase(
+            "masks");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test i2c_compare_bytes with no register.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"].erase(
+            "register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'register' is a required property");
+    }
+    // Invalid: test i2c_compare_bytes with no values.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"].erase(
+            "values");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'values' is a required property");
+    }
+    // Invalid: test i2c_compare_bytes with property values as empty array.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test i2c_compare_bytes with property masks as empty array.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test i2c_compare_bytes with property register wrong type.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_compare_bytes with property values wrong type.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+    // Invalid: test i2c_compare_bytes with property masks wrong type.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+    // Invalid: test i2c_compare_bytes with property register more than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property values more than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property masks more than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property register less than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "0x8";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property values less than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
+            "0x8";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property masks less than 2 hex
+    // digits.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
+            "0x8";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property register no leading prefix.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "82";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property values no leading prefix.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
+            "82";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property masks no leading prefix.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
+            "82";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property register invalid hex digit.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "0xG1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property values invalid hex digit.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
+            "0xG1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_compare_bytes with property masks invalid hex digit.
+    {
+        json configFile = i2cCompareBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
+            "0xG1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+}
