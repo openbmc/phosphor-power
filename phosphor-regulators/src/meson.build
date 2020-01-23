@@ -31,6 +31,8 @@ phosphor_regulators_library = static_library(
 phosphor_regulators = executable(
     'phosphor-regulators',
     'main.cpp',
+    'interfaces/manager.cpp',
+    'manager.cpp',
     dependencies: [
         sdbusplus,
         sdeventplus,
