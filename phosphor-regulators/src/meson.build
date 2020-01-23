@@ -31,6 +31,7 @@ phosphor_regulators = executable(
     'main.cpp',
     gen_intf_cpp,
     gen_intf_hpp,
+    'manager.cpp',
     dependencies: [
         sdbusplus,
         sdeventplus,
