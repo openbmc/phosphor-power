@@ -32,6 +32,8 @@ phosphor_regulators = executable(
     'phosphor-regulators',
     'journal.cpp',
     'main.cpp',
+    'interfaces/manager.cpp',
+    'manager.cpp',
     dependencies: [
         libi2c_dep,
         phosphor_logging,
