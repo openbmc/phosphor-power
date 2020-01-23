@@ -16,11 +16,17 @@
 
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
+#include "manager.hpp"
 
 int main(void)
 {
+    using namespace phosphor::power;
+
     auto bus = sdbusplus::bus::new_default();
     auto event = sdeventplus::Event::get_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+
+    regulators::Manager manager(bus);
+
     return event.loop();
 }
