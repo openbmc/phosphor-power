@@ -23,8 +23,11 @@ class PowerSupply
     /**
      * @param[in] invpath - string for inventory path to use
      */
-    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath) :
-        bus(bus), inventoryPath(invpath)
+    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+                std::uint8_t i2cbus, std::string i2caddr) :
+        bus(bus),
+        inventoryPath(invpath),
+        pmbusIntf(phosphor::pmbus::createPMBus(i2cbus, i2caddr))
     {
         // Setup the function to call when the D-Bus inventory path for the
         // Present property changes.
