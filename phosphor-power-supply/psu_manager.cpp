@@ -94,7 +94,10 @@ void PSUManager::getJSONProperties(
         if (psuJSON.contains("Inventory"))
         {
             std::string invpath = psuJSON["Inventory"];
-            auto psu = std::make_unique<PowerSupply>(bus, invpath);
+            std::uint8_t i2cbus = psuJSON["Bus"];
+            std::string i2caddr = psuJSON["Address"];
+            auto psu =
+                std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
             psus.emplace_back(std::move(psu));
         }
     }
