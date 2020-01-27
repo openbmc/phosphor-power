@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pmbus.hpp"
 #include "types.hpp"
 
 #include <sdbusplus/bus/match.hpp>
@@ -110,6 +111,13 @@ class PowerSupply
      **/
     std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
     std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
+
+    /**
+     * @brief Pointer to the PMBus interface
+     *
+     * Used to read or write to/from PMBus power supply devices.
+     */
+    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
 
     /**
      *  @brief Updates the presence status by querying D-Bus
