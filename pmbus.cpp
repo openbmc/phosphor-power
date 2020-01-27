@@ -336,5 +336,21 @@ void PMBus::findHwmonDir()
     }
 }
 
+std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint8_t bus,
+                                              const std::string& address)
+{
+    const std::string physpath = {"/sys/bus/i2c/devices/" +
+                                  std::to_string(bus) + "-" + address};
+    auto interface = std::make_unique<PMBus>(physpath);
+
+    return interface;
+}
+
+std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus,
+                                       const std::string& address)
+{
+    return PMBus::createPMBus(bus, address);
+}
+
 } // namespace pmbus
 } // namespace phosphor

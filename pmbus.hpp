@@ -110,6 +110,19 @@ enum class Type
 };
 
 /**
+ * @class PMBusBase
+ *
+ * This is a base class for PMBus to assist with unit testing via mocking.
+ */
+class PMBusBase
+{
+  public:
+    virtual ~PMBusBase() = default;
+};
+
+std::unique_ptr<PMBusBase> createPMBus(std::uint8_t, const std::string&);
+
+/**
  * @class PMBus
  *
  * This class is an interface to communicating with PMBus devices
@@ -119,7 +132,7 @@ enum class Type
  * in the base device directory (the one passed into the constructor),
  * or in the hwmon directory for the device.
  */
-class PMBus
+class PMBus : public PMBusBase
 {
   public:
     PMBus() = delete;
@@ -156,6 +169,17 @@ class PMBus
     {
         findHwmonDir();
     }
+
+    /**
+     * Wrapper function for PMBus
+     *
+     * @param[in] I2C bus
+     * @param[in] I2C address (as a 2-byte string, e.g. 0069)
+     *
+     * @return PMBusBase pointer
+     */
+    static std::unique_ptr<PMBusBase> createPMBus(std::uint8_t,
+                                                  const std::string&);
 
     /**
      * Reads a file in sysfs that represents a single bit,
