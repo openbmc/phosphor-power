@@ -1,6 +1,7 @@
 #pragma once
 
 #include "types.hpp"
+#include "pmbus.hpp"
 
 #include <sdbusplus/bus/match.hpp>
 
@@ -23,8 +24,10 @@ class PowerSupply
     /**
      * @param[in] invpath - string for inventory path to use
      */
-    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath) :
-        bus(bus), inventoryPath(invpath)
+    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+                std::uint16_t i2cbus, std::uint16_t i2caddr) :
+        bus(bus), inventoryPath(invpath),
+        pmbusIntf(phosphor::pmbus::createPMBus(i2cbus, i2caddr))
     {
         // Setup the function to call when the D-Bus inventory path for the
         // Present property changes.
@@ -107,6 +110,13 @@ class PowerSupply
      **/
     std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
     std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
+
+    /**
+     * @brief Pointer to the PMBus interface
+     *
+     * Used to read or write to/from PMBus power supply devices.
+     */
+    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
 
     /**
      *  @brief Updates the presence status by querying D-Bus

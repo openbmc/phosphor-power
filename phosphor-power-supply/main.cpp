@@ -44,7 +44,7 @@ void getJSONProperties(const std::string& path, sdbusplus::bus::bus& bus,
     for (auto psuJSON : configFileJSON["PowerSupplies"])
     {
         std::string invpath = psuJSON["Inventory"];
-        auto psu = std::make_unique<PowerSupply>(bus, invpath);
+        auto psu = std::make_unique<PowerSupply>(bus, invpath, 0, 0x68);
         psus.emplace_back(std::move(psu));
     }
 }

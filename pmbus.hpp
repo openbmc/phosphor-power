@@ -110,6 +110,17 @@ enum class Type
 };
 
 /**
+ * @class PMBusBase
+ *
+ * This is a base class for PMBus to assist with unit testing via mocking.
+ */
+class PMBusBase
+{
+};
+
+std::unique_ptr<PMBusBase> createPMBus(std::uint16_t, std::uint16_t);
+
+/**
  * @class PMBus
  *
  * This class is an interface to communicating with PMBus devices
@@ -119,7 +130,7 @@ enum class Type
  * in the base device directory (the one passed into the constructor),
  * or in the hwmon directory for the device.
  */
-class PMBus
+class PMBus : public PMBusBase
 {
   public:
     PMBus() = delete;
@@ -156,6 +167,8 @@ class PMBus
     {
         findHwmonDir();
     }
+
+    static std::unique_ptr<PMBusBase> createPMBus(std::uint16_t, std::uint16_t);
 
     /**
      * Reads a file in sysfs that represents a single bit,
