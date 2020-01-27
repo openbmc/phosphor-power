@@ -73,8 +73,7 @@ fs::path PMBus::getPath(Type type)
         case Type::Debug:
             return debugPath / "pmbus" / hwmonDir;
             break;
-        case Type::DeviceDebug:
-        {
+        case Type::DeviceDebug: {
             auto dir = driverName + "." + std::to_string(instance);
             return debugPath / dir;
             break;
@@ -336,16 +335,17 @@ void PMBus::findHwmonDir()
     }
 }
 
-std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint16_t bus, std::uint16_t address)
+std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint8_t bus,
+                                              std::string address)
 {
     const std::string objpath = {"/sys/bus/i2c/devices/" + std::to_string(bus) +
-        "-00" + std::to_string(address)};
+                                 "-" + address};
     std::unique_ptr<PMBusBase> interface(new PMBus(objpath));
 
     return interface;
 }
 
-std::unique_ptr<PMBusBase> createPMBus(std::uint16_t bus, std::uint16_t address)
+std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus, std::string address)
 {
     return PMBus::createPMBus(bus, address);
 }

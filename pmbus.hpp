@@ -118,7 +118,7 @@ class PMBusBase
 {
 };
 
-std::unique_ptr<PMBusBase> createPMBus(std::uint16_t, std::uint16_t);
+std::unique_ptr<PMBusBase> createPMBus(std::uint8_t, std::string);
 
 /**
  * @class PMBus
@@ -168,7 +168,7 @@ class PMBus : public PMBusBase
         findHwmonDir();
     }
 
-    static std::unique_ptr<PMBusBase> createPMBus(std::uint16_t, std::uint16_t);
+    static std::unique_ptr<PMBusBase> createPMBus(std::uint8_t, std::string);
 
     /**
      * Reads a file in sysfs that represents a single bit,
