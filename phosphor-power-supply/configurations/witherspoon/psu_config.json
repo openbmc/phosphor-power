@@ -8,12 +8,12 @@
         {
             "Inventory" : "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0",
             "Bus" : 3,
-            "Address" : "0x68"
+            "Address" : "0068"
         },
         {
             "Inventory" : "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1",
             "Bus" : 3,
-            "Address" : "0x69"
+            "Address" : "0069"
         }
     ]
 }

@@ -21,10 +21,14 @@ class PowerSupply
     ~PowerSupply() = default;
 
     /**
-     * @param[in] invpath - string for inventory path to use
+     * @param[in] invpath - String for inventory path to use
+     * @param[in] i2cbus - The bus number this power supply is on
+     * @param[in] i2caddr - The 16-bit I2C address of the power supply
      */
-    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath) :
-        bus(bus), inventoryPath(invpath)
+    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+                std::uint8_t i2cbus, const std::string& i2caddr) :
+        bus(bus),
+        inventoryPath(invpath), i2cbus(i2cbus), i2caddr(i2caddr)
     {
         // Setup the function to call when the D-Bus inventory path for the
         // Present property changes.
@@ -98,6 +102,19 @@ class PowerSupply
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
     std::string inventoryPath;
+
+    /**
+     * @brief I2C bus that this power supply is on.
+     */
+    std::uint8_t i2cbus;
+
+    /**
+     * @brief I2C address of this power supply.
+     *
+     * The PMBus device driver will put this in a path with 16-bit address,
+     * represented as a file path string.
+     */
+    std::string i2caddr;
 
     /** @brief True if the power supply is present. */
     bool present = false;
