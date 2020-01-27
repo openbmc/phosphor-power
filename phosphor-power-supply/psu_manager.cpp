@@ -88,11 +88,19 @@ void PSUManager::getJSONProperties(
 
     for (auto psuJSON : configFileJSON["PowerSupplies"])
     {
-        if (psuJSON.contains("Inventory"))
+        if (psuJSON.contains("Inventory") && psuJSON.contains("Bus") &&
+            psuJSON.contains("Address"))
         {
             std::string invpath = psuJSON["Inventory"];
-            auto psu = std::make_unique<PowerSupply>(bus, invpath);
+            std::uint8_t i2cbus = psuJSON["Bus"];
+            std::string i2caddr = psuJSON["Address"];
+            auto psu =
+                std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
             psus.emplace_back(std::move(psu));
+        }
+        else
+        {
+            log<level::ERR>("Insufficient PowerSupply properties");
         }
     }
 
