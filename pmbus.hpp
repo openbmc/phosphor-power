@@ -52,6 +52,10 @@ constexpr auto VOUT_FAULT = 0x8000;
 // to see if the INPUT FAULT OR WARNING bit is on.
 constexpr auto INPUT_FAULT_WARN = 0x2000;
 
+// The bit mask representing the MFRSPECIFIC fault, bit 4 of STATUS_WORD high
+// byte. A manufacturer specific fault or warning has occurred.
+constexpr auto MFR_SPECIFIC_FAULT = 0x1000;
+
 // The bit mask representing the POWER_GOOD Negated bit of the STATUS_WORD.
 constexpr auto POWER_GOOD_NEGATED = 0x0800;
 
@@ -116,6 +120,10 @@ enum class Type
  */
 class PMBusBase
 {
+  public:
+    virtual ~PMBusBase() = default;
+
+    virtual uint64_t read(const std::string& name, Type type) = 0;
 };
 
 std::unique_ptr<PMBusBase> createPMBus(std::uint8_t, const std::string&);
@@ -214,7 +222,7 @@ class PMBus : public PMBusBase
      *
      * @return uint64_t - Up to 8 bytes of data read from file.
      */
-    uint64_t read(const std::string& name, Type type);
+    uint64_t read(const std::string& name, Type type) override;
 
     /**
      * Read a string from file in sysfs.
