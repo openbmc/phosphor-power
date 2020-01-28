@@ -15,8 +15,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
 {
     // Parse out the JSON properties needed to pass down to the PSU manager.
     sys_properties properties;
-    std::vector<std::unique_ptr<PowerSupply>> lpsus;
-    getJSONProperties(configfile, bus, properties, lpsus);
+    getJSONProperties(configfile, bus, properties, psus);
 
     using namespace sdeventplus;
     auto interval = std::chrono::milliseconds(properties.pollInterval);
@@ -25,8 +24,6 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
 
     minPSUs = {properties.minPowerSupplies};
     maxPSUs = {properties.maxPowerSupplies};
-
-    psus = {std::move(lpsus)};
 
     // Subscribe to power state changes
     powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
