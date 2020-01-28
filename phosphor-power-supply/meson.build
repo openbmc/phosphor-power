@@ -1,9 +1,10 @@
 
-executable(
+phosphor_psu_monitor = executable(
     'phosphor-psu-monitor',
     'main.cpp',
     'psu_manager.cpp',
     'power_supply.cpp',
+    'util.cpp',
     dependencies: [
         sdbusplus,
         sdeventplus,
@@ -14,3 +15,9 @@ executable(
         libpower,
     ]
 )
+
+power_supply = phosphor_psu_monitor.extract_objects('power_supply.cpp')
+
+if get_option('tests').enabled()
+  subdir('test')
+endif
