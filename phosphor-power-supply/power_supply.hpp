@@ -48,9 +48,7 @@ class PowerSupply
      * If a certain fault bits are on, the appropriate error will be
      * committed.
      */
-    void analyze()
-    {
-    }
+    void analyze();
 
     /**
      * Write PMBus CLEAR_FAULTS
@@ -62,6 +60,10 @@ class PowerSupply
      */
     void clearFaults()
     {
+        faultFound = false;
+        inputFault = false;
+        mfrFault = false;
+        vinUVFault = false;
     }
 
     /**
@@ -91,12 +93,53 @@ class PowerSupply
         return present;
     }
 
+    /**
+     * @brief Returns true if a fault was found.
+     */
+    bool isFaulted() const
+    {
+        return faultFound;
+    }
+
+    /**
+     * @brief Returns true if INPUT fault occurred.
+     */
+    bool hasInputFault() const
+    {
+        return inputFault;
+    }
+
+    /**
+     * @brief Returns true if MFRSPECIFIC occurred.
+     */
+    bool hasMFRFault() const
+    {
+        return mfrFault;
+    }
+
+    /**
+     * @brief Returns true if VIN_UV_FAULT occurred.
+     */
+    bool hasVINUVFault() const
+    {
+        return vinUVFault;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
 
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
+
+    /** @brief True if bit 5 of STATUS_WORD high byte is on. */
+    bool inputFault = false;
+
+    /** @brief True if bit 4 of STATUS_WORD high byte is on. */
+    bool mfrFault = false;
+
+    /** @brief True if bit 3 of STATUS_WORD low byte is on. */
+    bool vinUVFault = false;
 
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
