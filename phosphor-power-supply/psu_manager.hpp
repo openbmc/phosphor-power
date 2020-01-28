@@ -125,6 +125,8 @@ class PSUManager
         {
             psu->clearFaults();
         }
+
+        faultLogged = false;
     }
 
   private:
@@ -147,10 +149,35 @@ class PSUManager
         {
             psu->analyze();
         }
+
+        for (auto& psu : psus)
+        {
+            // TODO: Fault priorities #918
+            if (!faultLogged && psu->isFaulted())
+            {
+                if (psu->hasInputFault())
+                {
+                    // TODO: Create error log
+                }
+
+                if (psu->hasMFRFault())
+                {
+                    // TODO: Create error log
+                }
+
+                if (psu->hasVINUVFault())
+                {
+                    // TODO: Create error log
+                }
+            }
+        }
     }
 
     /** @brief True if the power is on. */
     bool powerOn = false;
+
+    /** @brief True if fault logged. Clear in clearFaults(). */
+    bool faultLogged = false;
 
     /** @brief Used as part of subscribing to power on state changes*/
     std::string powerService;
