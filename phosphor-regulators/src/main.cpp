@@ -27,7 +27,7 @@ int main(void)
     auto event = sdeventplus::Event::get_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    regulators::Manager manager(bus);
+    regulators::Manager manager(bus, event);
 
     return event.loop();
 }
