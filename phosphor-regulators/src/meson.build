@@ -38,7 +38,8 @@ phosphor_regulators = executable(
         libi2c_dep,
         phosphor_logging,
         sdbusplus,
-        sdeventplus
+        sdeventplus,
+        stdplus
     ],
     link_with: phosphor_regulators_library,
     implicit_include_directories: false,
