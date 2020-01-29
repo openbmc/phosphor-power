@@ -1,0 +1,12 @@
+[Unit]
+Description=Phosphor Power Regulators Disable Monitoring
+Wants=obmc-host-stop-pre@0.target
+Before=obmc-host-stop-pre@0.target
+Conflicts=phosphor-regulators-monitor.service
+
+[Service]
+RemainAfterExit=yes
+ExecStart=regsctl --monitor disable
+
+[Install]
+WantedBy=obmc-host-stop@0.target
