@@ -16,8 +16,11 @@
 
 #include "manager.hpp"
 
+#include <functional>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
+#include <sdeventplus/source/signal.hpp>
+#include <stdplus/signal.hpp>
 
 int main(void)
 {
@@ -28,6 +31,12 @@ int main(void)
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
     regulators::Manager manager(bus, event);
+
+    // Handle HUP signals
+    stdplus::signal::block(SIGHUP);
+    sdeventplus::source::Signal signal(event, SIGHUP,
+        std::bind(&regulators::Manager::sighupHandler,
+                  &manager, std::placeholders::_1, std::placeholders::_2));
 
     return event.loop();
 }

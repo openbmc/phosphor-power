@@ -26,7 +26,8 @@ phosphor_regulators = executable(
     dependencies: [
         sdbusplus,
         sdeventplus,
-        libi2c_dep
+        libi2c_dep,
+        stdplus
     ],
     link_with: phosphor_regulators_library,
     implicit_include_directories: false,
