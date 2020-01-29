@@ -18,6 +18,8 @@
 
 #include <sdbusplus/bus.hpp>
 
+#include <chrono>
+
 namespace phosphor
 {
 namespace power
@@ -25,8 +27,8 @@ namespace power
 namespace regulators
 {
 
-Manager::Manager(sdbusplus::bus::bus& bus) :
-    ManagerObject(bus, objPath, true), bus(bus)
+Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
+    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event)
 {
     // TODO get property (IM keyword)
     // call parse json function
@@ -48,12 +50,22 @@ void Manager::monitor(bool enable)
 {
     if (enable)
     {
-        // TODO Enable timer event that will do the monitoring
+        Timer timer(eventLoop, std::bind(&Manager::timerExpired, this));
+        // Set timer as a repeating 1sec timer
+        timer.restart(std::chrono::milliseconds(1000));
+        timers.emplace_back(std::move(timer));
     }
     else
     {
-        // TODO Disable/delete timer event to stop monitoring
+        // Delete all timers to disable monitoring
+        timers.clear();
     }
+}
+
+void Manager::timerExpired()
+{
+    // TODO Analyze, refresh sensor status, and
+    // collect/update telemetry for each regulator
 }
 
 } // namespace regulators
