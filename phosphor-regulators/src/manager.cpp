@@ -68,6 +68,12 @@ void Manager::timerExpired()
     // collect/update telemetry for each regulator
 }
 
+void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
+                            const struct signalfd_siginfo* /*sigInfo*/)
+{
+    // TODO Reload and process the configuration data
+}
+
 } // namespace regulators
 } // namespace power
 } // namespace phosphor
