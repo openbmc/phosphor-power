@@ -49,7 +49,8 @@ services = [
     'phosphor-psu-monitor.service',
     'phosphor-regulators.service',
     'phosphor-regulators-config.service',
-    'phosphor-regulators-monitor-enable.service'
+    'phosphor-regulators-monitor-enable.service',
+    'phosphor-regulators-monitor-disable.service'
 ]
 
 foreach service : services
