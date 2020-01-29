@@ -24,6 +24,7 @@ sdbusplus = dependency('sdbusplus')
 sdbuspp = find_program('sdbus++')
 sdeventplus = dependency('sdeventplus')
 pthread = dependency('threads')
+stdplus = dependency('stdplus')
 
 systemd = dependency('systemd')
 servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
