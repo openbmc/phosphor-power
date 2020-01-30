@@ -16,6 +16,10 @@ namespace regulators
 
 constexpr auto busName = "xyz.openbmc_project.Power.Regulators";
 constexpr auto objPath = "/xyz/openbmc_project/power/regulators/manager";
+constexpr auto sysDbusObj = "/xyz/openbmc_project/inventory";
+constexpr auto sysDbusPath = "/xyz/openbmc_project/inventory/system";
+constexpr auto sysDbusIntf = "xyz.openbmc_project.Inventory.Item.System";
+constexpr auto sysDbusProp = "Identifier";
 
 using Timer = sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>;
 
