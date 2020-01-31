@@ -537,6 +537,137 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, Devices)
+{
+
+    // Valid: test chassis devices.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test chassis devices with required properties.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0].erase("comments");
+        configFile["chassis"][0]["devices"][0].erase("presence_detection");
+        configFile["chassis"][0]["devices"][0].erase("configuration");
+        configFile["chassis"][0]["devices"][0].erase("rails");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test chassis devices with no id.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0].erase("id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id' is a required property");
+    }
+    // Invalid: test chassis devices with no is_regulator.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0].erase("is_regulator");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'is_regulator' is a required property");
+    }
+    // Invalid: test chassis devices with no fru.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'fru' is a required property");
+    }
+    // Invalid: test chassis devices with no i2c_interface.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0].erase("i2c_interface");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'i2c_interface' is a required property");
+    }
+    // Invalid: test chassis devices with property comments wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test chassis devices with property id wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test chassis devices with property is_regulator wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["is_regulator"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'boolean'");
+    }
+    // Invalid: test chassis devices with property fru wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["fru"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test chassis devices with property i2c_interface wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test chassis devices with property presence_detection wrong
+    // type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test chassis devices with property configuration wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["configuration"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test chassis devices with property rails wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test chassis devices with property comments empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test chassis devices with property fru lenth less than 1.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'' is too short");
+    }
+    // Invalid: test chassis devices with property id wrong format.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["id"] = "id#";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id#' does not match u'^[A-Za-z0-9_]+$'");
+    }
+    // Invalid: test chassis devices with property rails empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, I2cCompareBit)
 {
     json i2cCompareBitFile = validConfigFile;
