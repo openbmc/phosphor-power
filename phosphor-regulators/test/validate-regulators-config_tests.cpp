@@ -1100,6 +1100,62 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
                             "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, I2CInterface)
+{
+    // Valid: test i2c_interface.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: testi2c_interface with no bus.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"].erase("bus");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'bus' is a required property");
+    }
+    // Invalid: test i2c_interface with no address.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"].erase(
+            "address");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'address' is a required property");
+    }
+    // Invalid: test i2c_interface with property bus wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"]["bus"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'integer'");
+    }
+    // Invalid: test i2c_interface with property address wrong
+    // type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"]["address"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test i2c_interface with property bus less than
+    // 0.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"]["bus"] = -1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "-1 is less than the minimum of 0");
+    }
+    // Invalid: test i2c_interface with property address wrong
+    // format.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["i2c_interface"]["address"] =
+            "0x700";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x700' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, If)
 {
     json ifFile = validConfigFile;
