@@ -1803,6 +1803,110 @@ TEST(ValidateRegulatorsConfigTest, RunRule)
             "u'set_voltage_rule%' does not match u'^[A-Za-z0-9_]+$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
+{
+    // Valid: test rails sensor_monitoring with only property rule id.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["comments"][0] = "comments";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test rails sensor_monitoring with only property actions.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+            .erase("rule_id");
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"][0]["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"][0]["compare_presence"]["value"] = true;
+        EXPECT_JSON_VALID(configFile);
+
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["comments"][0] = "comments";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test rails sensor_monitoring with both property rule_id and
+    // actions.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"][0]["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"][0]["compare_presence"]["value"] = true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'rule_id': u'read_sensors_rule', u'actions': "
+            "[{u'compare_presence': {u'value': True, u'fru': "
+            "u'/system/chassis/motherboard/cpu3'}}]} is valid under each of "
+            "{u'required': [u'actions']}, {u'required': [u'rule_id']}");
+    }
+    // Invalid: test rails sensor_monitoring with no rule_id and actions.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+            .erase("rule_id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'rule_id' is a required property");
+    }
+    // Invalid: test rails sensor_monitoring with property comments wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test rails sensor_monitoring with property rule_id wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["rule_id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test rails sensor_monitoring with property actions wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+            .erase("rule_id");
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test rails sensor_monitoring with property rule_id wrong format.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["rule_id"] = "id@";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id@' does not match u'^[A-Za-z0-9_]+$'");
+    }
+    // Invalid: test rails sensor_monitoring with property comments empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test rails sensor_monitoring with property actions empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+            .erase("rule_id");
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["actions"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, SetDevice)
 {
     json setDeviceFile = validConfigFile;
