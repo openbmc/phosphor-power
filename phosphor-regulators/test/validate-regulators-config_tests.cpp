@@ -537,6 +537,108 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, Configuration)
+{
+    json configurationFile = validConfigFile;
+    configurationFile["chassis"][0]["devices"][0]["configuration"]["comments"]
+                     [0] = "Set rail to 1.25V using standard rule";
+    configurationFile["chassis"][0]["devices"][0]["configuration"]["volts"] =
+        1.25;
+    configurationFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
+        "set_voltage_rule";
+    // Valid: test configuration with property rule_id and with no actions.
+    {
+        json configFile = configurationFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test configuration with property actions and with no rule_id.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
+                  ["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
+                  ["compare_presence"]["value"] = true;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test configuration with both property actions rule_id.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
+                  ["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
+                  ["compare_presence"]["value"] = true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'volts': 1.25, u'comments': [u'Set rail to 1.25V using standard "
+            "rule'], u'actions': [{u'compare_presence': {u'value': True, "
+            "u'fru': u'/system/chassis/motherboard/cpu3'}}], u'rule_id': "
+            "u'set_voltage_rule'} is valid under each of {u'required': "
+            "[u'actions']}, {u'required': [u'rule_id']}");
+    }
+    // Invalid: test configuration with no rule_id and actions.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"].erase(
+            "rule_id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'rule_id' is a required property");
+    }
+    // Invalid: test configuration with property volts wrong type.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["volts"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'number'");
+    }
+    // Invalid: test configuration with property rule_id wrong type.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test configuration with property actions wrong type.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"] =
+            true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test configuration with property comments empty array.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["comments"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test configuration with property rule_id wrong format.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
+            "id!";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id!' does not match u'^[A-Za-z0-9_]+$'");
+    }
+    // Invalid: test configuration with property actions empty array.
+    {
+        json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["configuration"]["actions"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, Devices)
 {
 
