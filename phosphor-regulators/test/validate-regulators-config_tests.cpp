@@ -200,94 +200,6 @@ void expectJsonInvalid(const json configFileJson,
     unlink(fileName.c_str());
 }
 
-TEST(ValidateRegulatorsConfigTest, Rule)
-{
-    // valid test comments property, id property,
-    // action property specified.
-    {
-        json configFile = validConfigFile;
-        EXPECT_JSON_VALID(configFile);
-    }
-
-    // valid test rule with no comments
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0].erase("comments");
-        EXPECT_JSON_VALID(configFile);
-    }
-
-    // invalid test comments property has invalid value type
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["comments"] = {1};
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
-    }
-
-    // invalid test rule with no ID
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0].erase("id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id' is a required property");
-    }
-
-    // invalid test id property has invalid value type (not string)
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["id"] = true;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
-    }
-
-    // invalid test id property has invalid value
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["id"] = "foo%";
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo%' does not match u'^[A-Za-z0-9_]+$'");
-    }
-
-    // invalid test rule with no actions property
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0].erase("actions");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'actions' is a required property");
-    }
-
-    // valid test rule with multiple actions
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["actions"][1]["run_rule"] =
-            "set_page0_voltage_rule";
-        EXPECT_JSON_VALID(configFile);
-    }
-
-    // invalid test actions property has invalid value type (not an array)
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["actions"] = 1;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
-    }
-
-    // invalid test actions property has invalid value of action
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["actions"][0] = "foo";
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
-    }
-
-    // invalid test actions property has empty array
-    {
-        json configFile = validConfigFile;
-        configFile["rules"][0]["actions"] = json::array();
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "[] is too short");
-    }
-}
 TEST(ValidateRegulatorsConfigTest, And)
 {
     // Valid.
@@ -1783,6 +1695,94 @@ TEST(ValidateRegulatorsConfigTest, Rails)
         configFile["chassis"][0]["devices"][0]["rails"][0]["id"] = "id~";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "u'id~' does not match u'^[A-Za-z0-9_]+$'");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, Rule)
+{
+    // valid test comments property, id property,
+    // action property specified.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // valid test rule with no comments
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0].erase("comments");
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // invalid test comments property has invalid value type
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["comments"] = {1};
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+
+    // invalid test rule with no ID
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0].erase("id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id' is a required property");
+    }
+
+    // invalid test id property has invalid value type (not string)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+
+    // invalid test id property has invalid value
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["id"] = "foo%";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'foo%' does not match u'^[A-Za-z0-9_]+$'");
+    }
+
+    // invalid test rule with no actions property
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0].erase("actions");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'actions' is a required property");
+    }
+
+    // valid test rule with multiple actions
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["run_rule"] =
+            "set_page0_voltage_rule";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // invalid test actions property has invalid value type (not an array)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+
+    // invalid test actions property has invalid value of action
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][0] = "foo";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'foo' is not of type u'object'");
+    }
+
+    // invalid test actions property has empty array
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
     }
 }
 TEST(ValidateRegulatorsConfigTest, RunRule)
