@@ -1919,3 +1919,80 @@ TEST(ValidateRegulatorsConfigTest, SetDevice)
             "u'io_expander2%' does not match u'^[A-Za-z0-9_]+$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, DuplicateRuleID)
+{
+    // Invalid: test duplicate ID in rule.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][1]["id"] = "set_voltage_rule";
+        configFile["rules"][1]["actions"][0]["pmbus_write_vout_command"]
+                  ["format"] = "linear";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate rule ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, DuplicateChassisNumber)
+{
+    // Invalid: test duplicate number in chassis.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][1]["number"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate chassis number.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, DuplicateDeviceID)
+{
+    // Invalid: test duplicate ID in device.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][1]["id"] = "vdd_regulator";
+        configFile["chassis"][0]["devices"][1]["is_regulator"] = true;
+        configFile["chassis"][0]["devices"][1]["fru"] =
+            "/system/chassis/motherboard/regulator1";
+        configFile["chassis"][0]["devices"][1]["i2c_interface"]["bus"] = 2;
+        configFile["chassis"][0]["devices"][1]["i2c_interface"]["address"] =
+            "0x71";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate device ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, DuplicateRailID)
+{
+    // Invalid: test duplicate ID in rail.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][1]["id"] = "vdd";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate rail ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, InfiniteLoops)
+{
+    // Invalid: test run_rule with infinite loop (rules run each other).
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][3]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][3]["id"] = "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile,
+                            "Infinite loop caused by run_rule actions.", "");
+    }
+    // Invalid: test run_rule with infinite loop (rule runs itself).
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        EXPECT_JSON_INVALID(configFile,
+                            "Infinite loop caused by run_rule actions.", "");
+    }
+    // Invalid: test run_rule with infinite loop (indirect loop).
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][3]["actions"][0]["run_rule"] = "set_voltage_rule3";
+        configFile["rules"][3]["id"] = "set_voltage_rule2";
+        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][4]["id"] = "set_voltage_rule3";
+        EXPECT_JSON_INVALID(configFile,
+                            "Infinite loop caused by run_rule actions.", "");
+    }
+}
