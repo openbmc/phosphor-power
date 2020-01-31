@@ -1217,6 +1217,275 @@ TEST(ValidateRegulatorsConfigTest, I2cInterface)
                             "u'0x700' does not match u'^0x[0-9A-Fa-f]{2}$'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, I2cWriteBit)
+{
+    json i2cWriteBitFile = validConfigFile;
+    i2cWriteBitFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] =
+        "0xA0";
+    i2cWriteBitFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = 3;
+    i2cWriteBitFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = 1;
+    // Valid: test rule actions i2c_write_bit.
+    {
+        json configFile = i2cWriteBitFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test i2c_write_bit with no register.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'register' is a required property");
+    }
+    // Invalid: test i2c_write_bit with no position.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("position");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'position' is a required property");
+    }
+    // Invalid: test i2c_write_bit with no value.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+    // Invalid: test i2c_write_bit with register wrong type.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_write_bit with register wrong format.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] =
+            "0xA00";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0xA00' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_write_bit with position wrong type.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = 3.1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "3.1 is not of type u'integer'");
+    }
+    // Invalid: test i2c_write_bit with position greater than 7.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = 8;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "8 is greater than the maximum of 7");
+    }
+    // Invalid: test i2c_write_bit with position less than 0.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = -1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "-1 is less than the minimum of 0");
+    }
+    // Invalid: test i2c_write_bit with value wrong type.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = "1";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'1' is not of type u'integer'");
+    }
+    // Invalid: test i2c_write_bit with value greater than 1.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = 2;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "2 is greater than the maximum of 1");
+    }
+    // Invalid: test i2c_write_bit with value less than 0.
+    {
+        json configFile = i2cWriteBitFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = -1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "-1 is less than the minimum of 0");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, I2cWriteByte)
+{
+    json i2cWriteByteFile = validConfigFile;
+    i2cWriteByteFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
+        "0x82";
+    i2cWriteByteFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] =
+        "0x40";
+    i2cWriteByteFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] =
+        "0x7F";
+    // Valid: test i2c_write_bytes with all properties.
+    {
+        json configFile = i2cWriteByteFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test i2c_write_bytes with all required properties.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"].erase("mask");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test i2c_write_bytes with no register.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"].erase(
+            "register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'register' is a required property");
+    }
+    // Invalid: test i2c_write_bytes with no values.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'value' is a required property");
+    }
+    // Invalid: test i2c_write_bytes with property register wrong type.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_write_bytes with property register wrong format.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_write_bytes with property values wrong type.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_write_bytes with property values wrong format.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] =
+            "0x400";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x400' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_write_bytes with property masks wrong type.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_write_bytes with property masks wrong format.
+    {
+        json configFile = i2cWriteByteFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] =
+            "0x7F0";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x7F0' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, I2cWriteBytes)
+{
+    json i2cWriteBytesFile = validConfigFile;
+    i2cWriteBytesFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
+        "0x82";
+    i2cWriteBytesFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] = {
+        "0x02", "0x73"};
+    i2cWriteBytesFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] = {
+        "0x7F", "0x7F"};
+    // Valid: test i2c_write_bytes.
+    {
+        json configFile = i2cWriteBytesFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test i2c_write_bytes with all required properties.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"].erase("masks");
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test i2c_write_bytes with no register.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"].erase(
+            "register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'register' is a required property");
+    }
+    // Invalid: test i2c_write_bytes with no values.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"].erase("values");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'values' is a required property");
+    }
+    // Invalid: test i2c_write_bytes with property values as empty array.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test i2c_write_bytes with property masks as empty array.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test i2c_write_bytes with property register wrong type.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'string'");
+    }
+    // Invalid: test i2c_write_bytes with property values wrong type.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+    // Invalid: test i2c_write_bytes with property masks wrong type.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] = 1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type u'array'");
+    }
+    // Invalid: test i2c_write_bytes with property register wrong format.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_write_bytes with property values wrong format.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"][0] =
+            "0x020";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x020' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+    // Invalid: test i2c_write_bytes with property masks wrong format.
+    {
+        json configFile = i2cWriteBytesFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"][0] =
+            "0x7F0";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'0x7F0' does not match u'^0x[0-9A-Fa-f]{2}$'");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, If)
 {
     json ifFile = validConfigFile;
