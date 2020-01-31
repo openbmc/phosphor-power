@@ -1464,6 +1464,108 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
                             "u'foo' is not one of [u'linear']");
     }
 }
+TEST(ValidateRegulatorsConfigTest, PresenceDetection)
+{
+    json presenceDetectionFile = validConfigFile;
+    presenceDetectionFile
+        ["chassis"][0]["devices"][0]["presence_detection"]["comments"][0] =
+            "Regulator is only present on the FooBar backplane";
+    presenceDetectionFile["chassis"][0]["devices"][0]["presence_detection"]
+                         ["rule_id"] = "is_foobar_backplane_installed_rule";
+    // Valid: test presence_detection with only property rule_id.
+    {
+        json configFile = presenceDetectionFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test presence_detection with only property actions.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
+                  [0]["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
+                  [0]["compare_presence"]["value"] = true;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test presence_detection with both property rule_id and actions.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
+                  [0]["compare_presence"]["fru"] =
+                      "/system/chassis/motherboard/cpu3";
+        configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
+                  [0]["compare_presence"]["value"] = true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'comments': [u'Regulator is only present on the FooBar "
+            "backplane'], u'actions': [{u'compare_presence': {u'value': True, "
+            "u'fru': u'/system/chassis/motherboard/cpu3'}}], u'rule_id': "
+            "u'is_foobar_backplane_installed_rule'} is valid under each of "
+            "{u'required': [u'actions']}, {u'required': [u'rule_id']}");
+    }
+    // Invalid: test presence_detection with no rule_id and actions.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
+            "rule_id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'rule_id' is a required property");
+    }
+    // Invalid: test presence_detection with property comments wrong type.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'array'");
+    }
+    // Invalid: test presence_detection with property rule_id wrong type.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["rule_id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'string'");
+    }
+    // Invalid: test presence_detection with property actions wrong type.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
+                  [0] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type u'object'");
+    }
+    // Invalid: test presence_detection with property rule_id wrong format.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["rule_id"] = "id@";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "u'id@' does not match u'^[A-Za-z0-9_]+$'");
+    }
+    // Invalid: test presence_detection with property comments empty array.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: test presence_detection with property actions empty array.
+    {
+        json configFile = presenceDetectionFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["actions"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, RunRule)
 {
     json runRuleFile = validConfigFile;
