@@ -10,6 +10,7 @@ phosphor_regulators_tests_source_files = [
     'rule_tests.cpp',
 
     'actions/action_environment_tests.cpp',
+    'actions/action_error_tests.cpp',
     'actions/action_utils_tests.cpp',
     'actions/and_action_tests.cpp',
     'actions/if_action_tests.cpp',
