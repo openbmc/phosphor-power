@@ -29,11 +29,12 @@ constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
  * @param[in] path - the D-Bus path name
  * @param[in] interface - the D-Bus interface name
  * @param[in] bus - the D-Bus object
+ * @param[in] logError - log error when no service found
  *
  * @return The service name
  */
 std::string getService(const std::string& path, const std::string& interface,
-                       sdbusplus::bus::bus& bus);
+                       sdbusplus::bus::bus& bus, bool logError = true);
 
 /**
  * @brief Read a D-Bus property
