@@ -16,6 +16,8 @@
 
 #include "manager.hpp"
 
+#include "utility.hpp"
+
 #include <sdbusplus/bus.hpp>
 
 #include <chrono>
@@ -28,12 +30,15 @@ namespace regulators
 {
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event)
+    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event), fileName("")
 {
-    // TODO get property (IM keyword)
-    // call parse json function
-    // TODO subscribe to interfacesadded (IM keyword)
-    // callback would call parse json function
+    // Attempt to get the filename property from dbus
+    setFileName(getFileNameDbus());
+
+    // TODO Subscribe to interfacesAdded signal for filename property
+    // Callback should set fileName and call parse json function
+
+    // TODO Load & parse JSON configuration data file
 
     // Obtain dbus service name
     bus.request_name(busName);
@@ -78,6 +83,22 @@ void Manager::sighupHandler(sdeventplus::source::Signal& sigSrc,
     (void)sigInfo;
 
     // TODO Reload and process the configuration data
+}
+
+const std::string Manager::getFileNameDbus()
+{
+    std::string fileName = "";
+    using namespace phosphor::power::util;
+
+    // Do not log an error when service is not found
+    auto service = getService(sysDbusPath, sysDbusIntf, bus, false);
+    if (!service.empty())
+    {
+        getProperty(sysDbusIntf, sysDbusProp, sysDbusPath, service, bus,
+                    fileName);
+    }
+
+    return fileName;
 }
 
 } // namespace regulators
