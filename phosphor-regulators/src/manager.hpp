@@ -6,6 +6,8 @@
 #include <sdeventplus/utility/timer.hpp>
 #include <xyz/openbmc_project/Power/Regulators/Manager/server.hpp>
 
+#include <algorithm>
+
 namespace phosphor
 {
 namespace power
@@ -86,6 +88,34 @@ class Manager : public ManagerObject
      * List of event timers
      */
     std::vector<Timer> timers;
+
+    /**
+     * JSON configuration data filename
+     */
+    std::string fileName;
+
+    /**
+     * @brief Set the JSON configuration data filename
+     *
+     * @param[in] fName = filename without `.json` extension
+     */
+    inline void setFileName(const std::string& fName)
+    {
+        fileName = fName;
+        if (!fileName.empty())
+        {
+            // Replace all spaces with underscores
+            std::replace(fileName.begin(), fileName.end(), ' ', '_');
+            fileName.append(".json");
+        }
+    };
+
+    /**
+     * @brief Get the JSON configuration data filename from dbus
+     *
+     * @return - JSON configuration data filename
+     */
+    const std::string getFileNameDbus();
 };
 
 } // namespace regulators
