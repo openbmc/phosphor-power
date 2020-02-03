@@ -34,7 +34,7 @@ using namespace phosphor::logging;
 using json = nlohmann::json;
 
 std::string getService(const std::string& path, const std::string& interface,
-                       sdbusplus::bus::bus& bus)
+                       sdbusplus::bus::bus& bus, bool logError)
 {
     auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
                                       MAPPER_INTERFACE, "GetObject");
@@ -49,9 +49,12 @@ std::string getService(const std::string& path, const std::string& interface,
 
     if (response.empty())
     {
-        log<level::ERR>("Error in mapper response for getting service name",
-                        entry("PATH=%s", path.c_str()),
-                        entry("INTERFACE=%s", interface.c_str()));
+        if (logError)
+        {
+            log<level::ERR>("Error in mapper response for getting service name",
+                            entry("PATH=%s", path.c_str()),
+                            entry("INTERFACE=%s", interface.c_str()));
+        }
         return std::string{};
     }
 
