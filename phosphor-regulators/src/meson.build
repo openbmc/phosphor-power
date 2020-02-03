@@ -1,5 +1,6 @@
 phosphor_regulators_include_directories = include_directories(
     '.',
+    '../..',
     'actions'
 )
 
@@ -44,7 +45,10 @@ phosphor_regulators = executable(
         sdeventplus,
         stdplus
     ],
-    link_with: phosphor_regulators_library,
+    link_with: [
+        phosphor_regulators_library,
+        libpower
+    ],
     implicit_include_directories: false,
     include_directories: phosphor_regulators_include_directories,
     install: true
