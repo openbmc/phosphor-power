@@ -85,6 +85,18 @@ class Manager : public ManagerObject
      * List of event timers
      */
     std::vector<Timer> timers;
+
+    /**
+     * JSON configuration data filename
+     */
+    std::string fileName;
+
+    /**
+     * @brief Get the JSON configuration data filename from dbus
+     *
+     * @return - JSON configuration data filename
+     */
+    const std::string getFileNameDbus();
 };
 
 } // namespace regulators
