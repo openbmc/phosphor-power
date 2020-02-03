@@ -16,6 +16,8 @@
 
 #include "manager.hpp"
 
+#include "utility.hpp"
+
 #include <sdbusplus/bus.hpp>
 
 #include <chrono>
@@ -28,12 +30,18 @@ namespace regulators
 {
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event)
+    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event), fileName("")
 {
-    // TODO get property (IM keyword)
-    // call parse json function
-    // TODO subscribe to interfacesadded (IM keyword)
-    // callback would call parse json function
+    // Attempt to get the filename property from dbus
+    setFileName(getFileNameDbus());
+
+    // TODO Subscribe to interfacesAdded signal for filename property
+    // Callback should set fileName and call parse json function
+
+    if (!fileName.empty())
+    {
+        // TODO Load & parse JSON configuration data file
+    }
 
     // Obtain dbus service name
     bus.request_name(busName);
@@ -72,6 +80,30 @@ void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
                             const struct signalfd_siginfo* /*sigInfo*/)
 {
     // TODO Reload and process the configuration data
+}
+
+const std::string Manager::getFileNameDbus()
+{
+    std::string fileName = "";
+    using namespace phosphor::power::util;
+
+    try
+    {
+        // Do not log an error when service or property are not found
+        auto service = getService(sysDbusPath, sysDbusIntf, bus, false);
+        if (!service.empty())
+        {
+            getProperty(sysDbusIntf, sysDbusProp, sysDbusPath, service, bus,
+                        fileName);
+        }
+    }
+    catch (const sdbusplus::exception::SdBusError&)
+    {
+        // File name property not available on dbus
+        fileName = "";
+    }
+
+    return fileName;
 }
 
 } // namespace regulators
