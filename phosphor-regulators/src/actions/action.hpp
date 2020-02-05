@@ -17,6 +17,8 @@
 
 #include "action_environment.hpp"
 
+#include <string>
+
 namespace phosphor::power::regulators
 {
 
@@ -54,6 +56,18 @@ class Action
      *         indicate if the action was successfully executed.
      */
     virtual bool execute(ActionEnvironment& environment) = 0;
+
+    /**
+     * Returns a string description of this action.
+     *
+     * The description should include the action name, properties, and property
+     * values.
+     *
+     * The description is used in journal entries and error logs.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const = 0;
 };
 
 } // namespace phosphor::power::regulators

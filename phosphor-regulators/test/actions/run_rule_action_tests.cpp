@@ -187,3 +187,9 @@ TEST(RunRuleActionTests, GetRuleID)
     RunRuleAction action{"read_sensors_rule"};
     EXPECT_EQ(action.getRuleID(), "read_sensors_rule");
 }
+
+TEST(RunRuleActionTests, ToString)
+{
+    RunRuleAction action{"set_voltage_rule"};
+    EXPECT_EQ(action.toString(), "run_rule: set_voltage_rule");
+}

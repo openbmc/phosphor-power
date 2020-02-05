@@ -19,6 +19,7 @@
 #include "action_environment.hpp"
 
 #include <memory>
+#include <string>
 #include <utility>
 
 namespace phosphor::power::regulators
@@ -77,6 +78,16 @@ class NotAction : public Action
     const std::unique_ptr<Action>& getAction() const
     {
         return action;
+    }
+
+    /**
+     * Returns a string description of this action.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const override
+    {
+        return "not: { ... }";
     }
 
   private:

@@ -89,6 +89,16 @@ class RunRuleAction : public Action
         return ruleID;
     }
 
+    /**
+     * Returns a string description of this action.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const override
+    {
+        return "run_rule: " + ruleID;
+    }
+
   private:
     /**
      * Rule ID.

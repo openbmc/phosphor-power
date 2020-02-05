@@ -19,6 +19,7 @@
 #include "action_environment.hpp"
 
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -91,6 +92,16 @@ class AndAction : public Action
     const std::vector<std::unique_ptr<Action>>& getActions() const
     {
         return actions;
+    }
+
+    /**
+     * Returns a string description of this action.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const override
+    {
+        return "and: [ ... ]";
     }
 
   private:

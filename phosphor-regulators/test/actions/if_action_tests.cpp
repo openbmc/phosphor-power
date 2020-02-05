@@ -298,3 +298,36 @@ TEST(IfActionTests, GetElseActions)
     EXPECT_EQ(ifAction.getElseActions()[0].get(), elseAction1);
     EXPECT_EQ(ifAction.getElseActions()[1].get(), elseAction2);
 }
+
+TEST(IfActionTests, ToString)
+{
+    // Test where else clause is not specified
+    {
+        std::unique_ptr<Action> conditionAction =
+            std::make_unique<MockAction>();
+
+        std::vector<std::unique_ptr<Action>> thenActions{};
+        thenActions.push_back(std::make_unique<MockAction>());
+
+        IfAction ifAction{std::move(conditionAction), std::move(thenActions)};
+        EXPECT_EQ(ifAction.toString(),
+                  "if: { condition: { ... }, then: [ ... ] }");
+    }
+
+    // Test where else clause is specified
+    {
+        std::unique_ptr<Action> conditionAction =
+            std::make_unique<MockAction>();
+
+        std::vector<std::unique_ptr<Action>> thenActions{};
+        thenActions.push_back(std::make_unique<MockAction>());
+
+        std::vector<std::unique_ptr<Action>> elseActions{};
+        elseActions.push_back(std::make_unique<MockAction>());
+
+        IfAction ifAction{std::move(conditionAction), std::move(thenActions),
+                          std::move(elseActions)};
+        EXPECT_EQ(ifAction.toString(),
+                  "if: { condition: { ... }, then: [ ... ], else: [ ... ] }");
+    }
+}

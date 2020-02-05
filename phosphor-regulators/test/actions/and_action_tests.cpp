@@ -162,3 +162,12 @@ TEST(AndActionTests, GetActions)
     EXPECT_EQ(andAction.getActions()[0].get(), action1);
     EXPECT_EQ(andAction.getActions()[1].get(), action2);
 }
+
+TEST(AndActionTests, ToString)
+{
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions.push_back(std::make_unique<MockAction>());
+
+    AndAction andAction{std::move(actions)};
+    EXPECT_EQ(andAction.toString(), "and: [ ... ]");
+}
