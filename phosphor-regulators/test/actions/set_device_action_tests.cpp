@@ -77,3 +77,9 @@ TEST(SetDeviceActionTests, GetDeviceID)
     SetDeviceAction action{"io_expander_0"};
     EXPECT_EQ(action.getDeviceID(), "io_expander_0");
 }
+
+TEST(SetDeviceActionTests, ToString)
+{
+    SetDeviceAction action{"regulator1"};
+    EXPECT_EQ(action.toString(), "set_device: regulator1");
+}

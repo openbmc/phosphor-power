@@ -162,3 +162,12 @@ TEST(OrActionTests, GetActions)
     EXPECT_EQ(orAction.getActions()[0].get(), action1);
     EXPECT_EQ(orAction.getActions()[1].get(), action2);
 }
+
+TEST(OrActionTests, ToString)
+{
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions.push_back(std::make_unique<MockAction>());
+
+    OrAction orAction{std::move(actions)};
+    EXPECT_EQ(orAction.toString(), "or: [ ... ]");
+}

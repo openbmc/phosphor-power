@@ -19,6 +19,7 @@
 #include "action_environment.hpp"
 
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -124,6 +125,22 @@ class IfAction : public Action
     const std::vector<std::unique_ptr<Action>>& getElseActions() const
     {
         return elseActions;
+    }
+
+    /**
+     * Returns a string description of this action.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const override
+    {
+        std::string description{"if: { condition: { ... }, then: [ ... ]"};
+        if (elseActions.size() > 0)
+        {
+            description += ", else: [ ... ]";
+        }
+        description += " }";
+        return description;
     }
 
   private:

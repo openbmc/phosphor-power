@@ -96,3 +96,9 @@ TEST(NotActionTests, GetAction)
     NotAction notAction{std::unique_ptr<Action>{action}};
     EXPECT_EQ(notAction.getAction().get(), action);
 }
+
+TEST(NotActionTests, ToString)
+{
+    NotAction notAction{std::make_unique<MockAction>()};
+    EXPECT_EQ(notAction.toString(), "not: { ... }");
+}

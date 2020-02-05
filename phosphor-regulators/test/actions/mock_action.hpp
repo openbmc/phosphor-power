@@ -18,6 +18,8 @@
 #include "action.hpp"
 #include "action_environment.hpp"
 
+#include <string>
+
 #include <gmock/gmock.h>
 
 namespace phosphor::power::regulators
@@ -35,6 +37,7 @@ class MockAction : public Action
     virtual ~MockAction() = default;
 
     MOCK_METHOD(bool, execute, (ActionEnvironment & environment), (override));
+    MOCK_METHOD(std::string, toString, (), (const, override));
 };
 
 } // namespace phosphor::power::regulators

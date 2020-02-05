@@ -75,6 +75,16 @@ class SetDeviceAction : public Action
         return deviceID;
     }
 
+    /**
+     * Returns a string description of this action.
+     *
+     * @return description of action
+     */
+    virtual std::string toString() const override
+    {
+        return "set_device: " + deviceID;
+    }
+
   private:
     /**
      * Device ID.
