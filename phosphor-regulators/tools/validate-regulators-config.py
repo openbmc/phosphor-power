@@ -13,6 +13,24 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_set_device_value_exist(config_json):
+    r"""
+    Check if set_device value exist in rule id.
+    config_json: Configuration file JSON
+    """
+    ids = []
+    for chassis in config_json.get('chassis', {}):
+        for device in chassis.get('devices', {}):
+            ids.append(device['id'])
+    for rule in config_json.get('rules', {}):
+        for action in rule.get('actions', {}):
+            if 'set_device' in action:
+                set_device_value = action['set_device']
+                if set_device_value not in ids:
+                    sys.stderr.write("Error: set_device not exist.\n"+\
+                    "Found set_device value not exist "+set_device_value+'\n')
+                    handle_validation_error()
+
 def check_run_rule_value_exist(config_json):
     r"""
     Check if run_rule value exist in rule id.
@@ -174,6 +192,8 @@ def check_for_duplicates(config_json):
     check_infinite_loops(config_json)
 
     check_run_rule_value_exist(config_json)
+
+    check_set_device_value_exist(config_json)
 
 def validate_schema(config, schema):
     r"""
