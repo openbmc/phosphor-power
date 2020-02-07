@@ -1,0 +1,9 @@
+Ok-To-Test+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Verified+1: Jenkins <openbmc-ci-admin@ozlabs.org>
+Code-Review+1: Shawn McCarney <shawnmm@us.ibm.com>
+Code-Review+2: Lei YU <mine260309@gmail.com>
+Submitted-by: Lei YU <mine260309@gmail.com>
+Submitted-at: Fri, 07 Feb 2020 02:54:57 +0000
+Reviewed-on: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/28389
+Project: openbmc/phosphor-power
+Branch: refs/heads/master
