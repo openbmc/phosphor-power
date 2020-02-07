@@ -13,6 +13,23 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_run_rule_value_exist(config_json):
+    r"""
+    Check if run_rule value exist in rule id.
+    config_json: Configuration file JSON
+    """
+    ids = []
+    for rule in config_json.get('rules', {}):
+        ids.append(rule['id'])
+    for rule in config_json.get('rules', {}):
+        for action in rule.get('actions', {}):
+            if 'run_rule' in action:
+                run_rule_value = action['run_rule']
+                if run_rule_value not in ids:
+                    sys.stderr.write("Error: run_rule not exist.\n"+\
+                    "Found run_rule value not exist "+run_rule_value+'\n')
+                    handle_validation_error()
+
 def check_infinite_loops(config_json, callStack=[]):
     r"""
     Check if rule on call stack multiple times indicating infinite recursion.
@@ -155,6 +172,8 @@ def check_for_duplicates(config_json):
     check_duplicate_global_id(config_json)
 
     check_infinite_loops(config_json)
+
+    check_run_rule_value_exist(config_json)
 
 def validate_schema(config, schema):
     r"""
