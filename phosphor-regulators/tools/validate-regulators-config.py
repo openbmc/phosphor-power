@@ -13,6 +13,45 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_infinite_loops_for_run_rule(config_json, rule_json, \
+    callStack=[]):
+    r"""
+    Check if a 'run_rule' action in the specified rule causes an
+    infinite loop.
+    config_json: Configuration file JSON.
+    rule_json: A rule in the JSON config file.
+    callStack: Current call stack of rules.
+    """
+
+    callStack.append(rule_json['id'])
+    for action in rule_json.get('actions', {}):
+        if 'run_rule' in action:
+            run_rule_id = action['run_rule']
+            if run_rule_id in callStack:
+                callStack.append(run_rule_id)
+                sys.stderr.write(\
+               "Infinite loop caused by run_rule actions.\n"+\
+                str(callStack)+'\n')
+                handle_validation_error()
+            else:
+                for rule in config_json['rules']:
+                    if rule['id'] == run_rule_id:
+                        check_infinite_loops_for_run_rule(\
+                        config_json, rule, callStack)
+    callStack.pop()
+    # end of function check_infinite_loops_for_run_rule.
+
+def check_infinite_loops(config_json):
+    r"""
+    Check if rule in config file called recursively and casuing an
+    infinite loop.
+    Check 'rule' objects and call check_infinite_loops_for_run_rule.
+    config_json: Configuration file JSON
+    """
+
+    for rule in config_json.get('rules', {}):
+        check_infinite_loops_for_run_rule(config_json, rule)
+
 def check_duplicate_object_id(config_json):
     r"""
     Check that there aren't any JSON objects with the same 'id' property value.
@@ -155,4 +194,8 @@ if __name__ == '__main__':
         sys.exit("Error: Configuration file is required.")
 
     config_json = validate_schema(args.configuration_file, args.schema_file)
+
     check_for_duplicates(config_json)
+
+    check_infinite_loops(config_json)
+
