@@ -13,6 +13,42 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def check_infinite_loops(config_json):
+    r"""
+    Check if rule in config file called recursion and casue infinite loop.
+    Check 'rule' object and call check_infinite_loops_for_run_rule.
+    config_json: Configuration file JSON
+    """
+
+    def check_infinite_loops_for_run_rule(config_json, rule_json, \
+        callStack=[]):
+        r"""
+        Check if 'run_rule' call rule recursion and cause infinite loop
+        config_json: Original platform config JSON.
+        rule_json: Configuration file JSON which be excuted.
+        callStack: Current call stack of rules.
+        """
+
+        callStack.append(rule_json['id'])
+        for action in rule_json.get('actions', {}):
+            if 'run_rule' in action:
+                run_rule_id = action['run_rule']
+                if run_rule_id in callStack:
+                    callStack.append(run_rule_id)
+                    sys.stderr.write(\
+                   "Infinite loop caused by run_rule actions.\n"+\
+                    str(callStack)+'\n')
+                    handle_validation_error()
+                else:
+                    for rule in config_json['rules']:
+                        if rule['id'] == action.get('run_rule', {}):
+                            check_infinite_loops_for_run_rule(\
+                            config_json, rule, callStack)
+        callStack.pop()
+        # end of function check_infinite_loops_for_run_rule.
+    for rule in config_json.get('rules', {}):
+        check_infinite_loops_for_run_rule(config_json, rule)
+
 def check_duplicate_object_id(config_json):
     r"""
     Check that there aren't any JSON objects with the same 'id' property value.
@@ -156,4 +192,8 @@ if __name__ == '__main__':
         sys.exit("Error: Configuration file is required.")
 
     config_json = validate_schema(args.configuration_file, args.schema_file)
+
     check_for_duplicates(config_json)
+
+    check_infinite_loops(config_json)
+
