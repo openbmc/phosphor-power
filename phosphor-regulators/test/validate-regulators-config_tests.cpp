@@ -2182,8 +2182,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
     // valid test rule with multiple actions
     {
         json configFile = validConfigFile;
-        configFile["rules"][0]["actions"][1]["run_rule"] =
-            "set_page0_voltage_rule";
+        configFile["rules"][0]["actions"][1]["run_rule"] = "read_sensors_rule";
         EXPECT_JSON_VALID(configFile);
     }
 
