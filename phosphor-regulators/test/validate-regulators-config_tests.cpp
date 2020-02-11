@@ -2213,7 +2213,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
 TEST(ValidateRegulatorsConfigTest, RunRule)
 {
     json runRuleFile = validConfigFile;
-    runRuleFile["rules"][0]["actions"][1]["run_rule"] = "set_voltage_rule1";
+    runRuleFile["rules"][0]["actions"][1]["run_rule"] = "read_sensors_rule";
     // Valid: test run_rule.
     {
         json configFile = runRuleFile;
@@ -2342,7 +2342,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
 TEST(ValidateRegulatorsConfigTest, SetDevice)
 {
     json setDeviceFile = validConfigFile;
-    setDeviceFile["rules"][0]["actions"][1]["set_device"] = "io_expander2";
+    setDeviceFile["rules"][0]["actions"][1]["set_device"] = "vdd_regulator";
     // Valid: test set_device.
     {
         json configFile = setDeviceFile;
