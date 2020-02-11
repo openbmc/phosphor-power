@@ -1636,12 +1636,13 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
 TEST(ValidateRegulatorsConfigTest, If)
 {
     json ifFile = validConfigFile;
-    ifFile["rules"][0]["actions"][1]["if"]["condition"]["run_rule"] =
-        "is_downlevel_regulator";
-    ifFile["rules"][0]["actions"][1]["if"]["then"][0]["run_rule"] =
-        "configure_downlevel_regulator";
-    ifFile["rules"][0]["actions"][1]["if"]["else"][0]["run_rule"] =
-        "configure_downlevel_regulator";
+    ifFile["rules"][2]["actions"][0]["if"]["condition"]["run_rule"] =
+        "set_voltage_rule";
+    ifFile["rules"][2]["actions"][0]["if"]["then"][0]["run_rule"] =
+        "read_sensors_rule";
+    ifFile["rules"][2]["actions"][0]["if"]["else"][0]["run_rule"] =
+        "read_sensors_rule";
+    ifFile["rules"][2]["id"] = "rule_if";
     // Valid: test if.
     {
         json configFile = ifFile;
@@ -1650,55 +1651,55 @@ TEST(ValidateRegulatorsConfigTest, If)
     // Valid: test if with required properties.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"].erase("else");
+        configFile["rules"][2]["actions"][0]["if"].erase("else");
         EXPECT_JSON_VALID(configFile);
     }
     // Invalid: test if with no property condition.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"].erase("condition");
+        configFile["rules"][2]["actions"][0]["if"].erase("condition");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "u'condition' is a required property");
     }
     // Invalid: test if with no property then.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"].erase("then");
+        configFile["rules"][2]["actions"][0]["if"].erase("then");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "u'then' is a required property");
     }
     // Invalid: test if with property then empty array.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"]["then"] = json::array();
+        configFile["rules"][2]["actions"][0]["if"]["then"] = json::array();
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "[] is too short");
     }
     // Invalid: test if with property else empty array.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"]["else"] = json::array();
+        configFile["rules"][2]["actions"][0]["if"]["else"] = json::array();
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "[] is too short");
     }
     // Invalid: test if with property condition wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"]["condition"] = 1;
+        configFile["rules"][2]["actions"][0]["if"]["condition"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type u'object'");
     }
     // Invalid: test if with property then wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"]["then"] = 1;
+        configFile["rules"][2]["actions"][0]["if"]["then"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type u'array'");
     }
     // Invalid: test if with property else wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][0]["actions"][1]["if"]["else"] = 1;
+        configFile["rules"][2]["actions"][0]["if"]["else"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type u'array'");
     }
