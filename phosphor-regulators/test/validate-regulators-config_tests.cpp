@@ -1952,7 +1952,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         ["chassis"][0]["devices"][0]["presence_detection"]["comments"][0] =
             "Regulator is only present on the FooBar backplane";
     presenceDetectionFile["chassis"][0]["devices"][0]["presence_detection"]
-                         ["rule_id"] = "is_foobar_backplane_installed_rule";
+                         ["rule_id"] = "set_voltage_rule";
     // Valid: test presence_detection with only property rule_id.
     {
         json configFile = presenceDetectionFile;
@@ -1989,7 +1989,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
             "{u'comments': [u'Regulator is only present on the FooBar "
             "backplane'], u'actions': [{u'compare_presence': {u'value': True, "
             "u'fru': u'/system/chassis/motherboard/cpu3'}}], u'rule_id': "
-            "u'is_foobar_backplane_installed_rule'} is valid under each of "
+            "u'set_voltage_rule'} is valid under each of "
             "{u'required': [u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test presence_detection with no rule_id and actions.
