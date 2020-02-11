@@ -51,6 +51,20 @@ const json validConfigFile = R"(
               }
             }
           ]
+        },
+        {
+          "comments": [ "Reads sensors from a PMBus regulator rail" ],
+          "id": "read_sensors_rule",
+          "actions": [
+            {
+              "comments": [ "Read output voltage from READ_VOUT." ],
+              "pmbus_read_sensor": {
+                "type": "vout",
+                "command": "0x8B",
+                "format": "linear_16"
+              }
+            }
+          ]
         }
       ],
 
@@ -2355,8 +2369,8 @@ TEST(ValidateRegulatorsConfigTest, DuplicateRuleID)
     // Invalid: test duplicate ID in rule.
     {
         json configFile = validConfigFile;
-        configFile["rules"][1]["id"] = "set_voltage_rule";
-        configFile["rules"][1]["actions"][0]["pmbus_write_vout_command"]
+        configFile["rules"][2]["id"] = "set_voltage_rule";
+        configFile["rules"][2]["actions"][0]["pmbus_write_vout_command"]
                   ["format"] = "linear";
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate rule ID.", "");
     }
@@ -2399,10 +2413,11 @@ TEST(ValidateRegulatorsConfigTest, InfiniteLoops)
     // Invalid: test run_rule with infinite loop.
     {
         json configFile = validConfigFile;
-        configFile["rules"][1]["actions"][0]["run_rule"] = "set_voltage_rule2";
-        configFile["rules"][1]["id"] = "set_voltage_rule1";
-        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule1";
-        configFile["rules"][2]["id"] = "set_voltage_rule2";
-        EXPECT_JSON_INVALID(configFile, "Error: Infinite loop.", "");
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][3]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][3]["id"] = "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile,
+                            "Infinite loop caused by run_rule actions.", "");
     }
 }
