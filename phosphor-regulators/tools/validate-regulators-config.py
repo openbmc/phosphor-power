@@ -36,6 +36,19 @@ def get_value(config_json, key, result = []):
                 get_value(item, key, result)
     return result
 
+def check_set_device_value_exist(config_json):
+    r"""
+    Check if a set_device action specifies a device ID that does not exist.
+    config_json: Configuration file JSON
+    """
+
+    set_device = get_value(config_json, 'set_device', [])
+    for set_device_key in set_device:
+        if set_device_key not in check_duplicate_device_id(config_json):
+            sys.stderr.write("Error: set_device not exist.\n"+\
+            "Found set_device value not exist "+set_device_key+'\n')
+            handle_validation_error()
+
 def check_run_rule_value_exist(config_json):
     r"""
     Check if any run_rule actions specify a rule ID that does not exist.
@@ -234,3 +247,5 @@ if __name__ == '__main__':
     check_infinite_loops(config_json)
 
     check_run_rule_value_exist(config_json)
+
+    check_set_device_value_exist(config_json)
