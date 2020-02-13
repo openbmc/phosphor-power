@@ -28,13 +28,31 @@ def get_value(config_json, key, result = []):
         for json_key in config_json:
             if type(config_json[json_key]) in (list, dict):
                 get_value(config_json[json_key], key, result)
-            elif json_key == key:
+            if json_key == key:
                 result.append(config_json[json_key])
     elif type(config_json) is list:
         for item in config_json:
             if type(item) in (list, dict):
                 get_value(item, key, result)
     return result
+
+def check_number_of_elements_in_masks(config_json):
+    r"""
+    Check if number of bit masks in the 'masks' property match the number of
+    expected byte values in the 'values' property.
+    config_json: Configuration file JSON
+    """
+
+    values_value = get_value(config_json, 'values', [])
+    masks_value = get_value(config_json, 'masks', [])
+
+    for i in range(len(masks_value)):
+        if len(masks_value[i]) != len(values_value[i]):
+            sys.stderr.write("Error: masks elements number error.\n"+\
+            "Found number of value in masks not equal to number in values. "+\
+            "masks: "+str(masks_value[i])+\
+            ", values: "+str(values_value[i])+'.\n')
+            handle_validation_error()
 
 def check_rule_id_exist(config_json):
     r"""
@@ -266,3 +284,5 @@ if __name__ == '__main__':
     check_set_device_value_exist(config_json)
 
     check_rule_id_exist(config_json)
+
+    check_number_of_elements_in_masks(config_json)
