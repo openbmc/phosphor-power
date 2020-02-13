@@ -6,7 +6,8 @@ phosphor_regulators_include_directories = include_directories(
 phosphor_regulators_library_source_files = [
     'id_map.cpp',
 
-    'actions/if_action.cpp'
+    'actions/if_action.cpp',
+    'actions/i2c_compare_byte_action.cpp'
 ]
 
 phosphor_regulators_library = static_library(
