@@ -13,6 +13,8 @@ phosphor_regulators_tests_source_files = [
     'actions/action_error_tests.cpp',
     'actions/action_utils_tests.cpp',
     'actions/and_action_tests.cpp',
+    'actions/i2c_action_tests.cpp',
+    'actions/i2c_compare_byte_action_tests.cpp',
     'actions/if_action_tests.cpp',
     'actions/not_action_tests.cpp',
     'actions/or_action_tests.cpp',
