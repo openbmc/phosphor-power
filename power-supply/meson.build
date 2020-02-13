@@ -19,4 +19,6 @@ psu_monitor = executable(
 
 record_manager = psu_monitor.extract_objects('record_manager.cpp')
 
-subdir('test')
+if get_option('tests').enabled()
+    subdir('test')
+endif

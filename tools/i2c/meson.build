@@ -10,4 +10,6 @@ libi2c_dep = declare_dependency(
     include_directories : libi2c_inc,
     link_args : '-li2c')
 
-subdir('test')
+if get_option('tests').enabled()
+    subdir('test')
+endif

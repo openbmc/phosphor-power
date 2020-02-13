@@ -15,4 +15,6 @@ psutils = executable(
     ]
 )
 
-subdir('test')
+if get_option('tests').enabled()
+    subdir('test')
+endif
