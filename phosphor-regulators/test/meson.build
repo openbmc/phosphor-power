@@ -27,6 +27,8 @@ test('phosphor-regulators-tests',
                     gmock,
                     gtest,
                 ],
+                link_args: dynamic_linker,
+                build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
                 link_with: [
                     phosphor_regulators_library,
                     libi2c_dev_mock

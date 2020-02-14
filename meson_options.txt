@@ -19,3 +19,6 @@ option(
     'ucd90160-yaml', type: 'string', value: 'example/ucd90160.yaml',
     description: 'The sequencer definition file to use.',
 )
+option(
+    'oe-sdk', type: 'feature', description: 'Enable OE SDK'
+)
