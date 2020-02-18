@@ -2476,3 +2476,32 @@ TEST(ValidateRegulatorsConfigTest, RuleIDExist)
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
     }
 }
+TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
+{
+    // Invalid: test number of elements in masks not equal to number in values
+    // in i2c_compare_bytes.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"] = {
+            "0x02", "0x73"};
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"] = {
+            "0x7F"};
+        EXPECT_JSON_INVALID(configFile,
+                            "Error: Invalid i2c_compare_bytes action.", "");
+    }
+    // Invalid: test number of elements in masks not equal to number in values
+    // in i2c_write_bytes.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] = {
+            "0x02", "0x73"};
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] = {
+            "0x7F"};
+        EXPECT_JSON_INVALID(configFile,
+                            "Error: Invalid i2c_write_bytes action.", "");
+    }
+}
