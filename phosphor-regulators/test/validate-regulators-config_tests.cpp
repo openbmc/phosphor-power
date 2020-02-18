@@ -2449,3 +2449,30 @@ TEST(ValidateRegulatorsConfigTest, SetDeviceValueExist)
         EXPECT_JSON_INVALID(configFile, "Error: Device ID does not exist.", "");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RuleIDExist)
+{
+    // Invalid: test rule_id property in configuration specifies a rule ID that
+    // does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
+            "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+    // Invalid: test rule_id property in presence_detection specifies a rule ID
+    // that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["presence_detection"]
+                  ["rule_id"] = "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+    // Invalid: test rule_id property in sensor_monitoring specifies a rule ID
+    // that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
+                  ["rule_id"] = "set_voltage_rule2";
+        EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+}
