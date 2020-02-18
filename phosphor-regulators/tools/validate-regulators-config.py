@@ -41,6 +41,43 @@ def check_infinite_loops_for_run_rule(config_json, rule_json, \
     callStack.pop()
     # end of function check_infinite_loops_for_run_rule.
 
+def get_value(config_json, key, result = []):
+    r"""
+    find the value of key in config file, store in result list and return
+    result.
+    config_json: Configuration file JSON
+    key: the key to get.
+    result: list to store the value of the key.
+    """
+
+    if type(config_json) == str:
+        config_json = json.loads(config_json)
+    if type(config_json) is dict:
+        for json_key in config_json:
+            if type(config_json[json_key]) in (list, dict):
+                get_value(config_json[json_key], key, result)
+            elif json_key == key:
+                result.append(config_json[json_key])
+    elif type(config_json) is list:
+        for item in config_json:
+            if type(item) in (list, dict):
+                get_value(item, key, result)
+    return result
+
+def check_run_rule_value_exist(config_json):
+    r"""
+    Check if any run_rule actions specify a rule ID that does not exist.
+    config_json: Configuration file JSON
+    """
+
+    run_rule = get_value(config_json, 'run_rule', [])
+    for run_rule_key in run_rule:
+        if run_rule_key not in check_duplicate_rule_id(config_json):
+            sys.stderr.write("Error: Rule ID does not exist.\n"+\
+            "Found run_rule action that specifies invalid rule ID "+\
+            run_rule_key+'\n')
+            handle_validation_error()
+
 def check_infinite_loops(config_json):
     r"""
     Check if rule in config file called recursively and casuing an
@@ -58,9 +95,7 @@ def check_duplicate_object_id(config_json):
     config_json: Configuration file JSON
     """
 
-    json_ids = check_duplicate_rule_id(config_json)+\
-               check_duplicate_device_id(config_json)+\
-               check_duplicate_rail_id(config_json)
+    json_ids = get_value(config_json, 'id', [])
     unique_ids = set()
     for id in json_ids:
         if id in unique_ids:
@@ -199,3 +234,4 @@ if __name__ == '__main__':
 
     check_infinite_loops(config_json)
 
+    check_run_rule_value_exist(config_json)
