@@ -2438,3 +2438,13 @@ TEST(ValidateRegulatorsConfigTest, RunRuleValueExists)
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
     }
 }
+TEST(ValidateRegulatorsConfigTest, SetDeviceValueExists)
+{
+    // Invalid: test set_device actions specify a device ID that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["set_device"] = "vdd_regulator2";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        EXPECT_JSON_INVALID(configFile, "Error: Device ID does not exist.", "");
+    }
+}
