@@ -2428,3 +2428,13 @@ TEST(ValidateRegulatorsConfigTest, InfiniteLoops)
                             "Infinite loop caused by run_rule actions.", "");
     }
 }
+TEST(ValidateRegulatorsConfigTest, RunRuleValueExist)
+{
+    // Invalid: test run_rule actions specify a rule ID that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+}
