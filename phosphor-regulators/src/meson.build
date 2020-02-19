@@ -7,6 +7,7 @@ phosphor_regulators_library_source_files = [
     'id_map.cpp',
 
     'actions/if_action.cpp',
+    'actions/i2c_compare_bit_action.cpp',
     'actions/i2c_compare_byte_action.cpp'
 ]
 
