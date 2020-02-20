@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 
 #include <nlohmann/json.hpp>
@@ -117,18 +118,17 @@ std::string createTmpFile()
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "python ../tools/validate-regulators-config.py -s \
+    std::string command = "../tools/validate-regulators-config.py -s \
                            ../schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
 
-int runToolForOutput(const std::string& configFileName, std::string& output,
+int runToolForOutput(std::string& output, std::string command,
                      bool isReadingStderr = false)
 {
     // run the validation tool with the temporary file and return the output
     // of the validation tool.
-    std::string command = getValidationToolCommand(configFileName);
     // reading the stderr while isReadingStderr is true.
     if (isReadingStderr == true)
     {
@@ -164,10 +164,17 @@ int runToolForOutput(const std::string& configFileName, std::string& output,
     return exitStatus;
 }
 
+int runToolForOutput(const std::string& configFileName, std::string& output,
+                     bool isReadingStderr = false)
+{
+    std::string command = getValidationToolCommand(configFileName);
+    return runToolForOutput(output, command, isReadingStderr);
+}
+
 void expectFileValid(const std::string& configFileName)
 {
-    std::string errorMessage = "";
-    std::string outputMessage = "";
+    std::string errorMessage;
+    std::string outputMessage;
     EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 0);
     EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 0);
     EXPECT_EQ(errorMessage, "");
@@ -178,15 +185,15 @@ void expectFileInvalid(const std::string& configFileName,
                        const std::string& expectedErrorMessage,
                        const std::string& expectedOutputMessage)
 {
-    std::string errorMessage = "";
-    std::string outputMessage = "";
+    std::string errorMessage;
+    std::string outputMessage;
     EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 1);
     EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 1);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
 
-void expectJsonValid(const json configFileJson)
+std::string writeDataToTmpFile(const json configFileJson)
 {
     std::string fileName;
     fileName = createTmpFile();
@@ -194,6 +201,14 @@ void expectJsonValid(const json configFileJson)
     std::ofstream out(fileName);
     out << jsonData;
     out.close();
+
+    return fileName;
+}
+
+void expectJsonValid(const json configFileJson)
+{
+    std::string fileName;
+    fileName = writeDataToTmpFile(configFileJson);
 
     EXPECT_FILE_VALID(fileName);
     unlink(fileName.c_str());
@@ -204,14 +219,22 @@ void expectJsonInvalid(const json configFileJson,
                        const std::string& expectedOutputMessage)
 {
     std::string fileName;
-    fileName = createTmpFile();
-    std::string jsonData = configFileJson.dump();
-    std::ofstream out(fileName);
-    out << jsonData;
-    out.close();
+    fileName = writeDataToTmpFile(configFileJson);
 
     EXPECT_FILE_INVALID(fileName, expectedErrorMessage, expectedOutputMessage);
     unlink(fileName.c_str());
+}
+
+void expectCommandLineSyntax(const std::string& expectedErrorMessage,
+                             const std::string& expectedOutputMessage,
+                             std::string command, int status)
+{
+    std::string errorMessage;
+    std::string outputMessage;
+    EXPECT_EQ(runToolForOutput(errorMessage, command, true), status);
+    EXPECT_EQ(runToolForOutput(outputMessage, command), status);
+    EXPECT_EQ(errorMessage, expectedErrorMessage);
+    EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
 
 TEST(ValidateRegulatorsConfigTest, And)
@@ -2503,4 +2526,143 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
         EXPECT_JSON_INVALID(configFile,
                             "Error: Invalid i2c_write_bytes action.", "");
     }
+}
+TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
+{
+    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string schema = " -s ";
+    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string configuration = " -c ";
+    std::string command;
+    std::string errorMessage;
+    std::string outputMessage;
+    std::string outputMessageHelp =
+        "usage: validate-regulators-config.py [-h] [-s SCHEMA_FILE]";
+    int valid = 0;
+
+    std::string fileName;
+    fileName = writeDataToTmpFile(validConfigFile);
+    // Valid: -s specified
+    {
+        command = validateTool + "-s " + schemaFile + configuration + fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
+    }
+    // Valid: --schema-file specified
+    {
+        command = validateTool + "--schema-file " + schemaFile + configuration +
+                  fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
+    }
+    // Valid: -c specified
+    {
+        command = validateTool + schema + schemaFile + "-c " + fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
+    }
+    // Valid: --configuration-file specified
+    {
+        command = validateTool + schema + schemaFile + "--configuration-file " +
+                  fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
+    }
+    // Valid: -h specified
+    {
+        command = validateTool + "-h ";
+        expectCommandLineSyntax(errorMessage, outputMessageHelp, command,
+                                valid);
+    }
+    // Valid: --help specified
+    {
+        command = validateTool + "--help ";
+        expectCommandLineSyntax(errorMessage, outputMessageHelp, command,
+                                valid);
+    }
+    // Invalid: -c/--configuration-file not specified
+    {
+        command = validateTool + schema + schemaFile;
+        expectCommandLineSyntax("Error: Configuration file is required.",
+                                outputMessageHelp, command, 1);
+    }
+    // Invalid: -s/--schema-file not specified
+    {
+        command = validateTool + configuration + fileName;
+        expectCommandLineSyntax("Error: Schema file is required.",
+                                outputMessageHelp, command, 1);
+    }
+    // Invalid: -s specified more than once
+    {
+        command =
+            validateTool + "-s -s " + schemaFile + configuration + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
+    // Invalid: -c specified more than once
+    {
+        command = validateTool + schema + schemaFile + "-c -c " + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
+    // Invalid: No file name specified after -c
+    {
+        command = validateTool + schema + schemaFile + configuration;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
+    // Invalid: No file name specified after -s
+    {
+        command = validateTool + schema + configuration + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
+    // Invalid: File specified after -c does not exist
+    {
+        command = validateTool + schema + schemaFile + configuration +
+                  "../notExistFile";
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
+    }
+    // Invalid: File specified after -s does not exist
+    {
+        command = validateTool + schema + "../notExistFile " + configuration +
+                  fileName;
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
+    }
+    // Invalid: File specified after -s is not right data format
+    {
+        std::string wrongFormatFile;
+        wrongFormatFile = createTmpFile();
+        std::ofstream out(wrongFormatFile);
+        out << "foo";
+        out.close();
+        command =
+            validateTool + schema + wrongFormatFile + configuration + fileName;
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
+        unlink(wrongFormatFile.c_str());
+    }
+    // Invalid: File specified after -c is not readable
+    {
+        std::string notReadableFile;
+        notReadableFile = writeDataToTmpFile(validConfigFile);
+        command = validateTool + schema + schemaFile + configuration +
+                  notReadableFile;
+        chmod(notReadableFile.c_str(), 0222);
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
+        unlink(notReadableFile.c_str());
+    }
+    // Invalid: File specified after -s is not readable
+    {
+        std::string notReadableFile;
+        notReadableFile = writeDataToTmpFile(validConfigFile);
+        command =
+            validateTool + schema + notReadableFile + configuration + fileName;
+        chmod(notReadableFile.c_str(), 0222);
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
+        unlink(notReadableFile.c_str());
+    }
+    // Invalid: Unexpected parameter specified (like -g)
+    {
+        command = validateTool + schema + schemaFile + configuration +
+                  fileName + " -g";
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
+    unlink(fileName.c_str());
 }
