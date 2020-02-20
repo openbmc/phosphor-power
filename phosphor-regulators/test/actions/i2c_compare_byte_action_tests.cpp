@@ -65,7 +65,7 @@ TEST(I2CCompareByteActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>()))
+        EXPECT_CALL(*i2cInterface, read(0xA0, A<uint8_t&>()))
             .Times(1)
             .WillOnce(SetArgReferee<1>(0xD7));
 
@@ -94,7 +94,7 @@ TEST(I2CCompareByteActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>()))
+        EXPECT_CALL(*i2cInterface, read(0xA0, A<uint8_t&>()))
             .Times(1)
             .WillOnce(SetArgReferee<1>(0xD7));
 
@@ -120,7 +120,7 @@ TEST(I2CCompareByteActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>()))
+        EXPECT_CALL(*i2cInterface, read(0xA0, A<uint8_t&>()))
             .Times(1)
             .WillOnce(SetArgReferee<1>(0xD7));
 
@@ -149,7 +149,7 @@ TEST(I2CCompareByteActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>()))
+        EXPECT_CALL(*i2cInterface, read(0xA0, A<uint8_t&>()))
             .Times(1)
             .WillOnce(SetArgReferee<1>(0xD7));
 
@@ -195,7 +195,7 @@ TEST(I2CCompareByteActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>()))
+        EXPECT_CALL(*i2cInterface, read(0xA0, A<uint8_t&>()))
             .Times(1)
             .WillOnce(Throw(
                 i2c::I2CException{"Failed to read byte", "/dev/i2c-1", 0x70}));
