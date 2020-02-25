@@ -17,6 +17,7 @@ phosphor_regulators_tests_source_files = [
     'actions/i2c_compare_bit_action_tests.cpp',
     'actions/i2c_compare_byte_action_tests.cpp',
     'actions/i2c_compare_bytes_action_tests.cpp',
+    'actions/i2c_write_bit_action_tests.cpp',
     'actions/i2c_write_byte_action_tests.cpp',
     'actions/i2c_write_bytes_action_tests.cpp',
     'actions/if_action_tests.cpp',
