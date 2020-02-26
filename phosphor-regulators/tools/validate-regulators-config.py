@@ -47,6 +47,32 @@ def get_rule_ids(config_json):
         rule_ids.append(rule['id'])
     return rule_ids
 
+def get_device_ids(config_json):
+    r"""
+    Get all device IDs in the configuration file.
+    config_json: Configuration file JSON
+    """
+    device_ids = []
+    for chassis in config_json.get('chassis', {}):
+        for device in chassis.get('devices', {}):
+            device_ids.append(device['id'])
+    return device_ids
+
+def check_set_device_value_exists(config_json):
+    r"""
+    Check if a set_device action specifies a device ID that does not exist.
+    config_json: Configuration file JSON
+    """
+
+    device_ids = get_values(config_json, 'set_device')
+    valid_device_ids = get_device_ids(config_json)
+    for device_id in device_ids:
+        if device_id not in valid_device_ids:
+            sys.stderr.write("Error: Device ID does not exist.\n"+\
+            "Found set_device action that specifies invalid device ID "+\
+            device_id+'\n')
+            handle_validation_error()
+
 def check_run_rule_value_exists(config_json):
     r"""
     Check if any run_rule actions specify a rule ID that does not exist.
@@ -241,3 +267,5 @@ if __name__ == '__main__':
     check_infinite_loops(config_json)
 
     check_run_rule_value_exists(config_json)
+
+    check_set_device_value_exists(config_json)
