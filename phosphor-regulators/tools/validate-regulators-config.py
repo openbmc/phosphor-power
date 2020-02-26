@@ -13,6 +13,55 @@ schema as well as doing some extra checks that can't be encoded in the schema.
 def handle_validation_error():
     sys.exit("Validation failed.")
 
+def get_values(json_element, key, result = None):
+    r"""
+    Finds all occurrences of a key within the specified JSON element and its
+    children. Returns the associated values.
+    To search the entire configuration file, pass the root JSON element
+    json_element: JSON element within the config file.
+    key: key name.
+    result: list of values found with the specified key.
+    """
+
+    if result is None:
+        result = []
+    if type(json_element) is dict:
+        for json_key in json_element:
+            if json_key == key:
+                result.append(json_element[json_key])
+            elif type(json_element[json_key]) in (list, dict):
+                get_values(json_element[json_key], key, result)
+    elif type(json_element) is list:
+        for item in json_element:
+            if type(item) in (list, dict):
+                get_values(item, key, result)
+    return result
+
+def get_rule_ids(config_json):
+    r"""
+    Get all rule IDs in the configuration file.
+    config_json: Configuration file JSON
+    """
+    rule_ids = []
+    for rule in config_json.get('rules', {}):
+        rule_ids.append(rule['id'])
+    return rule_ids
+
+def check_run_rule_value_exists(config_json):
+    r"""
+    Check if any run_rule actions specify a rule ID that does not exist.
+    config_json: Configuration file JSON
+    """
+
+    rule_ids = get_values(config_json, 'run_rule')
+    valid_rule_ids = get_rule_ids(config_json)
+    for rule_id in rule_ids:
+        if rule_id not in valid_rule_ids:
+            sys.stderr.write("Error: Rule ID does not exist.\n"+\
+            "Found run_rule action that specifies invalid rule ID "+\
+            rule_id+'\n')
+            handle_validation_error()
+
 def check_infinite_loops_in_rule(config_json, rule_json, call_stack=[]):
     r"""
     Check if a 'run_rule' action in the specified rule causes an
@@ -55,9 +104,7 @@ def check_duplicate_object_id(config_json):
     config_json: Configuration file JSON
     """
 
-    json_ids = check_duplicate_rule_id(config_json)+\
-               check_duplicate_device_id(config_json)+\
-               check_duplicate_rail_id(config_json)
+    json_ids = get_values(config_json, 'id')
     unique_ids = set()
     for id in json_ids:
         if id in unique_ids:
@@ -81,7 +128,6 @@ def check_duplicate_rule_id(config_json):
             handle_validation_error()
         else:
             rule_ids.append(rule_id)
-    return rule_ids
 
 def check_duplicate_chassis_number(config_json):
     r"""
@@ -113,7 +159,6 @@ def check_duplicate_device_id(config_json):
                 handle_validation_error()
             else:
                 device_ids.append(device_id)
-    return device_ids
 
 def check_duplicate_rail_id(config_json):
     r"""
@@ -131,7 +176,6 @@ def check_duplicate_rail_id(config_json):
                     handle_validation_error()
                 else:
                     rail_ids.append(rail_id)
-    return rail_ids
 
 def check_for_duplicates(config_json):
     r"""
@@ -196,3 +240,4 @@ if __name__ == '__main__':
 
     check_infinite_loops(config_json)
 
+    check_run_rule_value_exists(config_json)
