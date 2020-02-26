@@ -57,6 +57,35 @@ def get_device_ids(config_json):
             device_ids.append(device['id'])
     return device_ids
 
+def check_number_of_elements_in_masks(config_json):
+    r"""
+    Check if the number of bit masks in the 'masks' property matches the number
+    of byte values in the 'values' property.
+    expected byte values in the 'values' property.
+    config_json: Configuration file JSON
+    """
+
+    i2c_write_bytes = get_values(config_json, 'i2c_write_bytes')
+    i2c_compare_bytes = get_values(config_json, 'i2c_compare_bytes')
+
+    for index in i2c_write_bytes:
+        if 'masks' in index:
+            if len(index.get('masks', [])) != len(index.get('values', [])):
+                sys.stderr.write("Error: Invalid i2c_write_bytes action.\n"+\
+                "The masks array must have the same size as the values array. "+\
+                "masks: "+str(index.get('masks', []))+\
+                ", values: "+str(index.get('values', []))+'.\n')
+                handle_validation_error()
+
+    for index in i2c_compare_bytes:
+        if 'masks' in index:
+            if len(index.get('masks', [])) != len(index.get('values', [])):
+                sys.stderr.write("Error: Invalid i2c_compare_bytes action.\n"+\
+                "The masks array must have the same size as the values array. "+\
+                "masks: "+str(index.get('masks', []))+\
+                ", values: "+str(index.get('values', []))+'.\n')
+                handle_validation_error()
+
 def check_rule_id_exists(config_json):
     r"""
     Check if a rule_id property specifies a rule ID that does not exist.
@@ -285,3 +314,5 @@ if __name__ == '__main__':
     check_set_device_value_exists(config_json)
 
     check_rule_id_exists(config_json)
+
+    check_number_of_elements_in_masks(config_json)
