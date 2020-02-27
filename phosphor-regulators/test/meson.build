@@ -8,6 +8,7 @@ phosphor_regulators_tests_source_files = [
     'id_map_tests.cpp',
     'rail_tests.cpp',
     'rule_tests.cpp',
+    'validate-regulators-config_tests.cpp',
 
     'actions/action_environment_tests.cpp',
     'actions/action_error_tests.cpp',

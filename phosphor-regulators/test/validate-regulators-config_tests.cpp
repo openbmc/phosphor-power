@@ -118,8 +118,9 @@ std::string createTmpFile()
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "python ../tools/validate-regulators-config.py -s \
-                           ../schema/config_schema.json -c ";
+    std::string command = "python \
+        ../phosphor-regulators/tools/validate-regulators-config.py -s \
+        ../phosphor-regulators/schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
