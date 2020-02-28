@@ -2,6 +2,7 @@
 
 #include <interfaces/manager_interface.hpp>
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/source/signal.hpp>
@@ -70,6 +71,13 @@ class Manager : public ManagerObject
     void sighupHandler(sdeventplus::source::Signal& sigSrc,
                        const struct signalfd_siginfo* sigInfo);
 
+    /**
+     * @brief Callback function to handle interfacesAdded dbus signals
+     *
+     * @param[in] msg - Expanded sdbusplus message data
+     */
+    void signalHandler(sdbusplus::message::message& msg);
+
   private:
     /**
      * The dbus bus
@@ -85,6 +93,11 @@ class Manager : public ManagerObject
      * List of event timers
      */
     std::vector<Timer> timers;
+
+    /**
+     * List of dbus signal matches
+     */
+    std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals;
 
     /**
      * JSON configuration data filename
