@@ -35,8 +35,14 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     // Attempt to get the filename property from dbus
     setFileName(getFileNameDbus());
 
-    // TODO Subscribe to interfacesAdded signal for filename property
-    // Callback should set fileName and call parse json function
+    // Subscribe to interfacesAdded signal for filename property
+    std::unique_ptr<sdbusplus::server::match::match> matchPtr =
+        std::make_unique<sdbusplus::server::match::match>(
+            bus,
+            sdbusplus::bus::match::rules::interfacesAdded(sysDbusObj).c_str(),
+            std::bind(std::mem_fn(&Manager::signalHandler), this,
+                      std::placeholders::_1));
+    signals.emplace_back(std::move(matchPtr));
 
     if (!fileName.empty())
     {
@@ -86,6 +92,41 @@ void Manager::sighupHandler(sdeventplus::source::Signal& sigSrc,
     (void)sigInfo;
 
     // TODO Reload and process the configuration data
+}
+
+void Manager::signalHandler(sdbusplus::message::message& msg)
+{
+    using namespace sdbusplus::message;
+
+    if (msg)
+    {
+        object_path op;
+        msg.read(op);
+        if (static_cast<const std::string&>(op) != sysDbusPath)
+        {
+            // Object path does not match the path
+            return;
+        }
+
+        std::map<std::string, std::map<std::string, variant<std::string>>>
+            intfProp;
+        msg.read(intfProp);
+        auto itIntf = intfProp.find(sysDbusIntf);
+        if (itIntf == intfProp.cend())
+        {
+            // Interface not found on the path
+            return;
+        }
+        auto itProp = itIntf->second.find(sysDbusProp);
+        if (itProp == itIntf->second.cend())
+        {
+            // Property not found on the interface
+            return;
+        }
+        // Set fileName and call parse json function
+        setFileName(variant_ns::get<std::string>(itProp->second));
+        // TODO Load & parse JSON configuration data file
+    }
 }
 
 const std::string Manager::getFileNameDbus()
