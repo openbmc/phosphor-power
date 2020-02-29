@@ -111,6 +111,9 @@ class I2CInterface
 
     /** @brief Read word data from i2c
      *
+     * Uses the SMBus Read Word protocol.  Reads two bytes from the device, and
+     * the first byte read is the low-order byte.
+     *
      * @param[in] addr - The register address of the i2c device
      * @param[out] data - The data read from the i2c device
      *
@@ -156,6 +159,9 @@ class I2CInterface
     virtual void write(uint8_t addr, uint8_t data) = 0;
 
     /** @brief Write word data to i2c
+     *
+     * Uses the SMBus Write Word protocol.  Writes two bytes to the device, and
+     * the first byte written is the low-order byte.
      *
      * @param[in] addr - The register address of the i2c device
      * @param[in] data - The data to write to the i2c device
