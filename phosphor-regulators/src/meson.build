@@ -5,6 +5,7 @@ phosphor_regulators_include_directories = include_directories(
 
 phosphor_regulators_library_source_files = [
     'id_map.cpp',
+    'pmbus_utils.cpp',
 
     'actions/if_action.cpp',
     'actions/i2c_compare_bit_action.cpp',
