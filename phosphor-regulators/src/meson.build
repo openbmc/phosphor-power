@@ -13,7 +13,8 @@ phosphor_regulators_library_source_files = [
     'actions/i2c_compare_bytes_action.cpp',
     'actions/i2c_write_bit_action.cpp',
     'actions/i2c_write_byte_action.cpp',
-    'actions/i2c_write_bytes_action.cpp'
+    'actions/i2c_write_bytes_action.cpp',
+    'actions/pmbus_write_vout_command_action.cpp'
 ]
 
 phosphor_regulators_library = static_library(

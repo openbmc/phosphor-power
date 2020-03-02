@@ -26,6 +26,7 @@ phosphor_regulators_tests_source_files = [
     'actions/if_action_tests.cpp',
     'actions/not_action_tests.cpp',
     'actions/or_action_tests.cpp',
+    'actions/pmbus_write_vout_command_action_tests.cpp',
     'actions/run_rule_action_tests.cpp',
     'actions/set_device_action_tests.cpp'
 ]
