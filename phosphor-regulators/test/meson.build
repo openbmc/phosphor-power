@@ -11,9 +11,9 @@ phosphor_regulators_tests_source_files = [
     'rail_tests.cpp',
     'rule_tests.cpp',
     'write_verification_error_tests.cpp',
+    'validate-regulators-config_tests.cpp',
 
     'actions/action_environment_tests.cpp',
-    'actions/action_error_tests.cpp',
     'actions/action_utils_tests.cpp',
     'actions/and_action_tests.cpp',
     'actions/i2c_action_tests.cpp',
@@ -37,8 +37,6 @@ test('phosphor-regulators-tests',
                     gmock,
                     gtest,
                 ],
-                link_args: dynamic_linker,
-                build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
                 link_with: [
                     phosphor_regulators_library,
                     libi2c_dev_mock
@@ -50,5 +48,6 @@ test('phosphor-regulators-tests',
                     libi2c_inc,
                     libi2c_dev_mock_inc
                 ]
-     )
+     ),
+     timeout : 60
 )
