@@ -118,14 +118,15 @@ std::string createTmpFile()
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "../tools/validate-regulators-config.py -s \
-                           ../schema/config_schema.json -c ";
+    std::string command =
+        "../phosphor-regulators/tools/validate-regulators-config.py -s \
+                           ../phosphor-regulators/schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
 
-int runToolForOutput(const std::string& configFileName, std::string& output,
-                     std::string command, bool isReadingStderr = false)
+int runToolForOutput(std::string& output, std::string command,
+                     bool isReadingStderr = false)
 {
     // run the validation tool with the temporary file and return the output
     // of the validation tool.
@@ -167,8 +168,8 @@ int runToolForOutput(const std::string& configFileName, std::string& output,
 int runToolForOutput(const std::string& configFileName, std::string& output,
                      bool isReadingStderr = false)
 {
-    std::string command = getValidationToolCommand(configFileName);    
-    return runToolForOutput(configFileName, output, command, isReadingStderr);
+    std::string command = getValidationToolCommand(configFileName);
+    return runToolForOutput(output, command, isReadingStderr);
 }
 
 void expectFileValid(const std::string& configFileName)
@@ -225,16 +226,14 @@ void expectJsonInvalid(const json configFileJson,
     unlink(fileName.c_str());
 }
 
-void expectCommandLineSyntax(const std::string& configFileName,
-                             const std::string& expectedErrorMessage,
+void expectCommandLineSyntax(const std::string& expectedErrorMessage,
                              const std::string& expectedOutputMessage,
                              std::string command, int status)
 {
     std::string errorMessage = "";
     std::string outputMessage = "";
-    EXPECT_EQ(runToolForOutput(configFileName, errorMessage, command, true),
-              status);
-    EXPECT_EQ(runToolForOutput(configFileName, outputMessage, command), status);
+    EXPECT_EQ(runToolForOutput(errorMessage, command, true), status);
+    EXPECT_EQ(runToolForOutput(outputMessage, command), status);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
@@ -295,8 +294,19 @@ TEST(ValidateRegulatorsConfigTest, And)
                 }
             )"_json;
         configFile["rules"][0]["actions"].push_back(andAction);
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is valid under each of {u'required': "
+            "[u'compare_presence']}, {u'required': [u'compare_vpd']}, "
+            "{u'required': [u'i2c_compare_bit']}, {u'required': "
+            "[u'i2c_compare_byte']}, {u'required': [u'i2c_compare_bytes']}, "
+            "{u'required': [u'i2c_write_bit']}, {u'required': "
+            "[u'i2c_write_byte']}, {u'required': [u'i2c_write_bytes']}, "
+            "{u'required': [u'if']}, {u'required': [u'not']}, {u'required': "
+            "[u'or']}, {u'required': [u'pmbus_write_vout_command']}, "
+            "{u'required': [u'pmbus_read_sensor']}, {u'required': "
+            "[u'run_rule']}, {u'required': [u'set_device']}, {u'required': "
+            "[u'and']}");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Chassis)
@@ -567,8 +577,10 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'volts': 1.25, u'comments': [u'Set rail to 1.25V using standard "
+            "rule']} is not valid under any of the given schemas");
     }
     // Invalid: test configuration with property volts wrong type.
     {
@@ -708,14 +720,16 @@ TEST(ValidateRegulatorsConfigTest, Device)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test devices with property configuration wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["configuration"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test devices with property rails wrong type.
     {
@@ -1711,8 +1725,18 @@ TEST(ValidateRegulatorsConfigTest, If)
     {
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"]["condition"] = 1;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "1 is valid under each of {u'required': [u'compare_presence']}, "
+            "{u'required': [u'compare_vpd']}, {u'required': "
+            "[u'i2c_compare_bit']}, {u'required': [u'i2c_compare_byte']}, "
+            "{u'required': [u'i2c_compare_bytes']}, {u'required': "
+            "[u'i2c_write_bit']}, {u'required': [u'i2c_write_byte']}, "
+            "{u'required': [u'i2c_write_bytes']}, {u'required': [u'if']}, "
+            "{u'required': [u'not']}, {u'required': [u'or']}, {u'required': "
+            "[u'pmbus_write_vout_command']}, {u'required': "
+            "[u'pmbus_read_sensor']}, {u'required': [u'run_rule']}, "
+            "{u'required': [u'set_device']}, {u'required': [u'and']}");
     }
     // Invalid: test if with property then wrong type.
     {
@@ -1745,8 +1769,18 @@ TEST(ValidateRegulatorsConfigTest, Not)
     {
         json configFile = notFile;
         configFile["rules"][0]["actions"][1]["not"] = 1;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "1 is valid under each of {u'required': [u'compare_presence']}, "
+            "{u'required': [u'compare_vpd']}, {u'required': "
+            "[u'i2c_compare_bit']}, {u'required': [u'i2c_compare_byte']}, "
+            "{u'required': [u'i2c_compare_bytes']}, {u'required': "
+            "[u'i2c_write_bit']}, {u'required': [u'i2c_write_byte']}, "
+            "{u'required': [u'i2c_write_bytes']}, {u'required': [u'if']}, "
+            "{u'required': [u'not']}, {u'required': [u'or']}, {u'required': "
+            "[u'pmbus_write_vout_command']}, {u'required': "
+            "[u'pmbus_read_sensor']}, {u'required': [u'run_rule']}, "
+            "{u'required': [u'set_device']}, {u'required': [u'and']}");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Or)
@@ -2015,8 +2049,10 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         json configFile = presenceDetectionFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'comments': [u'Regulator is only present on the FooBar "
+            "backplane']} is not valid under any of the given schemas");
     }
     // Invalid: test presence_detection with property comments wrong type.
     {
@@ -2115,7 +2151,8 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]["configuration"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test rail with sensor_monitoring wrong type.
     {
@@ -2123,7 +2160,8 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]
                   ["sensor_monitoring"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test rail with comments empty array.
     {
@@ -2216,8 +2254,19 @@ TEST(ValidateRegulatorsConfigTest, Rule)
     {
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][0] = "foo";
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is valid under each of {u'required': "
+            "[u'compare_presence']}, {u'required': [u'compare_vpd']}, "
+            "{u'required': [u'i2c_compare_bit']}, {u'required': "
+            "[u'i2c_compare_byte']}, {u'required': [u'i2c_compare_bytes']}, "
+            "{u'required': [u'i2c_write_bit']}, {u'required': "
+            "[u'i2c_write_byte']}, {u'required': [u'i2c_write_bytes']}, "
+            "{u'required': [u'if']}, {u'required': [u'not']}, {u'required': "
+            "[u'or']}, {u'required': [u'pmbus_write_vout_command']}, "
+            "{u'required': [u'pmbus_read_sensor']}, {u'required': "
+            "[u'run_rule']}, {u'required': [u'set_device']}, {u'required': "
+            "[u'and']}");
     }
 
     // invalid test actions property has empty array
@@ -2296,7 +2345,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
             .erase("rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+                            "{} is not valid under any of the given schemas");
     }
     // Invalid: test rails sensor_monitoring with property comments wrong type.
     {
@@ -2529,11 +2578,14 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
                             "Error: Invalid i2c_write_bytes action.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
-    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string validateTool =
+        " ../phosphor-regulators/tools/validate-regulators-config.py ";
     std::string schema = " -s ";
-    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string schemaFile =
+        " ../phosphor-regulators/schema/config_schema.json ";
     std::string configuration = " -c ";
     std::string command;
     std::string errorMessage;
@@ -2546,98 +2598,84 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     fileName = writeDataToTmpFile(validConfigFile);
     // Valid: -s specified
     {
-        command = validateTool + "-s " + schemaFile +
-                  configuration + fileName;
-        expectCommandLineSyntax(fileName, errorMessage, outputMessage, command,
-                                valid);
+        command = validateTool + "-s " + schemaFile + configuration + fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
     }
     // Valid: --schema-file specified
     {
-        command = validateTool + "--schema-file " + schemaFile +
-                  configuration + fileName;
-        expectCommandLineSyntax(fileName, errorMessage, outputMessage, command,
-                                valid);
+        command = validateTool + "--schema-file " + schemaFile + configuration +
+                  fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
     }
     // Valid: -c specified
     {
-        command = validateTool + schema + schemaFile + "-c " +
-                  fileName;
-        expectCommandLineSyntax(fileName, errorMessage, outputMessage, command,
-                                valid);
+        command = validateTool + schema + schemaFile + "-c " + fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
     }
     // Valid: --configuration-file specified
     {
-        command = validateTool + schema + schemaFile +
-                  "--configuration-file " + fileName;
-        expectCommandLineSyntax(fileName, errorMessage, outputMessage, command,
-                                valid);
+        command = validateTool + schema + schemaFile + "--configuration-file " +
+                  fileName;
+        expectCommandLineSyntax(errorMessage, outputMessage, command, valid);
     }
     // Valid: -h specified
     {
         command = validateTool + "-h ";
-        expectCommandLineSyntax(fileName, errorMessage, outputMessageHelp,
-                                command, valid);
+        expectCommandLineSyntax(errorMessage, outputMessageHelp, command,
+                                valid);
     }
     // Valid: --help specified
     {
         command = validateTool + "--help ";
-        expectCommandLineSyntax(fileName, errorMessage, outputMessageHelp,
-                                command, valid);
+        expectCommandLineSyntax(errorMessage, outputMessageHelp, command,
+                                valid);
     }
     // Invalid: -c/--configuration-file not specified
     {
         command = validateTool + schema + schemaFile;
-        expectCommandLineSyntax(fileName,
-                                "Error: Configuration file is required.",
+        expectCommandLineSyntax("Error: Configuration file is required.",
                                 outputMessageHelp, command, 1);
     }
     // Invalid: -s/--schema-file not specified
     {
         command = validateTool + configuration + fileName;
-        expectCommandLineSyntax(fileName, "Error: Schema file is required.",
+        expectCommandLineSyntax("Error: Schema file is required.",
                                 outputMessageHelp, command, 1);
     }
     // Invalid: -s specified more than once
     {
-        command = validateTool + "-s -s " + schemaFile +
-                  configuration + fileName;
-        expectCommandLineSyntax(fileName, outputMessageHelp, outputMessage,
-                                command, 2);
+        command =
+            validateTool + "-s -s " + schemaFile + configuration + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: -c specified more than once
     {
-        command = validateTool + schema + schemaFile +
-                  "-c -c " + fileName;
-        expectCommandLineSyntax(fileName, outputMessageHelp, outputMessage,
-                                command, 2);
+        command = validateTool + schema + schemaFile + "-c -c " + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: No file name specified after -c
     {
-        command =
-            validateTool + schema + schemaFile + configuration;
-        expectCommandLineSyntax(fileName, outputMessageHelp, outputMessage,
-                                command, 2);
+        command = validateTool + schema + schemaFile + configuration;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: No file name specified after -s
     {
-        command =
-            validateTool + schema + configuration + fileName;
-        expectCommandLineSyntax(fileName, outputMessageHelp, outputMessage,
-                                command, 2);
+        command = validateTool + schema + configuration + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: File specified after -c does not exist
     {
-        command = validateTool + schema + schemaFile +
-                  configuration + "../notExistFile";
-        expectCommandLineSyntax(fileName, "Traceback (most recent call last):",
-                                outputMessage, command, 1);
+        command = validateTool + schema + schemaFile + configuration +
+                  "../notExistFile";
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
     }
     // Invalid: File specified after -s does not exist
     {
-        command = validateTool + schema + "../notExistFile " +
-                  configuration + fileName;
-        expectCommandLineSyntax(fileName, "Traceback (most recent call last):",
-                                outputMessage, command, 1);
+        command = validateTool + schema + "../notExistFile " + configuration +
+                  fileName;
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
     }
     // Invalid: File specified after -s is not right data format
     {
@@ -2646,20 +2684,19 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         std::ofstream out(wrongFormatFile);
         out << "foo";
         out.close();
-        command = validateTool + schema + wrongFormatFile +
-                  configuration + fileName;
-        expectCommandLineSyntax(fileName, "Traceback (most recent call last):",
-                                outputMessage, command, 1);
+        command =
+            validateTool + schema + wrongFormatFile + configuration + fileName;
+        expectCommandLineSyntax(
+            "Traceback (most recent call last):", outputMessage, command, 1);
     }
     // Invalid: File specified after -c is not readable
     {
         std::string notReadableFile;
         notReadableFile = writeDataToTmpFile(validConfigFile);
-        command = validateTool + schema + schemaFile +
-                  configuration + notReadableFile;
+        command = validateTool + schema + schemaFile + configuration +
+                  notReadableFile;
         chmod(notReadableFile.c_str(), 0222);
         expectCommandLineSyntax(
-            notReadableFile,
             "Traceback (most recent call last):", outputMessage, command, 1);
         unlink(notReadableFile.c_str());
     }
@@ -2667,20 +2704,18 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     {
         std::string notReadableFile;
         notReadableFile = writeDataToTmpFile(validConfigFile);
-        command = validateTool + schema + notReadableFile +
-                  configuration + fileName;
+        command =
+            validateTool + schema + notReadableFile + configuration + fileName;
         chmod(notReadableFile.c_str(), 0222);
         expectCommandLineSyntax(
-            notReadableFile,
             "Traceback (most recent call last):", outputMessage, command, 1);
         unlink(notReadableFile.c_str());
     }
     // Invalid: Unexpected parameter specified (like -g)
     {
-        command = validateTool + schema + schemaFile +
-                  configuration + "-g" + fileName;
-        expectCommandLineSyntax(fileName, outputMessageHelp, outputMessage,
-                                command, 2);
+        command = validateTool + schema + schemaFile + configuration + "-g" +
+                  fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     unlink(fileName.c_str());
 }
