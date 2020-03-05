@@ -295,8 +295,19 @@ TEST(ValidateRegulatorsConfigTest, And)
                 }
             )"_json;
         configFile["rules"][0]["actions"].push_back(andAction);
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is valid under each of {u'required': "
+            "[u'compare_presence']}, {u'required': [u'compare_vpd']}, "
+            "{u'required': [u'i2c_compare_bit']}, {u'required': "
+            "[u'i2c_compare_byte']}, {u'required': [u'i2c_compare_bytes']}, "
+            "{u'required': [u'i2c_write_bit']}, {u'required': "
+            "[u'i2c_write_byte']}, {u'required': [u'i2c_write_bytes']}, "
+            "{u'required': [u'if']}, {u'required': [u'not']}, {u'required': "
+            "[u'or']}, {u'required': [u'pmbus_write_vout_command']}, "
+            "{u'required': [u'pmbus_read_sensor']}, {u'required': "
+            "[u'run_rule']}, {u'required': [u'set_device']}, {u'required': "
+            "[u'and']}");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Chassis)
@@ -567,8 +578,10 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'volts': 1.25, u'comments': [u'Set rail to 1.25V using standard "
+            "rule']} is not valid under any of the given schemas");
     }
     // Invalid: test configuration with property volts wrong type.
     {
@@ -708,14 +721,16 @@ TEST(ValidateRegulatorsConfigTest, Device)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test devices with property configuration wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["configuration"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test devices with property rails wrong type.
     {
@@ -1711,8 +1726,18 @@ TEST(ValidateRegulatorsConfigTest, If)
     {
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"]["condition"] = 1;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "1 is valid under each of {u'required': [u'compare_presence']}, "
+            "{u'required': [u'compare_vpd']}, {u'required': "
+            "[u'i2c_compare_bit']}, {u'required': [u'i2c_compare_byte']}, "
+            "{u'required': [u'i2c_compare_bytes']}, {u'required': "
+            "[u'i2c_write_bit']}, {u'required': [u'i2c_write_byte']}, "
+            "{u'required': [u'i2c_write_bytes']}, {u'required': [u'if']}, "
+            "{u'required': [u'not']}, {u'required': [u'or']}, {u'required': "
+            "[u'pmbus_write_vout_command']}, {u'required': "
+            "[u'pmbus_read_sensor']}, {u'required': [u'run_rule']}, "
+            "{u'required': [u'set_device']}, {u'required': [u'and']}");
     }
     // Invalid: test if with property then wrong type.
     {
@@ -1745,8 +1770,18 @@ TEST(ValidateRegulatorsConfigTest, Not)
     {
         json configFile = notFile;
         configFile["rules"][0]["actions"][1]["not"] = 1;
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "1 is valid under each of {u'required': [u'compare_presence']}, "
+            "{u'required': [u'compare_vpd']}, {u'required': "
+            "[u'i2c_compare_bit']}, {u'required': [u'i2c_compare_byte']}, "
+            "{u'required': [u'i2c_compare_bytes']}, {u'required': "
+            "[u'i2c_write_bit']}, {u'required': [u'i2c_write_byte']}, "
+            "{u'required': [u'i2c_write_bytes']}, {u'required': [u'if']}, "
+            "{u'required': [u'not']}, {u'required': [u'or']}, {u'required': "
+            "[u'pmbus_write_vout_command']}, {u'required': "
+            "[u'pmbus_read_sensor']}, {u'required': [u'run_rule']}, "
+            "{u'required': [u'set_device']}, {u'required': [u'and']}");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Or)
@@ -2015,8 +2050,10 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         json configFile = presenceDetectionFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{u'comments': [u'Regulator is only present on the FooBar "
+            "backplane']} is not valid under any of the given schemas");
     }
     // Invalid: test presence_detection with property comments wrong type.
     {
@@ -2115,7 +2152,8 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]["configuration"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test rail with sensor_monitoring wrong type.
     {
@@ -2123,7 +2161,8 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]
                   ["sensor_monitoring"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is valid under each of {u'required': "
+                            "[u'actions']}, {u'required': [u'rule_id']}");
     }
     // Invalid: test rail with comments empty array.
     {
@@ -2216,8 +2255,19 @@ TEST(ValidateRegulatorsConfigTest, Rule)
     {
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][0] = "foo";
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "u'foo' is valid under each of {u'required': "
+            "[u'compare_presence']}, {u'required': [u'compare_vpd']}, "
+            "{u'required': [u'i2c_compare_bit']}, {u'required': "
+            "[u'i2c_compare_byte']}, {u'required': [u'i2c_compare_bytes']}, "
+            "{u'required': [u'i2c_write_bit']}, {u'required': "
+            "[u'i2c_write_byte']}, {u'required': [u'i2c_write_bytes']}, "
+            "{u'required': [u'if']}, {u'required': [u'not']}, {u'required': "
+            "[u'or']}, {u'required': [u'pmbus_write_vout_command']}, "
+            "{u'required': [u'pmbus_read_sensor']}, {u'required': "
+            "[u'run_rule']}, {u'required': [u'set_device']}, {u'required': "
+            "[u'and']}");
     }
 
     // invalid test actions property has empty array
@@ -2296,7 +2346,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
             .erase("rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+                            "{} is not valid under any of the given schemas");
     }
     // Invalid: test rails sensor_monitoring with property comments wrong type.
     {
@@ -2529,11 +2579,14 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
                             "Error: Invalid i2c_write_bytes action.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
-    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string validateTool =
+        " ../phosphor-regulators/tools/validate-regulators-config.py ";
     std::string schema = " -s ";
-    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string schemaFile =
+        " ../phosphor-regulators/schema/config_schema.json ";
     std::string configuration = " -c ";
     std::string command;
     std::string errorMessage;
