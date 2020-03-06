@@ -118,25 +118,26 @@ std::string createTmpFile()
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "../tools/validate-regulators-config.py -s \
-                           ../schema/config_schema.json -c ";
+    std::string command =
+        "../phosphor-regulators/tools/validate-regulators-config.py -s \
+         ../phosphor-regulators/schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
 
-int runToolForOutput(std::string& output, std::string command,
-                     bool isReadingStderr = false)
+int runToolForOutputWithCommand(std::string command,
+                                std::string& standardOutput,
+                                std::string& standardError)
 {
     // run the validation tool with the temporary file and return the output
     // of the validation tool.
-    // reading the stderr while isReadingStderr is true.
-    if (isReadingStderr == true)
-    {
-        command += " 2>&1 >/dev/null";
-    }
+
+    std::string errorTmpFile = createTmpFile();
+
+    command += " 2> " + errorTmpFile;
     // get the jsonschema print from validation tool.
     char buffer[256];
-    std::string result = "";
+    std::string result;
     // to get the stdout from the validation tool.
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe)
@@ -151,6 +152,7 @@ int runToolForOutput(std::string& output, std::string command,
         }
     }
     int returnValue = pclose(pipe);
+    int exitStatus = WEXITSTATUS(returnValue);
     // Check if pclose() failed
     if (returnValue == -1)
     {
@@ -158,25 +160,34 @@ int runToolForOutput(std::string& output, std::string command,
         throw std::runtime_error("pclose() failed!");
     }
     std::string firstLine = result.substr(0, result.find('\n'));
-    output = firstLine;
+    standardOutput = firstLine;
+
+    // Read the standardError from errorTmpFile.
+    std::ifstream input(errorTmpFile.c_str());
+    std::string line;
+
+    if (std::getline(input, line))
+    {
+        standardError = line;
+    }
+    // Delete the temp file.
+    unlink(errorTmpFile.c_str());
     // Get command exit status from return value
-    int exitStatus = WEXITSTATUS(returnValue);
     return exitStatus;
 }
 
 int runToolForOutput(const std::string& configFileName, std::string& output,
-                     bool isReadingStderr = false)
+                     std::string& error)
 {
     std::string command = getValidationToolCommand(configFileName);
-    return runToolForOutput(output, command, isReadingStderr);
+    return runToolForOutputWithCommand(command, output, error);
 }
 
 void expectFileValid(const std::string& configFileName)
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 0);
-    EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 0);
+    EXPECT_EQ(runToolForOutput(configFileName, outputMessage, errorMessage), 0);
     EXPECT_EQ(errorMessage, "");
     EXPECT_EQ(outputMessage, "");
 }
@@ -187,8 +198,7 @@ void expectFileInvalid(const std::string& configFileName,
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 1);
-    EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 1);
+    EXPECT_EQ(runToolForOutput(configFileName, outputMessage, errorMessage), 1);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
@@ -231,8 +241,8 @@ void expectCommandLineSyntax(const std::string& expectedErrorMessage,
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(errorMessage, command, true), status);
-    EXPECT_EQ(runToolForOutput(outputMessage, command), status);
+    EXPECT_EQ(runToolForOutputWithCommand(command, outputMessage, errorMessage),
+              status);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
@@ -2529,9 +2539,11 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
 }
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
-    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string validateTool =
+        " ../phosphor-regulators/tools/validate-regulators-config.py ";
     std::string schema = " -s ";
-    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string schemaFile =
+        " ../phosphor-regulators/schema/config_schema.json ";
     std::string configuration = " -c ";
     std::string command;
     std::string errorMessage;
