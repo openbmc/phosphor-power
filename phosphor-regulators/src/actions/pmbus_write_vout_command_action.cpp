@@ -131,10 +131,10 @@ double
         // A volts value is defined for this action
         voltsValue = volts.value();
     }
-    else if (environment.hasVolts())
+    else if (environment.getVolts().has_value())
     {
         // A volts value is defined in the ActionEnvironment
-        voltsValue = environment.getVolts();
+        voltsValue = environment.getVolts().value();
     }
     else
     {

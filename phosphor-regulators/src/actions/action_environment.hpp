@@ -18,6 +18,7 @@
 #include "id_map.hpp"
 
 #include <cstddef> // for size_t
+#include <optional>
 #include <stdexcept>
 #include <string>
 
@@ -130,31 +131,13 @@ class ActionEnvironment
     }
 
     /**
-     * Returns the current volts value.
-     *
-     * Call hasVolts() first to check whether a volts value has been set.
-     *
-     * Throws logic_error if no volts value has been set.
+     * Returns the current volts value, if set.
      *
      * @return current volts value
      */
-    double getVolts() const
+    std::optional<double> getVolts() const
     {
-        if (!hasVoltsValue)
-        {
-            throw std::logic_error{"No volts value has been set."};
-        }
         return volts;
-    }
-
-    /**
-     * Returns whether a volts value has been set.
-     *
-     * @return true if a volts value has been set, false otherwise
-     */
-    bool hasVolts() const
-    {
-        return hasVoltsValue;
     }
 
     /**
@@ -196,7 +179,6 @@ class ActionEnvironment
     void setVolts(double volts)
     {
         this->volts = volts;
-        hasVoltsValue = true;
     }
 
   private:
@@ -211,14 +193,9 @@ class ActionEnvironment
     std::string deviceID{};
 
     /**
-     * Indicates whether a volts value has been set.
-     */
-    bool hasVoltsValue{false};
-
-    /**
      * Current volts value (if set).
      */
-    double volts{0};
+    std::optional<double> volts{};
 
     /**
      * Rule call stack depth.

@@ -50,8 +50,7 @@ TEST(ActionEnvironmentTests, Constructor)
         EXPECT_EQ(env.getDevice().getID(), "regulator1");
         EXPECT_EQ(env.getDeviceID(), "regulator1");
         EXPECT_EQ(env.getRuleDepth(), 0);
-        EXPECT_THROW(env.getVolts(), std::logic_error);
-        EXPECT_EQ(env.hasVolts(), false);
+        EXPECT_EQ(env.getVolts().has_value(), false);
     }
     catch (const std::exception& error)
     {
@@ -186,42 +185,10 @@ TEST(ActionEnvironmentTests, GetVolts)
 {
     IDMap idMap{};
     ActionEnvironment env{idMap, ""};
-    EXPECT_EQ(env.hasVolts(), false);
-
-    // Test where a volts value has not been set
-    try
-    {
-        env.getVolts();
-    }
-    catch (const std::logic_error& l_error)
-    {
-        EXPECT_STREQ(l_error.what(), "No volts value has been set.");
-    }
-    catch (const std::exception& error)
-    {
-        ADD_FAILURE() << "Should not have caught exception.";
-    }
-
-    // Test where a volts value has been set
+    EXPECT_EQ(env.getVolts().has_value(), false);
     env.setVolts(1.31);
-    try
-    {
-        double volts = env.getVolts();
-        EXPECT_EQ(volts, 1.31);
-    }
-    catch (const std::exception& error)
-    {
-        ADD_FAILURE() << "Should not have caught exception.";
-    }
-}
-
-TEST(ActionEnvironmentTests, HasVolts)
-{
-    IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
-    EXPECT_EQ(env.hasVolts(), false);
-    env.setVolts(1.31);
-    EXPECT_EQ(env.hasVolts(), true);
+    EXPECT_EQ(env.getVolts().has_value(), true);
+    EXPECT_EQ(env.getVolts().value(), 1.31);
 }
 
 TEST(ActionEnvironmentTests, IncrementRuleDepth)
@@ -275,10 +242,10 @@ TEST(ActionEnvironmentTests, SetVolts)
     {
         IDMap idMap{};
         ActionEnvironment env{idMap, ""};
-        EXPECT_EQ(env.hasVolts(), false);
+        EXPECT_EQ(env.getVolts().has_value(), false);
         env.setVolts(2.35);
-        EXPECT_EQ(env.hasVolts(), true);
-        EXPECT_EQ(env.getVolts(), 2.35);
+        EXPECT_EQ(env.getVolts().has_value(), true);
+        EXPECT_EQ(env.getVolts().value(), 2.35);
     }
     catch (const std::exception& error)
     {
