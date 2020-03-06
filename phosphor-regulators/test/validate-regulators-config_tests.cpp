@@ -118,8 +118,9 @@ std::string createTmpFile()
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "../tools/validate-regulators-config.py -s \
-                           ../schema/config_schema.json -c ";
+    std::string command =
+        "../phosphor-regulators/tools/validate-regulators-config.py -s \
+         ../phosphor-regulators/schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
@@ -2529,9 +2530,11 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
 }
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
-    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string validateTool =
+        " ../phosphor-regulators/tools/validate-regulators-config.py ";
     std::string schema = " -s ";
-    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string schemaFile =
+        " ../phosphor-regulators/schema/config_schema.json ";
     std::string configuration = " -c ";
     std::string command;
     std::string errorMessage;
