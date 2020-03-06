@@ -103,40 +103,53 @@ const json validConfigFile = R"(
     }
 )"_json;
 
-std::string createTmpFile()
+class TmpFile
 {
-    // create temporary file using mkstemp under /tmp/. random name for XXXXXX
-    char fileName[] = "/tmp/temp-XXXXXX";
-    int fd = mkstemp(fileName);
-    if (fd == -1)
+  public:
+    TmpFile()
     {
-        perror("Can't create temporary file");
+        int fd = mkstemp(fileName);
+        if (fd == -1)
+        {
+            perror("Can't create temporary file");
+        }
+        close(fd);
     }
-    close(fd);
-    return fileName;
-}
+
+    std::string getName()
+    {
+        return fileName;
+    }
+
+    ~TmpFile()
+    {
+        unlink(fileName);
+    }
+
+  private:
+    char fileName[17] = "/tmp/temp-XXXXXX";
+};
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
-    std::string command = "../tools/validate-regulators-config.py -s \
-                           ../schema/config_schema.json -c ";
+    std::string command =
+        "../phosphor-regulators/tools/validate-regulators-config.py -s \
+         ../phosphor-regulators/schema/config_schema.json -c ";
     command += configFileName;
     return command;
 }
 
-int runToolForOutput(std::string& output, std::string command,
-                     bool isReadingStderr = false)
+int runToolForOutputWithCommand(std::string command,
+                                std::string& standardOutput,
+                                std::string& standardError)
 {
     // run the validation tool with the temporary file and return the output
     // of the validation tool.
-    // reading the stderr while isReadingStderr is true.
-    if (isReadingStderr == true)
-    {
-        command += " 2>&1 >/dev/null";
-    }
+    TmpFile tmpFile;
+    command += " 2> " + tmpFile.getName();
     // get the jsonschema print from validation tool.
     char buffer[256];
-    std::string result = "";
+    std::string result;
     // to get the stdout from the validation tool.
     FILE* pipe = popen(command.c_str(), "r");
     if (!pipe)
@@ -158,25 +171,34 @@ int runToolForOutput(std::string& output, std::string command,
         throw std::runtime_error("pclose() failed!");
     }
     std::string firstLine = result.substr(0, result.find('\n'));
-    output = firstLine;
+    standardOutput = firstLine;
     // Get command exit status from return value
     int exitStatus = WEXITSTATUS(returnValue);
+
+    // Read the standardError from tmpFile.
+    std::ifstream input(tmpFile.getName().c_str());
+    std::string line;
+
+    if (std::getline(input, line))
+    {
+        standardError = line;
+    }
+
     return exitStatus;
 }
 
 int runToolForOutput(const std::string& configFileName, std::string& output,
-                     bool isReadingStderr = false)
+                     std::string& error)
 {
     std::string command = getValidationToolCommand(configFileName);
-    return runToolForOutput(output, command, isReadingStderr);
+    return runToolForOutputWithCommand(command, output, error);
 }
 
 void expectFileValid(const std::string& configFileName)
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 0);
-    EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 0);
+    EXPECT_EQ(runToolForOutput(configFileName, outputMessage, errorMessage), 0);
     EXPECT_EQ(errorMessage, "");
     EXPECT_EQ(outputMessage, "");
 }
@@ -187,31 +209,27 @@ void expectFileInvalid(const std::string& configFileName,
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(configFileName, errorMessage, true), 1);
-    EXPECT_EQ(runToolForOutput(configFileName, outputMessage), 1);
+    EXPECT_EQ(runToolForOutput(configFileName, outputMessage, errorMessage), 1);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
 
-std::string writeDataToTmpFile(const json configFileJson)
+void writeDataToFile(const json configFileJson, std::string fileName)
 {
-    std::string fileName;
-    fileName = createTmpFile();
     std::string jsonData = configFileJson.dump();
     std::ofstream out(fileName);
     out << jsonData;
     out.close();
-
-    return fileName;
 }
 
 void expectJsonValid(const json configFileJson)
 {
     std::string fileName;
-    fileName = writeDataToTmpFile(configFileJson);
+    TmpFile tmpFile;
+    fileName = tmpFile.getName();
+    writeDataToFile(configFileJson, fileName);
 
     EXPECT_FILE_VALID(fileName);
-    unlink(fileName.c_str());
 }
 
 void expectJsonInvalid(const json configFileJson,
@@ -219,10 +237,11 @@ void expectJsonInvalid(const json configFileJson,
                        const std::string& expectedOutputMessage)
 {
     std::string fileName;
-    fileName = writeDataToTmpFile(configFileJson);
+    TmpFile tmpFile;
+    fileName = tmpFile.getName();
+    writeDataToFile(configFileJson, fileName);
 
     EXPECT_FILE_INVALID(fileName, expectedErrorMessage, expectedOutputMessage);
-    unlink(fileName.c_str());
 }
 
 void expectCommandLineSyntax(const std::string& expectedErrorMessage,
@@ -231,8 +250,8 @@ void expectCommandLineSyntax(const std::string& expectedErrorMessage,
 {
     std::string errorMessage;
     std::string outputMessage;
-    EXPECT_EQ(runToolForOutput(errorMessage, command, true), status);
-    EXPECT_EQ(runToolForOutput(outputMessage, command), status);
+    EXPECT_EQ(runToolForOutputWithCommand(command, outputMessage, errorMessage),
+              status);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
@@ -2529,9 +2548,11 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
 }
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
-    std::string validateTool = "../tools/validate-regulators-config.py ";
+    std::string validateTool =
+        " ../phosphor-regulators/tools/validate-regulators-config.py ";
     std::string schema = " -s ";
-    std::string schemaFile = " ../schema/config_schema.json ";
+    std::string schemaFile =
+        " ../phosphor-regulators/schema/config_schema.json ";
     std::string configuration = " -c ";
     std::string command;
     std::string errorMessage;
@@ -2541,7 +2562,9 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     int valid = 0;
 
     std::string fileName;
-    fileName = writeDataToTmpFile(validConfigFile);
+    TmpFile tmpFile;
+    fileName = tmpFile.getName();
+    writeDataToFile(validConfigFile, fileName);
     // Valid: -s specified
     {
         command = validateTool + "-s " + schemaFile + configuration + fileName;
@@ -2625,38 +2648,40 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     }
     // Invalid: File specified after -s is not right data format
     {
-        std::string wrongFormatFile;
-        wrongFormatFile = createTmpFile();
-        std::ofstream out(wrongFormatFile);
+        std::string wrongFormatFileName;
+        TmpFile wrongFormatFile;
+        wrongFormatFileName = wrongFormatFile.getName();
+        std::ofstream out(wrongFormatFileName);
         out << "foo";
         out.close();
-        command =
-            validateTool + schema + wrongFormatFile + configuration + fileName;
+        command = validateTool + schema + wrongFormatFileName + configuration +
+                  fileName;
         expectCommandLineSyntax(
             "Traceback (most recent call last):", outputMessage, command, 1);
-        unlink(wrongFormatFile.c_str());
     }
     // Invalid: File specified after -c is not readable
     {
-        std::string notReadableFile;
-        notReadableFile = writeDataToTmpFile(validConfigFile);
+        std::string notReadableFileName;
+        TmpFile notReadableFile;
+        notReadableFileName = notReadableFile.getName();
+        writeDataToFile(validConfigFile, notReadableFileName);
         command = validateTool + schema + schemaFile + configuration +
-                  notReadableFile;
-        chmod(notReadableFile.c_str(), 0222);
+                  notReadableFileName;
+        chmod(notReadableFileName.c_str(), 0222);
         expectCommandLineSyntax(
             "Traceback (most recent call last):", outputMessage, command, 1);
-        unlink(notReadableFile.c_str());
     }
     // Invalid: File specified after -s is not readable
     {
-        std::string notReadableFile;
-        notReadableFile = writeDataToTmpFile(validConfigFile);
-        command =
-            validateTool + schema + notReadableFile + configuration + fileName;
-        chmod(notReadableFile.c_str(), 0222);
+        std::string notReadableFileName;
+        TmpFile notReadableFile;
+        notReadableFileName = notReadableFile.getName();
+        writeDataToFile(validConfigFile, notReadableFileName);
+        command = validateTool + schema + notReadableFileName + configuration +
+                  fileName;
+        chmod(notReadableFileName.c_str(), 0222);
         expectCommandLineSyntax(
             "Traceback (most recent call last):", outputMessage, command, 1);
-        unlink(notReadableFile.c_str());
     }
     // Invalid: Unexpected parameter specified (like -g)
     {
@@ -2664,5 +2689,4 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
                   fileName + " -g";
         expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
-    unlink(fileName.c_str());
 }
