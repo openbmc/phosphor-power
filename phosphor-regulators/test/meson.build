@@ -12,6 +12,7 @@ phosphor_regulators_tests_source_files = [
     'presence_detection_tests.cpp',
     'rail_tests.cpp',
     'rule_tests.cpp',
+    'sensor_monitoring_tests.cpp',
     'write_verification_error_tests.cpp',
 
     'actions/action_environment_tests.cpp',
