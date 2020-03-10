@@ -9,6 +9,7 @@ phosphor_regulators_tests_source_files = [
     'id_map_tests.cpp',
     'pmbus_error_tests.cpp',
     'pmbus_utils_tests.cpp',
+    'presence_detection_tests.cpp',
     'rail_tests.cpp',
     'rule_tests.cpp',
     'write_verification_error_tests.cpp',
