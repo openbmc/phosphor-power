@@ -1,3 +1,6 @@
+install_subdir('configurations',
+      strip_directory: true,
+          install_dir: get_option('datadir')/'phosphor-psu-monitor')
 
 phosphor_psu_monitor = executable(
     'phosphor-psu-monitor',
