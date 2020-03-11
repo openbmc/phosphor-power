@@ -15,11 +15,15 @@
  */
 #pragma once
 
+#include "configuration.hpp"
 #include "i2c_interface.hpp"
+#include "presence_detection.hpp"
+#include "rail.hpp"
 
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -47,34 +51,35 @@ class Device
      * @param isRegulator indicates whether this device is a voltage regulator
      * @param fru Field-Replaceable Unit (FRU) for this device
      * @param i2cInterface I2C interface to this device
+     * @param presenceDetection presence detection for this device, if any
+     * @param configuration configuration changes to apply to this device, if
+     *                      any
+     * @param rails voltage rails produced by this device, if any
      */
-    explicit Device(const std::string& id, bool isRegulator,
-                    const std::string& fru,
-                    std::unique_ptr<i2c::I2CInterface> i2cInterface) :
+    explicit Device(
+        const std::string& id, bool isRegulator, const std::string& fru,
+        std::unique_ptr<i2c::I2CInterface> i2cInterface,
+        std::unique_ptr<PresenceDetection> presenceDetection = nullptr,
+        std::unique_ptr<Configuration> configuration = nullptr,
+        std::vector<std::unique_ptr<Rail>> rails =
+            std::vector<std::unique_ptr<Rail>>{}) :
         id{id},
-        isRegulatorDevice{isRegulator}, fru{fru}, i2cInterface{
-                                                      std::move(i2cInterface)}
+        isRegulatorDevice{isRegulator}, fru{fru},
+        i2cInterface{std::move(i2cInterface)}, presenceDetection{std::move(
+                                                   presenceDetection)},
+        configuration{std::move(configuration)}, rails{std::move(rails)}
     {
     }
 
     /**
-     * Returns the unique ID of this device.
+     * Returns the configuration changes to apply to this device, if any.
      *
-     * @return device ID
+     * @return Pointer to Configuration object.  Will equal nullptr if no
+     *         configuration changes are defined for this device.
      */
-    const std::string& getID() const
+    const std::unique_ptr<Configuration>& getConfiguration() const
     {
-        return id;
-    }
-
-    /**
-     * Returns whether this device is a voltage regulator.
-     *
-     * @return true if device is a voltage regulator, false otherwise
-     */
-    bool isRegulator() const
-    {
-        return isRegulatorDevice;
+        return configuration;
     }
 
     /**
@@ -91,13 +96,54 @@ class Device
     }
 
     /**
-     * Gets the I2C interface to this device.
+     * Returns the I2C interface to this device.
      *
      * @return I2C interface to device
      */
     i2c::I2CInterface& getI2CInterface()
     {
         return *i2cInterface;
+    }
+
+    /**
+     * Returns the unique ID of this device.
+     *
+     * @return device ID
+     */
+    const std::string& getID() const
+    {
+        return id;
+    }
+
+    /**
+     * Returns the presence detection for this device, if any.
+     *
+     * @return Pointer to PresenceDetection object.  Will equal nullptr if no
+     *         presence detection is defined for this device.
+     */
+    const std::unique_ptr<PresenceDetection>& getPresenceDetection() const
+    {
+        return presenceDetection;
+    }
+
+    /**
+     * Returns the voltage rails produced by this device, if any.
+     *
+     * @return voltage rails
+     */
+    const std::vector<std::unique_ptr<Rail>>& getRails() const
+    {
+        return rails;
+    }
+
+    /**
+     * Returns whether this device is a voltage regulator.
+     *
+     * @return true if device is a voltage regulator, false otherwise
+     */
+    bool isRegulator() const
+    {
+        return isRegulatorDevice;
     }
 
   private:
@@ -123,6 +169,24 @@ class Device
      * I2C interface to this device.
      */
     std::unique_ptr<i2c::I2CInterface> i2cInterface{};
+
+    /**
+     * Presence detection for this device, if any.  Set to nullptr if no
+     * presence detection is defined for this device.
+     */
+    std::unique_ptr<PresenceDetection> presenceDetection{};
+
+    /**
+     * Configuration changes to apply to this device, if any.  Set to nullptr if
+     * no configuration changes are defined for this device.
+     */
+    std::unique_ptr<Configuration> configuration{};
+
+    /**
+     * Voltage rails produced by this device, if any.  Vector is empty if no
+     * voltage rails are defined for this device.
+     */
+    std::vector<std::unique_ptr<Rail>> rails{};
 };
 
 } // namespace phosphor::power::regulators
