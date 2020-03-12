@@ -13,6 +13,7 @@ phosphor_regulators_tests_source_files = [
     'rail_tests.cpp',
     'rule_tests.cpp',
     'sensor_monitoring_tests.cpp',
+    'validate-regulators-config_tests.cpp',
     'write_verification_error_tests.cpp',
 
     'actions/action_environment_tests.cpp',
@@ -54,5 +55,6 @@ test('phosphor-regulators-tests',
                     libi2c_inc,
                     libi2c_dev_mock_inc
                 ]
-     )
+     ),
+     timeout : 60
 )
