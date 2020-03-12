@@ -40,7 +40,15 @@ int main(int argc, char* argv[])
         CLI11_PARSE(app, argc, argv);
         if (configfile.empty())
         {
-            configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+            if (std::filesystem::exists(
+                    "/etc/phosphor-psu-monitor/psu_config.json"))
+            {
+                configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+            }
+            else
+            {
+                configfile = "/usr/share/phosphor-psu-monitor/psu_config.json";
+            }
         }
 
         if (!std::filesystem::exists(configfile))
