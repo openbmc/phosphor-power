@@ -20,6 +20,7 @@
 #include "mock_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
+#include "test_utils.hpp"
 
 #include <memory>
 #include <optional>
@@ -29,18 +30,7 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
-
-/**
- * Create an I2CInterface object with hard-coded bus and address values.
- *
- * @return I2CInterface object wrapped in a unique_ptr
- */
-std::unique_ptr<i2c::I2CInterface> createI2CInterface()
-{
-    std::unique_ptr<i2c::I2CInterface> i2cInterface =
-        i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
-    return i2cInterface;
-}
+using namespace phosphor::power::regulators::test_utils;
 
 TEST(DeviceTests, Constructor)
 {
