@@ -518,6 +518,8 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
     // Valid: test configuration with property rule_id and with no actions.
     {
         json configFile = configurationFile;
+        configFile["chassis"][0]["devices"][0]["configuration"]["comments"][1] =
+            "test multiple array in comments.";
         EXPECT_JSON_VALID(configFile);
     }
     // Valid: test configuration with property actions and with no rule_id.
@@ -2435,6 +2437,31 @@ TEST(ValidateRegulatorsConfigTest, DuplicateRailID)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][1]["id"] = "vdd";
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate rail ID.", "");
+    }
+}
+TEST(ValidateRegulatorsConfigTest, DuplicateID)
+{
+    // Invalid: test duplicate object ID in device and rail.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][1]["id"] =
+            "vdd_regulator";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate ID.", "");
+    }
+    // Invalid: test duplicate object ID in device and rule.
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["id"] = "vdd_regulator";
+        configFile["rules"][2]["actions"][0]["pmbus_write_vout_command"]
+                  ["format"] = "linear";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate ID.", "");
+    }
+    // Invalid: test duplicate object ID in rule and rail.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["rails"][1]["id"] =
+            "set_voltage_rule";
+        EXPECT_JSON_INVALID(configFile, "Error: Duplicate ID.", "");
     }
 }
 TEST(ValidateRegulatorsConfigTest, InfiniteLoops)
