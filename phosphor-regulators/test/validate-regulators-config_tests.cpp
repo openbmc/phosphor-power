@@ -506,6 +506,98 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
                             "1 is not of type u'string'");
     }
 }
+TEST(ValidateRegulatorsConfigTest, ConfigFile)
+{
+    // Valid: Only required properties specified
+    {
+        json configFile;
+        configFile["chassis"][0]["number"] = 1;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: All properties specified
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: Required chassis property not specified
+    {
+        json configFile = validConfigFile;
+        configFile.erase("chassis");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'chassis' is a required property");
+    }
+    // Invalid: Wrong data type for comments
+    {
+        json configFile = validConfigFile;
+        configFile["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+    // Invalid: Wrong data type for rules
+    {
+        json configFile = validConfigFile;
+        configFile["rules"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+    // Invalid: Wrong data type for chassis
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+    // Invalid: Empty comments array;
+    {
+        json configFile = validConfigFile;
+        configFile["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: Empty rules array
+    {
+        json configFile = validConfigFile;
+        configFile["rules"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: Empty chassis array
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: Comments array has wrong element type (should be string)
+    {
+        json configFile = validConfigFile;
+        configFile["comments"][0] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
+    }
+    // Invalid: Rules array has wrong element type (should be rule)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'object'");
+    }
+    // Invalid: Chassis array has wrong element type (should be device)
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'object'");
+    }
+    // Invalid: Unexpected property specified
+    {
+        json configFile = validConfigFile;
+        configFile["foo"] = json::array();
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, Configuration)
 {
     json configurationFile = validConfigFile;
