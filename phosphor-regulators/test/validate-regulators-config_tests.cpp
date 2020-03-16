@@ -299,7 +299,7 @@ TEST(ValidateRegulatorsConfigTest, And)
             )"_json;
         configFile["rules"][0]["actions"].push_back(andAction);
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
 
     // Invalid: actions property value contains wrong element type
@@ -313,7 +313,7 @@ TEST(ValidateRegulatorsConfigTest, And)
             )"_json;
         configFile["rules"][0]["actions"].push_back(andAction);
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+                            "'foo' is not of type 'object'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Chassis)
@@ -335,28 +335,28 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         json configFile = validConfigFile;
         configFile["chassis"][0].erase("number");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'number' is a required property");
+                            "'number' is a required property");
     }
     // Invalid: test chassis with property comments wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["comments"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test chassis with property number wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["number"] = 1.3;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1.3 is not of type u'integer'");
+                            "1.3 is not of type 'integer'");
     }
     // Invalid: test chassis with property devices wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test chassis with property comments empty array.
     {
@@ -398,7 +398,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
         json configFile = comparePresenceFile;
         configFile["rules"][0]["actions"][1]["compare_presence"].erase("fru");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'fru' is a required property");
+                            "'fru' is a required property");
     }
 
     // Invalid: FRU property length is string less than 1.
@@ -406,7 +406,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
         json configFile = comparePresenceFile;
         configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = "";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'' is too short");
+                            "'' is too short");
     }
 
     // Invalid: no value property.
@@ -414,7 +414,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
         json configFile = comparePresenceFile;
         configFile["rules"][0]["actions"][1]["compare_presence"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
 
     // Invalid: value property type is not boolean.
@@ -422,7 +422,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
         json configFile = comparePresenceFile;
         configFile["rules"][0]["actions"][1]["compare_presence"]["value"] = "1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'1' is not of type u'boolean'");
+                            "'1' is not of type 'boolean'");
     }
 
     // Invalid: FRU property type is not string.
@@ -430,7 +430,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
         json configFile = comparePresenceFile;
         configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, CompareVpd)
@@ -452,7 +452,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"].erase("fru");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'fru' is a required property");
+                            "'fru' is a required property");
     }
 
     // Invalid: no keyword property.
@@ -460,7 +460,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"].erase("keyword");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'keyword' is a required property");
+                            "'keyword' is a required property");
     }
 
     // Invalid: no value property.
@@ -468,7 +468,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
 
     // Invalid: property FRU wrong type.
@@ -476,7 +476,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
 
     // Invalid: property FRU is string less than 1.
@@ -484,7 +484,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] = "";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'' is too short");
+                            "'' is too short");
     }
 
     // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
@@ -494,8 +494,8 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] =
             "Number";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'Number' is not one of [u'CCIN', "
-                            "u'Manufacturer', u'Model', u'PartNumber']");
+                            "'Number' is not one of ['CCIN', "
+                            "'Manufacturer', 'Model', 'PartNumber']");
     }
 
     // Invalid: property value wrong type.
@@ -503,7 +503,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Configuration)
@@ -561,7 +561,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"]["comments"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test configuration with both actions and rule_id properties.
     {
@@ -573,11 +573,11 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
                   ["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
-            "{u'volts': 1.25, u'comments': [u'Set rail to 1.25V using standard "
-            "rule'], u'actions': [{u'compare_presence': {u'value': True, "
-            "u'fru': u'/system/chassis/motherboard/cpu3'}}], u'rule_id': "
-            "u'set_voltage_rule'} is valid under each of {u'required': "
-            "[u'actions']}, {u'required': [u'rule_id']}");
+            "{'actions': [{'compare_presence': {'fru': "
+            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
+            "['Set rail to 1.25V using standard rule'], 'rule_id': "
+            "'set_voltage_rule', 'volts': 1.25} is valid under each of "
+            "{'required': ['actions']}, {'required': ['rule_id']}");
     }
     // Invalid: test configuration with no rule_id and actions.
     {
@@ -585,14 +585,14 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         configFile["chassis"][0]["devices"][0]["configuration"].erase(
             "rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+                            "'rule_id' is a required property");
     }
     // Invalid: test configuration with property volts wrong type.
     {
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"]["volts"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'number'");
+                            "True is not of type 'number'");
     }
     // Invalid: test configuration with property rule_id wrong type.
     {
@@ -600,7 +600,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         configFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test configuration with property actions wrong type.
     {
@@ -610,7 +610,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test configuration with property comments empty array.
     {
@@ -626,7 +626,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         configFile["chassis"][0]["devices"][0]["configuration"]["rule_id"] =
             "id!";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id!' does not match u'^[A-Za-z0-9_]+$'");
+                            "'id!' does not match '^[A-Za-z0-9_]+$'");
     }
     // Invalid: test configuration with property actions empty array.
     {
@@ -661,63 +661,63 @@ TEST(ValidateRegulatorsConfigTest, Device)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0].erase("id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id' is a required property");
+                            "'id' is a required property");
     }
     // Invalid: test devices with no is_regulator.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0].erase("is_regulator");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'is_regulator' is a required property");
+                            "'is_regulator' is a required property");
     }
     // Invalid: test devices with no fru.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0].erase("fru");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'fru' is a required property");
+                            "'fru' is a required property");
     }
     // Invalid: test devices with no i2c_interface.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0].erase("i2c_interface");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'i2c_interface' is a required property");
+                            "'i2c_interface' is a required property");
     }
     // Invalid: test devices with property comments wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["comments"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test devices with property id wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["id"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test devices with property is_regulator wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["is_regulator"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'boolean'");
+                            "1 is not of type 'boolean'");
     }
     // Invalid: test devices with property fru wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["fru"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test devices with property i2c_interface wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["i2c_interface"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is not of type 'object'");
     }
     // Invalid: test devices with property presence_detection wrong
     // type.
@@ -725,21 +725,21 @@ TEST(ValidateRegulatorsConfigTest, Device)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is not of type 'object'");
     }
     // Invalid: test devices with property configuration wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["configuration"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is not of type 'object'");
     }
     // Invalid: test devices with property rails wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test devices with property comments empty array.
     {
@@ -753,14 +753,14 @@ TEST(ValidateRegulatorsConfigTest, Device)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["fru"] = "";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'' is too short");
+                            "'' is too short");
     }
     // Invalid: test devices with property id wrong format.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["id"] = "id#";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id#' does not match u'^[A-Za-z0-9_]+$'");
+                            "'id#' does not match '^[A-Za-z0-9_]+$'");
     }
     // Invalid: test devices with property rails empty array.
     {
@@ -789,7 +789,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase(
             "register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_compare_bit with no position.
     {
@@ -797,21 +797,21 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase(
             "position");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'position' is a required property");
+                            "'position' is a required property");
     }
     // Invalid: test i2c_compare_bit with no value.
     {
         json configFile = i2cCompareBitFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
     // Invalid: test i2c_compare_bit with register wrong type.
     {
         json configFile = i2cCompareBitFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_compare_bit with register wrong format.
     {
@@ -819,7 +819,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] =
             "0xA00";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xA00' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xA00' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bit with position wrong type.
     {
@@ -827,7 +827,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] =
             3.1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "3.1 is not of type u'integer'");
+                            "3.1 is not of type 'integer'");
     }
     // Invalid: test i2c_compare_bit with position greater than 7.
     {
@@ -849,7 +849,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
         json configFile = i2cCompareBitFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = "1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'1' is not of type u'integer'");
+                            "'1' is not of type 'integer'");
     }
     // Invalid: test i2c_compare_bit with value greater than 1.
     {
@@ -892,14 +892,14 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"].erase(
             "register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_compare_byte with no value.
     {
         json configFile = i2cCompareByteFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
     // Invalid: test i2c_compare_byte with property register wrong type.
     {
@@ -907,21 +907,21 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
             1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_compare_byte with property value wrong type.
     {
         json configFile = i2cCompareByteFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_compare_byte with property mask wrong type.
     {
         json configFile = i2cCompareByteFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_compare_byte with property register more than 2 hex
     // digits.
@@ -930,7 +930,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property value more than 2 hex
     // digits.
@@ -939,7 +939,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property mask more than 2 hex digits.
     {
@@ -947,7 +947,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property register less than 2 hex
     // digits.
@@ -956,7 +956,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property value less than 2 hex
     // digits.
@@ -965,7 +965,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property mask less than 2 hex digits.
     {
@@ -973,7 +973,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property register no leading prefix.
     {
@@ -981,7 +981,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property value no leading prefix.
     {
@@ -989,14 +989,14 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property mask no leading prefix.
     {
         json configFile = i2cCompareByteFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] = "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property register invalid hex digit.
     {
@@ -1004,7 +1004,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property value invalid hex digit.
     {
@@ -1012,7 +1012,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_byte with property mask invalid hex digit.
     {
@@ -1020,7 +1020,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
         configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
@@ -1050,7 +1050,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"].erase(
             "register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_compare_bytes with no values.
     {
@@ -1058,7 +1058,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"].erase(
             "values");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'values' is a required property");
+                            "'values' is a required property");
     }
     // Invalid: test i2c_compare_bytes with property values as empty array.
     {
@@ -1082,21 +1082,21 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
             1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_compare_bytes with property values wrong type.
     {
         json configFile = i2cCompareBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test i2c_compare_bytes with property masks wrong type.
     {
         json configFile = i2cCompareBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test i2c_compare_bytes with property register more than 2 hex
     // digits.
@@ -1105,7 +1105,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property values more than 2 hex
     // digits.
@@ -1114,7 +1114,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property masks more than 2 hex
     // digits.
@@ -1123,7 +1123,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property register less than 2 hex
     // digits.
@@ -1132,7 +1132,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property values less than 2 hex
     // digits.
@@ -1141,7 +1141,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property masks less than 2 hex
     // digits.
@@ -1150,7 +1150,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property register no leading prefix.
     {
@@ -1158,7 +1158,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property values no leading prefix.
     {
@@ -1166,7 +1166,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property masks no leading prefix.
     {
@@ -1174,7 +1174,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property register invalid hex digit.
     {
@@ -1182,7 +1182,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property values invalid hex digit.
     {
@@ -1190,7 +1190,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"][0] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_compare_bytes with property masks invalid hex digit.
     {
@@ -1198,7 +1198,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
         configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"][0] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, I2CInterface)
@@ -1213,7 +1213,7 @@ TEST(ValidateRegulatorsConfigTest, I2CInterface)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["i2c_interface"].erase("bus");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'bus' is a required property");
+                            "'bus' is a required property");
     }
     // Invalid: test i2c_interface with no address.
     {
@@ -1221,14 +1221,14 @@ TEST(ValidateRegulatorsConfigTest, I2CInterface)
         configFile["chassis"][0]["devices"][0]["i2c_interface"].erase(
             "address");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'address' is a required property");
+                            "'address' is a required property");
     }
     // Invalid: test i2c_interface with property bus wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["i2c_interface"]["bus"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'integer'");
+                            "True is not of type 'integer'");
     }
     // Invalid: test i2c_interface with property address wrong
     // type.
@@ -1237,7 +1237,7 @@ TEST(ValidateRegulatorsConfigTest, I2CInterface)
         configFile["chassis"][0]["devices"][0]["i2c_interface"]["address"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test i2c_interface with property bus less than
     // 0.
@@ -1254,7 +1254,7 @@ TEST(ValidateRegulatorsConfigTest, I2CInterface)
         configFile["chassis"][0]["devices"][0]["i2c_interface"]["address"] =
             "0x700";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x700' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x700' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
@@ -1274,28 +1274,28 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_write_bit with no position.
     {
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("position");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'position' is a required property");
+                            "'position' is a required property");
     }
     // Invalid: test i2c_write_bit with no value.
     {
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
     // Invalid: test i2c_write_bit with register wrong type.
     {
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_write_bit with register wrong format.
     {
@@ -1303,14 +1303,14 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
         configFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] =
             "0xA00";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xA00' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xA00' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bit with position wrong type.
     {
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = 3.1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "3.1 is not of type u'integer'");
+                            "3.1 is not of type 'integer'");
     }
     // Invalid: test i2c_write_bit with position greater than 7.
     {
@@ -1331,7 +1331,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
         json configFile = i2cWriteBitFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = "1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'1' is not of type u'integer'");
+                            "'1' is not of type 'integer'");
     }
     // Invalid: test i2c_write_bit with value greater than 1.
     {
@@ -1374,35 +1374,35 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"].erase(
             "register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_write_byte with no value.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"].erase("value");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'value' is a required property");
+                            "'value' is a required property");
     }
     // Invalid: test i2c_write_byte with property register wrong type.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_write_byte with property value wrong type.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_write_byte with property mask wrong type.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_write_byte with property register more than 2 hex
     // digits.
@@ -1411,7 +1411,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property value more than 2 hex
     // digits.
@@ -1420,7 +1420,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property mask more than 2 hex digits.
     {
@@ -1428,7 +1428,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property register less than 2 hex
     // digits.
@@ -1437,7 +1437,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property value less than 2 hex
     // digits.
@@ -1445,14 +1445,14 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] = "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property mask less than 2 hex digits.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property register no leading prefix.
     {
@@ -1460,21 +1460,21 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property value no leading prefix.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] = "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property mask no leading prefix.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property register invalid hex digit.
     {
@@ -1482,7 +1482,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property value invalid hex digit.
     {
@@ -1490,14 +1490,14 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_byte with property mask invalid hex digit.
     {
         json configFile = i2cWriteByteFile;
         configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
@@ -1526,14 +1526,14 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"].erase(
             "register");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'register' is a required property");
+                            "'register' is a required property");
     }
     // Invalid: test i2c_write_bytes with no values.
     {
         json configFile = i2cWriteBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"].erase("values");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'values' is a required property");
+                            "'values' is a required property");
     }
     // Invalid: test i2c_write_bytes with property values as empty array.
     {
@@ -1556,21 +1556,21 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         json configFile = i2cWriteBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
     // Invalid: test i2c_write_bytes with property values wrong type.
     {
         json configFile = i2cWriteBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test i2c_write_bytes with property masks wrong type.
     {
         json configFile = i2cWriteBytesFile;
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test i2c_write_bytes with property register more than 2 hex
     // digits.
@@ -1579,7 +1579,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property values more than 2 hex
     // digits.
@@ -1588,7 +1588,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"][0] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property masks more than 2 hex
     // digits.
@@ -1597,7 +1597,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"][0] =
             "0x820";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x820' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x820' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property register less than 2 hex
     // digits.
@@ -1606,7 +1606,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property values less than 2 hex
     // digits.
@@ -1615,7 +1615,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"][0] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property masks less than 2 hex
     // digits.
@@ -1624,7 +1624,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"][0] =
             "0x8";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0x8' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property register no leading prefix.
     {
@@ -1632,7 +1632,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property values no leading prefix.
     {
@@ -1640,7 +1640,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"][0] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property masks no leading prefix.
     {
@@ -1648,7 +1648,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"][0] =
             "82";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'82' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'82' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property register invalid hex digit.
     {
@@ -1656,7 +1656,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property values invalid hex digit.
     {
@@ -1664,7 +1664,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"][0] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
     // Invalid: test i2c_write_bytes with property masks invalid hex digit.
     {
@@ -1672,7 +1672,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
         configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"][0] =
             "0xG1";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0xG1' does not match u'^0x[0-9A-Fa-f]{2}$'");
+                            "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, If)
@@ -1701,14 +1701,14 @@ TEST(ValidateRegulatorsConfigTest, If)
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"].erase("condition");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'condition' is a required property");
+                            "'condition' is a required property");
     }
     // Invalid: test if with no property then.
     {
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"].erase("then");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'then' is a required property");
+                            "'then' is a required property");
     }
     // Invalid: test if with property then empty array.
     {
@@ -1729,21 +1729,21 @@ TEST(ValidateRegulatorsConfigTest, If)
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"]["condition"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+                            "1 is not of type 'object'");
     }
     // Invalid: test if with property then wrong type.
     {
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"]["then"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
     // Invalid: test if with property else wrong type.
     {
         json configFile = ifFile;
         configFile["rules"][2]["actions"][0]["if"]["else"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Not)
@@ -1763,7 +1763,7 @@ TEST(ValidateRegulatorsConfigTest, Not)
         json configFile = notFile;
         configFile["rules"][0]["actions"][1]["not"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'object'");
+                            "1 is not of type 'object'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Or)
@@ -1794,7 +1794,7 @@ TEST(ValidateRegulatorsConfigTest, Or)
         json configFile = orFile;
         configFile["rules"][0]["actions"][1]["or"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
@@ -1825,7 +1825,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         json configFile = pmbusReadSensorFile;
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase("type");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'type' is a required property");
+                            "'type' is a required property");
     }
     // Invalid: test pmbus_read_sensor with no command.
     {
@@ -1833,7 +1833,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase(
             "command");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'command' is a required property");
+                            "'command' is a required property");
     }
     // Invalid: test pmbus_read_sensor with no format.
     {
@@ -1841,18 +1841,15 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"].erase(
             "format");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'format' is a required property");
+                            "'format' is a required property");
     }
     // Invalid: test pmbus_read_sensor with property type wrong type.
     {
         json configFile = pmbusReadSensorFile;
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["type"] =
             true;
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "True is not one of [u'iout', u'iout_peak', u'iout_valley', "
-            "u'pout', u'temperature', u'temperature_peak', u'vout', "
-            "u'vout_peak', u'vout_valley']");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
     }
     // Invalid: test pmbus_read_sensor with property command wrong type.
     {
@@ -1860,7 +1857,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["command"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test pmbus_read_sensor with property format wrong type.
     {
@@ -1868,7 +1865,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["format"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not one of [u'linear_11', u'linear_16']");
+                            "True is not of type 'string'");
     }
     // Invalid: test pmbus_read_sensor with property exponent wrong type.
     {
@@ -1876,7 +1873,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["exponent"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'integer'");
+                            "True is not of type 'integer'");
     }
     // Invalid: test pmbus_read_sensor with property type wrong format.
     {
@@ -1885,9 +1882,9 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
             "foo";
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
-            "u'foo' is not one of [u'iout', u'iout_peak', u'iout_valley', "
-            "u'pout', u'temperature', u'temperature_peak', u'vout', "
-            "u'vout_peak', u'vout_valley']");
+            "'foo' is not one of ['iout', 'iout_peak', 'iout_valley', "
+            "'pout', 'temperature', 'temperature_peak', 'vout', "
+            "'vout_peak', 'vout_valley']");
     }
     // Invalid: test pmbus_read_sensor with property command wrong format.
     {
@@ -1895,16 +1892,15 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["command"] =
             "0x8B0";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'0x8B0' does not match u'^0x[0-9a-fA-F]{2}$'");
+                            "'0x8B0' does not match '^0x[0-9a-fA-F]{2}$'");
     }
     // Invalid: test pmbus_read_sensor with property format wrong format.
     {
         json configFile = pmbusReadSensorFile;
         configFile["rules"][0]["actions"][1]["pmbus_read_sensor"]["format"] =
             "foo";
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "u'foo' is not one of [u'linear_11', u'linear_16']");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'foo' is not one of ['linear_11', 'linear_16']");
     }
 }
 TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
@@ -1940,7 +1936,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"].erase(
             "format");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'format' is a required property");
+                            "'format' is a required property");
     }
     // Invalid: test pmbus_write_vout_command with property volts wrong type.
     {
@@ -1948,7 +1944,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
                   ["volts"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'number'");
+                            "True is not of type 'number'");
     }
     // Invalid: test pmbus_write_vout_command with property format wrong type.
     {
@@ -1956,7 +1952,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
                   ["format"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not one of [u'linear']");
+                            "True is not of type 'string'");
     }
     // Invalid: test pmbus_write_vout_command with property exponent wrong type.
     {
@@ -1964,7 +1960,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
                   ["exponent"] = 1.3;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1.3 is not of type u'integer'");
+                            "1.3 is not of type 'integer'");
     }
     // Invalid: test pmbus_write_vout_command with property is_verified wrong
     // type.
@@ -1973,7 +1969,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
                   ["is_verified"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'boolean'");
+                            "1 is not of type 'boolean'");
     }
     // Invalid: test pmbus_write_vout_command with property format wrong format.
     {
@@ -1981,7 +1977,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
         configFile["rules"][0]["actions"][1]["pmbus_write_vout_command"]
                   ["format"] = "foo";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not one of [u'linear']");
+                            "'foo' is not one of ['linear']");
     }
 }
 TEST(ValidateRegulatorsConfigTest, PresenceDetection)
@@ -2021,11 +2017,11 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
                   [0]["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
-            "{u'comments': [u'Regulator is only present on the FooBar "
-            "backplane'], u'actions': [{u'compare_presence': {u'value': True, "
-            "u'fru': u'/system/chassis/motherboard/cpu3'}}], u'rule_id': "
-            "u'set_voltage_rule'} is valid under each of "
-            "{u'required': [u'actions']}, {u'required': [u'rule_id']}");
+            "{'actions': [{'compare_presence': {'fru': "
+            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
+            "['Regulator is only present on the FooBar backplane'], 'rule_id': "
+            "'set_voltage_rule'} is valid under each of {'required': "
+            "['actions']}, {'required': ['rule_id']}");
     }
     // Invalid: test presence_detection with no rule_id and actions.
     {
@@ -2033,7 +2029,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
             "rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+                            "'rule_id' is a required property");
     }
     // Invalid: test presence_detection with property comments wrong type.
     {
@@ -2041,7 +2037,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         configFile["chassis"][0]["devices"][0]["presence_detection"]
                   ["comments"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test presence_detection with property rule_id wrong type.
     {
@@ -2049,7 +2045,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         configFile["chassis"][0]["devices"][0]["presence_detection"]
                   ["rule_id"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test presence_detection with property actions wrong type.
     {
@@ -2059,7 +2055,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         configFile["chassis"][0]["devices"][0]["presence_detection"]
                   ["actions"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test presence_detection with property rule_id wrong format.
     {
@@ -2067,7 +2063,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         configFile["chassis"][0]["devices"][0]["presence_detection"]
                   ["rule_id"] = "id@";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id@' does not match u'^[A-Za-z0-9_]+$'");
+                            "'id@' does not match '^[A-Za-z0-9_]+$'");
     }
     // Invalid: test presence_detection with property comments empty array.
     {
@@ -2110,21 +2106,21 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0].erase("id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id' is a required property");
+                            "'id' is a required property");
     }
     // Invalid: test rail with comments wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0]["comments"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test rail with id wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0]["id"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test rail with configuration wrong type.
     {
@@ -2132,7 +2128,7 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]["configuration"] =
             true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is not of type 'object'");
     }
     // Invalid: test rail with sensor_monitoring wrong type.
     {
@@ -2140,7 +2136,7 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         configFile["chassis"][0]["devices"][0]["rails"][0]
                   ["sensor_monitoring"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'object'");
+                            "True is not of type 'object'");
     }
     // Invalid: test rail with comments empty array.
     {
@@ -2155,7 +2151,7 @@ TEST(ValidateRegulatorsConfigTest, Rail)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0]["id"] = "id~";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id~' does not match u'^[A-Za-z0-9_]+$'");
+                            "'id~' does not match '^[A-Za-z0-9_]+$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, Rule)
@@ -2179,7 +2175,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0]["comments"] = {1};
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'string'");
+                            "1 is not of type 'string'");
     }
 
     // invalid test rule with no ID
@@ -2187,7 +2183,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0].erase("id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id' is a required property");
+                            "'id' is a required property");
     }
 
     // invalid test id property has invalid value type (not string)
@@ -2195,7 +2191,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0]["id"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
 
     // invalid test id property has invalid value
@@ -2203,7 +2199,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0]["id"] = "foo%";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo%' does not match u'^[A-Za-z0-9_]+$'");
+                            "'foo%' does not match '^[A-Za-z0-9_]+$'");
     }
 
     // invalid test rule with no actions property
@@ -2211,7 +2207,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0].erase("actions");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'actions' is a required property");
+                            "'actions' is a required property");
     }
 
     // valid test rule with multiple actions
@@ -2226,7 +2222,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "1 is not of type u'array'");
+                            "1 is not of type 'array'");
     }
 
     // invalid test actions property has invalid value of action
@@ -2234,7 +2230,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][0] = "foo";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'foo' is not of type u'object'");
+                            "'foo' is not of type 'object'");
     }
 
     // invalid test actions property has empty array
@@ -2259,7 +2255,7 @@ TEST(ValidateRegulatorsConfigTest, RunRule)
         json configFile = runRuleFile;
         configFile["rules"][0]["actions"][1]["run_rule"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test run_rule wrong format.
     {
@@ -2267,7 +2263,7 @@ TEST(ValidateRegulatorsConfigTest, RunRule)
         configFile["rules"][0]["actions"][1]["run_rule"] = "set_voltage_rule%";
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
-            "u'set_voltage_rule%' does not match u'^[A-Za-z0-9_]+$'");
+            "'set_voltage_rule%' does not match '^[A-Za-z0-9_]+$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
@@ -2302,10 +2298,10 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
                   ["actions"][0]["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
-            "{u'rule_id': u'read_sensors_rule', u'actions': "
-            "[{u'compare_presence': {u'value': True, u'fru': "
-            "u'/system/chassis/motherboard/cpu3'}}]} is valid under each of "
-            "{u'required': [u'actions']}, {u'required': [u'rule_id']}");
+            "{'actions': [{'compare_presence': {'fru': "
+            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'rule_id': "
+            "'read_sensors_rule'} is valid under each of {'required': "
+            "['actions']}, {'required': ['rule_id']}");
     }
     // Invalid: test rails sensor_monitoring with no rule_id and actions.
     {
@@ -2313,7 +2309,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
             .erase("rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'rule_id' is a required property");
+                            "'rule_id' is a required property");
     }
     // Invalid: test rails sensor_monitoring with property comments wrong type.
     {
@@ -2321,7 +2317,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["comments"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test rails sensor_monitoring with property rule_id wrong type.
     {
@@ -2329,7 +2325,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["rule_id"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test rails sensor_monitoring with property actions wrong type.
     {
@@ -2339,7 +2335,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'array'");
+                            "True is not of type 'array'");
     }
     // Invalid: test rails sensor_monitoring with property rule_id wrong format.
     {
@@ -2347,7 +2343,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["rule_id"] = "id@";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "u'id@' does not match u'^[A-Za-z0-9_]+$'");
+                            "'id@' does not match '^[A-Za-z0-9_]+$'");
     }
     // Invalid: test rails sensor_monitoring with property comments empty array.
     {
@@ -2382,15 +2378,14 @@ TEST(ValidateRegulatorsConfigTest, SetDevice)
         json configFile = setDeviceFile;
         configFile["rules"][0]["actions"][1]["set_device"] = true;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "True is not of type u'string'");
+                            "True is not of type 'string'");
     }
     // Invalid: test set_device wrong format.
     {
         json configFile = setDeviceFile;
         configFile["rules"][0]["actions"][1]["set_device"] = "io_expander2%";
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "u'io_expander2%' does not match u'^[A-Za-z0-9_]+$'");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'io_expander2%' does not match '^[A-Za-z0-9_]+$'");
     }
 }
 TEST(ValidateRegulatorsConfigTest, DuplicateRuleID)
