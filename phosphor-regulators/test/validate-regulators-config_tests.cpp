@@ -256,6 +256,221 @@ void expectCommandLineSyntax(const std::string& expectedErrorMessage,
     EXPECT_EQ(outputMessage, expectedOutputMessage);
 }
 
+TEST(ValidateRegulatorsConfigTest, Action)
+{
+    // Valid: Comments property not specified
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: Comments property specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["comments"][0] = "comments for action";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: and action type specified
+    {
+        json configFile = validConfigFile;
+        json andAction =
+            R"(
+                {
+                 "and": [
+                    { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+                    { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+                  ]
+                }
+            )"_json;
+        configFile["rules"][0]["actions"].push_back(andAction);
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: compare_presence action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_presence"]["value"] =
+            true;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: compare_vpd action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
+            "/system/chassis/motherboard/regulator2";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_compare_bit action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["register"] =
+            "0xA0";
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["position"] = 3;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bit"]["value"] = 1;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_compare_byte action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["value"] =
+            "0x40";
+        configFile["rules"][0]["actions"][1]["i2c_compare_byte"]["mask"] =
+            "0x7F";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_compare_bytes action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["values"] = {
+            "0x02", "0x73"};
+        configFile["rules"][0]["actions"][1]["i2c_compare_bytes"]["masks"] = {
+            "0x7F", "0x7F"};
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_write_bit action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["register"] =
+            "0xA0";
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["position"] = 3;
+        configFile["rules"][0]["actions"][1]["i2c_write_bit"]["value"] = 1;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_write_byte action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["value"] =
+            "0x40";
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"]["mask"] = "0x7F";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: i2c_write_bytes action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["register"] =
+            "0x82";
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["values"] = {
+            "0x02", "0x73"};
+        configFile["rules"][0]["actions"][1]["i2c_write_bytes"]["masks"] = {
+            "0x7F", "0x7F"};
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: if action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][2]["actions"][0]["if"]["condition"]["run_rule"] =
+            "set_voltage_rule";
+        configFile["rules"][2]["actions"][0]["if"]["then"][0]["run_rule"] =
+            "read_sensors_rule";
+        configFile["rules"][2]["actions"][0]["if"]["else"][0]["run_rule"] =
+            "read_sensors_rule";
+        configFile["rules"][2]["id"] = "rule_if";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: not action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["not"]["i2c_compare_byte"]
+                  ["register"] = "0xA0";
+        configFile["rules"][0]["actions"][1]["not"]["i2c_compare_byte"]
+                  ["value"] = "0xFF";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: or action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["or"][0]["i2c_compare_byte"]
+                  ["register"] = "0xA0";
+        configFile["rules"][0]["actions"][1]["or"][0]["i2c_compare_byte"]
+                  ["value"] = "0x00";
+        configFile["rules"][0]["actions"][1]["or"][1]["i2c_compare_byte"]
+                  ["register"] = "0xA1";
+        configFile["rules"][0]["actions"][1]["or"][1]["i2c_compare_byte"]
+                  ["value"] = "0x00";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: pmbus_read_sensor and pmbus_write_vout_command action type
+    // specified
+    {
+        EXPECT_JSON_VALID(validConfigFile);
+    }
+    // Valid: run_rule action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["run_rule"] = "read_sensors_rule";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: set_device action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["set_device"] = "vdd_regulator";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: Wrong data type for comments (should be array of string)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][0]["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+    // Invalid: Wrong data type for action type (such as "i2c_write_byte": true)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_write_byte"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'object'");
+    }
+    // Invalid: Empty comments array
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][0]["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+    // Invalid: Comments array has wrong element type (should be string)
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][0]["comments"][0] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
+    }
+    // Invalid: No action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0].erase("actions");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'actions' is a required property");
+    }
+    // Invalid: Multiple action types specified (such as both 'compare_presence'
+    // and 'pmbus_write_vout_command')
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][0]["compare_presence"]["value"] =
+            true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'compare_presence': {'value': True}, 'pmbus_write_vout_command': "
+            "{'format': 'linear'}} is valid under each of {'required': "
+            "['pmbus_write_vout_command']}, {'required': "
+            "['compare_presence']}");
+    }
+    // Invalid: Unexpected property specified (like 'foo')
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["foo"] = "foo";
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+}
 TEST(ValidateRegulatorsConfigTest, And)
 {
     // Valid.
