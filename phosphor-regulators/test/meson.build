@@ -57,5 +57,5 @@ test('phosphor-regulators-tests',
                     libi2c_dev_mock_inc
                 ]
      ),
-     timeout : 120
+     timeout : 150
 )
