@@ -9,6 +9,22 @@
 namespace phosphor::power::psu
 {
 
+// PMBus device driver "file name" to read for CCIN value.
+constexpr auto CCIN = "ccin";
+constexpr auto PART_NUMBER = "part_number";
+constexpr auto SERIAL_HEADER = "header";
+constexpr auto SERIAL_NUMBER = "serial_number";
+constexpr auto FW_VERSION = "fw_version";
+
+// The D-Bus property name to update with the CCIN value.
+constexpr auto MODEL_PROP = "Model";
+constexpr auto PN_PROP = "PartNumber";
+constexpr auto SN_PROP = "SerialNumber";
+constexpr auto VERSION_PROP = "Version";
+
+// ipzVPD Keyword sizes
+static constexpr auto FL_KW_SIZE = 20;
+
 /**
  * @class PowerSupply
  * Represents a PMBus power supply device.
@@ -104,9 +120,7 @@ class PowerSupply
      * - CCIN (Customer Card Identification Number) - added as the Model
      * - Firmware version
      */
-    void updateInventory()
-    {
-    }
+    void updateInventory();
 
     /**
      * @brief Accessor function to indicate present status
