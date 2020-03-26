@@ -17,6 +17,9 @@ class MockedPMBus : public PMBusBase
 
     MOCK_METHOD(uint64_t, read, (const std::string& name, Type type),
                 (override));
+
+    MOCK_METHOD(std::string, readString, (const std::string& name, Type type),
+                (override));
 };
 } // namespace pmbus
 

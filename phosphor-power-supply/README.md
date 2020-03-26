@@ -2,6 +2,11 @@ OpenBMC power supply monitoring application.
 
 Design document: https://github.com/openbmc/docs/blob/master/designs/psu-monitoring.md
 
+# Compile Options
+
+To enable reading VPD data via PMBus commands to IBM common form factor
+power supplies (ibm-cffps), run meson with `-Dibm-vpd=true`.
+
 # JSON Configuration File
 
 The JSON configuration file should contain:

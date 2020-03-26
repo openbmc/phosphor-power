@@ -6,8 +6,29 @@
 
 #include <sdbusplus/bus/match.hpp>
 
+#include <stdexcept>
+
 namespace phosphor::power::psu
 {
+
+#ifdef IBM_VPD
+// PMBus device driver "file name" to read for CCIN value.
+constexpr auto CCIN = "ccin";
+constexpr auto PART_NUMBER = "part_number";
+constexpr auto FRU_NUMBER = "fru";
+constexpr auto SERIAL_HEADER = "header";
+constexpr auto SERIAL_NUMBER = "serial_number";
+constexpr auto FW_VERSION = "fw_version";
+
+// The D-Bus property name to update with the CCIN value.
+constexpr auto MODEL_PROP = "Model";
+constexpr auto PN_PROP = "PartNumber";
+constexpr auto SN_PROP = "SerialNumber";
+constexpr auto VERSION_PROP = "Version";
+
+// ipzVPD Keyword sizes
+static constexpr auto FL_KW_SIZE = 20;
+#endif
 
 /**
  * @class PowerSupply
@@ -34,6 +55,11 @@ class PowerSupply
         inventoryPath(invpath),
         pmbusIntf(phosphor::pmbus::createPMBus(i2cbus, i2caddr))
     {
+        if (inventoryPath.empty())
+        {
+            throw std::invalid_argument{"Invalid empty inventoryPath"};
+        }
+
         // Setup the functions to call when the D-Bus inventory path for the
         // Present property changes.
         presentMatch = std::make_unique<sdbusplus::bus::match_t>(
@@ -89,9 +115,7 @@ class PowerSupply
      * - CCIN (Customer Card Identification Number) - added as the Model
      * - Firmware version
      */
-    void updateInventory()
-    {
-    }
+    void updateInventory();
 
     /**
      * @brief Accessor function to indicate present status
