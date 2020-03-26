@@ -43,14 +43,40 @@ TEST_F(PowerSupplyTests, Constructor)
      * @param[in] i2caddr - The 16-bit I2C address of the power supply
      */
     auto bus = sdbusplus::bus::new_default();
-    EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath))).Times(1);
-    auto psu = std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, "0068");
 
-    EXPECT_EQ(psu->isPresent(), false);
-    EXPECT_EQ(psu->isFaulted(), false);
-    EXPECT_EQ(psu->hasInputFault(), false);
-    EXPECT_EQ(psu->hasMFRFault(), false);
-    EXPECT_EQ(psu->hasVINUVFault(), false);
+    // Try where inventory path is empty, constructor should fail.
+    try
+    {
+        auto psu = std::make_unique<PowerSupply>(bus, "", 3, "0068");
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid empty inventoryPath");
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
+
+    // Test with valid arguments
+    try
+    {
+        EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
+            .Times(1);
+        auto psu =
+            std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, "0068");
+
+        EXPECT_EQ(psu->isPresent(), false);
+        EXPECT_EQ(psu->isFaulted(), false);
+        EXPECT_EQ(psu->hasInputFault(), false);
+        EXPECT_EQ(psu->hasMFRFault(), false);
+        EXPECT_EQ(psu->hasVINUVFault(), false);
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
 }
 
 TEST_F(PowerSupplyTests, Analyze)
@@ -184,10 +210,27 @@ TEST_F(PowerSupplyTests, UpdateInventory)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
         .Times(1)
-        .WillOnce(Return(true)); // present
+        .WillOnce(Return(false)); // missing
     PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
     psu.updateInventory();
-    // TODO: Checks / Story #921
+
+    EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
+        .Times(1)
+        .WillOnce(Return(true)); // present
+    PowerSupply psu2{bus, PSUInventoryPath, 13, "0069"};
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
+    EXPECT_CALL(mockPMBus, readString(_, _)).WillRepeatedly(Return(""));
+    psu2.updateInventory();
+
+    EXPECT_CALL(mockPMBus, readString(_, _))
+        .WillOnce(Return("CCIN"))
+        .WillOnce(Return("PN3456"))
+        .WillOnce(Return("FN3456"))
+        .WillOnce(Return("HEADER"))
+        .WillOnce(Return("SN3456"))
+        .WillOnce(Return("FW3456"));
+    psu2.updateInventory();
+    // TODO: D-Bus mocking to verify values stored on D-Bus (???)
 }
 
 TEST_F(PowerSupplyTests, IsPresent)
