@@ -5,6 +5,10 @@
 
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
+#include <chrono>   //FIXME - sleep_for()
+#include <cstdint>  // uint8_t...
+#include <thread>   //FIXME - sleep_for()
+
 namespace phosphor::power::psu
 {
 
@@ -107,6 +111,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         {
             present = true;
             clearFaults();
+            updateInventory();
         }
         else
         {
@@ -114,6 +119,154 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
 
             // Clear out the now outdated inventory properties
             updateInventory();
+        }
+    }
+}
+
+void PowerSupply::updateInventory()
+{
+    using namespace phosphor::pmbus;
+
+    std::string ccin;
+    std::string pn;
+    std::string fn;
+    std::string header;
+    std::string sn;
+    std::string version;
+    using PropertyMap =
+        std::map<std::string, std::variant<std::string, std::vector<uint8_t>>>;
+    PropertyMap assetProps;
+    PropertyMap versionProps;
+    PropertyMap ipzvpdDINFProps;
+    PropertyMap ipzvpdVINIProps;
+    using InterfaceMap = std::map<std::string, PropertyMap>;
+    InterfaceMap interfaces;
+    using ObjectMap = std::map<sdbusplus::message::object_path, InterfaceMap>;
+    ObjectMap object;
+
+    if (present)
+    {
+        // TODO: All this hardcoding, what if this is not an IBM power supply?
+
+        // TODO: Immediately trying to read the "files" causes read failure.
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(2ms);
+
+        try
+        {
+            ccin = pmbusIntf->readString(CCIN, Type::HwmonDeviceDebug);
+            assetProps.emplace(MODEL_PROP, ccin);
+        }
+        catch (ReadFailure& e)
+        {
+            // Ignore the read failure, let pmbus code indicate failure, path...
+            // TODO?
+            // https://github.com/openbmc/docs/blob/master/designs/vpd-collection.md
+            // The BMC must log errors if any of the VPD cannot be properly
+            // parsed or fails ECC checks.
+        }
+
+        try
+        {
+            pn = pmbusIntf->readString(PART_NUMBER, Type::HwmonDeviceDebug);
+            assetProps.emplace(PN_PROP, pn);
+        }
+        catch (ReadFailure& e)
+        {
+            // Ignore the read failure, let pmbus code indicate failure, path...
+        }
+
+        try
+        {
+            fn = pmbusIntf->readString("fru", Type::HwmonDeviceDebug);
+        }
+        catch (ReadFailure& e)
+        {
+            // Ignore the read failure, let pmbus code indicate failure, path...
+        }
+
+        try
+        {
+            header =
+                pmbusIntf->readString(SERIAL_HEADER, Type::HwmonDeviceDebug);
+            sn = pmbusIntf->readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
+            assetProps.emplace(SN_PROP, sn);
+        }
+        catch (ReadFailure& e)
+        {
+            // Ignore the read failure, let pmbus code indicate failure, path...
+        }
+
+        try
+        {
+            version = pmbusIntf->readString(FW_VERSION, Type::HwmonDeviceDebug);
+            versionProps.emplace(VERSION_PROP, version);
+        }
+        catch (ReadFailure& e)
+        {
+            // Ignore the read failure, let pmbus code indicate failure, path...
+        }
+
+        // TODO: How do I know that I want to update ipzvpd?
+        ipzvpdVINIProps.emplace("CC",
+                                std::vector<uint8_t>(ccin.begin(), ccin.end()));
+        ipzvpdVINIProps.emplace("PN",
+                                std::vector<uint8_t>(pn.begin(), pn.end()));
+        ipzvpdVINIProps.emplace("FN",
+                                std::vector<uint8_t>(fn.begin(), fn.end()));
+        std::string header_sn = header + sn + '\0';
+        ipzvpdVINIProps.emplace(
+            "SN", std::vector<uint8_t>(header_sn.begin(), header_sn.end()));
+        // TODO: How do I know this is an IBM power supply?
+        std::string description = "IBM PS";
+        ipzvpdVINIProps.emplace(
+            "DR", std::vector<uint8_t>(description.begin(), description.end()));
+
+        // Update the Resource Identifier (RI) keyword
+        // 2 byte FRC: 0x0003
+        // 2 byte RID: 0x1000, 0x1001...
+        std::uint8_t num = std::stoi(
+            inventoryPath.substr(inventoryPath.size() - 1, 1), nullptr, 0);
+        std::vector<uint8_t> ri{0x00, 0x03, 0x10, num};
+        ipzvpdDINFProps.emplace("RI", ri);
+
+        // Fill in the FRU Label (FL) keyword.
+        std::string fl = "E";
+        fl += inventoryPath.substr(inventoryPath.size() - 1, 1);
+        fl.resize(FL_KW_SIZE, ' ');
+        ipzvpdDINFProps.emplace("FL",
+                                std::vector<uint8_t>(fl.begin(), fl.end()));
+
+        interfaces.emplace(ASSET_IFACE, std::move(assetProps));
+        interfaces.emplace(VERSION_IFACE, std::move(versionProps));
+        interfaces.emplace(DINF_IFACE, std::move(ipzvpdDINFProps));
+        interfaces.emplace(VINI_IFACE, std::move(ipzvpdVINIProps));
+
+        auto path = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+        object.emplace(path, std::move(interfaces));
+
+        try
+        {
+            auto service =
+                util::getService(INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
+
+            if (service.empty())
+            {
+                log<level::ERR>("Unable to get inventory manager service");
+                return;
+            }
+
+            auto method =
+                bus.new_method_call(service.c_str(), INVENTORY_OBJ_PATH,
+                                    INVENTORY_MGR_IFACE, "Notify");
+
+            method.append(std::move(object));
+
+            auto reply = bus.call(method);
+        }
+        catch (std::exception& e)
+        {
+            log<level::ERR>(e.what(), entry("PATH=%s", inventoryPath.c_str()));
         }
     }
 }

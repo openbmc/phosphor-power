@@ -181,10 +181,27 @@ TEST_F(PowerSupplyTests, UpdateInventory)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
         .Times(1)
-        .WillOnce(Return(true)); // present
+        .WillOnce(Return(false)); // missing
     PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
     psu.updateInventory();
-    // TODO: Checks / Story #921
+
+    EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
+        .Times(1)
+        .WillOnce(Return(true)); // present
+    PowerSupply psu2{bus, PSUInventoryPath, 13, "0069"};
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
+    EXPECT_CALL(mockPMBus, readString(_, _))
+        .WillRepeatedly(Return(""));
+    psu2.updateInventory();
+
+    EXPECT_CALL(mockPMBus, readString(_, _))
+        .WillOnce(Return("CCIN"))
+        .WillOnce(Return("PN3456"))
+        .WillOnce(Return("FN3456"))
+        .WillOnce(Return("HEADER"))
+        .WillOnce(Return("SN3456"))
+        .WillOnce(Return("FW3456"));
+    psu2.updateInventory();
 }
 
 TEST_F(PowerSupplyTests, IsPresent)
