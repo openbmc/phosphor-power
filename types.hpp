@@ -10,6 +10,9 @@ constexpr auto INVENTORY_MGR_IFACE = "xyz.openbmc_project.Inventory.Manager";
 constexpr auto ASSET_IFACE = "xyz.openbmc_project.Inventory.Decorator.Asset";
 constexpr auto PSU_INVENTORY_IFACE =
     "xyz.openbmc_project.Inventory.Item.PowerSupply";
+constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
+constexpr auto DINF_IFACE = "com.ibm.ipzvpd.DINF";
+constexpr auto VINI_IFACE = "com.ibm.ipzvpd.VINI";
 
 constexpr auto ENDPOINTS_PROP = "endpoints";
 constexpr auto MESSAGE_PROP = "Message";

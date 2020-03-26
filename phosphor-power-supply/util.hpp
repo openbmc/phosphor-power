@@ -21,6 +21,7 @@ class Util : public UtilBase
 
         return present;
     }
+
 };
 
 } // namespace phosphor::power::psu
