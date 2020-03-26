@@ -142,6 +142,7 @@ class PMBusBase
     virtual ~PMBusBase() = default;
 
     virtual uint64_t read(const std::string& name, Type type) = 0;
+    virtual std::string readString(const std::string& name, Type type) = 0;
     virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
                              Type type) = 0;
 };
@@ -269,7 +270,7 @@ class PMBus : public PMBusBase
      *
      * @return string - The data read from the file.
      */
-    std::string readString(const std::string& name, Type type);
+    std::string readString(const std::string& name, Type type) override;
 
     /**
      * Read data from a binary file in sysfs.
