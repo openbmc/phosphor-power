@@ -26,6 +26,12 @@ option(
     'device-access', type: 'boolean', value: true,
     description: 'Enable UCD90160 hardware access.',
 )
+
+option(
+    'ibm-vpd', type: 'boolean', value: false,
+    description: 'Setup for IBM VPD collection for inventory.',
+)
+
 option(
     'ucd90160-yaml', type: 'string', value: 'example/ucd90160.yaml',
     description: 'The sequencer definition file to use.',
