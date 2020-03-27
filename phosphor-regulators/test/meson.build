@@ -16,7 +16,6 @@ phosphor_regulators_tests_source_files = [
     'rail_tests.cpp',
     'rule_tests.cpp',
     'sensor_monitoring_tests.cpp',
-    'validate-regulators-config_tests.cpp',
     'write_verification_error_tests.cpp',
 
     'actions/action_environment_tests.cpp',
@@ -37,6 +36,12 @@ phosphor_regulators_tests_source_files = [
     'actions/run_rule_action_tests.cpp',
     'actions/set_device_action_tests.cpp'
 ]
+
+# Add validation tool tests if we are not in an SDK.  The SDK does not currently
+# include the jsonschema Python module required by the validation tool.
+if not get_option('oe-sdk').enabled()
+    phosphor_regulators_tests_source_files += 'validate-regulators-config_tests.cpp'
+endif
 
 test('phosphor-regulators-tests',
      executable('phosphor-regulators-tests',
