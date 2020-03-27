@@ -4,6 +4,7 @@ phosphor_regulators_include_directories = include_directories(
 )
 
 phosphor_regulators_library_source_files = [
+    'config_file_parser.cpp',
     'id_map.cpp',
     'pmbus_utils.cpp',
 

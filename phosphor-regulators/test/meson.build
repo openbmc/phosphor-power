@@ -6,6 +6,7 @@ phosphor_regulators_tests_include_directories = include_directories(
 phosphor_regulators_tests_source_files = [
     'chassis_tests.cpp',
     'config_file_parser_error_tests.cpp',
+    'config_file_parser_tests.cpp',
     'configuration_tests.cpp',
     'device_tests.cpp',
     'id_map_tests.cpp',
