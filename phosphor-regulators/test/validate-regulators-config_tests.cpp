@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
+#include "tmp_file.hpp"
+
+#include <stdio.h>    // for popen(), pclose(), fgets()
+#include <sys/stat.h> // for chmod()
+#include <sys/wait.h> // for WEXITSTATUS
 
 #include <nlohmann/json.hpp>
 
+#include <cstdio>
 #include <fstream>
 
 #include <gtest/gtest.h>
@@ -35,6 +36,7 @@
     expectJsonInvalid(configFileJson, expectedErrorMessage,                    \
                       expectedOutputMessage)
 
+using namespace phosphor::power::regulators;
 using json = nlohmann::json;
 
 const json validConfigFile = R"(
@@ -102,33 +104,6 @@ const json validConfigFile = R"(
       ]
     }
 )"_json;
-
-class TmpFile
-{
-  public:
-    TmpFile()
-    {
-        int fd = mkstemp(fileName);
-        if (fd == -1)
-        {
-            perror("Can't create temporary file");
-        }
-        close(fd);
-    }
-
-    std::string getName()
-    {
-        return fileName;
-    }
-
-    ~TmpFile()
-    {
-        unlink(fileName);
-    }
-
-  private:
-    char fileName[17] = "/tmp/temp-XXXXXX";
-};
 
 std::string getValidationToolCommand(const std::string& configFileName)
 {
