@@ -20,10 +20,9 @@
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
+#include "tmp_file.hpp"
 
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <unistd.h>
+#include <sys/stat.h> // for chmod()
 
 #include <nlohmann/json.hpp>
 
@@ -45,41 +44,6 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::config_file_parser;
 using namespace phosphor::power::regulators::config_file_parser::internal;
 using json = nlohmann::json;
-
-/**
- * @class TmpFile
- *
- * Temporary file.
- *
- * File is deleted automatically by the destructor when the object goes out of
- * scope.
- */
-class TmpFile
-{
-  public:
-    TmpFile()
-    {
-        int fd = mkstemp(fileName);
-        if (fd == -1)
-        {
-            throw std::runtime_error{"Unable to create temporary file"};
-        }
-        close(fd);
-    }
-
-    std::string getName()
-    {
-        return fileName;
-    }
-
-    ~TmpFile()
-    {
-        unlink(fileName);
-    }
-
-  private:
-    char fileName[17] = "/tmp/temp-XXXXXX";
-};
 
 void writeConfigFile(const std::filesystem::path& pathName,
                      const std::string& contents)
