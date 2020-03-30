@@ -17,6 +17,7 @@
 
 #include "action.hpp"
 #include "chassis.hpp"
+#include "i2c_write_bit_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
 
@@ -176,6 +177,44 @@ inline int8_t parseInt8(const nlohmann::json& element)
 }
 
 /**
+ * Parses a JSON element containing an 8-bit unsigned integer.
+ *
+ * Returns the corresponding C++ uint8_t value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return uint8_t value
+ */
+inline uint8_t parseUint8(const nlohmann::json& element)
+{
+    // Verify element contains an integer
+    if (!element.is_number_integer())
+    {
+        throw std::invalid_argument{"Element is not an integer"};
+    }
+    int value = element;
+    if ((value < 0) || (value > UINT8_MAX))
+    {
+        throw std::invalid_argument{"Element is not an 8-bit unsigned integer"};
+    }
+    return static_cast<uint8_t>(value);
+}
+
+/**
+ * Parses a JSON element containing a i2c_write_bit action.
+ *
+ * Returns the corresponding C++ I2CWriteBitAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CWriteBitAction object
+ */
+std::unique_ptr<I2CWriteBitAction>
+    parseI2CWriteBit(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a pmbus_write_vout_command action.
  *
  * Returns the corresponding C++ PMBusWriteVoutCommandAction object.
@@ -301,6 +340,22 @@ inline void verifyPropertyCount(const nlohmann::json& element,
     {
         throw std::invalid_argument{"Element contains an invalid property"};
     }
+}
+
+inline uint8_t parseStringToUint8(const nlohmann::json& element)
+{
+    std::string const& value = parseString(element);
+
+    bool isHexNotation = value.compare(0, 2, "0x") == 0 && value.size() > 2 &&
+                         value.size() < 5 &&
+                         value.find_first_not_of("0123456789abcdefABCDEF", 2) ==
+                             std::string::npos;
+    if (!isHexNotation)
+    {
+        throw std::invalid_argument{"Element is not hex notation string"};
+    }
+    uint8_t uint8 = stoul(value, 0, 0);
+    return uint8;
 }
 
 } // namespace internal
