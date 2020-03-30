@@ -17,6 +17,7 @@
 #include "config_file_parser.hpp"
 
 #include "config_file_parser_error.hpp"
+#include "i2c_interface.hpp"
 #include "pmbus_utils.hpp"
 
 #include <exception>
@@ -102,9 +103,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("i2c_write_bit"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CWriteBit(element["i2c_write_bit"]);
-        // ++propertyCount;
+        action = parseI2CWriteBit(element["i2c_write_bit"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_write_byte"))
     {
@@ -192,6 +192,32 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     //     chassis.emplace_back(parseChassis(chassisElement));
     // }
     return chassis;
+}
+
+std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseStringToUint8(regElement);
+    ++propertyCount;
+
+    // Required position property
+    const json& positionElement = getRequiredProperty(element, "position");
+    uint8_t position = parseBitPosition(positionElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    uint8_t value = parseBitValue(valueElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<I2CWriteBitAction>(reg, position, value);
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>
