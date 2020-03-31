@@ -19,6 +19,7 @@
 #include "chassis.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
+#include "i2c_write_bytes_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
 
@@ -203,6 +204,43 @@ inline double parseDouble(const nlohmann::json& element)
 }
 
 /**
+ * Parses a JSON element containing a btye hexadecimal string.
+ *
+ * Returns the corresponding C++ uint8_t value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return uint8_t value
+ */
+inline uint8_t parseHexByte(const nlohmann::json& element)
+{
+    std::string value = parseString(element);
+
+    bool isHex = (value.compare(0, 2, "0x") == 0) && (value.size() > 2) &&
+                 (value.size() < 5) &&
+                 (value.find_first_not_of("0123456789abcdefABCDEF", 2) ==
+                  std::string::npos);
+    if (!isHex)
+    {
+        throw std::invalid_argument{"Element is not hexadecimal string"};
+    }
+    return static_cast<uint8_t>(std::stoul(value, 0, 0));
+}
+
+/**
+ * Parses a JSON element containing an array of one byte hex string.
+ *
+ * Returns the corresponding C++ uint8_t.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of uint8_t
+ */
+std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an i2c_write_bit action.
  *
  * Returns the corresponding C++ I2CWriteBitAction object.
@@ -227,6 +265,19 @@ std::unique_ptr<I2CWriteBitAction>
  */
 std::unique_ptr<I2CWriteByteAction>
     parseI2CWriteByte(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_write_bytes action.
+ *
+ * Returns the corresponding C++ I2CWriteBytesAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CWriteBytesAction object
+ */
+std::unique_ptr<I2CWriteBytesAction>
+    parseI2CWriteBytes(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an 8-bit signed integer.
