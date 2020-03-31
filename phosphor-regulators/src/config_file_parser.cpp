@@ -108,9 +108,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("i2c_write_byte"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CWriteByte(element["i2c_write_byte"]);
-        // ++propertyCount;
+        action = parseI2CWriteByte(element["i2c_write_byte"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_write_bytes"))
     {
@@ -218,6 +217,36 @@ std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<I2CWriteBitAction>(reg, position, value);
+}
+
+std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseStringToUint8(regElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    uint8_t value = parseStringToUint8(valueElement);
+    ++propertyCount;
+
+    // Optional mask property
+    uint8_t mask = 0xff;
+    auto maskIt = element.find("mask");
+    if (maskIt != element.end())
+    {
+        mask = parseStringToUint8(*maskIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<I2CWriteByteAction>(reg, value, mask);
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>

@@ -19,6 +19,7 @@
 #include "config_file_parser_error.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
+#include "i2c_write_byte_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
@@ -263,7 +264,18 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: i2c_write_byte action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "i2c_write_byte": {
+                "register": "0x0A",
+                "value": "0xCC"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: i2c_write_bytes action type specified
     // TODO: Not implemented yet
@@ -527,59 +539,6 @@ TEST(ConfigFileParserTests, ParseDouble)
     }
 }
 
-TEST(ConfigFileParserTests, ParseInt8)
-{
-    // Test where works: INT8_MIN
-    {
-        const json element = R"( -128 )"_json;
-        int8_t value = parseInt8(element);
-        EXPECT_EQ(value, -128);
-    }
-
-    // Test where works: INT8_MAX
-    {
-        const json element = R"( 127 )"_json;
-        int8_t value = parseInt8(element);
-        EXPECT_EQ(value, 127);
-    }
-
-    // Test where fails: Element is not an integer
-    try
-    {
-        const json element = R"( 1.03 )"_json;
-        parseInt8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not an integer");
-    }
-
-    // Test where fails: Value < INT8_MIN
-    try
-    {
-        const json element = R"( -129 )"_json;
-        parseInt8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not an 8-bit signed integer");
-    }
-
-    // Test where fails: Value > INT8_MAX
-    try
-    {
-        const json element = R"( 128 )"_json;
-        parseInt8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not an 8-bit signed integer");
-    }
-}
-
 TEST(ConfigFileParserTests, ParseI2CWriteBit)
 {
     // Test where works
@@ -712,6 +671,179 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CWriteByte)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC"
+            }
+        )"_json;
+        std::unique_ptr<I2CWriteByteAction> action = parseI2CWriteByte(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xFF);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::unique_ptr<I2CWriteByteAction> action = parseI2CWriteByte(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xF7);
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0Z",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CWriteByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: value value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CWriteByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: mask value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC",
+              "mask": "F7"
+            }
+        )"_json;
+        parseI2CWriteByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CWriteByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required value property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CWriteByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseInt8)
+{
+    // Test where works: INT8_MIN
+    {
+        const json element = R"( -128 )"_json;
+        int8_t value = parseInt8(element);
+        EXPECT_EQ(value, -128);
+    }
+
+    // Test where works: INT8_MAX
+    {
+        const json element = R"( 127 )"_json;
+        int8_t value = parseInt8(element);
+        EXPECT_EQ(value, 127);
+    }
+
+    // Test where fails: Element is not an integer
+    try
+    {
+        const json element = R"( 1.03 )"_json;
+        parseInt8(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Value < INT8_MIN
+    try
+    {
+        const json element = R"( -129 )"_json;
+        parseInt8(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an 8-bit signed integer");
+    }
+
+    // Test where fails: Value > INT8_MAX
+    try
+    {
+        const json element = R"( 128 )"_json;
+        parseInt8(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an 8-bit signed integer");
     }
 }
 
