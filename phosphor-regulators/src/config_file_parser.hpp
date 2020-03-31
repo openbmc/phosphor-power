@@ -18,6 +18,7 @@
 #include "action.hpp"
 #include "chassis.hpp"
 #include "i2c_write_bit_action.hpp"
+#include "i2c_write_byte_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
 
@@ -213,6 +214,19 @@ inline double parseDouble(const nlohmann::json& element)
  */
 std::unique_ptr<I2CWriteBitAction>
     parseI2CWriteBit(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_write_byte action.
+ *
+ * Returns the corresponding C++ I2CWriteByteAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CWriteByteAction object
+ */
+std::unique_ptr<I2CWriteByteAction>
+    parseI2CWriteByte(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an 8-bit signed integer.
