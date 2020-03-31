@@ -113,9 +113,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("i2c_write_bytes"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CWriteBytes(element["i2c_write_bytes"]);
-        // ++propertyCount;
+        action = parseI2CWriteBytes(element["i2c_write_bytes"]);
+        ++propertyCount;
     }
     else if (element.contains("if"))
     {
@@ -193,6 +192,17 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
+std::vector<uint8_t> parseHexByteArray(const json& element)
+{
+    verifyIsArray(element);
+    std::vector<uint8_t> values;
+    for (auto& valueElement : element)
+    {
+        values.emplace_back(parseHexByte(valueElement));
+    }
+    return values;
+}
+
 std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
 {
     verifyIsObject(element);
@@ -200,7 +210,7 @@ std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseStringToUint8(regElement);
+    uint8_t reg = parseHexByte(regElement);
     ++propertyCount;
 
     // Required position property
@@ -226,12 +236,12 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseStringToUint8(regElement);
+    uint8_t reg = parseHexByte(regElement);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    uint8_t value = parseStringToUint8(valueElement);
+    uint8_t value = parseHexByte(valueElement);
     ++propertyCount;
 
     // Optional mask property
@@ -239,7 +249,7 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
     auto maskIt = element.find("mask");
     if (maskIt != element.end())
     {
-        mask = parseStringToUint8(*maskIt);
+        mask = parseHexByte(*maskIt);
         ++propertyCount;
     }
 
@@ -247,6 +257,46 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<I2CWriteByteAction>(reg, value, mask);
+}
+
+std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseHexByte(regElement);
+    ++propertyCount;
+
+    // Required values property
+    const json& valueElement = getRequiredProperty(element, "values");
+    std::vector<uint8_t> values = parseHexByteArray(valueElement);
+    ++propertyCount;
+
+    // Optional masks property
+    std::vector<uint8_t> masks{};
+    auto masksIt = element.find("masks");
+    if (masksIt != element.end())
+    {
+        masks = parseHexByteArray(*masksIt);
+        ++propertyCount;
+    }
+
+    // Verify masks array (if specified) was same size as values array
+    if ((masks.size() != 0) && (masks.size() != values.size()))
+    {
+        throw std::invalid_argument{"Invalid number of elements in masks"};
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    if (masks.size() == 0)
+    {
+        return std::make_unique<I2CWriteBytesAction>(reg, values);
+    }
+    return std::make_unique<I2CWriteBytesAction>(reg, values, masks);
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>
