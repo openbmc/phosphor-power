@@ -318,7 +318,15 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: run_rule action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "run_rule": "set_voltage_rule"
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: set_device action type specified
     // TODO: Not implemented yet
@@ -1539,6 +1547,40 @@ TEST(ConfigFileParserTests, ParseRuleArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseRunRule)
+{
+    // Test where works
+    {
+        const json element = "vdd_regulator";
+        std::unique_ptr<RunRuleAction> action = parseRunRule(element);
+        EXPECT_EQ(action->getRuleID(), "vdd_regulator");
+    }
+
+    // Test where fails: Element is not a string
+    try
+    {
+        const json element = 1;
+        parseRunRule(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Empty string
+    try
+    {
+        const json element = "";
+        parseRunRule(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
