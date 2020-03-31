@@ -19,6 +19,7 @@
 #include "chassis.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
+#include "i2c_write_bytes_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
 
@@ -229,6 +230,19 @@ std::unique_ptr<I2CWriteByteAction>
     parseI2CWriteByte(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing an i2c_write_bytes action.
+ *
+ * Returns the corresponding C++ I2CWriteBytesAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CWriteBytesAction object
+ */
+std::unique_ptr<I2CWriteBytesAction>
+    parseI2CWriteBytes(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an 8-bit signed integer.
  *
  * Returns the corresponding C++ int8_t value.
@@ -252,6 +266,18 @@ inline int8_t parseInt8(const nlohmann::json& element)
     }
     return static_cast<int8_t>(value);
 }
+
+/**
+ * Parses a JSON element containing an array of masks.
+ *
+ * Returns the corresponding C++ Mask objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of Mask objects
+ */
+std::vector<uint8_t> parseMaskArray(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a pmbus_write_vout_command action.
@@ -381,6 +407,18 @@ inline uint8_t parseUint8(const nlohmann::json& element)
     }
     return static_cast<uint8_t>(value);
 }
+
+/**
+ * Parses a JSON element containing an array of values.
+ *
+ * Returns the corresponding C++ Value objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of Value objects
+ */
+std::vector<uint8_t> parseValueArray(const nlohmann::json& element);
 
 /**
  * Verifies that the specified JSON element is a JSON array.
