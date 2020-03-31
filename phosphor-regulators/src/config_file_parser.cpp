@@ -113,9 +113,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("i2c_write_bytes"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CWriteBytes(element["i2c_write_bytes"]);
-        // ++propertyCount;
+        action = parseI2CWriteBytes(element["i2c_write_bytes"]);
+        ++propertyCount;
     }
     else if (element.contains("if"))
     {
@@ -249,6 +248,57 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
     return std::make_unique<I2CWriteByteAction>(reg, value, mask);
 }
 
+std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseStringToUint8(regElement);
+    ++propertyCount;
+
+    // Required values property
+    const json& valueElement = getRequiredProperty(element, "values");
+    std::vector<uint8_t> values = parseValueArray(valueElement);
+    ++propertyCount;
+
+    // Optional masks property
+    std::vector<uint8_t> masks{};
+    auto maskIt = element.find("masks");
+    if (maskIt != element.end())
+    {
+        masks = parseMaskArray(*maskIt);
+        ++propertyCount;
+    }
+
+    // Verify elements in masks
+    if (masks.size() != 0 && masks.size() != values.size())
+    {
+        throw std::invalid_argument{"Invalid number of elements in masks"};
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    if (masks.size() == 0)
+    {
+        return std::make_unique<I2CWriteBytesAction>(reg, values);
+    }
+    return std::make_unique<I2CWriteBytesAction>(reg, values, masks);
+}
+
+std::vector<uint8_t> parseMaskArray(const json& element)
+{
+    verifyIsArray(element);
+    std::vector<uint8_t> masks;
+    for (auto& maskElement : element)
+    {
+        masks.emplace_back(parseStringToUint8(maskElement));
+    }
+    return masks;
+}
+
 std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const json& element)
 {
@@ -370,6 +420,17 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(const json& element)
         rules.emplace_back(parseRule(ruleElement));
     }
     return rules;
+}
+
+std::vector<uint8_t> parseValueArray(const json& element)
+{
+    verifyIsArray(element);
+    std::vector<uint8_t> values;
+    for (auto& valueElement : element)
+    {
+        values.emplace_back(parseStringToUint8(valueElement));
+    }
+    return values;
 }
 
 } // namespace internal
