@@ -20,6 +20,7 @@
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
+#include "i2c_write_bytes_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
@@ -278,7 +279,18 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: i2c_write_bytes action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "i2c_write_bytes": {
+                "register": "0x0A",
+                "values": [ "0xCC", "0xFF" ]
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: if action type specified
     // TODO: Not implemented yet
@@ -560,6 +572,137 @@ TEST(ConfigFileParserTests, ParseDouble)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a number");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseHexByte)
+{
+    // Test where works: "0xFF"
+    {
+        const json element = R"( "0xFF" )"_json;
+        uint8_t value = parseHexByte(element);
+        EXPECT_EQ(value, 0xFF);
+    }
+
+    // Test where works: "0xff"
+    {
+        const json element = R"( "0xff" )"_json;
+        uint8_t value = parseHexByte(element);
+        EXPECT_EQ(value, 0xff);
+    }
+
+    // Test where works: "0xf"
+    {
+        const json element = R"( "0xf" )"_json;
+        uint8_t value = parseHexByte(element);
+        EXPECT_EQ(value, 0xf);
+    }
+
+    // Test where fails: "0xfff"
+    try
+    {
+        const json element = R"( "0xfff" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: "0xAG"
+    try
+    {
+        const json element = R"( "0xAG" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: "ff"
+    try
+    {
+        const json element = R"( "ff" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: ""
+    try
+    {
+        const json element = "";
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: "f"
+    try
+    {
+        const json element = R"( "f" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: "0x"
+    try
+    {
+        const json element = R"( "0x" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: "0Xff"
+    try
+    {
+        const json element = R"( "0XFF" )"_json;
+        parseHexByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseHexByteArray)
+{
+    // Test where works
+    {
+        const json element = R"( [ "0xCC", "0xFF" ] )"_json;
+        std::vector<uint8_t> hexBytes = parseHexByteArray(element);
+        std::vector<uint8_t> expected = {0xcc, 0xff};
+        EXPECT_EQ(hexBytes, expected);
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = 0;
+        parseHexByteArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
     }
 }
 
@@ -865,6 +1008,181 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CWriteBytes)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        std::unique_ptr<I2CWriteBytesAction> action =
+            parseI2CWriteBytes(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 0);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x77" ]
+            }
+        )"_json;
+        std::unique_ptr<I2CWriteBytesAction> action =
+            parseI2CWriteBytes(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 2);
+        EXPECT_EQ(action->getMasks()[0], 0x7F);
+        EXPECT_EQ(action->getMasks()[1], 0x77);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ],
+              "foo": 1
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0Z",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: values value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: masks value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: number of elements in masks is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F" ]
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid number of elements in masks");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required values property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A"
+            }
+        )"_json;
+        parseI2CWriteBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: values");
     }
 }
 
@@ -1393,114 +1711,6 @@ TEST(ConfigFileParserTests, ParseString)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an empty string");
-    }
-}
-
-TEST(ConfigFileParserTests, ParseStringToUint8)
-{
-    // Test where works: "0xFF"
-    {
-        const json element = R"( "0xFF" )"_json;
-        uint8_t value = parseStringToUint8(element);
-        EXPECT_EQ(value, 0xFF);
-    }
-
-    // Test where works: "0xff"
-    {
-        const json element = R"( "0xff" )"_json;
-        uint8_t value = parseStringToUint8(element);
-        EXPECT_EQ(value, 0xff);
-    }
-
-    // Test where works: "0xf"
-    {
-        const json element = R"( "0xf" )"_json;
-        uint8_t value = parseStringToUint8(element);
-        EXPECT_EQ(value, 0xf);
-    }
-
-    // Test where fails: "0xfff"
-    try
-    {
-        const json element = R"( "0xfff" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
-    }
-
-    // Test where fails: "0xAG"
-    try
-    {
-        const json element = R"( "0xAG" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
-    }
-
-    // Test where fails: "ff"
-    try
-    {
-        const json element = R"( "ff" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
-    }
-
-    // Test where fails: ""
-    try
-    {
-        const json element = "";
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element contains an empty string");
-    }
-
-    // Test where fails: "f"
-    try
-    {
-        const json element = R"( "f" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
-    }
-
-    // Test where fails: "0x"
-    try
-    {
-        const json element = R"( "0x" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
-    }
-
-    // Test where fails: "0Xff"
-    try
-    {
-        const json element = R"( "0XFF" )"_json;
-        parseStringToUint8(element);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
