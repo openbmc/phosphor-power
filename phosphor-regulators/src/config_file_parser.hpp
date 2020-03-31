@@ -22,6 +22,7 @@
 #include "i2c_write_bytes_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "rule.hpp"
+#include "run_rule_action.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -332,6 +333,18 @@ std::vector<std::unique_ptr<Rule>>
     parseRuleArray(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing an run_rule action.
+ *
+ * Returns the corresponding C++ RunRuleAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return RunRuleAction object
+ */
+std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a string.
  *
  * Returns the corresponding C++ string.
@@ -342,6 +355,7 @@ std::vector<std::unique_ptr<Rule>>
  * @param isEmptyValid indicates whether an empty string value is valid
  * @return string value
  */
+
 inline std::string parseString(const nlohmann::json& element,
                                bool isEmptyValid = false)
 {
