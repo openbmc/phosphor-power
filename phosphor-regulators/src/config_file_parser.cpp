@@ -225,6 +225,61 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
+std::unique_ptr<Configuration> parseConfiguration(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Optional volts property
+    std::optional<double> volts{};
+    auto voltsIt = element.find("volts");
+    if (voltsIt != element.end())
+    {
+        volts = parseDouble(*voltsIt);
+        ++propertyCount;
+    }
+
+    // Required one of rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    auto ruleIDIt = element.find("rule_id");
+    auto actionsIt = element.find("actions");
+    if (actionsIt == element.end() && ruleIDIt != element.end())
+    {
+        // json runRuleElement = R"(
+        //     [
+        //       {
+        //         "run_rule": *ruleIDIt
+        //       }
+        //     ]
+        // )"_json;
+        // runRuleElement.insert(runRuleElement["run_rule"].end(),
+        // element.begin(), element.end()); actions =
+        // parseActionArray(runRuleElement);
+        // ++propertyCount;
+    }
+    else if (actionsIt != element.end() && ruleIDIt == element.end())
+    {
+        actions = parseActionArray(*actionsIt);
+        ++propertyCount;
+    }
+    else
+    {
+        throw std::invalid_argument{
+            "Required one of property missing: rule_id or actions"};
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Configuration>(volts, std::move(actions));
+}
+
 std::unique_ptr<Device> parseDevice(const json& element)
 {
     verifyIsObject(element);
@@ -272,12 +327,12 @@ std::unique_ptr<Device> parseDevice(const json& element)
     // Optional configuration property
     // TODO: Not implemented yet
     std::unique_ptr<Configuration> configuration{};
-    // auto configurationIt = element.find("configuration");
-    // if (configurationIt != element.end())
-    // {
-    //     configuration = parseConfiguration(*configurationIt);
-    //     ++propertyCount;
-    // }
+    auto configurationIt = element.find("configuration");
+    if (configurationIt != element.end())
+    {
+        configuration = parseConfiguration(*configurationIt);
+        ++propertyCount;
+    }
 
     // Optional rails property
     // TODO: Not implemented yet
