@@ -219,6 +219,35 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
+std::unique_ptr<Configuration> parseConfiguration(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional volts property
+    std::optional<double> volts{};
+    auto voltsIt = element.find("volts");
+    if (voltsIt != element.end())
+    {
+        volts = parseDouble(*voltsIt);
+        ++propertyCount;
+    }
+
+    // Required one of rule_id or actions property
+    // TODO: Not implemented yet
+    // Required rule_id property
+    // TODO: Not implemented yet
+
+    // Required actions property
+    const json& actionsElement = getRequiredProperty(element, "actions");
+    std::vector<std::unique_ptr<Action>> actions =
+        parseActionArray(actionsElement);
+    ++propertyCount;
+
+    verifyPropertyCount(element, propertyCount);
+    return std::make_unique<Configuration>(volts, std::move(actions));
+}
+
 std::unique_ptr<Device> parseDevice(const json& element)
 {
     verifyIsObject(element);
@@ -266,12 +295,12 @@ std::unique_ptr<Device> parseDevice(const json& element)
     // Optional configuration property
     // TODO: Not implemented yet
     std::unique_ptr<Configuration> configuration{};
-    // auto configurationIt = element.find("configuration");
-    // if (configurationIt != element.end())
-    // {
-    //     configuration = parseConfiguration(*configurationIt);
-    //     ++propertyCount;
-    // }
+    auto configurationIt = element.find("configuration");
+    if (configurationIt != element.end())
+    {
+        configuration = parseConfiguration(*configurationIt);
+        ++propertyCount;
+    }
 
     // Optional rails property
     // TODO: Not implemented yet
