@@ -225,6 +225,37 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
+std::unique_ptr<Configuration> parseConfiguration(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Optional volts property
+    std::optional<double> volts{};
+    auto voltsIt = element.find("volts");
+    if (voltsIt != element.end())
+    {
+        volts = parseDouble(*voltsIt);
+        ++propertyCount;
+    }
+
+    // Required rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions = parseRuleIDOrActionsProperty(element);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Configuration>(volts, std::move(actions));
+}
+
 std::unique_ptr<Device> parseDevice(const json& element)
 {
     verifyIsObject(element);
@@ -270,14 +301,13 @@ std::unique_ptr<Device> parseDevice(const json& element)
     // }
 
     // Optional configuration property
-    // TODO: Not implemented yet
     std::unique_ptr<Configuration> configuration{};
-    // auto configurationIt = element.find("configuration");
-    // if (configurationIt != element.end())
-    // {
-    //     configuration = parseConfiguration(*configurationIt);
-    //     ++propertyCount;
-    // }
+    auto configurationIt = element.find("configuration");
+    if (configurationIt != element.end())
+    {
+        configuration = parseConfiguration(*configurationIt);
+        ++propertyCount;
+    }
 
     // Optional rails property
     std::vector<std::unique_ptr<Rail>> rails{};
@@ -572,6 +602,32 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(const json& element)
         rules.emplace_back(parseRule(ruleElement));
     }
     return rules;
+}
+
+std::vector<std::unique_ptr<Action>>
+    parseRuleIDOrActionsProperty(const json& element)
+{
+    verifyIsObject(element);
+    // Required rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    auto ruleIDIt = element.find("rule_id");
+    auto actionsIt = element.find("actions");
+    if ((actionsIt == element.end()) && (ruleIDIt != element.end()))
+    {
+        std::string ruleID = parseString(*ruleIDIt);
+        actions.emplace_back(std::make_unique<RunRuleAction>(ruleID));
+    }
+    else if ((actionsIt != element.end()) && (ruleIDIt == element.end()))
+    {
+        actions = parseActionArray(*actionsIt);
+    }
+    else
+    {
+        throw std::invalid_argument{"Invalid property combination: Must "
+                                    "contain either rule_id or actions"};
+    }
+
+    return actions;
 }
 
 std::unique_ptr<RunRuleAction> parseRunRule(const json& element)
