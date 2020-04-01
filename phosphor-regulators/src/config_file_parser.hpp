@@ -202,6 +202,19 @@ std::vector<std::unique_ptr<Chassis>>
     parseChassisArray(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a configuration.
+ *
+ * Returns the corresponding C++ Configuration object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return Configuration object
+ */
+std::unique_ptr<Configuration>
+    parseConfiguration(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a device.
  *
  * Returns the corresponding C++ Device object.
