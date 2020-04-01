@@ -747,6 +747,191 @@ TEST(ConfigFileParserTests, ParseChassisArray)
     }
 }
 
+TEST(ConfigFileParserTests, ParseConfiguration)
+{
+    // Test where works: actions required property specified
+    {
+        const json element = R"(
+            {
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<Configuration> configuration =
+            parseConfiguration(element);
+        EXPECT_EQ(configuration->getActions().size(), 1);
+        EXPECT_EQ(configuration->getVolts().has_value(), false);
+    }
+
+    // Test where works: volts and actions properties specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "comments property" ],
+              "volts": 1.03,
+              "actions": [
+                { "pmbus_write_vout_command": { "format": "linear" } },
+                { "run_rule": "set_voltage_rule" }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<Configuration> configuration =
+            parseConfiguration(element);
+        EXPECT_EQ(configuration->getVolts().has_value(), true);
+        EXPECT_EQ(configuration->getVolts().value(), 1.03);
+        EXPECT_EQ(configuration->getActions().size(), 2);
+    }
+
+    // Test where works: volts and rule_id properties specified
+    {
+        const json element = R"(
+            {
+              "volts": 1.05,
+              "rule_id": "set_voltage_rule"
+            }
+        )"_json;
+        std::unique_ptr<Configuration> configuration =
+            parseConfiguration(element);
+        EXPECT_EQ(configuration->getVolts().has_value(), true);
+        EXPECT_EQ(configuration->getVolts().value(), 1.05);
+        EXPECT_EQ(configuration->getActions().size(), 1);
+    }
+
+    // Test where fails: volts value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "volts": "foo",
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a number");
+    }
+
+    // Test where fails: actions object is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03,
+              "actions": 1
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: rule_id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.05,
+              "rule_id": 1
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Required actions or rule_id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Required actions or rule_id property both specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03,
+              "rule_id": "set_voltage_rule",
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03,
+              "rule_id": "set_voltage_rule",
+              "foo": 1
+            }
+        )"_json;
+        parseConfiguration(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseDevice)
 {
     // Test where works: Only required properties specified
@@ -770,7 +955,33 @@ TEST(ConfigFileParserTests, ParseDevice)
     }
 
     // Test where works: All properties specified
-    // TODO: Not implemented yet
+    {
+        // TODO : add rails and presence_detection properties
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              },
+              "configuration":
+              {
+                  "rule_id": "configure_ir35221_rule"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Device> device = parseDevice(element);
+        EXPECT_EQ(device->getID(), "vdd_regulator");
+        EXPECT_EQ(device->isRegulator(), true);
+        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_NE(&(device->getI2CInterface()), nullptr);
+        // EXPECT_NE(device->getPresenceDetection(), nullptr);
+        EXPECT_NE(device->getConfiguration(), nullptr);
+        // EXPECT_NE(device->getRails().size(), 0);
+    }
 
     // Test where fails: id value is invalid
     try
@@ -2143,6 +2354,118 @@ TEST(ConfigFileParserTests, ParseRuleArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
+{
+    // Test where works: actions specified
+    {
+        const json element = R"(
+            {
+              "actions": [
+                { "pmbus_write_vout_command": { "format": "linear" } },
+                { "run_rule": "set_voltage_rule" }
+              ]
+            }
+        )"_json;
+        std::vector<std::unique_ptr<Action>> actions =
+            parseRuleIDOrActionsProperty(element);
+        EXPECT_EQ(actions.size(), 2);
+    }
+
+    // Test where works: rule_id specified
+    {
+        const json element = R"(
+            {
+              "rule_id": "set_voltage_rule"
+            }
+        )"_json;
+        std::vector<std::unique_ptr<Action>> actions =
+            parseRuleIDOrActionsProperty(element);
+        EXPECT_EQ(actions.size(), 1);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "foo", "bar" ] )"_json;
+        parseRuleIDOrActionsProperty(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: rule_id is invalid
+    try
+    {
+        const json element = R"(
+            { "rule_id": 1 }
+        )"_json;
+        parseRuleIDOrActionsProperty(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: actions is invalid
+    try
+    {
+        const json element = R"(
+            { "actions": 1 }
+        )"_json;
+        parseRuleIDOrActionsProperty(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Neither rule_id nor actions specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03
+            }
+        )"_json;
+        parseRuleIDOrActionsProperty(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Both rule_id and actions specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": 1.03,
+              "rule_id": "set_voltage_rule",
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        parseRuleIDOrActionsProperty(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
     }
 }
 

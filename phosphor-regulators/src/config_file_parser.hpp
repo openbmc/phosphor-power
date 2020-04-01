@@ -202,6 +202,19 @@ std::vector<std::unique_ptr<Chassis>>
     parseChassisArray(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a configuration.
+ *
+ * Returns the corresponding C++ Configuration object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return Configuration object
+ */
+std::unique_ptr<Configuration>
+    parseConfiguration(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a device.
  *
  * Returns the corresponding C++ Device object.
@@ -434,6 +447,25 @@ std::unique_ptr<Rule> parseRule(const nlohmann::json& element);
  */
 std::vector<std::unique_ptr<Rule>>
     parseRuleArray(const nlohmann::json& element);
+
+/**
+ * Parses the "rule_id" or "actions" property in a JSON element.
+ *
+ * The element must contain one property or the other but not both.
+ *
+ * If the element contains a "rule_id" property, the corresponding C++
+ * RunRuleAction object is returned.
+ *
+ * If the element contains an "actions" property, the corresponding C++ Action
+ * objects are returned.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of Action objects
+ */
+std::vector<std::unique_ptr<Action>>
+    parseRuleIDOrActionsProperty(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a run_rule action.
