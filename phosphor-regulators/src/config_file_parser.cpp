@@ -179,16 +179,62 @@ std::vector<std::unique_ptr<Action>> parseActionArray(const json& element)
     return actions;
 }
 
+std::unique_ptr<Chassis> parseChassis(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required number property
+    const json& numberElement = getRequiredProperty(element, "number");
+    unsigned int number = parseUnsignedInteger(numberElement);
+    if (number < 1)
+    {
+        throw std::invalid_argument{"Invalid chassis number: Must be > 0"};
+    }
+    ++propertyCount;
+
+    // Optional devices property
+    std::vector<std::unique_ptr<Device>> devices{};
+    auto devicesIt = element.find("devices");
+    if (devicesIt != element.end())
+    {
+        devices = parseDeviceArray(*devicesIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Chassis>(number, std::move(devices));
+}
+
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Chassis>> chassis;
-    // TODO: Not implemented yet
-    // for (auto& chassisElement : element)
-    // {
-    //     chassis.emplace_back(parseChassis(chassisElement));
-    // }
+    for (auto& chassisElement : element)
+    {
+        chassis.emplace_back(parseChassis(chassisElement));
+    }
     return chassis;
+}
+
+std::vector<std::unique_ptr<Device>> parseDeviceArray(const json& element)
+{
+    verifyIsArray(element);
+    std::vector<std::unique_ptr<Device>> devices;
+    // TODO: Not implemented yet
+    // for (auto& deviceElement : element)
+    // {
+    //     devices.emplace_back(parseDevice(deviceElement));
+    // }
+    return devices;
 }
 
 std::vector<uint8_t> parseHexByteArray(const json& element)
