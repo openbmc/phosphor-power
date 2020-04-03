@@ -148,9 +148,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("run_rule"))
     {
-        // TODO: Not implemented yet
-        // action = parseRunRule(element["run_rule"]);
-        // ++propertyCount;
+        action = parseRunRule(element["run_rule"]);
+        ++propertyCount;
     }
     else if (element.contains("set_device"))
     {
@@ -420,6 +419,14 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(const json& element)
         rules.emplace_back(parseRule(ruleElement));
     }
     return rules;
+}
+
+std::unique_ptr<RunRuleAction> parseRunRule(const json& element)
+{
+    // String ruleID
+    std::string ruleID = parseString(element);
+
+    return std::make_unique<RunRuleAction>(ruleID);
 }
 
 } // namespace internal
