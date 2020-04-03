@@ -219,15 +219,86 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
+std::unique_ptr<Device> parseDevice(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required id property
+    const json& idElement = getRequiredProperty(element, "id");
+    std::string id = parseString(idElement);
+    ++propertyCount;
+
+    // Required is_regulator property
+    const json& isRegulatorElement =
+        getRequiredProperty(element, "is_regulator");
+    bool isRegulator = parseBoolean(isRegulatorElement);
+    ++propertyCount;
+
+    // Required fru property
+    const json& fruElement = getRequiredProperty(element, "fru");
+    std::string fru = parseString(fruElement);
+    ++propertyCount;
+
+    // Required i2c_interface property
+    const json& i2cInterfaceElement =
+        getRequiredProperty(element, "i2c_interface");
+    std::unique_ptr<i2c::I2CInterface> i2cInterface =
+        parseI2CInterface(i2cInterfaceElement);
+    ++propertyCount;
+
+    // Optional presence_detection property
+    // TODO: Not implemented yet
+    std::unique_ptr<PresenceDetection> presenceDetection{};
+    // auto presenceDetectionIt = element.find("presence_detection");
+    // if (presenceDetectionIt != element.end())
+    // {
+    //     presenceDetection = parsePresenceDetection(*presenceDetectionIt);
+    //     ++propertyCount;
+    // }
+
+    // Optional configuration property
+    // TODO: Not implemented yet
+    std::unique_ptr<Configuration> configuration{};
+    // auto configurationIt = element.find("configuration");
+    // if (configurationIt != element.end())
+    // {
+    //     configuration = parseConfiguration(*configurationIt);
+    //     ++propertyCount;
+    // }
+
+    // Optional rails property
+    // TODO: Not implemented yet
+    std::vector<std::unique_ptr<Rail>> rails{};
+    // auto railIt = element.find("rails");
+    // if (railIt != element.end())
+    // {
+    //     rails = parseRailArray(*railIt);
+    //     ++propertyCount;
+    // }
+
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Device>(id, isRegulator, fru,
+                                    std::move(i2cInterface),
+                                    std::move(presenceDetection),
+                                    std::move(configuration), std::move(rails));
+}
+
 std::vector<std::unique_ptr<Device>> parseDeviceArray(const json& element)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Device>> devices;
-    // TODO: Not implemented yet
-    // for (auto& deviceElement : element)
-    // {
-    //     devices.emplace_back(parseDevice(deviceElement));
-    // }
+    for (auto& deviceElement : element)
+    {
+        devices.emplace_back(parseDevice(deviceElement));
+    }
     return devices;
 }
 
@@ -240,6 +311,25 @@ std::vector<uint8_t> parseHexByteArray(const json& element)
         values.emplace_back(parseStringToUint8(valueElement));
     }
     return values;
+}
+
+std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required bus property
+    const json& busElement = getRequiredProperty(element, "bus");
+    uint8_t bus = parseUint8(busElement);
+    ++propertyCount;
+
+    // Required address property
+    const json& addressElement = getRequiredProperty(element, "address");
+    uint8_t address = parseStringToUint8(addressElement);
+    ++propertyCount;
+
+    verifyPropertyCount(element, propertyCount);
+    return i2c::create(bus, address, i2c::I2CInterface::InitialState::OPEN);
 }
 
 std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
@@ -386,6 +476,18 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
 
     return std::make_unique<PMBusWriteVoutCommandAction>(volts, format,
                                                          exponent, isVerified);
+}
+
+std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)
+{
+    verifyIsArray(element);
+    std::vector<std::unique_ptr<Rail>> rails;
+    // TODO: Not implemented yet
+    // for (auto& railElement : element)
+    // {
+    //     rails.emplace_back(parseRail(railElement));
+    // }
+    return rails;
 }
 
 std::tuple<std::vector<std::unique_ptr<Rule>>,
