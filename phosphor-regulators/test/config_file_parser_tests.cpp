@@ -17,6 +17,7 @@
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
+#include "device.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
@@ -550,9 +551,135 @@ TEST(ConfigFileParserTests, ParseBoolean)
     }
 }
 
+TEST(ConfigFileParserTests, ParseChassis)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "number": 1
+            }
+        )"_json;
+        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        EXPECT_EQ(chassis->getNumber(), 1);
+        // TODO: Not implemented yet
+        // EXPECT_EQ(chassis->getDevices().size(), 0);
+    }
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "number": 2,
+              "devices": [
+                {
+                  "id": "vdd_regulator",
+                  "is_regulator": true,
+                  "fru": "/system/chassis/motherboard/regulator2",
+                  "i2c_interface":
+                  {
+                      "bus": 1,
+                      "address": "0x70"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        EXPECT_EQ(chassis->getNumber(), 2);
+        // TODO: Not implemented yet
+        // EXPECT_EQ(chassis->getDevices().size(), 1);
+    }
+
+    // Test where fails: number value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "number": 0.5
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "foo": 2
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Required number property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "devices": [
+                {
+                  "id": "vdd_regulator",
+                  "is_regulator": true,
+                  "fru": "/system/chassis/motherboard/regulator2",
+                  "i2c_interface":
+                  {
+                      "bus": 1,
+                      "address": "0x70"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseChassisArray)
 {
-    // TODO: Not implemented yet
+    // Test where works
+    {
+        const json element = R"(
+            [
+              { "number": 1 }
+            ]
+        )"_json;
+        std::vector<std::unique_ptr<Chassis>> chassis =
+            parseChassisArray(element);
+        EXPECT_EQ(chassis.size(), 1);
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar"
+            }
+        )"_json;
+        parseChassisArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
 }
 
 TEST(ConfigFileParserTests, ParseDouble)
@@ -1247,6 +1374,59 @@ TEST(ConfigFileParserTests, ParseInt8)
     }
 }
 
+TEST(ConfigFileParserTests, ParseNumber)
+{
+    // Test where works: 1
+    {
+        const json element = R"( 1 )"_json;
+        unsigned int value = parseNumber(element);
+        EXPECT_EQ(value, 1);
+    }
+
+    // Test where works: 65535
+    {
+        const json element = R"( 65535 )"_json;
+        unsigned int value = parseNumber(element);
+        EXPECT_EQ(value, 65535);
+    }
+
+    // Test where fails: Element is not an integer
+    try
+    {
+        const json element = R"( 1.5 )"_json;
+        parseNumber(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Value < 1
+    try
+    {
+        const json element = R"( 0 )"_json;
+        parseNumber(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a number");
+    }
+
+    // Test where fails: Value > 65535
+    try
+    {
+        const json element = R"( 65536 )"_json;
+        parseNumber(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a number");
+    }
+}
+
 TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
 {
     // Test where works: Only required properties specified
@@ -1413,8 +1593,7 @@ TEST(ConfigFileParserTests, ParseRoot)
         std::vector<std::unique_ptr<Chassis>> chassis{};
         std::tie(rules, chassis) = parseRoot(element);
         EXPECT_EQ(rules.size(), 0);
-        // TODO: Not implemented yet
-        // EXPECT_EQ(chassis.size(), 1);
+        EXPECT_EQ(chassis.size(), 1);
     }
 
     // Test where works: All properties specified
@@ -1440,8 +1619,7 @@ TEST(ConfigFileParserTests, ParseRoot)
         std::vector<std::unique_ptr<Chassis>> chassis{};
         std::tie(rules, chassis) = parseRoot(element);
         EXPECT_EQ(rules.size(), 1);
-        // TODO: Not implemented yet
-        // EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis.size(), 2);
     }
 
     // Test where fails: Element is not an object
