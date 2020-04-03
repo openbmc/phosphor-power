@@ -17,11 +17,15 @@
 
 #include "action.hpp"
 #include "chassis.hpp"
+#include "configuration.hpp"
 #include "device.hpp"
+#include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
+#include "presence_detection.hpp"
+#include "rail.hpp"
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 
@@ -198,6 +202,18 @@ std::vector<std::unique_ptr<Chassis>>
     parseChassisArray(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a device.
+ *
+ * Returns the corresponding C++ Device object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return Device object
+ */
+std::unique_ptr<Device> parseDevice(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an array of device.
  *
  * Returns the corresponding C++ Device objects.
@@ -270,6 +286,19 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
  * @return vector of uint8_t
  */
 std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_interface action.
+ *
+ * Returns the corresponding C++ i2c::I2CInterface object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return i2c::I2CInterface object
+ */
+std::unique_ptr<i2c::I2CInterface>
+    parseI2CInterface(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_write_bit action.
@@ -372,6 +401,19 @@ inline unsigned int parseNumber(const nlohmann::json& element)
  */
 std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an array of rail.
+ *
+ * Returns the corresponding C++ Rail objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of Rail objects
+ */
+std::vector<std::unique_ptr<Rail>>
+    parseRailArray(const nlohmann::json& element);
 
 /**
  * Parses the JSON root element of the entire configuration file.
