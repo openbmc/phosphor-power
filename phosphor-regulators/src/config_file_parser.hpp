@@ -17,6 +17,7 @@
 
 #include "action.hpp"
 #include "chassis.hpp"
+#include "device.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
@@ -172,6 +173,18 @@ inline bool parseBoolean(const nlohmann::json& element)
 }
 
 /**
+ * Parses a JSON element containing a chassis.
+ *
+ * Returns the corresponding C++ Chassis object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return Chassis object
+ */
+std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an array of chassis.
  *
  * Returns the corresponding C++ Chassis objects.
@@ -183,6 +196,19 @@ inline bool parseBoolean(const nlohmann::json& element)
  */
 std::vector<std::unique_ptr<Chassis>>
     parseChassisArray(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an array of devices.
+ *
+ * Returns the corresponding C++ Device objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return vector of Device objects
+ */
+std::vector<std::unique_ptr<Device>>
+    parseDeviceArray(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a double (floating point number).
@@ -428,6 +454,26 @@ inline uint8_t parseUint8(const nlohmann::json& element)
         throw std::invalid_argument{"Element is not an 8-bit unsigned integer"};
     }
     return static_cast<uint8_t>(value);
+}
+
+/**
+ * Parses a JSON element containing an unsigned integer.
+ *
+ * Returns the corresponding C++ unsigned int value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return unsigned int value
+ */
+inline unsigned int parseUnsignedInteger(const nlohmann::json& element)
+{
+    // Verify element contains an unsigned integer
+    if (!element.is_number_unsigned())
+    {
+        throw std::invalid_argument{"Element is not an unsigned integer"};
+    }
+    return element.get<unsigned int>();
 }
 
 /**
