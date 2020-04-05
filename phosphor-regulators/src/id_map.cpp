@@ -25,17 +25,35 @@ namespace phosphor::power::regulators
 
 void IDMap::addDevice(Device& device)
 {
-    deviceMap[device.getID()] = &device;
+    const std::string& id = device.getID();
+    if (deviceMap.count(id) != 0)
+    {
+        throw std::invalid_argument{"Unable to add device: Duplicate ID \"" +
+                                    id + '"'};
+    }
+    deviceMap[id] = &device;
 }
 
 void IDMap::addRail(Rail& rail)
 {
-    railMap[rail.getID()] = &rail;
+    const std::string& id = rail.getID();
+    if (railMap.count(id) != 0)
+    {
+        throw std::invalid_argument{"Unable to add rail: Duplicate ID \"" + id +
+                                    '"'};
+    }
+    railMap[id] = &rail;
 }
 
 void IDMap::addRule(Rule& rule)
 {
-    ruleMap[rule.getID()] = &rule;
+    const std::string& id = rule.getID();
+    if (ruleMap.count(id) != 0)
+    {
+        throw std::invalid_argument{"Unable to add rule: Duplicate ID \"" + id +
+                                    '"'};
+    }
+    ruleMap[id] = &rule;
 }
 
 } // namespace phosphor::power::regulators

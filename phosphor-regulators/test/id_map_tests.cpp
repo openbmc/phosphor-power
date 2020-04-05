@@ -62,6 +62,21 @@ TEST(IDMapTests, AddDevice)
 
     // Verify different device is not in map
     EXPECT_THROW(idMap.getDevice("vio_reg2"), std::invalid_argument);
+
+    // Test where device ID already exists in map
+    try
+    {
+        i2cInterface =
+            i2c::create(1, 0x72, i2c::I2CInterface::InitialState::CLOSED);
+        Device device2{"vio_reg", true, "/system/chassis/motherboard/vio_reg2",
+                       std::move(i2cInterface)};
+        idMap.addDevice(device2);
+    }
+    catch (const std::invalid_argument& error)
+    {
+        EXPECT_STREQ(error.what(),
+                     "Unable to add device: Duplicate ID \"vio_reg\"");
+    }
 }
 
 TEST(IDMapTests, AddRail)
@@ -92,6 +107,17 @@ TEST(IDMapTests, AddRail)
 
     // Verify different rail is not in map
     EXPECT_THROW(idMap.getRail("vcs0"), std::invalid_argument);
+
+    // Test where rail ID already exists in map
+    try
+    {
+        Rail rail2{"vio0"};
+        idMap.addRail(rail2);
+    }
+    catch (const std::invalid_argument& error)
+    {
+        EXPECT_STREQ(error.what(), "Unable to add rail: Duplicate ID \"vio0\"");
+    }
 }
 
 TEST(IDMapTests, AddRule)
@@ -123,6 +149,18 @@ TEST(IDMapTests, AddRule)
     // Verify different rule is not in map
     EXPECT_THROW(idMap.getRule("set_voltage_rule_page0"),
                  std::invalid_argument);
+
+    // Test where rule ID already exists in map
+    try
+    {
+        Rule rule2{"set_voltage_rule", std::vector<std::unique_ptr<Action>>{}};
+        idMap.addRule(rule2);
+    }
+    catch (const std::invalid_argument& error)
+    {
+        EXPECT_STREQ(error.what(),
+                     "Unable to add rule: Duplicate ID \"set_voltage_rule\"");
+    }
 }
 
 TEST(IDMapTests, GetDevice)
