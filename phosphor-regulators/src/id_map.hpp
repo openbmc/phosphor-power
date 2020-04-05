@@ -47,6 +47,8 @@ class IDMap
     /**
      * Adds the specified device to this IDMap.
      *
+     * Throws invalid_argument if the device's ID already exists in the map.
+     *
      * @param device device to add
      */
     void addDevice(Device& device);
@@ -54,12 +56,16 @@ class IDMap
     /**
      * Adds the specified rail to this IDMap.
      *
+     * Throws invalid_argument if the rail's ID already exists in the map.
+     *
      * @param rail rail to add
      */
     void addRail(Rail& rail);
 
     /**
      * Adds the specified rule to this IDMap.
+     *
+     * Throws invalid_argument if the rule's ID already exists in the map.
      *
      * @param rule rule to add
      */
