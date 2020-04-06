@@ -124,7 +124,7 @@ inline uint8_t parseBitPosition(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not an integer"};
     }
-    int value = element;
+    int value = element.get<int>();
     if ((value < 0) || (value > 7))
     {
         throw std::invalid_argument{"Element is not a bit position"};
@@ -149,7 +149,7 @@ inline uint8_t parseBitValue(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not an integer"};
     }
-    int value = element;
+    int value = element.get<int>();
     if ((value < 0) || (value > 1))
     {
         throw std::invalid_argument{"Element is not a bit value"};
@@ -281,7 +281,7 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not a string"};
     }
-    std::string value = element;
+    std::string value = element.get<std::string>();
 
     bool isHex = (value.compare(0, 2, "0x") == 0) && (value.size() > 2) &&
                  (value.size() < 5) &&
@@ -376,7 +376,7 @@ inline int8_t parseInt8(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not an integer"};
     }
-    int value = element;
+    int value = element.get<int>();
     if ((value < INT8_MIN) || (value > INT8_MAX))
     {
         throw std::invalid_argument{"Element is not an 8-bit signed integer"};
@@ -504,7 +504,7 @@ inline std::string parseString(const nlohmann::json& element,
     {
         throw std::invalid_argument{"Element is not a string"};
     }
-    std::string value = element;
+    std::string value = element.get<std::string>();
     if (value.empty() && !isEmptyValid)
     {
         throw std::invalid_argument{"Element contains an empty string"};
@@ -529,7 +529,7 @@ inline uint8_t parseUint8(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not an integer"};
     }
-    int value = element;
+    int value = element.get<int>();
     if ((value < 0) || (value > UINT8_MAX))
     {
         throw std::invalid_argument{"Element is not an 8-bit unsigned integer"};
