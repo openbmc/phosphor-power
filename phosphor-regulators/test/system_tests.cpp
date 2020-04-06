@@ -13,38 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "action.hpp"
 #include "chassis.hpp"
-#include "mock_action.hpp"
+#include "device.hpp"
+#include "id_map.hpp"
+#include "rail.hpp"
 #include "rule.hpp"
 #include "system.hpp"
+#include "test_utils.hpp"
 
 #include <memory>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
+using namespace phosphor::power::regulators::test_utils;
 
 TEST(SystemTests, Constructor)
 {
     // Create Rules
     std::vector<std::unique_ptr<Rule>> rules{};
-    std::vector<std::unique_ptr<Action>> actions{};
-    actions.emplace_back(std::make_unique<MockAction>());
-    rules.emplace_back(
-        std::make_unique<Rule>("set_voltage_rule", std::move(actions)));
+    rules.emplace_back(createRule("set_voltage_rule"));
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
-    chassis.emplace_back(std::make_unique<Chassis>(1));
+    std::vector<std::unique_ptr<Device>> devices{};
+    devices.emplace_back(createDevice("reg1", {"rail1"}));
+    chassis.emplace_back(std::make_unique<Chassis>(1, std::move(devices)));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
     EXPECT_EQ(system.getChassis().size(), 1);
     EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
-    // TODO: Add tests for IDMap once code to populate it is implemented
+    EXPECT_NO_THROW(system.getIDMap().getRule("set_voltage_rule"));
+    EXPECT_NO_THROW(system.getIDMap().getDevice("reg1"));
+    EXPECT_NO_THROW(system.getIDMap().getRail("rail1"));
+    EXPECT_THROW(system.getIDMap().getRail("rail2"), std::invalid_argument);
     EXPECT_EQ(system.getRules().size(), 1);
     EXPECT_EQ(system.getRules()[0]->getID(), "set_voltage_rule");
 }
@@ -68,20 +74,59 @@ TEST(SystemTests, GetChassis)
 
 TEST(SystemTests, GetIDMap)
 {
-    // TODO: Code to build IDMap is not implemented yet
+    // Create Rules
+    std::vector<std::unique_ptr<Rule>> rules{};
+    rules.emplace_back(createRule("set_voltage_rule"));
+    rules.emplace_back(createRule("read_sensors_rule"));
+
+    // Create Chassis
+    std::vector<std::unique_ptr<Chassis>> chassis{};
+    {
+        // Chassis 1
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(createDevice("reg1", {"rail1"}));
+        devices.emplace_back(createDevice("reg2", {"rail2a", "rail2b"}));
+        chassis.emplace_back(std::make_unique<Chassis>(1, std::move(devices)));
+    }
+    {
+        // Chassis 2
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(createDevice("reg3", {"rail3a", "rail3b"}));
+        devices.emplace_back(createDevice("reg4"));
+        chassis.emplace_back(std::make_unique<Chassis>(2, std::move(devices)));
+    }
+
+    // Create System
+    System system{std::move(rules), std::move(chassis)};
+    const IDMap& idMap = system.getIDMap();
+
+    // Verify all Rules are in the IDMap
+    EXPECT_NO_THROW(idMap.getRule("set_voltage_rule"));
+    EXPECT_NO_THROW(idMap.getRule("read_sensors_rule"));
+    EXPECT_THROW(idMap.getRule("set_voltage_rule2"), std::invalid_argument);
+
+    // Verify all Devices are in the IDMap
+    EXPECT_NO_THROW(idMap.getDevice("reg1"));
+    EXPECT_NO_THROW(idMap.getDevice("reg2"));
+    EXPECT_NO_THROW(idMap.getDevice("reg3"));
+    EXPECT_NO_THROW(idMap.getDevice("reg4"));
+    EXPECT_THROW(idMap.getDevice("reg5"), std::invalid_argument);
+
+    // Verify all Rails are in the IDMap
+    EXPECT_NO_THROW(idMap.getRail("rail1"));
+    EXPECT_NO_THROW(idMap.getRail("rail2a"));
+    EXPECT_NO_THROW(idMap.getRail("rail2b"));
+    EXPECT_NO_THROW(idMap.getRail("rail3a"));
+    EXPECT_NO_THROW(idMap.getRail("rail3b"));
+    EXPECT_THROW(idMap.getRail("rail4"), std::invalid_argument);
 }
 
 TEST(SystemTests, GetRules)
 {
     // Create Rules
     std::vector<std::unique_ptr<Rule>> rules{};
-    std::vector<std::unique_ptr<Action>> actions{};
-    actions.emplace_back(std::make_unique<MockAction>());
-    rules.emplace_back(
-        std::make_unique<Rule>("set_voltage_rule", std::move(actions)));
-    actions.emplace_back(std::make_unique<MockAction>());
-    rules.emplace_back(
-        std::make_unique<Rule>("read_sensors_rule", std::move(actions)));
+    rules.emplace_back(createRule("set_voltage_rule"));
+    rules.emplace_back(createRule("read_sensors_rule"));
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};

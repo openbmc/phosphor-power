@@ -17,6 +17,7 @@
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
+#include "id_map.hpp"
 #include "mock_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -93,6 +94,39 @@ TEST(DeviceTests, Constructor)
         EXPECT_EQ(device.getConfiguration()->getActions().size(), 2);
         EXPECT_EQ(device.getRails().size(), 2);
     }
+}
+
+TEST(DeviceTests, AddToIDMap)
+{
+    std::unique_ptr<PresenceDetection> presenceDetection{};
+    std::unique_ptr<Configuration> configuration{};
+
+    // Create vector of Rail objects
+    std::vector<std::unique_ptr<Rail>> rails{};
+    rails.push_back(std::make_unique<Rail>("vdd0"));
+    rails.push_back(std::make_unique<Rail>("vdd1"));
+
+    // Create Device
+    Device device{"vdd_reg",
+                  false,
+                  "/system/chassis/motherboard/reg2",
+                  std::move(createI2CInterface()),
+                  std::move(presenceDetection),
+                  std::move(configuration),
+                  std::move(rails)};
+
+    // Add Device and Rail objects to an IDMap
+    IDMap idMap{};
+    device.addToIDMap(idMap);
+
+    // Verify Device is in the IDMap
+    EXPECT_NO_THROW(idMap.getDevice("vdd_reg"));
+    EXPECT_THROW(idMap.getDevice("vio_reg"), std::invalid_argument);
+
+    // Verify all Rails are in the IDMap
+    EXPECT_NO_THROW(idMap.getRail("vdd0"));
+    EXPECT_NO_THROW(idMap.getRail("vdd1"));
+    EXPECT_THROW(idMap.getRail("vdd2"), std::invalid_argument);
 }
 
 TEST(DeviceTests, GetConfiguration)

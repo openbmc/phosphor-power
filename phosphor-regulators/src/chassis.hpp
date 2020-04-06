@@ -16,6 +16,7 @@
 #pragma once
 
 #include "device.hpp"
+#include "id_map.hpp"
 
 #include <memory>
 #include <stdexcept>
@@ -72,6 +73,13 @@ class Chassis
                                         std::to_string(number)};
         }
     }
+
+    /**
+     * Adds the Device and Rail objects in this chassis to the specified IDMap.
+     *
+     * @param idMap mapping from IDs to the associated Device/Rail/Rule objects
+     */
+    void addToIDMap(IDMap& idMap);
 
     /**
      * Returns the devices within this chassis, if any.
