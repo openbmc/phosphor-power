@@ -17,6 +17,7 @@
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
+#include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
@@ -24,6 +25,8 @@
 #include "i2c_write_bytes_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
+#include "presence_detection.hpp"
+#include "rail.hpp"
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 #include "tmp_file.hpp"
@@ -575,8 +578,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         )"_json;
         std::unique_ptr<Chassis> chassis = parseChassis(element);
         EXPECT_EQ(chassis->getNumber(), 1);
-        // TODO: Not implemented yet
-        // EXPECT_EQ(chassis->getDevices().size(), 0);
+        EXPECT_EQ(chassis->getDevices().size(), 0);
     }
 
     // Test where works: All properties specified
@@ -601,9 +603,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         )"_json;
         std::unique_ptr<Chassis> chassis = parseChassis(element);
         EXPECT_EQ(chassis->getNumber(), 2);
-        // TODO: Not implemented yet
-        // EXPECT_EQ(chassis->getDevices().size(), 1);
-        // EXPECT_EQ(chassis->getDevices()[0]->getID(), "vdd_regulator")
+        EXPECT_EQ(chassis->getDevices().size(), 1);
+        EXPECT_EQ(chassis->getDevices()[0]->getID(), "vdd_regulator");
     }
 
     // Test where fails: number value is invalid
@@ -738,6 +739,247 @@ TEST(ConfigFileParserTests, ParseChassisArray)
             }
         )"_json;
         parseChassisArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseDevice)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Device> device = parseDevice(element);
+        EXPECT_EQ(device->getID(), "vdd_regulator");
+        EXPECT_EQ(device->isRegulator(), true);
+        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_NE(&(device->getI2CInterface()), nullptr);
+        EXPECT_EQ(device->getPresenceDetection(), nullptr);
+        EXPECT_EQ(device->getConfiguration(), nullptr);
+        EXPECT_EQ(device->getRails().size(), 0);
+    }
+
+    // Test where works: All properties specified
+    // TODO: Not implemented yet
+
+    // Test where fails: id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": 3,
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: is_regulator value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": 3,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: fru value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": 2,
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: i2c_interface value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface": 3
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+    // Test where fails: Required is_regulator property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: is_regulator");
+    }
+
+    // Test where fails: Required fru property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: fru");
+    }
+
+    // Test where fails: Required i2c_interface property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": "/system/chassis/motherboard/regulator2"
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: i2c_interface");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseDeviceArray)
+{
+    // Test where works
+    {
+        const json element = R"(
+            [
+              {
+                "id": "vdd_regulator",
+                "is_regulator": true,
+                "fru": "/system/chassis/motherboard/regulator2",
+                "i2c_interface":
+                {
+                    "bus": 1,
+                    "address": "0x70"
+                }
+              }
+            ]
+        )"_json;
+        std::vector<std::unique_ptr<Device>> devices =
+            parseDeviceArray(element);
+        EXPECT_EQ(devices.size(), 1);
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar"
+            }
+        )"_json;
+        parseDeviceArray(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
