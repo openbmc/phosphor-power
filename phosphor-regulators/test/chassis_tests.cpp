@@ -16,6 +16,7 @@
 #include "chassis.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
+#include "id_map.hpp"
 #include "test_utils.hpp"
 
 #include <memory>
@@ -41,12 +42,8 @@ TEST(ChassisTests, Constructor)
     {
         // Create vector of Device objects
         std::vector<std::unique_ptr<Device>> devices{};
-        devices.push_back(std::make_unique<Device>(
-            "vdd_reg1", true, "/system/chassis/motherboard/reg1",
-            std::move(createI2CInterface())));
-        devices.push_back(std::make_unique<Device>(
-            "vdd_reg2", true, "/system/chassis/motherboard/reg2",
-            std::move(createI2CInterface())));
+        devices.emplace_back(createDevice("vdd_reg1"));
+        devices.emplace_back(createDevice("vdd_reg2"));
 
         // Create Chassis
         Chassis chassis{1, std::move(devices)};
@@ -70,6 +67,34 @@ TEST(ChassisTests, Constructor)
     }
 }
 
+TEST(ChassisTests, AddToIDMap)
+{
+    // Create vector of Device objects
+    std::vector<std::unique_ptr<Device>> devices{};
+    devices.emplace_back(createDevice("reg1", {"rail1"}));
+    devices.emplace_back(createDevice("reg2", {"rail2a", "rail2b"}));
+    devices.emplace_back(createDevice("reg3"));
+
+    // Create Chassis
+    Chassis chassis{1, std::move(devices)};
+
+    // Add Device and Rail objects within the Chassis to an IDMap
+    IDMap idMap{};
+    chassis.addToIDMap(idMap);
+
+    // Verify all Devices are in the IDMap
+    EXPECT_NO_THROW(idMap.getDevice("reg1"));
+    EXPECT_NO_THROW(idMap.getDevice("reg2"));
+    EXPECT_NO_THROW(idMap.getDevice("reg3"));
+    EXPECT_THROW(idMap.getDevice("reg4"), std::invalid_argument);
+
+    // Verify all Rails are in the IDMap
+    EXPECT_NO_THROW(idMap.getRail("rail1"));
+    EXPECT_NO_THROW(idMap.getRail("rail2a"));
+    EXPECT_NO_THROW(idMap.getRail("rail2b"));
+    EXPECT_THROW(idMap.getRail("rail3"), std::invalid_argument);
+}
+
 TEST(ChassisTests, GetDevices)
 {
     // Test where no devices were specified in constructor
@@ -82,12 +107,8 @@ TEST(ChassisTests, GetDevices)
     {
         // Create vector of Device objects
         std::vector<std::unique_ptr<Device>> devices{};
-        devices.push_back(std::make_unique<Device>(
-            "vdd_reg1", true, "/system/chassis/motherboard/reg1",
-            std::move(createI2CInterface())));
-        devices.push_back(std::make_unique<Device>(
-            "vdd_reg2", true, "/system/chassis/motherboard/reg2",
-            std::move(createI2CInterface())));
+        devices.emplace_back(createDevice("vdd_reg1"));
+        devices.emplace_back(createDevice("vdd_reg2"));
 
         // Create Chassis
         Chassis chassis{1, std::move(devices)};

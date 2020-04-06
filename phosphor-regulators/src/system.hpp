@@ -56,6 +56,7 @@ class System
         rules{std::move(rules)},
         chassis{std::move(chassis)}
     {
+        buildIDMap();
     }
 
     /**
@@ -92,6 +93,13 @@ class System
     }
 
   private:
+    /**
+     * Builds the IDMap for the system.
+     *
+     * Adds the Device, Rail, and Rule objects in the system to the map.
+     */
+    void buildIDMap();
+
     /**
      * Rules used to monitor and control regulators in the system.
      */

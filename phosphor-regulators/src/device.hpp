@@ -17,6 +17,7 @@
 
 #include "configuration.hpp"
 #include "i2c_interface.hpp"
+#include "id_map.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 
@@ -70,6 +71,15 @@ class Device
         configuration{std::move(configuration)}, rails{std::move(rails)}
     {
     }
+
+    /**
+     * Adds this Device object to the specified IDMap.
+     *
+     * Also adds any Rail objects in this Device to the IDMap.
+     *
+     * @param idMap mapping from IDs to the associated Device/Rail/Rule objects
+     */
+    void addToIDMap(IDMap& idMap);
 
     /**
      * Returns the configuration changes to apply to this device, if any.
