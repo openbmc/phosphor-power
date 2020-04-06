@@ -28,6 +28,7 @@
 #include "rail.hpp"
 #include "rule.hpp"
 #include "run_rule_action.hpp"
+#include "sensor_monitoring.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -417,6 +418,18 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a rail.
+ *
+ * Returns the corresponding C++ Rail object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return Rail object
+ */
+std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an array of rails.
  *
  * Returns the corresponding C++ Rail objects.
@@ -479,6 +492,19 @@ std::vector<std::unique_ptr<Rule>>
  * @return RunRuleAction object
  */
 std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a sensor_monitoring.
+ *
+ * Returns the corresponding C++ SensorMonitoring object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SensorMonitoring object
+ */
+std::unique_ptr<SensorMonitoring>
+    parseSensorMonitoring(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a string.
