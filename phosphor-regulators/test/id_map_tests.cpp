@@ -71,6 +71,7 @@ TEST(IDMapTests, AddDevice)
         Device device2{"vio_reg", true, "/system/chassis/motherboard/vio_reg2",
                        std::move(i2cInterface)};
         idMap.addDevice(device2);
+        ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& error)
     {
@@ -113,6 +114,7 @@ TEST(IDMapTests, AddRail)
     {
         Rail rail2{"vio0"};
         idMap.addRail(rail2);
+        ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& error)
     {
@@ -155,6 +157,7 @@ TEST(IDMapTests, AddRule)
     {
         Rule rule2{"set_voltage_rule", std::vector<std::unique_ptr<Action>>{}};
         idMap.addRule(rule2);
+        ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& error)
     {
