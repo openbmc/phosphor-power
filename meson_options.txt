@@ -29,3 +29,27 @@ option(
 option(
     'oe-sdk', type: 'feature', description: 'Enable OE SDK'
 )
+option(
+    'cold-redundancy', type: 'boolean',
+    description: 'Enable support for cold redundancy'
+)
+option(
+    'supply-monitor', type: 'boolean',
+    description: 'Enable support for power supply monitoring'
+)
+option(
+    'supply-monitor-ng', type: 'boolean',
+    description: 'Enable support for power supply monitoring'
+)
+option(
+    'regulators', type: 'boolean',
+    description: 'Enable support for voltage regulator control'
+)
+option(
+    'sequencer-monitor', type: 'boolean',
+    description: 'Enable support for power sequencer control'
+)
+option(
+    'utils', type: 'boolean',
+    description: 'Enable support for power supply utilities'
+)
