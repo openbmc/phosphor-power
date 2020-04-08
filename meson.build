@@ -44,18 +44,20 @@ systemd = dependency('systemd')
 servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
 
 services = [
-    'power-supply-monitor@.service',
-    'pseq-monitor-pgood.service',
-    'pseq-monitor.service',
-    'phosphor-psu-monitor.service',
-    'phosphor-regulators.service'
+    ['supply-monitor', 'power-supply-monitor@.service'],
+    ['sequencer-monitor', 'pseq-monitor-pgood.service'],
+    ['sequencer-monitor', 'pseq-monitor.service'],
+    ['supply-monitor-ng', 'phosphor-psu-monitor.service'],
+    ['regulators', 'phosphor-regulators.service'],
 ]
 
 foreach service : services
-  configure_file(input: 'services/' + service,
-                 output: service,
+    if get_option(service[0])
+        configure_file(input: 'services/' + service[1],
+                 output: service[1],
                  copy: true,
                  install_dir: servicedir)
+    endif
 endforeach
 
 # Get the power sequencer class name
@@ -113,12 +115,24 @@ libpower_inc = include_directories('.')
 # Meson variables defined there.
 subdir('tools/i2c')
 
-subdir('phosphor-regulators')
-subdir('power-sequencer')
-subdir('power-supply')
-subdir('phosphor-power-supply')
-subdir('tools/power-utils')
+if get_option('regulators')
+    subdir('phosphor-regulators')
+endif
+if get_option('sequencer-monitor')
+    subdir('power-sequencer')
+endif
+if get_option('supply-monitor')
+    subdir('power-supply')
+endif
+if get_option('supply-monitor-ng')
+    subdir('phosphor-power-supply')
+endif
+if get_option('utils')
+    subdir('tools/power-utils')
+endif
 if get_option('tests').enabled()
     subdir('test')
 endif
-subdir('cold-redundancy')
+if get_option('cold-redundancy')
+    subdir('cold-redundancy')
+endif
