@@ -29,6 +29,7 @@
 #include "rail.hpp"
 #include "rule.hpp"
 #include "run_rule_action.hpp"
+#include "sensor_monitoring.hpp"
 #include "tmp_file.hpp"
 
 #include <sys/stat.h> // for chmod()
@@ -956,7 +957,7 @@ TEST(ConfigFileParserTests, ParseDevice)
 
     // Test where works: All properties specified
     {
-        // TODO : add rails and presence_detection properties
+        // TODO : add presence_detection prorperty
         const json element = R"(
             {
               "id": "vdd_regulator",
@@ -970,7 +971,13 @@ TEST(ConfigFileParserTests, ParseDevice)
               "configuration":
               {
                   "rule_id": "configure_ir35221_rule"
-              }
+              },
+              "rails":
+              [
+                {
+                  "id": "vdd"
+                }
+              ]
             }
         )"_json;
         std::unique_ptr<Device> device = parseDevice(element);
@@ -980,7 +987,41 @@ TEST(ConfigFileParserTests, ParseDevice)
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         // EXPECT_NE(device->getPresenceDetection(), nullptr);
         EXPECT_NE(device->getConfiguration(), nullptr);
-        // EXPECT_NE(device->getRails().size(), 0);
+        EXPECT_EQ(device->getRails().size(), 1);
+    }
+
+    // Test where fails: rails property exist and is_regulator is false
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": false,
+              "fru": "/system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              },
+              "configuration":
+              {
+                  "rule_id": "configure_ir35221_rule"
+              },
+              "rails":
+              [
+                {
+                  "id": "vdd"
+                }
+              ]
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(),
+                     "Invalid rails property when is_regulator is false");
     }
 
     // Test where fails: id value is invalid
@@ -2076,6 +2117,163 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
     }
 }
 
+TEST(ConfigFileParserTests, ParseRail)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "id": "vdd"
+            }
+        )"_json;
+        std::unique_ptr<Rail> rail = parseRail(element);
+        EXPECT_EQ(rail->getID(), "vdd");
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "id": "vdd",
+              "configuration": {
+                "volts": 1.1,
+                "actions": [
+                  {
+                    "pmbus_write_vout_command": {
+                      "format": "linear"
+                    }
+                  }
+                ]
+              },
+              "sensor_monitoring": {
+                "actions": [
+                  {
+                    "pmbus_write_vout_command": {
+                      "format": "linear"
+                    }
+                  }
+                ]
+              }
+            }
+        )"_json;
+        std::unique_ptr<Rail> rail = parseRail(element);
+        EXPECT_EQ(rail->getID(), "vdd");
+        EXPECT_NE(rail->getConfiguration(), nullptr);
+        EXPECT_NE(rail->getSensorMonitoring(), nullptr);
+    }
+
+    // Test where fails: id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "configuration": {
+                "volts": 1.1,
+                "actions": [
+                  {
+                    "pmbus_write_vout_command": {
+                      "format": "linear"
+                    }
+                  }
+                ]
+              }
+            }
+        )"_json;
+        parseRail(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+
+    // Test where fails: id property is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": "",
+              "configuration": {
+                "volts": 1.1,
+                "actions": [
+                  {
+                    "pmbus_write_vout_command": {
+                      "format": "linear"
+                    }
+                  }
+                ]
+              }
+            }
+        )"_json;
+        parseRail(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseRail(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd",
+              "foo" : true
+            }
+        )"_json;
+        parseRail(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseRailArray)
+{
+    // Test where works
+    {
+        const json element = R"(
+            [
+              { "id": "vdd" },
+              { "id": "vio" }
+            ]
+        )"_json;
+        std::vector<std::unique_ptr<Rail>> rails = parseRailArray(element);
+        EXPECT_EQ(rails.size(), 2);
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar"
+            }
+        )"_json;
+        parseRailArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseRoot)
 {
     // Test where works: Only required properties specified
@@ -2500,6 +2698,113 @@ TEST(ConfigFileParserTests, ParseRunRule)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseSensorMonitoring)
+{
+    // Test where works: actions property specified
+    {
+        const json element = R"(
+            {
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            parseSensorMonitoring(element);
+        EXPECT_EQ(sensorMonitoring->getActions().size(), 1);
+    }
+
+    // Test where works: rule_id property specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "comments property" ],
+              "rule_id": "set_voltage_rule"
+            }
+        )"_json;
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            parseSensorMonitoring(element);
+        EXPECT_EQ(sensorMonitoring->getActions().size(), 1);
+    }
+
+    // Test where fails: actions object is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "actions": 1
+            }
+        )"_json;
+        parseSensorMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: rule_id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": 1
+            }
+        )"_json;
+        parseSensorMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Required actions or rule_id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "comments": [ "comments property" ]
+            }
+        )"_json;
+        parseSensorMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Required actions or rule_id property both specified
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": "set_voltage_rule",
+              "actions": [
+                {
+                  "pmbus_write_vout_command": {
+                    "format": "linear"
+                  }
+                }
+              ]
+            }
+        )"_json;
+        parseSensorMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
     }
 }
 
