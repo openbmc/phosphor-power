@@ -9,6 +9,7 @@ phosphor_regulators_tests_source_files = [
     'config_file_parser_tests.cpp',
     'configuration_tests.cpp',
     'device_tests.cpp',
+    'exception_utils_tests.cpp',
     'id_map_tests.cpp',
     'mock_journal.cpp',
     'pmbus_error_tests.cpp',
