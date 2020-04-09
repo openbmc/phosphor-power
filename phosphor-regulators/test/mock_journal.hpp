@@ -48,4 +48,11 @@ const std::vector<std::string>& getErrMessages();
  */
 const std::vector<std::string>& getInfoMessages();
 
+/**
+ * Returns all mock journal messages with a priority value of 'DEBUG'.
+ *
+ * @return mock debug messages
+ */
+const std::vector<std::string>& getDebugMessages();
+
 } // namespace phosphor::power::regulators::journal

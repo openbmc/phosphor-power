@@ -39,4 +39,9 @@ void logInfo(const std::string& message)
     log<level::INFO>(message.c_str());
 }
 
+void logDebug(const std::string& message)
+{
+    log<level::DEBUG>(message.c_str());
+}
+
 } // namespace phosphor::power::regulators::journal

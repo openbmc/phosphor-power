@@ -20,7 +20,7 @@
 /**
  * Systemd journal interface.
  *
- * Provides functions to log informational and error messages to the journal.
+ * Provides functions to log messages to the systemd journal.
  *
  * This interface provides an abstraction layer so that testcases can use a mock
  * implementation and validate the logged messages.
@@ -45,5 +45,12 @@ void logErr(const std::string& message);
  * @param message message to log
  */
 void logInfo(const std::string& message);
+
+/**
+ * Logs a message with a priority value of 'DEBUG' to the systemd journal.
+ *
+ * @param message message to log
+ */
+void logDebug(const std::string& message);
 
 } // namespace phosphor::power::regulators::journal

@@ -36,10 +36,16 @@ static std::vector<std::string> errMessages{};
  */
 static std::vector<std::string> infoMessages{};
 
+/**
+ * Mock journal messages with a priority value of 'DEBUG'.
+ */
+static std::vector<std::string> debugMessages{};
+
 void clear()
 {
     errMessages.clear();
     infoMessages.clear();
+    debugMessages.clear();
 }
 
 const std::vector<std::string>& getErrMessages()
@@ -52,6 +58,11 @@ const std::vector<std::string>& getInfoMessages()
     return infoMessages;
 }
 
+const std::vector<std::string>& getDebugMessages()
+{
+    return debugMessages;
+}
+
 void logErr(const std::string& message)
 {
     errMessages.emplace_back(message);
@@ -60,6 +71,11 @@ void logErr(const std::string& message)
 void logInfo(const std::string& message)
 {
     infoMessages.emplace_back(message);
+}
+
+void logDebug(const std::string& message)
+{
+    debugMessages.emplace_back(message);
 }
 
 } // namespace phosphor::power::regulators::journal
