@@ -519,15 +519,55 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
                                                          exponent, isVerified);
 }
 
+std::unique_ptr<Rail> parseRail(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required id property
+    const json& idElement = getRequiredProperty(element, "id");
+    std::string id = parseString(idElement);
+    ++propertyCount;
+
+    // Optional configuration property
+    std::unique_ptr<Configuration> configuration{};
+    auto configurationIt = element.find("configuration");
+    if (configurationIt != element.end())
+    {
+        configuration = parseConfiguration(*configurationIt);
+        ++propertyCount;
+    }
+
+    // Optional sensor_monitoring property
+    std::unique_ptr<SensorMonitoring> sensorMonitoring{};
+    auto sensorMonitoringIt = element.find("sensor_monitoring");
+    if (sensorMonitoringIt != element.end())
+    {
+        sensorMonitoring = parseSensorMonitoring(*sensorMonitoringIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Rail>(id, std::move(configuration),
+                                  std::move(sensorMonitoring));
+}
+
 std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Rail>> rails;
-    // TODO: Not implemented yet
-    // for (auto& railElement : element)
-    // {
-    //     rails.emplace_back(parseRail(railElement));
-    // }
+    for (auto& railElement : element)
+    {
+        rails.emplace_back(parseRail(railElement));
+    }
     return rails;
 }
 
@@ -636,6 +676,28 @@ std::unique_ptr<RunRuleAction> parseRunRule(const json& element)
     std::string ruleID = parseString(element);
 
     return std::make_unique<RunRuleAction>(ruleID);
+}
+
+std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions = parseRuleIDOrActionsProperty(element);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<SensorMonitoring>(std::move(actions));
 }
 
 } // namespace internal
