@@ -19,11 +19,18 @@
 
 #include <memory>
 #include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
 namespace phosphor::power::regulators
 {
+
+// Forward declarations to avoid circular dependencies
+class Chassis;
+class Device;
+class Rail;
+class System;
 
 /**
  * @class Configuration
@@ -70,13 +77,29 @@ class Configuration
     }
 
     /**
-     * Executes the actions to configure the device/rail.
+     * Executes the actions to configure the specified device.
+     *
+     * This method should be called during the boot before regulators are
+     * enabled.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device to configure
      */
-    void execute()
-    {
-        // TODO: Create ActionEnvironment, set volts value if specified, execute
-        // actions, catch and handle any exceptions
-    }
+    void execute(System& system, Chassis& chassis, Device& device);
+
+    /**
+     * Executes the actions to configure the specified rail.
+     *
+     * This method should be called during the boot before regulators are
+     * enabled.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device that contains the rail
+     * @param rail rail to configure
+     */
+    void execute(System& system, Chassis& chassis, Device& device, Rail& rail);
 
     /**
      * Returns the actions that configure the device/rail.
@@ -99,6 +122,17 @@ class Configuration
     }
 
   private:
+    /**
+     * Executes the actions to configure a device or rail.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device to configure or that contains rail to configure
+     * @param deviceOrRailID ID of the device or rail to configure
+     */
+    void execute(System& system, Chassis& chassis, Device& device,
+                 const std::string& deviceOrRailID);
+
     /**
      * Optional output voltage value.
      */
