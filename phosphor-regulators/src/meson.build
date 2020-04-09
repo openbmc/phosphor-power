@@ -6,6 +6,7 @@ phosphor_regulators_include_directories = include_directories(
 phosphor_regulators_library_source_files = [
     'chassis.cpp',
     'config_file_parser.cpp',
+    'configuration.cpp',
     'device.cpp',
     'exception_utils.cpp',
     'id_map.cpp',
