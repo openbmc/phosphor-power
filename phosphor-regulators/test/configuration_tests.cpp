@@ -25,9 +25,12 @@
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
+#include "presence_detection.hpp"
 #include "rail.hpp"
+#include "rule.hpp"
 #include "system.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <optional>
 #include <utility>

@@ -25,6 +25,11 @@
 namespace phosphor::power::regulators
 {
 
+// Forward declarations to avoid circular dependencies
+class Chassis;
+class Device;
+class System;
+
 /**
  * @class Rail
  *
@@ -60,6 +65,20 @@ class Rail
                                                      sensorMonitoring)}
     {
     }
+
+    /**
+     * Configure this rail.
+     *
+     * Applies the configuration changes that are defined for this rail, if any.
+     *
+     * This method should be called during the boot before regulators are
+     * enabled.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device that contains this rail
+     */
+    void configure(System& system, Chassis& chassis, Device& device);
 
     /**
      * Returns the configuration changes to apply to this rail, if any.
