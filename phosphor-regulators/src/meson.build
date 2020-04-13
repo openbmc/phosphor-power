@@ -12,6 +12,7 @@ phosphor_regulators_library_source_files = [
     'exception_utils.cpp',
     'id_map.cpp',
     'pmbus_utils.cpp',
+    'rail.cpp',
     'system.cpp',
 
     'actions/if_action.cpp',
