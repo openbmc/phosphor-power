@@ -19,6 +19,9 @@
 #include "chassis.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
+#include "i2c_compare_bit_action.hpp"
+#include "i2c_compare_byte_action.hpp"
+#include "i2c_compare_bytes_action.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
@@ -306,6 +309,45 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
  * @return vector of uint8_t
  */
 std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_compare_bit action.
+ *
+ * Returns the corresponding C++ I2CCompareBitAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CCompareBitAction object
+ */
+std::unique_ptr<I2CCompareBitAction>
+    parseI2CCompareBit(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_compare_byte action.
+ *
+ * Returns the corresponding C++ I2CCompareByteAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CCompareByteAction object
+ */
+std::unique_ptr<I2CCompareByteAction>
+    parseI2CCompareByte(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_Compare_bytes action.
+ *
+ * Returns the corresponding C++ I2CCompareBytesAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CCompareBytesAction object
+ */
+std::unique_ptr<I2CCompareBytesAction>
+    parseI2CCompareBytes(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_interface.

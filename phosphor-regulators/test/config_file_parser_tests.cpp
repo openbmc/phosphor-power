@@ -19,6 +19,9 @@
 #include "config_file_parser_error.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
+#include "i2c_compare_bit_action.hpp"
+#include "i2c_compare_byte_action.hpp"
+#include "i2c_compare_bytes_action.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
@@ -1430,6 +1433,491 @@ TEST(ConfigFileParserTests, ParseHexByteArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CCompareBit)
+{
+    // Test where works
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "position": 3,
+              "value": 0
+            }
+        )"_json;
+        std::unique_ptr<I2CCompareBitAction> action =
+            parseI2CCompareBit(element);
+        EXPECT_EQ(action->getRegister(), 0xA0);
+        EXPECT_EQ(action->getPosition(), 3);
+        EXPECT_EQ(action->getValue(), 0);
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "position": 3,
+              "value": 0,
+              "foo": 3
+            }
+        )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xAG",
+              "position": 3,
+              "value": 0
+            }
+        )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: position value is invalid
+    try
+    {
+        const json element = R"(
+                {
+                  "register": "0xA0",
+                  "position": 8,
+                  "value": 0
+                }
+            )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a bit position");
+    }
+
+    // Test where fails: value value is invalid
+    try
+    {
+        const json element = R"(
+                {
+                  "register": "0xA0",
+                  "position": 3,
+                  "value": 2
+                }
+            )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a bit value");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "position": 3,
+              "value": 0
+            }
+        )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required position property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "value": 0
+            }
+        )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: position");
+    }
+
+    // Test where fails: Required value property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "position": 3
+            }
+        )"_json;
+        parseI2CCompareBit(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CCompareByte)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC"
+            }
+        )"_json;
+        std::unique_ptr<I2CCompareByteAction> action =
+            parseI2CCompareByte(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xFF);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::unique_ptr<I2CCompareByteAction> action =
+            parseI2CCompareByte(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xF7);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC",
+              "mask": "0xF7",
+              "foo": 1
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0Z",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: value value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: mask value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "value": "0xCC",
+              "mask": "F7"
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required value property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "mask": "0xF7"
+            }
+        )"_json;
+        parseI2CCompareByte(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CCompareBytes)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        std::unique_ptr<I2CCompareBytesAction> action =
+            parseI2CCompareBytes(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 2);
+        EXPECT_EQ(action->getMasks()[0], 0xFF);
+        EXPECT_EQ(action->getMasks()[1], 0xFF);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x77" ]
+            }
+        )"_json;
+        std::unique_ptr<I2CCompareBytesAction> action =
+            parseI2CCompareBytes(element);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 2);
+        EXPECT_EQ(action->getMasks()[0], 0x7F);
+        EXPECT_EQ(action->getMasks()[1], 0x77);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ],
+              "foo": 1
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0Z",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: values value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCCC", "0xFF" ],
+              "masks":  [ "0x7F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: masks value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "F", "0x7F" ]
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: number of elements in masks is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F" ]
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid number of elements in masks");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required values property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0A"
+            }
+        )"_json;
+        parseI2CCompareBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: values");
     }
 }
 

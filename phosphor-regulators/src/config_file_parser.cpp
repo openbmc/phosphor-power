@@ -85,21 +85,18 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("i2c_compare_bit"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CCompareBit(element["i2c_compare_bit"]);
-        // ++propertyCount;
+        action = parseI2CCompareBit(element["i2c_compare_bit"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_compare_byte"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CCompareByte(element["i2c_compare_byte"]);
-        // ++propertyCount;
+        action = parseI2CCompareByte(element["i2c_compare_byte"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_compare_bytes"))
     {
-        // TODO: Not implemented yet
-        // action = parseI2CCompareBytes(element["i2c_compare_bytes"]);
-        // ++propertyCount;
+        action = parseI2CCompareBytes(element["i2c_compare_bytes"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_write_bit"))
     {
@@ -352,6 +349,102 @@ std::vector<uint8_t> parseHexByteArray(const json& element)
         values.emplace_back(parseHexByte(valueElement));
     }
     return values;
+}
+
+std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseHexByte(regElement);
+    ++propertyCount;
+
+    // Required position property
+    const json& positionElement = getRequiredProperty(element, "position");
+    uint8_t position = parseBitPosition(positionElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    uint8_t value = parseBitValue(valueElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<I2CCompareBitAction>(reg, position, value);
+}
+
+std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseHexByte(regElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    uint8_t value = parseHexByte(valueElement);
+    ++propertyCount;
+
+    // Optional mask property
+    uint8_t mask = 0xff;
+    auto maskIt = element.find("mask");
+    if (maskIt != element.end())
+    {
+        mask = parseHexByte(*maskIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<I2CCompareByteAction>(reg, value, mask);
+}
+
+std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseHexByte(regElement);
+    ++propertyCount;
+
+    // Required values property
+    const json& valueElement = getRequiredProperty(element, "values");
+    std::vector<uint8_t> values = parseHexByteArray(valueElement);
+    ++propertyCount;
+
+    // Optional masks property
+    std::vector<uint8_t> masks{};
+    auto masksIt = element.find("masks");
+    if (masksIt != element.end())
+    {
+        masks = parseHexByteArray(*masksIt);
+        ++propertyCount;
+    }
+
+    // Verify masks array (if specified) was same size as values array
+    if ((!masks.empty()) && (masks.size() != values.size()))
+    {
+        throw std::invalid_argument{"Invalid number of elements in masks"};
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    if (masks.empty())
+    {
+        return std::make_unique<I2CCompareBytesAction>(reg, values);
+    }
+    return std::make_unique<I2CCompareBytesAction>(reg, values, masks);
 }
 
 std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
