@@ -56,3 +56,13 @@ phosphor_regulators = executable(
     include_directories: phosphor_regulators_include_directories,
     install: true
 )
+
+regsctl = executable(
+    'regsctl',
+    'regsctl/main.cpp',
+    dependencies: [
+        phosphor_logging,
+        sdbusplus
+    ],
+    install: true
+)
