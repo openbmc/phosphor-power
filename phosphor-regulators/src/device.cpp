@@ -16,6 +16,9 @@
 
 #include "device.hpp"
 
+#include "chassis.hpp"
+#include "system.hpp"
+
 namespace phosphor::power::regulators
 {
 
@@ -28,6 +31,21 @@ void Device::addToIDMap(IDMap& idMap)
     for (std::unique_ptr<Rail>& rail : rails)
     {
         idMap.addRail(*rail);
+    }
+}
+
+void Device::configure(System& system, Chassis& chassis)
+{
+    // If configuration changes are defined for this device, apply them
+    if (configuration)
+    {
+        configuration->execute(system, chassis, *this);
+    }
+
+    // Configure rails
+    for (std::unique_ptr<Rail>& rail : rails)
+    {
+        rail->configure(system, chassis, *this);
     }
 }
 
