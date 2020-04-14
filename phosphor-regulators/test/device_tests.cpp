@@ -25,12 +25,12 @@
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
-#include "sensor_monitoring.hpp"
 #include "system.hpp"
 #include "test_utils.hpp"
 
 #include <memory>
 #include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -243,10 +243,8 @@ TEST(DeviceTests, Configure)
         journal::clear();
         devicePtr->configure(system, *chassisPtr);
         std::vector<std::string> expectedDebugMessages{
-            "Configuring reg1",
-            "Configuring vdd0: volts=1.300000",
-            "Configuring vio0: volts=3.200000",
-        };
+            "Configuring reg1", "Configuring vdd0: volts=1.300000",
+            "Configuring vio0: volts=3.200000"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }

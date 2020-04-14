@@ -221,7 +221,7 @@ void expectJsonInvalid(const json configFileJson,
 
 void expectCommandLineSyntax(const std::string& expectedErrorMessage,
                              const std::string& expectedOutputMessage,
-                             std::string command, int status)
+                             const std::string& command, int status)
 {
     std::string errorMessage;
     std::string outputMessage;
