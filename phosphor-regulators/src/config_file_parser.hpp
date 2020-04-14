@@ -16,6 +16,7 @@
 #pragma once
 
 #include "action.hpp"
+#include "and_action.hpp"
 #include "chassis.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
@@ -109,6 +110,18 @@ std::unique_ptr<Action> parseAction(const nlohmann::json& element);
  */
 std::vector<std::unique_ptr<Action>>
     parseActionArray(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an and action.
+ *
+ * Returns the corresponding C++ AndAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return AndAction object
+ */
+std::unique_ptr<AndAction> parseAnd(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a bit position (from 0-7).
