@@ -27,6 +27,9 @@
 namespace phosphor::power::regulators
 {
 
+// Forward declarations to avoid circular dependencies
+class System;
+
 /**
  * @class Chassis
  *
@@ -80,6 +83,16 @@ class Chassis
      * @param idMap mapping from IDs to the associated Device/Rail/Rule objects
      */
     void addToIDMap(IDMap& idMap);
+
+    /**
+     * Configure the devices within this chassis, if any.
+     *
+     * This method should be called during the boot before regulators are
+     * enabled.
+     *
+     * @param system system that contains this chassis
+     */
+    void configure(System& system);
 
     /**
      * Returns the devices within this chassis, if any.

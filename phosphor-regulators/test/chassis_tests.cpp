@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "action.hpp"
 #include "chassis.hpp"
+#include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "journal.hpp"
+#include "mock_journal.hpp"
+#include "presence_detection.hpp"
+#include "rail.hpp"
+#include "rule.hpp"
+#include "system.hpp"
 #include "test_utils.hpp"
 
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -93,6 +102,93 @@ TEST(ChassisTests, AddToIDMap)
     EXPECT_NO_THROW(idMap.getRail("rail2a"));
     EXPECT_NO_THROW(idMap.getRail("rail2b"));
     EXPECT_THROW(idMap.getRail("rail3"), std::invalid_argument);
+}
+
+TEST(ChassisTests, Configure)
+{
+    // Test where no devices were specified in constructor
+    {
+        // Create Chassis
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(1);
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call configure()
+        journal::clear();
+        chassisPtr->configure(system);
+        EXPECT_EQ(journal::getDebugMessages().size(), 0);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        std::vector<std::string> expectedInfoMessages{"Configuring chassis 1"};
+        EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
+    }
+
+    // Test where devices were specified in constructor
+    {
+        std::vector<std::unique_ptr<Device>> devices{};
+
+        // Create Device vdd0_reg
+        {
+            // Create Configuration
+            std::vector<std::unique_ptr<Action>> actions{};
+            std::unique_ptr<Configuration> configuration =
+                std::make_unique<Configuration>(1.3, std::move(actions));
+
+            // Create Device
+            std::unique_ptr<i2c::I2CInterface> i2cInterface =
+                createI2CInterface();
+            std::unique_ptr<PresenceDetection> presenceDetection{};
+            std::unique_ptr<Device> device = std::make_unique<Device>(
+                "vdd0_reg", true, "/system/chassis/motherboard/vdd0_reg",
+                std::move(i2cInterface), std::move(presenceDetection),
+                std::move(configuration));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Device vdd1_reg
+        {
+            // Create Configuration
+            std::vector<std::unique_ptr<Action>> actions{};
+            std::unique_ptr<Configuration> configuration =
+                std::make_unique<Configuration>(1.2, std::move(actions));
+
+            // Create Device
+            std::unique_ptr<i2c::I2CInterface> i2cInterface =
+                createI2CInterface();
+            std::unique_ptr<PresenceDetection> presenceDetection{};
+            std::unique_ptr<Device> device = std::make_unique<Device>(
+                "vdd1_reg", true, "/system/chassis/motherboard/vdd1_reg",
+                std::move(i2cInterface), std::move(presenceDetection),
+                std::move(configuration));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Chassis
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(2, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call configure()
+        journal::clear();
+        chassisPtr->configure(system);
+        std::vector<std::string> expectedDebugMessages{
+            "Configuring vdd0_reg: volts=1.300000",
+            "Configuring vdd1_reg: volts=1.200000"};
+        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        std::vector<std::string> expectedInfoMessages{"Configuring chassis 2"};
+        EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
+    }
 }
 
 TEST(ChassisTests, GetDevices)

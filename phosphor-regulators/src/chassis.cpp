@@ -16,6 +16,9 @@
 
 #include "chassis.hpp"
 
+#include "journal.hpp"
+#include "system.hpp"
+
 namespace phosphor::power::regulators
 {
 
@@ -25,6 +28,18 @@ void Chassis::addToIDMap(IDMap& idMap)
     for (std::unique_ptr<Device>& device : devices)
     {
         device->addToIDMap(idMap);
+    }
+}
+
+void Chassis::configure(System& system)
+{
+    // Log info message in journal; important for verifying success of boot
+    journal::logInfo("Configuring chassis " + std::to_string(number));
+
+    // Configure devices
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->configure(system, *this);
     }
 }
 
