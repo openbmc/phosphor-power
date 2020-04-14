@@ -27,6 +27,7 @@
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
+#include "not_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -438,6 +439,18 @@ inline int8_t parseInt8(const nlohmann::json& element)
     }
     return static_cast<int8_t>(value);
 }
+
+/**
+ * Parses a JSON element containing a not action.
+ *
+ * Returns the corresponding C++ NotAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return NotAction object
+ */
+std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a pmbus_write_vout_command action.

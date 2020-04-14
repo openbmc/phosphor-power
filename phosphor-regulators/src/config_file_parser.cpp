@@ -120,9 +120,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("not"))
     {
-        // TODO: Not implemented yet
-        // action = parseNot(element["not"]);
-        // ++propertyCount;
+        action = parseNot(element["not"]);
+        ++propertyCount;
     }
     else if (element.contains("or"))
     {
@@ -574,6 +573,21 @@ std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
         return std::make_unique<I2CWriteBytesAction>(reg, values);
     }
     return std::make_unique<I2CWriteBytesAction>(reg, values, masks);
+}
+
+std::unique_ptr<NotAction> parseNot(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required action to execute
+    std::unique_ptr<Action> action = parseAction(element);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<NotAction>(std::move(action));
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>
