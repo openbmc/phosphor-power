@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "action.hpp"
+#include "and_action.hpp"
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
@@ -240,7 +241,18 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: and action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "and": [
+                { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+                { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: compare_presence action type specified
     // TODO: Not implemented yet
@@ -462,6 +474,53 @@ TEST(ConfigFileParserTests, ParseActionArray)
             }
         )"_json;
         parseActionArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseAnd)
+{
+    // Test where works: Element is an array with 2 actions
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+            ]
+        )"_json;
+        std::unique_ptr<AndAction> action = parseAnd(element);
+        EXPECT_EQ(action->getActions().size(), 2);
+    }
+
+    // Test where fails: Element is an array with 1 action
+    try
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } }
+            ]
+        )"_json;
+        parseAnd(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required array of two or more actions");
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar"
+            }
+        )"_json;
+        parseAnd(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
