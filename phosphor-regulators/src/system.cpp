@@ -34,4 +34,13 @@ void System::buildIDMap()
     }
 }
 
+void System::configure()
+{
+    // Configure devices in each chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->configure(*this);
+    }
+}
+
 } // namespace phosphor::power::regulators

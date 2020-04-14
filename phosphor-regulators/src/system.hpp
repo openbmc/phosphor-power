@@ -60,6 +60,14 @@ class System
     }
 
     /**
+     * Configure the regulator devices in the system.
+     *
+     * This method should be called during the boot before regulators are
+     * enabled.
+     */
+    void configure();
+
+    /**
      * Returns the chassis in the system.
      *
      * @return chassis
