@@ -67,9 +67,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     std::unique_ptr<Action> action{};
     if (element.contains("and"))
     {
-        // TODO: Not implemented yet
-        // action = parseAnd(element["and"]);
-        // ++propertyCount;
+        action = parseAnd(element["and"]);
+        ++propertyCount;
     }
     else if (element.contains("compare_presence"))
     {
@@ -174,6 +173,21 @@ std::vector<std::unique_ptr<Action>> parseActionArray(const json& element)
         actions.emplace_back(parseAction(actionElement));
     }
     return actions;
+}
+
+std::unique_ptr<AndAction> parseAnd(const json& element)
+{
+    verifyIsArray(element);
+
+    // Verify if array size less than 2
+    if (element.size() < 2)
+    {
+        throw std::invalid_argument{"Array must contain two or more actions"};
+    }
+    // Array of two or more actions
+    std::vector<std::unique_ptr<Action>> actions = parseActionArray(element);
+
+    return std::make_unique<AndAction>(std::move(actions));
 }
 
 std::unique_ptr<Chassis> parseChassis(const json& element)
