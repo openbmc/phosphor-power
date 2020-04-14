@@ -16,6 +16,8 @@
 #include "chassis.hpp"
 #include "device.hpp"
 #include "id_map.hpp"
+#include "journal.hpp"
+#include "mock_journal.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
 #include "system.hpp"
@@ -23,6 +25,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -53,6 +56,29 @@ TEST(SystemTests, Constructor)
     EXPECT_THROW(system.getIDMap().getRail("rail2"), std::invalid_argument);
     EXPECT_EQ(system.getRules().size(), 1);
     EXPECT_EQ(system.getRules()[0]->getID(), "set_voltage_rule");
+}
+
+TEST(SystemTests, Configure)
+{
+    // Specify an empty rules vector
+    std::vector<std::unique_ptr<Rule>> rules{};
+
+    // Create Chassis
+    std::vector<std::unique_ptr<Chassis>> chassis{};
+    chassis.emplace_back(std::make_unique<Chassis>(1));
+    chassis.emplace_back(std::make_unique<Chassis>(3));
+
+    // Create System
+    System system{std::move(rules), std::move(chassis)};
+
+    // Call configure()
+    journal::clear();
+    system.configure();
+    EXPECT_EQ(journal::getDebugMessages().size(), 0);
+    EXPECT_EQ(journal::getErrMessages().size(), 0);
+    std::vector<std::string> expectedInfoMessages{"Configuring chassis 1",
+                                                  "Configuring chassis 3"};
+    EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
 }
 
 TEST(SystemTests, GetChassis)
