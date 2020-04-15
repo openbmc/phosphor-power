@@ -114,9 +114,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("if"))
     {
-        // TODO: Not implemented yet
-        // action = parseIf(element["if"]);
-        // ++propertyCount;
+        action = parseIf(element["if"]);
+        ++propertyCount;
     }
     else if (element.contains("not"))
     {
@@ -572,6 +571,39 @@ std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
         return std::make_unique<I2CWriteBytesAction>(reg, values);
     }
     return std::make_unique<I2CWriteBytesAction>(reg, values, masks);
+}
+
+std::unique_ptr<IfAction> parseIf(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required condition property
+    const json& conditionElement = getRequiredProperty(element, "condition");
+    std::unique_ptr<Action> conditionAction = parseAction(conditionElement);
+    ++propertyCount;
+
+    // Required then property
+    const json& thenElement = getRequiredProperty(element, "then");
+    std::vector<std::unique_ptr<Action>> thenActions =
+        parseActionArray(thenElement);
+    ++propertyCount;
+
+    // Optional else property
+    std::vector<std::unique_ptr<Action>> elseActions{};
+    auto elseIt = element.find("else");
+    if (elseIt != element.end())
+    {
+        elseActions = parseActionArray(*elseIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<IfAction>(std::move(conditionAction),
+                                      std::move(thenActions),
+                                      std::move(elseActions));
 }
 
 std::unique_ptr<NotAction> parseNot(const json& element)
