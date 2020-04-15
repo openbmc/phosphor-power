@@ -349,7 +349,20 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: if action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "if":
+              {
+                "condition": { "run_rule": "is_downlevel_regulator" },
+                "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+                "else": [ { "run_rule": "configure_standard_regulator" } ]
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: not action type specified
     {
@@ -2513,6 +2526,157 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: values");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseIf)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" },
+                        { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        std::unique_ptr<IfAction> action = parseIf(element);
+        EXPECT_NE(action->getConditionAction().get(), nullptr);
+        EXPECT_EQ(action->getThenActions().size(), 2);
+        EXPECT_EQ(action->getElseActions().size(), 0);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+              "else": [ { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        std::unique_ptr<IfAction> action = parseIf(element);
+        EXPECT_NE(action->getConditionAction().get(), nullptr);
+        EXPECT_EQ(action->getThenActions().size(), 1);
+        EXPECT_EQ(action->getElseActions().size(), 1);
+    }
+
+    // Test where fails: Required condition property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+              "else": [ { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: condition");
+    }
+
+    // Test where fails: Required then property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "else": [ { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: then");
+    }
+
+    // Test where fails: condition value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "condition": 1,
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+              "else": [ { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: then value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "then": "foo",
+              "else": [ { "run_rule": "configure_standard_regulator" } ]
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: else value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+              "else": 1
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "is_downlevel_regulator" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ],
+              "foo": "bar"
+            }
+        )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseIf(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
     }
 }
 

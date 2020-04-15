@@ -27,6 +27,7 @@
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
+#include "if_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
@@ -415,6 +416,18 @@ std::unique_ptr<I2CWriteByteAction>
  */
 std::unique_ptr<I2CWriteBytesAction>
     parseI2CWriteBytes(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an if action.
+ *
+ * Returns the corresponding C++ IfAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return IfAction object
+ */
+std::unique_ptr<IfAction> parseIf(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an 8-bit signed integer.
