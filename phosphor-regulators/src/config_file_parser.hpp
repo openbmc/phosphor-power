@@ -28,6 +28,7 @@
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
 #include "not_action.hpp"
+#include "or_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -451,6 +452,18 @@ inline int8_t parseInt8(const nlohmann::json& element)
  * @return NotAction object
  */
 std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an or action.
+ *
+ * Returns the corresponding C++ OrAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return OrAction object
+ */
+std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a pmbus_write_vout_command action.

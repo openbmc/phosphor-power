@@ -28,6 +28,7 @@
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
 #include "not_action.hpp"
+#include "or_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
@@ -363,7 +364,18 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: or action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "or": [
+                { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+                { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: pmbus_read_sensor action type specified
     // TODO: Not implemented yet
@@ -2578,6 +2590,53 @@ TEST(ConfigFileParserTests, ParseNot)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseOr)
+{
+    // Test where works: Element is an array with 2 actions
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+            ]
+        )"_json;
+        std::unique_ptr<OrAction> action = parseOr(element);
+        EXPECT_EQ(action->getActions().size(), 2);
+    }
+
+    // Test where fails: Element is an array with 1 action
+    try
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } }
+            ]
+        )"_json;
+        parseOr(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required array of two or more actions");
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar"
+            }
+        )"_json;
+        parseOr(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
     }
 }
 
