@@ -125,9 +125,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("or"))
     {
-        // TODO: Not implemented yet
-        // action = parseOr(element["or"]);
-        // ++propertyCount;
+        action = parseOr(element["or"]);
+        ++propertyCount;
     }
     else if (element.contains("pmbus_read_sensor"))
     {
@@ -581,6 +580,21 @@ std::unique_ptr<NotAction> parseNot(const json& element)
     std::unique_ptr<Action> action = parseAction(element);
 
     return std::make_unique<NotAction>(std::move(action));
+}
+
+std::unique_ptr<OrAction> parseOr(const json& element)
+{
+    verifyIsArray(element);
+
+    // Verify if array size less than 2
+    if (element.size() < 2)
+    {
+        throw std::invalid_argument{"Array must contain two or more actions"};
+    }
+    // Array of two or more actions
+    std::vector<std::unique_ptr<Action>> actions = parseActionArray(element);
+
+    return std::make_unique<OrAction>(std::move(actions));
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>
