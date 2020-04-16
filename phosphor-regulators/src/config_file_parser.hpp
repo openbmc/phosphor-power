@@ -492,6 +492,19 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a presence detection operation.
+ *
+ * Returns the corresponding C++ PresenceDetection object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return PresenceDetection object
+ */
+std::unique_ptr<PresenceDetection>
+    parsePresenceDetection(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a rail.
  *
  * Returns the corresponding C++ Rail object.
