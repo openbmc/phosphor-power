@@ -299,14 +299,13 @@ std::unique_ptr<Device> parseDevice(const json& element)
     ++propertyCount;
 
     // Optional presence_detection property
-    // TODO: Not implemented yet
     std::unique_ptr<PresenceDetection> presenceDetection{};
-    // auto presenceDetectionIt = element.find("presence_detection");
-    // if (presenceDetectionIt != element.end())
-    // {
-    //     presenceDetection = parsePresenceDetection(*presenceDetectionIt);
-    //     ++propertyCount;
-    // }
+    auto presenceDetectionIt = element.find("presence_detection");
+    if (presenceDetectionIt != element.end())
+    {
+        presenceDetection = parsePresenceDetection(*presenceDetectionIt);
+        ++propertyCount;
+    }
 
     // Optional configuration property
     std::unique_ptr<Configuration> configuration{};
@@ -677,6 +676,28 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
 
     return std::make_unique<PMBusWriteVoutCommandAction>(volts, format,
                                                          exponent, isVerified);
+}
+
+std::unique_ptr<PresenceDetection> parsePresenceDetection(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions = parseRuleIDOrActionsProperty(element);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<PresenceDetection>(std::move(actions));
 }
 
 std::unique_ptr<Rail> parseRail(const json& element)

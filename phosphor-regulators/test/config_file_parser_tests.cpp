@@ -1088,7 +1088,6 @@ TEST(ConfigFileParserTests, ParseDevice)
 
     // Test where works: All properties specified
     {
-        // TODO : add presence_detection property
         const json element = R"(
             {
               "id": "vdd_regulator",
@@ -1103,6 +1102,10 @@ TEST(ConfigFileParserTests, ParseDevice)
               {
                   "rule_id": "configure_ir35221_rule"
               },
+              "presence_detection":
+              {
+                  "rule_id": "is_foobar_backplane_installed_rule"
+              },
               "rails":
               [
                 {
@@ -1116,7 +1119,7 @@ TEST(ConfigFileParserTests, ParseDevice)
         EXPECT_EQ(device->isRegulator(), true);
         EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
-        // EXPECT_NE(device->getPresenceDetection(), nullptr);
+        EXPECT_NE(device->getPresenceDetection(), nullptr);
         EXPECT_NE(device->getConfiguration(), nullptr);
         EXPECT_EQ(device->getRails().size(), 1);
     }
@@ -2947,6 +2950,136 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
             }
         )"_json;
         parsePMBusWriteVoutCommand(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePresenceDetection)
+{
+    // Test where works: actions property specified
+    {
+        const json element = R"(
+            {
+              "actions": [
+                { "run_rule": "read_sensors_rule" }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            parsePresenceDetection(element);
+        EXPECT_EQ(presenceDetection->getActions().size(), 1);
+    }
+
+    // Test where works: rule_id property specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "comments property" ],
+              "rule_id": "set_voltage_rule"
+            }
+        )"_json;
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            parsePresenceDetection(element);
+        EXPECT_EQ(presenceDetection->getActions().size(), 1);
+    }
+
+    // Test where fails: actions object is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "actions": 1
+            }
+        )"_json;
+        parsePresenceDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: rule_id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": 1
+            }
+        )"_json;
+        parsePresenceDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Required actions or rule_id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "comments": [ "comments property" ]
+            }
+        )"_json;
+        parsePresenceDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Required actions or rule_id property both specified
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": "set_voltage_rule",
+              "actions": [
+                { "run_rule": "read_sensors_rule" }
+              ]
+            }
+        )"_json;
+        parsePresenceDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "foo", "bar" ] )"_json;
+        parsePresenceDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar",
+              "actions": [
+                { "run_rule": "read_sensors_rule" }
+              ]
+            }
+        )"_json;
+        parsePresenceDetection(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
