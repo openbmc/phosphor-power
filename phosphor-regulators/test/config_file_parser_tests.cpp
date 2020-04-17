@@ -36,6 +36,7 @@
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 #include "sensor_monitoring.hpp"
+#include "set_device_action.hpp"
 #include "tmp_file.hpp"
 
 #include <sys/stat.h> // for chmod()
@@ -418,7 +419,15 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: set_device action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "set_device": "io_expander2"
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where fails: Element is not an object
     try
@@ -3845,6 +3854,40 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseSetDevice)
+{
+    // Test where works
+    {
+        const json element = "regulator1";
+        std::unique_ptr<SetDeviceAction> action = parseSetDevice(element);
+        EXPECT_EQ(action->getDeviceID(), "regulator1");
+    }
+
+    // Test where fails: Element is not a string
+    try
+    {
+        const json element = 1;
+        parseSetDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Empty string
+    try
+    {
+        const json element = "";
+        parseSetDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
