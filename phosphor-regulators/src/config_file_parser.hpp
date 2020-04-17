@@ -36,6 +36,7 @@
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 #include "sensor_monitoring.hpp"
+#include "set_device_action.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -611,6 +612,18 @@ std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
  */
 std::unique_ptr<SensorMonitoring>
     parseSensorMonitoring(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a set device action.
+ *
+ * Returns the corresponding C++ SetDeviceAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SetDeviceAction object
+ */
+std::unique_ptr<SetDeviceAction> parseSetDevice(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a string.
