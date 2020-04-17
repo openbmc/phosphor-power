@@ -146,9 +146,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("set_device"))
     {
-        // TODO: Not implemented yet
-        // action = parseSetDevice(element["set_device"]);
-        // ++propertyCount;
+        action = parseSetDevice(element["set_device"]);
+        ++propertyCount;
     }
     else
     {
@@ -879,6 +878,14 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<SensorMonitoring>(std::move(actions));
+}
+
+std::unique_ptr<SetDeviceAction> parseSetDevice(const json& element)
+{
+    // String deviceID
+    std::string deviceID = parseString(element);
+
+    return std::make_unique<SetDeviceAction>(deviceID);
 }
 
 } // namespace internal
