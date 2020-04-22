@@ -72,9 +72,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("compare_presence"))
     {
-        // TODO: Not implemented yet
-        // action = parseComparePresence(element["compare_presence"]);
-        // ++propertyCount;
+        action = parseComparePresence(element["compare_presence"]);
+        ++propertyCount;
     }
     else if (element.contains("compare_vpd"))
     {
@@ -230,6 +229,27 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
         chassis.emplace_back(parseChassis(chassisElement));
     }
     return chassis;
+}
+
+std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required fru property
+    const json& fruElement = getRequiredProperty(element, "fru");
+    std::string fru = parseString(fruElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    bool value = parseBoolean(valueElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<ComparePresenceAction>(fru, value);
 }
 
 std::unique_ptr<Configuration> parseConfiguration(const json& element)
