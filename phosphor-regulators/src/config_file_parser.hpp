@@ -18,6 +18,7 @@
 #include "action.hpp"
 #include "and_action.hpp"
 #include "chassis.hpp"
+#include "compare_presence_action.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_compare_bit_action.hpp"
@@ -234,6 +235,19 @@ std::vector<std::unique_ptr<Chassis>>
  */
 std::unique_ptr<Configuration>
     parseConfiguration(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a compare_presence action.
+ *
+ * Returns the corresponding C++ ComparePresenceAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return ComparePresenceAction object
+ */
+std::unique_ptr<ComparePresenceAction>
+    parseComparePresence(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a device.
