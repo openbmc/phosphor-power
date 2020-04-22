@@ -16,6 +16,7 @@
 #include "action.hpp"
 #include "and_action.hpp"
 #include "chassis.hpp"
+#include "compare_presence_action.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
 #include "configuration.hpp"
@@ -258,7 +259,19 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: compare_presence action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "compare_presence":
+              {
+                "fru": "/system/chassis/motherboard/cpu3",
+                "value": true
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: compare_vpd action type specified
     // TODO: Not implemented yet
@@ -885,6 +898,119 @@ TEST(ConfigFileParserTests, ParseChassisArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseComparePresence)
+{
+    // Test where works
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/motherboard/cpu3",
+              "value": true
+            }
+        )"_json;
+        std::unique_ptr<ComparePresenceAction> action =
+            parseComparePresence(element);
+        EXPECT_EQ(action->getFRU(), "/system/chassis/motherboard/cpu3");
+        EXPECT_EQ(action->getValue(), true);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/motherboard/cpu3",
+              "value": true,
+              "foo" : true
+            }
+        )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Required fru property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "value": true
+            }
+        )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: fru");
+    }
+
+    // Test where fails: Required value property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/motherboard/cpu3"
+            }
+        )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: fru value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": 1,
+              "value": true
+            }
+        )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: value value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/motherboard/cpu3",
+              "value": 1
+            }
+        )"_json;
+        parseComparePresence(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
     }
 }
 
