@@ -17,6 +17,7 @@
 #include "and_action.hpp"
 #include "chassis.hpp"
 #include "compare_presence_action.hpp"
+#include "compare_vpd_action.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
 #include "configuration.hpp"
@@ -274,7 +275,20 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: compare_vpd action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "compare_vpd":
+              {
+                "fru": "/system/chassis/disk_backplane",
+                "keyword": "CCIN",
+                "value": "2D35"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: i2c_compare_bit action type specified
     {
@@ -1011,6 +1025,160 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseCompareVPD)
+{
+    // Test where works
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "value": "2D35"
+            }
+        )"_json;
+        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        EXPECT_EQ(action->getFRU(), "/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getValue(), "2D35");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "value": "2D35",
+              "foo" : true
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Required fru property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "keyword": "CCIN",
+              "value": "2D35"
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: fru");
+    }
+
+    // Test where fails: Required keyword property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "value": "2D35"
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: keyword");
+    }
+
+    // Test where fails: Required value property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "keyword": "CCIN"
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: fru value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": 1,
+              "keyword": "CCIN",
+              "value": "2D35"
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: keyword value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "keyword": 1,
+              "value": "2D35"
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: value value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "/system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "value": 1
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
     }
 }
 
