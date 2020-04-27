@@ -77,9 +77,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("compare_vpd"))
     {
-        // TODO: Not implemented yet
-        // action = parseCompareVPD(element["compare_vpd"]);
-        // ++propertyCount;
+        action = parseCompareVPD(element["compare_vpd"]);
+        ++propertyCount;
     }
     else if (element.contains("i2c_compare_bit"))
     {
@@ -250,6 +249,32 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<ComparePresenceAction>(fru, value);
+}
+
+std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required fru property
+    const json& fruElement = getRequiredProperty(element, "fru");
+    std::string fru = parseString(fruElement);
+    ++propertyCount;
+
+    // Required keyword property
+    const json& keywordElement = getRequiredProperty(element, "keyword");
+    std::string keyword = parseString(keywordElement);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    std::string value = parseString(valueElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<CompareVPDAction>(fru, keyword, value);
 }
 
 std::unique_ptr<Configuration> parseConfiguration(const json& element)
