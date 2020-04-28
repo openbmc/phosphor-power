@@ -38,6 +38,78 @@ const uint8_t VOUT_MODE{0x20u};
 const uint8_t VOUT_COMMAND{0x21u};
 
 /**
+ * Data Format.
+ */
+enum class SensorDataFormat
+{
+    /**
+     * Linear data format used for values not related to voltage output, such
+     * as output current, input voltage, and temperature. Two byte value with
+     * an 11-bit, two's complement mantissa and a 5-bit, two's complement
+     * exponent.
+     */
+    linear_11,
+
+    /**
+     * Linear data format used for values related to voltage output. Two
+     * byte (16-bit), unsigned integer that is raised to the power of an
+     * exponent. The exponent is not stored within the two bytes.
+     */
+    linear_16
+};
+
+/**
+ * Sensor Value Type.
+ */
+enum class SensorValueType
+{
+    /**
+     * Output current.
+     */
+    iout,
+
+    /**
+     * Highest output current.
+     */
+    iout_peak,
+
+    /**
+     * Lowest output current.
+     */
+    iout_valley,
+
+    /**
+     * Output power.
+     */
+    pout,
+
+    /**
+     * Temperature.
+     */
+    temperature,
+
+    /**
+     * Highest temperature.
+     */
+    temperature_peak,
+
+    /**
+     * Output voltage.
+     */
+    vout,
+
+    /**
+     * Highest output voltage.
+     */
+    vout_peak,
+
+    /**
+     * Lowest output voltage.
+     */
+    vout_valley
+};
+
+/**
  * Data formats for output voltage.
  *
  * These formats are used for commanding and reading output voltage and related
