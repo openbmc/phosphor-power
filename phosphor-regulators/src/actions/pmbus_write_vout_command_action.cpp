@@ -81,8 +81,7 @@ std::string PMBusWriteVoutCommandAction::toString() const
         ss << "volts: " << volts.value() << ", ";
     }
 
-    // Only linear format is currently supported
-    ss << "format: linear";
+    ss << "format: " << pmbus_utils::toString(format);
 
     if (exponent.has_value())
     {
