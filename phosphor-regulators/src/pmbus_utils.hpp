@@ -17,6 +17,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <string>
 
 /**
  * @namespace pmbus_utils
@@ -36,6 +37,78 @@ namespace phosphor::power::regulators::pmbus_utils
  */
 const uint8_t VOUT_MODE{0x20u};
 const uint8_t VOUT_COMMAND{0x21u};
+
+/**
+ * Sensor data format.
+ */
+enum class SensorDataFormat
+{
+    /**
+     * Linear data format used for values not related to voltage output, such
+     * as output current, input voltage, and temperature. Two byte value with
+     * an 11-bit, two's complement mantissa and a 5-bit, two's complement
+     * exponent.
+     */
+    linear_11,
+
+    /**
+     * Linear data format used for values related to voltage output. Two
+     * byte (16-bit), unsigned integer that is raised to the power of an
+     * exponent. The exponent is not stored within the two bytes.
+     */
+    linear_16
+};
+
+/**
+ * Sensor Value Type.
+ */
+enum class SensorValueType
+{
+    /**
+     * Output current.
+     */
+    iout,
+
+    /**
+     * Highest output current.
+     */
+    iout_peak,
+
+    /**
+     * Lowest output current.
+     */
+    iout_valley,
+
+    /**
+     * Output power.
+     */
+    pout,
+
+    /**
+     * Temperature.
+     */
+    temperature,
+
+    /**
+     * Highest temperature.
+     */
+    temperature_peak,
+
+    /**
+     * Output voltage.
+     */
+    vout,
+
+    /**
+     * Highest output voltage.
+     */
+    vout_peak,
+
+    /**
+     * Lowest output voltage.
+     */
+    vout_valley
+};
 
 /**
  * Data formats for output voltage.
@@ -86,6 +159,27 @@ enum class VoutDataFormat
  */
 void parseVoutMode(uint8_t voutModeValue, VoutDataFormat& format,
                    int8_t& parameter);
+
+/**
+ * Convert the SensorDataFormat to string.
+ *
+ * @param format SensorDataFormat format
+ */
+std::string toString(const SensorDataFormat& format);
+
+/**
+ * Convert the SensorValueType to string.
+ *
+ * @param type SensorValueType type
+ */
+std::string toString(const SensorValueType& type);
+
+/**
+ * Convert the VoutDataFormat to string.
+ *
+ * @param format VoutDataFormat format
+ */
+std::string toString(const VoutDataFormat& format);
 
 /**
  * Converts a volts value to the linear data format for output voltage.
