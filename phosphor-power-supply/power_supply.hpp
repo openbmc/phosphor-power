@@ -78,6 +78,16 @@ class PowerSupply
         inputFault = false;
         mfrFault = false;
         vinUVFault = false;
+
+        // The PMBus device driver does not allow for writing CLEAR_FAULTS
+        // directly. However, the hwmon code will send a CLEAR_FAULTS after
+        // reading from any of the hwmon "files" in sysfs, so reading in1_crit
+        // should result in clearing the fault bits in STATUS_BYTE/STATUS_WORD.
+        auto in1Crit{pmbusIntf->read("in1_crit", phosphor::pmbus::Type::Hwmon)};
+        phosphor::logging::log<phosphor::logging::level::INFO>(
+            "CLEAR_FAULTS",
+            phosphor::logging::entry("IN1_CRIT=0x%02X",
+                                     static_cast<uint8_t>(in1Crit)));
     }
 
     /**
