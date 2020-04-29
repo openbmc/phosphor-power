@@ -41,9 +41,9 @@ phosphor_regulators_tests_source_files = [
     'actions/set_device_action_tests.cpp'
 ]
 
-# Add validation tool tests if we are not in an SDK.  The SDK does not currently
-# include the jsonschema Python module required by the validation tool.
-if not get_option('oe-sdk').enabled()
+# Long-running tests that are excluded from CI
+if get_option('long-tests').enabled()
+    # This test requires the Python module 'jsonschema'
     phosphor_regulators_tests_source_files += 'validate-regulators-config_tests.cpp'
 endif
 

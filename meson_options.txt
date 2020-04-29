@@ -11,6 +11,10 @@ option(
 option(
     'tests', type: 'feature', description: 'Build tests.',
 )
+option(
+    'long-tests', type: 'feature',
+    description: 'Build long-running tests that are excluded from CI.',
+)
 
 # Supported power sequencers are: ucd90160, mihawk-cpld
 option(
