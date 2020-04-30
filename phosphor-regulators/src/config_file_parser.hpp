@@ -32,6 +32,7 @@
 #include "if_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
+#include "pmbus_read_sensor_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -508,6 +509,19 @@ std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
 std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a pmbus_read_sensor action.
+ *
+ * Returns the corresponding C++ PMBusReadSensorAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return PMBusReadSensorAction object
+ */
+std::unique_ptr<PMBusReadSensorAction>
+    parsePMBusReadSensor(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a pmbus_write_vout_command action.
  *
  * Returns the corresponding C++ PMBusWriteVoutCommandAction object.
@@ -629,6 +643,42 @@ std::vector<std::unique_ptr<Action>>
 std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a SensorDataFormat expressed as a string.
+ *
+ * Returns the SensorDataFormat sensor data format.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SensorDataFormat format
+ */
+inline pmbus_utils::SensorDataFormat
+    parseSensorDataFormat(const nlohmann::json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::SensorDataFormat format{};
+
+    if (value == "linear_11")
+    {
+        format = pmbus_utils::SensorDataFormat::linear_11;
+    }
+    else if (value == "linear_16")
+    {
+        format = pmbus_utils::SensorDataFormat::linear_16;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a sensor data format"};
+    }
+
+    return format;
+}
+
+/**
  * Parses a JSON element containing a sensor monitoring operation.
  *
  * Returns the corresponding C++ SensorMonitoring object.
@@ -640,6 +690,70 @@ std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
  */
 std::unique_ptr<SensorMonitoring>
     parseSensorMonitoring(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a SensorValueType expressed as a string.
+ *
+ * Returns the SensorValueType sensor value type.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SensorValueType type
+ */
+inline pmbus_utils::SensorValueType
+    parseSensorValueType(const nlohmann::json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::SensorValueType type{};
+
+    if (value == "iout")
+    {
+        type = pmbus_utils::SensorValueType::iout;
+    }
+    else if (value == "iout_peak")
+    {
+        type = pmbus_utils::SensorValueType::iout_peak;
+    }
+    else if (value == "iout_valley")
+    {
+        type = pmbus_utils::SensorValueType::iout_valley;
+    }
+    else if (value == "pout")
+    {
+        type = pmbus_utils::SensorValueType::pout;
+    }
+    else if (value == "temperature")
+    {
+        type = pmbus_utils::SensorValueType::temperature;
+    }
+    else if (value == "temperature_peak")
+    {
+        type = pmbus_utils::SensorValueType::temperature_peak;
+    }
+    else if (value == "vout")
+    {
+        type = pmbus_utils::SensorValueType::vout;
+    }
+    else if (value == "vout_peak")
+    {
+        type = pmbus_utils::SensorValueType::vout_peak;
+    }
+    else if (value == "vout_valley")
+    {
+        type = pmbus_utils::SensorValueType::vout_valley;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a sensor value type"};
+    }
+
+    return type;
+}
 
 /**
  * Parses a JSON element containing a set_device action.
@@ -722,6 +836,50 @@ inline unsigned int parseUnsignedInteger(const nlohmann::json& element)
         throw std::invalid_argument{"Element is not an unsigned integer"};
     }
     return element.get<unsigned int>();
+}
+
+/**
+ * Parses a JSON element containing a VoutDataFormat expressed as a string.
+ *
+ * Returns the VoutDataFormat VOUT_COMMAND data format.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return VoutDataFormat format
+ */
+inline pmbus_utils::VoutDataFormat
+    parseVoutDataFormat(const nlohmann::json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::VoutDataFormat format{};
+
+    if (value == "linear")
+    {
+        format = pmbus_utils::VoutDataFormat::linear;
+    }
+    else if (value == "vid")
+    {
+        format = pmbus_utils::VoutDataFormat::vid;
+    }
+    else if (value == "direct")
+    {
+        format = pmbus_utils::VoutDataFormat::direct;
+    }
+    else if (value == "ieee")
+    {
+        format = pmbus_utils::VoutDataFormat::ieee;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not an vout data format"};
+    }
+
+    return format;
 }
 
 /**
