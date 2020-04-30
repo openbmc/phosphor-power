@@ -127,9 +127,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("pmbus_read_sensor"))
     {
-        // TODO: Not implemented yet
-        // action = parsePMBusReadSensor(element["pmbus_read_sensor"]);
-        // ++propertyCount;
+        action = parsePMBusReadSensor(element["pmbus_read_sensor"]);
+        ++propertyCount;
     }
     else if (element.contains("pmbus_write_vout_command"))
     {
@@ -670,6 +669,42 @@ std::unique_ptr<OrAction> parseOr(const json& element)
     std::vector<std::unique_ptr<Action>> actions = parseActionArray(element);
 
     return std::make_unique<OrAction>(std::move(actions));
+}
+
+std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required type property
+    const json& typeElement = getRequiredProperty(element, "type");
+    pmbus_utils::SensorValueType type = parseSensorValueType(typeElement);
+    ++propertyCount;
+
+    // Required command property
+    const json& commandElement = getRequiredProperty(element, "command");
+    std::string command = parseString(commandElement);
+    ++propertyCount;
+
+    // Required format property
+    const json& formatElement = getRequiredProperty(element, "format");
+    pmbus_utils::SensorDataFormat format = parseSensorDataFormat(formatElement);
+    ++propertyCount;
+
+    // Optional exponent property
+    std::optional<int8_t> exponent{};
+    auto exponentIt = element.find("exponent");
+    if (exponentIt != element.end())
+    {
+        exponent = parseInt8(*exponentIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<PMBusReadSensorAction>(type, command, format,
+                                                   exponent);
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction>
