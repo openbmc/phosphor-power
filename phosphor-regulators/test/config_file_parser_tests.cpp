@@ -31,6 +31,7 @@
 #include "i2c_write_bytes_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
+#include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
@@ -419,7 +420,19 @@ TEST(ConfigFileParserTests, ParseAction)
     }
 
     // Test where works: pmbus_read_sensor action type specified
-    // TODO: Not implemented yet
+    {
+        const json element = R"(
+            {
+              "pmbus_read_sensor": {
+                "type": "iout",
+                "command": "0x8C",
+                "format": "linear_11"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
 
     // Test where works: pmbus_write_vout_command action type specified
     {
@@ -3107,6 +3120,202 @@ TEST(ConfigFileParserTests, ParseOr)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePMBusReadSensor)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "command": "0x8C",
+              "format": "linear_11"
+            }
+        )"_json;
+        std::unique_ptr<PMBusReadSensorAction> action =
+            parsePMBusReadSensor(element);
+        EXPECT_EQ(action->getType(), pmbus_utils::SensorValueType::iout);
+        EXPECT_EQ(action->getCommand(), "0x8C");
+        EXPECT_EQ(action->getFormat(),
+                  pmbus_utils::SensorDataFormat::linear_11);
+        EXPECT_EQ(action->getExponent().has_value(), false);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "type": "temperature",
+              "command": "0x7A",
+              "format": "linear_16",
+              "exponent": -8
+            }
+        )"_json;
+        std::unique_ptr<PMBusReadSensorAction> action =
+            parsePMBusReadSensor(element);
+        EXPECT_EQ(action->getType(), pmbus_utils::SensorValueType::temperature);
+        EXPECT_EQ(action->getCommand(), "0x7A");
+        EXPECT_EQ(action->getFormat(),
+                  pmbus_utils::SensorDataFormat::linear_16);
+        EXPECT_EQ(action->getExponent().has_value(), true);
+        EXPECT_EQ(action->getExponent().value(), -8);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "command": "0x8C",
+              "format": "linear_11",
+              "foo": 1
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Required type property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "command": "0x8C",
+              "format": "linear_11"
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: type");
+    }
+
+    // Test where fails: Required command property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "format": "linear_11"
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: command");
+    }
+
+    // Test where fails: Required format property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "command": "0x8C"
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: format");
+    }
+
+    // Test where fails: type value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": 1,
+              "command": "0x7A",
+              "format": "linear_16"
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: command value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "temperature",
+              "command": 0,
+              "format": "linear_16"
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: format value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "temperature",
+              "command": "0x7A",
+              "format": 1
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: exponent value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "temperature",
+              "command": "0x7A",
+              "format": "linear_16",
+              "exponent": 1.3
+            }
+        )"_json;
+        parsePMBusReadSensor(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 }
 
