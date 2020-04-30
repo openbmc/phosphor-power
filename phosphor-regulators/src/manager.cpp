@@ -23,27 +23,29 @@
 #include <chrono>
 #include <variant>
 
-namespace phosphor
-{
-namespace power
-{
-namespace regulators
+namespace phosphor::power::regulators
 {
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     ManagerObject(bus, objPath, true), bus(bus), eventLoop(event), fileName("")
 {
-    // Subscribe to interfacesAdded signal for filename property
-    std::unique_ptr<sdbusplus::server::match::match> matchPtr =
-        std::make_unique<sdbusplus::server::match::match>(
-            bus,
-            sdbusplus::bus::match::rules::interfacesAdded(sysDbusObj).c_str(),
-            std::bind(std::mem_fn(&Manager::signalHandler), this,
-                      std::placeholders::_1));
-    signals.emplace_back(std::move(matchPtr));
+    /* Temporarily comment out until D-Bus interface is defined and available.
+        // Subscribe to interfacesAdded signal for filename property
+        std::unique_ptr<sdbusplus::server::match::match> matchPtr =
+            std::make_unique<sdbusplus::server::match::match>(
+                bus,
+                sdbusplus::bus::match::rules::interfacesAdded(sysDbusObj).c_str(),
+                std::bind(std::mem_fn(&Manager::signalHandler), this,
+                          std::placeholders::_1));
+        signals.emplace_back(std::move(matchPtr));
 
-    // Attempt to get the filename property from dbus
-    setFileName(getFileNameDbus());
+        // Attempt to get the filename property from dbus
+        setFileName(getFileNameDbus());
+    */
+
+    // Temporarily hard-code JSON config file name to first system that will use
+    // this application.  Remove this when D-Bus interface is available.
+    fileName = "ibm_rainier.json";
 
     if (!fileName.empty())
     {
@@ -149,6 +151,4 @@ const std::string Manager::getFileNameDbus()
     return fileName;
 }
 
-} // namespace regulators
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::regulators
