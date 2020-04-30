@@ -127,9 +127,8 @@ std::unique_ptr<Action> parseAction(const json& element)
     }
     else if (element.contains("pmbus_read_sensor"))
     {
-        // TODO: Not implemented yet
-        // action = parsePMBusReadSensor(element["pmbus_read_sensor"]);
-        // ++propertyCount;
+        action = parsePMBusReadSensor(element["pmbus_read_sensor"]);
+        ++propertyCount;
     }
     else if (element.contains("pmbus_write_vout_command"))
     {
@@ -672,6 +671,42 @@ std::unique_ptr<OrAction> parseOr(const json& element)
     return std::make_unique<OrAction>(std::move(actions));
 }
 
+std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required type property
+    const json& typeElement = getRequiredProperty(element, "type");
+    pmbus_utils::SensorValueType type = parseSensorValueType(typeElement);
+    ++propertyCount;
+
+    // Required command property
+    const json& commandElement = getRequiredProperty(element, "command");
+    uint8_t command = parseHexByte(commandElement);
+    ++propertyCount;
+
+    // Required format property
+    const json& formatElement = getRequiredProperty(element, "format");
+    pmbus_utils::SensorDataFormat format = parseSensorDataFormat(formatElement);
+    ++propertyCount;
+
+    // Optional exponent property
+    std::optional<int8_t> exponent{};
+    auto exponentIt = element.find("exponent");
+    if (exponentIt != element.end())
+    {
+        exponent = parseInt8(*exponentIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<PMBusReadSensorAction>(type, command, format,
+                                                   exponent);
+}
+
 std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const json& element)
 {
@@ -903,6 +938,31 @@ std::unique_ptr<RunRuleAction> parseRunRule(const json& element)
     return std::make_unique<RunRuleAction>(ruleID);
 }
 
+pmbus_utils::SensorDataFormat parseSensorDataFormat(const json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::SensorDataFormat format{};
+
+    if (value == "linear_11")
+    {
+        format = pmbus_utils::SensorDataFormat::linear_11;
+    }
+    else if (value == "linear_16")
+    {
+        format = pmbus_utils::SensorDataFormat::linear_16;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a sensor data format"};
+    }
+
+    return format;
+}
+
 std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
 {
     verifyIsObject(element);
@@ -925,12 +985,98 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
     return std::make_unique<SensorMonitoring>(std::move(actions));
 }
 
+pmbus_utils::SensorValueType parseSensorValueType(const json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::SensorValueType type{};
+
+    if (value == "iout")
+    {
+        type = pmbus_utils::SensorValueType::iout;
+    }
+    else if (value == "iout_peak")
+    {
+        type = pmbus_utils::SensorValueType::iout_peak;
+    }
+    else if (value == "iout_valley")
+    {
+        type = pmbus_utils::SensorValueType::iout_valley;
+    }
+    else if (value == "pout")
+    {
+        type = pmbus_utils::SensorValueType::pout;
+    }
+    else if (value == "temperature")
+    {
+        type = pmbus_utils::SensorValueType::temperature;
+    }
+    else if (value == "temperature_peak")
+    {
+        type = pmbus_utils::SensorValueType::temperature_peak;
+    }
+    else if (value == "vout")
+    {
+        type = pmbus_utils::SensorValueType::vout;
+    }
+    else if (value == "vout_peak")
+    {
+        type = pmbus_utils::SensorValueType::vout_peak;
+    }
+    else if (value == "vout_valley")
+    {
+        type = pmbus_utils::SensorValueType::vout_valley;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a sensor value type"};
+    }
+
+    return type;
+}
+
 std::unique_ptr<SetDeviceAction> parseSetDevice(const json& element)
 {
     // String deviceID
     std::string deviceID = parseString(element);
 
     return std::make_unique<SetDeviceAction>(deviceID);
+}
+
+pmbus_utils::VoutDataFormat parseVoutDataFormat(const json& element)
+{
+    if (!element.is_string())
+    {
+        throw std::invalid_argument{"Element is not a string"};
+    }
+    std::string value = element.get<std::string>();
+    pmbus_utils::VoutDataFormat format{};
+
+    if (value == "linear")
+    {
+        format = pmbus_utils::VoutDataFormat::linear;
+    }
+    else if (value == "vid")
+    {
+        format = pmbus_utils::VoutDataFormat::vid;
+    }
+    else if (value == "direct")
+    {
+        format = pmbus_utils::VoutDataFormat::direct;
+    }
+    else if (value == "ieee")
+    {
+        format = pmbus_utils::VoutDataFormat::ieee;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a vout data format"};
+    }
+
+    return format;
 }
 
 } // namespace internal

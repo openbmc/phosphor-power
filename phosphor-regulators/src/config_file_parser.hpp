@@ -32,6 +32,7 @@
 #include "if_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
+#include "pmbus_read_sensor_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -508,6 +509,19 @@ std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
 std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a pmbus_read_sensor action.
+ *
+ * Returns the corresponding C++ PMBusReadSensorAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return PMBusReadSensorAction object
+ */
+std::unique_ptr<PMBusReadSensorAction>
+    parsePMBusReadSensor(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a pmbus_write_vout_command action.
  *
  * Returns the corresponding C++ PMBusWriteVoutCommandAction object.
@@ -629,6 +643,19 @@ std::vector<std::unique_ptr<Action>>
 std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a SensorDataFormat expressed as a string.
+ *
+ * Returns the corresponding SensorDataFormat enum value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SensorDataFormat enum value
+ */
+pmbus_utils::SensorDataFormat
+    parseSensorDataFormat(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a sensor monitoring operation.
  *
  * Returns the corresponding C++ SensorMonitoring object.
@@ -640,6 +667,19 @@ std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
  */
 std::unique_ptr<SensorMonitoring>
     parseSensorMonitoring(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a SensorValueType expressed as a string.
+ *
+ * Returns the corresponding SensorValueType enum value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return SensorValueType enum value
+ */
+pmbus_utils::SensorValueType
+    parseSensorValueType(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a set_device action.
@@ -723,6 +763,18 @@ inline unsigned int parseUnsignedInteger(const nlohmann::json& element)
     }
     return element.get<unsigned int>();
 }
+
+/**
+ * Parses a JSON element containing a VoutDataFormat expressed as a string.
+ *
+ * Returns the corresponding VoutDataFormat enum value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return VoutDataFormat enum value
+ */
+pmbus_utils::VoutDataFormat parseVoutDataFormat(const nlohmann::json& element);
 
 /**
  * Verifies that the specified JSON element is a JSON array.
