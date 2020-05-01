@@ -1,4 +1,21 @@
+/**
+ * Copyright © 2020 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #pragma once
+
+#include "system.hpp"
 
 #include <interfaces/manager_interface.hpp>
 #include <sdbusplus/bus.hpp>
@@ -9,6 +26,10 @@
 #include <sdeventplus/utility/timer.hpp>
 
 #include <algorithm>
+#include <filesystem>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -39,75 +60,50 @@ class Manager : public ManagerObject
      * Constructor
      * Creates a manager over the regulators.
      *
-     * @param[in] bus - the dbus bus
-     * @param[in] event - the sdevent event
+     * @param bus the dbus bus
+     * @param event the sdevent event
      */
     Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
 
     /**
-     * @brief Overridden manager object's configure method
+     * Overridden manager object's configure method
      */
     void configure() override;
 
     /**
-     * @brief Overridden manager object's monitor method
+     * Overridden manager object's monitor method
      *
-     * @param[in] enable - Enable or disable regulator monitoring
+     * @param enable Enable or disable regulator monitoring
      */
     void monitor(bool enable) override;
 
     /**
-     * @brief Timer expired callback function
+     * Timer expired callback function
      */
     void timerExpired();
 
     /**
-     * @brief Callback function to handle receiving a HUP signal
+     * Callback function to handle receiving a HUP signal
      * to reload the configuration data.
      *
-     * @param[in] sigSrc - sd_event_source signal wrapper
-     * @param[in] sigInfo - signal info on signal fd
+     * @param sigSrc sd_event_source signal wrapper
+     * @param sigInfo signal info on signal fd
      */
     void sighupHandler(sdeventplus::source::Signal& sigSrc,
                        const struct signalfd_siginfo* sigInfo);
 
     /**
-     * @brief Callback function to handle interfacesAdded dbus signals
+     * Callback function to handle interfacesAdded dbus signals
      *
-     * @param[in] msg - Expanded sdbusplus message data
+     * @param msg Expanded sdbusplus message data
      */
     void signalHandler(sdbusplus::message::message& msg);
 
   private:
     /**
-     * The dbus bus
-     */
-    sdbusplus::bus::bus& bus;
-
-    /**
-     * Event to loop on
-     */
-    sdeventplus::Event eventLoop;
-
-    /**
-     * List of event timers
-     */
-    std::vector<Timer> timers;
-
-    /**
-     * List of dbus signal matches
-     */
-    std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals;
-
-    /**
-     * JSON configuration data filename
-     */
-    std::string fileName;
-
-    /**
-     * @brief Set the JSON configuration data filename
+     * Set the JSON configuration data filename
      *
-     * @param[in] fName = filename without `.json` extension
+     * @param fName filename without `.json` extension
      */
     inline void setFileName(const std::string& fName)
     {
@@ -121,11 +117,74 @@ class Manager : public ManagerObject
     };
 
     /**
-     * @brief Get the JSON configuration data filename from dbus
+     * Get the JSON configuration data filename from dbus
      *
-     * @return - JSON configuration data filename
+     * @return JSON configuration data filename
      */
     const std::string getFileNameDbus();
+
+    /**
+     * Finds the JSON configuration file.
+     *
+     * Looks for the config file in the test directory and standard directory.
+     *
+     * Throws an exception if the file cannot be found or a file system error
+     * occurs.
+     *
+     * The base name of the config file must have already been obtained and
+     * stored in the fileName data member.
+     *
+     * @return absolute path to config file
+     */
+    std::filesystem::path findConfigFile();
+
+    /**
+     * Loads the JSON configuration file.
+     *
+     * Looks for the config file in the test directory and standard directory.
+     *
+     * If the config file is found, it is parsed and the resulting information
+     * is stored in the system data member.
+     *
+     * If the config file cannot be found or parsing fails, an error is logged.
+     *
+     * The base name of the config file must have already been obtained and
+     * stored in the fileName data member.
+     */
+    void loadConfigFile();
+
+    /**
+     * The dbus bus
+     */
+    sdbusplus::bus::bus& bus;
+
+    /**
+     * Event to loop on
+     */
+    sdeventplus::Event eventLoop;
+
+    /**
+     * List of event timers
+     */
+    std::vector<Timer> timers{};
+
+    /**
+     * List of dbus signal matches
+     */
+    std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals{};
+
+    /**
+     * JSON configuration file base name.
+     */
+    std::string fileName{};
+
+    /**
+     * Computer system being controlled and monitored by the BMC.
+     *
+     * Contains the information loaded from the JSON configuration file.
+     * Contains nullptr if the configuration file has not been loaded.
+     */
+    std::unique_ptr<System> system{};
 };
 
 } // namespace phosphor::power::regulators

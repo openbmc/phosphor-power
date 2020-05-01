@@ -16,18 +16,41 @@
 
 #include "manager.hpp"
 
+#include "chassis.hpp"
+#include "config_file_parser.hpp"
+#include "exception_utils.hpp"
+#include "journal.hpp"
+#include "rule.hpp"
 #include "utility.hpp"
 
 #include <sdbusplus/bus.hpp>
 
 #include <chrono>
+#include <exception>
+#include <stdexcept>
+#include <tuple>
+#include <utility>
 #include <variant>
 
 namespace phosphor::power::regulators
 {
 
+namespace fs = std::filesystem;
+
+/**
+ * Standard configuration file directory.  This directory is part of the
+ * firmware install image.  It contains the standard version of the config file.
+ */
+const fs::path standardConfigFileDir{"/usr/share/phosphor-regulators"};
+
+/**
+ * Test configuration file directory.  This directory can contain a test version
+ * of the config file.  The test version will override the standard version.
+ */
+const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
+
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject(bus, objPath, true), bus(bus), eventLoop(event), fileName("")
+    ManagerObject{bus, objPath, true}, bus{bus}, eventLoop{event}
 {
     /* Temporarily comment out until D-Bus interface is defined and available.
         // Subscribe to interfacesAdded signal for filename property
@@ -49,7 +72,7 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
 
     if (!fileName.empty())
     {
-        // TODO Load & parse JSON configuration data file
+        loadConfigFile();
     }
 
     // Obtain dbus service name
@@ -88,7 +111,10 @@ void Manager::timerExpired()
 void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
                             const struct signalfd_siginfo* /*sigInfo*/)
 {
-    // TODO Reload and process the configuration data
+    if (!fileName.empty())
+    {
+        loadConfigFile();
+    }
 }
 
 void Manager::signalHandler(sdbusplus::message::message& msg)
@@ -123,7 +149,10 @@ void Manager::signalHandler(sdbusplus::message::message& msg)
         }
         // Set fileName and call parse json function
         setFileName(std::get<std::string>(itProp->second));
-        // TODO Load & parse JSON configuration data file
+        if (!fileName.empty())
+        {
+            loadConfigFile();
+        }
     }
 }
 
@@ -149,6 +178,53 @@ const std::string Manager::getFileNameDbus()
     }
 
     return fileName;
+}
+
+fs::path Manager::findConfigFile()
+{
+    // First look in the test directory
+    fs::path pathName{testConfigFileDir / fileName};
+    if (!fs::exists(pathName))
+    {
+        // Look in the standard directory
+        pathName = standardConfigFileDir / fileName;
+        if (!fs::exists(pathName))
+        {
+            throw std::runtime_error{"Configuration file does not exist: " +
+                                     pathName.string()};
+        }
+    }
+
+    return pathName;
+}
+
+void Manager::loadConfigFile()
+{
+    try
+    {
+        // Find the absolute path to the config file
+        fs::path pathName = findConfigFile();
+
+        // Log info message in journal; config file path is important
+        journal::logInfo("Loading configuration file " + pathName.string());
+
+        // Parse the config file
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassis{};
+        std::tie(rules, chassis) = config_file_parser::parse(pathName);
+
+        // Store config file information in a new System object.  The old System
+        // object, if any, is automatically deleted.
+        system = std::make_unique<System>(std::move(rules), std::move(chassis));
+    }
+    catch (const std::exception& e)
+    {
+        // Log error messages in journal
+        exception_utils::log(e);
+        journal::logErr("Unable to load configuration file");
+
+        // TODO: Create error log entry
+    }
 }
 
 } // namespace phosphor::power::regulators
