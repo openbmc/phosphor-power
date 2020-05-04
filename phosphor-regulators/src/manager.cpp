@@ -81,13 +81,27 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
 
 void Manager::configure()
 {
+    // Verify System object exists; this means config file has been loaded
+    if (system)
+    {
+        // Configure the regulator devices in the system
+        system->configure();
+    }
+    else
+    {
+        journal::logErr("Unable to configure regulator devices: Configuration "
+                        "file not loaded");
+        // TODO: Log error
+    }
+
     // TODO Configuration errors that should halt poweron,
     // throw InternalFailure exception (or similar) to
     // fail the call(busctl) to this method
 }
 
-void Manager::monitor(bool enable)
+void Manager::monitor(bool /*enable*/)
 {
+    /* Temporarily comment out until monitoring is supported.
     if (enable)
     {
         Timer timer(eventLoop, std::bind(&Manager::timerExpired, this));
@@ -100,6 +114,7 @@ void Manager::monitor(bool enable)
         // Delete all timers to disable monitoring
         timers.clear();
     }
+    */
 }
 
 void Manager::timerExpired()
