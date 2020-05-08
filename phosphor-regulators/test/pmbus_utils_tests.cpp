@@ -203,6 +203,36 @@ TEST(PMBusUtilsTests, ToString)
     }
 }
 
+TEST(PMBusUtilsTests, ConvertFromLinear)
+{
+    uint16_t value;
+
+    // Exponent = 0, mantissa > 0
+    // mantissa : 1, exponent : 0, decimal = 1 * 2^0 = 1
+    value = 0x0001;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 1);
+
+    // Exponent > 0, mantissa > 0
+    // mantissa : 2, exponent : 1, decimal = 2 * 2^1 = 4
+    value = 0x0802;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 4);
+
+    // Exponent < 0, mantissa > 0
+    // mantissa : 15, exponent : -1, decimal = 15 * 2^-1 = 7.5
+    value = 0xf80f;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 7.5);
+
+    // Exponent > 0, mantissa = 0
+    // mantissa : 0, exponent : 3, decimal = 0 * 2^3 = 0
+    value = 0x1800;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 0);
+
+    // Exponent > 0, mantissa < 0
+    // mantissa : -2, exponent : 3, decimal = -2 * 2^3 = -16
+    value = 0x1ffe;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), -16);
+}
+
 TEST(PMBusUtilsTests, ConvertToVoutLinear)
 {
     double volts;
