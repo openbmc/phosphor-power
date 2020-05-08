@@ -203,6 +203,57 @@ TEST(PMBusUtilsTests, ToString)
     }
 }
 
+TEST(PMBusUtilsTests, ConvertFromLinear)
+{
+    uint16_t value;
+
+    // Minimum possible exponent value: -16
+    // mantissa : 511, exponent : -16, decimal = 511 * 2^-16 =
+    // 0.0077972412109375
+    value = 0x81ff;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 0.0077972412109375);
+
+    // Maximum possible exponent value: 15
+    // mantissa : 2, exponent : 15, decimal = 2 * 2^15 = 65536
+    value = 0x7802;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 65536);
+
+    // Minimum possible mantissa value: -1024
+    // mantissa : -1024, exponent : 1, decimal = -1024 * 2^1 = -2048
+    value = 0x0c00;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), -2048);
+
+    // Maximum possible mantissa value: 1023
+    // mantissa : 1023, exponent : -11, decimal = 1023 * 2^-11 = 0.49951171875
+    value = 0xabff;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 0.49951171875);
+
+    // Exponent = 0, mantissa > 0
+    // mantissa : 1, exponent : 0, decimal = 1 * 2^0 = 1
+    value = 0x0001;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 1);
+
+    // Exponent > 0, mantissa > 0
+    // mantissa : 2, exponent : 1, decimal = 2 * 2^1 = 4
+    value = 0x0802;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 4);
+
+    // Exponent < 0, mantissa > 0
+    // mantissa : 15, exponent : -1, decimal = 15 * 2^-1 = 7.5
+    value = 0xf80f;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 7.5);
+
+    // Exponent > 0, mantissa = 0
+    // mantissa : 0, exponent : 3, decimal = 0 * 2^3 = 0
+    value = 0x1800;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), 0);
+
+    // Exponent > 0, mantissa < 0
+    // mantissa : -2, exponent : 3, decimal = -2 * 2^3 = -16
+    value = 0x1ffe;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), -16);
+}
+
 TEST(PMBusUtilsTests, ConvertToVoutLinear)
 {
     double volts;
