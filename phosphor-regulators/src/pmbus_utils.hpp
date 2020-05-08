@@ -185,6 +185,45 @@ std::string toString(SensorValueType type);
 std::string toString(VoutDataFormat format);
 
 /**
+ * Converts a linear data format value to a double value.
+ *
+ * This data format consists of the following:
+ *   - Two byte value
+ *   - 11-bit two's complement mantissa value stored in the two bytes
+ *   - 5-bit two's complement exponent value stored in the two bytes
+ *
+ * @param value linear data format value
+ * @return double value
+ */
+inline double convertFromLinear(uint16_t value)
+{
+    // extract exponent from most significant 5 bits
+    uint8_t exponentField = value >> 11;
+
+    // extract mantissa from least significant 11 bits
+    uint16_t mantissaField = value & 0x7FFu;
+
+    // sign extend exponent
+    if (exponentField > 0x0Fu)
+    {
+        exponentField |= 0xE0u;
+    }
+
+    // sign extend mantissa
+    if (mantissaField > 0x03FFu)
+    {
+        mantissaField |= 0xF800u;
+    }
+
+    int8_t exponent = static_cast<int8_t>(exponentField);
+    int16_t mantissa = static_cast<int16_t>(mantissaField);
+
+    // compute value as mantissa * 2^(exponent)
+    double decimal = mantissa * std::pow(2.0, exponent);
+    return decimal;
+}
+
+/**
  * Converts a volts value to the linear data format for output voltage.
  *
  * This data format consists of the following:
