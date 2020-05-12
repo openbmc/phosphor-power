@@ -224,6 +224,26 @@ inline double convertFromLinear(uint16_t value)
 }
 
 /**
+ * Converts a linear data format output voltage value to a volts value.
+ *
+ * This data format consists of the following:
+ *   - Two byte value
+ *   - 16-bit unsigned mantissa value stored in the two bytes
+ *   - 5-bit signed exponent value that is not stored in the two bytes
+ *
+ * @param value linear data format output voltage value
+ * @param exponent exponent value obtained from VOUT_MODE or device
+ *        documentation
+ * @return normal decimal number
+ */
+inline double convertFromVoutLinear(uint16_t value, int8_t exponent)
+{
+    // compute value as mantissa * 2^(exponent)
+    double decimal = value * std::pow(2.0, exponent);
+    return decimal;
+}
+
+/**
  * Converts a volts value to the linear data format for output voltage.
  *
  * This data format consists of the following:
