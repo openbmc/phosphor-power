@@ -220,6 +220,33 @@ inline double convertFromLinear(uint16_t value)
 }
 
 /**
+ * Converts a uint16_t linear_16 format to a normal decimal number.
+ *
+ * This data format consists of the following:
+ *   - Two byte value
+ *   - 16-bit unsigned mantissa value stored in the two bytes
+ *   - 5-bit signed exponent value that is not stored in the two bytes
+ *
+ * @param linear data format value
+ * @return normal decimal number
+ */
+inline double convertFromVoutLinear(uint16_t value, int8_t exponent)
+{
+    // extract exponent as LS 5 bits
+    exponent = exponent & 0x1F;
+
+    // sign extend exponent
+    if (exponent > 0x0F)
+    {
+        exponent |= 0xE0;
+    }
+
+    // compute value as mantissa * 2^(exponent)
+    double decimal = value * std::pow(2, exponent);
+    return decimal;
+}
+
+/**
  * Converts a volts value to the linear data format for output voltage.
  *
  * This data format consists of the following:
