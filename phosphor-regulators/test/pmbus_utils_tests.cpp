@@ -254,6 +254,33 @@ TEST(PMBusUtilsTests, ConvertFromLinear)
     EXPECT_DOUBLE_EQ(pmbus_utils::convertFromLinear(value), -16);
 }
 
+TEST(PMBusUtilsTests, ConvertFromVoutLinear)
+{
+    uint16_t value;
+    int8_t exponent;
+
+    // mantissa : 1, exponent : 2, decimal = 1 * 2^2 = 4
+    value = 0x0001;
+    exponent = 2;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromVoutLinear(value, exponent), 4);
+
+    // mantissa : 15, exponent : 0, decimal = 15 * 2^0 = 15
+    value = 0x000f;
+    exponent = 0;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromVoutLinear(value, exponent), 15);
+
+    // mantissa : 255, exponent : -3, decimal = 255 * 2^-3 = 31.875
+    value = 0x00ff;
+    exponent = -3;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromVoutLinear(value, exponent),
+                     31.875);
+
+    // mantissa : 0, exponent : 10, decimal = 0 * 2^10 = 0
+    value = 0x0000;
+    exponent = 10;
+    EXPECT_DOUBLE_EQ(pmbus_utils::convertFromVoutLinear(value, exponent), 0);
+}
+
 TEST(PMBusUtilsTests, ConvertToVoutLinear)
 {
     double volts;
