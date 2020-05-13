@@ -72,22 +72,7 @@ class PowerSupply
      * with a clean state. Presence changes and power state changes will
      * want to clear any faults logged.
      */
-    void clearFaults()
-    {
-        faultFound = false;
-        inputFault = false;
-        mfrFault = false;
-        vinUVFault = false;
-
-        // The PMBus device driver does not allow for writing CLEAR_FAULTS
-        // directly. However, the pmbus hwmon device driver code will send a
-        // CLEAR_FAULTS after reading from any of the hwmon "files" in sysfs, so
-        // reading in1_crit should result in clearing the fault bits in
-        // STATUS_BYTE/STATUS_WORD.
-        // I do not care what the return value is.
-        static_cast<void>(
-            pmbusIntf->read("in1_crit", phosphor::pmbus::Type::Hwmon));
-    }
+    void clearFaults();
 
     /**
      * @brief Adds properties to the inventory.
