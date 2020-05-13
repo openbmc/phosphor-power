@@ -61,7 +61,7 @@ void getProperty(const std::string& interface, const std::string& propertyName,
     auto reply = bus.call(method);
 
     reply.read(property);
-    value = sdbusplus::message::variant_ns::get<T>(property);
+    value = std::get<T>(property);
 }
 
 /**
