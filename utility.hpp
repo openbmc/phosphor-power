@@ -51,7 +51,7 @@ void getProperty(const std::string& interface, const std::string& propertyName,
                  const std::string& path, const std::string& service,
                  sdbusplus::bus::bus& bus, T& value)
 {
-    sdbusplus::message::variant<T> property;
+    std::variant<T> property;
 
     auto method = bus.new_method_call(service.c_str(), path.c_str(),
                                       PROPERTY_INTF, "Get");
@@ -79,7 +79,7 @@ void setProperty(const std::string& interface, const std::string& propertyName,
                  const std::string& path, const std::string& service,
                  sdbusplus::bus::bus& bus, T& value)
 {
-    sdbusplus::message::variant<T> propertyValue(value);
+    std::variant<T> propertyValue(value);
 
     auto method = bus.new_method_call(service.c_str(), path.c_str(),
                                       PROPERTY_INTF, "Set");
