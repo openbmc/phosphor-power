@@ -185,7 +185,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
     auto valPropMap = msgData.find(PRESENT_PROP);
     if (valPropMap != msgData.end())
     {
-        if (sdbusplus::message::variant_ns::get<bool>(valPropMap->second))
+        if (std::get<bool>(valPropMap->second))
         {
             clearFaults();
             presentTimer.restartOnce(presentInterval);
@@ -222,8 +222,7 @@ void PowerSupply::powerStateChanged(sdbusplus::message::message& msg)
     auto valPropMap = msgData.find("state");
     if (valPropMap != msgData.end())
     {
-        state =
-            sdbusplus::message::variant_ns::get<int32_t>(valPropMap->second);
+        state = std::get<int32_t>(valPropMap->second);
 
         // Power is on when state=1. Set the fault logged variables to false
         // and start the power on timer when the state changes to 1.
