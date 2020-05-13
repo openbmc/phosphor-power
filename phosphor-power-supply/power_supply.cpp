@@ -93,6 +93,33 @@ void PowerSupply::analyze()
     }
 }
 
+void PowerSupply::clearFaults()
+{
+    faultFound = false;
+    inputFault = false;
+    mfrFault = false;
+    vinUVFault = false;
+
+    // The PMBus device driver does not allow for writing CLEAR_FAULTS
+    // directly. However, the pmbus hwmon device driver code will send a
+    // CLEAR_FAULTS after reading from any of the hwmon "files" in sysfs, so
+    // reading in1_input should result in clearing the fault bits in
+    // STATUS_BYTE/STATUS_WORD.
+    // I do not care what the return value is.
+    try
+    {
+        static_cast<void>(
+            pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
+    }
+    catch (ReadFailure& e)
+    {
+        // Since I do not care what the return value is, I really do not
+        // care much if it gets a ReadFailure either. However, this should not
+        // prevent the application from continuing to run, so catching the read
+        // failure.
+    }
+}
+
 void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
 {
     std::string msgSensor;
