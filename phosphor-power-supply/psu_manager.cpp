@@ -114,7 +114,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
 {
     int32_t state = 0;
     std::string msgSensor;
-    std::map<std::string, sdbusplus::message::variant<int32_t>> msgData;
+    std::map<std::string, std::variant<int32_t>> msgData;
     msg.read(msgSensor, msgData);
 
     // Check if it was the Present property that changed.

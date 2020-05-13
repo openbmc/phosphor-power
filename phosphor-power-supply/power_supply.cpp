@@ -96,7 +96,7 @@ void PowerSupply::analyze()
 void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
 {
     std::string msgSensor;
-    std::map<std::string, sdbusplus::message::variant<uint32_t, bool>> msgData;
+    std::map<std::string, std::variant<uint32_t, bool>> msgData;
     msg.read(msgSensor, msgData);
 
     // Check if it was the Present property that changed.
