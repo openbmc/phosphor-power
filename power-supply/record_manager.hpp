@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <deque>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
