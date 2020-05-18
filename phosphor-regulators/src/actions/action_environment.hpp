@@ -16,11 +16,13 @@
 #pragma once
 
 #include "id_map.hpp"
+#include "pmbus_utils.hpp"
 
 #include <cstddef> // for size_t
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -67,6 +69,16 @@ class ActionEnvironment
         idMap{idMap},
         deviceID{deviceID}
     {
+    }
+
+    /**
+     * Add the specified SensorReading to the sensorReadings vector.
+     *
+     * @param reading SensorReading
+     */
+    void addSensorReading(const pmbus_utils::SensorReading& reading)
+    {
+        sensorReadings.insert(sensorReadings.end(), reading);
     }
 
     /**
@@ -128,6 +140,18 @@ class ActionEnvironment
     size_t getRuleDepth() const
     {
         return ruleDepth;
+    }
+
+    /**
+     * Returns the sensorReadings.
+     *
+     * This will be called by the SensorMonitoring object.
+     *
+     * @return sensorReadings
+     */
+    const std::vector<pmbus_utils::SensorReading>& getSensorReadings()
+    {
+        return sensorReadings;
     }
 
     /**
@@ -201,6 +225,11 @@ class ActionEnvironment
      * Rule call stack depth.
      */
     size_t ruleDepth{0};
+
+    /**
+     * Sensor readings for a single regulator rail.
+     */
+    std::vector<pmbus_utils::SensorReading> sensorReadings{};
 };
 
 } // namespace phosphor::power::regulators
