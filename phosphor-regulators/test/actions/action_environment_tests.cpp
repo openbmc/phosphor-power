@@ -18,6 +18,7 @@
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "pmbus_utils.hpp"
 #include "rule.hpp"
 
 #include <cstddef> // for size_t
@@ -56,6 +57,28 @@ TEST(ActionEnvironmentTests, Constructor)
     {
         ADD_FAILURE() << "Should not have caught exception.";
     }
+}
+
+TEST(ActionEnvironmentTests, AddSensorReading)
+{
+    IDMap idMap{};
+    ActionEnvironment env{idMap, ""};
+    pmbus_utils::SensorReading reading;
+    reading.type = pmbus_utils::SensorValueType::iout;
+    reading.value = 1;
+    EXPECT_EQ(env.getSensorReadings().size(), 0);
+    env.addSensorReading(reading);
+    EXPECT_EQ(env.getSensorReadings().size(), 1);
+    EXPECT_EQ(env.getSensorReadings()[0].type,
+              pmbus_utils::SensorValueType::iout);
+    EXPECT_EQ(env.getSensorReadings()[0].value, 1);
+    reading.type = pmbus_utils::SensorValueType::vout;
+    reading.value = 2;
+    env.addSensorReading(reading);
+    EXPECT_EQ(env.getSensorReadings().size(), 2);
+    EXPECT_EQ(env.getSensorReadings()[1].type,
+              pmbus_utils::SensorValueType::vout);
+    EXPECT_EQ(env.getSensorReadings()[1].value, 2);
 }
 
 TEST(ActionEnvironmentTests, DecrementRuleDepth)
@@ -179,6 +202,28 @@ TEST(ActionEnvironmentTests, GetRuleDepth)
     EXPECT_EQ(env.getRuleDepth(), 1);
     env.decrementRuleDepth();
     EXPECT_EQ(env.getRuleDepth(), 0);
+}
+
+TEST(ActionEnvironmentTests, GetSensorReadings)
+{
+    IDMap idMap{};
+    ActionEnvironment env{idMap, ""};
+    pmbus_utils::SensorReading reading;
+    reading.type = pmbus_utils::SensorValueType::pout;
+    reading.value = 1.3;
+    EXPECT_EQ(env.getSensorReadings().size(), 0);
+    env.addSensorReading(reading);
+    EXPECT_EQ(env.getSensorReadings().size(), 1);
+    EXPECT_EQ(env.getSensorReadings()[0].type,
+              pmbus_utils::SensorValueType::pout);
+    EXPECT_EQ(env.getSensorReadings()[0].value, 1.3);
+    reading.type = pmbus_utils::SensorValueType::temperature;
+    reading.value = -1;
+    env.addSensorReading(reading);
+    EXPECT_EQ(env.getSensorReadings().size(), 2);
+    EXPECT_EQ(env.getSensorReadings()[1].type,
+              pmbus_utils::SensorValueType::temperature);
+    EXPECT_EQ(env.getSensorReadings()[1].value, -1);
 }
 
 TEST(ActionEnvironmentTests, GetVolts)

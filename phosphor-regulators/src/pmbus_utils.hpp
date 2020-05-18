@@ -142,6 +142,22 @@ enum class VoutDataFormat
 };
 
 /**
+ * This struct represents one sensor reading from a device.
+ */
+struct SensorReading
+{
+    /**
+     * Sensor value type that was read.
+     */
+    SensorValueType type;
+
+    /**
+     * Sensor value that was read.
+     */
+    double value;
+};
+
+/**
  * Parse the one byte value of the VOUT_MODE command.
  *
  * VOUT_MODE contains a 'mode' field that indicates the data format used for
