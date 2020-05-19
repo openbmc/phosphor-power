@@ -136,7 +136,7 @@ where `<config file>` is the name of the config file to validate.
 
 `/usr/share/phosphor-regulators`
 
-The standard version of the config file should be installed in this read-only
+The standard version of the config file is installed in this read-only
 directory as part of the firmware image install.  This is the config file that
 will normally be used.
 
@@ -150,9 +150,10 @@ the BMC.
 
 ### Search Order
 
-The `phosphor-regulators` application will search first in the test directory
-for a config file.  If no config file is found or the file contains errors, the
-application will next search in the standard directory.
+The `phosphor-regulators` application will search the installation directories
+in the following order to find a config file:
+1. test directory
+2. standard directory
 
 
 ## Loading and Reloading
@@ -162,7 +163,11 @@ The config file is loaded when the `phosphor-regulators` application starts.
 To force the application to reload the config file, use the following command
 on the BMC:
 
-``kill -SIGHUP `pidof phosphor-regulators` ``
+``systemctl kill -s HUP phosphor-regulators.service``
+
+To confirm which config file was loaded, use the following command on the BMC:
+
+``journalctl -u phosphor-regulators.service | grep Loading``
 
 
 ## Testing
