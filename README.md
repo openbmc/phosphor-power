@@ -1,14 +1,38 @@
-Code for detecting and analyzing power faults on Witherspoon.
+## Overview
 
-## To Build
+This repository contains applications for configuring and monitoring devices
+that deliver power to the system.
+
+* cold-redundancy: Application that makes power supplies work in Cold
+  Redundancy mode and rotates them at intervals.
+* [phosphor-power-supply](phosphor-power-supply/README.md): Next generation
+  power supply monitoring application.
+* [phosphor-regulators](phosphor-regulators/README.md): JSON-driven application
+  that configures and monitors voltage regulators.
+* power-sequencer: A power sequencer monitoring application.
+* power-supply: Original power supply monitoring application.
+* tools/power-utils: Power supply utilities.
+
+
+## Build
+
+To build all applications in this repository:
 ```
-To build this package, do the following steps:
-
-    1. meson build
-    2. ninja -C build
-
-To clean the repository again run `rm -rf build`.
+  meson build
+  ninja -C build
 ```
+
+To clean the repository and remove all build output:
+```
+  rm -rf build
+```
+
+You can specify [meson options](meson_options.txt) to customize the build
+process.  For example, you can specify:
+* Which applications to build and install.
+* Application-specific configuration data, such as power sequencer type.
+* Whether to build tests.
+
 
 ## Power Supply Monitor and Util JSON config
 
