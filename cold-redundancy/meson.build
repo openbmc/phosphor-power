@@ -9,6 +9,7 @@ cold_redundancy = executable(
         sdbusplus,
         systemd,
         pthread,
+        boost,
     ],
     include_directories: [
         '.',
