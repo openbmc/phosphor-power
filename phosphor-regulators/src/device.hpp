@@ -86,6 +86,14 @@ class Device
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Closes this device.
+     *
+     * Closes any interfaces that are open to this device.  Releases any other
+     * operating system resources associated with this device.
+     */
+    void close();
+
+    /**
      * Configure this device.
      *
      * Applies the configuration changes that are defined for this device, if

@@ -17,7 +17,11 @@
 #include "device.hpp"
 
 #include "chassis.hpp"
+#include "exception_utils.hpp"
+#include "journal.hpp"
 #include "system.hpp"
+
+#include <exception>
 
 namespace phosphor::power::regulators
 {
@@ -31,6 +35,26 @@ void Device::addToIDMap(IDMap& idMap)
     for (std::unique_ptr<Rail>& rail : rails)
     {
         idMap.addRail(*rail);
+    }
+}
+
+void Device::close()
+{
+    try
+    {
+        // Close I2C interface if it is open
+        if (i2cInterface->isOpen())
+        {
+            i2cInterface->close();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Log error messages in journal
+        exception_utils::log(e);
+        journal::logErr("Unable to close device " + id);
+
+        // TODO: Create error log entry
     }
 }
 
