@@ -22,6 +22,7 @@
 #include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mocked_i2c_interface.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
@@ -41,6 +42,7 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::test_utils;
 
 using ::testing::Return;
+using ::testing::Throw;
 
 TEST(DeviceTests, Constructor)
 {
@@ -136,6 +138,69 @@ TEST(DeviceTests, AddToIDMap)
     EXPECT_NO_THROW(idMap.getRail("vdd0"));
     EXPECT_NO_THROW(idMap.getRail("vdd1"));
     EXPECT_THROW(idMap.getRail("vdd2"), std::invalid_argument);
+}
+
+TEST(DeviceTests, Close)
+{
+    // Test where works: I2C interface is not open
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(false));
+        EXPECT_CALL(*i2cInterface, close).Times(0);
+
+        // Create Device
+        Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                      std::move(i2cInterface)};
+
+        // Close Device
+        journal::clear();
+        device.close();
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
+
+    // Test where works: I2C interface is open
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, close).Times(1);
+
+        // Create Device
+        Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                      std::move(i2cInterface)};
+
+        // Close Device
+        journal::clear();
+        device.close();
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
+
+    // Test where fails: closing I2C interface fails
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, close)
+            .Times(1)
+            .WillOnce(Throw(
+                i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
+
+        // Create Device
+        Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
+                      std::move(i2cInterface)};
+
+        // Close Device
+        journal::clear();
+        device.close();
+        std::vector<std::string> expectedErrMessages{
+            "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70",
+            "Unable to close device vdd_reg"};
+        EXPECT_EQ(journal::getErrMessages(), expectedErrMessages);
+    }
 }
 
 TEST(DeviceTests, Configure)
