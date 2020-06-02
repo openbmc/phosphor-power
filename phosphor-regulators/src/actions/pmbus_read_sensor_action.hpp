@@ -78,16 +78,29 @@ class PMBusReadSensorAction : public I2CAction
     /**
      * Executes this action.
      *
-     * TODO: Not implemented yet
+     * Reads one sensor using the I2C interface.
+     *
+     * The sensor value type is specified in the constructor.
+     *
+     * The command is the register to read from the PMBus command code data
+     * member.
+     *
+     * The sensor data format is specified in the constructor. Currently
+     * the linear_11 and linear_16 format are supported.
+     *
+     * An exponent value is required to convert the linear format to decimal
+     * value.  If an exponent value was specified in the constructor, that
+     * value will be used.  Otherwise the exponent value will be obtained from
+     * the VOUT_MODE command.
+     *
+     * The device is obtained from the ActionEnvironment.
+     *
+     * Throws an exception if an error occurs.
      *
      * @param environment Action execution environment.
      * @return true
      */
-    virtual bool execute(ActionEnvironment& /* environment */) override
-    {
-        // TODO: Not implemented yet
-        return true;
-    }
+    virtual bool execute(ActionEnvironment& environment) override;
 
     /**
      * Returns the PMBus command code.
@@ -134,27 +147,23 @@ class PMBusReadSensorAction : public I2CAction
      *
      * @return description of action
      */
-    virtual std::string toString() const override
-    {
-        std::ostringstream ss;
-        ss << "pmbus_read_sensor: { ";
-        ss << "type: " << pmbus_utils::toString(type) << ", " << std::hex
-           << std::uppercase;
-        ss << "command: 0x" << static_cast<uint16_t>(command) << ", "
-           << std::dec << std::nouppercase;
-        ss << "format: " << pmbus_utils::toString(format);
-
-        if (exponent.has_value())
-        {
-            ss << ", exponent: " << static_cast<int16_t>(exponent.value());
-        }
-
-        ss << " }";
-
-        return ss.str();
-    }
+    virtual std::string toString() const override;
 
   private:
+    /**
+     * Gets the exponent value to use to convert the volts value to linear data
+     * format.
+     *
+     * If an exponent value is defined for this action, that value is returned.
+     * Otherwise VOUT_MODE is read from the current device to obtain the
+     * exponent value.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param interface I2C interface to the current device
+     * @return exponent value
+     */
+    int8_t getExponentValue(i2c::I2CInterface& interface);
     /**
      * Sensor value type.
      */
