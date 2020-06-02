@@ -85,6 +85,11 @@ class Chassis
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Close the devices within this chassis, if any.
+     */
+    void closeDevices();
+
+    /**
      * Configure the devices within this chassis, if any.
      *
      * This method should be called during the boot before regulators are
