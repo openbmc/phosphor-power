@@ -31,6 +31,18 @@ void Chassis::addToIDMap(IDMap& idMap)
     }
 }
 
+void Chassis::closeDevices()
+{
+    // Log debug message in journal
+    journal::logDebug("Closing devices in chassis " + std::to_string(number));
+
+    // Close devices
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->close();
+    }
+}
+
 void Chassis::configure(System& system)
 {
     // Log info message in journal; important for verifying success of boot

@@ -21,6 +21,7 @@
 #include "id_map.hpp"
 #include "journal.hpp"
 #include "mock_journal.hpp"
+#include "mocked_i2c_interface.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
@@ -37,6 +38,8 @@
 
 using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::test_utils;
+
+using ::testing::Return;
 
 TEST(ChassisTests, Constructor)
 {
@@ -102,6 +105,71 @@ TEST(ChassisTests, AddToIDMap)
     EXPECT_NO_THROW(idMap.getRail("rail2a"));
     EXPECT_NO_THROW(idMap.getRail("rail2b"));
     EXPECT_THROW(idMap.getRail("rail3"), std::invalid_argument);
+}
+
+TEST(ChassisTests, CloseDevices)
+{
+    // Test where no devices were specified in constructor
+    {
+        // Create Chassis
+        Chassis chassis{2};
+
+        // Call closeDevices()
+        journal::clear();
+        chassis.closeDevices();
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        EXPECT_EQ(journal::getInfoMessages().size(), 0);
+        std::vector<std::string> expectedDebugMessages{
+            "Closing devices in chassis 2"};
+        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+    }
+
+    // Test where devices were specified in constructor
+    {
+        std::vector<std::unique_ptr<Device>> devices{};
+
+        // Create Device vdd0_reg
+        {
+            // Create mock I2CInterface: isOpen() and close() should be called
+            std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+                std::make_unique<i2c::MockedI2CInterface>();
+            EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+            EXPECT_CALL(*i2cInterface, close).Times(1);
+
+            // Create Device
+            std::unique_ptr<Device> device = std::make_unique<Device>(
+                "vdd0_reg", true, "/system/chassis/motherboard/vdd0_reg",
+                std::move(i2cInterface));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Device vdd1_reg
+        {
+            // Create mock I2CInterface: isOpen() and close() should be called
+            std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+                std::make_unique<i2c::MockedI2CInterface>();
+            EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+            EXPECT_CALL(*i2cInterface, close).Times(1);
+
+            // Create Device
+            std::unique_ptr<Device> device = std::make_unique<Device>(
+                "vdd1_reg", true, "/system/chassis/motherboard/vdd1_reg",
+                std::move(i2cInterface));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Chassis
+        Chassis chassis{1, std::move(devices)};
+
+        // Call closeDevices()
+        journal::clear();
+        chassis.closeDevices();
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        EXPECT_EQ(journal::getInfoMessages().size(), 0);
+        std::vector<std::string> expectedDebugMessages{
+            "Closing devices in chassis 1"};
+        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+    }
 }
 
 TEST(ChassisTests, Configure)
