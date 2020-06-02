@@ -58,6 +58,29 @@ TEST(SystemTests, Constructor)
     EXPECT_EQ(system.getRules()[0]->getID(), "set_voltage_rule");
 }
 
+TEST(SystemTests, CloseDevices)
+{
+    // Specify an empty rules vector
+    std::vector<std::unique_ptr<Rule>> rules{};
+
+    // Create Chassis
+    std::vector<std::unique_ptr<Chassis>> chassis{};
+    chassis.emplace_back(std::make_unique<Chassis>(1));
+    chassis.emplace_back(std::make_unique<Chassis>(3));
+
+    // Create System
+    System system{std::move(rules), std::move(chassis)};
+
+    // Call closeDevices()
+    journal::clear();
+    system.closeDevices();
+    EXPECT_EQ(journal::getErrMessages().size(), 0);
+    EXPECT_EQ(journal::getInfoMessages().size(), 0);
+    std::vector<std::string> expectedDebugMessages{
+        "Closing devices in chassis 1", "Closing devices in chassis 3"};
+    EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+}
+
 TEST(SystemTests, Configure)
 {
     // Specify an empty rules vector

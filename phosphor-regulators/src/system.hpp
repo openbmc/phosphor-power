@@ -60,6 +60,11 @@ class System
     }
 
     /**
+     * Close the regulator devices in the system.
+     */
+    void closeDevices();
+
+    /**
      * Configure the regulator devices in the system.
      *
      * This method should be called during the boot before regulators are

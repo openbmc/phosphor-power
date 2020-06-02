@@ -99,22 +99,34 @@ void Manager::configure()
     // fail the call(busctl) to this method
 }
 
-void Manager::monitor(bool /*enable*/)
+void Manager::monitor(bool enable)
 {
-    /* Temporarily comment out until monitoring is supported.
     if (enable)
     {
-        Timer timer(eventLoop, std::bind(&Manager::timerExpired, this));
-        // Set timer as a repeating 1sec timer
-        timer.restart(std::chrono::milliseconds(1000));
-        timers.emplace_back(std::move(timer));
+        /* Temporarily comment out until monitoring is supported.
+            Timer timer(eventLoop, std::bind(&Manager::timerExpired, this));
+            // Set timer as a repeating 1sec timer
+            timer.restart(std::chrono::milliseconds(1000));
+            timers.emplace_back(std::move(timer));
+        */
     }
     else
     {
-        // Delete all timers to disable monitoring
-        timers.clear();
+        /* Temporarily comment out until monitoring is supported.
+            // Delete all timers to disable monitoring
+            timers.clear();
+        */
+
+        // Verify System object exists; this means config file has been loaded
+        if (system)
+        {
+            // Close the regulator devices in the system.  Monitoring is
+            // normally disabled because the system is being powered off.  The
+            // devices should be closed in case hardware is removed or replaced
+            // while the system is at standby.
+            system->closeDevices();
+        }
     }
-    */
 }
 
 void Manager::timerExpired()

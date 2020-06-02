@@ -34,6 +34,15 @@ void System::buildIDMap()
     }
 }
 
+void System::closeDevices()
+{
+    // Close devices in each chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->closeDevices();
+    }
+}
+
 void System::configure()
 {
     // Configure devices in each chassis
