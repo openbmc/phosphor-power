@@ -611,7 +611,7 @@ void PowerSupply::updateInventory()
     using namespace sdbusplus::message;
 
     // Build the object map and send it to the inventory
-    using Properties = std::map<std::string, variant<std::string>>;
+    using Properties = std::map<std::string, std::variant<std::string>>;
     using Interfaces = std::map<std::string, Properties>;
     using Object = std::map<object_path, Interfaces>;
     Properties assetProps;
