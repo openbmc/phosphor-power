@@ -11,8 +11,11 @@ using namespace phosphor::power::psu;
 using namespace phosphor::pmbus;
 
 using ::testing::_;
+using ::testing::Args;
 using ::testing::Assign;
 using ::testing::DoAll;
+using ::testing::ElementsAre;
+using ::testing::NotNull;
 using ::testing::Return;
 using ::testing::StrEq;
 
@@ -146,6 +149,45 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.hasVINUVFault(), false);
 
     // TODO: ReadFailure
+}
+
+TEST_F(PowerSupplyTests, OnOffConfig)
+{
+    auto bus = sdbusplus::bus::new_default();
+    uint8_t data = 0x15;
+
+    try
+    {
+        EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
+            .Times(1)
+            .WillOnce(Return(false));
+        PowerSupply psu{bus, PSUInventoryPath, 4, "0069"};
+        MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+        // If it is not present, I should not be trying to write to it.
+        EXPECT_CALL(mockPMBus, writeBinary(_, _, _)).Times(0);
+        psu.onOffConfig(data);
+    }
+    catch (...)
+    {
+    }
+
+    try
+    {
+        // TODO: presence should matter?
+        EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
+            .Times(1)
+            .WillOnce(Return(true)); // present
+        PowerSupply psu2{bus, PSUInventoryPath, 5, "006a"};
+        MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
+        // TODO: ???should I check the filename?
+        EXPECT_CALL(mockPMBus,
+                    writeBinary(_, ElementsAre(0x15), Type::HwmonDeviceDebug))
+            .Times(1);
+        psu2.onOffConfig(data);
+    }
+    catch (...)
+    {
+    }
 }
 
 TEST_F(PowerSupplyTests, ClearFaults)

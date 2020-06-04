@@ -101,6 +101,24 @@ namespace status_temperature
 constexpr auto OT_FAULT = 0x80;
 } // namespace status_temperature
 
+constexpr auto ON_OFF_CONFIG = "on_off_config";
+
+// From PMBus Specification Part II Revsion 1.2:
+// The ON_OFF_CONFIG command configures the combination of CONTROL pin input
+// and serial bus commands needed to turn the unit on and off. This includes how
+// the unit responds when power is applied.
+// Bits [7:5] - 000 - Reserved
+// Bit 4 - 1 - Unit does not power up until commanded by the CONTROL pin and
+// OPERATION command (as programmed in bits [3:0]).
+// Bit 3 - 0 - Unit ignores the on/off portion of the OPERATION command from
+// serial bus.
+// Bit 2 - 1 - Unit requires the CONTROL pin to be asserted to start the unit.
+// Bit 1 - 0 - Polarity of the CONTROL pin. Active low (Pull pin low to start
+// the unit).
+// Bit 0 - 1 - Turn off the output and stop transferring energy to the output as
+// fast as possible.
+constexpr auto ON_OFF_CONFIG_CONTROL_PIN_ONLY = 0x15;
+
 /**
  * Where the access should be done
  */
@@ -124,6 +142,8 @@ class PMBusBase
     virtual ~PMBusBase() = default;
 
     virtual uint64_t read(const std::string& name, Type type) = 0;
+    virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
+                             Type type) = 0;
 };
 
 /**
@@ -273,6 +293,16 @@ class PMBus : public PMBusBase
      * @param[in] type - Path type
      */
     void write(const std::string& name, int value, Type type);
+
+    /**
+     * Writes binary data to a file in sysfs.
+     *
+     * @param[in] name - path concatenated to basePath to write
+     * @param[in] data - The data to write to the file
+     * @param[in] type - Path type
+     */
+    void writeBinary(const std::string& name, std::vector<uint8_t> data,
+                     Type type) override;
 
     /**
      * Returns the sysfs base path of this device
