@@ -87,6 +87,7 @@ class PSUManager
             powerOn = false;
         }
 
+        onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_DATA);
         clearFaults();
         updateInventory();
     }
@@ -97,6 +98,20 @@ class PSUManager
     int run()
     {
         return timer->get_event().loop();
+    }
+
+    /**
+     * Write PMBus ON_OFF_CONFIG
+     *
+     * This function will be called to cause the PMBus device driver to send the
+     * ON_OFF_CONFIG command. Takes one byte of data.
+     */
+    void onOffConfig(const uint8_t data)
+    {
+        for (auto& psu : psus)
+        {
+            psu->onOffConfig(data);
+        }
     }
 
     /**

@@ -93,6 +93,27 @@ void PowerSupply::analyze()
     }
 }
 
+void PowerSupply::onOffConfig(const uint8_t data)
+{
+    using namespace phosphor::pmbus;
+
+    if (present)
+    {
+        log<level::INFO>("ON_OFF_CONFIG write",
+                         entry("DATA=0x%02X", static_cast<uint8_t>(data)));
+        try
+        {
+            std::vector<uint8_t> configData{data};
+            // pmbusIntf->writeBinary(ON_OFF_CONFIG, configData, Type::Debug)
+            pmbusIntf->writeBinary(ON_OFF_CONFIG, configData,
+                                   Type::HwmonDeviceDebug);
+        }
+        catch (...)
+        {
+        }
+    }
+}
+
 void PowerSupply::clearFaults()
 {
     faultFound = false;
@@ -133,6 +154,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         if (std::get<bool>(valPropMap->second))
         {
             present = true;
+            onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_DATA);
             clearFaults();
         }
         else

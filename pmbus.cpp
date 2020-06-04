@@ -303,6 +303,40 @@ void PMBus::write(const std::string& name, int value, Type type)
     }
 }
 
+void PMBus::writeBinary(const std::string& name, std::vector<uint8_t> data,
+                        Type type)
+{
+    std::ofstream file;
+    fs::path path = getPath(type);
+
+    path /= name;
+
+    file.exceptions(std::ofstream::failbit | std::ofstream::badbit |
+                    std::ofstream::eofbit);
+
+    try
+    {
+        // I need to specify binary mode when I construct the ofstream
+        file.open(path, std::ios::out | std::ios_base::binary);
+        log<level::INFO>("Write data to sysfs file",
+                         entry("FILENAME=%s", path.c_str()));
+        file.write(reinterpret_cast<const char*>(&data[0]), data.size());
+    }
+    catch (const std::exception& e)
+    {
+        auto rc = errno;
+
+        log<level::ERR>("Failed to write binary data to sysfs file",
+                        entry("FILENAME=%s", path.c_str()));
+
+        using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
+
+        elog<WriteFailure>(
+            metadata::CALLOUT_ERRNO(rc),
+            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
+    }
+}
+
 void PMBus::findHwmonDir()
 {
     fs::path path{basePath};
