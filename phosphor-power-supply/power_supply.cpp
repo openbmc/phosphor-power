@@ -93,6 +93,30 @@ void PowerSupply::analyze()
     }
 }
 
+void PowerSupply::onOffConfig(uint8_t data)
+{
+    using namespace phosphor::pmbus;
+
+    if (present)
+    {
+        log<level::INFO>("ON_OFF_CONFIG write", entry("DATA=0x%02X", data));
+        try
+        {
+            std::vector<uint8_t> configData{data};
+            pmbusIntf->writeBinary(ON_OFF_CONFIG, configData,
+                                   Type::HwmonDeviceDebug);
+        }
+        catch (...)
+        {
+            // The underlying code in writeBinary will log a message to the
+            // journal if the write fails. If the ON_OFF_CONFIG is not setup as
+            // desired, later fault detection and analysis code should catch any
+            // of the fall out. We should not need to terminate the application
+            // if this write fails.
+        }
+    }
+}
+
 void PowerSupply::clearFaults()
 {
     faultFound = false;
@@ -133,6 +157,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         if (std::get<bool>(valPropMap->second))
         {
             present = true;
+            onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
             clearFaults();
         }
         else

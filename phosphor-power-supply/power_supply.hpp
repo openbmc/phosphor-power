@@ -65,6 +65,16 @@ class PowerSupply
     void analyze();
 
     /**
+     * Write PMBus ON_OFF_CONFIG
+     *
+     * This function will be called to cause the PMBus device driver to send the
+     * ON_OFF_CONFIG command. Takes one byte of data.
+     *
+     * @param[in] data - The ON_OFF_CONFIG data byte mask.
+     */
+    void onOffConfig(uint8_t data);
+
+    /**
      * Write PMBus CLEAR_FAULTS
      *
      * This function will be called in various situations in order to clear
