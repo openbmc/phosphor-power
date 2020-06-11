@@ -24,6 +24,12 @@
 namespace phosphor::power::regulators
 {
 
+// Forward declarations to avoid circular dependencies
+class Chassis;
+class Device;
+class Rail;
+class System;
+
 /**
  * @class SensorMonitoring
  *
@@ -61,12 +67,13 @@ class SensorMonitoring
 
     /**
      * Executes the actions to read the sensors for a rail.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device that contains the rail
+     * @param rail rail associated with the sensors
      */
-    void execute()
-    {
-        // TODO: Create ActionEnvironment, execute actions, store sensor values
-        // on D-Bus, catch and handle any exceptions
-    }
+    void execute(System& system, Chassis& chassis, Device& device, Rail& rail);
 
     /**
      * Returns the actions that read the sensors for a rail.
