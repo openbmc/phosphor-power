@@ -13,6 +13,7 @@ phosphor_regulators_library_source_files = [
     'id_map.cpp',
     'pmbus_utils.cpp',
     'rail.cpp',
+    'sensor_monitoring.cpp',
     'system.cpp',
 
     'actions/if_action.cpp',
