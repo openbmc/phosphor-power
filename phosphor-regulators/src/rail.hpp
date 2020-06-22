@@ -102,6 +102,21 @@ class Rail
     }
 
     /**
+     * Configure this rail.
+     *
+     * Applies the monitorSensors changes that are defined for this rail, if
+     * any.
+     *
+     * Sensors will be read once per second. The sensor values will be stored
+     * on D-Bus on the BMC, making them available to external interfaces.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device that contains this rail
+     */
+    void monitorSensors(System& system, Chassis& chassis, Device& device);
+
+    /**
      * Returns the sensor monitoring for this rail, if any.
      *
      * @return Pointer to SensorMonitoring object.  Will equal nullptr if no

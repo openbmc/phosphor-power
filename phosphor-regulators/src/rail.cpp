@@ -32,4 +32,13 @@ void Rail::configure(System& system, Chassis& chassis, Device& device)
     }
 }
 
+void Rail::monitorSensors(System& system, Chassis& chassis, Device& device)
+{
+    // If sensorMonitoring changes are defined for this rail, apply them
+    if (sensorMonitoring)
+    {
+        sensorMonitoring->execute(system, chassis, device, *this);
+    }
+}
+
 } // namespace phosphor::power::regulators
