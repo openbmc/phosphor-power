@@ -205,6 +205,97 @@ TEST(RailTests, GetID)
     EXPECT_EQ(rail.getID(), "vio2");
 }
 
+TEST(RailTests, MonitorSensors)
+{
+    // Test where SensorMonitoring was not specified in constructor
+    {
+        // Create Rail
+        std::unique_ptr<Rail> rail = std::make_unique<Rail>("vdd0");
+        Rail* railPtr = rail.get();
+
+        // Create Device that contains Rail
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> deviceConfiguration{};
+        std::vector<std::unique_ptr<Rail>> rails{};
+        rails.emplace_back(std::move(rail));
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true, "/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(deviceConfiguration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call sensorMonitoring().  Should do nothing.
+        journal::clear();
+        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
+        EXPECT_EQ(journal::getDebugMessages().size(), 0);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
+
+    // Test where SensorMonitoring was specified in constructor
+    {
+        // Create SensorMonitoring
+        std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+        EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
+        std::vector<std::unique_ptr<Action>> actions{};
+        actions.emplace_back(std::move(action));
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            std::make_unique<SensorMonitoring>(std::move(actions));
+
+        // Create Rail
+        std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<Rail> rail = std::make_unique<Rail>(
+            "vddr1", std::move(configuration), std::move(sensorMonitoring));
+        Rail* railPtr = rail.get();
+
+        // Create Device that contains Rail
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> deviceConfiguration{};
+        std::vector<std::unique_ptr<Rail>> rails{};
+        rails.emplace_back(std::move(rail));
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true, "/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(deviceConfiguration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call sensorMonitoring().
+        journal::clear();
+        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
+        EXPECT_EQ(journal::getDebugMessages().size(), 0);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
+}
+
 TEST(RailTests, GetSensorMonitoring)
 {
     // Test where SensorMonitoring was not specified in constructor
