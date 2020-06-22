@@ -102,6 +102,20 @@ class Rail
     }
 
     /**
+     * Monitor the sensors for this rail.
+     *
+     * Sensor monitoring is optional.  If sensor monitoring is defined for this
+     * rail, the sensor values are read.
+     *
+     * This method should be called once per second.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     * @param device device that contains this rail
+     */
+    void monitorSensors(System& system, Chassis& chassis, Device& device);
+
+    /**
      * Returns the sensor monitoring for this rail, if any.
      *
      * @return Pointer to SensorMonitoring object.  Will equal nullptr if no
