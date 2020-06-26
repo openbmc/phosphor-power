@@ -1,6 +1,5 @@
 {
     "SystemProperties" : {
-        "pollInterval" : 1000,
         "MinPowerSupplies" : 1,
         "MaxPowerSupplies" : 2
     },
