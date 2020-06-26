@@ -11,7 +11,6 @@
 
 struct sys_properties
 {
-    int pollInterval;
     int minPowerSupplies;
     int maxPowerSupplies;
 };

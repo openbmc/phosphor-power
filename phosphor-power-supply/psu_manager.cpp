@@ -20,7 +20,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     getJSONProperties(configfile, bus, properties, psus);
 
     using namespace sdeventplus;
-    auto interval = std::chrono::milliseconds(properties.pollInterval);
+    auto interval = std::chrono::milliseconds(1000);
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::analyze, this), interval);
 
@@ -60,13 +60,6 @@ void PSUManager::getJSONProperties(
     }
 
     auto sysProps = configFileJSON["SystemProperties"];
-
-    if (!sysProps.contains("pollInterval"))
-    {
-        throw std::runtime_error("Missing required pollInterval property");
-    }
-
-    p.pollInterval = sysProps["pollInterval"];
 
     if (sysProps.contains("MinPowerSupplies"))
     {

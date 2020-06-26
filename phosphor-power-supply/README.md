@@ -6,10 +6,6 @@ Design document: https://github.com/openbmc/docs/blob/master/designs/psu-monitor
 
 The JSON configuration file should contain:
 
-## pollInterval
-Required property that specifies the delay between updating the power supply 
-status, period in milliseconds.
-
 ## MinPowerSupplies
 Optional property, integer, that indicates the minimum number of power supplies
 that should be present.
