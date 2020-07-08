@@ -122,6 +122,18 @@ class Chassis
         return number;
     }
 
+    /**
+     * Monitor the sensors for this chassis.
+     *
+     * Sensor monitoring is optional.  If sensor monitoring is defined for the
+     * rail, the sensor values are read.
+     *
+     * This method should be called once per second.
+     *
+     * @param system system that contains the chassis
+     */
+    void monitorSensors(System& system);
+
   private:
     /**
      * Chassis number within the system.

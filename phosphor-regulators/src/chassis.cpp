@@ -55,4 +55,13 @@ void Chassis::configure(System& system)
     }
 }
 
+void Chassis::monitorSensors(System& system)
+{
+    // If sensor monitoring is defined, read the sensors.
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->monitorSensors(system, *this);
+    }
+}
+
 } // namespace phosphor::power::regulators
