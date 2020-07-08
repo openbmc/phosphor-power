@@ -73,4 +73,14 @@ void Device::configure(System& system, Chassis& chassis)
     }
 }
 
+void Device::monitorSensors(System& system, Chassis& chassis)
+{
+
+    // Monitor sensors in each rail
+    for (std::unique_ptr<Rail>& rail : rails)
+    {
+        rail->monitorSensors(system, chassis, *this);
+    }
+}
+
 } // namespace phosphor::power::regulators
