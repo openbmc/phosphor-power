@@ -184,6 +184,19 @@ class Device
         return isRegulatorDevice;
     }
 
+    /**
+     * Monitor the sensors for this device.
+     *
+     * Sensor monitoring is optional.  If sensor monitoring is defined for the
+     * rail, the sensor values are read.
+     *
+     * This method should be called once per second.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     */
+    void monitorSensors(System& system, Chassis& chassis);
+
   private:
     /**
      * Unique ID of this device.
