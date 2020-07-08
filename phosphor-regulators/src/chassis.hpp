@@ -122,6 +122,16 @@ class Chassis
         return number;
     }
 
+    /**
+     * Monitors the sensors for the voltage rails produced by this chassis, if
+     * any.
+     *
+     * This method should be called once per second.
+     *
+     * @param system system that contains the chassis
+     */
+    void monitorSensors(System& system);
+
   private:
     /**
      * Chassis number within the system.
