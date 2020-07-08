@@ -23,6 +23,7 @@
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "pmbus_read_sensor_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
@@ -41,8 +42,10 @@
 using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::test_utils;
 
+using ::testing::A;
 using ::testing::Return;
 using ::testing::Throw;
+using ::testing::TypedEq;
 
 TEST(DeviceTests, Constructor)
 {
@@ -437,4 +440,102 @@ TEST(DeviceTests, IsRegulator)
     Device device{"vdd_reg", false, "/system/chassis/motherboard/reg2",
                   std::move(createI2CInterface())};
     EXPECT_EQ(device.isRegulator(), false);
+}
+
+TEST(DeviceTests, MonitorSensors)
+{
+    // Test where Rails were not specified in constructor
+    {
+        // Create mock I2CInterface.  A two-byte read should NOT occur.
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint16_t&>())).Times(0);
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true, "/system/chassis/motherboard/reg1",
+            std::move(i2cInterface));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().  Should do nothing.
+        journal::clear();
+        devicePtr->monitorSensors(system, *chassisPtr);
+        EXPECT_EQ(journal::getDebugMessages().size(), 0);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
+
+    // Test where Rails were specified in constructor
+    {
+        std::vector<std::unique_ptr<Rail>> rails{};
+
+        // Create PMBusReadSensorAction
+        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        uint8_t command = 0x8C;
+        pmbus_utils::SensorDataFormat format{
+            pmbus_utils::SensorDataFormat::linear_11};
+        std::optional<int8_t> exponent{};
+        std::unique_ptr<PMBusReadSensorAction> action =
+            std::make_unique<PMBusReadSensorAction>(type, command, format,
+                                                    exponent);
+
+        // Create mock I2CInterface.  A two-byte read should occur.
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x8C), A<uint16_t&>()))
+            .Times(1);
+
+        // Create SensorMonitoring
+        std::vector<std::unique_ptr<Action>> actions{};
+        actions.emplace_back(std::move(action));
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            std::make_unique<SensorMonitoring>(std::move(actions));
+
+        // Create Rail
+        std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<Rail> rail = std::make_unique<Rail>(
+            "vdd0", std::move(configuration), std::move(sensorMonitoring));
+        rails.emplace_back(std::move(rail));
+
+        // Create Device
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true, "/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(deviceConfiguration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().
+        journal::clear();
+        devicePtr->monitorSensors(system, *chassisPtr);
+        EXPECT_EQ(journal::getDebugMessages().size(), 0);
+        EXPECT_EQ(journal::getErrMessages().size(), 0);
+    }
 }

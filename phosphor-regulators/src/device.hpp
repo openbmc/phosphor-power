@@ -184,6 +184,17 @@ class Device
         return isRegulatorDevice;
     }
 
+    /**
+     * Monitors the sensors for the voltage rails produced by this device, if
+     * any.
+     *
+     * This method should be called once per second.
+     *
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     */
+    void monitorSensors(System& system, Chassis& chassis);
+
   private:
     /**
      * Unique ID of this device.
