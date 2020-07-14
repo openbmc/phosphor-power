@@ -105,6 +105,14 @@ class System
         return rules;
     }
 
+    /**
+     * Monitors the sensors for the voltage rails produced by this system, if
+     * any.
+     *
+     * This method should be called once per second.
+     */
+    void monitorSensors();
+
   private:
     /**
      * Builds the IDMap for the system.
