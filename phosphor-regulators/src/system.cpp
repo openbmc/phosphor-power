@@ -52,4 +52,13 @@ void System::configure()
     }
 }
 
+void System::monitorSensors()
+{
+    // Monitor sensors in each chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->monitorSensors(*this);
+    }
+}
+
 } // namespace phosphor::power::regulators
