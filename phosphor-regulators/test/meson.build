@@ -56,6 +56,7 @@ test('phosphor-regulators-tests',
                 dependencies: [
                     gmock,
                     gtest,
+                    sdbusplus
                 ],
                 link_args: dynamic_linker,
                 build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
