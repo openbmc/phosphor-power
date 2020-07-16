@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "services.hpp"
 #include "system.hpp"
 
 #include <interfaces/manager_interface.hpp>
@@ -60,7 +61,7 @@ class Manager : public ManagerObject
      * Constructor
      * Creates a manager over the regulators.
      *
-     * @param bus the dbus bus
+     * @param bus the D-Bus bus
      * @param event the sdevent event
      */
     Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
@@ -154,7 +155,7 @@ class Manager : public ManagerObject
     void loadConfigFile();
 
     /**
-     * The dbus bus
+     * The D-Bus bus
      */
     sdbusplus::bus::bus& bus;
 
@@ -162,6 +163,11 @@ class Manager : public ManagerObject
      * Event to loop on
      */
     sdeventplus::Event eventLoop;
+
+    /**
+     * System services like error logging and the journal.
+     */
+    BMCServices services;
 
     /**
      * List of event timers

@@ -19,7 +19,6 @@
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "exception_utils.hpp"
-#include "journal.hpp"
 #include "rule.hpp"
 #include "utility.hpp"
 
@@ -50,7 +49,7 @@ const fs::path standardConfigFileDir{"/usr/share/phosphor-regulators"};
 const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject{bus, objPath, true}, bus{bus}, eventLoop{event}
+    ManagerObject{bus, objPath, true}, bus{bus}, eventLoop{event}, services{bus}
 {
     /* Temporarily comment out until D-Bus interface is defined and available.
         // Subscribe to interfacesAdded signal for filename property
@@ -89,8 +88,8 @@ void Manager::configure()
     }
     else
     {
-        journal::logErr("Unable to configure regulator devices: Configuration "
-                        "file not loaded");
+        services.getJournal().logError("Unable to configure regulator devices: "
+                                       "Configuration file not loaded");
         // TODO: Log error
     }
 
@@ -233,7 +232,8 @@ void Manager::loadConfigFile()
         fs::path pathName = findConfigFile();
 
         // Log info message in journal; config file path is important
-        journal::logInfo("Loading configuration file " + pathName.string());
+        services.getJournal().logInfo("Loading configuration file " +
+                                      pathName.string());
 
         // Parse the config file
         std::vector<std::unique_ptr<Rule>> rules{};
@@ -247,8 +247,8 @@ void Manager::loadConfigFile()
     catch (const std::exception& e)
     {
         // Log error messages in journal
-        exception_utils::log(e);
-        journal::logErr("Unable to load configuration file");
+        services.getJournal().logError(exception_utils::getMessages(e));
+        services.getJournal().logError("Unable to load configuration file");
 
         // TODO: Create error log entry
     }
