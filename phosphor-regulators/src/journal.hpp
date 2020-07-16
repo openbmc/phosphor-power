@@ -15,7 +15,145 @@
  */
 #pragma once
 
+#include <phosphor-logging/log.hpp>
+
 #include <string>
+#include <vector>
+
+namespace phosphor::power::regulators
+{
+
+/**
+ * @class Journal
+ *
+ * Abstract base class that provides a journal interface.
+ *
+ * The interface is used to write messages/log entries to the system journal.
+ */
+class Journal
+{
+  public:
+    // Specify which compiler-generated methods we want
+    Journal() = default;
+    Journal(const Journal&) = delete;
+    Journal(Journal&&) = delete;
+    Journal& operator=(const Journal&) = delete;
+    Journal& operator=(Journal&&) = delete;
+    virtual ~Journal() = default;
+
+    /**
+     * Logs a debug message in the system journal.
+     *
+     * @param message message to log
+     */
+    virtual void logDebug(const std::string& message) = 0;
+
+    /**
+     * Logs debug messages in the system journal.
+     *
+     * @param messages messages to log
+     */
+    virtual void logDebug(const std::vector<std::string>& messages) = 0;
+
+    /**
+     * Logs an error message in the system journal.
+     *
+     * @param message message to log
+     */
+    virtual void logError(const std::string& message) = 0;
+
+    /**
+     * Logs error messages in the system journal.
+     *
+     * @param messages messages to log
+     */
+    virtual void logError(const std::vector<std::string>& messages) = 0;
+
+    /**
+     * Logs an informational message in the system journal.
+     *
+     * @param message message to log
+     */
+    virtual void logInfo(const std::string& message) = 0;
+
+    /**
+     * Logs informational messages in the system journal.
+     *
+     * @param messages messages to log
+     */
+    virtual void logInfo(const std::vector<std::string>& messages) = 0;
+};
+
+/**
+ * @class SystemdJournal
+ *
+ * Implementation of the Journal interface that writes to the systemd journal.
+ */
+class SystemdJournal : public Journal
+{
+  public:
+    // Specify which compiler-generated methods we want
+    SystemdJournal() = default;
+    SystemdJournal(const SystemdJournal&) = delete;
+    SystemdJournal(SystemdJournal&&) = delete;
+    SystemdJournal& operator=(const SystemdJournal&) = delete;
+    SystemdJournal& operator=(SystemdJournal&&) = delete;
+    virtual ~SystemdJournal() = default;
+
+    /** @copydoc Journal::logDebug(const std::string&) */
+    virtual void logDebug(const std::string& message) override
+    {
+        using namespace phosphor::logging;
+        log<level::DEBUG>(message.c_str());
+    }
+
+    /** @copydoc Journal::logDebug(const std::vector<std::string>&) */
+    virtual void logDebug(const std::vector<std::string>& messages) override
+    {
+        for (const std::string& message : messages)
+        {
+            logDebug(message);
+        }
+    }
+
+    /** @copydoc Journal::logError(const std::string&) */
+    virtual void logError(const std::string& message) override
+    {
+        using namespace phosphor::logging;
+        log<level::ERR>(message.c_str());
+    }
+
+    /** @copydoc Journal::logError(const std::vector<std::string>&) */
+    virtual void logError(const std::vector<std::string>& messages) override
+    {
+        for (const std::string& message : messages)
+        {
+            logError(message);
+        }
+    }
+
+    /** @copydoc Journal::logInfo(const std::string&) */
+    virtual void logInfo(const std::string& message) override
+    {
+        using namespace phosphor::logging;
+        log<level::INFO>(message.c_str());
+    }
+
+    /** @copydoc Journal::logInfo(const std::vector<std::string>&) */
+    virtual void logInfo(const std::vector<std::string>& messages) override
+    {
+        for (const std::string& message : messages)
+        {
+            logInfo(message);
+        }
+    }
+};
+
+} // namespace phosphor::power::regulators
+
+// TODO: Remove the functional interface below once all the code has switched to
+// the new Journal interface.  Also delete journal.cpp and remove references to
+// it in meson files.
 
 /**
  * Systemd journal interface.
