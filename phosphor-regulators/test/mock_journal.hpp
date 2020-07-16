@@ -20,6 +20,44 @@
 #include <string>
 #include <vector>
 
+#include <gmock/gmock.h>
+
+namespace phosphor::power::regulators
+{
+
+/**
+ * @class MockJournal
+ *
+ * Mock implementation of the Journal interface.
+ */
+class MockJournal : public Journal
+{
+  public:
+    // Specify which compiler-generated methods we want
+    MockJournal() = default;
+    MockJournal(const MockJournal&) = delete;
+    MockJournal(MockJournal&&) = delete;
+    MockJournal& operator=(const MockJournal&) = delete;
+    MockJournal& operator=(MockJournal&&) = delete;
+    virtual ~MockJournal() = default;
+
+    MOCK_METHOD(void, logDebug, (const std::string& message), (override));
+    MOCK_METHOD(void, logDebug, (const std::vector<std::string>& messages),
+                (override));
+    MOCK_METHOD(void, logError, (const std::string& message), (override));
+    MOCK_METHOD(void, logError, (const std::vector<std::string>& messages),
+                (override));
+    MOCK_METHOD(void, logInfo, (const std::string& message), (override));
+    MOCK_METHOD(void, logInfo, (const std::vector<std::string>& messages),
+                (override));
+};
+
+} // namespace phosphor::power::regulators
+
+// TODO: Remove the functional interface below once all the code has switched to
+// the new Journal interface.  Also delete mock_journal.cpp and remove
+// references to it in meson files.
+
 /**
  * Extensions to the systemd journal interface.
  *
