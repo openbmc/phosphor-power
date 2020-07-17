@@ -247,6 +247,8 @@ TEST(PMBusReadSensorActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x8B), A<uint16_t&>()))
+            .Times(1);
         EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x20), A<uint8_t&>()))
             .Times(1)
             .WillOnce(SetArgReferee<1>(0b0010'0000));
@@ -302,6 +304,8 @@ TEST(PMBusReadSensorActionTests, Execute)
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0xC6), A<uint16_t&>()))
+            .Times(1);
         EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x20), A<uint8_t&>()))
             .Times(1)
             .WillOnce(Throw(
