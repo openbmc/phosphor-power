@@ -28,6 +28,7 @@ namespace phosphor::power::regulators
 // Forward declarations to avoid circular dependencies
 class Chassis;
 class Device;
+class Services;
 class System;
 
 /**
@@ -74,11 +75,13 @@ class Rail
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services services interface in the system
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains this rail
      */
-    void configure(System& system, Chassis& chassis, Device& device);
+    void configure(Services& services, System& system, Chassis& chassis,
+                   Device& device);
 
     /**
      * Returns the configuration changes to apply to this rail, if any.

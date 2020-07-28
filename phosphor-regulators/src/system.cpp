@@ -16,6 +16,8 @@
 
 #include "system.hpp"
 
+#include "services.hpp"
+
 namespace phosphor::power::regulators
 {
 
@@ -43,12 +45,12 @@ void System::closeDevices()
     }
 }
 
-void System::configure()
+void System::configure(Services& services)
 {
     // Configure devices in each chassis
     for (std::unique_ptr<Chassis>& oneChassis : chassis)
     {
-        oneChassis->configure(*this);
+        oneChassis->configure(services, *this);
     }
 }
 

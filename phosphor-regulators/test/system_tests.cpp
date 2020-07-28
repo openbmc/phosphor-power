@@ -18,6 +18,7 @@
 #include "id_map.hpp"
 #include "journal.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
 #include "system.hpp"
@@ -83,6 +84,9 @@ TEST(SystemTests, CloseDevices)
 
 TEST(SystemTests, Configure)
 {
+    // Create mock services.
+    MockServices services{};
+
     // Specify an empty rules vector
     std::vector<std::unique_ptr<Rule>> rules{};
 
@@ -96,7 +100,7 @@ TEST(SystemTests, Configure)
 
     // Call configure()
     journal::clear();
-    system.configure();
+    system.configure(services);
     EXPECT_EQ(journal::getDebugMessages().size(), 0);
     EXPECT_EQ(journal::getErrMessages().size(), 0);
     std::vector<std::string> expectedInfoMessages{"Configuring chassis 1",

@@ -21,6 +21,7 @@
 #include "id_map.hpp"
 #include "journal.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -176,6 +177,9 @@ TEST(ChassisTests, Configure)
 {
     // Test where no devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create Chassis
         std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(1);
         Chassis* chassisPtr = chassis.get();
@@ -188,7 +192,7 @@ TEST(ChassisTests, Configure)
 
         // Call configure()
         journal::clear();
-        chassisPtr->configure(system);
+        chassisPtr->configure(services, system);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
         std::vector<std::string> expectedInfoMessages{"Configuring chassis 1"};
@@ -197,6 +201,9 @@ TEST(ChassisTests, Configure)
 
     // Test where devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         std::vector<std::unique_ptr<Device>> devices{};
 
         // Create Device vdd0_reg
@@ -248,7 +255,7 @@ TEST(ChassisTests, Configure)
 
         // Call configure()
         journal::clear();
-        chassisPtr->configure(system);
+        chassisPtr->configure(services, system);
         std::vector<std::string> expectedDebugMessages{
             "Configuring vdd0_reg: volts=1.300000",
             "Configuring vdd1_reg: volts=1.200000"};

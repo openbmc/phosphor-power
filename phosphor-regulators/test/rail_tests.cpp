@@ -21,6 +21,7 @@
 #include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "presence_detection.hpp"
@@ -86,6 +87,9 @@ TEST(RailTests, Configure)
 {
     // Test where Configuration was not specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create Rail
         std::unique_ptr<Rail> rail = std::make_unique<Rail>("vdd0");
         Rail* railPtr = rail.get();
@@ -118,13 +122,16 @@ TEST(RailTests, Configure)
 
         // Call configure().  Should do nothing.
         journal::clear();
-        railPtr->configure(system, *chassisPtr, *devicePtr);
+        railPtr->configure(services, system, *chassisPtr, *devicePtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where Configuration was specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create Configuration
         std::optional<double> volts{1.3};
         std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
@@ -168,7 +175,7 @@ TEST(RailTests, Configure)
         // Call configure().  Should execute Configuration and log debug message
         // to journal.
         journal::clear();
-        railPtr->configure(system, *chassisPtr, *devicePtr);
+        railPtr->configure(services, system, *chassisPtr, *devicePtr);
         std::vector<std::string> expectedDebugMessages{
             "Configuring vddr1: volts=1.300000"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);

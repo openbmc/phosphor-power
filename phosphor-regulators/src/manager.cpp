@@ -84,7 +84,7 @@ void Manager::configure()
     if (system)
     {
         // Configure the regulator devices in the system
-        system->configure();
+        system->configure(services);
     }
     else
     {

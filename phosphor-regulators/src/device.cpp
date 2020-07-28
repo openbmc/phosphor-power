@@ -19,6 +19,7 @@
 #include "chassis.hpp"
 #include "exception_utils.hpp"
 #include "journal.hpp"
+#include "services.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -58,18 +59,18 @@ void Device::close()
     }
 }
 
-void Device::configure(System& system, Chassis& chassis)
+void Device::configure(Services& services, System& system, Chassis& chassis)
 {
     // If configuration changes are defined for this device, apply them
     if (configuration)
     {
-        configuration->execute(system, chassis, *this);
+        configuration->execute(services, system, chassis, *this);
     }
 
     // Configure rails
     for (std::unique_ptr<Rail>& rail : rails)
     {
-        rail->configure(system, chassis, *this);
+        rail->configure(services, system, chassis, *this);
     }
 }
 
