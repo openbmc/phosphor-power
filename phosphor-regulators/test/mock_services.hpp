@@ -19,6 +19,7 @@
 #include "journal.hpp"
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
+#include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -67,7 +68,7 @@ class MockServices : public Services
      *
      * @return mock error logging object
      */
-    virtual MockErrorLogging& getMockErrorLogging() override
+    virtual MockErrorLogging& getMockErrorLogging()
     {
         return errorLogging;
     }
@@ -79,7 +80,7 @@ class MockServices : public Services
      *
      * @return mock journal object
      */
-    virtual MockJournal& getMockJournal() override
+    virtual MockJournal& getMockJournal()
     {
         return journal;
     }

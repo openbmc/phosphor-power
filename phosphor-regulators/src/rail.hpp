@@ -17,6 +17,7 @@
 
 #include "configuration.hpp"
 #include "sensor_monitoring.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <string>
@@ -74,11 +75,13 @@ class Rail
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains this rail
      */
-    void configure(System& system, Chassis& chassis, Device& device);
+    void configure(Services& services, System& system, Chassis& chassis,
+                   Device& device);
 
     /**
      * Returns the configuration changes to apply to this rail, if any.

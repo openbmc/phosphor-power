@@ -16,6 +16,7 @@
 #pragma once
 
 #include "action.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <optional>
@@ -82,11 +83,13 @@ class Configuration
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device to configure
      */
-    void execute(System& system, Chassis& chassis, Device& device);
+    void execute(Services& services, System& system, Chassis& chassis,
+                 Device& device);
 
     /**
      * Executes the actions to configure the specified rail.
@@ -94,12 +97,14 @@ class Configuration
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains the rail
      * @param rail rail to configure
      */
-    void execute(System& system, Chassis& chassis, Device& device, Rail& rail);
+    void execute(Services& services, System& system, Chassis& chassis,
+                 Device& device, Rail& rail);
 
     /**
      * Returns the actions that configure the device/rail.
@@ -125,13 +130,14 @@ class Configuration
     /**
      * Executes the actions to configure a device or rail.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device to configure or that contains rail to configure
      * @param deviceOrRailID ID of the device or rail to configure
      */
-    void execute(System& system, Chassis& chassis, Device& device,
-                 const std::string& deviceOrRailID);
+    void execute(Services& services, System& system, Chassis& chassis,
+                 Device& device, const std::string& deviceOrRailID);
 
     /**
      * Optional output voltage value.

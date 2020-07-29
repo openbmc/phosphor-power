@@ -17,6 +17,7 @@
 
 #include "device.hpp"
 #include "id_map.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <stdexcept>
@@ -95,9 +96,10 @@ class Chassis
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains this chassis
      */
-    void configure(System& system);
+    void configure(Services& services, System& system);
 
     /**
      * Returns the devices within this chassis, if any.

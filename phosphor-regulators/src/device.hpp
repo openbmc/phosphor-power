@@ -20,6 +20,7 @@
 #include "id_map.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <string>
@@ -104,10 +105,11 @@ class Device
      * This method should be called during the boot before regulators are
      * enabled.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains this device
      */
-    void configure(System& system, Chassis& chassis);
+    void configure(Services& services, System& system, Chassis& chassis);
 
     /**
      * Returns the configuration changes to apply to this device, if any.

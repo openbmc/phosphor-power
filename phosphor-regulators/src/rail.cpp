@@ -23,12 +23,13 @@
 namespace phosphor::power::regulators
 {
 
-void Rail::configure(System& system, Chassis& chassis, Device& device)
+void Rail::configure(Services& services, System& system, Chassis& chassis,
+                     Device& device)
 {
     // If configuration changes are defined for this rail, apply them
     if (configuration)
     {
-        configuration->execute(system, chassis, device, *this);
+        configuration->execute(services, system, chassis, device, *this);
     }
 }
 
