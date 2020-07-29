@@ -22,6 +22,7 @@
 #include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "presence_detection.hpp"
@@ -210,6 +211,9 @@ TEST(DeviceTests, Configure)
 {
     // Test where Configuration and Rails were not specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create Device
         std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
         std::unique_ptr<Device> device = std::make_unique<Device>(
@@ -232,13 +236,16 @@ TEST(DeviceTests, Configure)
 
         // Call configure().  Should do nothing.
         journal::clear();
-        devicePtr->configure(system, *chassisPtr);
+        devicePtr->configure(services, system, *chassisPtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where Configuration and Rails were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         std::vector<std::unique_ptr<Rail>> rails{};
 
         // Create Rail vdd0
@@ -309,7 +316,7 @@ TEST(DeviceTests, Configure)
         // Call configure().  For the Device and both Rails, should execute the
         // Configuration and log a debug message.
         journal::clear();
-        devicePtr->configure(system, *chassisPtr);
+        devicePtr->configure(services, system, *chassisPtr);
         std::vector<std::string> expectedDebugMessages{
             "Configuring reg1", "Configuring vdd0: volts=1.300000",
             "Configuring vio0: volts=3.200000"};

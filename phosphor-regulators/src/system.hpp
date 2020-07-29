@@ -26,6 +26,8 @@
 namespace phosphor::power::regulators
 {
 
+class Services;
+
 /**
  * @class System
  *
@@ -69,8 +71,10 @@ class System
      *
      * This method should be called during the boot before regulators are
      * enabled.
+     *
+     * @param services services interface in the system
      */
-    void configure();
+    void configure(Services& services);
 
     /**
      * Returns the chassis in the system.
