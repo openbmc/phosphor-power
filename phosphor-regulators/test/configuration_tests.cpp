@@ -22,6 +22,7 @@
 #include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
@@ -80,6 +81,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
 {
     // Test where works: Volts value not specified
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
             std::make_unique<I2CWriteByteAction>(0x7C, 0x0A);
@@ -123,7 +127,7 @@ TEST(ConfigurationTests, ExecuteForDevice)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
         std::vector<std::string> expectedDebugMessages{"Configuring vdd_reg"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
@@ -131,6 +135,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
 
     // Test where works: Volts value specified
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create PMBusWriteVoutCommandAction.  Do not specify a volts value
         // because it will get a value of 1.3V from the
         // ActionEnvironment/Configuration.  Specify a -8 exponent.
@@ -179,7 +186,7 @@ TEST(ConfigurationTests, ExecuteForDevice)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
         std::vector<std::string> expectedDebugMessages{
             "Configuring vdd_reg: volts=1.300000"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
@@ -188,6 +195,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
 
     // Test where fails
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
             std::make_unique<I2CWriteByteAction>(0x7C, 0x0A);
@@ -233,7 +243,7 @@ TEST(ConfigurationTests, ExecuteForDevice)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
         std::vector<std::string> expectedDebugMessages{"Configuring vdd_reg"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
         std::vector<std::string> expectedErrMessages{
@@ -250,6 +260,9 @@ TEST(ConfigurationTests, ExecuteForRail)
 {
     // Test where works: Volts value not specified
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
             std::make_unique<I2CWriteByteAction>(0x7C, 0x0A);
@@ -301,7 +314,8 @@ TEST(ConfigurationTests, ExecuteForRail)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                  *railPtr);
         std::vector<std::string> expectedDebugMessages{"Configuring vio2"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
@@ -309,6 +323,9 @@ TEST(ConfigurationTests, ExecuteForRail)
 
     // Test where works: Volts value specified
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create PMBusWriteVoutCommandAction.  Do not specify a volts value
         // because it will get a value of 1.3V from the
         // ActionEnvironment/Configuration.  Specify a -8 exponent.
@@ -365,7 +382,8 @@ TEST(ConfigurationTests, ExecuteForRail)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                  *railPtr);
         std::vector<std::string> expectedDebugMessages{
             "Configuring vio2: volts=1.300000"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
@@ -374,6 +392,9 @@ TEST(ConfigurationTests, ExecuteForRail)
 
     // Test where fails
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
             std::make_unique<I2CWriteByteAction>(0x7C, 0x0A);
@@ -427,7 +448,8 @@ TEST(ConfigurationTests, ExecuteForRail)
 
         // Execute Configuration
         journal::clear();
-        configurationPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
+        configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                  *railPtr);
         std::vector<std::string> expectedDebugMessages{"Configuring vio2"};
         EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
         std::vector<std::string> expectedErrMessages{

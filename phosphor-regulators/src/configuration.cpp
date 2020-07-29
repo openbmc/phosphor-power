@@ -23,6 +23,7 @@
 #include "exception_utils.hpp"
 #include "journal.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -30,19 +31,21 @@
 namespace phosphor::power::regulators
 {
 
-void Configuration::execute(System& system, Chassis& chassis, Device& device)
+void Configuration::execute(Services& services, System& system,
+                            Chassis& chassis, Device& device)
 {
-    execute(system, chassis, device, device.getID());
+    execute(services, system, chassis, device, device.getID());
 }
 
-void Configuration::execute(System& system, Chassis& chassis, Device& device,
-                            Rail& rail)
+void Configuration::execute(Services& services, System& system,
+                            Chassis& chassis, Device& device, Rail& rail)
 {
-    execute(system, chassis, device, rail.getID());
+    execute(services, system, chassis, device, rail.getID());
 }
 
-void Configuration::execute(System& system, Chassis& /*chassis*/,
-                            Device& device, const std::string& deviceOrRailID)
+void Configuration::execute(Services& /*services*/, System& system,
+                            Chassis& /*chassis*/, Device& device,
+                            const std::string& deviceOrRailID)
 {
     try
     {
