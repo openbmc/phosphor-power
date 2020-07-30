@@ -211,8 +211,11 @@ TEST(DeviceTests, Configure)
 {
     // Test where Configuration and Rails were not specified in constructor
     {
-        // Create mock services.
+        // Create mock services.  logDebug should NOT occur.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Device
         std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
@@ -234,19 +237,26 @@ TEST(DeviceTests, Configure)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call configure().  Should do nothing.
-        journal::clear();
+        // Call configure().
         devicePtr->configure(services, system, *chassisPtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where Configuration and Rails were specified in constructor
     {
-        // Create mock services.
-        MockServices services{};
-
         std::vector<std::unique_ptr<Rail>> rails{};
+
+        // Create mock services.  logDebug with expectedDebugMessages should be
+        // read. For the Device and both Rails, should execute the Configuration
+        // and log a debug message.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedDebugMessages{
+            "Configuring reg1", "Configuring vdd0: volts=1.300000",
+            "Configuring vio0: volts=3.200000"};
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[0])).Times(1);
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[1])).Times(1);
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[2])).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Rail vdd0
         {
@@ -313,15 +323,8 @@ TEST(DeviceTests, Configure)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call configure().  For the Device and both Rails, should execute the
-        // Configuration and log a debug message.
-        journal::clear();
+        // Call configure().
         devicePtr->configure(services, system, *chassisPtr);
-        std::vector<std::string> expectedDebugMessages{
-            "Configuring reg1", "Configuring vdd0: volts=1.300000",
-            "Configuring vio0: volts=3.200000"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 }
 

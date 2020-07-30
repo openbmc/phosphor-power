@@ -46,8 +46,9 @@ void Chassis::closeDevices()
 
 void Chassis::configure(Services& services, System& system)
 {
-    // Log info message in journal; important for verifying success of boot
-    journal::logInfo("Configuring chassis " + std::to_string(number));
+    // Log info message in services; important for verifying success of boot
+    services.getJournal().logInfo("Configuring chassis " +
+                                  std::to_string(number));
 
     // Configure devices
     for (std::unique_ptr<Device>& device : devices)

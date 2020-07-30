@@ -181,8 +181,14 @@ TEST(ChassisTests, Configure)
 {
     // Test where no devices were specified in constructor
     {
-        // Create mock services.
+        // Create mock services.  logInfo with expectedInfoMessages should be
+        // read.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedInfoMessages{"Configuring chassis 1"};
+        EXPECT_CALL(journal, logInfo(expectedInfoMessages[0])).Times(1);
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Chassis
         std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(1);
@@ -195,20 +201,25 @@ TEST(ChassisTests, Configure)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call configure()
-        journal::clear();
         chassisPtr->configure(services, system);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
-        std::vector<std::string> expectedInfoMessages{"Configuring chassis 1"};
-        EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
     }
 
     // Test where devices were specified in constructor
     {
-        // Create mock services.
-        MockServices services{};
-
         std::vector<std::unique_ptr<Device>> devices{};
+
+        // Create mock services.  logInfo with expectedInfoMessages and logDebug
+        // with expectedDebugMessages should be read.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedInfoMessages{"Configuring chassis 2"};
+        EXPECT_CALL(journal, logInfo(expectedInfoMessages[0])).Times(1);
+        std::vector<std::string> expectedDebugMessages{
+            "Configuring vdd0_reg: volts=1.300000",
+            "Configuring vdd1_reg: volts=1.200000"};
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[0])).Times(1);
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[1])).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Device vdd0_reg
         {
@@ -258,15 +269,7 @@ TEST(ChassisTests, Configure)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call configure()
-        journal::clear();
         chassisPtr->configure(services, system);
-        std::vector<std::string> expectedDebugMessages{
-            "Configuring vdd0_reg: volts=1.300000",
-            "Configuring vdd1_reg: volts=1.200000"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
-        std::vector<std::string> expectedInfoMessages{"Configuring chassis 2"};
-        EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
     }
 }
 
