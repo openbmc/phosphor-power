@@ -23,6 +23,7 @@
 #include "pmbus_read_sensor_action.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
+#include "services.hpp"
 #include "system.hpp"
 #include "test_utils.hpp"
 
@@ -91,8 +92,15 @@ TEST(SystemTests, CloseDevices)
 
 TEST(SystemTests, Configure)
 {
-    // Create mock services.
+    // Create mock services.  logInfo with expectedInfoMessages should be read.
     MockServices services{};
+    MockJournal& journal = services.getMockJournal();
+    std::vector<std::string> expectedInfoMessages{"Configuring chassis 1",
+                                                  "Configuring chassis 3"};
+    EXPECT_CALL(journal, logInfo(expectedInfoMessages[0])).Times(1);
+    EXPECT_CALL(journal, logInfo(expectedInfoMessages[1])).Times(1);
+    EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+    EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
     // Specify an empty rules vector
     std::vector<std::unique_ptr<Rule>> rules{};
@@ -106,13 +114,7 @@ TEST(SystemTests, Configure)
     System system{std::move(rules), std::move(chassis)};
 
     // Call configure()
-    journal::clear();
     system.configure(services);
-    EXPECT_EQ(journal::getDebugMessages().size(), 0);
-    EXPECT_EQ(journal::getErrMessages().size(), 0);
-    std::vector<std::string> expectedInfoMessages{"Configuring chassis 1",
-                                                  "Configuring chassis 3"};
-    EXPECT_EQ(journal::getInfoMessages(), expectedInfoMessages);
 }
 
 TEST(SystemTests, GetChassis)
