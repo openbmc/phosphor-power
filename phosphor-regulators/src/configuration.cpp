@@ -21,7 +21,6 @@
 #include "chassis.hpp"
 #include "device.hpp"
 #include "exception_utils.hpp"
-#include "journal.hpp"
 #include "rail.hpp"
 #include "system.hpp"
 
@@ -42,7 +41,7 @@ void Configuration::execute(Services& services, System& system,
     execute(services, system, chassis, device, rail.getID());
 }
 
-void Configuration::execute(Services& /*services*/, System& system,
+void Configuration::execute(Services& services, System& system,
                             Chassis& /*chassis*/, Device& device,
                             const std::string& deviceOrRailID)
 {
@@ -54,7 +53,7 @@ void Configuration::execute(Services& /*services*/, System& system,
         {
             message += ": volts=" + std::to_string(volts.value());
         }
-        journal::logDebug(message);
+        services.getJournal().logDebug(message);
 
         // Create ActionEnvironment
         ActionEnvironment environment{system.getIDMap(), device.getID()};
@@ -69,8 +68,8 @@ void Configuration::execute(Services& /*services*/, System& system,
     catch (const std::exception& e)
     {
         // Log error messages in journal
-        exception_utils::log(e);
-        journal::logErr("Unable to configure " + deviceOrRailID);
+        services.getJournal().logError(exception_utils::getMessages(e));
+        services.getJournal().logError("Unable to configure " + deviceOrRailID);
 
         // TODO: Create error log entry
     }
