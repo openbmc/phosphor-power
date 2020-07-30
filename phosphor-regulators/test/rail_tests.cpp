@@ -87,8 +87,11 @@ TEST(RailTests, Configure)
 {
     // Test where Configuration was not specified in constructor
     {
-        // Create mock services.
+        // Create mock services.  logDebug should NOT occur.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Rail
         std::unique_ptr<Rail> rail = std::make_unique<Rail>("vdd0");
@@ -120,17 +123,20 @@ TEST(RailTests, Configure)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call configure().  Should do nothing.
-        journal::clear();
+        // Call configure().
         railPtr->configure(services, system, *chassisPtr, *devicePtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where Configuration was specified in constructor
     {
-        // Create mock services.
+        // Create mock services.  logDebug with expectedDebugMessages should be
+        // read.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedDebugMessages{
+            "Configuring vddr1: volts=1.300000"};
+        EXPECT_CALL(journal, logDebug(expectedDebugMessages[0])).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Configuration
         std::optional<double> volts{1.3};
@@ -172,14 +178,8 @@ TEST(RailTests, Configure)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call configure().  Should execute Configuration and log debug message
-        // to journal.
-        journal::clear();
+        // Call configure().
         railPtr->configure(services, system, *chassisPtr, *devicePtr);
-        std::vector<std::string> expectedDebugMessages{
-            "Configuring vddr1: volts=1.300000"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 }
 
