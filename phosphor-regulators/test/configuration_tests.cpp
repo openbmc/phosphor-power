@@ -19,7 +19,6 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "i2c_write_byte_action.hpp"
-#include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
@@ -43,6 +42,7 @@
 using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::pmbus_utils;
 
+using ::testing::A;
 using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
@@ -76,13 +76,16 @@ TEST(ConfigurationTests, Constructor)
     }
 }
 
-// Test for execute(System&, Chassis&, Device&)
+// Test for execute(Services&, System&, Chassis&, Device&)
 TEST(ConfigurationTests, ExecuteForDevice)
 {
     // Test where works: Volts value not specified
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug("Configuring vdd_reg")).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
@@ -126,17 +129,17 @@ TEST(ConfigurationTests, ExecuteForDevice)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
-        std::vector<std::string> expectedDebugMessages{"Configuring vdd_reg"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where works: Volts value specified
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug("Configuring vdd_reg: volts=1.300000"))
+            .Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create PMBusWriteVoutCommandAction.  Do not specify a volts value
         // because it will get a value of 1.3V from the
@@ -185,18 +188,21 @@ TEST(ConfigurationTests, ExecuteForDevice)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
-        std::vector<std::string> expectedDebugMessages{
-            "Configuring vdd_reg: volts=1.300000"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where fails
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() and logError() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedErrMessagesException{
+            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
+            "ActionError: i2c_write_byte: { register: 0x7C, value: 0xA, mask: "
+            "0xFF }"};
+        EXPECT_CALL(journal, logDebug("Configuring vdd_reg")).Times(1);
+        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        EXPECT_CALL(journal, logError("Unable to configure vdd_reg")).Times(1);
 
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
@@ -242,26 +248,20 @@ TEST(ConfigurationTests, ExecuteForDevice)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr);
-        std::vector<std::string> expectedDebugMessages{"Configuring vdd_reg"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        std::vector<std::string> expectedErrMessages{
-            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
-            "ActionError: i2c_write_byte: { register: 0x7C, value: 0xA, mask: "
-            "0xFF }",
-            "Unable to configure vdd_reg"};
-        EXPECT_EQ(journal::getErrMessages(), expectedErrMessages);
     }
 }
 
-// Test for execute(System&, Chassis&, Device&, Rail&)
+// Test for execute(Services&, System&, Chassis&, Device&, Rail&)
 TEST(ConfigurationTests, ExecuteForRail)
 {
     // Test where works: Volts value not specified
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug("Configuring vio2")).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
@@ -313,18 +313,18 @@ TEST(ConfigurationTests, ExecuteForRail)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
                                   *railPtr);
-        std::vector<std::string> expectedDebugMessages{"Configuring vio2"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where works: Volts value specified
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug("Configuring vio2: volts=1.300000"))
+            .Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create PMBusWriteVoutCommandAction.  Do not specify a volts value
         // because it will get a value of 1.3V from the
@@ -381,19 +381,22 @@ TEST(ConfigurationTests, ExecuteForRail)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
                                   *railPtr);
-        std::vector<std::string> expectedDebugMessages{
-            "Configuring vio2: volts=1.300000"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where fails
     {
-        // Create mock services.
+        // Create mock services.  Expect logDebug() and logError() to be called.
         MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedErrMessagesException{
+            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
+            "ActionError: i2c_write_byte: { register: 0x7C, value: 0xA, mask: "
+            "0xFF }"};
+        EXPECT_CALL(journal, logDebug("Configuring vio2")).Times(1);
+        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        EXPECT_CALL(journal, logError("Unable to configure vio2")).Times(1);
 
         // Create I2CWriteByteAction with register 0x7C and value 0x0A
         std::unique_ptr<I2CWriteByteAction> action =
@@ -447,17 +450,8 @@ TEST(ConfigurationTests, ExecuteForRail)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute Configuration
-        journal::clear();
         configurationPtr->execute(services, system, *chassisPtr, *devicePtr,
                                   *railPtr);
-        std::vector<std::string> expectedDebugMessages{"Configuring vio2"};
-        EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
-        std::vector<std::string> expectedErrMessages{
-            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
-            "ActionError: i2c_write_byte: { register: 0x7C, value: 0xA, mask: "
-            "0xFF }",
-            "Unable to configure vio2"};
-        EXPECT_EQ(journal::getErrMessages(), expectedErrMessages);
     }
 }
 
