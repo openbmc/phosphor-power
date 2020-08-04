@@ -148,12 +148,26 @@ A new version of the config file can be tested by copying it into this writable
 directory.  This avoids the need to build and install a new firmware image on
 the BMC.
 
+The test directory might not exist on the BMC.  If it is missing, create it
+using the following command:
+
+`mkdir /etc/phosphor-regulators`
+
 ### Search Order
 
 The `phosphor-regulators` application will search the installation directories
 in the following order to find a config file:
 1. test directory
 2. standard directory
+
+### Firmware Updates
+
+When a new firmware image is installed on the BMC, it will update the config
+file in the standard directory.
+
+The test directory will **not** be modified by a firmware update.  If a config
+file exists in the test directory, it will continue to override the config file
+in the standard directory.
 
 
 ## Loading and Reloading
@@ -163,11 +177,11 @@ The config file is loaded when the `phosphor-regulators` application starts.
 To force the application to reload the config file, use the following command
 on the BMC:
 
-``systemctl kill -s HUP phosphor-regulators.service``
+`systemctl kill -s HUP phosphor-regulators.service`
 
 To confirm which config file was loaded, use the following command on the BMC:
 
-``journalctl -u phosphor-regulators.service | grep Loading``
+`journalctl -u phosphor-regulators.service | grep Loading`
 
 
 ## Testing
@@ -184,10 +198,14 @@ Perform the following steps to test the config file:
   the file in the test directory.
 * Boot the system.  Regulator configuration changes (such as voltage settings)
   are only applied during the boot.
+* View output from the `phosphor-regulators` application to make sure no errors
+  occurred.  Use the command `journalctl -u phosphor-regulators.service`.
 
 When finished testing, perform the following steps to revert to the standard
 config file:
-* Remove the config file from the test directory.
+* Remove the config file from the test directory.  If this is not done, the
+  test config file will continue to override the standard config file even
+  after a firmware update.
 * Force the `phosphor-regulators` application to reload its config file,
   causing it to find and load the file in the standard directory.
 * Boot the system, if necessary, to apply the regulator configuration changes
