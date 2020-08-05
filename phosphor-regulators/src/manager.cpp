@@ -123,7 +123,7 @@ void Manager::monitor(bool enable)
             // normally disabled because the system is being powered off.  The
             // devices should be closed in case hardware is removed or replaced
             // while the system is at standby.
-            system->closeDevices();
+            system->closeDevices(services);
         }
     }
 }

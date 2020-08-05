@@ -62,8 +62,10 @@ class System
 
     /**
      * Close the regulator devices in the system.
+     *
+     * @param services system services like error logging and the journal
      */
-    void closeDevices();
+    void closeDevices(Services& services);
 
     /**
      * Configure the regulator devices in the system.
@@ -113,8 +115,10 @@ class System
      * any.
      *
      * This method should be called once per second.
+     *
+     * @param services system services like error logging and the journal
      */
-    void monitorSensors();
+    void monitorSensors(Services& services);
 
   private:
     /**

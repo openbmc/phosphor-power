@@ -91,8 +91,10 @@ class Device
      *
      * Closes any interfaces that are open to this device.  Releases any other
      * operating system resources associated with this device.
+     *
+     * @param services system services like error logging and the journal
      */
-    void close();
+    void close(Services& services);
 
     /**
      * Configure this device.
@@ -192,10 +194,11 @@ class Device
      *
      * This method should be called once per second.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      */
-    void monitorSensors(System& system, Chassis& chassis);
+    void monitorSensors(Services& services, System& system, Chassis& chassis);
 
   private:
     /**
