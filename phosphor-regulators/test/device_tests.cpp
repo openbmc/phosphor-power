@@ -455,6 +455,12 @@ TEST(DeviceTests, MonitorSensors)
 {
     // Test where Rails were not specified in constructor
     {
+        // Create mock services.  No logging should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         // Create mock I2CInterface.  A two-byte read should NOT occur.
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
@@ -479,15 +485,18 @@ TEST(DeviceTests, MonitorSensors)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call monitorSensors().  Should do nothing.
-        journal::clear();
-        devicePtr->monitorSensors(system, *chassisPtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        // Call monitorSensors().
+        devicePtr->monitorSensors(services, system, *chassisPtr);
     }
 
     // Test where Rails were specified in constructor
     {
+        // Create mock services.  No logging should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         std::vector<std::unique_ptr<Rail>> rails{};
 
         // Create PMBusReadSensorAction
@@ -542,9 +551,6 @@ TEST(DeviceTests, MonitorSensors)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call monitorSensors().
-        journal::clear();
-        devicePtr->monitorSensors(system, *chassisPtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        devicePtr->monitorSensors(services, system, *chassisPtr);
     }
 }
