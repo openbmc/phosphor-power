@@ -306,6 +306,9 @@ TEST(ChassisTests, MonitorSensors)
 {
     // Test where no devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create mock I2CInterface.  A two-byte read should NOT occur.
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
@@ -331,13 +334,16 @@ TEST(ChassisTests, MonitorSensors)
 
         // Call monitorSensors()
         journal::clear();
-        chassisPtr->monitorSensors(system);
+        chassisPtr->monitorSensors(services, system);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         std::vector<std::unique_ptr<Device>> devices{};
 
         // Create PMBusReadSensorAction
@@ -392,7 +398,7 @@ TEST(ChassisTests, MonitorSensors)
 
         // Call monitorSensors()
         journal::clear();
-        chassisPtr->monitorSensors(system);
+        chassisPtr->monitorSensors(services, system);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }

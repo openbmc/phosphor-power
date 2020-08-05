@@ -203,6 +203,9 @@ TEST(SystemTests, GetRules)
 
 TEST(SystemTests, MonitorSensors)
 {
+    // Create mock services.
+    MockServices services{};
+
     // Create PMBusReadSensorAction
     pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
     uint8_t command = 0x8C;
@@ -255,7 +258,7 @@ TEST(SystemTests, MonitorSensors)
 
     // Call monitorSensors()
     journal::clear();
-    system.monitorSensors();
+    system.monitorSensors(services);
     EXPECT_EQ(journal::getDebugMessages().size(), 0);
     EXPECT_EQ(journal::getErrMessages().size(), 0);
 }

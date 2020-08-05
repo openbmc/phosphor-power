@@ -57,12 +57,12 @@ void Chassis::configure(Services& services, System& system)
     }
 }
 
-void Chassis::monitorSensors(System& system)
+void Chassis::monitorSensors(Services& services, System& system)
 {
     // Monitor sensors in each device
     for (std::unique_ptr<Device>& device : devices)
     {
-        device->monitorSensors(system, *this);
+        device->monitorSensors(services, system, *this);
     }
 }
 
