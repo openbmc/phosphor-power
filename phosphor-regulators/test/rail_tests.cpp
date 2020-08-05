@@ -18,7 +18,6 @@
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
-#include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
@@ -219,6 +218,12 @@ TEST(RailTests, MonitorSensors)
 {
     // Test where SensorMonitoring was not specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         // Create mock I2CInterface.  A two-byte read should NOT occur.
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
@@ -252,15 +257,18 @@ TEST(RailTests, MonitorSensors)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call monitorSensors().  Should do nothing.
-        journal::clear();
-        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        // Call monitorSensors().
+        railPtr->monitorSensors(services, system, *chassisPtr, *devicePtr);
     }
 
     // Test where SensorMonitoring was specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -315,10 +323,7 @@ TEST(RailTests, MonitorSensors)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call monitorSensors().
-        journal::clear();
-        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        railPtr->monitorSensors(services, system, *chassisPtr, *devicePtr);
     }
 }
 

@@ -112,11 +112,13 @@ class Rail
      *
      * This method should be called once per second.
      *
+     * @param services services interface in the system
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains this rail
      */
-    void monitorSensors(System& system, Chassis& chassis, Device& device);
+    void monitorSensors(Services& services, System& system, Chassis& chassis,
+                        Device& device);
 
     /**
      * Returns the sensor monitoring for this rail, if any.

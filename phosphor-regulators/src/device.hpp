@@ -192,10 +192,11 @@ class Device
      *
      * This method should be called once per second.
      *
+     * @param services services interface in the system
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      */
-    void monitorSensors(System& system, Chassis& chassis);
+    void monitorSensors(Services& services, System& system, Chassis& chassis);
 
   private:
     /**
