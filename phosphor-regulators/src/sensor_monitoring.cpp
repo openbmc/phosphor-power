@@ -21,8 +21,8 @@
 #include "chassis.hpp"
 #include "device.hpp"
 #include "exception_utils.hpp"
-#include "journal.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -30,8 +30,8 @@
 namespace phosphor::power::regulators
 {
 
-void SensorMonitoring::execute(System& system, Chassis& /*chassis*/,
-                               Device& device, Rail& rail)
+void SensorMonitoring::execute(Services& services, System& system,
+                               Chassis& /*chassis*/, Device& device, Rail& rail)
 {
     try
     {
@@ -43,9 +43,10 @@ void SensorMonitoring::execute(System& system, Chassis& /*chassis*/,
     }
     catch (const std::exception& e)
     {
-        // Log error messages in journal
-        exception_utils::log(e);
-        journal::logErr("Unable to monitor sensors for rail " + rail.getID());
+        // Log error messages in services
+        services.getJournal().logError(exception_utils::getMessages(e));
+        services.getJournal().logError("Unable to monitor sensors for rail " +
+                                       rail.getID());
 
         // TODO: Create error log entry
     }

@@ -306,6 +306,12 @@ TEST(ChassisTests, MonitorSensors)
 {
     // Test where no devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         // Create Chassis
         std::vector<std::unique_ptr<Device>> devices{};
         std::unique_ptr<Chassis> chassis =
@@ -319,14 +325,17 @@ TEST(ChassisTests, MonitorSensors)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call monitorSensors().  Should do nothing.
-        journal::clear();
-        chassisPtr->monitorSensors(system);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        chassisPtr->monitorSensors(services, system);
     }
 
     // Test where devices were specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         std::vector<std::unique_ptr<Device>> devices{};
 
         // Create PMBusReadSensorAction
@@ -380,9 +389,6 @@ TEST(ChassisTests, MonitorSensors)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Call monitorSensors()
-        journal::clear();
-        chassisPtr->monitorSensors(system);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        chassisPtr->monitorSensors(services, system);
     }
 }
