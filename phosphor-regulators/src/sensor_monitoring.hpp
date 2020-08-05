@@ -16,6 +16,7 @@
 #pragma once
 
 #include "action.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <utility>
@@ -68,12 +69,14 @@ class SensorMonitoring
     /**
      * Executes the actions to read the sensors for a rail.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains the rail
      * @param rail rail associated with the sensors
      */
-    void execute(System& system, Chassis& chassis, Device& device, Rail& rail);
+    void execute(Services& services, System& system, Chassis& chassis,
+                 Device& device, Rail& rail);
 
     /**
      * Returns the actions that read the sensors for a rail.

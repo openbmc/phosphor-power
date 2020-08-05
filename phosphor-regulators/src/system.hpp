@@ -113,8 +113,10 @@ class System
      * any.
      *
      * This method should be called once per second.
+     *
+     * @param services system services like error logging and the journal
      */
-    void monitorSensors();
+    void monitorSensors(Services& services);
 
   private:
     /**
