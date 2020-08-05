@@ -130,9 +130,10 @@ class Chassis
      *
      * This method should be called once per second.
      *
+     * @param services system services like error logging and the journal
      * @param system system that contains the chassis
      */
-    void monitorSensors(System& system);
+    void monitorSensors(Services& services, System& system);
 
   private:
     /**
