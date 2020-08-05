@@ -34,12 +34,13 @@ void Rail::configure(Services& services, System& system, Chassis& chassis,
     }
 }
 
-void Rail::monitorSensors(System& system, Chassis& chassis, Device& device)
+void Rail::monitorSensors(Services& services, System& system, Chassis& chassis,
+                          Device& device)
 {
     // If sensor monitoring is defined for this rail, read the sensors.
     if (sensorMonitoring)
     {
-        sensorMonitoring->execute(system, chassis, device, *this);
+        sensorMonitoring->execute(services, system, chassis, device, *this);
     }
 }
 

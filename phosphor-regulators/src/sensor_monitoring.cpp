@@ -23,6 +23,7 @@
 #include "exception_utils.hpp"
 #include "journal.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -30,8 +31,8 @@
 namespace phosphor::power::regulators
 {
 
-void SensorMonitoring::execute(System& system, Chassis& /*chassis*/,
-                               Device& device, Rail& rail)
+void SensorMonitoring::execute(Services& /*services*/, System& system,
+                               Chassis& /*chassis*/, Device& device, Rail& rail)
 {
     try
     {

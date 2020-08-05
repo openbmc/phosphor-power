@@ -21,6 +21,7 @@
 #include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
@@ -60,6 +61,9 @@ TEST(SensorMonitoringTests, Execute)
 {
     // Test where works
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -116,13 +120,17 @@ TEST(SensorMonitoringTests, Execute)
 
         // Execute sensorMonitoring
         journal::clear();
-        sensorMonitoringPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
+        sensorMonitoringPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                     *railPtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where fails
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -181,7 +189,8 @@ TEST(SensorMonitoringTests, Execute)
 
         // Execute sensorMonitoring
         journal::clear();
-        sensorMonitoringPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
+        sensorMonitoringPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                     *railPtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         std::vector<std::string> expectedErrMessages{
             "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",

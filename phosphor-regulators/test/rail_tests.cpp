@@ -219,6 +219,9 @@ TEST(RailTests, MonitorSensors)
 {
     // Test where SensorMonitoring was not specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create mock I2CInterface.  A two-byte read should NOT occur.
         std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
             std::make_unique<i2c::MockedI2CInterface>();
@@ -254,13 +257,16 @@ TEST(RailTests, MonitorSensors)
 
         // Call monitorSensors().  Should do nothing.
         journal::clear();
-        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
+        railPtr->monitorSensors(services, system, *chassisPtr, *devicePtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
 
     // Test where SensorMonitoring was specified in constructor
     {
+        // Create mock services.
+        MockServices services{};
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -316,7 +322,7 @@ TEST(RailTests, MonitorSensors)
 
         // Call monitorSensors().
         journal::clear();
-        railPtr->monitorSensors(system, *chassisPtr, *devicePtr);
+        railPtr->monitorSensors(services, system, *chassisPtr, *devicePtr);
         EXPECT_EQ(journal::getDebugMessages().size(), 0);
         EXPECT_EQ(journal::getErrMessages().size(), 0);
     }
