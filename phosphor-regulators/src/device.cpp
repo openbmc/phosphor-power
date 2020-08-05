@@ -74,13 +74,14 @@ void Device::configure(Services& services, System& system, Chassis& chassis)
     }
 }
 
-void Device::monitorSensors(System& system, Chassis& chassis)
+void Device::monitorSensors(Services& services, System& system,
+                            Chassis& chassis)
 {
 
     // Monitor sensors in each rail
     for (std::unique_ptr<Rail>& rail : rails)
     {
-        rail->monitorSensors(system, chassis, *this);
+        rail->monitorSensors(services, system, chassis, *this);
     }
 }
 

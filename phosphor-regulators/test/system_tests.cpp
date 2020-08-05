@@ -203,6 +203,12 @@ TEST(SystemTests, GetRules)
 
 TEST(SystemTests, MonitorSensors)
 {
+    // Create mock services.
+    MockServices services{};
+    MockJournal& journal = services.getMockJournal();
+    EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+    EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
     // Create PMBusReadSensorAction
     pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
     uint8_t command = 0x8C;
@@ -254,8 +260,5 @@ TEST(SystemTests, MonitorSensors)
     System system{std::move(rules), std::move(chassisVec)};
 
     // Call monitorSensors()
-    journal::clear();
-    system.monitorSensors();
-    EXPECT_EQ(journal::getDebugMessages().size(), 0);
-    EXPECT_EQ(journal::getErrMessages().size(), 0);
+    system.monitorSensors(services);
 }

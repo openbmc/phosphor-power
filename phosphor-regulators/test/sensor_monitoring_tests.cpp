@@ -18,9 +18,9 @@
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
-#include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
@@ -60,6 +60,12 @@ TEST(SensorMonitoringTests, Execute)
 {
     // Test where works
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -115,14 +121,26 @@ TEST(SensorMonitoringTests, Execute)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute sensorMonitoring
-        journal::clear();
-        sensorMonitoringPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        sensorMonitoringPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                     *railPtr);
     }
 
     // Test where fails
     {
+        // Create mock services.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        std::vector<std::string> expectedErrMessagesException{
+            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
+            "ActionError: pmbus_read_sensor: { type: iout, command: 0x8C, "
+            "format: linear_11 }"};
+        std::vector<std::string> expectedErrMessages{
+            "Unable to monitor sensors for rail vio2"};
+        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        EXPECT_CALL(journal, logError(expectedErrMessages[0])).Times(1);
+
         // Create PMBusReadSensorAction
         pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
         uint8_t command = 0x8C;
@@ -180,15 +198,8 @@ TEST(SensorMonitoringTests, Execute)
         System system{std::move(rules), std::move(chassisVec)};
 
         // Execute sensorMonitoring
-        journal::clear();
-        sensorMonitoringPtr->execute(system, *chassisPtr, *devicePtr, *railPtr);
-        EXPECT_EQ(journal::getDebugMessages().size(), 0);
-        std::vector<std::string> expectedErrMessages{
-            "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
-            "ActionError: pmbus_read_sensor: { type: iout, command: 0x8C, "
-            "format: linear_11 }",
-            "Unable to monitor sensors for rail vio2"};
-        EXPECT_EQ(journal::getErrMessages(), expectedErrMessages);
+        sensorMonitoringPtr->execute(services, system, *chassisPtr, *devicePtr,
+                                     *railPtr);
     }
 }
 
