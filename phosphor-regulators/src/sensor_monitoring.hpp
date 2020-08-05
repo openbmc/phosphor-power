@@ -28,6 +28,7 @@ namespace phosphor::power::regulators
 class Chassis;
 class Device;
 class Rail;
+class Services;
 class System;
 
 /**
@@ -68,12 +69,14 @@ class SensorMonitoring
     /**
      * Executes the actions to read the sensors for a rail.
      *
+     * @param services services interface in the system
      * @param system system that contains the chassis
      * @param chassis chassis that contains the device
      * @param device device that contains the rail
      * @param rail rail associated with the sensors
      */
-    void execute(System& system, Chassis& chassis, Device& device, Rail& rail);
+    void execute(Services& services, System& system, Chassis& chassis,
+                 Device& device, Rail& rail);
 
     /**
      * Returns the actions that read the sensors for a rail.

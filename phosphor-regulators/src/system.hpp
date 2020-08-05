@@ -115,8 +115,10 @@ class System
      * any.
      *
      * This method should be called once per second.
+     *
+     * @param services services interface in the system
      */
-    void monitorSensors();
+    void monitorSensors(Services& services);
 
   private:
     /**
