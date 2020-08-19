@@ -30,6 +30,8 @@ constexpr auto VERSION_PROP = "Version";
 static constexpr auto FL_KW_SIZE = 20;
 #endif
 
+constexpr auto LOG_LIMIT = 3;
+
 /**
  * @class PowerSupply
  * Represents a PMBus power supply device.
@@ -196,6 +198,14 @@ class PowerSupply
         return inventoryPath;
     }
 
+    /** @brief Returns true if the number of failed reads exceeds limit
+     * TODO: or CML bit on.
+     */
+    bool hasCommFault() const
+    {
+        return readFail >= LOG_LIMIT;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
@@ -217,6 +227,9 @@ class PowerSupply
 
     /** @brief True if bit 3 of STATUS_WORD low byte is on. */
     bool vinUVFault = false;
+
+    /** @brief Count of the number of read failures. */
+    size_t readFail = 0;
 
     /**
      * @brief D-Bus path to use for this power supply's inventory status.

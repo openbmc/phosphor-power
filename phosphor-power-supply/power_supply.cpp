@@ -35,11 +35,13 @@ void PowerSupply::analyze()
 {
     using namespace phosphor::pmbus;
 
-    if (present)
+    if ((present) && (readFail < LOG_LIMIT))
     {
         try
         {
             statusWord = pmbusIntf->read(STATUS_WORD, Type::Debug);
+            // Read worked, reset the fail count.
+            readFail = 0;
 
             if (statusWord)
             {
@@ -94,6 +96,7 @@ void PowerSupply::analyze()
         }
         catch (ReadFailure& e)
         {
+            readFail++;
             phosphor::logging::commit<ReadFailure>();
         }
     }
@@ -129,6 +132,7 @@ void PowerSupply::clearFaults()
     inputFault = false;
     mfrFault = false;
     vinUVFault = false;
+    readFail = 0;
     faultLogged = false;
 
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
