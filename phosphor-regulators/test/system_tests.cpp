@@ -16,7 +16,6 @@
 #include "chassis.hpp"
 #include "device.hpp"
 #include "id_map.hpp"
-#include "journal.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
@@ -72,6 +71,17 @@ TEST(SystemTests, CloseDevices)
     // Specify an empty rules vector
     std::vector<std::unique_ptr<Rule>> rules{};
 
+    // Create mock services.  LogDebug with expectedDebugMessages should be
+    // called.
+    MockServices services{};
+    MockJournal& journal = services.getMockJournal();
+    std::vector<std::string> expectedDebugMessages{
+        "Closing devices in chassis 1", "Closing devices in chassis 3"};
+    EXPECT_CALL(journal, logDebug(expectedDebugMessages[0])).Times(1);
+    EXPECT_CALL(journal, logDebug(expectedDebugMessages[1])).Times(1);
+    EXPECT_CALL(journal, logInfo(A<const std::string&>())).Times(0);
+    EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
     chassis.emplace_back(std::make_unique<Chassis>(1));
@@ -81,13 +91,7 @@ TEST(SystemTests, CloseDevices)
     System system{std::move(rules), std::move(chassis)};
 
     // Call closeDevices()
-    journal::clear();
-    system.closeDevices();
-    EXPECT_EQ(journal::getErrMessages().size(), 0);
-    EXPECT_EQ(journal::getInfoMessages().size(), 0);
-    std::vector<std::string> expectedDebugMessages{
-        "Closing devices in chassis 1", "Closing devices in chassis 3"};
-    EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+    system.closeDevices(services);
 }
 
 TEST(SystemTests, Configure)

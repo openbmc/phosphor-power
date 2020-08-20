@@ -16,7 +16,6 @@
 
 #include "chassis.hpp"
 
-#include "journal.hpp"
 #include "services.hpp"
 #include "system.hpp"
 
@@ -32,15 +31,16 @@ void Chassis::addToIDMap(IDMap& idMap)
     }
 }
 
-void Chassis::closeDevices()
+void Chassis::closeDevices(Services& services)
 {
-    // Log debug message in journal
-    journal::logDebug("Closing devices in chassis " + std::to_string(number));
+    // Log debug message in services
+    services.getJournal().logDebug("Closing devices in chassis " +
+                                   std::to_string(number));
 
     // Close devices
     for (std::unique_ptr<Device>& device : devices)
     {
-        device->close();
+        device->close(services);
     }
 }
 
