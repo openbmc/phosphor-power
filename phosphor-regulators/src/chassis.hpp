@@ -87,8 +87,10 @@ class Chassis
 
     /**
      * Close the devices within this chassis, if any.
+     *
+     * @param services services interface in the system
      */
-    void closeDevices();
+    void closeDevices(Services& services);
 
     /**
      * Configure the devices within this chassis, if any.

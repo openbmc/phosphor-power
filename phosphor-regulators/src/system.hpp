@@ -64,8 +64,10 @@ class System
 
     /**
      * Close the regulator devices in the system.
+     *
+     * @param services services interface in the system
      */
-    void closeDevices();
+    void closeDevices(Services& services);
 
     /**
      * Configure the regulator devices in the system.

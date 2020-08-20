@@ -91,8 +91,10 @@ class Device
      *
      * Closes any interfaces that are open to this device.  Releases any other
      * operating system resources associated with this device.
+     *
+     * @param services services interface in the system
      */
-    void close();
+    void close(Services& services);
 
     /**
      * Configure this device.
