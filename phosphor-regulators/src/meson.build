@@ -43,7 +43,6 @@ phosphor_regulators_library = static_library(
 phosphor_regulators = executable(
     'phosphor-regulators',
     'interfaces/manager_interface.cpp',
-    'journal.cpp',
     'main.cpp',
     'manager.cpp',
     dependencies: [
