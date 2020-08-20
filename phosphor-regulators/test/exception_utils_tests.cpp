@@ -49,31 +49,6 @@ TEST(ExceptionUtilsTests, GetMessages)
     }
 }
 
-TEST(ExceptionUtilsTests, Log)
-{
-    try
-    {
-        try
-        {
-            throw std::invalid_argument{"JSON element is not an array"};
-        }
-        catch (...)
-        {
-            std::throw_with_nested(
-                std::logic_error{"Unable to parse config file"});
-        }
-    }
-    catch (const std::exception& e)
-    {
-        journal::clear();
-        exception_utils::log(e);
-        const std::vector<std::string>& messages = journal::getErrMessages();
-        EXPECT_EQ(messages.size(), 2);
-        EXPECT_EQ(messages[0], "JSON element is not an array");
-        EXPECT_EQ(messages[1], "Unable to parse config file");
-    }
-}
-
 // Test for getMessages() function in the internal namespace
 TEST(ExceptionUtilsTests, GetMessagesInternal)
 {

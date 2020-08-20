@@ -26,15 +26,6 @@ std::vector<std::string> getMessages(const std::exception& e)
     return messages;
 }
 
-void log(const std::exception& e)
-{
-    std::vector<std::string> messages = getMessages(e);
-    for (const std::string& message : messages)
-    {
-        journal::logErr(message);
-    }
-}
-
 namespace internal
 {
 
