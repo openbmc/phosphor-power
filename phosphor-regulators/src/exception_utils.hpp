@@ -42,18 +42,6 @@ namespace phosphor::power::regulators::exception_utils
  */
 std::vector<std::string> getMessages(const std::exception& e);
 
-/**
- * Logs the specified exception to the systemd journal.
- *
- * Gets the error messages from the specified exception and any nested inner
- * exceptions.
- *
- * Logs each error message to the journal with a priority value of 'ERR'.
- *
- * @param e exception
- */
-void log(const std::exception& e);
-
 /*
  * Internal implementation details
  */
