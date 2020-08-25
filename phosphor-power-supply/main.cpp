@@ -53,8 +53,10 @@ int main(int argc, char* argv[])
 
         if (!std::filesystem::exists(configfile))
         {
-            log<level::ERR>("Configuration file does not exist",
-                            entry("FILENAME=%s", configfile.c_str()));
+            log<level::ERR>((std::string("Configuration file does not exist: "
+                                         "FILENAME=") +
+                             configfile)
+                                .c_str());
             return -1;
         }
 
