@@ -321,7 +321,9 @@ void PowerSupply::updateInventory()
         }
         catch (std::exception& e)
         {
-            log<level::ERR>(e.what(), entry("PATH=%s", inventoryPath.c_str()));
+            log<level::ERR>(
+                std::string(e.what() + std::string(" PATH=") + inventoryPath)
+                    .c_str());
         }
 #endif
     }
