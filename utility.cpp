@@ -51,9 +51,11 @@ std::string getService(const std::string& path, const std::string& interface,
     {
         if (logError)
         {
-            log<level::ERR>("Error in mapper response for getting service name",
-                            entry("PATH=%s", path.c_str()),
-                            entry("INTERFACE=%s", interface.c_str()));
+            log<level::ERR>(
+                std::string("Error in mapper response for getting service name "
+                            "PATH=" +
+                            path + " INTERFACE=" + interface)
+                    .c_str());
         }
         return std::string{};
     }
@@ -66,13 +68,19 @@ json loadJSONFromFile(const char* path)
     std::ifstream ifs(path);
     if (!ifs.good())
     {
-        log<level::ERR>("Unable to open file", entry("PATH=%s", path));
+        log<level::ERR>(std::string("Unable to open file "
+                                    "PATH=" +
+                                    std::string(path))
+                            .c_str());
         return nullptr;
     }
     auto data = json::parse(ifs, nullptr, false);
     if (data.is_discarded())
     {
-        log<level::ERR>("Failed to parse json", entry("PATH=%s", path));
+        log<level::ERR>(std::string("Failed to parse json "
+                                    "PATH=" +
+                                    std::string(path))
+                            .c_str());
         return nullptr;
     }
     return data;
