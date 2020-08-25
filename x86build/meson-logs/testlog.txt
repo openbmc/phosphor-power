@@ -1,0 +1,705 @@
+Log of Meson test suite run on 2020-08-25T20:50:43.019460
+
+Inherited environment: AS='x86_64-openbmc-linux-as  ' LDFLAGS='-Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed' AR='x86_64-openbmc-linux-ar' OECORE_TARGET_SYSROOT='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' VNCDESKTOP='gfwr610.rchland.ibm.com:3 (jaymeyer)' TARGET_PREFIX='x86_64-openbmc-linux-' XDG_SESSION_ID='c222' M4='m4' HOSTNAME='gfwr610.rchland.ibm.com' OE_CMAKE_FIND_LIBRARY_CUSTOM_LIB_SUFFIX='' OE_CMAKE_TOOLCHAIN_FILE='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/share/cmake/OEToolchainConfig.cmake' TERM='xterm-256color' SHELL='/bin/bash' VTE_VERSION='5202' PYTHONNOUSERSITE='1' NM='x86_64-openbmc-linux-nm' HISTSIZE='1000' OECORE_DISTRO_VERSION='0.1.0' CPPFLAGS='' IBM_JVM_SR_SIGNUM='62' SSH_CLIENT='9.80.225.251 50377 22' GNOME_TERMINAL_SCREEN='/org/gnome/Terminal/screen/bd050d67_9fbe_4bd6_ab8c_ae9b71685a42' QTDIR='/usr/lib64/qt-3.3' QTINC='/usr/lib64/qt-3.3/include' SSH_TTY='/dev/pts/7' LC_ALL='en_US.UTF-8' OEPYTHON3HOME='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/../../usr' QT_GRAPHICSSYSTEM_CHECKED='1' OECORE_SDK_VERSION='nodistro.0' GDB='x86_64-openbmc-linux-gdb' USER='jaymeyer' LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:' GNOME_TERMINAL_SERVICE=':1.4' PKG_CONFIG_SYSROOT_DIR='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' CXXFLAGS=' -O2 -pipe -g -feliminate-unused-debug-types ' CONFIG_SITE='/esw/san2/openbmc/sdk/x86_64/2020-04-15/site-config-core2-64-openbmc-linux' LC_TYPE='en_US.UTF-8' CPP='x86_64-openbmc-linux-gcc -E  -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' TERMINFO_DIRS='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/../../etc/terminfo:/etc/terminfo:/usr/share/terminfo:/usr/share/misc/terminfo:/lib/terminfo' PATH='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/sbin:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/bin:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/sbin:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/../x86_64-oesdk-linux/bin:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/x86_64-openbmc-linux:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/x86_64-openbmc-linux-musl:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ibm/cmvc/bin:/afs/austin.ibm.com/projects/esw/bin:/usr/ode/bin:/usr/lpp/cmvc/bin' MAIL='/var/spool/mail/jaymeyer' LD='x86_64-openbmc-linux-ld   --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' PWD='/esw/san2/jaymeyer/openbmc/phosphor-power/x86build' STRIP='x86_64-openbmc-linux-strip' JAVA_HOME='/etc/alternatives/java_sdk' LANG='en_US.UTF-8' MODULEPATH='/usr/share/Modules/modulefiles:/etc/modulefiles' OECORE_TARGET_ARCH='x86_64' LOADEDMODULES='' KDEDIRS='/usr' OECORE_NATIVE_SYSROOT='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux' CONFIGURE_FLAGS='--target=x86_64-openbmc-linux --host=x86_64-openbmc-linux --build=x86_64-linux --with-libtool-sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' KCFLAGS='--sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' CXX='x86_64-openbmc-linux-g++  -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' HISTCONTROL='ignoredups' OBJCOPY='x86_64-openbmc-linux-objcopy' OECORE_TARGET_OS='linux' OECORE_BASELIB='lib' HOME='/gsa/rchgsa/home/j/a/jaymeyer' SHLVL='5' OPENSSL_CONF='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/ssl-1.1/openssl.cnf' CFLAGS=' -O2 -pipe -g -feliminate-unused-debug-types ' LOGNAME='jaymeyer' QTLIB='/usr/lib64/qt-3.3/lib' CVS_RSH='ssh' XDG_DATA_DIRS='/gsa/rchgsa/home/j/a/jaymeyer/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share' SSH_CONNECTION='9.80.225.251 50377 9.10.239.57 22' OECORE_ACLOCAL_OPTS='-I /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/share/aclocal' MODULESHOME='/usr/share/Modules' PKG_CONFIG_PATH='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig' LESSOPEN='||/usr/bin/lesspipe.sh %s' ARCH='x86' RANLIB='x86_64-openbmc-linux-ranlib' CROSS_COMPILE='x86_64-openbmc-linux-' CC='x86_64-openbmc-linux-gcc  -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' XDG_RUNTIME_DIR='/run/user/600120' DISPLAY=':3' READELF='x86_64-openbmc-linux-readelf' QT_PLUGIN_PATH='/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins' OBJDUMP='x86_64-openbmc-linux-objdump' SDKTARGETSYSROOT='/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux' COLORTERM='truecolor' BASH_FUNC_module()='() {  eval `/usr/bin/modulecmd bash $*`
+}' 
+
+1/6 phosphor-regulators-tests               OK       1.14 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/phosphor-regulators/test/phosphor-regulators-tests
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 225 tests from 36 test suites.
+[----------] Global test environment set-up.
+[----------] 7 tests from ChassisTests
+[ RUN      ] ChassisTests.Constructor
+[       OK ] ChassisTests.Constructor (0 ms)
+[ RUN      ] ChassisTests.AddToIDMap
+[       OK ] ChassisTests.AddToIDMap (1 ms)
+[ RUN      ] ChassisTests.CloseDevices
+[       OK ] ChassisTests.CloseDevices (0 ms)
+[ RUN      ] ChassisTests.Configure
+[       OK ] ChassisTests.Configure (0 ms)
+[ RUN      ] ChassisTests.GetDevices
+[       OK ] ChassisTests.GetDevices (0 ms)
+[ RUN      ] ChassisTests.GetNumber
+[       OK ] ChassisTests.GetNumber (0 ms)
+[ RUN      ] ChassisTests.MonitorSensors
+[       OK ] ChassisTests.MonitorSensors (0 ms)
+[----------] 7 tests from ChassisTests (1 ms total)
+
+[----------] 3 tests from ConfigFileParserErrorTests
+[ RUN      ] ConfigFileParserErrorTests.Constructor
+[       OK ] ConfigFileParserErrorTests.Constructor (0 ms)
+[ RUN      ] ConfigFileParserErrorTests.GetPathName
+[       OK ] ConfigFileParserErrorTests.GetPathName (0 ms)
+[ RUN      ] ConfigFileParserErrorTests.What
+[       OK ] ConfigFileParserErrorTests.What (0 ms)
+[----------] 3 tests from ConfigFileParserErrorTests (0 ms total)
+
+[----------] 49 tests from ConfigFileParserTests
+[ RUN      ] ConfigFileParserTests.Parse
+[       OK ] ConfigFileParserTests.Parse (17 ms)
+[ RUN      ] ConfigFileParserTests.GetRequiredProperty
+[       OK ] ConfigFileParserTests.GetRequiredProperty (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseAction
+[       OK ] ConfigFileParserTests.ParseAction (2 ms)
+[ RUN      ] ConfigFileParserTests.ParseActionArray
+[       OK ] ConfigFileParserTests.ParseActionArray (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseAnd
+[       OK ] ConfigFileParserTests.ParseAnd (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseBitPosition
+[       OK ] ConfigFileParserTests.ParseBitPosition (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseBitValue
+[       OK ] ConfigFileParserTests.ParseBitValue (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseBoolean
+[       OK ] ConfigFileParserTests.ParseBoolean (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseChassis
+[       OK ] ConfigFileParserTests.ParseChassis (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseChassisArray
+[       OK ] ConfigFileParserTests.ParseChassisArray (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseComparePresence
+[       OK ] ConfigFileParserTests.ParseComparePresence (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseCompareVPD
+[       OK ] ConfigFileParserTests.ParseCompareVPD (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseConfiguration
+[       OK ] ConfigFileParserTests.ParseConfiguration (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseDevice
+[       OK ] ConfigFileParserTests.ParseDevice (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseDeviceArray
+[       OK ] ConfigFileParserTests.ParseDeviceArray (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseDouble
+[       OK ] ConfigFileParserTests.ParseDouble (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseHexByte
+[       OK ] ConfigFileParserTests.ParseHexByte (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseHexByteArray
+[       OK ] ConfigFileParserTests.ParseHexByteArray (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CCompareBit
+[       OK ] ConfigFileParserTests.ParseI2CCompareBit (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CCompareByte
+[       OK ] ConfigFileParserTests.ParseI2CCompareByte (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CCompareBytes
+[       OK ] ConfigFileParserTests.ParseI2CCompareBytes (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CWriteBit
+[       OK ] ConfigFileParserTests.ParseI2CWriteBit (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CWriteByte
+[       OK ] ConfigFileParserTests.ParseI2CWriteByte (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseI2CWriteBytes
+[       OK ] ConfigFileParserTests.ParseI2CWriteBytes (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseIf
+[       OK ] ConfigFileParserTests.ParseIf (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseInt8
+[       OK ] ConfigFileParserTests.ParseInt8 (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseNot
+[       OK ] ConfigFileParserTests.ParseNot (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseOr
+[       OK ] ConfigFileParserTests.ParseOr (0 ms)
+[ RUN      ] ConfigFileParserTests.ParsePMBusReadSensor
+[       OK ] ConfigFileParserTests.ParsePMBusReadSensor (1 ms)
+[ RUN      ] ConfigFileParserTests.ParsePMBusWriteVoutCommand
+[       OK ] ConfigFileParserTests.ParsePMBusWriteVoutCommand (0 ms)
+[ RUN      ] ConfigFileParserTests.ParsePresenceDetection
+[       OK ] ConfigFileParserTests.ParsePresenceDetection (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseRail
+[       OK ] ConfigFileParserTests.ParseRail (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseRailArray
+[       OK ] ConfigFileParserTests.ParseRailArray (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseRoot
+[       OK ] ConfigFileParserTests.ParseRoot (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseRule
+[       OK ] ConfigFileParserTests.ParseRule (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseRuleArray
+[       OK ] ConfigFileParserTests.ParseRuleArray (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseRuleIDOrActionsProperty
+[       OK ] ConfigFileParserTests.ParseRuleIDOrActionsProperty (1 ms)
+[ RUN      ] ConfigFileParserTests.ParseRunRule
+[       OK ] ConfigFileParserTests.ParseRunRule (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseSensorDataFormat
+[       OK ] ConfigFileParserTests.ParseSensorDataFormat (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseSensorMonitoring
+[       OK ] ConfigFileParserTests.ParseSensorMonitoring (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseSensorValueType
+[       OK ] ConfigFileParserTests.ParseSensorValueType (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseSetDevice
+[       OK ] ConfigFileParserTests.ParseSetDevice (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseString
+[       OK ] ConfigFileParserTests.ParseString (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseUint8
+[       OK ] ConfigFileParserTests.ParseUint8 (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseUnsignedInteger
+[       OK ] ConfigFileParserTests.ParseUnsignedInteger (0 ms)
+[ RUN      ] ConfigFileParserTests.ParseVoutDataFormat
+[       OK ] ConfigFileParserTests.ParseVoutDataFormat (0 ms)
+[ RUN      ] ConfigFileParserTests.VerifyIsArray
+[       OK ] ConfigFileParserTests.VerifyIsArray (0 ms)
+[ RUN      ] ConfigFileParserTests.VerifyIsObject
+[       OK ] ConfigFileParserTests.VerifyIsObject (0 ms)
+[ RUN      ] ConfigFileParserTests.VerifyPropertyCount
+[       OK ] ConfigFileParserTests.VerifyPropertyCount (0 ms)
+[----------] 49 tests from ConfigFileParserTests (36 ms total)
+
+[----------] 5 tests from ConfigurationTests
+[ RUN      ] ConfigurationTests.Constructor
+[       OK ] ConfigurationTests.Constructor (0 ms)
+[ RUN      ] ConfigurationTests.ExecuteForDevice
+[       OK ] ConfigurationTests.ExecuteForDevice (1 ms)
+[ RUN      ] ConfigurationTests.ExecuteForRail
+[       OK ] ConfigurationTests.ExecuteForRail (0 ms)
+[ RUN      ] ConfigurationTests.GetActions
+[       OK ] ConfigurationTests.GetActions (0 ms)
+[ RUN      ] ConfigurationTests.GetVolts
+[       OK ] ConfigurationTests.GetVolts (0 ms)
+[----------] 5 tests from ConfigurationTests (1 ms total)
+
+[----------] 12 tests from DeviceTests
+[ RUN      ] DeviceTests.Constructor
+[       OK ] DeviceTests.Constructor (0 ms)
+[ RUN      ] DeviceTests.AddToIDMap
+[       OK ] DeviceTests.AddToIDMap (0 ms)
+[ RUN      ] DeviceTests.Close
+[       OK ] DeviceTests.Close (0 ms)
+[ RUN      ] DeviceTests.Configure
+[       OK ] DeviceTests.Configure (1 ms)
+[ RUN      ] DeviceTests.GetConfiguration
+[       OK ] DeviceTests.GetConfiguration (0 ms)
+[ RUN      ] DeviceTests.GetFRU
+[       OK ] DeviceTests.GetFRU (0 ms)
+[ RUN      ] DeviceTests.GetI2CInterface
+[       OK ] DeviceTests.GetI2CInterface (0 ms)
+[ RUN      ] DeviceTests.GetID
+[       OK ] DeviceTests.GetID (0 ms)
+[ RUN      ] DeviceTests.GetPresenceDetection
+[       OK ] DeviceTests.GetPresenceDetection (0 ms)
+[ RUN      ] DeviceTests.GetRails
+[       OK ] DeviceTests.GetRails (0 ms)
+[ RUN      ] DeviceTests.IsRegulator
+[       OK ] DeviceTests.IsRegulator (0 ms)
+[ RUN      ] DeviceTests.MonitorSensors
+[       OK ] DeviceTests.MonitorSensors (0 ms)
+[----------] 12 tests from DeviceTests (1 ms total)
+
+[----------] 3 tests from ErrorHistoryTests
+[ RUN      ] ErrorHistoryTests.Constructor
+[       OK ] ErrorHistoryTests.Constructor (0 ms)
+[ RUN      ] ErrorHistoryTests.Clear
+[       OK ] ErrorHistoryTests.Clear (0 ms)
+[ RUN      ] ErrorHistoryTests.IncrementCount
+[       OK ] ErrorHistoryTests.IncrementCount (0 ms)
+[----------] 3 tests from ErrorHistoryTests (0 ms total)
+
+[----------] 3 tests from ExceptionUtilsTests
+[ RUN      ] ExceptionUtilsTests.GetMessages
+[       OK ] ExceptionUtilsTests.GetMessages (0 ms)
+[ RUN      ] ExceptionUtilsTests.Log
+[       OK ] ExceptionUtilsTests.Log (0 ms)
+[ RUN      ] ExceptionUtilsTests.GetMessagesInternal
+[       OK ] ExceptionUtilsTests.GetMessagesInternal (0 ms)
+[----------] 3 tests from ExceptionUtilsTests (0 ms total)
+
+[----------] 6 tests from IDMapTests
+[ RUN      ] IDMapTests.AddDevice
+[       OK ] IDMapTests.AddDevice (0 ms)
+[ RUN      ] IDMapTests.AddRail
+[       OK ] IDMapTests.AddRail (0 ms)
+[ RUN      ] IDMapTests.AddRule
+[       OK ] IDMapTests.AddRule (0 ms)
+[ RUN      ] IDMapTests.GetDevice
+[       OK ] IDMapTests.GetDevice (0 ms)
+[ RUN      ] IDMapTests.GetRail
+[       OK ] IDMapTests.GetRail (1 ms)
+[ RUN      ] IDMapTests.GetRule
+[       OK ] IDMapTests.GetRule (0 ms)
+[----------] 6 tests from IDMapTests (1 ms total)
+
+[----------] 2 tests from PMBusErrorTests
+[ RUN      ] PMBusErrorTests.Constructor
+[       OK ] PMBusErrorTests.Constructor (0 ms)
+[ RUN      ] PMBusErrorTests.What
+[       OK ] PMBusErrorTests.What (0 ms)
+[----------] 2 tests from PMBusErrorTests (0 ms total)
+
+[----------] 5 tests from PMBusUtilsTests
+[ RUN      ] PMBusUtilsTests.ParseVoutMode
+[       OK ] PMBusUtilsTests.ParseVoutMode (0 ms)
+[ RUN      ] PMBusUtilsTests.ToString
+[       OK ] PMBusUtilsTests.ToString (0 ms)
+[ RUN      ] PMBusUtilsTests.ConvertFromLinear
+[       OK ] PMBusUtilsTests.ConvertFromLinear (0 ms)
+[ RUN      ] PMBusUtilsTests.ConvertFromVoutLinear
+[       OK ] PMBusUtilsTests.ConvertFromVoutLinear (0 ms)
+[ RUN      ] PMBusUtilsTests.ConvertToVoutLinear
+[       OK ] PMBusUtilsTests.ConvertToVoutLinear (0 ms)
+[----------] 5 tests from PMBusUtilsTests (0 ms total)
+
+[----------] 3 tests from PresenceDetectionTests
+[ RUN      ] PresenceDetectionTests.Constructor
+[       OK ] PresenceDetectionTests.Constructor (0 ms)
+[ RUN      ] PresenceDetectionTests.Execute
+[       OK ] PresenceDetectionTests.Execute (0 ms)
+[ RUN      ] PresenceDetectionTests.GetActions
+[       OK ] PresenceDetectionTests.GetActions (0 ms)
+[----------] 3 tests from PresenceDetectionTests (0 ms total)
+
+[----------] 6 tests from RailTests
+[ RUN      ] RailTests.Constructor
+[       OK ] RailTests.Constructor (0 ms)
+[ RUN      ] RailTests.Configure
+[       OK ] RailTests.Configure (0 ms)
+[ RUN      ] RailTests.GetConfiguration
+[       OK ] RailTests.GetConfiguration (0 ms)
+[ RUN      ] RailTests.GetID
+[       OK ] RailTests.GetID (0 ms)
+[ RUN      ] RailTests.MonitorSensors
+[       OK ] RailTests.MonitorSensors (0 ms)
+[ RUN      ] RailTests.GetSensorMonitoring
+[       OK ] RailTests.GetSensorMonitoring (0 ms)
+[----------] 6 tests from RailTests (0 ms total)
+
+[----------] 4 tests from RuleTests
+[ RUN      ] RuleTests.Constructor
+[       OK ] RuleTests.Constructor (0 ms)
+[ RUN      ] RuleTests.Execute
+[       OK ] RuleTests.Execute (0 ms)
+[ RUN      ] RuleTests.GetActions
+[       OK ] RuleTests.GetActions (0 ms)
+[ RUN      ] RuleTests.GetID
+[       OK ] RuleTests.GetID (0 ms)
+[----------] 4 tests from RuleTests (0 ms total)
+
+[----------] 3 tests from SensorMonitoringTests
+[ RUN      ] SensorMonitoringTests.Constructor
+[       OK ] SensorMonitoringTests.Constructor (0 ms)
+[ RUN      ] SensorMonitoringTests.Execute
+[       OK ] SensorMonitoringTests.Execute (1 ms)
+[ RUN      ] SensorMonitoringTests.GetActions
+[       OK ] SensorMonitoringTests.GetActions (0 ms)
+[----------] 3 tests from SensorMonitoringTests (1 ms total)
+
+[----------] 7 tests from SystemTests
+[ RUN      ] SystemTests.Constructor
+[       OK ] SystemTests.Constructor (0 ms)
+[ RUN      ] SystemTests.CloseDevices
+[       OK ] SystemTests.CloseDevices (0 ms)
+[ RUN      ] SystemTests.Configure
+[       OK ] SystemTests.Configure (0 ms)
+[ RUN      ] SystemTests.GetChassis
+[       OK ] SystemTests.GetChassis (0 ms)
+[ RUN      ] SystemTests.GetIDMap
+[       OK ] SystemTests.GetIDMap (0 ms)
+[ RUN      ] SystemTests.GetRules
+[       OK ] SystemTests.GetRules (0 ms)
+[ RUN      ] SystemTests.MonitorSensors
+[       OK ] SystemTests.MonitorSensors (0 ms)
+[----------] 7 tests from SystemTests (0 ms total)
+
+[----------] 2 tests from WriteVerificationErrorTests
+[ RUN      ] WriteVerificationErrorTests.Constructor
+[       OK ] WriteVerificationErrorTests.Constructor (0 ms)
+[ RUN      ] WriteVerificationErrorTests.What
+[       OK ] WriteVerificationErrorTests.What (0 ms)
+[----------] 2 tests from WriteVerificationErrorTests (0 ms total)
+
+[----------] 12 tests from ActionEnvironmentTests
+[ RUN      ] ActionEnvironmentTests.Constructor
+[       OK ] ActionEnvironmentTests.Constructor (0 ms)
+[ RUN      ] ActionEnvironmentTests.AddSensorReading
+[       OK ] ActionEnvironmentTests.AddSensorReading (0 ms)
+[ RUN      ] ActionEnvironmentTests.DecrementRuleDepth
+[       OK ] ActionEnvironmentTests.DecrementRuleDepth (0 ms)
+[ RUN      ] ActionEnvironmentTests.GetDevice
+[       OK ] ActionEnvironmentTests.GetDevice (0 ms)
+[ RUN      ] ActionEnvironmentTests.GetDeviceID
+[       OK ] ActionEnvironmentTests.GetDeviceID (0 ms)
+[ RUN      ] ActionEnvironmentTests.GetRule
+[       OK ] ActionEnvironmentTests.GetRule (1 ms)
+[ RUN      ] ActionEnvironmentTests.GetRuleDepth
+[       OK ] ActionEnvironmentTests.GetRuleDepth (0 ms)
+[ RUN      ] ActionEnvironmentTests.GetSensorReadings
+[       OK ] ActionEnvironmentTests.GetSensorReadings (0 ms)
+[ RUN      ] ActionEnvironmentTests.GetVolts
+[       OK ] ActionEnvironmentTests.GetVolts (0 ms)
+[ RUN      ] ActionEnvironmentTests.IncrementRuleDepth
+[       OK ] ActionEnvironmentTests.IncrementRuleDepth (0 ms)
+[ RUN      ] ActionEnvironmentTests.SetDeviceID
+[       OK ] ActionEnvironmentTests.SetDeviceID (0 ms)
+[ RUN      ] ActionEnvironmentTests.SetVolts
+[       OK ] ActionEnvironmentTests.SetVolts (0 ms)
+[----------] 12 tests from ActionEnvironmentTests (1 ms total)
+
+[----------] 2 tests from ActionErrorTests
+[ RUN      ] ActionErrorTests.Constructor
+[       OK ] ActionErrorTests.Constructor (0 ms)
+[ RUN      ] ActionErrorTests.What
+[       OK ] ActionErrorTests.What (0 ms)
+[----------] 2 tests from ActionErrorTests (0 ms total)
+
+[----------] 1 test from ActionUtilsTests
+[ RUN      ] ActionUtilsTests.Execute
+[       OK ] ActionUtilsTests.Execute (0 ms)
+[----------] 1 test from ActionUtilsTests (0 ms total)
+
+[----------] 4 tests from AndActionTests
+[ RUN      ] AndActionTests.Constructor
+[       OK ] AndActionTests.Constructor (0 ms)
+[ RUN      ] AndActionTests.Execute
+[       OK ] AndActionTests.Execute (0 ms)
+[ RUN      ] AndActionTests.GetActions
+[       OK ] AndActionTests.GetActions (0 ms)
+[ RUN      ] AndActionTests.ToString
+[       OK ] AndActionTests.ToString (0 ms)
+[----------] 4 tests from AndActionTests (0 ms total)
+
+[----------] 5 tests from ComparePresenceActionTests
+[ RUN      ] ComparePresenceActionTests.Constructor
+[       OK ] ComparePresenceActionTests.Constructor (0 ms)
+[ RUN      ] ComparePresenceActionTests.Execute
+[       OK ] ComparePresenceActionTests.Execute (0 ms)
+[ RUN      ] ComparePresenceActionTests.GetFRU
+[       OK ] ComparePresenceActionTests.GetFRU (0 ms)
+[ RUN      ] ComparePresenceActionTests.GetValue
+[       OK ] ComparePresenceActionTests.GetValue (0 ms)
+[ RUN      ] ComparePresenceActionTests.ToString
+[       OK ] ComparePresenceActionTests.ToString (0 ms)
+[----------] 5 tests from ComparePresenceActionTests (0 ms total)
+
+[----------] 6 tests from CompareVPDActionTests
+[ RUN      ] CompareVPDActionTests.Constructor
+[       OK ] CompareVPDActionTests.Constructor (0 ms)
+[ RUN      ] CompareVPDActionTests.Execute
+[       OK ] CompareVPDActionTests.Execute (0 ms)
+[ RUN      ] CompareVPDActionTests.GetFRU
+[       OK ] CompareVPDActionTests.GetFRU (0 ms)
+[ RUN      ] CompareVPDActionTests.GetKeyword
+[       OK ] CompareVPDActionTests.GetKeyword (0 ms)
+[ RUN      ] CompareVPDActionTests.GetValue
+[       OK ] CompareVPDActionTests.GetValue (0 ms)
+[ RUN      ] CompareVPDActionTests.ToString
+[       OK ] CompareVPDActionTests.ToString (0 ms)
+[----------] 6 tests from CompareVPDActionTests (0 ms total)
+
+[----------] 1 test from I2CActionTests
+[ RUN      ] I2CActionTests.GetI2CInterface
+[       OK ] I2CActionTests.GetI2CInterface (1 ms)
+[----------] 1 test from I2CActionTests (1 ms total)
+
+[----------] 6 tests from I2CCompareBitActionTests
+[ RUN      ] I2CCompareBitActionTests.Constructor
+[       OK ] I2CCompareBitActionTests.Constructor (0 ms)
+[ RUN      ] I2CCompareBitActionTests.Execute
+[       OK ] I2CCompareBitActionTests.Execute (0 ms)
+[ RUN      ] I2CCompareBitActionTests.GetRegister
+[       OK ] I2CCompareBitActionTests.GetRegister (0 ms)
+[ RUN      ] I2CCompareBitActionTests.GetPosition
+[       OK ] I2CCompareBitActionTests.GetPosition (0 ms)
+[ RUN      ] I2CCompareBitActionTests.GetValue
+[       OK ] I2CCompareBitActionTests.GetValue (0 ms)
+[ RUN      ] I2CCompareBitActionTests.ToString
+[       OK ] I2CCompareBitActionTests.ToString (0 ms)
+[----------] 6 tests from I2CCompareBitActionTests (0 ms total)
+
+[----------] 6 tests from I2CCompareByteActionTests
+[ RUN      ] I2CCompareByteActionTests.Constructor
+[       OK ] I2CCompareByteActionTests.Constructor (0 ms)
+[ RUN      ] I2CCompareByteActionTests.Execute
+[       OK ] I2CCompareByteActionTests.Execute (1 ms)
+[ RUN      ] I2CCompareByteActionTests.GetRegister
+[       OK ] I2CCompareByteActionTests.GetRegister (0 ms)
+[ RUN      ] I2CCompareByteActionTests.GetValue
+[       OK ] I2CCompareByteActionTests.GetValue (0 ms)
+[ RUN      ] I2CCompareByteActionTests.GetMask
+[       OK ] I2CCompareByteActionTests.GetMask (0 ms)
+[ RUN      ] I2CCompareByteActionTests.ToString
+[       OK ] I2CCompareByteActionTests.ToString (0 ms)
+[----------] 6 tests from I2CCompareByteActionTests (1 ms total)
+
+[----------] 7 tests from I2CCompareBytesActionTests
+[ RUN      ] I2CCompareBytesActionTests.Constructor1
+[       OK ] I2CCompareBytesActionTests.Constructor1 (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.Constructor2
+[       OK ] I2CCompareBytesActionTests.Constructor2 (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.Execute
+[       OK ] I2CCompareBytesActionTests.Execute (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.GetRegister
+[       OK ] I2CCompareBytesActionTests.GetRegister (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.GetValues
+[       OK ] I2CCompareBytesActionTests.GetValues (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.GetMasks
+[       OK ] I2CCompareBytesActionTests.GetMasks (0 ms)
+[ RUN      ] I2CCompareBytesActionTests.ToString
+[       OK ] I2CCompareBytesActionTests.ToString (0 ms)
+[----------] 7 tests from I2CCompareBytesActionTests (0 ms total)
+
+[----------] 6 tests from I2CWriteBitActionTests
+[ RUN      ] I2CWriteBitActionTests.Constructor
+[       OK ] I2CWriteBitActionTests.Constructor (0 ms)
+[ RUN      ] I2CWriteBitActionTests.Execute
+[       OK ] I2CWriteBitActionTests.Execute (1 ms)
+[ RUN      ] I2CWriteBitActionTests.GetRegister
+[       OK ] I2CWriteBitActionTests.GetRegister (0 ms)
+[ RUN      ] I2CWriteBitActionTests.GetPosition
+[       OK ] I2CWriteBitActionTests.GetPosition (0 ms)
+[ RUN      ] I2CWriteBitActionTests.GetValue
+[       OK ] I2CWriteBitActionTests.GetValue (0 ms)
+[ RUN      ] I2CWriteBitActionTests.ToString
+[       OK ] I2CWriteBitActionTests.ToString (0 ms)
+[----------] 6 tests from I2CWriteBitActionTests (1 ms total)
+
+[----------] 6 tests from I2CWriteByteActionTests
+[ RUN      ] I2CWriteByteActionTests.Constructor
+[       OK ] I2CWriteByteActionTests.Constructor (0 ms)
+[ RUN      ] I2CWriteByteActionTests.Execute
+[       OK ] I2CWriteByteActionTests.Execute (1 ms)
+[ RUN      ] I2CWriteByteActionTests.GetRegister
+[       OK ] I2CWriteByteActionTests.GetRegister (0 ms)
+[ RUN      ] I2CWriteByteActionTests.GetValue
+[       OK ] I2CWriteByteActionTests.GetValue (0 ms)
+[ RUN      ] I2CWriteByteActionTests.GetMask
+[       OK ] I2CWriteByteActionTests.GetMask (0 ms)
+[ RUN      ] I2CWriteByteActionTests.ToString
+[       OK ] I2CWriteByteActionTests.ToString (0 ms)
+[----------] 6 tests from I2CWriteByteActionTests (1 ms total)
+
+[----------] 7 tests from I2CWriteBytesActionTests
+[ RUN      ] I2CWriteBytesActionTests.Constructor1
+[       OK ] I2CWriteBytesActionTests.Constructor1 (0 ms)
+[ RUN      ] I2CWriteBytesActionTests.Constructor2
+[       OK ] I2CWriteBytesActionTests.Constructor2 (0 ms)
+[ RUN      ] I2CWriteBytesActionTests.Execute
+[       OK ] I2CWriteBytesActionTests.Execute (0 ms)
+[ RUN      ] I2CWriteBytesActionTests.GetRegister
+[       OK ] I2CWriteBytesActionTests.GetRegister (1 ms)
+[ RUN      ] I2CWriteBytesActionTests.GetValues
+[       OK ] I2CWriteBytesActionTests.GetValues (0 ms)
+[ RUN      ] I2CWriteBytesActionTests.GetMasks
+[       OK ] I2CWriteBytesActionTests.GetMasks (0 ms)
+[ RUN      ] I2CWriteBytesActionTests.ToString
+[       OK ] I2CWriteBytesActionTests.ToString (0 ms)
+[----------] 7 tests from I2CWriteBytesActionTests (1 ms total)
+
+[----------] 6 tests from IfActionTests
+[ RUN      ] IfActionTests.Constructor
+[       OK ] IfActionTests.Constructor (0 ms)
+[ RUN      ] IfActionTests.Execute
+[       OK ] IfActionTests.Execute (0 ms)
+[ RUN      ] IfActionTests.GetConditionAction
+[       OK ] IfActionTests.GetConditionAction (0 ms)
+[ RUN      ] IfActionTests.GetThenActions
+[       OK ] IfActionTests.GetThenActions (0 ms)
+[ RUN      ] IfActionTests.GetElseActions
+[       OK ] IfActionTests.GetElseActions (0 ms)
+[ RUN      ] IfActionTests.ToString
+[       OK ] IfActionTests.ToString (0 ms)
+[----------] 6 tests from IfActionTests (0 ms total)
+
+[----------] 4 tests from NotActionTests
+[ RUN      ] NotActionTests.Constructor
+[       OK ] NotActionTests.Constructor (0 ms)
+[ RUN      ] NotActionTests.Execute
+[       OK ] NotActionTests.Execute (0 ms)
+[ RUN      ] NotActionTests.GetAction
+[       OK ] NotActionTests.GetAction (0 ms)
+[ RUN      ] NotActionTests.ToString
+[       OK ] NotActionTests.ToString (0 ms)
+[----------] 4 tests from NotActionTests (0 ms total)
+
+[----------] 4 tests from OrActionTests
+[ RUN      ] OrActionTests.Constructor
+[       OK ] OrActionTests.Constructor (0 ms)
+[ RUN      ] OrActionTests.Execute
+[       OK ] OrActionTests.Execute (0 ms)
+[ RUN      ] OrActionTests.GetActions
+[       OK ] OrActionTests.GetActions (0 ms)
+[ RUN      ] OrActionTests.ToString
+[       OK ] OrActionTests.ToString (0 ms)
+[----------] 4 tests from OrActionTests (1 ms total)
+
+[----------] 7 tests from PMBusReadSensorActionTests
+[ RUN      ] PMBusReadSensorActionTests.Constructor
+[       OK ] PMBusReadSensorActionTests.Constructor (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.Execute
+[       OK ] PMBusReadSensorActionTests.Execute (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.GetCommand
+[       OK ] PMBusReadSensorActionTests.GetCommand (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.GetExponent
+[       OK ] PMBusReadSensorActionTests.GetExponent (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.GetFormat
+[       OK ] PMBusReadSensorActionTests.GetFormat (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.GetType
+[       OK ] PMBusReadSensorActionTests.GetType (0 ms)
+[ RUN      ] PMBusReadSensorActionTests.ToString
+[       OK ] PMBusReadSensorActionTests.ToString (0 ms)
+[----------] 7 tests from PMBusReadSensorActionTests (0 ms total)
+
+[----------] 7 tests from PMBusWriteVoutCommandActionTests
+[ RUN      ] PMBusWriteVoutCommandActionTests.Constructor
+[       OK ] PMBusWriteVoutCommandActionTests.Constructor (0 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.Execute
+[       OK ] PMBusWriteVoutCommandActionTests.Execute (2 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.GetExponent
+[       OK ] PMBusWriteVoutCommandActionTests.GetExponent (0 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.GetFormat
+[       OK ] PMBusWriteVoutCommandActionTests.GetFormat (0 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.GetVolts
+[       OK ] PMBusWriteVoutCommandActionTests.GetVolts (0 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.IsVerified
+[       OK ] PMBusWriteVoutCommandActionTests.IsVerified (0 ms)
+[ RUN      ] PMBusWriteVoutCommandActionTests.ToString
+[       OK ] PMBusWriteVoutCommandActionTests.ToString (0 ms)
+[----------] 7 tests from PMBusWriteVoutCommandActionTests (2 ms total)
+
+[----------] 4 tests from RunRuleActionTests
+[ RUN      ] RunRuleActionTests.Constructor
+[       OK ] RunRuleActionTests.Constructor (0 ms)
+[ RUN      ] RunRuleActionTests.Execute
+[       OK ] RunRuleActionTests.Execute (0 ms)
+[ RUN      ] RunRuleActionTests.GetRuleID
+[       OK ] RunRuleActionTests.GetRuleID (0 ms)
+[ RUN      ] RunRuleActionTests.ToString
+[       OK ] RunRuleActionTests.ToString (0 ms)
+[----------] 4 tests from RunRuleActionTests (0 ms total)
+
+[----------] 4 tests from SetDeviceActionTests
+[ RUN      ] SetDeviceActionTests.Constructor
+[       OK ] SetDeviceActionTests.Constructor (0 ms)
+[ RUN      ] SetDeviceActionTests.Execute
+[       OK ] SetDeviceActionTests.Execute (0 ms)
+[ RUN      ] SetDeviceActionTests.GetDeviceID
+[       OK ] SetDeviceActionTests.GetDeviceID (0 ms)
+[ RUN      ] SetDeviceActionTests.ToString
+[       OK ] SetDeviceActionTests.ToString (0 ms)
+[----------] 4 tests from SetDeviceActionTests (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 225 tests from 36 test suites ran. (50 ms total)
+[  PASSED  ] 225 tests.
+-------
+
+2/6 test_records                            OK       0.96 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/power-supply/test/test_records
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 2 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from LinearFormatTest
+[ RUN      ] LinearFormatTest.TestConversions
+[       OK ] LinearFormatTest.TestConversions (0 ms)
+[----------] 1 test from LinearFormatTest (0 ms total)
+
+[----------] 1 test from ManagerTest
+[ RUN      ] ManagerTest.TestRecordAdds
+[       OK ] ManagerTest.TestRecordAdds (0 ms)
+[----------] 1 test from ManagerTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 2 test suites ran. (0 ms total)
+[  PASSED  ] 2 tests.
+-------
+
+3/6 phosphor-power-supply-tests             OK       1.15 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/phosphor-power-supply/test/phosphor-power-supply-tests
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from PowerSupplyTests
+[ RUN      ] PowerSupplyTests.Constructor
+[       OK ] PowerSupplyTests.Constructor (0 ms)
+[ RUN      ] PowerSupplyTests.Analyze
+[       OK ] PowerSupplyTests.Analyze (0 ms)
+[ RUN      ] PowerSupplyTests.OnOffConfig
+[       OK ] PowerSupplyTests.OnOffConfig (1 ms)
+[ RUN      ] PowerSupplyTests.ClearFaults
+[       OK ] PowerSupplyTests.ClearFaults (0 ms)
+[ RUN      ] PowerSupplyTests.UpdateInventory
+[       OK ] PowerSupplyTests.UpdateInventory (1 ms)
+[ RUN      ] PowerSupplyTests.IsPresent
+[       OK ] PowerSupplyTests.IsPresent (0 ms)
+[ RUN      ] PowerSupplyTests.IsFaulted
+[       OK ] PowerSupplyTests.IsFaulted (1 ms)
+[ RUN      ] PowerSupplyTests.HasInputFault
+[       OK ] PowerSupplyTests.HasInputFault (0 ms)
+[ RUN      ] PowerSupplyTests.HasMFRFault
+[       OK ] PowerSupplyTests.HasMFRFault (1 ms)
+[ RUN      ] PowerSupplyTests.HasVINUVFault
+[       OK ] PowerSupplyTests.HasVINUVFault (0 ms)
+[----------] 10 tests from PowerSupplyTests (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 1 test suite ran. (5 ms total)
+[  PASSED  ] 10 tests.
+-------
+
+4/6 test_version                            OK       1.09 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/tools/power-utils/test/test_version
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Version
+[ RUN      ] Version.GetLatest
+[       OK ] Version.GetLatest (0 ms)
+[----------] 1 test from Version (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+-------
+
+5/6 test_updater                            OK       4.01 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/tools/power-utils/test/test_updater
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 4 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 4 tests from TestUpdater
+[ RUN      ] TestUpdater.ctordtor
+[       OK ] TestUpdater.ctordtor (2 ms)
+[ RUN      ] TestUpdater.doUpdate
+Unlock PSU
+Set boot flag ret
+Read of 0xf1, 0x00
+[       OK ] TestUpdater.doUpdate (3006 ms)
+[ RUN      ] TestUpdater.getDeviceName
+[       OK ] TestUpdater.getDeviceName (1 ms)
+[ RUN      ] TestUpdater.parseDeviceName
+[       OK ] TestUpdater.parseDeviceName (3 ms)
+[----------] 4 tests from TestUpdater (3012 ms total)
+
+[----------] Global test environment tear-down
+[==========] 4 tests from 1 test suite ran. (3012 ms total)
+[  PASSED  ] 4 tests.
+-------
+
+6/6 nvtest                                  OK       0.99 s 
+
+--- command ---
+20:50:43 /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/test/nvtest
+--- stdout ---
+Running main() from /usr/src/debug/googletest/1.10.0-r0/git/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from NamesValuesTest
+[ RUN      ] NamesValuesTest.TestValues
+[       OK ] NamesValuesTest.TestValues (1 ms)
+[----------] 1 test from NamesValuesTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+-------
+
+
+Ok:                    6
+Expected Fail:         0
+Fail:                  0
+Unexpected Pass:       0
+Skipped:               0
+Timeout:               0

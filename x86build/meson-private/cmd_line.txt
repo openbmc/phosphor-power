@@ -1,0 +1,7 @@
+[options]
+oe-sdk = enabled
+tests = enabled
+
+[properties]
+cross_file = ['/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/share/meson/x86_64-openbmc-linux-meson.cross']
+

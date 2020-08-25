@@ -1,0 +1,396 @@
+Build started at 2020-08-25T20:49:53.858128
+Main binary: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/python3
+Build Options: -Doe-sdk=enabled -Dtests=enabled '--cross-file /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/share/meson/x86_64-openbmc-linux-meson.cross'
+Python system: Linux
+The Meson build system
+Version: 0.53.2
+Source dir: /esw/san2/jaymeyer/openbmc/phosphor-power
+Build dir: /esw/san2/jaymeyer/openbmc/phosphor-power/x86build
+Build type: cross build
+Project name: phosphor-power
+Project version: 1.0
+Appending CXXFLAGS from environment: ' -O2 -pipe -g -feliminate-unused-debug-types '
+Appending LDFLAGS from environment: ['-Wl,-O1', '-Wl,--hash-style=gnu', '-Wl,--as-needed']
+No CPPFLAGS in the environment, not changing global flags.
+Sanity testing C++ compiler: c++
+Is cross compiler: False.
+Sanity check compiler command line: c++ /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/sanitycheckcpp.cc -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/sanitycheckcpp.exe -O2 -pipe -g -feliminate-unused-debug-types -pipe -D_FILE_OFFSET_BITS=64 -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+Running test binary command: /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/sanitycheckcpp.exe
+C++ compiler for the build machine: c++ (gcc 4.8.5 "c++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-39)")
+C++ linker for the build machine: c++ ld.bfd 2.27-43
+Sanity testing C++ compiler: x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux
+Is cross compiler: True.
+Sanity check compiler command line: x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/sanitycheckcpp.cc -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/sanitycheckcpp_cross.exe -pipe -D_FILE_OFFSET_BITS=64 -c
+Sanity check compile stdout:
+
+-----
+Sanity check compile stderr:
+
+-----
+C++ compiler for the host machine: x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux (gcc 9.2.0 "x86_64-openbmc-linux-g++ (GCC) 9.2.0")
+C++ linker for the host machine: x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux ld.bfd 2.32.0.20190204
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Running command: /bin/sh -c echo $OECORE_TARGET_SYSROOT
+--- stdout ---
+/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux
+
+--- stderr ---
+
+
+Message: OE_SYSROOT: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux
+Running command: /bin/sh -c find /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/ld-*.so | sort -r -n | head -n1
+--- stdout ---
+/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/ld-2.30.so
+
+--- stderr ---
+
+
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmppdb5pprm
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmppdb5pprm/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmppdb5pprm/output.exe -pipe -D_FILE_OFFSET_BITS=64 -O0 -fpermissive -Wl,--start-group -lstdc++fs -Wl,--end-group -Wl,--allow-shlib-undefined -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed 
+
+Code:
+ int main(void) { return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Library stdc++fs found: YES
+Pkg-config binary for MachineChoice.HOST is not cached.
+Pkg-config binary for MachineChoice.HOST specified from cross file, native file, or env var as ['pkg-config']
+Trying pkg-config binary pkg-config for machine MachineChoice.HOST at ['/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config']
+Found pkg-config: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config (0.29.2)
+Determining dependency 'gmock' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion gmock` -> 0
+1.10.0
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags gmock` -> 0
+-DGTEST_HAS_PTHREAD=1 -lpthread -DGTEST_HAS_PTHREAD=1 -lpthread -I/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../include
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config gmock --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../lib -lgmock -lpthread -lgtest -lpthread
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config gmock --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../lib -lgmock -lpthread -lgtest -lpthread
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp_tkt7fez
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp_tkt7fez/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp_tkt7fez/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) {
+            void * something;
+            return 0;
+        }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpn0f3jyri
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpn0f3jyri/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpn0f3jyri/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) >= 0)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp59clfpgc
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp59clfpgc/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp59clfpgc/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) > 0)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfx69kpou
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfx69kpou/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfx69kpou/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) > 1)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpw4bamc62
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpw4bamc62/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpw4bamc62/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) > 3)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpe5tjr3ur
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpe5tjr3ur/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpe5tjr3ur/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) > 7)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) > 15)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz/testfile.cpp: In function 'int main()':
+/esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz/testfile.cpp:3:65: error: narrowing conversion of '-1' from 'int' to 'long unsigned int' [-Wnarrowing]
+    3 |         int main(void) { static int a[1-2*!(sizeof(void *) > 15)]; a[0]=0; return 0; }
+      |                                                                 ^
+/esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp6uk8vxaz/testfile.cpp:3:40: error: size '-1' of array 'a' is negative
+    3 |         int main(void) { static int a[1-2*!(sizeof(void *) > 15)]; a[0]=0; return 0; }
+      |                                       ~^~~~~~~~~~~~~~~~~~~~~~~~~
+
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp7jg21o2g
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp7jg21o2g/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp7jg21o2g/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) <= 11)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfnclxtzk
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfnclxtzk/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpfnclxtzk/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) <= 9)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp14sfy60d
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp14sfy60d/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp14sfy60d/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive 
+
+Code:
+ #include <stdio.h>
+        
+        int main(void) { static int a[1-2*!(sizeof(void *) <= 8)]; a[0]=0; return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpdeaexq5q
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpdeaexq5q/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpdeaexq5q/output.obj -pipe -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive --print-search-dirs 
+
+Code:
+ 
+Compiler stdout:
+ install: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/
+programs: =/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/libexec/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/libexec/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/libexec/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/bin/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/bin/
+libraries: =/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/lib/../lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/lib/../lib/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/../lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/../lib/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/../lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/x86_64-openbmc-linux/9.2.0/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/../lib/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/lib/x86_64-openbmc-linux/gcc/x86_64-openbmc-linux/9.2.0/../../../../../x86_64-openbmc-linux/lib/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib/:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/
+
+Compiler stderr:
+ 
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpqp3ji7a0
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpqp3ji7a0/testfile.cpp -o /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmpqp3ji7a0/output.exe -pipe -D_FILE_OFFSET_BITS=64 -O0 -fpermissive -Wl,--start-group -lpthread -Wl,--end-group -Wl,--allow-shlib-undefined -Wl,-O1 -Wl,--hash-style=gnu -Wl,--as-needed 
+
+Code:
+ int main(void) { return 0; }
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Run-time dependency GMock found: YES 1.10.0
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'gtest_main' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion gtest_main` -> 0
+1.10.0
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags gtest_main` -> 0
+-DGTEST_HAS_PTHREAD=1 -lpthread -DGTEST_HAS_PTHREAD=1 -lpthread -I/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../include
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config gtest_main --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../lib -lgtest_main -lpthread -lgtest -lpthread
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config gtest_main --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig/../../lib -lgtest_main -lpthread -lgtest -lpthread
+Run-time dependency GTest found: YES 1.10.0
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'phosphor-dbus-interfaces' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion phosphor-dbus-interfaces` -> 0
+1.0
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags phosphor-dbus-interfaces` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config phosphor-dbus-interfaces --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -lphosphor_dbus
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config phosphor-dbus-interfaces --libs` -> 0
+-lphosphor_dbus
+Run-time dependency phosphor-dbus-interfaces found: YES 1.0
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'phosphor-logging' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion phosphor-logging` -> 0
+1.0
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags phosphor-logging` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config phosphor-logging --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib -L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -lphosphor_logging -lsdbusplus -lsystemd -lphosphor_dbus
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config phosphor-logging --libs` -> 0
+-lphosphor_logging -lsdbusplus -lsystemd -lphosphor_dbus
+Run-time dependency phosphor-logging found: YES 1.0
+Program python3 found: YES (/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/python3)
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'sdbusplus' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion sdbusplus` -> 0
+1.0
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags sdbusplus` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config sdbusplus --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/lib -lsdbusplus -lsystemd
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config sdbusplus --libs` -> 0
+-lsdbusplus -lsystemd
+Run-time dependency sdbusplus found: YES 1.0
+Program sdbus++ found: YES (/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/sdbus++)
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'sdeventplus' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion sdeventplus` -> 0
+0.1
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags sdeventplus` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config sdeventplus --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -lsdeventplus
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config sdeventplus --libs` -> 0
+-lsdeventplus
+Run-time dependency sdeventplus found: YES 0.1
+Run-time dependency threads found: YES
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'stdplus' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion stdplus` -> 0
+0.1
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags stdplus` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config stdplus --libs` -> 0
+-L/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib -lstdplus
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config stdplus --libs` -> 0
+-lstdplus
+Run-time dependency stdplus found: YES 0.1
+Boost library root dir is None
+Boost include directory is None
+Running compile:
+Working directory:  /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp57a987zw
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /esw/san2/jaymeyer/openbmc/phosphor-power/x86build/meson-private/tmp57a987zw/testfile.cpp -pipe -E -P -D_FILE_OFFSET_BITS=64 -P -O0 -fpermissive 
+
+Code:
+ 
+        #include <boost/version.hpp>
+        #ifndef BOOST_LIB_VERSION
+        # define BOOST_LIB_VERSION
+        #endif
+        "MESON_GET_DEFINE_DELIMITER"
+BOOST_LIB_VERSION
+Compiler stdout:
+         "MESON_GET_DEFINE_DELIMITER"
+"1_71"
+
+Compiler stderr:
+ 
+Boost library directory is None
+Installed Boost libraries: 
+Run-time dependency Boost found: YES 1.71
+Pkg-config binary for MachineChoice.HOST is cached.
+Determining dependency 'systemd' with pkg-config executable '/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config'
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --modversion systemd` -> 0
+243
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --cflags systemd` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config systemd --libs` -> 0
+
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config systemd --libs` -> 0
+
+Run-time dependency systemd found: YES 243
+PKG_CONFIG_PATH: /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/lib/pkgconfig:/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux/usr/share/pkgconfig
+Called `/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/pkg-config --variable=systemdsystemunitdir systemd` -> 0
+/lib/systemd/system
+Got pkgconfig variable systemdsystemunitdir : /lib/systemd/system
+Configuring config.h using configuration
+Adding test "phosphor-regulators-tests"
+Adding test "test_records"
+Adding test "phosphor-power-supply-tests"
+Adding test "test_version"
+Adding test "test_updater"
+Adding test "nvtest"
+Build targets in project: 20
+
+Found ninja-1.9.0 at /esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/x86_64-oesdk-linux/usr/bin/ninja
+Running compile:
+Working directory:  /tmp/tmpssfkpv3x
+Command line:  x86_64-openbmc-linux-g++ -m64 -march=core2 -mtune=core2 -msse3 -mfpmath=sse --sysroot=/esw/san2/openbmc/sdk/x86_64/2020-04-15/sysroots/core2-64-openbmc-linux /tmp/tmpssfkpv3x/testfile.cpp -o /tmp/tmpssfkpv3x/output.obj -pipe -D_FILE_OFFSET_BITS=64 -c -std=c++17 
+
+Code:
+ int i = static_cast<int>(0);
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Compiler accepts -std=c++17: YES

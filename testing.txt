@@ -1,0 +1,13 @@
+Tested: Ran unit tests. All successful
+Tested: Changes to phosphor-power-supply/main.cpp tested by running simcics with the
+        absence of the .json configuration file in either and both default locations.
+        Changes to other files tested by manipulating the code to force various error paths.
+        Change to loadJSONFromFile in utility.cpp tested by giving invalid "psu_config.json"
+        file to main program; empty file message in this method tested by changing main() to
+        let loadJSONFromFile be called when the file did not exist.
+        Methods with changes that were not tested (becase they are not used by phosphor-power 
+        initialization) are PMBUS::readBit() PBBUS::readBinary() and PMBUS::write()
+        Methods that ar echanged bit were not directly called by phosphor-power initialization:
+        PMBus::readBit(),  PMBus::readBinary() and PBBus::write().
+        The log messages in these were tested by adding calls to them from PMBus::read and then
+        changing code to force execution through paths that created the log messages.
