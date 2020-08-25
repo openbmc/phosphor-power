@@ -38,23 +38,31 @@ int main(int argc, char* argv[])
 
         // Read the arguments.
         CLI11_PARSE(app, argc, argv);
+
+        std::string fileMissingMsg;
         if (configfile.empty())
         {
-            if (std::filesystem::exists(
-                    "/etc/phosphor-psu-monitor/psu_config.json"))
+            std::string relativeFilename =
+                "phosphor-psu-monitor/psu_config.json";
+            configfile = "/etc/" + relativeFilename;
+            if (!std::filesystem::exists(configfile))
             {
-                configfile = "/etc/phosphor-psu-monitor/psu_config.json";
+                configfile = "/usr/share/" + relativeFilename;
             }
-            else
-            {
-                configfile = "/usr/share/phosphor-psu-monitor/psu_config.json";
-            }
+            fileMissingMsg =
+                relativeFilename + " not found in default location(s)";
+        }
+        else
+        {
+            fileMissingMsg = "FILENAME = " + configfile;
         }
 
         if (!std::filesystem::exists(configfile))
         {
-            log<level::ERR>("Configuration file does not exist",
-                            entry("FILENAME=%s", configfile.c_str()));
+            log<level::ERR>(
+                (std::string("Configuration file does not exist: ") +
+                 fileMissingMsg)
+                    .c_str());
             return -1;
         }
 
