@@ -14,6 +14,7 @@
 // limitations under the License.
 */
 
+#include <boost/asio.hpp>
 #include <sdbusplus/asio/object_server.hpp>
 #include <util.hpp>
 
