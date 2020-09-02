@@ -14,54 +14,17 @@
  * limitations under the License.
  */
 #include "temporary_file.hpp"
+#include "test_utils.hpp"
 
 #include <filesystem>
-#include <fstream>
 #include <string>
 #include <utility>
 
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
+using namespace phosphor::power::regulators::test_utils;
 namespace fs = std::filesystem;
-
-/**
- * Modify the specified temporary file so that fs::remove() fails with an
- * exception.
- *
- * @param path path to the temporary file
- */
-void makeFileUnRemovable(const fs::path& path)
-{
-    // Delete temporary file.  Note that this is not sufficient to cause
-    // fs::remove() to throw an exception.
-    fs::remove(path);
-
-    // Create a directory at the temporary file path
-    fs::create_directory(path);
-
-    // Create a file within the directory.  fs::remove() will throw an exception
-    // if the path is a non-empty directory.
-    std::ofstream childFile{path / "childFile"};
-}
-
-/**
- * Modify the specified temporary file so that fs::remove() can successfully
- * delete it.
- *
- * Undo the modifications from an earlier call to makeFileUnRemovable().
- *
- * @param path path to the temporary file
- */
-void makeFileRemovable(const fs::path& path)
-{
-    // makeFileUnRemovable() creates a directory at the temporary file path.
-    // Remove the directory and all of its contents.
-    fs::remove_all(path);
-
-    // Re-create the temporary file
-    std::ofstream file{path};
-}
 
 TEST(TemporaryFileTests, DefaultConstructor)
 {
