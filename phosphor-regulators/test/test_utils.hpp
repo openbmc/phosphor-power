@@ -23,6 +23,8 @@
 #include "rail.hpp"
 #include "rule.hpp"
 
+#include <filesystem>
+#include <fstream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -30,6 +32,8 @@
 
 namespace phosphor::power::regulators::test_utils
 {
+
+namespace fs = std::filesystem;
 
 /**
  * Create an I2CInterface object with hard-coded bus and address values.
@@ -87,6 +91,45 @@ inline std::unique_ptr<Rule> createRule(const std::string& id)
 
     // Create Rule
     return std::make_unique<Rule>(id, std::move(actions));
+}
+
+/**
+ * Modify the specified file so that fs::remove() fails with an exception.
+ *
+ * The file will be renamed and can be restored by calling makeFileRemovable().
+ *
+ * @param path path to the file
+ */
+inline void makeFileUnRemovable(const fs::path& path)
+{
+    // Rename the file to save its contents
+    fs::path savePath{path.native() + ".save"};
+    fs::rename(path, savePath);
+
+    // Create a directory at the original file path
+    fs::create_directory(path);
+
+    // Create a file within the directory.  fs::remove() will throw an exception
+    // if the path is a non-empty directory.
+    std::ofstream childFile{path / "childFile"};
+}
+
+/**
+ * Modify the specified file so that fs::remove() can successfully delete it.
+ *
+ * Undo the modifications from an earlier call to makeFileUnRemovable().
+ *
+ * @param path path to the file
+ */
+inline void makeFileRemovable(const fs::path& path)
+{
+    // makeFileUnRemovable() creates a directory at the file path.  Remove the
+    // directory and all of its contents.
+    fs::remove_all(path);
+
+    // Rename the file back to the original path to restore its contents
+    fs::path savePath{path.native() + ".save"};
+    fs::rename(savePath, path);
 }
 
 } // namespace phosphor::power::regulators::test_utils
