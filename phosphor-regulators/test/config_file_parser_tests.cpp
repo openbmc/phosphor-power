@@ -40,7 +40,7 @@
 #include "run_rule_action.hpp"
 #include "sensor_monitoring.hpp"
 #include "set_device_action.hpp"
-#include "tmp_file.hpp"
+#include "temporary_file.hpp"
 
 #include <sys/stat.h> // for chmod()
 
@@ -107,8 +107,8 @@ TEST(ConfigFileParserTests, Parse)
             }
         )"_json;
 
-        TmpFile configFile;
-        std::filesystem::path pathName{configFile.getName()};
+        TemporaryFile configFile;
+        std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         std::vector<std::unique_ptr<Rule>> rules{};
@@ -146,8 +146,8 @@ TEST(ConfigFileParserTests, Parse)
             }
         )"_json;
 
-        TmpFile configFile;
-        std::filesystem::path pathName{configFile.getName()};
+        TemporaryFile configFile;
+        std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         chmod(pathName.c_str(), 0222);
@@ -165,8 +165,8 @@ TEST(ConfigFileParserTests, Parse)
     {
         const std::string configFileContents = "] foo [";
 
-        TmpFile configFile;
-        std::filesystem::path pathName{configFile.getName()};
+        TemporaryFile configFile;
+        std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         parse(pathName);
@@ -182,8 +182,8 @@ TEST(ConfigFileParserTests, Parse)
     {
         const json configFileContents = R"( { "foo": "bar" } )"_json;
 
-        TmpFile configFile;
-        std::filesystem::path pathName{configFile.getName()};
+        TemporaryFile configFile;
+        std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         parse(pathName);

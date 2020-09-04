@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "tmp_file.hpp"
+#include "temporary_file.hpp"
 
 #include <stdio.h>    // for popen(), pclose(), fgets()
 #include <sys/stat.h> // for chmod()
@@ -120,8 +120,8 @@ int runToolForOutputWithCommand(std::string command,
 {
     // run the validation tool with the temporary file and return the output
     // of the validation tool.
-    TmpFile tmpFile;
-    command += " 2> " + tmpFile.getName();
+    TemporaryFile tmpFile;
+    command += " 2> " + tmpFile.getPath().string();
     // get the jsonschema print from validation tool.
     char buffer[256];
     std::string result;
@@ -151,7 +151,7 @@ int runToolForOutputWithCommand(std::string command,
     int exitStatus = WEXITSTATUS(returnValue);
 
     // Read the standardError from tmpFile.
-    std::ifstream input(tmpFile.getName().c_str());
+    std::ifstream input(tmpFile.getPath());
     std::string line;
 
     if (std::getline(input, line))
@@ -199,9 +199,8 @@ void writeDataToFile(const json configFileJson, std::string fileName)
 
 void expectJsonValid(const json configFileJson)
 {
-    std::string fileName;
-    TmpFile tmpFile;
-    fileName = tmpFile.getName();
+    TemporaryFile tmpFile;
+    std::string fileName = tmpFile.getPath().string();
     writeDataToFile(configFileJson, fileName);
 
     EXPECT_FILE_VALID(fileName);
@@ -211,9 +210,8 @@ void expectJsonInvalid(const json configFileJson,
                        const std::string& expectedErrorMessage,
                        const std::string& expectedOutputMessage)
 {
-    std::string fileName;
-    TmpFile tmpFile;
-    fileName = tmpFile.getName();
+    TemporaryFile tmpFile;
+    std::string fileName = tmpFile.getPath().string();
     writeDataToFile(configFileJson, fileName);
 
     EXPECT_FILE_INVALID(fileName, expectedErrorMessage, expectedOutputMessage);
@@ -2867,9 +2865,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         "usage: validate-regulators-config.py [-h] [-s SCHEMA_FILE]";
     int valid = 0;
 
-    std::string fileName;
-    TmpFile tmpFile;
-    fileName = tmpFile.getName();
+    TemporaryFile tmpFile;
+    std::string fileName = tmpFile.getPath().string();
     writeDataToFile(validConfigFile, fileName);
     // Valid: -s specified
     {
@@ -2954,9 +2951,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     }
     // Invalid: File specified after -s is not right data format
     {
-        std::string wrongFormatFileName;
-        TmpFile wrongFormatFile;
-        wrongFormatFileName = wrongFormatFile.getName();
+        TemporaryFile wrongFormatFile;
+        std::string wrongFormatFileName = wrongFormatFile.getPath().string();
         std::ofstream out(wrongFormatFileName);
         out << "foo";
         out.close();
@@ -2967,9 +2963,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     }
     // Invalid: File specified after -c is not readable
     {
-        std::string notReadableFileName;
-        TmpFile notReadableFile;
-        notReadableFileName = notReadableFile.getName();
+        TemporaryFile notReadableFile;
+        std::string notReadableFileName = notReadableFile.getPath().string();
         writeDataToFile(validConfigFile, notReadableFileName);
         command = validateTool + schema + schemaFile + configuration +
                   notReadableFileName;
@@ -2979,9 +2974,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     }
     // Invalid: File specified after -s is not readable
     {
-        std::string notReadableFileName;
-        TmpFile notReadableFile;
-        notReadableFileName = notReadableFile.getName();
+        TemporaryFile notReadableFile;
+        std::string notReadableFileName = notReadableFile.getPath().string();
         writeDataToFile(validConfigFile, notReadableFileName);
         command = validateTool + schema + notReadableFileName + configuration +
                   fileName;
