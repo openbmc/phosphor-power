@@ -34,12 +34,12 @@ void System::buildIDMap()
     }
 }
 
-void System::closeDevices()
+void System::closeDevices(Services& services)
 {
     // Close devices in each chassis
     for (std::unique_ptr<Chassis>& oneChassis : chassis)
     {
-        oneChassis->closeDevices();
+        oneChassis->closeDevices(services);
     }
 }
 

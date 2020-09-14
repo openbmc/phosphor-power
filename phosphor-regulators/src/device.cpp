@@ -18,7 +18,6 @@
 
 #include "chassis.hpp"
 #include "exception_utils.hpp"
-#include "journal.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -38,7 +37,7 @@ void Device::addToIDMap(IDMap& idMap)
     }
 }
 
-void Device::close()
+void Device::close(Services& services)
 {
     try
     {
@@ -51,8 +50,8 @@ void Device::close()
     catch (const std::exception& e)
     {
         // Log error messages in journal
-        exception_utils::log(e);
-        journal::logErr("Unable to close device " + id);
+        services.getJournal().logError(exception_utils::getMessages(e));
+        services.getJournal().logError("Unable to close device " + id);
 
         // TODO: Create error log entry
     }

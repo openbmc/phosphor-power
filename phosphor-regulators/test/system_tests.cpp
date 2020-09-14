@@ -71,6 +71,14 @@ TEST(SystemTests, CloseDevices)
     // Specify an empty rules vector
     std::vector<std::unique_ptr<Rule>> rules{};
 
+    // Create mock services.  Expect logDebug() to be called.
+    MockServices services{};
+    MockJournal& journal = services.getMockJournal();
+    EXPECT_CALL(journal, logDebug("Closing devices in chassis 1")).Times(1);
+    EXPECT_CALL(journal, logDebug("Closing devices in chassis 3")).Times(1);
+    EXPECT_CALL(journal, logInfo(A<const std::string&>())).Times(0);
+    EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
     chassis.emplace_back(std::make_unique<Chassis>(1));
@@ -80,13 +88,7 @@ TEST(SystemTests, CloseDevices)
     System system{std::move(rules), std::move(chassis)};
 
     // Call closeDevices()
-    journal::clear();
-    system.closeDevices();
-    EXPECT_EQ(journal::getErrMessages().size(), 0);
-    EXPECT_EQ(journal::getInfoMessages().size(), 0);
-    std::vector<std::string> expectedDebugMessages{
-        "Closing devices in chassis 1", "Closing devices in chassis 3"};
-    EXPECT_EQ(journal::getDebugMessages(), expectedDebugMessages);
+    system.closeDevices(services);
 }
 
 TEST(SystemTests, Configure)
