@@ -19,7 +19,6 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
-#include "journal.hpp"
 #include "mock_action.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
@@ -154,14 +153,19 @@ TEST(DeviceTests, Close)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(false));
         EXPECT_CALL(*i2cInterface, close).Times(0);
 
+        // Create mock services.  No logError should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
+            .Times(0);
+
         // Create Device
         Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
                       std::move(i2cInterface)};
 
         // Close Device
-        journal::clear();
-        device.close();
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        device.close(services);
     }
 
     // Test where works: I2C interface is open
@@ -172,14 +176,19 @@ TEST(DeviceTests, Close)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
         EXPECT_CALL(*i2cInterface, close).Times(1);
 
+        // Create mock services.  No logError should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
+            .Times(0);
+
         // Create Device
         Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
                       std::move(i2cInterface)};
 
         // Close Device
-        journal::clear();
-        device.close();
-        EXPECT_EQ(journal::getErrMessages().size(), 0);
+        device.close(services);
     }
 
     // Test where fails: closing I2C interface fails
@@ -193,17 +202,21 @@ TEST(DeviceTests, Close)
             .WillOnce(Throw(
                 i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
 
+        // Create mock services.  Expect logError() to be called.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        std::vector<std::string> expectedErrMessagesException{
+            "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70"};
+        EXPECT_CALL(journal, logError("Unable to close device vdd_reg"))
+            .Times(1);
+        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+
         // Create Device
         Device device{"vdd_reg", true, "/system/chassis/motherboard/reg2",
                       std::move(i2cInterface)};
 
         // Close Device
-        journal::clear();
-        device.close();
-        std::vector<std::string> expectedErrMessages{
-            "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70",
-            "Unable to close device vdd_reg"};
-        EXPECT_EQ(journal::getErrMessages(), expectedErrMessages);
+        device.close(services);
     }
 }
 
