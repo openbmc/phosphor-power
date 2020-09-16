@@ -40,6 +40,7 @@ sdeventplus = dependency('sdeventplus')
 pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
+fmt_dep = dependency('fmt')
 
 systemd = dependency('systemd')
 servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
