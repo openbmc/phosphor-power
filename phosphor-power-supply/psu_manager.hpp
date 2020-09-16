@@ -121,8 +121,6 @@ class PSUManager
         {
             psu->clearFaults();
         }
-
-        faultLogged = false;
     }
 
   private:
@@ -139,15 +137,20 @@ class PSUManager
         timer;
 
     /**
+     * Create a PEL
+     */
+    void createErrorPEL(const std::string& faultName,
+                        std::map<std::string, std::string> additionalData);
+
+    /**
      * Analyze the status of each of the power supplies.
+     *
+     * Log errors for faults, when and where appropriate.
      */
     void analyze();
 
     /** @brief True if the power is on. */
     bool powerOn = false;
-
-    /** @brief True if fault logged. Clear in clearFaults(). */
-    bool faultLogged = false;
 
     /** @brief Used as part of subscribing to power on state changes*/
     std::string powerService;
