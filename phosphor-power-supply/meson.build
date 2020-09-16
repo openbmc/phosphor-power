@@ -11,6 +11,7 @@ phosphor_psu_monitor = executable(
     dependencies: [
         sdbusplus,
         sdeventplus,
+        fmt,
     ],
     include_directories: '..',
     install: true,
