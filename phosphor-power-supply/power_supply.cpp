@@ -129,6 +129,7 @@ void PowerSupply::clearFaults()
     inputFault = false;
     mfrFault = false;
     vinUVFault = false;
+    faultLogged = false;
 
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a

@@ -152,6 +152,22 @@ class PowerSupply
     }
 
     /**
+     * @brief Return state of faultLogged
+     */
+    bool isFaultLogged() const
+    {
+        return faultLogged;
+    }
+
+    /**
+     * @brief Called when a fault for this power supply has been logged.
+     */
+    void setFaultLogged()
+    {
+        faultLogged = true;
+    }
+
+    /**
      * @brief Returns true if INPUT fault occurred.
      */
     bool hasInputFault() const
@@ -189,6 +205,9 @@ class PowerSupply
 
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
+
+    /** @brief True if an error for a fault has already been logged. */
+    bool faultLogged = false;
 
     /** @brief True if bit 5 of STATUS_WORD high byte is on. */
     bool inputFault = false;

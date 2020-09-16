@@ -2,6 +2,10 @@
 
 #include "utility.hpp"
 
+#include <fmt/format.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 using namespace phosphor::logging;
 
 namespace phosphor::power::manager
@@ -125,6 +129,45 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
     }
 }
 
+void PSUManager::createError(const std::string& faultName,
+                             std::map<std::string, std::string> additionalData)
+{
+    constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
+    constexpr auto loggingCreateInterface =
+        "xyz.openbmc_project.Logging.Create";
+
+    try
+    {
+        auto service =
+            util::getService(loggingObjectPath, loggingCreateInterface, bus);
+
+        if (service.empty())
+        {
+            log<level::ERR>("Unable to get logging manager service");
+            return;
+        }
+
+        auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
+                                          loggingCreateInterface, "Create");
+
+        auto level =
+            sdbusplus::xyz::openbmc_project::Logging::server::convertForMessage(
+                sdbusplus::xyz::openbmc_project::Logging::server::Entry::Level::
+                    Error);
+        method.append(faultName, level, additionalData);
+
+        auto reply = bus.call(method);
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format(
+                "Failed creating event log for fault {} due to error {}",
+                faultName, e.what())
+                .c_str());
+    }
+}
+
 void PSUManager::analyze()
 {
     for (auto& psu : psus)
@@ -135,21 +178,45 @@ void PSUManager::analyze()
     for (auto& psu : psus)
     {
         // TODO: Fault priorities #918
-        if (!faultLogged && psu->isFaulted())
+        if (!psu->isFaultLogged() && psu->isFaulted())
         {
-            if (psu->hasInputFault())
-            {
-                // TODO: Create error log
-            }
+            std::map<std::string, std::string> additionalData;
+            additionalData["_PID"] = std::to_string(getpid());
+            additionalData["STATUS_WORD"] =
+                std::to_string(psu->getStatusWord());
 
-            if (psu->hasMFRFault())
+            if ((psu->hasInputFault() || psu->hasVINUVFault()))
             {
-                // TODO: Create error log
+                /* The power supply location might be needed if the input fault
+                 * is due to a problem with the power supply itself. Include the
+                 * inventory path with a call out priority of low.
+                 */
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+                additionalData["CALLOUT_PRIORITY"] = "L";
+                createError(
+                    "xyz.openbmc_project.Power.PowerSupply.Error.InputFault",
+                    additionalData);
+                psu->setFaultLogged();
             }
-
-            if (psu->hasVINUVFault())
+            else if (psu->hasMFRFault())
             {
-                // TODO: Create error log
+                /* This can represent a variety of faults that result in calling
+                 * out the power supply for replacement:
+                 * Output OverCurrent, Output Under Voltage, and potentially
+                 * other faults.
+                 *
+                 * Also plan on putting specific fault in AdditionalData,
+                 * along with register names and register values
+                 * (STATUS_WORD, STATUS_MFR, etc.).*/
+
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+
+                createError("xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                            additionalData);
+
+                psu->setFaultLogged();
             }
         }
     }
