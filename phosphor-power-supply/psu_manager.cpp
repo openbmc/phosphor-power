@@ -4,11 +4,7 @@
 
 using namespace phosphor::logging;
 
-namespace phosphor
-{
-namespace power
-{
-namespace manager
+namespace phosphor::power::manager
 {
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
@@ -129,6 +125,34 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
     }
 }
 
-} // namespace manager
-} // namespace power
-} // namespace phosphor
+void PSUManager::analyze()
+{
+    for (auto& psu : psus)
+    {
+        psu->analyze();
+    }
+
+    for (auto& psu : psus)
+    {
+        // TODO: Fault priorities #918
+        if (!faultLogged && psu->isFaulted())
+        {
+            if (psu->hasInputFault())
+            {
+                // TODO: Create error log
+            }
+
+            if (psu->hasMFRFault())
+            {
+                // TODO: Create error log
+            }
+
+            if (psu->hasVINUVFault())
+            {
+                // TODO: Create error log
+            }
+        }
+    }
+}
+
+} // namespace phosphor::power::manager

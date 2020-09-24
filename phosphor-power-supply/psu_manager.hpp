@@ -18,11 +18,7 @@ struct sys_properties
 using namespace phosphor::power::psu;
 using namespace phosphor::logging;
 
-namespace phosphor
-{
-namespace power
-{
-namespace manager
+namespace phosphor::power::manager
 {
 
 /**
@@ -145,35 +141,7 @@ class PSUManager
     /**
      * Analyze the status of each of the power supplies.
      */
-    void analyze()
-    {
-        for (auto& psu : psus)
-        {
-            psu->analyze();
-        }
-
-        for (auto& psu : psus)
-        {
-            // TODO: Fault priorities #918
-            if (!faultLogged && psu->isFaulted())
-            {
-                if (psu->hasInputFault())
-                {
-                    // TODO: Create error log
-                }
-
-                if (psu->hasMFRFault())
-                {
-                    // TODO: Create error log
-                }
-
-                if (psu->hasVINUVFault())
-                {
-                    // TODO: Create error log
-                }
-            }
-        }
-    }
+    void analyze();
 
     /** @brief True if the power is on. */
     bool powerOn = false;
@@ -229,6 +197,4 @@ class PSUManager
     std::vector<std::unique_ptr<PowerSupply>> psus;
 };
 
-} // namespace manager
-} // namespace power
-} // namespace phosphor
+} // namespace phosphor::power::manager
