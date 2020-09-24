@@ -38,13 +38,29 @@ class MockErrorLogging : public ErrorLogging
     MockErrorLogging& operator=(MockErrorLogging&&) = delete;
     virtual ~MockErrorLogging() = default;
 
-    // TODO: Add parameters when ErrorLogging interface is complete
-    MOCK_METHOD(void, logConfigFileError, (), (override));
-    MOCK_METHOD(void, logDBusError, (), (override));
-    MOCK_METHOD(void, logI2CError, (), (override));
-    MOCK_METHOD(void, logInternalError, (), (override));
-    MOCK_METHOD(void, logPMBusError, (), (override));
-    MOCK_METHOD(void, logWriteVerificationError, (), (override));
+    MOCK_METHOD(void, logConfigFileError,
+                (Entry::Level severity, Journal& journal), (override));
+
+    MOCK_METHOD(void, logDBusError, (Entry::Level severity, Journal& journal),
+                (override));
+
+    MOCK_METHOD(void, logI2CError,
+                (Entry::Level severity, Journal& journal,
+                 const std::string& bus, uint8_t addr, int errorNumber),
+                (override));
+
+    MOCK_METHOD(void, logInternalError,
+                (Entry::Level severity, Journal& journal), (override));
+
+    MOCK_METHOD(void, logPMBusError,
+                (Entry::Level severity, Journal& journal,
+                 const std::string& inventoryPath),
+                (override));
+
+    MOCK_METHOD(void, logWriteVerificationError,
+                (Entry::Level severity, Journal& journal,
+                 const std::string& inventoryPath),
+                (override));
 };
 
 } // namespace phosphor::power::regulators
