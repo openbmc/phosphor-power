@@ -1,0 +1,260 @@
+/**
+ * Copyright © 2020 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "error_logging.hpp"
+
+#include "exception_utils.hpp"
+#include "utility.hpp" // for getService()
+
+#include <errno.h>     // for errno
+#include <string.h>    // for strerror()
+#include <sys/types.h> // for getpid(), lseek(), ssize_t
+#include <unistd.h>    // for getpid(), lseek(), write()
+
+#include <sdbusplus/message.hpp>
+
+#include <exception>
+#include <ios>
+#include <sstream>
+#include <stdexcept>
+
+namespace phosphor::power::regulators
+{
+
+void DBusErrorLogging::logConfigFileError(Entry::Level severity,
+                                          Journal& journal)
+{
+    std::map<std::string, std::string> additionalData{};
+    logError("xyz.openbmc_project.Power.Regulators.Error.ConfigFile", severity,
+             additionalData, journal);
+}
+
+void DBusErrorLogging::logDBusError(Entry::Level severity, Journal& journal)
+{
+    std::map<std::string, std::string> additionalData{};
+    logError("xyz.openbmc_project.Power.Error.DBus", severity, additionalData,
+             journal);
+}
+
+void DBusErrorLogging::logI2CError(Entry::Level severity, Journal& journal,
+                                   const std::string& bus, uint8_t addr,
+                                   int errorNumber)
+{
+    // Convert I2C address to a hex string
+    std::ostringstream ss;
+    ss << "0x" << std::hex << std::uppercase << static_cast<uint16_t>(addr);
+    std::string addrStr = ss.str();
+
+    // Convert errno value to an integer string
+    std::string errorNumberStr = std::to_string(errorNumber);
+
+    std::map<std::string, std::string> additionalData{};
+    additionalData.emplace("CALLOUT_IIC_BUS", bus);
+    additionalData.emplace("CALLOUT_IIC_ADDR", addrStr);
+    additionalData.emplace("CALLOUT_ERRNO", errorNumberStr);
+    logError("xyz.openbmc_project.Power.Error.I2C", severity, additionalData,
+             journal);
+}
+
+void DBusErrorLogging::logInternalError(Entry::Level severity, Journal& journal)
+{
+    std::map<std::string, std::string> additionalData{};
+    logError("xyz.openbmc_project.Power.Error.Internal", severity,
+             additionalData, journal);
+}
+
+void DBusErrorLogging::logPMBusError(Entry::Level severity, Journal& journal,
+                                     const std::string& inventoryPath)
+{
+    // Convert relative inventory path to an absolute path
+    std::string absInventoryPath = getAbsoluteInventoryPath(inventoryPath);
+
+    std::map<std::string, std::string> additionalData{};
+    additionalData.emplace("CALLOUT_INVENTORY_PATH", absInventoryPath);
+    logError("xyz.openbmc_project.Power.Error.PMBus", severity, additionalData,
+             journal);
+}
+
+void DBusErrorLogging::logWriteVerificationError(
+    Entry::Level severity, Journal& journal, const std::string& inventoryPath)
+{
+    // Convert relative inventory path to an absolute path
+    std::string absInventoryPath = getAbsoluteInventoryPath(inventoryPath);
+
+    std::map<std::string, std::string> additionalData{};
+    additionalData.emplace("CALLOUT_INVENTORY_PATH", absInventoryPath);
+    logError("xyz.openbmc_project.Power.Regulators.Error.WriteVerification",
+             severity, additionalData, journal);
+}
+
+FFDCFile DBusErrorLogging::createFFDCFile(const std::vector<std::string>& lines)
+{
+    // Create FFDC file of type Text
+    FFDCFile file{FFDCFormat::Text};
+
+    // Write lines to file
+    for (const std::string& line : lines)
+    {
+        // Write line to file
+        if (!line.empty())
+        {
+            writeToFFDCFile(file, line.c_str(), line.size());
+        }
+
+        // Write newline to file if necessary
+        if (line.empty() || (line.back() != '\n'))
+        {
+            writeToFFDCFile(file, "\n", 1);
+        }
+    }
+
+    // Seek to beginning of file so error logging system can read data
+    int fd = file.getFileDescriptor();
+    if (lseek(fd, 0, SEEK_SET) != 0)
+    {
+        throw std::runtime_error{
+            std::string{"Unable to seek within FFDC file: "} + strerror(errno)};
+    }
+
+    return file;
+}
+
+std::vector<FFDCFile> DBusErrorLogging::createFFDCFiles(Journal& journal)
+{
+    std::vector<FFDCFile> files{};
+
+    // Create FFDC files containing journal messages from relevant executables.
+    // Executables in priority order in case error log cannot hold all the FFDC.
+    std::vector<std::string> executables{"phosphor-regulators", "systemd"};
+    for (const std::string& executable : executables)
+    {
+        try
+        {
+            // Get recent journal messages from the executable
+            // TODO: Uncomment the following line and remove the temporary code
+            // when Journal::getMessages() is implemented
+            // std::vector<std::string> messages =
+            //   journal.getMessages("SYSLOG_IDENTIFIER", executable, 30);
+            std::vector<std::string> messages{
+                executable + ": journal message 1",
+                executable + ": journal message 2"};
+
+            // Create FFDC file containing the journal messages
+            if (!messages.empty())
+            {
+                files.emplace_back(createFFDCFile(messages));
+            }
+        }
+        catch (const std::exception& e)
+        {
+            journal.logError(exception_utils::getMessages(e));
+        }
+    }
+
+    return files;
+}
+
+std::vector<FFDCTuple>
+    DBusErrorLogging::createFFDCTuples(std::vector<FFDCFile>& files)
+{
+    std::vector<FFDCTuple> ffdcTuples{};
+    for (FFDCFile& file : files)
+    {
+        ffdcTuples.emplace_back(
+            file.getFormat(), file.getSubType(), file.getVersion(),
+            sdbusplus::message::unix_fd(file.getFileDescriptor()));
+    }
+    return ffdcTuples;
+}
+
+void DBusErrorLogging::logError(
+    const std::string& message, Entry::Level severity,
+    std::map<std::string, std::string>& additionalData, Journal& journal)
+{
+    try
+    {
+        // Add PID to AdditionalData
+        additionalData.emplace("_PID", std::to_string(getpid()));
+
+        // Create FFDC files containing debug data to store in error log
+        std::vector<FFDCFile> files{createFFDCFiles(journal)};
+
+        // Create FFDC tuples used to pass FFDC files to D-Bus method
+        std::vector<FFDCTuple> ffdcTuples{createFFDCTuples(files)};
+
+        // Call D-Bus method to create an error log with FFDC files
+        const char* service = "xyz.openbmc_project.Logging";
+        const char* objPath = "/xyz/openbmc_project/logging";
+        const char* interface = "xyz.openbmc_project.Logging.Create";
+        const char* method = "CreateWithFFDCFiles";
+        auto reqMsg = bus.new_method_call(service, objPath, interface, method);
+        reqMsg.append(message, severity, additionalData, ffdcTuples);
+        auto respMsg = bus.call(reqMsg);
+
+        // Remove FFDC files.  If an exception occurs before this, the files
+        // will be deleted by FFDCFile desctructor but errors will be ignored.
+        removeFFDCFiles(files, journal);
+    }
+    catch (const std::exception& e)
+    {
+        journal.logError(exception_utils::getMessages(e));
+        journal.logError("Unable to log error " + message);
+    }
+}
+
+void DBusErrorLogging::removeFFDCFiles(std::vector<FFDCFile>& files,
+                                       Journal& journal)
+{
+    // Explicitly remove FFDC files rather than relying on FFDCFile destructor.
+    // This allows any resulting errors to be written to the journal.
+    for (FFDCFile& file : files)
+    {
+        try
+        {
+            file.remove();
+        }
+        catch (const std::exception& e)
+        {
+            journal.logError(exception_utils::getMessages(e));
+        }
+    }
+
+    // Clear vector since the FFDCFile objects can no longer be used
+    files.clear();
+}
+
+void DBusErrorLogging::writeToFFDCFile(FFDCFile& file, const char* buffer,
+                                       unsigned int count)
+{
+    int fd = file.getFileDescriptor();
+
+    // While more bytes to write
+    while (count > 0)
+    {
+        // Try to write remaining bytes; it might not write all of them
+        ssize_t bytesWritten = write(fd, buffer, count);
+        if (bytesWritten == -1)
+        {
+            throw std::runtime_error{
+                std::string{"Unable to write to FFDC file: "} +
+                strerror(errno)};
+        }
+        buffer += bytesWritten;
+        count -= bytesWritten;
+    }
+}
+
+} // namespace phosphor::power::regulators

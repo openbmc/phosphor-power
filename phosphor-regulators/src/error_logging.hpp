@@ -15,10 +15,25 @@
  */
 #pragma once
 
+#include "ffdc_file.hpp"
+#include "journal.hpp"
+#include "xyz/openbmc_project/Logging/Create/server.hpp"
+#include "xyz/openbmc_project/Logging/Entry/server.hpp"
+
 #include <sdbusplus/bus.hpp>
+
+#include <cstdint>
+#include <map>
+#include <string>
+#include <tuple>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
+
+using namespace sdbusplus::xyz::openbmc_project::Logging::server;
+using FFDCTuple =
+    std::tuple<FFDCFormat, uint8_t, uint8_t, sdbusplus::message::unix_fd>;
 
 /**
  * @class ErrorLogging
@@ -38,13 +53,78 @@ class ErrorLogging
     ErrorLogging& operator=(ErrorLogging&&) = delete;
     virtual ~ErrorLogging() = default;
 
-    // TODO: The following are stubs.  Add parameters and doxygen later.
-    virtual void logConfigFileError() = 0;
-    virtual void logDBusError() = 0;
-    virtual void logI2CError() = 0;
-    virtual void logInternalError() = 0;
-    virtual void logPMBusError() = 0;
-    virtual void logWriteVerificationError() = 0;
+    /**
+     * Log a regulators configuration file error.
+     *
+     * This error is logged when the regulators configuration file could not be
+     * found, could not be read, or had invalid contents.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     */
+    virtual void logConfigFileError(Entry::Level severity,
+                                    Journal& journal) = 0;
+
+    /**
+     * Log a D-Bus error.
+     *
+     * This error is logged when D-Bus communication fails.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     */
+    virtual void logDBusError(Entry::Level severity, Journal& journal) = 0;
+
+    /**
+     * Log an I2C communication error.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     * @param bus I2C bus in the form "/dev/i2c-X", where X is the 0-based bus
+     *            number
+     * @param addr 7 bit I2C address
+     * @param errorNumber errno value from the failed I2C operation
+     */
+    virtual void logI2CError(Entry::Level severity, Journal& journal,
+                             const std::string& bus, uint8_t addr,
+                             int errorNumber) = 0;
+
+    /**
+     * Log an internal firmware error.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     */
+    virtual void logInternalError(Entry::Level severity, Journal& journal) = 0;
+
+    /**
+     * Log a PMBus error.
+     *
+     * This error is logged when the I2C communication was successful, but the
+     * PMBus value read is invalid or unsupported.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     * @param inventoryPath D-Bus inventory path of the device where the error
+     *                      occurred
+     */
+    virtual void logPMBusError(Entry::Level severity, Journal& journal,
+                               const std::string& inventoryPath) = 0;
+
+    /**
+     * Log a write verification error.
+     *
+     * This error is logged when a device register is written, read back, and
+     * the two values do not match.  This is also called a read-back error.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     * @param inventoryPath D-Bus inventory path of the device where the error
+     *                      occurred
+     */
+    virtual void
+        logWriteVerificationError(Entry::Level severity, Journal& journal,
+                                  const std::string& inventoryPath) = 0;
 };
 
 /**
@@ -72,16 +152,124 @@ class DBusErrorLogging : public ErrorLogging
     {
     }
 
-    // TODO: The following are stubs.  Add parameters, implementation, and
-    // doxygen later.
-    virtual void logConfigFileError(){};
-    virtual void logDBusError(){};
-    virtual void logI2CError(){};
-    virtual void logInternalError(){};
-    virtual void logPMBusError(){};
-    virtual void logWriteVerificationError(){};
+    /** @copydoc ErrorLogging::logConfigFileError() */
+    virtual void logConfigFileError(Entry::Level severity,
+                                    Journal& journal) override;
+
+    /** @copydoc ErrorLogging::logDBusError() */
+    virtual void logDBusError(Entry::Level severity, Journal& journal) override;
+
+    /** @copydoc ErrorLogging::logI2CError() */
+    virtual void logI2CError(Entry::Level severity, Journal& journal,
+                             const std::string& bus, uint8_t addr,
+                             int errorNumber) override;
+
+    /** @copydoc ErrorLogging::logInternalError() */
+    virtual void logInternalError(Entry::Level severity,
+                                  Journal& journal) override;
+
+    /** @copydoc ErrorLogging::logPMBusError() */
+    virtual void logPMBusError(Entry::Level severity, Journal& journal,
+                               const std::string& inventoryPath) override;
+
+    /** @copydoc ErrorLogging::logWriteVerificationError() */
+    virtual void
+        logWriteVerificationError(Entry::Level severity, Journal& journal,
+                                  const std::string& inventoryPath) override;
 
   private:
+    /**
+     * Create an FFDCFile object containing the specified lines of text data.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param lines lines of text data to write to file
+     * @return FFDCFile object
+     */
+    FFDCFile createFFDCFile(const std::vector<std::string>& lines);
+
+    /**
+     * Create FFDCFile objects containing debug data to store in the error log.
+     *
+     * If an error occurs, the error is written to the journal but an exception
+     * is not thrown.
+     *
+     * @param journal system journal
+     * @return vector of FFDCFile objects
+     */
+    std::vector<FFDCFile> createFFDCFiles(Journal& journal);
+
+    /**
+     * Create FFDCTuple objects corresponding to the specified FFDC files.
+     *
+     * The D-Bus method to create an error log requires a vector of tuples to
+     * pass in the FFDC file information.
+     *
+     * @param files FFDC files
+     * @return vector of FFDCTuple objects
+     */
+    std::vector<FFDCTuple> createFFDCTuples(std::vector<FFDCFile>& files);
+
+    /**
+     * Returns the absolute form of the specified inventory path.
+     *
+     * The inventory paths in the JSON configuration file are relative.  Add the
+     * the necessary prefix to make the path absolute.
+     *
+     * @param inventoryPath relative D-Bus inventory path
+     * @return absolute D-Bus inventory path
+     */
+    std::string getAbsoluteInventoryPath(const std::string& inventoryPath)
+    {
+        std::string absPath = "/xyz/openbmc_project/inventory";
+        if ((!inventoryPath.empty()) && (inventoryPath.front() != '/'))
+        {
+            absPath += '/';
+        }
+        absPath += inventoryPath;
+        return absPath;
+    }
+
+    /**
+     * Logs an error using the D-Bus CreateWithFFDCFiles method.
+     *
+     * If logging fails, a message is written to the journal but an exception is
+     * not thrown.
+     *
+     * @param message Message property of the error log entry
+     * @param severity Severity property of the error log entry
+     * @param additionalData AdditionalData property of the error log entry
+     * @param journal system journal
+     */
+    void logError(const std::string& message, Entry::Level severity,
+                  std::map<std::string, std::string>& additionalData,
+                  Journal& journal);
+
+    /**
+     * Removes the specified FFDC files from the file system.
+     *
+     * Also clears the specified vector, removing the FFDCFile objects.
+     *
+     * If an error occurs, the error is written to the journal but an exception
+     * is not thrown.
+     *
+     * @param files FFDC files to remove
+     * @param journal system journal
+     */
+    void removeFFDCFiles(std::vector<FFDCFile>& files, Journal& journal);
+
+    /**
+     * Writes character data to an FFDC file.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param file FFDC file
+     * @param buffer buffer containing the character data to write
+     * @param count number of characters in the buffer
+     */
+    void writeToFFDCFile(FFDCFile& file, const char* buffer,
+                         unsigned int count);
+
     /**
      * D-Bus bus object.
      */
