@@ -136,6 +136,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last read value from STATUS_WORD.
+     */
+    uint64_t getStatusWord() const
+    {
+        return statusWord;
+    }
+
+    /**
      * @brief Returns true if a fault was found.
      */
     bool isFaulted() const
@@ -175,6 +183,9 @@ class PowerSupply
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
+
+    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD. */
+    uint64_t statusWord = 0;
 
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
