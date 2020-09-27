@@ -167,6 +167,11 @@ class PowerSupply
         return vinUVFault;
     }
 
+    std::string getInventoryPath() const
+    {
+        return inventoryPath;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
