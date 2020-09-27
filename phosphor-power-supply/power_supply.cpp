@@ -39,7 +39,7 @@ void PowerSupply::analyze()
     {
         try
         {
-            auto statusWord{pmbusIntf->read(STATUS_WORD, Type::Debug)};
+            statusWord = pmbusIntf->read(STATUS_WORD, Type::Debug);
 
             if (statusWord)
             {
