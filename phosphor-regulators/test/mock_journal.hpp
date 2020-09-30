@@ -41,6 +41,10 @@ class MockJournal : public Journal
     MockJournal& operator=(MockJournal&&) = delete;
     virtual ~MockJournal() = default;
 
+    MOCK_METHOD(std::vector<std::string>, getMessages,
+                (const std::string& field, const std::string& fieldValue,
+                 unsigned int max),
+                (override));
     MOCK_METHOD(void, logDebug, (const std::string& message), (override));
     MOCK_METHOD(void, logDebug, (const std::vector<std::string>& messages),
                 (override));
