@@ -82,6 +82,27 @@ class Journal
      * @param messages messages to log
      */
     virtual void logInfo(const std::vector<std::string>& messages) = 0;
+
+    /**
+     * Gets the data object associated with a specific field from the
+     * current journal entry and return the data as string.
+     *
+     * @param journal the current journal entry
+     * @param field a specific field to get data
+     */
+    std::string getFieldValue(sd_journal* journal, const char* field) const;
+
+    /**
+     * Gets the journal messages that have the specified field set to the
+     * specified value.
+     *
+     * @param field a specific field to get data
+     * @param fieldValue a specific field value to compare
+     * @param max the maximum number of messages that should be returned
+     */
+    std::vector<std::string> getMessages(const std::string& field,
+                                         const std::string& fieldValue,
+                                         unsigned int max) const;
 };
 
 /**
