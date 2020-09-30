@@ -15,6 +15,8 @@
  */
 #pragma once
 
+#include <systemd/sd-journal.h>
+
 #include <phosphor-logging/log.hpp>
 
 #include <string>
@@ -82,6 +84,21 @@ class Journal
      * @param messages messages to log
      */
     virtual void logInfo(const std::vector<std::string>& messages) = 0;
+
+    /**
+     * Gets the journal messages that have the specified field set to the
+     * specified value.
+     *
+     * @param field journal field to use during search
+     * @param fieldValue expected field value
+     * @param max Maximum number of messages to return.
+     *        Specify 0 to return all matching messages.
+     *
+     * @return matching messages from the journal
+     */
+    virtual std::vector<std::string> getMessages(const std::string& field,
+                                                 const std::string& fieldValue,
+                                                 unsigned int max = 0) = 0;
 };
 
 /**
@@ -99,6 +116,11 @@ class SystemdJournal : public Journal
     SystemdJournal& operator=(const SystemdJournal&) = delete;
     SystemdJournal& operator=(SystemdJournal&&) = delete;
     virtual ~SystemdJournal() = default;
+
+    /** @copydoc Journal::getMessages() */
+    virtual std::vector<std::string> getMessages(const std::string& field,
+                                                 const std::string& fieldValue,
+                                                 unsigned int max) override;
 
     /** @copydoc Journal::logDebug(const std::string&) */
     virtual void logDebug(const std::string& message) override
@@ -147,6 +169,16 @@ class SystemdJournal : public Journal
             logInfo(message);
         }
     }
+
+  private:
+    /**
+     * Gets the data object associated with a specific field from the
+     * current journal entry and return the data as string.
+     *
+     * @param journal the current journal entry
+     * @param field journal field to use during search
+     */
+    std::string getFieldValue(sd_journal* journal, const char* field) const;
 };
 
 } // namespace phosphor::power::regulators
