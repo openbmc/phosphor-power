@@ -225,6 +225,18 @@ void PSUManager::analyze()
 
                 psu->setFaultLogged();
             }
+            else if (psu->hasCommFault())
+            {
+                /* Attempts to communicate with the power supply have reached
+                 * there limit. Create an error. */
+                additionalData["CALLOUT_DEVICE_PATH"] = psu->getDevicePath();
+
+                createError(
+                    "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
+                    additionalData);
+
+                psu->setFaultLogged();
+            }
         }
     }
 }
