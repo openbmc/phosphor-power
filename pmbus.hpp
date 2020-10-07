@@ -145,6 +145,7 @@ class PMBusBase
     virtual std::string readString(const std::string& name, Type type) = 0;
     virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
                              Type type) = 0;
+    virtual const fs::path& path() const = 0;
 };
 
 /**
@@ -308,7 +309,7 @@ class PMBus : public PMBusBase
     /**
      * Returns the sysfs base path of this device
      */
-    inline const auto& path() const
+    const fs::path& path() const override
     {
         return basePath;
     }

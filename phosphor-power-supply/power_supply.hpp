@@ -150,7 +150,7 @@ class PowerSupply
      */
     bool isFaulted() const
     {
-        return faultFound;
+        return (faultFound || hasCommFault());
     }
 
     /**
@@ -191,6 +191,11 @@ class PowerSupply
     bool hasVINUVFault() const
     {
         return vinUVFault;
+    }
+
+    const std::string getDevicePath() const
+    {
+        return pmbusIntf->path();
     }
 
     const std::string& getInventoryPath() const
