@@ -175,11 +175,20 @@ void PSUManager::analyze()
 
     for (auto& psu : psus)
     {
+        std::map<std::string, std::string> additionalData;
+        additionalData["_PID"] = std::to_string(getpid());
         // TODO: Fault priorities #918
-        if (!psu->isFaultLogged() && psu->isFaulted())
+        if (!psu->isFaultLogged() && !psu->isPresent())
         {
-            std::map<std::string, std::string> additionalData;
-            additionalData["_PID"] = std::to_string(getpid());
+            // Create error for power supply missing.
+            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
+            additionalData["CALLOUT_PRIORITY"] = "H";
+            createError("xyz.openbmc_project.Power.PowerSupply.Error.Missing",
+                        additionalData);
+            psu->setFaultLogged();
+        }
+        else if (!psu->isFaultLogged() && psu->isFaulted())
+        {
             additionalData["STATUS_WORD"] =
                 std::to_string(psu->getStatusWord());
 
