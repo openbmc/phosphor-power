@@ -193,14 +193,35 @@ class PowerSupply
         return vinUVFault;
     }
 
+    /**
+     * @brief Returns the device path
+     *
+     * This can be used for error call outs.
+     * Example: /sys/bus/i2c/devices/3-0068
+     */
     const std::string getDevicePath() const
     {
         return pmbusIntf->path();
     }
 
+    /**
+     * @brief Returns this power supplies inventory path.
+     *
+     * This can be used for error call outs.
+     * Example:
+     * /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1
+     */
     const std::string& getInventoryPath() const
     {
         return inventoryPath;
+    }
+
+    /**
+     * @brief Returns the firmware revision version read from the power supply
+     */
+    const std::string& getFWVersion() const
+    {
+        return fwVersion;
     }
 
     /** @brief Returns true if the number of failed reads exceeds limit
@@ -260,6 +281,9 @@ class PowerSupply
      * Used to read or write to/from PMBus power supply devices.
      */
     std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
+
+    /** @brief Stored copy of the firmware version/revision string */
+    std::string fwVersion;
 
     /**
      *  @brief Updates the presence status by querying D-Bus
