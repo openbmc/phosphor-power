@@ -57,7 +57,7 @@
           "comments": [ "IR35221 regulator producing the Vdd rail" ],
           "id": "vdd_regulator",
           "is_regulator": true,
-          "fru": "/system/chassis/motherboard/regulator1",
+          "fru": "system/chassis/motherboard/regulator1",
           "i2c_interface": {
             "bus": 1,
             "address": "0x70"
@@ -81,7 +81,7 @@
           "comments": [ "IR35221 regulator producing the Vio rail" ],
           "id": "vio_regulator",
           "is_regulator": true,
-          "fru": "/system/chassis/motherboard/regulator2",
+          "fru": "system/chassis/motherboard/regulator2",
           "i2c_interface": {
             "bus": 1,
             "address": "0x71"

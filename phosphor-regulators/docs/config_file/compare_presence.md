@@ -11,7 +11,7 @@ execute actions based on FRU presence.
 ## Properties
 | Name | Required | Type | Description |
 | :--- | :------: | :--- | :---------- |
-| fru | yes | string | Field-Replaceable Unit.  Specify the D-Bus inventory path of the FRU. |
+| fru | yes | string | Field-Replaceable Unit.  Specify the relative D-Bus inventory path of the FRU.  Full inventory paths begin with the root "/xyz/openbmc_project/inventory".  Specify the relative path below the root, such as "system/chassis/motherboard/cpu3". |
 | value | yes | boolean (true or false) | Expected presence value. |
 
 ## Return Value
@@ -23,7 +23,7 @@ returns false.
 {
   "comments": [ "Check if CPU3 is present" ],
   "compare_presence": {
-    "fru": "/system/chassis/motherboard/cpu3",
+    "fru": "system/chassis/motherboard/cpu3",
     "value": true
   }
 }

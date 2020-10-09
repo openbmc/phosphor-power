@@ -53,7 +53,7 @@ presence detection is not supported for devices that can be removed or added
   "actions": [
     {
       "compare_presence": {
-        "fru": "/system/chassis/motherboard/cpu3",
+        "fru": "system/chassis/motherboard/cpu3",
         "value": true
       }
     }
