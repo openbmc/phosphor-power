@@ -203,6 +203,11 @@ class PowerSupply
         return inventoryPath;
     }
 
+    const std::string& getFWVersion() const
+    {
+        return fwVersion;
+    }
+
     /** @brief Returns true if the number of failed reads exceeds limit
      * TODO: or CML bit on.
      */
@@ -260,6 +265,9 @@ class PowerSupply
      * Used to read or write to/from PMBus power supply devices.
      */
     std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
+
+    /** @brief Stored copy of the firmware version/revision string */
+    std::string fwVersion;
 
     /**
      *  @brief Updates the presence status by querying D-Bus

@@ -191,6 +191,10 @@ void PSUManager::analyze()
         {
             additionalData["STATUS_WORD"] =
                 std::to_string(psu->getStatusWord());
+            // If there are faults being reported, they possibly could be
+            // related to a bug in the firmware version running on the power
+            // supply. Capture that data into the error as well.
+            additionalData["FW_VERSION"] = psu->getFWVersion();
 
             if ((psu->hasInputFault() || psu->hasVINUVFault()))
             {

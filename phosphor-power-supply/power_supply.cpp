@@ -196,7 +196,6 @@ void PowerSupply::updateInventory()
     std::string fn;
     std::string header;
     std::string sn;
-    std::string version;
     using PropertyMap =
         std::map<std::string, std::variant<std::string, std::vector<uint8_t>>>;
     PropertyMap assetProps;
@@ -261,8 +260,9 @@ void PowerSupply::updateInventory()
 
         try
         {
-            version = pmbusIntf->readString(FW_VERSION, Type::HwmonDeviceDebug);
-            versionProps.emplace(VERSION_PROP, version);
+            fwVersion =
+                pmbusIntf->readString(FW_VERSION, Type::HwmonDeviceDebug);
+            versionProps.emplace(VERSION_PROP, fwVersion);
         }
         catch (ReadFailure& e)
         {
