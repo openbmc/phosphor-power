@@ -197,8 +197,10 @@ void PowerSupply::updateInventory()
     std::string header;
     std::string sn;
     using PropertyMap =
-        std::map<std::string, std::variant<std::string, std::vector<uint8_t>>>;
+        std::map<std::string,
+                 std::variant<std::string, std::vector<uint8_t>, bool>>;
     PropertyMap assetProps;
+    PropertyMap operProps;
     PropertyMap versionProps;
     PropertyMap ipzvpdDINFProps;
     PropertyMap ipzvpdVINIProps;
@@ -301,6 +303,10 @@ void PowerSupply::updateInventory()
         interfaces.emplace(VERSION_IFACE, std::move(versionProps));
         interfaces.emplace(DINF_IFACE, std::move(ipzvpdDINFProps));
         interfaces.emplace(VINI_IFACE, std::move(ipzvpdVINIProps));
+
+        // Update the Functional
+        operProps.emplace(FUNCTIONAL_PROP, present);
+        interfaces.emplace(OPERATIONAL_STATE_IFACE, std::move(operProps));
 
         auto path = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
         object.emplace(path, std::move(interfaces));
