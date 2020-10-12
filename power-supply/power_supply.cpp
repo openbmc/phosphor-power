@@ -611,10 +611,11 @@ void PowerSupply::updateInventory()
     using namespace sdbusplus::message;
 
     // Build the object map and send it to the inventory
-    using Properties = std::map<std::string, std::variant<std::string>>;
+    using Properties = std::map<std::string, std::variant<std::string, bool>>;
     using Interfaces = std::map<std::string, Properties>;
     using Object = std::map<object_path, Interfaces>;
     Properties assetProps;
+    Properties operProps;
     Interfaces interfaces;
     Object object;
 
@@ -642,7 +643,9 @@ void PowerSupply::updateInventory()
         }
     }
 
+    operProps.emplace(FUNCTIONAL_PROP, present);
     interfaces.emplace(ASSET_IFACE, std::move(assetProps));
+    interfaces.emplace(OPERATIONAL_STATE_IFACE, std::move(operProps));
 
     // For Notify(), just send the relative path of the inventory
     // object so remove the INVENTORY_OBJ_PATH prefix
