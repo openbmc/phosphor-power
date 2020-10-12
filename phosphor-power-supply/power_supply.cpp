@@ -198,8 +198,10 @@ void PowerSupply::updateInventory()
     std::string sn;
     std::string version;
     using PropertyMap =
-        std::map<std::string, std::variant<std::string, std::vector<uint8_t>>>;
+        std::map<std::string,
+                 std::variant<std::string, std::vector<uint8_t>, bool>>;
     PropertyMap assetProps;
+    PropertyMap operProps;
     PropertyMap versionProps;
     PropertyMap ipzvpdDINFProps;
     PropertyMap ipzvpdVINIProps;
@@ -332,6 +334,9 @@ void PowerSupply::updateInventory()
         }
 #endif
     }
+
+    operProps.emplace(FUNCTIONAL_PROP, present);
+    interfaces.emplace(OPERATIONAL_STATE_IFACE, std::move(operProps));
 }
 
 } // namespace phosphor::power::psu
