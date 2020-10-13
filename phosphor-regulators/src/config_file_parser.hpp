@@ -485,6 +485,26 @@ inline int8_t parseInt8(const nlohmann::json& element)
 }
 
 /**
+ * Returns the absolute form of the specified inventory path.
+ *
+ * The inventory paths in the JSON configuration file are relative.  Add the
+ * the necessary prefix to make the path absolute.
+ *
+ * @param inventoryPath relative D-Bus inventory path
+ * @return absolute D-Bus inventory path
+ */
+inline std::string parseInventoryPath(const std::string& inventoryPath)
+{
+    std::string absPath = "/xyz/openbmc_project/inventory";
+    if ((!inventoryPath.empty()) && (inventoryPath.front() != '/'))
+    {
+        absPath += '/';
+    }
+    absPath += inventoryPath;
+    return absPath;
+}
+
+/**
  * Parses a JSON element containing a not action.
  *
  * Returns the corresponding C++ NotAction object.

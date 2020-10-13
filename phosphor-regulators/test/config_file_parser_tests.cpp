@@ -940,7 +940,9 @@ TEST(ConfigFileParserTests, ParseComparePresence)
         )"_json;
         std::unique_ptr<ComparePresenceAction> action =
             parseComparePresence(element);
-        EXPECT_EQ(action->getFRU(), "/system/chassis/motherboard/cpu3");
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
         EXPECT_EQ(action->getValue(), true);
     }
 
@@ -1053,7 +1055,9 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             }
         )"_json;
         std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
-        EXPECT_EQ(action->getFRU(), "/system/chassis/disk_backplane");
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), "2D35");
     }
@@ -1395,7 +1399,8 @@ TEST(ConfigFileParserTests, ParseDevice)
         std::unique_ptr<Device> device = parseDevice(element);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
-        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
+                                    "chassis/motherboard/regulator2");
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_EQ(device->getPresenceDetection(), nullptr);
         EXPECT_EQ(device->getConfiguration(), nullptr);
@@ -1433,7 +1438,8 @@ TEST(ConfigFileParserTests, ParseDevice)
         std::unique_ptr<Device> device = parseDevice(element);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
-        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
+                                    "chassis/motherboard/regulator2");
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_NE(device->getPresenceDetection(), nullptr);
         EXPECT_NE(device->getConfiguration(), nullptr);
