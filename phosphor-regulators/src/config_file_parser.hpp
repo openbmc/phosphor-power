@@ -720,6 +720,30 @@ inline std::string parseString(const nlohmann::json& element,
 }
 
 /**
+ * Returns the absolute form of the specified inventory path.
+ *
+ * The inventory paths in the JSON configuration file are relative. Parses a
+ * JSON element containing a relative inventory path. Add the the necessary
+ * prefix to make the path absolute.
+ *
+ * Throws an exception if parsing fails from parseString().
+ *
+ * @param element JSON element
+ * @return absolute D-Bus inventory path
+ */
+inline std::string parseInventoryPath(const nlohmann::json& element)
+{
+    std::string inventoryPath = parseString(element);
+    std::string absPath = "/xyz/openbmc_project/inventory";
+    if (inventoryPath.front() != '/')
+    {
+        absPath += '/';
+    }
+    absPath += inventoryPath;
+    return absPath;
+}
+
+/**
  * Parses a JSON element containing an 8-bit unsigned integer.
  *
  * Returns the corresponding C++ uint8_t value.

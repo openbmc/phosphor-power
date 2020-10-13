@@ -145,9 +145,11 @@ TEST(ChassisTests, CloseDevices)
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            std::unique_ptr<Device> device = std::make_unique<Device>(
-                "vdd0_reg", true, "/system/chassis/motherboard/vdd0_reg",
-                std::move(i2cInterface));
+            std::unique_ptr<Device> device =
+                std::make_unique<Device>("vdd0_reg", true,
+                                         "/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/vdd0_reg",
+                                         std::move(i2cInterface));
             devices.emplace_back(std::move(device));
         }
 
@@ -160,9 +162,11 @@ TEST(ChassisTests, CloseDevices)
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            std::unique_ptr<Device> device = std::make_unique<Device>(
-                "vdd1_reg", true, "/system/chassis/motherboard/vdd1_reg",
-                std::move(i2cInterface));
+            std::unique_ptr<Device> device =
+                std::make_unique<Device>("vdd1_reg", true,
+                                         "/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/vdd1_reg",
+                                         std::move(i2cInterface));
             devices.emplace_back(std::move(device));
         }
 
@@ -225,7 +229,9 @@ TEST(ChassisTests, Configure)
                 createI2CInterface();
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Device> device = std::make_unique<Device>(
-                "vdd0_reg", true, "/system/chassis/motherboard/vdd0_reg",
+                "vdd0_reg", true,
+                "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
+                "vdd0_reg",
                 std::move(i2cInterface), std::move(presenceDetection),
                 std::move(configuration));
             devices.emplace_back(std::move(device));
@@ -243,7 +249,9 @@ TEST(ChassisTests, Configure)
                 createI2CInterface();
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Device> device = std::make_unique<Device>(
-                "vdd1_reg", true, "/system/chassis/motherboard/vdd1_reg",
+                "vdd1_reg", true,
+                "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
+                "vdd1_reg",
                 std::move(i2cInterface), std::move(presenceDetection),
                 std::move(configuration));
             devices.emplace_back(std::move(device));
@@ -364,7 +372,8 @@ TEST(ChassisTests, MonitorSensors)
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> deviceConfiguration{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "reg1", true, "/system/chassis/motherboard/reg1",
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(deviceConfiguration), std::move(rails));
 
