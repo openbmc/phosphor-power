@@ -104,8 +104,10 @@ TEST(PMBusReadSensorActionTests, Execute)
         EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>())).Times(0);
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -146,8 +148,10 @@ TEST(PMBusReadSensorActionTests, Execute)
         EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint8_t&>())).Times(0);
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -188,8 +192,10 @@ TEST(PMBusReadSensorActionTests, Execute)
             .Times(1)
             .WillOnce(SetArgReferee<1>(0b0001'0111));
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -254,8 +260,10 @@ TEST(PMBusReadSensorActionTests, Execute)
             .WillOnce(SetArgReferee<1>(0b0010'0000));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -312,8 +320,10 @@ TEST(PMBusReadSensorActionTests, Execute)
                 i2c::I2CException{"Failed to read byte", "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -370,8 +380,10 @@ TEST(PMBusReadSensorActionTests, Execute)
                 i2c::I2CException{"Failed to read word", "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};

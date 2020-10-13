@@ -28,8 +28,11 @@ using namespace phosphor::power::regulators;
 
 TEST(CompareVPDActionTests, Constructor)
 {
-    CompareVPDAction action{"/system/chassis/disk_backplane", "CCIN", "2D35"};
-    EXPECT_EQ(action.getFRU(), "/system/chassis/disk_backplane");
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
+        "2D35"};
+    EXPECT_EQ(action.getFRU(),
+              "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
     EXPECT_EQ(action.getKeyword(), "CCIN");
     EXPECT_EQ(action.getValue(), "2D35");
 }
@@ -41,26 +44,36 @@ TEST(CompareVPDActionTests, Execute)
 
 TEST(CompareVPDActionTests, GetFRU)
 {
-    CompareVPDAction action{"/system/chassis/disk_backplane", "CCIN", "2D35"};
-    EXPECT_EQ(action.getFRU(), "/system/chassis/disk_backplane");
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
+        "2D35"};
+    EXPECT_EQ(action.getFRU(),
+              "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
 }
 
 TEST(CompareVPDActionTests, GetKeyword)
 {
-    CompareVPDAction action{"/system/chassis/disk_backplane", "CCIN", "2D35"};
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
+        "2D35"};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
 TEST(CompareVPDActionTests, GetValue)
 {
-    CompareVPDAction action{"/system/chassis/disk_backplane", "CCIN", "2D35"};
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
+        "2D35"};
     EXPECT_EQ(action.getValue(), "2D35");
 }
 
 TEST(CompareVPDActionTests, ToString)
 {
-    CompareVPDAction action{"/system/chassis/disk_backplane", "CCIN", "2D35"};
-    EXPECT_EQ(action.toString(),
-              "compare_vpd: { fru: /system/chassis/disk_backplane, keyword: "
-              "CCIN, value: 2D35 }");
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
+        "2D35"};
+    EXPECT_EQ(action.toString(), "compare_vpd: { fru: "
+                                 "/xyz/openbmc_project/inventory/system/"
+                                 "chassis/disk_backplane, keyword: "
+                                 "CCIN, value: 2D35 }");
 }

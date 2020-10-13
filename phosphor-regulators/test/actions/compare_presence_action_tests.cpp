@@ -30,8 +30,10 @@ using namespace phosphor::power::regulators;
 
 TEST(ComparePresenceActionTests, Constructor)
 {
-    ComparePresenceAction action{"/system/chassis/motherboard/cpu3", true};
-    EXPECT_EQ(action.getFRU(), "/system/chassis/motherboard/cpu3");
+    ComparePresenceAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3", true};
+    EXPECT_EQ(action.getFRU(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
     EXPECT_EQ(action.getValue(), true);
 }
 
@@ -42,20 +44,26 @@ TEST(ComparePresenceActionTests, Execute)
 
 TEST(ComparePresenceActionTests, GetFRU)
 {
-    ComparePresenceAction action{"/system/chassis/motherboard/cpu2", true};
-    EXPECT_EQ(action.getFRU(), "/system/chassis/motherboard/cpu2");
+    ComparePresenceAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2", true};
+    EXPECT_EQ(action.getFRU(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2");
 }
 
 TEST(ComparePresenceActionTests, GetValue)
 {
-    ComparePresenceAction action{"/system/chassis/motherboard/cpu3", false};
+    ComparePresenceAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3",
+        false};
     EXPECT_EQ(action.getValue(), false);
 }
 
 TEST(ComparePresenceActionTests, ToString)
 {
-    ComparePresenceAction action{"/system/chassis/motherboard/cpu2", true};
+    ComparePresenceAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2", true};
     EXPECT_EQ(action.toString(),
-              "compare_presence: { fru: /system/chassis/motherboard/cpu2, "
+              "compare_presence: { fru: "
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2, "
               "value: true }");
 }
