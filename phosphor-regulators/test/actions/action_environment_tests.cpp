@@ -40,8 +40,10 @@ TEST(ActionEnvironmentTests, Constructor)
     // Create Device and add to IDMap
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
-    Device reg1{"regulator1", true, "/system/chassis/motherboard/reg1",
-                std::move(i2cInterface)};
+    Device reg1{
+        "regulator1", true,
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+        std::move(i2cInterface)};
     idMap.addDevice(reg1);
 
     // Verify object state after constructor
@@ -105,8 +107,10 @@ TEST(ActionEnvironmentTests, GetDevice)
     // Create Device and add to IDMap
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
-    Device reg1{"regulator1", true, "/system/chassis/motherboard/reg1",
-                std::move(i2cInterface)};
+    Device reg1{
+        "regulator1", true,
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+        std::move(i2cInterface)};
     idMap.addDevice(reg1);
 
     ActionEnvironment env{idMap, "regulator1"};

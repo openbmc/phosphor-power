@@ -78,11 +78,8 @@ void DBusErrorLogging::logInternalError(Entry::Level severity, Journal& journal)
 void DBusErrorLogging::logPMBusError(Entry::Level severity, Journal& journal,
                                      const std::string& inventoryPath)
 {
-    // Convert relative inventory path to an absolute path
-    std::string absInventoryPath = getAbsoluteInventoryPath(inventoryPath);
-
     std::map<std::string, std::string> additionalData{};
-    additionalData.emplace("CALLOUT_INVENTORY_PATH", absInventoryPath);
+    additionalData.emplace("CALLOUT_INVENTORY_PATH", inventoryPath);
     logError("xyz.openbmc_project.Power.Error.PMBus", severity, additionalData,
              journal);
 }
@@ -90,11 +87,8 @@ void DBusErrorLogging::logPMBusError(Entry::Level severity, Journal& journal,
 void DBusErrorLogging::logWriteVerificationError(
     Entry::Level severity, Journal& journal, const std::string& inventoryPath)
 {
-    // Convert relative inventory path to an absolute path
-    std::string absInventoryPath = getAbsoluteInventoryPath(inventoryPath);
-
     std::map<std::string, std::string> additionalData{};
-    additionalData.emplace("CALLOUT_INVENTORY_PATH", absInventoryPath);
+    additionalData.emplace("CALLOUT_INVENTORY_PATH", inventoryPath);
     logError("xyz.openbmc_project.Power.Regulators.Error.WriteVerification",
              severity, additionalData, journal);
 }

@@ -211,26 +211,6 @@ class DBusErrorLogging : public ErrorLogging
     std::vector<FFDCTuple> createFFDCTuples(std::vector<FFDCFile>& files);
 
     /**
-     * Returns the absolute form of the specified inventory path.
-     *
-     * The inventory paths in the JSON configuration file are relative.  Add the
-     * the necessary prefix to make the path absolute.
-     *
-     * @param inventoryPath relative D-Bus inventory path
-     * @return absolute D-Bus inventory path
-     */
-    std::string getAbsoluteInventoryPath(const std::string& inventoryPath)
-    {
-        std::string absPath = "/xyz/openbmc_project/inventory";
-        if ((!inventoryPath.empty()) && (inventoryPath.front() != '/'))
-        {
-            absPath += '/';
-        }
-        absPath += inventoryPath;
-        return absPath;
-    }
-
-    /**
      * Logs an error using the D-Bus CreateWithFFDCFiles method.
      *
      * If logging fails, a message is written to the journal but an exception is
