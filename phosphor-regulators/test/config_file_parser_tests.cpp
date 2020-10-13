@@ -266,7 +266,7 @@ TEST(ConfigFileParserTests, ParseAction)
             {
               "compare_presence":
               {
-                "fru": "/system/chassis/motherboard/cpu3",
+                "fru": "system/chassis/motherboard/cpu3",
                 "value": true
               }
             }
@@ -281,7 +281,7 @@ TEST(ConfigFileParserTests, ParseAction)
             {
               "compare_vpd":
               {
-                "fru": "/system/chassis/disk_backplane",
+                "fru": "system/chassis/disk_backplane",
                 "keyword": "CCIN",
                 "value": "2D35"
               }
@@ -772,7 +772,7 @@ TEST(ConfigFileParserTests, ParseChassis)
                 {
                   "id": "vdd_regulator",
                   "is_regulator": true,
-                  "fru": "/system/chassis/motherboard/regulator2",
+                  "fru": "system/chassis/motherboard/regulator2",
                   "i2c_interface":
                   {
                       "bus": 1,
@@ -830,7 +830,7 @@ TEST(ConfigFileParserTests, ParseChassis)
                 {
                   "id": "vdd_regulator",
                   "is_regulator": true,
-                  "fru": "/system/chassis/motherboard/regulator2",
+                  "fru": "system/chassis/motherboard/regulator2",
                   "i2c_interface":
                   {
                       "bus": 1,
@@ -934,13 +934,15 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/motherboard/cpu3",
+              "fru": "system/chassis/motherboard/cpu3",
               "value": true
             }
         )"_json;
         std::unique_ptr<ComparePresenceAction> action =
             parseComparePresence(element);
-        EXPECT_EQ(action->getFRU(), "/system/chassis/motherboard/cpu3");
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
         EXPECT_EQ(action->getValue(), true);
     }
 
@@ -961,7 +963,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/motherboard/cpu3",
+              "fru": "system/chassis/motherboard/cpu3",
               "value": true,
               "foo" : true
             }
@@ -995,7 +997,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/motherboard/cpu3"
+              "fru": "system/chassis/motherboard/cpu3"
             }
         )"_json;
         parseComparePresence(element);
@@ -1028,7 +1030,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/motherboard/cpu3",
+              "fru": "system/chassis/motherboard/cpu3",
               "value": 1
             }
         )"_json;
@@ -1047,13 +1049,15 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "keyword": "CCIN",
               "value": "2D35"
             }
         )"_json;
         std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
-        EXPECT_EQ(action->getFRU(), "/system/chassis/disk_backplane");
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), "2D35");
     }
@@ -1075,7 +1079,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "keyword": "CCIN",
               "value": "2D35",
               "foo" : true
@@ -1111,7 +1115,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "value": "2D35"
             }
         )"_json;
@@ -1128,7 +1132,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "keyword": "CCIN"
             }
         )"_json;
@@ -1163,7 +1167,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "keyword": 1,
               "value": "2D35"
             }
@@ -1181,7 +1185,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     {
         const json element = R"(
             {
-              "fru": "/system/chassis/disk_backplane",
+              "fru": "system/chassis/disk_backplane",
               "keyword": "CCIN",
               "value": 1
             }
@@ -1388,14 +1392,15 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface": { "bus": 1, "address": "0x70" }
             }
         )"_json;
         std::unique_ptr<Device> device = parseDevice(element);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
-        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
+                                    "chassis/motherboard/regulator2");
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_EQ(device->getPresenceDetection(), nullptr);
         EXPECT_EQ(device->getConfiguration(), nullptr);
@@ -1408,7 +1413,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1433,7 +1438,8 @@ TEST(ConfigFileParserTests, ParseDevice)
         std::unique_ptr<Device> device = parseDevice(element);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
-        EXPECT_EQ(device->getFRU(), "/system/chassis/motherboard/regulator2");
+        EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
+                                    "chassis/motherboard/regulator2");
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_NE(device->getPresenceDetection(), nullptr);
         EXPECT_NE(device->getConfiguration(), nullptr);
@@ -1447,7 +1453,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": false,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1481,7 +1487,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": 3,
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1504,7 +1510,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": 3,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1550,7 +1556,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface": 3
             }
         )"_json;
@@ -1568,7 +1574,7 @@ TEST(ConfigFileParserTests, ParseDevice)
         const json element = R"(
             {
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1590,7 +1596,7 @@ TEST(ConfigFileParserTests, ParseDevice)
         const json element = R"(
             {
               "id": "vdd_regulator",
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface":
               {
                   "bus": 1,
@@ -1635,7 +1641,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2"
+              "fru": "system/chassis/motherboard/regulator2"
             }
         )"_json;
         parseDevice(element);
@@ -1665,7 +1671,7 @@ TEST(ConfigFileParserTests, ParseDevice)
             {
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator2",
+              "fru": "system/chassis/motherboard/regulator2",
               "i2c_interface": { "bus": 1, "address": "0x70" },
               "foo" : true
             }
@@ -1688,13 +1694,13 @@ TEST(ConfigFileParserTests, ParseDeviceArray)
               {
                 "id": "vdd_regulator",
                 "is_regulator": true,
-                "fru": "/system/chassis/motherboard/regulator2",
+                "fru": "system/chassis/motherboard/regulator2",
                 "i2c_interface": { "bus": 1, "address": "0x70" }
               },
               {
                 "id": "vio_regulator",
                 "is_regulator": true,
-                "fru": "/system/chassis/motherboard/regulator2",
+                "fru": "system/chassis/motherboard/regulator2",
                 "i2c_interface": { "bus": 1, "address": "0x71" }
               }
             ]
@@ -3049,6 +3055,51 @@ TEST(ConfigFileParserTests, ParseInt8)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an 8-bit signed integer");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseInventoryPath)
+{
+    // Test where works: Inventory path has a leading '/'
+    {
+        const json element = "/system/chassis/motherboard/cpu3";
+        std::string value = parseInventoryPath(element);
+        EXPECT_EQ(
+            value,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
+    }
+
+    // Test where works: Inventory path does not have a leading '/'
+    {
+        const json element = "system/chassis/motherboard/cpu1";
+        std::string value = parseInventoryPath(element);
+        EXPECT_EQ(
+            value,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1");
+    }
+
+    // Test where fails: JSON element is not a string
+    try
+    {
+        const json element = R"( { "foo": "bar" } )"_json;
+        parseInventoryPath(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: JSON element contains an empty string
+    try
+    {
+        const json element = "";
+        parseInventoryPath(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 

@@ -236,7 +236,7 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(fruElement);
     ++propertyCount;
 
     // Required value property
@@ -257,7 +257,7 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(fruElement);
     ++propertyCount;
 
     // Required keyword property
@@ -331,7 +331,7 @@ std::unique_ptr<Device> parseDevice(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(fruElement);
     ++propertyCount;
 
     // Required i2c_interface property
@@ -646,6 +646,18 @@ std::unique_ptr<IfAction> parseIf(const json& element)
     return std::make_unique<IfAction>(std::move(conditionAction),
                                       std::move(thenActions),
                                       std::move(elseActions));
+}
+
+std::string parseInventoryPath(const json& element)
+{
+    std::string inventoryPath = parseString(element);
+    std::string absPath = "/xyz/openbmc_project/inventory";
+    if (inventoryPath.front() != '/')
+    {
+        absPath += '/';
+    }
+    absPath += inventoryPath;
+    return absPath;
 }
 
 std::unique_ptr<NotAction> parseNot(const json& element)

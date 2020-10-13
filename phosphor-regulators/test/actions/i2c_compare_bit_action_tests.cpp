@@ -96,8 +96,10 @@ TEST(I2CCompareBitActionTests, Execute)
             .WillRepeatedly(SetArgReferee<1>(0x96));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -174,8 +176,10 @@ TEST(I2CCompareBitActionTests, Execute)
                 i2c::I2CException{"Failed to read byte", "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};

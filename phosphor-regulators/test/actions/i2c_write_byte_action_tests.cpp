@@ -72,8 +72,10 @@ TEST(I2CWriteByteActionTests, Execute)
             .Times(1);
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -101,8 +103,10 @@ TEST(I2CWriteByteActionTests, Execute)
             .Times(1);
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -156,8 +160,10 @@ TEST(I2CWriteByteActionTests, Execute)
         EXPECT_CALL(*i2cInterface, write(A<uint8_t>(), A<uint8_t>())).Times(0);
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -207,8 +213,10 @@ TEST(I2CWriteByteActionTests, Execute)
                 i2c::I2CException{"Failed to write byte", "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
