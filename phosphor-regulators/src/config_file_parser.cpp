@@ -236,7 +236,7 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(parseString(fruElement));
     ++propertyCount;
 
     // Required value property
@@ -257,7 +257,7 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(parseString(fruElement));
     ++propertyCount;
 
     // Required keyword property
@@ -331,7 +331,7 @@ std::unique_ptr<Device> parseDevice(const json& element)
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseString(fruElement);
+    std::string fru = parseInventoryPath(parseString(fruElement));
     ++propertyCount;
 
     // Required i2c_interface property

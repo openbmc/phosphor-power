@@ -65,8 +65,10 @@ TEST(I2CActionTests, GetI2CInterface)
         EXPECT_CALL(*i2cInterface, open).Times(1);
 
         // Create Device, IDMap, ActionEnvironment, and I2CAction
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -90,8 +92,10 @@ TEST(I2CActionTests, GetI2CInterface)
         EXPECT_CALL(*i2cInterface, open).Times(0);
 
         // Create Device, IDMap, ActionEnvironment, and I2CAction
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -140,8 +144,10 @@ TEST(I2CActionTests, GetI2CInterface)
                 Throw(i2c::I2CException{"Failed to open", "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, ActionEnvironment, and I2CAction
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
