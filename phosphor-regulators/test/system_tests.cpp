@@ -242,7 +242,8 @@ TEST(SystemTests, MonitorSensors)
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> deviceConfiguration{};
     std::unique_ptr<Device> device = std::make_unique<Device>(
-        "reg1", true, "/system/chassis/motherboard/reg1",
+        "reg1", true,
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
         std::move(i2cInterface), std::move(presenceDetection),
         std::move(deviceConfiguration), std::move(rails));
 

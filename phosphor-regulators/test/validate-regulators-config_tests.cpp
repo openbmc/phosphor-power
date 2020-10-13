@@ -80,7 +80,7 @@ const json validConfigFile = R"(
               "comments": [ "IR35221 regulator producing the Vdd rail" ],
               "id": "vdd_regulator",
               "is_regulator": true,
-              "fru": "/system/chassis/motherboard/regulator1",
+              "fru": "system/chassis/motherboard/regulator1",
               "i2c_interface": {
                 "bus": 1,
                 "address": "0x70"
@@ -262,7 +262,7 @@ TEST(ValidateRegulatorsConfigTest, Action)
     {
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][1]["compare_presence"]["fru"] =
-            "/system/chassis/motherboard/regulator2";
+            "system/chassis/motherboard/regulator2";
         configFile["rules"][0]["actions"][1]["compare_presence"]["value"] =
             true;
         EXPECT_JSON_VALID(configFile);
@@ -271,7 +271,7 @@ TEST(ValidateRegulatorsConfigTest, Action)
     {
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
-            "/system/chassis/motherboard/regulator2";
+            "system/chassis/motherboard/regulator2";
         configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
         configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
         EXPECT_JSON_VALID(configFile);
@@ -574,7 +574,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
 {
     json comparePresenceFile = validConfigFile;
     comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["fru"] =
-        "/system/chassis/motherboard/regulator2";
+        "system/chassis/motherboard/regulator2";
     comparePresenceFile["rules"][0]["actions"][1]["compare_presence"]["value"] =
         true;
     // Valid.
@@ -627,7 +627,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
 {
     json compareVpdFile = validConfigFile;
     compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["fru"] =
-        "/system/chassis/motherboard/regulator2";
+        "system/chassis/motherboard/regulator2";
     compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
     compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
 
@@ -811,7 +811,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
             "rule_id");
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
                   ["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
                   ["compare_presence"]["value"] = true;
         EXPECT_JSON_VALID(configFile);
@@ -852,13 +852,13 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
                   ["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
                   ["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
             "{'actions': [{'compare_presence': {'fru': "
-            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
+            "'system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
             "['Set rail to 1.25V using standard rule'], 'rule_id': "
             "'set_voltage_rule', 'volts': 1.25} is valid under each of "
             "{'required': ['actions']}, {'required': ['rule_id']}");
@@ -2284,7 +2284,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
             "rule_id");
         configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
                   [0]["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
                   [0]["compare_presence"]["value"] = true;
         configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
@@ -2296,13 +2296,13 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         json configFile = presenceDetectionFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
                   [0]["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
                   [0]["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
             "{'actions': [{'compare_presence': {'fru': "
-            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
+            "'system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
             "['Regulator is only present on the FooBar backplane'], 'rule_id': "
             "'set_voltage_rule'} is valid under each of {'required': "
             "['actions']}, {'required': ['rule_id']}");
@@ -2564,7 +2564,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
             .erase("rule_id");
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"][0]["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"][0]["compare_presence"]["value"] = true;
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
@@ -2577,13 +2577,13 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"][0]["compare_presence"]["fru"] =
-                      "/system/chassis/motherboard/cpu3";
+                      "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"][0]["compare_presence"]["value"] = true;
         EXPECT_JSON_INVALID(
             configFile, "Validation failed.",
             "{'actions': [{'compare_presence': {'fru': "
-            "'/system/chassis/motherboard/cpu3', 'value': True}}], 'rule_id': "
+            "'system/chassis/motherboard/cpu3', 'value': True}}], 'rule_id': "
             "'read_sensors_rule'} is valid under each of {'required': "
             "['actions']}, {'required': ['rule_id']}");
     }
@@ -2700,7 +2700,7 @@ TEST(ValidateRegulatorsConfigTest, DuplicateDeviceID)
         configFile["chassis"][0]["devices"][1]["id"] = "vdd_regulator";
         configFile["chassis"][0]["devices"][1]["is_regulator"] = true;
         configFile["chassis"][0]["devices"][1]["fru"] =
-            "/system/chassis/motherboard/regulator1";
+            "system/chassis/motherboard/regulator1";
         configFile["chassis"][0]["devices"][1]["i2c_interface"]["bus"] = 2;
         configFile["chassis"][0]["devices"][1]["i2c_interface"]["address"] =
             "0x71";

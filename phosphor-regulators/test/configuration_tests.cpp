@@ -110,7 +110,8 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Device that contains Configuration
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "vdd_reg", true, "/system/chassis/motherboard/reg2",
+            "vdd_reg", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(configuration));
         Device* devicePtr = device.get();
@@ -169,7 +170,8 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Device that contains Configuration
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "vdd_reg", true, "/system/chassis/motherboard/reg2",
+            "vdd_reg", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(configuration));
         Device* devicePtr = device.get();
@@ -229,7 +231,8 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Device that contains Configuration
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "vdd_reg", true, "/system/chassis/motherboard/reg2",
+            "vdd_reg", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(configuration));
         Device* devicePtr = device.get();
@@ -294,7 +297,8 @@ TEST(ConfigurationTests, ExecuteForRail)
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "reg1", true, "/system/chassis/motherboard/reg1",
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(deviceConfiguration), std::move(rails));
         Device* devicePtr = device.get();
@@ -362,7 +366,8 @@ TEST(ConfigurationTests, ExecuteForRail)
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "reg1", true, "/system/chassis/motherboard/reg1",
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(deviceConfiguration), std::move(rails));
         Device* devicePtr = device.get();
@@ -431,7 +436,8 @@ TEST(ConfigurationTests, ExecuteForRail)
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
-            "reg1", true, "/system/chassis/motherboard/reg1",
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(deviceConfiguration), std::move(rails));
         Device* devicePtr = device.get();

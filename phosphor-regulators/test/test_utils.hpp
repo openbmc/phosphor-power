@@ -67,7 +67,8 @@ inline std::unique_ptr<Device>
 
     // Create Device
     bool isRegulator = true;
-    std::string fru = "/system/chassis/motherboard/reg1";
+    std::string fru =
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1";
     std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> configuration{};

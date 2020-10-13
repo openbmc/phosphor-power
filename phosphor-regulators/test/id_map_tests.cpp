@@ -39,8 +39,10 @@ TEST(IDMapTests, AddDevice)
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
     std::string id{"vio_reg"};
-    Device device{id, true, "/system/chassis/motherboard/vio_reg",
-                  std::move(i2cInterface)};
+    Device device{
+        id, true,
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/vio_reg",
+        std::move(i2cInterface)};
 
     // Verify device is not initially in map
     EXPECT_THROW(idMap.getDevice(id), std::invalid_argument);
@@ -68,7 +70,9 @@ TEST(IDMapTests, AddDevice)
     {
         i2cInterface =
             i2c::create(1, 0x72, i2c::I2CInterface::InitialState::CLOSED);
-        Device device2{"vio_reg", true, "/system/chassis/motherboard/vio_reg2",
+        Device device2{"vio_reg", true,
+                       "/xyz/openbmc_project/inventory/system/chassis/"
+                       "motherboard/vio_reg2",
                        std::move(i2cInterface)};
         idMap.addDevice(device2);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -174,8 +178,10 @@ TEST(IDMapTests, GetDevice)
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
     std::string id{"vio_reg"};
-    Device device{id, true, "/system/chassis/motherboard/vio_reg",
-                  std::move(i2cInterface)};
+    Device device{
+        id, true,
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/vio_reg",
+        std::move(i2cInterface)};
 
     // Add a device to the map
     idMap.addDevice(device);

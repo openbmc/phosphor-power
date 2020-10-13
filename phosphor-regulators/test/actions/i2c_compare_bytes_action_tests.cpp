@@ -161,8 +161,10 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 2));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -194,8 +196,10 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 3));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -223,8 +227,10 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 2));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -256,8 +262,10 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 3));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -285,8 +293,10 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 1));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
@@ -339,8 +349,10 @@ TEST(I2CCompareBytesActionTests, Execute)
                                               "/dev/i2c-1", 0x70}));
 
         // Create Device, IDMap, and ActionEnvironment
-        Device device{"reg1", true, "/system/chassis/motherboard/reg1",
-                      std::move(i2cInterface)};
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
         ActionEnvironment env{idMap, "reg1"};
