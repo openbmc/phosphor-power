@@ -2914,15 +2914,15 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         expectCommandLineSyntax("Error: Schema file is required.",
                                 outputMessageHelp, command, 1);
     }
+    // Invalid: -c specified more than once
+    {
+        command = validateTool + schema + schemaFile + "-c -c " + fileName;
+        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
+    }
     // Invalid: -s specified more than once
     {
         command =
             validateTool + "-s -s " + schemaFile + configuration + fileName;
-        expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
-    }
-    // Invalid: -c specified more than once
-    {
-        command = validateTool + schema + schemaFile + "-c -c " + fileName;
         expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: No file name specified after -c
@@ -2939,15 +2939,28 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     {
         command = validateTool + schema + schemaFile + configuration +
                   "../notExistFile";
-        expectCommandLineSyntax(
-            "Traceback (most recent call last):", outputMessage, command, 1);
+        expectCommandLineSyntax("Error: Configuration file does not exist.",
+                                outputMessageHelp, command, 1);
     }
     // Invalid: File specified after -s does not exist
     {
         command = validateTool + schema + "../notExistFile " + configuration +
                   fileName;
+        expectCommandLineSyntax("Error: Schema file does not exist.",
+                                outputMessageHelp, command, 1);
+    }
+    // Invalid: File specified after -c is not right data format
+    {
+        TemporaryFile wrongFormatFile;
+        std::string wrongFormatFileName = wrongFormatFile.getPath().string();
+        std::ofstream out(wrongFormatFileName);
+        out << "foo";
+        out.close();
+        command = validateTool + schema + schemaFile + configuration +
+                  wrongFormatFileName;
         expectCommandLineSyntax(
-            "Traceback (most recent call last):", outputMessage, command, 1);
+            "Error: Configuration file is not in the JSON format.",
+            outputMessageHelp, command, 1);
     }
     // Invalid: File specified after -s is not right data format
     {
@@ -2958,8 +2971,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         out.close();
         command = validateTool + schema + wrongFormatFileName + configuration +
                   fileName;
-        expectCommandLineSyntax(
-            "Traceback (most recent call last):", outputMessage, command, 1);
+        expectCommandLineSyntax("Error: Schema file is not in the JSON format.",
+                                outputMessageHelp, command, 1);
     }
     // Invalid: File specified after -c is not readable
     {
@@ -2969,8 +2982,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         command = validateTool + schema + schemaFile + configuration +
                   notReadableFileName;
         chmod(notReadableFileName.c_str(), 0222);
-        expectCommandLineSyntax(
-            "Traceback (most recent call last):", outputMessage, command, 1);
+        expectCommandLineSyntax("Error: Configuration file is not readable.",
+                                outputMessageHelp, command, 1);
     }
     // Invalid: File specified after -s is not readable
     {
@@ -2980,8 +2993,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
         command = validateTool + schema + notReadableFileName + configuration +
                   fileName;
         chmod(notReadableFileName.c_str(), 0222);
-        expectCommandLineSyntax(
-            "Traceback (most recent call last):", outputMessage, command, 1);
+        expectCommandLineSyntax("Error: Schema file is not readable.",
+                                outputMessageHelp, command, 1);
     }
     // Invalid: Unexpected parameter specified (like -g)
     {

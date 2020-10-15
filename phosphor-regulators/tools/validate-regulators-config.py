@@ -2,8 +2,9 @@
 
 import argparse
 import json
-import sys
 import jsonschema
+import os
+import sys
 
 r"""
 Validates the phosphor-regulators configuration file. Checks it against a JSON
@@ -283,6 +284,14 @@ def validate_schema(config, schema):
 
     return config_json
 
+def validate_JSON_format(file):
+    with open(file) as json_data:
+        try:
+            return json.load(json_data)
+        except ValueError as err:
+            return False
+        return True
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
@@ -299,9 +308,27 @@ if __name__ == '__main__':
     if not args.schema_file:
         parser.print_help()
         sys.exit("Error: Schema file is required.")
+    if not os.path.exists(args.schema_file):
+        parser.print_help()
+        sys.exit("Error: Schema file does not exist.")
+    if not os.access(args.schema_file, os.R_OK):
+        parser.print_help()
+        sys.exit("Error: Schema file is not readable.")
+    if not validate_JSON_format(args.schema_file):
+        parser.print_help()
+        sys.exit("Error: Schema file is not in the JSON format.")
     if not args.configuration_file:
         parser.print_help()
         sys.exit("Error: Configuration file is required.")
+    if not os.path.exists(args.configuration_file):
+        parser.print_help()
+        sys.exit("Error: Configuration file does not exist.")
+    if not os.access(args.configuration_file, os.R_OK):
+        parser.print_help()
+        sys.exit("Error: Configuration file is not readable.")
+    if not validate_JSON_format(args.configuration_file):
+        parser.print_help()
+        sys.exit("Error: Configuration file is not in the JSON format.")
 
     config_json = validate_schema(args.configuration_file, args.schema_file)
 
