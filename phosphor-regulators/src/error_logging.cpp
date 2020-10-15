@@ -156,13 +156,8 @@ std::vector<FFDCFile> DBusErrorLogging::createFFDCFiles(Journal& journal)
         try
         {
             // Get recent journal messages from the executable
-            // TODO: Uncomment the following line and remove the temporary code
-            // when Journal::getMessages() is implemented
-            // std::vector<std::string> messages =
-            //   journal.getMessages("SYSLOG_IDENTIFIER", executable, 30);
-            std::vector<std::string> messages{
-                executable + ": journal message 1",
-                executable + ": journal message 2"};
+            std::vector<std::string> messages =
+                journal.getMessages("SYSLOG_IDENTIFIER", executable, 30);
 
             // Create FFDC file containing the journal messages
             if (!messages.empty())
