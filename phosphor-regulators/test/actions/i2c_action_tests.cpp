@@ -18,6 +18,7 @@
 #include "i2c_action.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 
 #include <memory>
@@ -64,14 +65,15 @@ TEST(I2CActionTests, GetI2CInterface)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(false));
         EXPECT_CALL(*i2cInterface, open).Times(1);
 
-        // Create Device, IDMap, ActionEnvironment, and I2CAction
+        // Create Device, IDMap, MockServices, ActionEnvironment, and I2CAction
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
         I2CActionImpl action{};
 
         // Get I2CInterface.  Should succeed without an exception.
@@ -91,14 +93,15 @@ TEST(I2CActionTests, GetI2CInterface)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
         EXPECT_CALL(*i2cInterface, open).Times(0);
 
-        // Create Device, IDMap, ActionEnvironment, and I2CAction
+        // Create Device, IDMap, MockServices, ActionEnvironment, and I2CAction
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
         I2CActionImpl action{};
 
         // Get I2CInterface.  Should succeed without an exception.
@@ -112,9 +115,10 @@ TEST(I2CActionTests, GetI2CInterface)
     // Test where fails: getting current device fails
     try
     {
-        // Create IDMap, ActionEnvironment, and I2CAction
+        // Create IDMap, MockServices, ActionEnvironment, and I2CAction
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
         I2CActionImpl action{};
 
         // Get I2CInterface.  Should throw an exception since "reg1" is not a
@@ -150,7 +154,8 @@ TEST(I2CActionTests, GetI2CInterface)
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
         I2CActionImpl action{};
 
         // Get I2CInterface.  Should throw an exception from the open() call.
