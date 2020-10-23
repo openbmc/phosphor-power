@@ -17,6 +17,7 @@
 
 #include "id_map.hpp"
 #include "pmbus_utils.hpp"
+#include "services.hpp"
 
 #include <cstddef> // for size_t
 #include <optional>
@@ -64,11 +65,12 @@ class ActionEnvironment
      *
      * @param idMap mapping from IDs to the associated Device/Rule objects
      * @param deviceID current device ID
+     * @param services system services like error logging and the journal
      */
-    explicit ActionEnvironment(const IDMap& idMap,
-                               const std::string& deviceID) :
+    explicit ActionEnvironment(const IDMap& idMap, const std::string& deviceID,
+                               Services& services) :
         idMap{idMap},
-        deviceID{deviceID}
+        deviceID{deviceID}, services{services}
     {
     }
 
@@ -154,6 +156,16 @@ class ActionEnvironment
     }
 
     /**
+     * Returns the services in this action environment.
+     *
+     * @return system services
+     */
+    Services& getServices() const
+    {
+        return services;
+    }
+
+    /**
      * Returns the current volts value, if set.
      *
      * @return current volts value
@@ -214,6 +226,11 @@ class ActionEnvironment
      * Current device ID.
      */
     std::string deviceID{};
+
+    /**
+     * System services like error logging and the journal.
+     */
+    Services& services;
 
     /**
      * Current volts value (if set).
