@@ -18,6 +18,7 @@
 #include "action_utils.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 
 #include <exception>
 #include <memory>
@@ -37,7 +38,9 @@ TEST(ActionUtilsTests, Execute)
 {
     // Create ActionEnvironment
     IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
+    // Create mock services.
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
 
     // Test where vector is empty
     try

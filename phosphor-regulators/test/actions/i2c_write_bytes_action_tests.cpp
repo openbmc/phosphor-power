@@ -19,6 +19,7 @@
 #include "i2c_interface.hpp"
 #include "i2c_write_bytes_action.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 
 #include <cstdint>
@@ -163,14 +164,15 @@ TEST(I2CWriteBytesActionTests, Execute)
             .With(Args<2, 1>(ElementsAre(0x56, 0x14, 0xDA)))
             .Times(1);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDA};
         I2CWriteBytesAction action{0x7C, values};
@@ -198,14 +200,15 @@ TEST(I2CWriteBytesActionTests, Execute)
             .With(Args<2, 1>(ElementsAre(0xEA, 0xB3)))
             .Times(1);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         //                        Byte 1             Byte 2
         // Value to write       : 0xD6 = 1101 0110 : 0xD2 = 1101 0010
@@ -242,14 +245,15 @@ TEST(I2CWriteBytesActionTests, Execute)
             .With(Args<2, 1>(ElementsAre(0xEA)))
             .Times(1);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Value to write       : 0xD6 = 1101 0110
         // Mask                 : 0xC3 = 1100 0011
@@ -271,9 +275,10 @@ TEST(I2CWriteBytesActionTests, Execute)
     // Test where fails: Getting I2CInterface fails
     try
     {
-        // Create IDMap and ActionEnvironment
+        // Create IDMap, MockServices, and ActionEnvironment
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDB};
         I2CWriteBytesAction action{0x7C, values};
@@ -306,14 +311,15 @@ TEST(I2CWriteBytesActionTests, Execute)
                           A<i2c::I2CInterface::Mode>()))
             .Times(0);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0xD6, 0xD2};
         std::vector<uint8_t> masks{0xC3, 0x96};
@@ -366,14 +372,15 @@ TEST(I2CWriteBytesActionTests, Execute)
             .WillOnce(Throw(i2c::I2CException{"Failed to write i2c block data",
                                               "/dev/i2c-1", 0x70}));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDA};
         I2CWriteBytesAction action{0x7C, values};

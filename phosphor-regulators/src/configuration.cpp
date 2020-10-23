@@ -56,7 +56,8 @@ void Configuration::execute(Services& services, System& system,
         services.getJournal().logDebug(message);
 
         // Create ActionEnvironment
-        ActionEnvironment environment{system.getIDMap(), device.getID()};
+        ActionEnvironment environment{system.getIDMap(), device.getID(),
+                                      services};
         if (volts.has_value())
         {
             environment.setVolts(volts.value());

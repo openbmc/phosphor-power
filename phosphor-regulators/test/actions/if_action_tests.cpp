@@ -18,6 +18,7 @@
 #include "id_map.hpp"
 #include "if_action.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 
 #include <exception>
 #include <memory>
@@ -74,7 +75,8 @@ TEST(IfActionTests, Execute)
 {
     // Create ActionEnvironment
     IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
 
     // Test where action throws an exception
     try
