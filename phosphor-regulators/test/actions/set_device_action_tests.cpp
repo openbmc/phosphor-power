@@ -17,6 +17,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "set_device_action.hpp"
 
@@ -39,6 +40,9 @@ TEST(SetDeviceActionTests, Execute)
     // Create IDMap
     IDMap idMap{};
 
+    // Create mock services.
+    MockServices services{};
+
     // Create Device regulator1 and add to IDMap
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         i2c::create(1, 0x70, i2c::I2CInterface::InitialState::CLOSED);
@@ -58,7 +62,7 @@ TEST(SetDeviceActionTests, Execute)
     idMap.addDevice(reg2);
 
     // Create ActionEnvironment
-    ActionEnvironment env{idMap, "regulator1"};
+    ActionEnvironment env{idMap, "regulator1", services};
 
     // Create action
     SetDeviceAction action{"regulator2"};
