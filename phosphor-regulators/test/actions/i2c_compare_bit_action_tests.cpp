@@ -19,6 +19,7 @@
 #include "i2c_compare_bit_action.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 
 #include <cstdint>
@@ -95,14 +96,15 @@ TEST(I2CCompareBitActionTests, Execute)
         EXPECT_CALL(*i2cInterface, read(0x7C, A<uint8_t&>()))
             .WillRepeatedly(SetArgReferee<1>(0x96));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Test where actual bit value is equal to expected bit value.
         // Test all bits in register value 0x96 == 1001 0110).
@@ -146,9 +148,10 @@ TEST(I2CCompareBitActionTests, Execute)
     // Test where fails: Getting I2CInterface fails
     try
     {
-        // Create IDMap and ActionEnvironment
+        // Create IDMap, mock services, and ActionEnvironment
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         I2CCompareBitAction action{0x7C, 5, 1};
         action.execute(env);
@@ -175,14 +178,15 @@ TEST(I2CCompareBitActionTests, Execute)
             .WillOnce(Throw(
                 i2c::I2CException{"Failed to read byte", "/dev/i2c-1", 0x70}));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         I2CCompareBitAction action{0x7C, 5, 1};
         action.execute(env);
