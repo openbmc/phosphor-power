@@ -18,6 +18,7 @@
 #include "device.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 
@@ -47,7 +48,8 @@ TEST(RunRuleActionTests, Execute)
     try
     {
         IDMap idMap{};
-        ActionEnvironment env{idMap, ""};
+        MockServices services{};
+        ActionEnvironment env{idMap, "", services};
         RunRuleAction runRuleAction{"set_voltage_rule"};
         runRuleAction.execute(env);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -77,7 +79,8 @@ TEST(RunRuleActionTests, Execute)
         // Create ActionEnvironment
         IDMap idMap{};
         idMap.addRule(rule);
-        ActionEnvironment env{idMap, ""};
+        MockServices services{};
+        ActionEnvironment env{idMap, "", services};
 
         // Create RunRuleAction
         RunRuleAction runRuleAction{"exception_rule"};
@@ -100,7 +103,8 @@ TEST(RunRuleActionTests, Execute)
         // Create ActionEnvironment
         IDMap idMap{};
         idMap.addRule(rule);
-        ActionEnvironment env{idMap, ""};
+        MockServices services{};
+        ActionEnvironment env{idMap, "", services};
 
         // Create RunRuleAction
         RunRuleAction runRuleAction{"infinite_rule"};
@@ -137,7 +141,8 @@ TEST(RunRuleActionTests, Execute)
         // Create ActionEnvironment
         IDMap idMap{};
         idMap.addRule(rule);
-        ActionEnvironment env{idMap, ""};
+        MockServices services{};
+        ActionEnvironment env{idMap, "", services};
 
         // Create RunRuleAction
         RunRuleAction runRuleAction{"set_voltage_rule"};
@@ -169,7 +174,8 @@ TEST(RunRuleActionTests, Execute)
         // Create ActionEnvironment
         IDMap idMap{};
         idMap.addRule(rule);
-        ActionEnvironment env{idMap, ""};
+        MockServices services{};
+        ActionEnvironment env{idMap, "", services};
 
         // Create RunRuleAction
         RunRuleAction runRuleAction{"set_voltage_rule"};

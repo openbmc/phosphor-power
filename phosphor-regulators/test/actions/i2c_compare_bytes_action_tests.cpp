@@ -19,6 +19,7 @@
 #include "i2c_compare_bytes_action.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 
 #include <cstdint>
@@ -160,14 +161,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .Times(1)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 2));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Actual values: 0xD7 = 1101 0111   0x96 = 1001 0110
         // Masks        : 0x7E = 0111 1110   0x3C = 0011 1100
@@ -195,14 +197,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .Times(1)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 3));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDA};
         I2CCompareBytesAction action{0x7C, values};
@@ -226,14 +229,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .Times(1)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 2));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Actual values: 0xD7 = 1101 0111   0x96 = 1001 0110
         // Masks        : 0x7E = 0111 1110   0x3C = 0011 1100
@@ -261,14 +265,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .Times(1)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 3));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDB};
         I2CCompareBytesAction action{0x7C, values};
@@ -292,14 +297,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .Times(1)
             .WillOnce(SetArrayArgument<2>(actualValues, actualValues + 1));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Actual values: 0xD7 = 1101 0111
         // Masks        : 0x7E = 0111 1110
@@ -317,9 +323,10 @@ TEST(I2CCompareBytesActionTests, Execute)
     // Test where fails: Getting I2CInterface fails
     try
     {
-        // Create IDMap and ActionEnvironment
+        // Create IDMap, mock services, and ActionEnvironment
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14, 0xDB};
         I2CCompareBytesAction action{0x7C, values};
@@ -348,14 +355,15 @@ TEST(I2CCompareBytesActionTests, Execute)
             .WillOnce(Throw(i2c::I2CException{"Failed to read i2c block data",
                                               "/dev/i2c-1", 0x70}));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, mock services, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         std::vector<uint8_t> values{0x56, 0x14};
         I2CCompareBytesAction action{0x7C, values};
