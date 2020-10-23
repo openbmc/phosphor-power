@@ -18,6 +18,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
 #include "pmbus_error.hpp"
 #include "pmbus_utils.hpp"
@@ -123,14 +124,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .Times(1)
             .WillOnce(SetArgReferee<1>(0x014D));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         // Linear format volts value = (1.3 / 2^(-8)) = 332.8 = 333 = 0x014D
@@ -165,15 +167,16 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .Times(1);
         EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint16_t&>())).Times(0);
 
-        // Create Device, IDMap, and ActionEnvironment.  Set volts value to 3.3
-        // in ActionEnvironment.
+        // Create Device, IDMap, MockServices, and ActionEnvironment.  Set
+        // volts value to 3.3 in ActionEnvironment.
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
         env.setVolts(3.3);
 
         // Create and execute action
@@ -193,9 +196,10 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
     // Test where fails: No volts value defined
     try
     {
-        // Create IDMap and ActionEnvironment
+        // Create IDMap, MockServices, and ActionEnvironment
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         std::optional<double> volts{};
@@ -221,9 +225,10 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
     // Test where fails: Unable to get I2C interface to current device
     try
     {
-        // Create IDMap and ActionEnvironment
+        // Create IDMap, MockServices, and ActionEnvironment
         IDMap idMap{};
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         std::optional<double> volts{1.3};
@@ -258,14 +263,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
                 i2c::I2CException{"Failed to read byte", "/dev/i2c-1", 0x70}));
         EXPECT_CALL(*i2cInterface, write(A<uint8_t>(), A<uint16_t>())).Times(0);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         std::optional<double> volts{3.3};
@@ -317,14 +323,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .WillOnce(SetArgReferee<1>(0b0010'0000));
         EXPECT_CALL(*i2cInterface, write(A<uint8_t>(), A<uint16_t>())).Times(0);
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         std::optional<double> volts{3.3};
@@ -378,14 +385,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .WillOnce(Throw(i2c::I2CException{"Failed to write word data",
                                               "/dev/i2c-1", 0x70}));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         // Linear format volts value = (1.3 / 2^(-8)) = 332.8 = 333 = 0x014D
@@ -442,14 +450,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .WillOnce(Throw(i2c::I2CException{"Failed to read word data",
                                               "/dev/i2c-1", 0x70}));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         // Linear format volts value = (1.3 / 2^(-8)) = 332.8 = 333 = 0x014D
@@ -505,14 +514,15 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
             .Times(1)
             .WillOnce(SetArgReferee<1>(0x014C));
 
-        // Create Device, IDMap, and ActionEnvironment
+        // Create Device, IDMap, MockServices, and ActionEnvironment
         Device device{
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface)};
         IDMap idMap{};
         idMap.addDevice(device);
-        ActionEnvironment env{idMap, "reg1"};
+        MockServices services{};
+        ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
         // Linear format volts value = (1.3 / 2^(-8)) = 332.8 = 333 = 0x014D

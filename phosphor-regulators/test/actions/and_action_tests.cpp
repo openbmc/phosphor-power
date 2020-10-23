@@ -18,6 +18,7 @@
 #include "and_action.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 
 #include <exception>
 #include <memory>
@@ -47,7 +48,8 @@ TEST(AndActionTests, Execute)
 {
     // Create ActionEnvironment
     IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
 
     // Test where empty vector of actions is specified
     try

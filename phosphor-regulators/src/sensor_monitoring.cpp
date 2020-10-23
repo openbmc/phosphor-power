@@ -35,7 +35,8 @@ void SensorMonitoring::execute(Services& services, System& system,
     try
     {
         // Create ActionEnvironment
-        ActionEnvironment environment{system.getIDMap(), device.getID()};
+        ActionEnvironment environment{system.getIDMap(), device.getID(),
+                                      services};
 
         // Execute the actions
         action_utils::execute(actions, environment);

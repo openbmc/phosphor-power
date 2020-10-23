@@ -17,6 +17,7 @@
 #include "action_environment.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 #include "or_action.hpp"
 
 #include <exception>
@@ -47,7 +48,9 @@ TEST(OrActionTests, Execute)
 {
     // Create ActionEnvironment
     IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
+    // Create MockServices.
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
 
     // Test where empty vector of actions is specified
     try

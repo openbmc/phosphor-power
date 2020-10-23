@@ -17,6 +17,7 @@
 #include "action_environment.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_services.hpp"
 #include "rule.hpp"
 
 #include <exception>
@@ -50,7 +51,8 @@ TEST(RuleTests, Execute)
 {
     // Create ActionEnvironment
     IDMap idMap{};
-    ActionEnvironment env{idMap, ""};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
 
     // Test where an action throws an exception
     try
