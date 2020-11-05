@@ -17,6 +17,7 @@
 
 #include "error_logging.hpp"
 #include "journal.hpp"
+#include "presence_service.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -63,6 +64,13 @@ class Services
      * @return journal interface
      */
     virtual Journal& getJournal() = 0;
+
+    /**
+     * Returns the interface to hardware presence data.
+     *
+     * @return hardware presence interface
+     */
+    virtual PresenceService& getPresenceService() = 0;
 };
 
 /**
@@ -86,7 +94,8 @@ class BMCServices : public Services
      *
      * @param bus D-Bus bus object
      */
-    explicit BMCServices(sdbusplus::bus::bus& bus) : bus{bus}, errorLogging{bus}
+    explicit BMCServices(sdbusplus::bus::bus& bus) :
+        bus{bus}, errorLogging{bus}, presenceService{bus}
     {
     }
 
@@ -108,6 +117,12 @@ class BMCServices : public Services
         return journal;
     }
 
+    /** @copydoc Services::getPresenceService() */
+    virtual PresenceService& getPresenceService() override
+    {
+        return presenceService;
+    }
+
   private:
     /**
      * D-Bus bus object.
@@ -124,6 +139,11 @@ class BMCServices : public Services
      * journal.
      */
     SystemdJournal journal{};
+
+    /**
+     * Implementation of the PresenceService interface using D-Bus method calls.
+     */
+    DBusPresenceService presenceService;
 };
 
 } // namespace phosphor::power::regulators
