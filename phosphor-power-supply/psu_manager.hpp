@@ -37,7 +37,7 @@ class PSUManager
     PSUManager& operator=(PSUManager&&) = delete;
 
     /**
-     * Constructor
+     * Constructor to read configuration from JSON file.
      *
      * @param[in] bus - D-Bus bus object
      * @param[in] e - event object
@@ -47,11 +47,31 @@ class PSUManager
                const std::string& configfile);
 
     /**
+     * Constructor to read configuration from D-Bus.
+     *
+     * @param[in] bus - D-Bus bus object
+     * @param[in] e - event object
+     */
+    PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e);
+
+    /**
      * @brief Initialize the system properties and PowerSupply objects from
      *        the JSON config file.
      * @param[in] path - Path to the JSON config file
      */
     void getJSONProperties(const std::string& path);
+
+    /**
+     * Get PSU properties from D-Bus, use that to build array of power supply
+     * objects.
+     *
+     * @param[in] bus - D-Bus object
+     * @param[in] interface - Interface string to get PSU information from.
+     * @param[in] psus - Array (vectory) of power supply objects to populate.
+     */
+    void getPSUProperties(sdbusplus::bus::bus& bus,
+                          const std::string& interface,
+                          std::vector<std::unique_ptr<PowerSupply>>& psus);
 
     /**
      * Initializes the manager.
