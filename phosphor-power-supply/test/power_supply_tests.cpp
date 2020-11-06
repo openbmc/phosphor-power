@@ -50,7 +50,7 @@ TEST_F(PowerSupplyTests, Constructor)
     // Try where inventory path is empty, constructor should fail.
     try
     {
-        auto psu = std::make_unique<PowerSupply>(bus, "", 3, "0068");
+        auto psu = std::make_unique<PowerSupply>(bus, "", 3, 0x68);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -68,7 +68,7 @@ TEST_F(PowerSupplyTests, Constructor)
         EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
             .Times(1);
         auto psu =
-            std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, "0068");
+            std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, 0x68);
 
         EXPECT_EQ(psu->isPresent(), false);
         EXPECT_EQ(psu->isFaulted(), false);
@@ -87,7 +87,7 @@ TEST_F(PowerSupplyTests, Analyze)
     auto bus = sdbusplus::bus::new_default();
 
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath))).Times(1);
-    PowerSupply psu{bus, PSUInventoryPath, 4, "0069"};
+    PowerSupply psu{bus, PSUInventoryPath, 4, 0x69};
     psu.analyze();
     // By default, nothing should change.
     EXPECT_EQ(psu.isPresent(), false);
@@ -101,7 +101,7 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
         .Times(1)
         .WillOnce(Return(true)); // present
-    PowerSupply psu2{bus, PSUInventoryPath, 5, "006a"};
+    PowerSupply psu2{bus, PSUInventoryPath, 5, 0x6a};
     EXPECT_EQ(psu2.isPresent(), true);
 
     // STATUS_WORD 0x0000 is powered on, no faults.
@@ -188,7 +188,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
             .Times(1)
             .WillOnce(Return(false));
-        PowerSupply psu{bus, PSUInventoryPath, 4, "0069"};
+        PowerSupply psu{bus, PSUInventoryPath, 4, 0x69};
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // If it is not present, I should not be trying to write to it.
         EXPECT_CALL(mockPMBus, writeBinary(_, _, _)).Times(0);
@@ -204,7 +204,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
             .Times(1)
             .WillOnce(Return(true)); // present
-        PowerSupply psu{bus, PSUInventoryPath, 5, "006a"};
+        PowerSupply psu{bus, PSUInventoryPath, 5, 0x6a};
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // TODO: ???should I check the filename?
         EXPECT_CALL(mockPMBus,
@@ -223,7 +223,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
         .Times(1)
         .WillOnce(Return(true)); // present
-    PowerSupply psu{bus, PSUInventoryPath, 13, "0068"};
+    PowerSupply psu{bus, PSUInventoryPath, 13, 0x68};
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
     EXPECT_EQ(psu.hasInputFault(), false);
@@ -257,7 +257,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
         EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
             .Times(1)
             .WillOnce(Return(false)); // missing
-        PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
+        PowerSupply psu{bus, PSUInventoryPath, 3, 0x68};
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // If it is not present, I should not be trying to read a string
         EXPECT_CALL(mockPMBus, readString(_, _)).Times(0);
@@ -273,7 +273,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
         EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath)))
             .Times(1)
             .WillOnce(Return(true)); // present
-        PowerSupply psu{bus, PSUInventoryPath, 13, "0069"};
+        PowerSupply psu{bus, PSUInventoryPath, 13, 0x69};
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         EXPECT_CALL(mockPMBus, readString(_, _)).WillRepeatedly(Return(""));
         psu.updateInventory();
@@ -298,12 +298,12 @@ TEST_F(PowerSupplyTests, IsPresent)
 {
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, StrEq(PSUInventoryPath))).Times(1);
-    PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x68};
     EXPECT_EQ(psu.isPresent(), false);
 
     EXPECT_CALL(mockedUtil, getPresence(_, _))
         .WillOnce(Return(true)); // present
-    PowerSupply psu2{bus, PSUInventoryPath, 10, "006b"};
+    PowerSupply psu2{bus, PSUInventoryPath, 10, 0x6b};
     EXPECT_EQ(psu2.isPresent(), true);
 }
 
@@ -312,7 +312,7 @@ TEST_F(PowerSupplyTests, IsFaulted)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, _))
         .WillOnce(Return(true)); // present
-    PowerSupply psu{bus, PSUInventoryPath, 11, "006f"};
+    PowerSupply psu{bus, PSUInventoryPath, 11, 0x6f};
     EXPECT_EQ(psu.isFaulted(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0xFFFF));
@@ -325,7 +325,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, _))
         .WillOnce(Return(true)); // present
-    PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x68};
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasInputFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
@@ -346,7 +346,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, _))
         .WillOnce(Return(true)); // present
-    PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x68};
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
@@ -367,7 +367,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     auto bus = sdbusplus::bus::new_default();
     EXPECT_CALL(mockedUtil, getPresence(_, _))
         .WillOnce(Return(true)); // present
-    PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x68};
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasVINUVFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
