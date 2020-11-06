@@ -38,6 +38,33 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     initialize();
 }
 
+PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
+    bus(bus)
+{
+    // Parse out the JSON properties
+    std::string IBMCFFPSInterface =
+        "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
+    getPSUProperties(bus, IBMCFFPSInterface, psus);
+
+    using namespace sdeventplus;
+    auto interval = std::chrono::milliseconds(1000);
+    timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+        e, std::bind(&PSUManager::analyze, this), interval);
+
+    minPSUs = 0;
+    maxPSUs = 0;
+
+    // Subscribe to power state changes
+    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                        POWER_IFACE),
+        [this](auto& msg) { this->powerStateChanged(msg); });
+
+    initialize();
+}
+
 void PSUManager::getJSONProperties(
     const std::string& path, sdbusplus::bus::bus& bus, sys_properties& p,
     std::vector<std::unique_ptr<PowerSupply>>& psus)
@@ -86,7 +113,7 @@ void PSUManager::getJSONProperties(
         {
             std::string invpath = psuJSON["Inventory"];
             std::uint8_t i2cbus = psuJSON["Bus"];
-            std::string i2caddr = psuJSON["Address"];
+            std::uint16_t i2caddr = static_cast<uint16_t>(psuJSON["Address"]);
             auto psu =
                 std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
             psus.emplace_back(std::move(psu));
@@ -95,6 +122,52 @@ void PSUManager::getJSONProperties(
         {
             log<level::ERR>("Insufficient PowerSupply properties");
         }
+    }
+
+    if (psus.empty())
+    {
+        throw std::runtime_error("No power supplies to monitor");
+    }
+}
+
+void PSUManager::getPSUProperties(
+    sdbusplus::bus::bus& bus, const std::string& interface,
+    std::vector<std::unique_ptr<PowerSupply>>& psus)
+{
+    using namespace phosphor::power::util;
+    const auto basePSUInvPath =
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply";
+    auto depth = 0;
+    auto objects = getSubTree(bus, "/", interface, depth);
+    // I should get an array of objects back.
+    // Each object will have a path, a service, and an interface.
+    // The interface should match the one passed into this function.
+    for (const auto& elem : objects)
+    {
+        // For each element in the array of objects, I want to get properties
+        // from the service, path, interface, and property: I2CBus, I2CAddress,
+        // and the Name, which will be used to build the inventory path.
+        auto service = elem.second.begin()->first;
+        auto path = elem.first;
+
+        std::uint64_t i2cbus = 0;
+        std::uint64_t i2caddr = 0;
+        std::string psuname;
+
+        getProperty<std::uint64_t>(interface, "I2CBus", path, service, bus,
+                                   i2cbus);
+        getProperty<std::uint64_t>(interface, "I2CAddress", path, service, bus,
+                                   i2caddr);
+        getProperty<std::string>(interface, "Name", path, service, bus,
+                                 psuname);
+
+        std::string invpath = basePSUInvPath;
+        invpath.push_back(psuname.back());
+
+        log<level::INFO>(fmt::format("Inventory Path: {}", invpath).c_str());
+
+        auto psu = std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
+        psus.emplace_back(std::move(psu));
     }
 
     if (psus.empty())
