@@ -22,6 +22,12 @@ constexpr auto SYSTEMD_INTERFACE = "org.freedesktop.systemd1.Manager";
 constexpr auto POWEROFF_TARGET = "obmc-chassis-hard-poweroff@0.target";
 constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
 
+using DbusPath = std::string;
+using DbusService = std::string;
+using DbusInterface = std::string;
+using DbusInterfaceList = std::vector<DbusInterface>;
+using DbusSubtree =
+    std::map<DbusPath, std::map<DbusService, DbusInterfaceList>>;
 /**
  * @brief Get the service name from the mapper for the
  *        interface and path passed in.
@@ -88,6 +94,10 @@ void setProperty(const std::string& interface, const std::string& propertyName,
 
     auto reply = bus.call(method);
 }
+
+/** @brief Get subtree from the mapper. */
+DbusSubtree getSubTree(sdbusplus::bus::bus& bus, const std::string& path,
+                       const std::string& interface, int32_t depth);
 
 /**
  * Logs an error and powers off the system.
