@@ -5,6 +5,8 @@
 #include "types.hpp"
 #include "util.hpp"
 
+#include <fmt/format.h>
+
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
@@ -16,6 +18,38 @@ namespace phosphor::power::psu
 
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
+
+PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+                         std::uint8_t i2cbus, const std::uint16_t i2caddr) :
+    bus(bus),
+    inventoryPath(invpath)
+{
+    if (inventoryPath.empty())
+    {
+        throw std::invalid_argument{"Invalid empty inventoryPath"};
+    }
+
+    // Setup the functions to call when the D-Bus inventory path for the
+    // Present property changes.
+    presentMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(inventoryPath,
+                                                        INVENTORY_IFACE),
+        [this](auto& msg) { this->inventoryChanged(msg); });
+    presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAdded() +
+            sdbusplus::bus::match::rules::path_namespace(inventoryPath),
+        [this](auto& msg) { this->inventoryChanged(msg); });
+
+    std::ostringstream ss;
+    ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
+    std::string addrStr = ss.str();
+    pmbusIntf = phosphor::pmbus::createPMBus(i2cbus, addrStr);
+
+    // Get the current state of the Present property.
+    updatePresence();
+}
 
 void PowerSupply::updatePresence()
 {
