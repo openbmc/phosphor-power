@@ -11,6 +11,12 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
+constexpr auto IBMCFFPSInterface =
+    "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
+constexpr auto i2cBusProp = "I2CBus";
+constexpr auto i2cAddressProp = "I2CAddress";
+constexpr auto psuNameProp = "Name";
+
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 constexpr auto maxCountProp = "MaxCount";
@@ -19,8 +25,8 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                        const std::string& configfile) :
     bus(bus)
 {
-    // Parse out the JSON properties
     sysProperties = {0};
+    // Parse out the JSON properties
     getJSONProperties(configfile);
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
@@ -32,6 +38,39 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                 "xyz.openbmc_project.EntityManager"),
         std::bind(&PSUManager::entityManagerIfaceAdded, this,
                   std::placeholders::_1));
+    getSystemProperties();
+
+    using namespace sdeventplus;
+    auto interval = std::chrono::milliseconds(1000);
+    timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+        e, std::bind(&PSUManager::analyze, this), interval);
+
+    // Subscribe to power state changes
+    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                        POWER_IFACE),
+        [this](auto& msg) { this->powerStateChanged(msg); });
+
+    initialize();
+}
+
+PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
+    bus(bus)
+{
+    sysProperties = {0};
+    // Subscribe to InterfacesAdded before doing a property read, otherwise
+    // the interface could be created after the read attempt but before the
+    // match is created.
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAdded() +
+            sdbusplus::bus::match::rules::sender(
+                "xyz.openbmc_project.EntityManager"),
+        std::bind(&PSUManager::entityManagerIfaceAdded, this,
+                  std::placeholders::_1));
+    getPSUConfiguration();
     getSystemProperties();
 
     using namespace sdeventplus;
@@ -71,7 +110,7 @@ void PSUManager::getJSONProperties(const std::string& path)
         {
             std::string invpath = psuJSON["Inventory"];
             std::uint8_t i2cbus = psuJSON["Bus"];
-            std::string i2caddr = psuJSON["Address"];
+            std::uint16_t i2caddr = static_cast<uint16_t>(psuJSON["Address"]);
             auto psu =
                 std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
             psus.emplace_back(std::move(psu));
@@ -85,6 +124,98 @@ void PSUManager::getJSONProperties(const std::string& path)
     if (psus.empty())
     {
         throw std::runtime_error("No power supplies to monitor");
+    }
+}
+
+void PSUManager::getPSUConfiguration()
+{
+    using namespace phosphor::power::util;
+    auto depth = 0;
+    auto objects = getSubTree(bus, "/", IBMCFFPSInterface, depth);
+
+    psus.clear();
+
+    // I should get an array of objects back.
+    // Each object will have a path, a service, and an interface.
+    // The interface should match the one passed into this function.
+    for (const auto& [path, services] : objects)
+    {
+        auto service = services.begin()->first;
+
+        if (path.empty() || service.empty())
+        {
+            continue;
+        }
+
+        // For each object in the array of objects, I want to get properties
+        // from the service, path, and interface.
+        auto properties =
+            getAllProperties(bus, path, IBMCFFPSInterface, service);
+
+        getPSUProperties(properties);
+    }
+
+    if (psus.empty())
+    {
+        // Interface or properties not found. Let the Interfaces Added callback
+        // process the information once the interfaces are added to D-Bus.
+        log<level::INFO>(fmt::format("No power supplies to monitor").c_str());
+    }
+}
+
+void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
+{
+    // From passed in properties, I want to get: I2CBus, I2CAddress,
+    // and Name. Create a power supply object, using Name to build the inventory
+    // path.
+    const auto basePSUInvPath =
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply";
+    uint64_t* i2cbus = nullptr;
+    uint64_t* i2caddr = nullptr;
+    std::string* psuname = nullptr;
+
+    for (const auto& property : properties)
+    {
+        try
+        {
+            if (property.first == i2cBusProp)
+            {
+                i2cbus = std::get_if<uint64_t>(&properties[i2cBusProp]);
+            }
+            else if (property.first == i2cAddressProp)
+            {
+                i2caddr = std::get_if<uint64_t>(&properties[i2cAddressProp]);
+            }
+            else if (property.first == psuNameProp)
+            {
+                psuname = std::get_if<std::string>(&properties[psuNameProp]);
+            }
+            else
+            {
+                log<level::INFO>(
+                    fmt::format("Unused property: {}", property.first).c_str());
+            }
+        }
+        catch (std::exception& e)
+        {
+        }
+    }
+
+    if ((i2cbus) && (i2caddr) && (psuname) && (!psuname->empty()))
+    {
+        std::string invpath = basePSUInvPath;
+        invpath.push_back(psuname->back());
+
+        log<level::DEBUG>(fmt::format("Inventory Path: {}", invpath).c_str());
+
+        auto psu =
+            std::make_unique<PowerSupply>(bus, invpath, *i2cbus, *i2caddr);
+        psus.emplace_back(std::move(psu));
+    }
+
+    if (psus.empty())
+    {
+        log<level::INFO>(fmt::format("No power supplies to monitor").c_str());
     }
 }
 
@@ -129,23 +260,28 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
     try
     {
         sdbusplus::message::object_path objPath;
-        std::map<std::string, std::map<std::string, std::variant<uint64_t>>>
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         msg.read(objPath, interfaces);
 
         auto itIntf = interfaces.find(supportedConfIntf);
-        if (itIntf == interfaces.cend())
+        if (itIntf != interfaces.cend())
         {
-            return;
+
+            auto itProp = itIntf->second.find(maxCountProp);
+            if (itProp != itIntf->second.cend())
+            {
+                sysProperties.maxPowerSupplies = std::get<0>(itProp->second);
+            }
         }
 
-        auto itProp = itIntf->second.find(maxCountProp);
-        if (itProp != itIntf->second.cend())
+        itIntf = interfaces.find(IBMCFFPSInterface);
+        if (itIntf != interfaces.cend())
         {
-            sysProperties.maxPowerSupplies = std::get<0>(itProp->second);
-
-            // Don't need the match anymore
-            entityManagerIfacesAddedMatch.reset();
+            log<level::INFO>(
+                fmt::format("InterfacesAdded for: {}", IBMCFFPSInterface)
+                    .c_str());
+            getPSUProperties(itIntf->second);
         }
     }
     catch (std::exception& e)
