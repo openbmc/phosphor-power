@@ -52,30 +52,7 @@ class PowerSupply
      * @param[in] i2caddr - The 16-bit I2C address of the power supply
      */
     PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
-                std::uint8_t i2cbus, const std::string& i2caddr) :
-        bus(bus),
-        i2cbus(i2cbus), i2caddr(i2caddr), inventoryPath(invpath)
-    {
-        if (inventoryPath.empty())
-        {
-            throw std::invalid_argument{"Invalid empty inventoryPath"};
-        }
-
-        // Setup the functions to call when the D-Bus inventory path for the
-        // Present property changes.
-        presentMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::propertiesChanged(inventoryPath,
-                                                            INVENTORY_IFACE),
-            [this](auto& msg) { this->inventoryChanged(msg); });
-        presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::interfacesAdded() +
-                sdbusplus::bus::match::rules::path_namespace(inventoryPath),
-            [this](auto& msg) { this->inventoryChanged(msg); });
-        // Get the current state of the Present property.
-        updatePresence();
-    }
+                std::uint8_t i2cbus, const std::uint16_t i2caddr);
 
     phosphor::pmbus::PMBusBase& getPMBus()
     {
@@ -239,7 +216,7 @@ class PowerSupply
     std::uint8_t i2cbus = 0;
 
     /** @brief I2C address the power supply is at. */
-    std::string i2caddr;
+    std::uint16_t i2caddr = 0;
 
     /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
