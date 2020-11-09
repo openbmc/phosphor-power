@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
         // handle both sd_events (for the timers) and dbus signals.
         bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-        manager::PSUManager manager(bus, event, configfile);
+        manager::PSUManager manager(bus, event);
 
         return manager.run();
     }
