@@ -24,41 +24,13 @@
 
 using namespace phosphor::power;
 
-int main(int argc, char* argv[])
+int main(void)
 {
     try
     {
         using namespace phosphor::logging;
 
         CLI::App app{"OpenBMC Power Supply Unit Monitor"};
-
-        std::string configfile;
-        app.add_option("-c,--config", configfile,
-                       "JSON configuration file path");
-
-        // Read the arguments.
-        CLI11_PARSE(app, argc, argv);
-        if (configfile.empty())
-        {
-            if (std::filesystem::exists(
-                    "/etc/phosphor-psu-monitor/psu_config.json"))
-            {
-                configfile = "/etc/phosphor-psu-monitor/psu_config.json";
-            }
-            else
-            {
-                configfile = "/usr/share/phosphor-psu-monitor/psu_config.json";
-            }
-        }
-
-        if (!std::filesystem::exists(configfile))
-        {
-            log<level::ERR>((std::string("Configuration file does not exist: "
-                                         "FILENAME=") +
-                             configfile)
-                                .c_str());
-            return -1;
-        }
 
         auto bus = sdbusplus::bus::new_default();
         auto event = sdeventplus::Event::get_default();
@@ -67,7 +39,7 @@ int main(int argc, char* argv[])
         // handle both sd_events (for the timers) and dbus signals.
         bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-        manager::PSUManager manager(bus, event, configfile);
+        manager::PSUManager manager(bus, event);
 
         return manager.run();
     }
