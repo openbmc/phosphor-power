@@ -6,6 +6,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <chrono>
+#include <iostream>
+
 using namespace phosphor::logging;
 
 namespace phosphor::power::manager
