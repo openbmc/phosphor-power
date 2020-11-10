@@ -79,9 +79,9 @@ class PowerSupply
     }
 
     phosphor::pmbus::PMBusBase& getPMBus()
-    {
+     {
         return *pmbusIntf;
-    }
+     }
 
     /**
      * Power supply specific function to analyze for faults/errors.
@@ -236,7 +236,7 @@ class PowerSupply
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD. */
+    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
 
     /** @brief True if a fault has already been found and not cleared */
@@ -280,7 +280,7 @@ class PowerSupply
      *
      * Used to read or write to/from PMBus power supply devices.
      */
-    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
+    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf = nullptr;
 
     /** @brief Stored copy of the firmware version/revision string */
     std::string fwVersion;
