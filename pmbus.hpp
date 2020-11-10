@@ -145,6 +145,7 @@ class PMBusBase
     virtual std::string readString(const std::string& name, Type type) = 0;
     virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
                              Type type) = 0;
+    virtual void findHwmonDir() = 0;
     virtual const fs::path& path() const = 0;
 };
 
@@ -334,7 +335,7 @@ class PMBus : public PMBusBase
      * Finds the path relative to basePath to the hwmon directory
      * for the device and stores it in hwmonRelPath.
      */
-    void findHwmonDir();
+    void findHwmonDir() override;
 
     /**
      * Returns the path to use for the passed in type.

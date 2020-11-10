@@ -128,13 +128,6 @@ void PowerSupply::onOffConfig(uint8_t data)
 
 void PowerSupply::clearFaults()
 {
-    faultFound = false;
-    inputFault = false;
-    mfrFault = false;
-    vinUVFault = false;
-    readFail = 0;
-    faultLogged = false;
-
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a
     // CLEAR_FAULTS after reading from any of the hwmon "files" in sysfs, so
@@ -143,6 +136,13 @@ void PowerSupply::clearFaults()
     // I do not care what the return value is.
     if (present)
     {
+        faultFound = false;
+        inputFault = false;
+        mfrFault = false;
+        vinUVFault = false;
+        readFail = 0;
+        faultLogged = false;
+
         try
         {
             static_cast<void>(
@@ -175,6 +175,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             // or write failures.
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(20ms);
+            pmbusIntf->findHwmonDir();
             onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
             clearFaults();
             updateInventory();
