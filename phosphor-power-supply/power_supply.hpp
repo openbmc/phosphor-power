@@ -54,8 +54,7 @@ class PowerSupply
     PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
                 std::uint8_t i2cbus, const std::string& i2caddr) :
         bus(bus),
-        inventoryPath(invpath),
-        pmbusIntf(phosphor::pmbus::createPMBus(i2cbus, i2caddr))
+        i2cbus(i2cbus), i2caddr(i2caddr), inventoryPath(invpath)
     {
         if (inventoryPath.empty())
         {
@@ -236,7 +235,13 @@ class PowerSupply
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD. */
+    /** @brief I2C bus the power supply is on. */
+    std::uint8_t i2cbus = 0;
+
+    /** @brief I2C address the power supply is at. */
+    std::string i2caddr;
+
+    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
 
     /** @brief True if a fault has already been found and not cleared */
@@ -280,7 +285,7 @@ class PowerSupply
      *
      * Used to read or write to/from PMBus power supply devices.
      */
-    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf;
+    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf = nullptr;
 
     /** @brief Stored copy of the firmware version/revision string */
     std::string fwVersion;

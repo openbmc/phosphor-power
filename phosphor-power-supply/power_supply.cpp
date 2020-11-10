@@ -22,6 +22,13 @@ void PowerSupply::updatePresence()
     try
     {
         present = getPresence(bus, inventoryPath);
+        if (present)
+        {
+            if (nullptr == pmbusIntf)
+            { // createPMBus()
+                pmbusIntf = phosphor::pmbus::createPMBus(i2cbus, i2caddr);
+            }
+        }
     }
     catch (const sdbusplus::exception::SdBusError& e)
     {
@@ -175,6 +182,14 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             // or write failures.
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(20ms);
+            if (nullptr == pmbusIntf)
+            {
+                pmbusIntf = phosphor::pmbus::createPMBus(i2cbus, i2caddr);
+            }
+            else
+            {
+                pmbusIntf->findHwmonDir();
+            }
             onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
             clearFaults();
             updateInventory();
