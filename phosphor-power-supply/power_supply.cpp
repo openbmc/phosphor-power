@@ -141,17 +141,20 @@ void PowerSupply::clearFaults()
     // reading in1_input should result in clearing the fault bits in
     // STATUS_BYTE/STATUS_WORD.
     // I do not care what the return value is.
-    try
+    if (present)
     {
-        static_cast<void>(
-            pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
-    }
-    catch (ReadFailure& e)
-    {
-        // Since I do not care what the return value is, I really do not
-        // care much if it gets a ReadFailure either. However, this should not
-        // prevent the application from continuing to run, so catching the read
-        // failure.
+        try
+        {
+            static_cast<void>(
+                pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
+        }
+        catch (ReadFailure& e)
+        {
+            // Since I do not care what the return value is, I really do not
+            // care much if it gets a ReadFailure either. However, this should
+            // not prevent the application from continuing to run, so catching
+            // the read failure.
+        }
     }
 }
 
