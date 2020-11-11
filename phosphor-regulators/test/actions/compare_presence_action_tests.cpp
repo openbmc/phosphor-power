@@ -15,18 +15,29 @@
  */
 #include "action.hpp"
 #include "action_environment.hpp"
+#include "action_error.hpp"
 #include "compare_presence_action.hpp"
+#include "device.hpp"
+#include "i2c_interface.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_presence_service.hpp"
+#include "mock_services.hpp"
+#include "mocked_i2c_interface.hpp"
 
 #include <exception>
 #include <memory>
 #include <stdexcept>
 #include <utility>
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
+
+using ::testing::A;
+using ::testing::Return;
+using ::testing::Throw;
 
 TEST(ComparePresenceActionTests, Constructor)
 {
@@ -39,7 +50,134 @@ TEST(ComparePresenceActionTests, Constructor)
 
 TEST(ComparePresenceActionTests, Execute)
 {
-    // TODO: Not implemented yet
+    // Test where works: actual value is true.
+    try
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+
+        // Create Device, IDMap, mock services and ActionEnvironment
+        // Actual value isPresent() is true
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
+        IDMap idMap{};
+        idMap.addDevice(device);
+        MockServices services{};
+        MockPresenceService& presenceService =
+            services.getMockPresenceService();
+        EXPECT_CALL(presenceService, isPresent(A<const std::string&>()))
+            .Times(2)
+            .WillRepeatedly(Return(true));
+        ActionEnvironment env{idMap, "reg1", services};
+
+        // Test where works: expected value is true, return value is true.
+        {
+            ComparePresenceAction action{"/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/cpu2",
+                                         true};
+            EXPECT_EQ(action.execute(env), true);
+        }
+
+        // Test where works: expected value is false, return value is false.
+        {
+            ComparePresenceAction action{"/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/cpu2",
+                                         false};
+            EXPECT_EQ(action.execute(env), false);
+        }
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
+
+    // Test where actual value is false.
+    try
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+
+        // Create Device, IDMap, mock services and ActionEnvironment
+        // Actual value isPresent() is false
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
+        IDMap idMap{};
+        idMap.addDevice(device);
+        MockServices services{};
+        MockPresenceService& presenceService =
+            services.getMockPresenceService();
+        EXPECT_CALL(presenceService, isPresent(A<const std::string&>()))
+            .Times(2)
+            .WillRepeatedly(Return(false));
+        ActionEnvironment env{idMap, "reg1", services};
+
+        // Test where works: expected value is true, return value is false.
+        {
+            ComparePresenceAction action{"/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/cpu2",
+                                         true};
+            EXPECT_EQ(action.execute(env), false);
+        }
+
+        // Test where works: expected value is false, return value is true.
+        {
+            ComparePresenceAction action{"/xyz/openbmc_project/inventory/"
+                                         "system/chassis/motherboard/cpu2",
+                                         false};
+            EXPECT_EQ(action.execute(env), true);
+        }
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
+
+    // Test where fails. Reading presence fails.
+    try
+    {
+        // Create mock I2CInterface
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+
+        // Create Device, IDMap, mock services and ActionEnvironment
+        // PresenceService cannot get the presence
+        Device device{
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface)};
+        IDMap idMap{};
+        idMap.addDevice(device);
+        MockServices services{};
+        MockPresenceService& presenceService =
+            services.getMockPresenceService();
+        EXPECT_CALL(presenceService, isPresent(A<const std::string&>()))
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error(
+                "PresenceService cannot get the presence.")));
+
+        ActionEnvironment env{idMap, "reg1", services};
+
+        ComparePresenceAction action{"/xyz/openbmc_project/inventory/"
+                                     "system/chassis/motherboard/cpu2",
+                                     true};
+        EXPECT_EQ(action.execute(env), false);
+    }
+    catch (const ActionError& e)
+    {
+        EXPECT_STREQ(e.what(), "ActionError: compare_presence: { fru: "
+                               "/xyz/openbmc_project/inventory/system/chassis/"
+                               "motherboard/cpu2, value: true }");
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
 }
 
 TEST(ComparePresenceActionTests, GetFRU)
