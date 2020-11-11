@@ -21,6 +21,7 @@ phosphor_regulators_library_source_files = [
     'system.cpp',
     'temporary_file.cpp',
 
+    'actions/compare_presence_action.cpp',
     'actions/if_action.cpp',
     'actions/i2c_compare_bit_action.cpp',
     'actions/i2c_compare_byte_action.cpp',
