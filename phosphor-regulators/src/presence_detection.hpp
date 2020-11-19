@@ -16,13 +16,20 @@
 #pragma once
 
 #include "action.hpp"
+#include "services.hpp"
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
 namespace phosphor::power::regulators
 {
+
+// Forward declarations to avoid circular dependencies
+class Chassis;
+class Device;
+class System;
 
 /**
  * @class PresenceDetection
@@ -69,20 +76,30 @@ class PresenceDetection
     }
 
     /**
+     * Clears the cached presence value.
+     */
+    void clearCache(void)
+    {
+        isPresent.reset();
+    }
+
+    /**
      * Executes the actions to detect whether the device is present.
      *
      * The return value of the last action indicates whether the device is
      * present.  A return value of true means the device is present; false means
      * the device is missing.
      *
+     * Caches the resulting presence value.  Subsequent calls to execute() will
+     * return the cached value rather than re-executing the actions.  This
+     * provides a performance improvement since the actions may be expensive to
+     * execute, such as I2C reads or D-Bus method calls.  The cached value can
+     * be cleared by calling clearCache().
+     *
      * @return true if device is present, false otherwise
      */
-    bool execute()
-    {
-        // TODO: Create ActionEnvironment, execute actions, catch and handle any
-        // exceptions
-        return true;
-    }
+    bool execute(Services& services, System& system, Chassis& chassis,
+                 Device& device);
 
     /**
      * Returns the actions that detect whether the device is present.
@@ -94,11 +111,26 @@ class PresenceDetection
         return actions;
     }
 
+    /**
+     * Returns the cached presence value, if any.
+     *
+     * @return cached presence value
+     */
+    std::optional<bool> getCachedPresence() const
+    {
+        return isPresent;
+    }
+
   private:
     /**
      * Actions that detect whether the device is present.
      */
     std::vector<std::unique_ptr<Action>> actions{};
+
+    /**
+     * Cached presence value.  Initially has no value.
+     */
+    std::optional<bool> isPresent{};
 };
 
 } // namespace phosphor::power::regulators
