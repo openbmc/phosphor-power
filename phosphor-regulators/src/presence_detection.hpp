@@ -16,6 +16,7 @@
 #pragma once
 
 #include "action.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <utility>
@@ -23,6 +24,11 @@
 
 namespace phosphor::power::regulators
 {
+
+// Forward declarations to avoid circular dependencies
+class Chassis;
+class Device;
+class System;
 
 /**
  * @class PresenceDetection
@@ -77,12 +83,8 @@ class PresenceDetection
      *
      * @return true if device is present, false otherwise
      */
-    bool execute()
-    {
-        // TODO: Create ActionEnvironment, execute actions, catch and handle any
-        // exceptions
-        return true;
-    }
+    bool execute(Services& services, System& system, Chassis& /*chassis*/,
+                 Device& device);
 
     /**
      * Returns the actions that detect whether the device is present.
