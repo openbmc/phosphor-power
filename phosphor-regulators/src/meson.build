@@ -20,6 +20,7 @@ phosphor_regulators_library_source_files = [
     'sensor_monitoring.cpp',
     'system.cpp',
     'temporary_file.cpp',
+    'vpd_service.cpp',
 
     'actions/if_action.cpp',
     'actions/i2c_compare_bit_action.cpp',

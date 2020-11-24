@@ -20,8 +20,10 @@
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_presence_service.hpp"
+#include "mock_vpd_service.hpp"
 #include "presence_service.hpp"
 #include "services.hpp"
+#include "vpd_service.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -68,6 +70,12 @@ class MockServices : public Services
         return presenceService;
     }
 
+    /** @copydoc Services::getVPDService() */
+    virtual VPDService& getVPDService() override
+    {
+        return vpdService;
+    }
+
     /**
      * Returns the MockErrorLogging object that implements the ErrorLogging
      * interface.
@@ -106,6 +114,19 @@ class MockServices : public Services
         return presenceService;
     }
 
+    /**
+     * Returns the MockVPDService object that implements the
+     * VPDService interface.
+     *
+     * This allows test cases to use the object in EXPECT_CALL() statements.
+     *
+     * @return mock VPD service object
+     */
+    virtual MockVPDService& getMockVPDService()
+    {
+        return vpdService;
+    }
+
   private:
     /**
      * D-Bus bus object.
@@ -126,6 +147,11 @@ class MockServices : public Services
      * Mock implementation of the PresenceService interface.
      */
     MockPresenceService presenceService{};
+
+    /**
+     * Mock implementation of the VPDService interface.
+     */
+    MockVPDService vpdService{};
 };
 
 } // namespace phosphor::power::regulators
