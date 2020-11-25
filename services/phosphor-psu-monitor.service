@@ -4,6 +4,8 @@ Wants=obmc-mapper.target
 After=obmc-mapper.target
 Wants=mapper-wait@-org-openbmc-control-power0.service
 After=mapper-wait@-org-openbmc-control-power0.service
+Wants=phosphor-gpio-presence@.service
+After=phosphor-gpio-presence@.service
 
 [Service]
 Restart=on-failure
