@@ -225,6 +225,9 @@ void PSUManager::analyze()
                 additionalData["CALLOUT_INVENTORY_PATH"] =
                     psu->getInventoryPath();
 
+                additionalData["STATUS_MFR"] =
+                    std::to_string(psu->getMFRFault());
+
                 createError("xyz.openbmc_project.Power.PowerSupply.Error.Fault",
                             additionalData);
 
