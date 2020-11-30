@@ -196,6 +196,8 @@ void PSUManager::analyze()
             {
                 additionalData["STATUS_WORD"] =
                     std::to_string(psu->getStatusWord());
+                additionalData["STATUS_MFR"] =
+                    std::to_string(psu->getMFRFault());
                 // If there are faults being reported, they possibly could be
                 // related to a bug in the firmware version running on the power
                 // supply. Capture that data into the error as well.
