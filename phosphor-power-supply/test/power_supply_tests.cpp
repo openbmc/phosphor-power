@@ -116,8 +116,9 @@ TEST_F(PowerSupplyTests, Analyze)
 
     // STATUS_WORD input fault/warn
     EXPECT_CALL(mockPMBus, read(_, _))
-        .Times(1)
-        .WillOnce(Return(status_word::INPUT_FAULT_WARN));
+        .Times(2)
+        .WillOnce(Return(status_word::INPUT_FAULT_WARN))
+        .WillOnce(Return(0x0000));
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
     EXPECT_EQ(psu2.isFaulted(), true);
@@ -129,7 +130,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // First need it to return good status, then the fault
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::VIN_UV_FAULT));
+        .WillOnce(Return(status_word::VIN_UV_FAULT))
+        .WillOnce(Return(0x0000));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -141,7 +143,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // STATUS_WORD MFR fault.
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT));
+        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT))
+        .WillOnce(Return(1));       // mock return for read(STATUS_MFR... )
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -153,7 +156,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // Ignore Temperature fault.
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::TEMPERATURE_FAULT_WARN));
+        .WillOnce(Return(status_word::TEMPERATURE_FAULT_WARN))
+        .WillOnce(Return(0x0000));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -165,7 +169,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // Ignore fan fault
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::FAN_FAULT));
+        .WillOnce(Return(status_word::FAN_FAULT))
+        .WillOnce(Return(0x0000));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -230,7 +235,10 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0xFFFF));
+    EXPECT_CALL(mockPMBus, read(_, _))
+        .Times(2)
+        .WillOnce(Return(0xFFFF))
+        .WillOnce(Return(1));       // mock return for read(STATUS_MFR... )
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), true);
@@ -315,7 +323,10 @@ TEST_F(PowerSupplyTests, IsFaulted)
     PowerSupply psu{bus, PSUInventoryPath, 11, "006f"};
     EXPECT_EQ(psu.isFaulted(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0xFFFF));
+    EXPECT_CALL(mockPMBus, read(_, _))
+        .Times(2)
+        .WillOnce(Return(0xFFFF))
+        .WillOnce(Return(1));       // mock return for read(STATUS_MFR... ) 
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), true);
 }
@@ -332,8 +343,9 @@ TEST_F(PowerSupplyTests, HasInputFault)
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _))
-        .Times(1)
-        .WillOnce(Return(status_word::INPUT_FAULT_WARN));
+        .Times(2)
+        .WillOnce(Return(status_word::INPUT_FAULT_WARN))
+        .WillOnce(Return(0));
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), true);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
@@ -353,8 +365,9 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _))
-        .Times(1)
-        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT));
+        .Times(2)
+        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT))
+        .WillOnce(Return(1));       // mock return for read(STATUS_MFR... )
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), true);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
@@ -374,8 +387,9 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _))
-        .Times(1)
-        .WillOnce(Return(status_word::VIN_UV_FAULT));
+        .Times(2)
+        .WillOnce(Return(status_word::VIN_UV_FAULT))
+        .WillOnce(Return(0));
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), true);
     EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
