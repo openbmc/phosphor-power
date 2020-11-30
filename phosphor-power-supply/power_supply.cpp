@@ -5,6 +5,8 @@
 #include "types.hpp"
 #include "util.hpp"
 
+#include <fmt/format.h>
+
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
@@ -45,14 +47,16 @@ void PowerSupply::analyze()
 
             if (statusWord)
             {
+                statusMFR = pmbusIntf->read(STATUS_MFR, Type::Debug);
                 if (statusWord & status_word::INPUT_FAULT_WARN)
                 {
                     if (!inputFault)
                     {
-                        log<level::INFO>(
-                            "INPUT fault",
-                            entry("STATUS_WORD=0x%04X",
-                                  static_cast<uint16_t>(statusWord)));
+                        log<level::INFO>(fmt::format("INPUT fault: "
+                                                     "status word = {:#04x}, "
+                                                     "MFR fault = {:#02x}",
+                                                     statusWord, statusMFR)
+                                             .c_str());
                     }
 
                     faultFound = true;
@@ -63,10 +67,11 @@ void PowerSupply::analyze()
                 {
                     if (!mfrFault)
                     {
-                        log<level::INFO>(
-                            "MFRSPECIFIC fault",
-                            entry("STATUS_WORD=0x%04X",
-                                  static_cast<uint16_t>(statusWord)));
+                        log<level::ERR>(fmt::format("MFR fault: "
+                                                    "status word = {:#04x} "
+                                                    "MFR fault =  {:#02x}",
+                                                    statusWord, statusMFR)
+                                            .c_str());
                     }
                     faultFound = true;
                     mfrFault = true;
@@ -76,10 +81,11 @@ void PowerSupply::analyze()
                 {
                     if (!vinUVFault)
                     {
-                        log<level::INFO>(
-                            "VIN_UV fault",
-                            entry("STATUS_WORD=0x%04X",
-                                  static_cast<uint16_t>(statusWord)));
+                        log<level::INFO>(fmt::format("VIN_UV fault: "
+                                                     "status word = {:#04x}, "
+                                                     "MFR fault = {:#02x}",
+                                                     statusWord, statusMFR)
+                                             .c_str());
                     }
 
                     faultFound = true;
@@ -139,6 +145,7 @@ void PowerSupply::clearFaults()
         faultFound = false;
         inputFault = false;
         mfrFault = false;
+        statusMFR = 0;
         vinUVFault = false;
         readFail = 0;
         faultLogged = false;
