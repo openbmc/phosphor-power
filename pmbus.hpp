@@ -55,6 +55,7 @@ constexpr auto INPUT_FAULT_WARN = 0x2000;
 // The bit mask representing the MFRSPECIFIC fault, bit 4 of STATUS_WORD high
 // byte. A manufacturer specific fault or warning has occurred.
 constexpr auto MFR_SPECIFIC_FAULT = 0x1000;
+// constexpr auto MFR_SPECIFIC_FAULT = 0x1001;  // Changed for testing only
 
 // The bit mask representing the POWER_GOOD Negated bit of the STATUS_WORD.
 constexpr auto POWER_GOOD_NEGATED = 0x0800;
