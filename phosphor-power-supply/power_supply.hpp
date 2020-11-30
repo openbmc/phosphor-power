@@ -146,6 +146,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last read value from STATUS_MFR.
+     */
+    uint64_t getMFRFault() const
+    {
+        return mfrFaultStatus;
+    }
+
+    /**
      * @brief Returns true if a fault was found.
      */
     bool isFaulted() const
@@ -238,6 +246,9 @@ class PowerSupply
 
     /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
+
+    /** @brief Will be updated to the latest/lastvalue read from STATUS_MFR. */
+    uint64_t mfrFaultStatus =  0;
 
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
