@@ -5,6 +5,8 @@
 #include "types.hpp"
 #include "util.hpp"
 
+#include <fmt/format.h>
+
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
@@ -63,10 +65,14 @@ void PowerSupply::analyze()
                 {
                     if (!mfrFault)
                     {
+                        mfrFaultStatus = 0;
+//                            pmbusIntf->read(STATUS_MFR, Type::Debug);
                         log<level::INFO>(
-                            "MFRSPECIFIC fault",
-                            entry("STATUS_WORD=0x%04X",
-                                  static_cast<uint16_t>(statusWord)));
+                            fmt::format(
+                                "Set MFRSPECIFIC fault: status: {:#08X} "
+                                "MFR Specific Fault value: {:#08X}",
+                                statusWord, mfrFaultStatus)
+                                .c_str());
                     }
                     faultFound = true;
                     mfrFault = true;
