@@ -230,7 +230,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0xFFFF));
+    EXPECT_CALL(mockPMBus, read(_, _)).Times(2).WillOnce(Return(0xFFFF));
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), true);
@@ -315,7 +315,7 @@ TEST_F(PowerSupplyTests, IsFaulted)
     PowerSupply psu{bus, PSUInventoryPath, 11, "006f"};
     EXPECT_EQ(psu.isFaulted(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0xFFFF));
+    EXPECT_CALL(mockPMBus, read(_, _)).Times(2).WillOnce(Return(0xFFFF));
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), true);
 }
@@ -349,7 +349,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     PowerSupply psu{bus, PSUInventoryPath, 3, "0068"};
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasMFRFault(), false);
-    EXPECT_CALL(mockPMBus, read(_, _)).Times(1).WillOnce(Return(0x0000));
+    EXPECT_CALL(mockPMBus, read(_, _)).Times(2).WillOnce(Return(0x0000));
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_CALL(mockPMBus, read(_, _))
