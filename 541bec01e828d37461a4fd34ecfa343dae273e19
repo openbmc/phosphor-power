@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7eda6b52_1f51b908",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2020-12-01T19:55:09Z",
+      "side": 1,
+      "message": "hasMFRFault() returns true if status_word::MFR_SPECIFIC_FAULT is set.\ngetMFRFault() has value read from pmbusIntf-\u003eread(STATUS_MFR, Type::Debug); \nThis value could be zero; nothing prevents that. I guess this is ok?",
+      "range": {
+        "startLine": 229,
+        "startChar": 55,
+        "endLine": 230,
+        "endChar": 0
+      },
+      "revId": "541bec01e828d37461a4fd34ecfa343dae273e19",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
