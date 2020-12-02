@@ -67,11 +67,7 @@ class CompareVPDAction : public Action
      * @param environment Action execution environment.
      * @return true
      */
-    virtual bool execute(ActionEnvironment& /* environment */) override
-    {
-        // TODO: Not implemented yet
-        return true;
-    }
+    virtual bool execute(ActionEnvironment& environment) override;
 
     /**
      * Returns the Field-Replaceable Unit (FRU).
@@ -108,16 +104,7 @@ class CompareVPDAction : public Action
      *
      * @return description of action
      */
-    virtual std::string toString() const override
-    {
-        std::ostringstream ss;
-        ss << "compare_vpd: { ";
-        ss << "fru: " << fru << ", ";
-        ss << "keyword: " << keyword << ", ";
-        ss << "value: " << value << " }";
-
-        return ss.str();
-    }
+    virtual std::string toString() const override;
 
   private:
     /**
