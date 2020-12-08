@@ -174,73 +174,81 @@ void PSUManager::analyze()
         psu->analyze();
     }
 
-    for (auto& psu : psus)
+    if (powerOn)
     {
-        std::map<std::string, std::string> additionalData;
-        additionalData["_PID"] = std::to_string(getpid());
-        // TODO: Fault priorities #918
-        if (!psu->isFaultLogged() && !psu->isPresent())
+        for (auto& psu : psus)
         {
-            // Create error for power supply missing.
-            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
-            additionalData["CALLOUT_PRIORITY"] = "H";
-            createError("xyz.openbmc_project.Power.PowerSupply.Error.Missing",
+            std::map<std::string, std::string> additionalData;
+            additionalData["_PID"] = std::to_string(getpid());
+            // TODO: Fault priorities #918
+            if (!psu->isFaultLogged() && !psu->isPresent())
+            {
+                // Create error for power supply missing.
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+                additionalData["CALLOUT_PRIORITY"] = "H";
+                createError(
+                    "xyz.openbmc_project.Power.PowerSupply.Error.Missing",
+                    additionalData);
+                psu->setFaultLogged();
+            }
+            else if (!psu->isFaultLogged() && psu->isFaulted())
+            {
+                additionalData["STATUS_WORD"] =
+                    std::to_string(psu->getStatusWord());
+                // If there are faults being reported, they possibly could be
+                // related to a bug in the firmware version running on the power
+                // supply. Capture that data into the error as well.
+                additionalData["FW_VERSION"] = psu->getFWVersion();
+
+                if ((psu->hasInputFault() || psu->hasVINUVFault()))
+                {
+                    /* The power supply location might be needed if the input
+                     * fault is due to a problem with the power supply itself.
+                     * Include the inventory path with a call out priority of
+                     * low.
+                     */
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+                    additionalData["CALLOUT_PRIORITY"] = "L";
+                    createError("xyz.openbmc_project.Power.PowerSupply.Error."
+                                "InputFault",
+                                additionalData);
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasMFRFault())
+                {
+                    /* This can represent a variety of faults that result in
+                     * calling out the power supply for replacement: Output
+                     * OverCurrent, Output Under Voltage, and potentially other
+                     * faults.
+                     *
+                     * Also plan on putting specific fault in AdditionalData,
+                     * along with register names and register values
+                     * (STATUS_WORD, STATUS_MFR, etc.).*/
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
                         additionalData);
-            psu->setFaultLogged();
-        }
-        else if (!psu->isFaultLogged() && psu->isFaulted())
-        {
-            additionalData["STATUS_WORD"] =
-                std::to_string(psu->getStatusWord());
-            // If there are faults being reported, they possibly could be
-            // related to a bug in the firmware version running on the power
-            // supply. Capture that data into the error as well.
-            additionalData["FW_VERSION"] = psu->getFWVersion();
 
-            if ((psu->hasInputFault() || psu->hasVINUVFault()))
-            {
-                /* The power supply location might be needed if the input fault
-                 * is due to a problem with the power supply itself. Include the
-                 * inventory path with a call out priority of low.
-                 */
-                additionalData["CALLOUT_INVENTORY_PATH"] =
-                    psu->getInventoryPath();
-                additionalData["CALLOUT_PRIORITY"] = "L";
-                createError(
-                    "xyz.openbmc_project.Power.PowerSupply.Error.InputFault",
-                    additionalData);
-                psu->setFaultLogged();
-            }
-            else if (psu->hasMFRFault())
-            {
-                /* This can represent a variety of faults that result in calling
-                 * out the power supply for replacement:
-                 * Output OverCurrent, Output Under Voltage, and potentially
-                 * other faults.
-                 *
-                 * Also plan on putting specific fault in AdditionalData,
-                 * along with register names and register values
-                 * (STATUS_WORD, STATUS_MFR, etc.).*/
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasCommFault())
+                {
+                    /* Attempts to communicate with the power supply have
+                     * reached there limit. Create an error. */
+                    additionalData["CALLOUT_DEVICE_PATH"] =
+                        psu->getDevicePath();
 
-                additionalData["CALLOUT_INVENTORY_PATH"] =
-                    psu->getInventoryPath();
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
+                        additionalData);
 
-                createError("xyz.openbmc_project.Power.PowerSupply.Error.Fault",
-                            additionalData);
-
-                psu->setFaultLogged();
-            }
-            else if (psu->hasCommFault())
-            {
-                /* Attempts to communicate with the power supply have reached
-                 * there limit. Create an error. */
-                additionalData["CALLOUT_DEVICE_PATH"] = psu->getDevicePath();
-
-                createError(
-                    "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
-                    additionalData);
-
-                psu->setFaultLogged();
+                    psu->setFaultLogged();
+                }
             }
         }
     }
