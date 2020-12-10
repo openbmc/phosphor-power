@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "301b151c_41b2e03d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "I think in general this probably follows the intent of that bit in the STATUS_WORD response, but it might be interesting to know what value is read from here if other faults occur. Perhaps just read it all the time, after reading STATUS_WORD? Line 47?",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae2bba33_be3ca6d6",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "This seems a tad bit verbose to me.\nShould it be an ERROR trace since a fault bit for an error is on?\nThe STATUS_WORD response is two bytes (#04X ?).\nThe STATUS_MFR_SPECIFIC response is one byte (#02X ?).\nex: MFRSPECIFIC fault: STATUS_WORD: 0x1860 STATUS_MFR_SPECIFIC: 0x26",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 42
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1b0a7c_09a28dfe",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "I probably would have called this statusMFR, or maybe statusMFRSpecific.\n\nPMBus Spec Part II, 1.3.1, 17.9 STATUS_MFR_SPECIFIC.\nhttps://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md\nhttps://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#naming-conventions",
+      "range": {
+        "startLine": 251,
+        "startChar": 13,
+        "endLine": 251,
+        "endChar": 27
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43fddba5_369ff449",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "I think we should include this in all faults that are not PSU missing faults. I suspect the power supply engineers and/or those performing failure analysis would be curious what this value was at the time of the failure.\nBetween line 194 and 195?",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 55
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1752b7e6_61e9c61d",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "This reminds me about a comment Shawn had about ordering or something. I seem to remember having a note about checking some of this, and turning on some option, but now I forget what that was.\n\nI think what this was intended to mean earlier was that it calls analyze() and reads 0x0000 for STATUS_WORD, then calls it a second time and reads 0x1000. The way you have the code now, I think the third WillOnce you added is going to return 0x00 for STATUS_MFR_SPECIFIC.\n\nWith all that said, I could be off/wrong, since I forgot what the rule was on ordering things in gmock. I also suggested that you read both STATUS_WORD and STATUS_MFR_SPECIFIC on each call through analyze.",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 43
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b38cc6a5_ff8ef508",
+        "filename": "pmbus.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2020-12-10T19:45:37Z",
+      "side": 1,
+      "message": "Probably best to not include this for review. :-)\nI suspect it is related to the simulator problem we noted.\n\nI am not sure on the best suggestion on how to flag this to be corrected before you push code back up. FIXME? DEBUG? DO-NOT-MERGE?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
