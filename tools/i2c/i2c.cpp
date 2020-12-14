@@ -200,7 +200,7 @@ void I2CDevice::read(uint8_t addr, uint16_t& data)
 void I2CDevice::read(uint8_t addr, uint8_t& size, uint8_t* data, Mode mode)
 {
     checkIsOpen();
-    int ret;
+    int ret = -1;
     switch (mode)
     {
         case Mode::SMBUS:
@@ -261,7 +261,7 @@ void I2CDevice::write(uint8_t addr, uint8_t size, const uint8_t* data,
                       Mode mode)
 {
     checkIsOpen();
-    int ret;
+    int ret = -1;
     switch (mode)
     {
         case Mode::SMBUS:
