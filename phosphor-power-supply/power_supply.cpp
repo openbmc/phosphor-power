@@ -5,6 +5,8 @@
 #include "types.hpp"
 #include "util.hpp"
 
+#include <fmt/format.h>
+
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
@@ -27,7 +29,10 @@ void PowerSupply::updatePresence()
     {
         // Relying on property change or interface added to retry.
         // Log an informational trace to the journal.
-        log<level::INFO>("D-Bus property access failure exception");
+        log<level::INFO>(
+            fmt::format("D-Bus property {} access failure exception",
+                        inventoryPath)
+                .c_str());
     }
 }
 
