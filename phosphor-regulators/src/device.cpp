@@ -72,6 +72,25 @@ void Device::configure(Services& services, System& system, Chassis& chassis)
     }
 }
 
+bool Device::isPresent(Services& services, System& system, Chassis& chassis)
+{
+    if (!present.has_value())
+    {
+        // If there is no presenceDetection data member, set present to true.
+        if (presenceDetection == nullptr)
+        {
+            present = true;
+        }
+        // Get present value from PresenceDetection::execute.
+        else
+        {
+            present =
+                presenceDetection->execute(services, system, chassis, *this);
+        }
+    }
+    return present.value();
+}
+
 void Device::monitorSensors(Services& services, System& system,
                             Chassis& chassis)
 {
