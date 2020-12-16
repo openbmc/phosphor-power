@@ -161,7 +161,7 @@ TEST(DeviceTests, Close)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(false));
         EXPECT_CALL(*i2cInterface, close).Times(0);
 
-        // Create mock services.  No logError should occur.
+        // Create MockServices.  No logError should occur.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
@@ -186,7 +186,7 @@ TEST(DeviceTests, Close)
         EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
         EXPECT_CALL(*i2cInterface, close).Times(1);
 
-        // Create mock services.  No logError should occur.
+        // Create MockServices.  No logError should occur.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
@@ -214,7 +214,7 @@ TEST(DeviceTests, Close)
             .WillOnce(Throw(
                 i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
 
-        // Create mock services.  Expect logError() to be called.
+        // Create MockServices.  Expect logError() to be called.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         std::vector<std::string> expectedErrMessagesException{
@@ -238,7 +238,7 @@ TEST(DeviceTests, Configure)
 {
     // Test where Configuration and Rails were not specified in constructor
     {
-        // Create mock services.  No logging should occur.
+        // Create MockServices.  No logging should occur.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
@@ -273,7 +273,7 @@ TEST(DeviceTests, Configure)
     {
         std::vector<std::unique_ptr<Rail>> rails{};
 
-        // Create mock services.  Expect logDebug() to be called.
+        // Create MockServices.  Expect logDebug() to be called.
         // For the Device and both Rails, should execute the Configuration
         // and log a debug message.
         MockServices services{};
@@ -498,11 +498,170 @@ TEST(DeviceTests, IsRegulator)
     EXPECT_EQ(device.isRegulator(), false);
 }
 
+TEST(DeviceTests, IsPesent)
+{
+    // Test where Device does not have a PresenceDetection data member.
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(createI2CInterface()));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+    }
+
+    // Test where Device has a PresenceDetection data member: Device is present.
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* action = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{action});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // MockAction::execute should be called only once and return true.
+        EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "vdd_reg", false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface()), std::move(presenceDetection));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Presence is not cached: MockAction::execute should be called once.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+
+        // Presence is cached: MockAction::execute should not be called.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+    }
+
+    // Test where Device has a PresenceDetection data member: Presence is not
+    // cached: Device is not present.
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* action = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{action});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // MockAction::execute should be called only once and return false.
+        EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(false));
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "vdd_reg", false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface()), std::move(presenceDetection));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Presence is not cached: MockAction::execute should be called once.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), false);
+
+        // Presence is cached: MockAction::execute should not be called.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), false);
+    }
+
+    // Test where Device has a PresenceDetection data member: Presence is not
+    // cached: An error occurs while PresenceDetection->execute() runs.
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* action = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{action});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // An error occurs while PresenceDetection->execute() runs.
+        EXPECT_CALL(*action, execute)
+            .Times(1)
+            .WillOnce(Throw(
+                std::runtime_error("An error occurs while action runs.")));
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "vdd_reg", false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface()), std::move(presenceDetection));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Presence is not cached: MockAction::execute should be called once.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+    }
+}
+
 TEST(DeviceTests, MonitorSensors)
 {
     // Test where Rails were not specified in constructor
     {
-        // Create mock services.  No logging should occur.
+        // Create MockServices.  No logging should occur.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
@@ -539,7 +698,7 @@ TEST(DeviceTests, MonitorSensors)
 
     // Test where Rails were specified in constructor
     {
-        // Create mock services.  No logging should occur.
+        // Create MockServices.  No logging should occur.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
