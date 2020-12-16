@@ -23,6 +23,7 @@
 #include "services.hpp"
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -189,6 +190,14 @@ class Device
     }
 
     /**
+     * Returns whether this device is present.
+     *
+     * @return true if device is present or there is no the presenceDetection
+     * data member, false otherwise
+     */
+    bool isPresent(Services& services, System& system, Chassis& chassis);
+
+    /**
      * Monitors the sensors for the voltage rails produced by this device, if
      * any.
      *
@@ -218,6 +227,11 @@ class Device
      * a FRU, set to the FRU that contains the device.
      */
     const std::string fru{};
+
+    /**
+     * Optional present value indicates whether this device is present.
+     */
+    std::optional<bool> present{};
 
     /**
      * I2C interface to this device.
