@@ -356,6 +356,95 @@ TEST(DeviceTests, Configure)
         // Call configure().
         devicePtr->configure(services, system, *chassisPtr);
     }
+
+    // Test where isPresent returns false. Configuration for Rail and Device
+    // should not be called.
+    {
+        std::vector<std::unique_ptr<Rail>> rails{};
+
+        // Create MockServices.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* presenceAction = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{presenceAction});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // MockAction::execute should be called only once and return false.
+        EXPECT_CALL(*presenceAction, execute).Times(1).WillOnce(Return(false));
+
+        // Create Rail vdd0
+        {
+            // Create Configuration for Rail
+            std::optional<double> volts{1.3};
+            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(0);
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            std::unique_ptr<Configuration> configuration =
+                std::make_unique<Configuration>(volts, std::move(actions));
+
+            // Create Rail
+            std::unique_ptr<Rail> rail =
+                std::make_unique<Rail>("vdd0", std::move(configuration));
+            rails.emplace_back(std::move(rail));
+        }
+
+        // Create Rail vio0
+        {
+            // Create Configuration for Rail
+            std::optional<double> volts{3.2};
+            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(0);
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            std::unique_ptr<Configuration> configuration =
+                std::make_unique<Configuration>(volts, std::move(actions));
+
+            // Create Rail
+            std::unique_ptr<Rail> rail =
+                std::make_unique<Rail>("vio0", std::move(configuration));
+            rails.emplace_back(std::move(rail));
+        }
+
+        // Create Configuration for Device
+        std::optional<double> volts{};
+        std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+        EXPECT_CALL(*action, execute).Times(0);
+        actions.emplace_back(std::move(action));
+        std::unique_ptr<Configuration> configuration =
+            std::make_unique<Configuration>(volts, std::move(actions));
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(configuration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().
+        devicePtr->configure(services, system, *chassisPtr);
+    }
 }
 
 TEST(DeviceTests, GetConfiguration)
@@ -768,6 +857,77 @@ TEST(DeviceTests, MonitorSensors)
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(deviceConfiguration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().
+        devicePtr->monitorSensors(services, system, *chassisPtr);
+    }
+
+    // Test where isPresent returns false. rail->monitorSensors should not be
+    // called.
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* action = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{action});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // MockAction::execute should be called only once and return false.
+        EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(false));
+
+        // Create PMBusReadSensorAction
+        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        uint8_t command = 0x8C;
+        pmbus_utils::SensorDataFormat format{
+            pmbus_utils::SensorDataFormat::linear_11};
+        std::optional<int8_t> exponent{};
+        std::unique_ptr<PMBusReadSensorAction> action2 =
+            std::make_unique<PMBusReadSensorAction>(type, command, format,
+                                                    exponent);
+
+        // Create mock I2CInterface.  A two-byte read should not occur.
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x8C), A<uint16_t&>()))
+            .Times(0);
+
+        // Create SensorMonitoring
+        std::vector<std::unique_ptr<Action>> actions2{};
+        actions2.emplace_back(std::move(action2));
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            std::make_unique<SensorMonitoring>(std::move(actions2));
+
+        // Create Rail
+        std::vector<std::unique_ptr<Rail>> rails{};
+        std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<Rail> rail = std::make_unique<Rail>(
+            "vdd0", std::move(configuration), std::move(sensorMonitoring));
+        rails.emplace_back(std::move(rail));
+
+        // Create Device
+        std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
             std::move(i2cInterface), std::move(presenceDetection),
             std::move(deviceConfiguration), std::move(rails));
         Device* devicePtr = device.get();
