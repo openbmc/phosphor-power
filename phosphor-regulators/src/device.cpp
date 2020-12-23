@@ -59,16 +59,20 @@ void Device::close(Services& services)
 
 void Device::configure(Services& services, System& system, Chassis& chassis)
 {
-    // If configuration changes are defined for this device, apply them
-    if (configuration)
+    // Skip configuring if Device::isPresent() returns false.
+    if (Device::isPresent(services, system, chassis))
     {
-        configuration->execute(services, system, chassis, *this);
-    }
+        // If configuration changes are defined for this device, apply them
+        if (configuration)
+        {
+            configuration->execute(services, system, chassis, *this);
+        }
 
-    // Configure rails
-    for (std::unique_ptr<Rail>& rail : rails)
-    {
-        rail->configure(services, system, chassis, *this);
+        // Configure rails
+        for (std::unique_ptr<Rail>& rail : rails)
+        {
+            rail->configure(services, system, chassis, *this);
+        }
     }
 }
 
@@ -94,11 +98,14 @@ bool Device::isPresent(Services& services, System& system, Chassis& chassis)
 void Device::monitorSensors(Services& services, System& system,
                             Chassis& chassis)
 {
-
-    // Monitor sensors in each rail
-    for (std::unique_ptr<Rail>& rail : rails)
+    // Skip monitoring sensors if Device::isPresent() returns false.
+    if (Device::isPresent(services, system, chassis))
     {
-        rail->monitorSensors(services, system, chassis, *this);
+        // Monitor sensors in each rail
+        for (std::unique_ptr<Rail>& rail : rails)
+        {
+            rail->monitorSensors(services, system, chassis, *this);
+        }
     }
 }
 
