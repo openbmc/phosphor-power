@@ -153,6 +153,58 @@ TEST(DeviceTests, AddToIDMap)
     EXPECT_THROW(idMap.getRail("vdd2"), std::invalid_argument);
 }
 
+TEST(DeviceTests, ClearCache)
+{
+    // TODO: Implement test where no value was previously cached
+    // TODO: Implement test where value was previously cached
+    // Test that next call to isPresent() executes the PresenceDetection object
+    // and caches value
+    {
+        // Create MockServices.
+        MockServices services{};
+
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        MockAction* action = new MockAction{};
+        actions.push_back(std::unique_ptr<MockAction>{action});
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+
+        // MockAction::execute should be called twice and return true.
+        EXPECT_CALL(*action, execute).Times(2).WillRepeatedly(Return(true));
+
+        // Create Device
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "vdd_reg", false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface()), std::move(presenceDetection));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Presence is not cached: MockAction::execute should be called once.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+
+        // Reset the present to default value.
+        devicePtr->clearCache();
+
+        // Presence is not cached: MockAction::execute should be called the
+        // second times.
+        EXPECT_EQ(devicePtr->isPresent(services, system, *chassisPtr), true);
+    }
+}
+
 TEST(DeviceTests, Close)
 {
     // Test where works: I2C interface is not open

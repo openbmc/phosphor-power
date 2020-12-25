@@ -88,6 +88,14 @@ class Device
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Reset the present back to initial state where it does not have a value.
+     */
+    void clearCache(void)
+    {
+        present.reset();
+    }
+
+    /**
      * Closes this device.
      *
      * Closes any interfaces that are open to this device.  Releases any other
