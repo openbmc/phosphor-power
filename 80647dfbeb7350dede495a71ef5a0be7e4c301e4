@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7b85e4a0_1e03ffdb",
+        "filename": "utility.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-01-11T23:54:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7acac0f_c573c9d9",
+      "revId": "80647dfbeb7350dede495a71ef5a0be7e4c301e4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8ffafff_dc6493a5",
         "filename": "utility.hpp",
         "patchSetId": 3
@@ -120,6 +138,30 @@
       "side": 1,
       "message": "In the subsequent commit, I do have the extra parsing, so I do have it finding the service name that way, instead of using GetSubTreePaths and then looking up the service name.",
       "parentUuid": "fdb8820d_0cfa95ff",
+      "range": {
+        "startLine": 100,
+        "startChar": 23,
+        "endLine": 100,
+        "endChar": 51
+      },
+      "revId": "80647dfbeb7350dede495a71ef5a0be7e4c301e4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8ab0b3e_c2ffe12f",
+        "filename": "utility.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-01-11T23:54:33Z",
+      "side": 1,
+      "message": "Failed to address the multiple interfaces comment.",
+      "parentUuid": "0ecdbbe8_0b553fd1",
       "range": {
         "startLine": 100,
         "startChar": 23,
