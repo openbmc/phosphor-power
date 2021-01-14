@@ -26,7 +26,6 @@
 #include <sdeventplus/source/signal.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
-#include <algorithm>
 #include <filesystem>
 #include <memory>
 #include <string>
@@ -34,13 +33,6 @@
 
 namespace phosphor::power::regulators
 {
-
-constexpr auto busName = "xyz.openbmc_project.Power.Regulators";
-constexpr auto objPath = "/xyz/openbmc_project/power/regulators/manager";
-constexpr auto sysDbusObj = "/xyz/openbmc_project/inventory";
-constexpr auto sysDbusPath = "/xyz/openbmc_project/inventory/system";
-constexpr auto sysDbusIntf = "xyz.openbmc_project.Inventory.Item.System";
-constexpr auto sysDbusProp = "Identifier";
 
 using Timer = sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>;
 
@@ -72,16 +64,18 @@ class Manager : public ManagerObject
     void configure() override;
 
     /**
+     * Callback function to handle interfacesAdded D-Bus signals
+     *
+     * @param msg Expanded sdbusplus message data
+     */
+    void interfacesAddedHandler(sdbusplus::message::message& msg);
+
+    /**
      * Overridden manager object's monitor method
      *
      * @param enable Enable or disable regulator monitoring
      */
     void monitor(bool enable) override;
-
-    /**
-     * Timer expired callback function
-     */
-    void timerExpired();
 
     /**
      * Callback function to handle receiving a HUP signal
@@ -94,63 +88,47 @@ class Manager : public ManagerObject
                        const struct signalfd_siginfo* sigInfo);
 
     /**
-     * Callback function to handle interfacesAdded dbus signals
-     *
-     * @param msg Expanded sdbusplus message data
+     * Timer expired callback function
      */
-    void signalHandler(sdbusplus::message::message& msg);
+    void timerExpired();
 
   private:
     /**
-     * Set the JSON configuration data filename
+     * Finds the list of compatible system types using D-Bus methods.
      *
-     * @param fName filename without `.json` extension
-     */
-    inline void setFileName(const std::string& fName)
-    {
-        fileName = fName;
-        if (!fileName.empty())
-        {
-            // Replace all spaces with underscores
-            std::replace(fileName.begin(), fileName.end(), ' ', '_');
-            fileName.append(".json");
-        }
-    };
-
-    /**
-     * Get the JSON configuration data filename from dbus
+     * This list is used to find the correct JSON configuration file for the
+     * current system.
      *
-     * @return JSON configuration data filename
+     * Note that some systems do not support the D-Bus compatible interface.
+     *
+     * If a list of compatible system types is found, it is stored in the
+     * compatibleSystemTypes data member.
      */
-    const std::string getFileNameDbus();
+    void findCompatibleSystemTypes();
 
     /**
      * Finds the JSON configuration file.
      *
-     * Looks for the config file in the test directory and standard directory.
+     * Looks for a configuration file based on the list of compatable system
+     * types.  If no file is found, looks for a file with the default name.
      *
-     * Throws an exception if the file cannot be found or a file system error
-     * occurs.
+     * Looks for the file in the test directory and standard directory.
      *
-     * The base name of the config file must have already been obtained and
-     * stored in the fileName data member.
+     * Throws an exception if an operating system error occurs while checking
+     * for the existance of a file.
      *
-     * @return absolute path to config file
+     * @return absolute path to config file, or an empty path if none found
      */
     std::filesystem::path findConfigFile();
 
     /**
      * Loads the JSON configuration file.
      *
-     * Looks for the config file in the test directory and standard directory.
+     * Looks for the config file using findConfigFile().
      *
      * If the config file is found, it is parsed and the resulting information
-     * is stored in the system data member.
-     *
-     * If the config file cannot be found or parsing fails, an error is logged.
-     *
-     * The base name of the config file must have already been obtained and
-     * stored in the fileName data member.
+     * is stored in the system data member.  If parsing fails, an error is
+     * logged.
      */
     void loadConfigFile();
 
@@ -180,9 +158,11 @@ class Manager : public ManagerObject
     std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals{};
 
     /**
-     * JSON configuration file base name.
+     * List of compatible system types for the current system.
+     *
+     * Used to find the JSON configuration file.
      */
-    std::string fileName{};
+    std::vector<std::string> compatibleSystemTypes{};
 
     /**
      * Computer system being controlled and monitored by the BMC.
