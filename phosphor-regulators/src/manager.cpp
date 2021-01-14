@@ -22,11 +22,11 @@
 #include "rule.hpp"
 #include "utility.hpp"
 
-#include <sdbusplus/bus.hpp>
-
+#include <algorithm>
 #include <chrono>
 #include <exception>
-#include <stdexcept>
+#include <functional>
+#include <map>
 #include <tuple>
 #include <utility>
 #include <variant>
@@ -35,6 +35,18 @@ namespace phosphor::power::regulators
 {
 
 namespace fs = std::filesystem;
+
+constexpr auto busName = "xyz.openbmc_project.Power.Regulators";
+constexpr auto managerObjPath = "/xyz/openbmc_project/power/regulators/manager";
+constexpr auto compatibleIntf =
+    "xyz.openbmc_project.Configuration.IBMCompatibleSystem";
+constexpr auto compatibleNamesProp = "Names";
+
+/**
+ * Default configuration file name.  This is used when the system does not
+ * implement the D-Bus compatible interface.
+ */
+constexpr auto defaultConfigFileName = "config.json";
 
 /**
  * Standard configuration file directory.  This directory is part of the
@@ -49,30 +61,28 @@ const fs::path standardConfigFileDir{"/usr/share/phosphor-regulators"};
 const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject{bus, objPath, true}, bus{bus}, eventLoop{event}, services{bus}
+    ManagerObject{bus, managerObjPath, true}, bus{bus}, eventLoop{event},
+    services{bus}
 {
-    /* Temporarily comment out until D-Bus interface is defined and available.
-        // Subscribe to interfacesAdded signal for filename property
-        std::unique_ptr<sdbusplus::server::match::match> matchPtr =
-            std::make_unique<sdbusplus::server::match::match>(
-                bus,
-                sdbusplus::bus::match::rules::interfacesAdded(sysDbusObj).c_str(),
-                std::bind(std::mem_fn(&Manager::signalHandler), this,
-                          std::placeholders::_1));
-        signals.emplace_back(std::move(matchPtr));
+    // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
+    // notifies us if the compatible interface becomes available later.
+    std::string matchStr = sdbusplus::bus::match::rules::interfacesAdded() +
+                           sdbusplus::bus::match::rules::sender(
+                               "xyz.openbmc_project.EntityManager");
+    std::unique_ptr<sdbusplus::server::match::match> matchPtr =
+        std::make_unique<sdbusplus::server::match::match>(
+            bus, matchStr,
+            std::bind(&Manager::interfacesAddedHandler, this,
+                      std::placeholders::_1));
+    signals.emplace_back(std::move(matchPtr));
 
-        // Attempt to get the filename property from dbus
-        setFileName(getFileNameDbus());
-    */
+    // Try to find compatible system types using D-Bus compatible interface.
+    // Note that it might not be supported on this system, or the service that
+    // provides the interface might not be running yet.
+    findCompatibleSystemTypes();
 
-    // Temporarily hard-code JSON config file name to first system that will use
-    // this application.  Remove this when D-Bus interface is available.
-    fileName = "ibm_rainier.json";
-
-    if (!fileName.empty())
-    {
-        loadConfigFile();
-    }
+    // Try to find and load the JSON configuration file
+    loadConfigFile();
 
     // Obtain dbus service name
     bus.request_name(busName);
@@ -96,6 +106,55 @@ void Manager::configure()
     // TODO Configuration errors that should halt poweron,
     // throw InternalFailure exception (or similar) to
     // fail the call(busctl) to this method
+}
+
+void Manager::interfacesAddedHandler(sdbusplus::message::message& msg)
+{
+    // Verify message is valid
+    if (!msg)
+    {
+        return;
+    }
+
+    try
+    {
+        // Read object path for object that was created or had interface added
+        sdbusplus::message::object_path objPath;
+        msg.read(objPath);
+
+        // Read the dictionary whose keys are interface names and whose values
+        // are dictionaries containing the interface property names and values
+        std::map<std::string,
+                 std::map<std::string, std::variant<std::vector<std::string>>>>
+            intfProp;
+        msg.read(intfProp);
+
+        // Find the compatible interface, if present
+        auto itIntf = intfProp.find(compatibleIntf);
+        if (itIntf != intfProp.cend())
+        {
+            // Find the Names property of the compatible interface, if present
+            auto itProp = itIntf->second.find(compatibleNamesProp);
+            if (itProp != itIntf->second.cend())
+            {
+                // Get value of Names property
+                auto propValue = std::get<0>(itProp->second);
+                if (!propValue.empty())
+                {
+                    // Store list of compatible system types
+                    compatibleSystemTypes = propValue;
+
+                    // Find and load JSON config file based on system types
+                    loadConfigFile();
+                }
+            }
+        }
+    }
+    catch (const std::exception&)
+    {
+        // Error trying to read interfacesAdded message.  One possible cause
+        // could be a property whose value is not a std::vector<std::string>.
+    }
 }
 
 void Manager::monitor(bool enable)
@@ -128,100 +187,100 @@ void Manager::monitor(bool enable)
     }
 }
 
+void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
+                            const struct signalfd_siginfo* /*sigInfo*/)
+{
+    // Reload the JSON configuration file
+    loadConfigFile();
+}
+
 void Manager::timerExpired()
 {
     // TODO Analyze, refresh sensor status, and
     // collect/update telemetry for each regulator
 }
 
-void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
-                            const struct signalfd_siginfo* /*sigInfo*/)
+void Manager::findCompatibleSystemTypes()
 {
-    if (!fileName.empty())
-    {
-        loadConfigFile();
-    }
-}
-
-void Manager::signalHandler(sdbusplus::message::message& msg)
-{
-    if (msg)
-    {
-        sdbusplus::message::object_path op;
-        msg.read(op);
-        if (static_cast<const std::string&>(op) != sysDbusPath)
-        {
-            // Object path does not match the path
-            return;
-        }
-
-        // An interfacesAdded signal returns a dictionary of interface
-        // names to a dictionary of properties and their values
-        // https://dbus.freedesktop.org/doc/dbus-specification.html
-        std::map<std::string, std::map<std::string, std::variant<std::string>>>
-            intfProp;
-        msg.read(intfProp);
-        auto itIntf = intfProp.find(sysDbusIntf);
-        if (itIntf == intfProp.cend())
-        {
-            // Interface not found on the path
-            return;
-        }
-        auto itProp = itIntf->second.find(sysDbusProp);
-        if (itProp == itIntf->second.cend())
-        {
-            // Property not found on the interface
-            return;
-        }
-        // Set fileName and call parse json function
-        setFileName(std::get<std::string>(itProp->second));
-        if (!fileName.empty())
-        {
-            loadConfigFile();
-        }
-    }
-}
-
-const std::string Manager::getFileNameDbus()
-{
-    std::string fileName = "";
     using namespace phosphor::power::util;
 
     try
     {
-        // Do not log an error when service or property are not found
-        auto service = getService(sysDbusPath, sysDbusIntf, bus, false);
-        if (!service.empty())
+        // Query object mapper for object paths that implement the compatible
+        // interface.  Returns a map of object paths to a map of services names
+        // to their interfaces.
+        DbusSubtree subTree = getSubTree(bus, "/xyz/openbmc_project/inventory",
+                                         compatibleIntf, 0);
+
+        // Get the first object path
+        auto objectIt = subTree.cbegin();
+        if (objectIt != subTree.cend())
         {
-            getProperty(sysDbusIntf, sysDbusProp, sysDbusPath, service, bus,
-                        fileName);
+            std::string objPath = objectIt->first;
+
+            // Get the first service name
+            auto serviceIt = objectIt->second.cbegin();
+            if (serviceIt != objectIt->second.cend())
+            {
+                std::string service = serviceIt->first;
+                if (!service.empty())
+                {
+                    // Get compatible system types property value
+                    getProperty(compatibleIntf, compatibleNamesProp, objPath,
+                                service, bus, compatibleSystemTypes);
+                }
+            }
         }
     }
-    catch (const sdbusplus::exception::SdBusError&)
+    catch (const std::exception&)
     {
-        // File name property not available on dbus
-        fileName = "";
+        // Compatible system types information is not available.  The current
+        // system might not support the interface, or the service that
+        // implements the interface might not be running yet.
     }
-
-    return fileName;
 }
 
 fs::path Manager::findConfigFile()
 {
-    // First look in the test directory
-    fs::path pathName{testConfigFileDir / fileName};
-    if (!fs::exists(pathName))
+    // Build list of possible base file names
+    std::vector<std::string> fileNames{};
+
+    // Add possible file names based on compatible system types (if any)
+    for (const std::string& systemType : compatibleSystemTypes)
     {
-        // Look in the standard directory
-        pathName = standardConfigFileDir / fileName;
-        if (!fs::exists(pathName))
+        // Replace all spaces and commas in system type name with underscores
+        std::string fileName{systemType};
+        std::replace(fileName.begin(), fileName.end(), ' ', '_');
+        std::replace(fileName.begin(), fileName.end(), ',', '_');
+
+        // Append .json suffix and add to list
+        fileName.append(".json");
+        fileNames.emplace_back(fileName);
+    }
+
+    // Add default file name for systems that don't use compatible interface
+    fileNames.emplace_back(defaultConfigFileName);
+
+    // Look for a config file with one of the possible base names
+    for (const std::string& fileName : fileNames)
+    {
+        // Check if file exists in test directory
+        fs::path pathName{testConfigFileDir / fileName};
+        if (fs::exists(pathName))
         {
-            throw std::runtime_error{"Configuration file does not exist: " +
-                                     pathName.string()};
+            return pathName;
+        }
+
+        // Check if file exists in standard directory
+        pathName = standardConfigFileDir / fileName;
+        if (fs::exists(pathName))
+        {
+            return pathName;
         }
     }
 
-    return pathName;
+    // No config file found; return empty path
+    return fs::path{};
 }
 
 void Manager::loadConfigFile()
@@ -230,19 +289,22 @@ void Manager::loadConfigFile()
     {
         // Find the absolute path to the config file
         fs::path pathName = findConfigFile();
+        if (!pathName.empty())
+        {
+            // Log info message in journal; config file path is important
+            services.getJournal().logInfo("Loading configuration file " +
+                                          pathName.string());
 
-        // Log info message in journal; config file path is important
-        services.getJournal().logInfo("Loading configuration file " +
-                                      pathName.string());
+            // Parse the config file
+            std::vector<std::unique_ptr<Rule>> rules{};
+            std::vector<std::unique_ptr<Chassis>> chassis{};
+            std::tie(rules, chassis) = config_file_parser::parse(pathName);
 
-        // Parse the config file
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassis{};
-        std::tie(rules, chassis) = config_file_parser::parse(pathName);
-
-        // Store config file information in a new System object.  The old System
-        // object, if any, is automatically deleted.
-        system = std::make_unique<System>(std::move(rules), std::move(chassis));
+            // Store config file information in a new System object.  The old
+            // System object, if any, is automatically deleted.
+            system =
+                std::make_unique<System>(std::move(rules), std::move(chassis));
+        }
     }
     catch (const std::exception& e)
     {
