@@ -1,5 +1,17 @@
 # phosphor-regulators Configuration File
 
+## Table of Contents
+* [Overview](#overview)
+* [Data Format](#data-format)
+* [Example](#example)
+* [Name](#name)
+* [Contents](#contents)
+* [Validation](#validation)
+* [Installation](#installation)
+* [Loading and Reloading](#loading-and-reloading)
+* [Testing](#testing)
+
+
 ## Overview
 
 The `phosphor-regulators` application is controlled by a configuration file
@@ -26,7 +38,49 @@ gedit, Vim, or Emacs.  You can select any file name, but it must end with the
 
 ## Example
 
-See [config_file.json](../../examples/config_file.json).
+See [config.json](../../examples/config.json).
+
+
+## Name
+
+There are two options for naming the config file:
+* [Default Name](#default-name)
+* [Name Based on System Type](#name-based-on-system-type)
+
+### Default Name
+
+The default config file name is `config.json`.  The default name can be used if
+the BMC firmware image only supports one system type.  It can also be used if
+the firmware image supports multiple system types that share a common config
+file.
+
+### Name Based on System Type
+
+The config file name can be based on the system type, such as
+`ibm_rainier.json`.  This is required if the BMC firmware image supports
+multiple system types, and those system types do not share a common config
+file.
+
+The system type is obtained from the `IBMCompatibleSystem` D-Bus interface that
+is provided by the [Entity Manager](https://github.com/openbmc/entity-manager)
+application.  The `Names` property of this interface contains a list of one or
+more compatible system types, ordered from most specific to most general.
+
+Example:
+* `ibm,rainier-2u`
+* `ibm,rainier`
+
+The `phosphor-regulators` application converts each system type into a
+corresponding config file name:
+* Replaces spaces and commas with underscores
+* Adds a ".json" suffix
+
+Example:
+* `ibm,rainier -> ibm_rainier.json`
+
+`phosphor-regulators` searches for a config file with one of these file names,
+from most specific to most general.  If a config file is not found, it searches
+for a file with the [default name](#default-name).
 
 
 ## Contents
