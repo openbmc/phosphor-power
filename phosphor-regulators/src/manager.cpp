@@ -90,6 +90,9 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
 
 void Manager::configure()
 {
+    // Clear any cached data or error history related to hardware devices
+    clearHardwareData();
+
     // Verify System object exists; this means config file has been loaded
     if (system)
     {
@@ -181,7 +184,7 @@ void Manager::monitor(bool enable)
             // Close the regulator devices in the system.  Monitoring is
             // normally disabled because the system is being powered off.  The
             // devices should be closed in case hardware is removed or replaced
-            // while the system is at standby.
+            // while the system is powered off.
             system->closeDevices(services);
         }
     }
@@ -198,6 +201,21 @@ void Manager::timerExpired()
 {
     // TODO Analyze, refresh sensor status, and
     // collect/update telemetry for each regulator
+}
+
+void Manager::clearHardwareData()
+{
+    // Clear any cached hardware presence data
+    services.getPresenceService().clearCache();
+
+    // Verify System object exists; this means config file has been loaded
+    if (system)
+    {
+        // Clear any cached hardware data in the System object
+        system->clearCache();
+    }
+
+    // TODO: Clear error history related to hardware devices
 }
 
 void Manager::findCompatibleSystemTypes()

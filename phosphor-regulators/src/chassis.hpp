@@ -86,6 +86,11 @@ class Chassis
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Clear any cached data about hardware devices.
+     */
+    void clearCache();
+
+    /**
      * Close the devices within this chassis, if any.
      *
      * @param services system services like error logging and the journal

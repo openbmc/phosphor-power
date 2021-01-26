@@ -87,6 +87,11 @@ class Device
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Clear any cached data about hardware devices.
+     */
+    void clearCache();
+
+    /**
      * Closes this device.
      *
      * Closes any interfaces that are open to this device.  Releases any other

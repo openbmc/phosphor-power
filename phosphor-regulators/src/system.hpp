@@ -61,6 +61,11 @@ class System
     }
 
     /**
+     * Clear any cached data about hardware devices.
+     */
+    void clearCache();
+
+    /**
      * Close the regulator devices in the system.
      *
      * @param services system services like error logging and the journal

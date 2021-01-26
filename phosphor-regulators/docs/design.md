@@ -13,7 +13,8 @@ this application.
 
 The `phosphor-regulators` application is a single-threaded C++ executable.  It
 is a 'daemon' process that runs continually.  The application is launched by
-systemd when the system receives standby power.
+systemd when the BMC reaches the Ready state and before the chassis is powered
+on.
 
 The application is driven by a system-specific JSON configuration file.  The
 JSON file is found and parsed at runtime.  The parsing process creates a
