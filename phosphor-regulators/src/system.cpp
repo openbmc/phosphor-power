@@ -34,6 +34,15 @@ void System::buildIDMap()
     }
 }
 
+void System::clearCache()
+{
+    // Clear any cached data in each chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->clearCache();
+    }
+}
+
 void System::closeDevices(Services& services)
 {
     // Close devices in each chassis

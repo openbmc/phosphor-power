@@ -30,6 +30,15 @@ void Chassis::addToIDMap(IDMap& idMap)
     }
 }
 
+void Chassis::clearCache()
+{
+    // Clear any cached data in each device
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->clearCache();
+    }
+}
+
 void Chassis::closeDevices(Services& services)
 {
     // Log debug message in journal

@@ -151,6 +151,65 @@ TEST(DeviceTests, AddToIDMap)
     EXPECT_THROW(idMap.getRail("vdd2"), std::invalid_argument);
 }
 
+TEST(DeviceTests, ClearCache)
+{
+    // Test where Device does not contain a PresenceDetection object
+    try
+    {
+        Device device{
+            "vdd_reg", false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface())};
+        device.clearCache();
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
+
+    // Test where Device contains a PresenceDetection object
+    {
+        // Create PresenceDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(actions));
+        PresenceDetection* presenceDetectionPtr = presenceDetection.get();
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Cache presence value in PresenceDetection
+        MockServices services{};
+        presenceDetectionPtr->execute(services, system, *chassisPtr,
+                                      *devicePtr);
+        EXPECT_TRUE(presenceDetectionPtr->getCachedPresence().has_value());
+
+        // Clear cached data in Device
+        devicePtr->clearCache();
+
+        // Verify presence value no longer cached in PresenceDetection
+        EXPECT_FALSE(presenceDetectionPtr->getCachedPresence().has_value());
+    }
+}
+
 TEST(DeviceTests, Close)
 {
     // Test where works: I2C interface is not open

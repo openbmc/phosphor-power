@@ -37,6 +37,16 @@ void Device::addToIDMap(IDMap& idMap)
     }
 }
 
+void Device::clearCache()
+{
+    // If presence detection is defined for this device
+    if (presenceDetection)
+    {
+        // Clear cached presence data
+        presenceDetection->clearCache();
+    }
+}
+
 void Device::close(Services& services)
 {
     try

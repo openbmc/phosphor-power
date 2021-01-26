@@ -94,6 +94,15 @@ class Manager : public ManagerObject
 
   private:
     /**
+     * Clear any cached data or error history related to hardware devices.
+     *
+     * This method should be called when the system is powering on (booting).
+     * While the system was powered off (at standby), hardware could have been
+     * added, removed, or replaced.
+     */
+    void clearHardwareData();
+
+    /**
      * Finds the list of compatible system types using D-Bus methods.
      *
      * This list is used to find the correct JSON configuration file for the
