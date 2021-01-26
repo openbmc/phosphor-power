@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bd71867_30958e4d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-01-26T16:20:19Z",
+      "side": 1,
+      "message": "Is there a separate commit that would populate the properties under this new interface?",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0d5295b_2d06c167",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-01-26T16:20:19Z",
+      "side": 1,
+      "message": "We usually try to to limit the content of the journal to errors. Maybe make this trace \"DEBUG\" instead of \"INFO\"? that way would be hidden by default.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a910a37c_8f26aa63",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-01-26T16:20:19Z",
+      "side": 1,
+      "message": "We should start these 2 lines (line 60 and 61) with a \u0027*\u0027",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
