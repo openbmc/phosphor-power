@@ -37,6 +37,57 @@
     },
     {
       "key": {
+        "uuid": "100cf9bd_27632aed",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-01-27T18:44:53Z",
+      "side": 1,
+      "message": "Seems like most of the rest of this code is common with the other ctor.  Could probably refactor to a common method called by both ctors if you wanted.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cd70fa2_2cdd244b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-01-27T18:44:53Z",
+      "side": 1,
+      "message": "Temporary measure?",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c45d79cd_1cee1939",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-01-27T18:44:53Z",
+      "side": 1,
+      "message": "I see in the Witherspoon json file the address string looks like \"0068\".  Is that hex or decimal?  From your testcase changes, it seems like maybe hex?\n\nWondering if this cast will convert it properly.  e.g. will it convert it to the value 0x68 or the decimal value 68?\n\nAnother question is whether it will treat the number as octal since it has a leading 0.\n\nIf you\u0027ve already read the docs and tested it and it is fine, then please disregard.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "572e5a2a_32872503",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -54,6 +105,23 @@
     },
     {
       "key": {
+        "uuid": "90d80a73_d395e705",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-01-27T18:44:53Z",
+      "side": 1,
+      "message": "Not sure if that psuname could ever be empty here, such as EM not set up quite right?  If so, behavior of .back() is undefined.\n\nAlso, this assumes we never have more than 9 PSUs I guess?",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d5295b_2d06c167",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -65,6 +133,23 @@
       "writtenOn": "2021-01-26T16:20:19Z",
       "side": 1,
       "message": "We usually try to to limit the content of the journal to errors. Maybe make this trace \"DEBUG\" instead of \"INFO\"? that way would be hidden by default.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9ef0a98_3e3e20fa",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-01-27T18:44:53Z",
+      "side": 1,
+      "message": "Is the plan to support both JSON and EM based config long term?\n\nOr are you just leaving the JSON config file stuff here as a temporary measure?",
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
