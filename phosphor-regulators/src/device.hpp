@@ -184,6 +184,25 @@ class Device
     }
 
     /**
+     * Returns whether this device is present.
+     *
+     * @return true if device is present, false otherwise
+     */
+    bool isPresent(Services& services, System& system, Chassis& chassis)
+    {
+        if (presenceDetection)
+        {
+            // Execute presence detection to determine if device is present
+            return presenceDetection->execute(services, system, chassis, *this);
+        }
+        else
+        {
+            // No presence detection defined; assume device is present
+            return true;
+        }
+    }
+
+    /**
      * Returns whether this device is a voltage regulator.
      *
      * @return true if device is a voltage regulator, false otherwise

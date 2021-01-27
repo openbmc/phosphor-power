@@ -69,27 +69,34 @@ void Device::close(Services& services)
 
 void Device::configure(Services& services, System& system, Chassis& chassis)
 {
-    // If configuration changes are defined for this device, apply them
-    if (configuration)
+    // Verify device is present
+    if (isPresent(services, system, chassis))
     {
-        configuration->execute(services, system, chassis, *this);
-    }
+        // If configuration changes are defined for this device, apply them
+        if (configuration)
+        {
+            configuration->execute(services, system, chassis, *this);
+        }
 
-    // Configure rails
-    for (std::unique_ptr<Rail>& rail : rails)
-    {
-        rail->configure(services, system, chassis, *this);
+        // Configure rails
+        for (std::unique_ptr<Rail>& rail : rails)
+        {
+            rail->configure(services, system, chassis, *this);
+        }
     }
 }
 
 void Device::monitorSensors(Services& services, System& system,
                             Chassis& chassis)
 {
-
-    // Monitor sensors in each rail
-    for (std::unique_ptr<Rail>& rail : rails)
+    // Verify device is present
+    if (isPresent(services, system, chassis))
     {
-        rail->monitorSensors(services, system, chassis, *this);
+        // Monitor sensors in each rail
+        for (std::unique_ptr<Rail>& rail : rails)
+        {
+            rail->monitorSensors(services, system, chassis, *this);
+        }
     }
 }
 
