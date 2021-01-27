@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69e722d0_8d44e83e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-01-27T20:36:03Z",
+      "side": 1,
+      "message": "Nit: is standby a term used in OBMC?",
+      "range": {
+        "startLine": 12,
+        "startChar": 37,
+        "endLine": 12,
+        "endChar": 44
+      },
+      "revId": "927e857b63839d694d06303f42b97295233fb08c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a3cbd06_bfbd4ebb",
+        "filename": "phosphor-regulators/src/manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-01-27T20:36:03Z",
+      "side": 1,
+      "message": "Same nit as commit message.",
+      "range": {
+        "startLine": 100,
+        "startChar": 44,
+        "endLine": 100,
+        "endChar": 51
+      },
+      "revId": "927e857b63839d694d06303f42b97295233fb08c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
