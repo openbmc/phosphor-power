@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25e77bde_bc0769bf",
+        "filename": "phosphor-power-supply/main.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-28T14:53:00Z",
+      "side": 1,
+      "message": "I still have the same question as in the other commit.  How do you know that the manager can even start running now, if t starts befory entity-manager gets around to putting things on dbus?",
+      "revId": "efaccae9bd3a2581261673f83e1f8b3ff8d1fa44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
