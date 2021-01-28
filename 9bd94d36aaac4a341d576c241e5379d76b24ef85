@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95cd1c0f_f243dc00",
+        "filename": "phosphor-regulators/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-01-28T14:51:01Z",
+      "side": 1,
+      "message": "Man, you sure do a lot of  extra typing in all these files by never using auto ;)",
+      "range": {
+        "startLine": 36,
+        "startChar": 9,
+        "endLine": 36,
+        "endChar": 32
+      },
+      "revId": "9bd94d36aaac4a341d576c241e5379d76b24ef85",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
