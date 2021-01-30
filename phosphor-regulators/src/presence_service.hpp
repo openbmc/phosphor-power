@@ -16,6 +16,7 @@
 #pragma once
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/exception.hpp>
 
 #include <map>
 #include <string>
@@ -96,6 +97,14 @@ class DBusPresenceService : public PresenceService
     virtual bool isPresent(const std::string& inventoryPath) override;
 
   private:
+    /**
+     * Returns whether the specified D-Bus exception is one of the expected
+     * types that can be thrown if hardware is not present.
+     *
+     * @return true if exception type is expected, false otherwise
+     */
+    bool isExpectedException(const sdbusplus::exception::SdBusError& e);
+
     /**
      * D-Bus bus object.
      */
