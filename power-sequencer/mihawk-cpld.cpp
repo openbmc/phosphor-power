@@ -26,6 +26,9 @@
 static constexpr uint8_t busId = 11;
 static constexpr uint8_t slaveAddr = 0x40;
 
+// SMLink Status Register(PSU status Register)
+static constexpr size_t StatusReg_0 = 0x05;
+
 // SMLink Status Register(Interrupt-control-bit Register)
 static constexpr size_t StatusReg_1 = 0x20;
 
@@ -369,8 +372,8 @@ void MihawkCPLD::analyze()
                         errorcodeMask = 1;
                         break;
                 }
-                clearCPLDregister();
             }
+            clearCPLDregister();
         }
     }
 
@@ -475,15 +478,24 @@ bool MihawkCPLD::checkPowerreadyFault()
 void MihawkCPLD::clearCPLDregister()
 {
     uint16_t data = 0x01;
+    uint16_t checkpsu;
 
     if (!i2c)
     {
         openCPLDDevice();
     }
 
-    // Write 0x01 to StatusReg_1 for clearing
-    // CPLD_register.
-    i2c->write(StatusReg_1, data);
+    // check psu pgood status.
+    i2c->read(StatusReg_0, checkpsu);
+
+    // check one of both psus pgood status before
+    // clear CPLD_register.
+    if(((checkpsu >> 1) & 1) || ((checkpsu >> 2) & 1))
+    {
+        // Write 0x01 to StatusReg_1 for clearing
+        // CPLD_register.
+        i2c->write(StatusReg_1, data);
+    }
 }
 
 // Open i2c device(CPLD_register)
