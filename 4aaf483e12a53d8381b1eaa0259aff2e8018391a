@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5d3eb252_49ed7c8f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-02T22:10:18Z",
+      "side": 1,
+      "message": "The way the code is structured now, once MFR_SPECIFIC_FAULT is seen, the log message will never show again even it the STATUS_MFR value changes. One thing I tried would show the log entry every time the status changes (should this show the change when STATUS_MFR goes back to zero or not?). If we do this, then what is the point of ever testing the MFR_SPECIFIC_FAULT at all?\nI think I will just push up a new version if the code and we can debate from there.",
+      "parentUuid": "301b151c_41b2e03d",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae2bba33_be3ca6d6",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 10
