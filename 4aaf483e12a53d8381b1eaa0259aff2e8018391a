@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "881f9be8_bce9bad2",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-04T01:29:09Z",
+      "side": 1,
+      "message": "The value returned from STATUS_MFR is apparently interesting enough, that the power supply engineers like to see what it was when some other fault might be occurring that STATUS_WORD indicates.\n\nIf we get an MFR type fault, it probably should latch. I don\u0027t think we need to track it going back to 0. I would have to read more into details, but things like AC cycle or power cycle probably clear it.",
+      "parentUuid": "5d3eb252_49ed7c8f",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae2bba33_be3ca6d6",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 10
