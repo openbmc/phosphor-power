@@ -44,7 +44,8 @@ class ComparePresenceAction : public Action
     /**
      * Constructor.
      *
-     * @param fru Field-Replaceable Unit (FRU)
+     * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
+     *            of the FRU.
      * @param value Expected presence value
      */
     explicit ComparePresenceAction(const std::string& fru, bool value) :
@@ -55,8 +56,13 @@ class ComparePresenceAction : public Action
     /**
      * Executes this action.
      *
-     * @param environment Action execution environment.
-     * @return true
+     * Compares the actual presence value to the expected value.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param environment action execution environment
+     * @return true if the actual presence value equals the expected value,
+     *         otherwise returns false
      */
     virtual bool execute(ActionEnvironment& environment) override;
 
@@ -91,7 +97,7 @@ class ComparePresenceAction : public Action
     /**
      * Field-Replaceable Unit (FRU) for this action.
      *
-     * Specify the D-Bus inventory path of the FRU.
+     * The D-Bus inventory path of the FRU.
      */
     const std::string fru{};
 

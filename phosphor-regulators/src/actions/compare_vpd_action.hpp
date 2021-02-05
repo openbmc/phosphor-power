@@ -18,7 +18,6 @@
 #include "action.hpp"
 #include "action_environment.hpp"
 
-#include <sstream>
 #include <string>
 
 namespace phosphor::power::regulators
@@ -62,16 +61,15 @@ class CompareVPDAction : public Action
     /**
      * Executes this action.
      *
-     * TODO: Not implemented yet
+     * Compares the actual VPD keyword value to the expected value.
      *
-     * @param environment Action execution environment.
-     * @return true
+     * Throws an exception if an error occurs.
+     *
+     * @param environment action execution environment
+     * @return true if the keyword value equals the expected value, otherwise
+     *         returns false
      */
-    virtual bool execute(ActionEnvironment& /* environment */) override
-    {
-        // TODO: Not implemented yet
-        return true;
-    }
+    virtual bool execute(ActionEnvironment& environment) override;
 
     /**
      * Returns the Field-Replaceable Unit (FRU).
@@ -108,20 +106,13 @@ class CompareVPDAction : public Action
      *
      * @return description of action
      */
-    virtual std::string toString() const override
-    {
-        std::ostringstream ss;
-        ss << "compare_vpd: { ";
-        ss << "fru: " << fru << ", ";
-        ss << "keyword: " << keyword << ", ";
-        ss << "value: " << value << " }";
-
-        return ss.str();
-    }
+    virtual std::string toString() const override;
 
   private:
     /**
-     * Field-Replaceable Unit (FRU) that contains the VPD.
+     * Field-Replaceable Unit (FRU) for this action.
+     *
+     * The D-Bus inventory path of the FRU.
      */
     const std::string fru{};
 
