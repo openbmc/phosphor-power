@@ -205,8 +205,9 @@ void Manager::timerExpired()
 
 void Manager::clearHardwareData()
 {
-    // Clear any cached hardware presence data
+    // Clear any cached hardware presence data and VPD values
     services.getPresenceService().clearCache();
+    services.getVPD().clearCache();
 
     // Verify System object exists; this means config file has been loaded
     if (system)

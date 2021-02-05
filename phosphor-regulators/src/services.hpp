@@ -18,6 +18,7 @@
 #include "error_logging.hpp"
 #include "journal.hpp"
 #include "presence_service.hpp"
+#include "vpd.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -71,6 +72,13 @@ class Services
      * @return hardware presence interface
      */
     virtual PresenceService& getPresenceService() = 0;
+
+    /**
+     * Returns the interface to hardware VPD (Vital Product Data).
+     *
+     * @return hardware VPD interface
+     */
+    virtual VPD& getVPD() = 0;
 };
 
 /**
@@ -95,7 +103,7 @@ class BMCServices : public Services
      * @param bus D-Bus bus object
      */
     explicit BMCServices(sdbusplus::bus::bus& bus) :
-        bus{bus}, errorLogging{bus}, presenceService{bus}
+        bus{bus}, errorLogging{bus}, presenceService{bus}, vpd{bus}
     {
     }
 
@@ -123,6 +131,12 @@ class BMCServices : public Services
         return presenceService;
     }
 
+    /** @copydoc Services::getVPD() */
+    virtual VPD& getVPD() override
+    {
+        return vpd;
+    }
+
   private:
     /**
      * D-Bus bus object.
@@ -144,6 +158,11 @@ class BMCServices : public Services
      * Implementation of the PresenceService interface using D-Bus method calls.
      */
     DBusPresenceService presenceService;
+
+    /**
+     * Implementation of the VPD interface using D-Bus method calls.
+     */
+    DBusVPD vpd;
 };
 
 } // namespace phosphor::power::regulators
