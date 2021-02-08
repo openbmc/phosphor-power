@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "922ef5ab_d20ed520",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-08T16:21:39Z",
+      "side": 1,
+      "message": "Was the change from INFO to ERR intentional here?  I didn\u0027t see it mentioned in the commit message, but not a big deal.",
+      "range": {
+        "startLine": 70,
+        "startChar": 28,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52155095_046e7e73",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-08T16:21:39Z",
+      "side": 1,
+      "message": "Wouldn\u0027t the value of STATUS_MFR_SPECIFIC be non-zero in this case?",
+      "range": {
+        "startLine": 147,
+        "startChar": 25,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f4c89bd_875ff5f8",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-08T16:21:39Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this be non-zero since you are indicating an MFR fault?",
+      "range": {
+        "startLine": 241,
+        "startChar": 25,
+        "endLine": 241,
+        "endChar": 26
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de5de7ff_f9a55d70",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-08T16:21:39Z",
+      "side": 1,
+      "message": "Should be non-zero ?",
+      "range": {
+        "startLine": 329,
+        "startChar": 25,
+        "endLine": 329,
+        "endChar": 26
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67ea6061_e4e1fed9",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-08T16:21:39Z",
+      "side": 1,
+      "message": "This value is two bytes (0x1000).  Isn\u0027t the STATUS_MFR_SPECIFIC register one byte?",
+      "range": {
+        "startLine": 370,
+        "startChar": 25,
+        "endLine": 370,
+        "endChar": 56
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
