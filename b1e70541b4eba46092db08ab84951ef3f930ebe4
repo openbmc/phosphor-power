@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e0aac61a_56ca005b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-09T17:22:29Z",
+      "side": 1,
+      "message": "Change was made because of a previous review comment and is intentional.\nIt will be included in the next commit message.",
+      "parentUuid": "922ef5ab_d20ed520",
+      "range": {
+        "startLine": 70,
+        "startChar": 28,
+        "endLine": 70,
+        "endChar": 38
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52155095_046e7e73",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2021-02-08T16:21:39Z",
       "side": 1,
       "message": "Wouldn\u0027t the value of STATUS_MFR_SPECIFIC be non-zero in this case?",
+      "range": {
+        "startLine": 147,
+        "startChar": 25,
+        "endLine": 147,
+        "endChar": 31
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290bf522_4687f923",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-09T17:22:29Z",
+      "side": 1,
+      "message": "In live operation, STATUS_MFR should always read as nonzero if status_word::MFR_SPECIFIC_FAULT is set. In the testing environment, nothing makes that happen.\n\nIt could be misleading to have the second WillOnce() return a nonzero value because it makes it appear that this value is relevant to the test operation, which it is not.\n\nExplanation of operation:\nThe change to the code results in a second call to (pmbusIntf-\u003eread(STATUS_MFR... ) for all cases where the first call (pmbusIntf-\u003eread(STATUS_WORD, ...) returns a nonzero status, so I simply added a second WillOnce() for all of these cases, consistently returning zero.\n\nIf the reviewer believes that using a nonzero value is a better way to code this test, we could make this change. We would need to decide on some nonzero value to return.",
+      "parentUuid": "52155095_046e7e73",
       "range": {
         "startLine": 147,
         "startChar": 25,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "eaba4fe5_8a8d2e5e",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-09T17:22:29Z",
+      "side": 1,
+      "message": "See line 147 discussion.",
+      "parentUuid": "7f4c89bd_875ff5f8",
+      "range": {
+        "startLine": 241,
+        "startChar": 25,
+        "endLine": 241,
+        "endChar": 26
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de5de7ff_f9a55d70",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 12
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e445350f_cb110e77",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-09T17:22:29Z",
+      "side": 1,
+      "message": "See line 147.",
+      "parentUuid": "de5de7ff_f9a55d70",
+      "range": {
+        "startLine": 329,
+        "startChar": 25,
+        "endLine": 329,
+        "endChar": 26
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67ea6061_e4e1fed9",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 12
@@ -105,6 +201,30 @@
       "writtenOn": "2021-02-08T16:21:39Z",
       "side": 1,
       "message": "This value is two bytes (0x1000).  Isn\u0027t the STATUS_MFR_SPECIFIC register one byte?",
+      "range": {
+        "startLine": 370,
+        "startChar": 25,
+        "endLine": 370,
+        "endChar": 56
+      },
+      "revId": "b1e70541b4eba46092db08ab84951ef3f930ebe4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba61611_ae386fa0",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1000830
+      },
+      "writtenOn": "2021-02-09T17:22:29Z",
+      "side": 1,
+      "message": "Yes, that is completely wrong. \nCould return zero like all of the other tests, or have some other answer to be sonsistent with all of the other tests that are modified.",
+      "parentUuid": "67ea6061_e4e1fed9",
       "range": {
         "startLine": 370,
         "startChar": 25,
