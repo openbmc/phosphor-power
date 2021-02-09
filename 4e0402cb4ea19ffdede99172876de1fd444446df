@@ -22,6 +22,30 @@
       "revId": "4e0402cb4ea19ffdede99172876de1fd444446df",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be47eb15_ec9f126b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-09T20:05:10Z",
+      "side": 1,
+      "message": "Hmm, that was not my intention.  I found the term defined online without an IBM citation, so I thought it was OK.\n\nGiven the number of places the term appears, I think I\u0027ll leave it for now as changing it would be very expensive.  But if there is a better term, I could open an issue to do it in the future.",
+      "parentUuid": "27c4051c_9ccc2b85",
+      "range": {
+        "startLine": 9,
+        "startChar": 43,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "4e0402cb4ea19ffdede99172876de1fd444446df",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
