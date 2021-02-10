@@ -3,11 +3,19 @@
 ## Description
 Compares a VPD (Vital Product Data) keyword value to an expected value.
 
-The following keywords are currently supported:
+VPD is information that describes a hardware component.  VPD is typically read
+from an EEPROM on a Field-Replaceable Unit (FRU).  For this reason, VPD is also
+called "FRU data".
+
+The following VPD keywords are currently supported:
 * CCIN
 * Manufacturer
 * Model
 * PartNumber
+
+This action can be used in an [if](if.md) condition to execute actions based on
+a VPD keyword value.  For example, you could set the output voltage only for
+regulators with a specific Model number.
 
 ## Properties
 | Name | Required | Type | Description |
