@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "83578f4f_dd05a4ff",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-10T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "881f9be8_bce9bad2",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 69
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae2bba33_be3ca6d6",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 10
@@ -93,6 +117,30 @@
       "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03e1c215_8c88d7e5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-10T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae2bba33_be3ca6d6",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 42
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "cde38c99_14d0d800",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-10T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af1b0a7c_09a28dfe",
+      "range": {
+        "startLine": 251,
+        "startChar": 13,
+        "endLine": 251,
+        "endChar": 27
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43fddba5_369ff449",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 10
@@ -139,6 +211,30 @@
       "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a1d1dc_dbb6b7b6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-10T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43fddba5_369ff449",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 229,
+        "endChar": 55
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -185,6 +281,30 @@
       "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b53af8dd_59c31540",
+        "filename": "pmbus.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-10T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b38cc6a5_ff8ef508",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "4aaf483e12a53d8381b1eaa0259aff2e8018391a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
