@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1065166a_965928ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "Correct, we are relying on the entity-manager interface to populate these properties. The commit is already merged to do that.\n\nhttps://github.com/openbmc/entity-manager/commit/55237c494aa2e23a70535cc9a77c1136f3a49d57#diff-0484e9f943bfe0cbd774e7e4d16da1664c0ce82436bcd635b56e670e3be105b8\n\nhttps://github.com/openbmc/entity-manager/blob/master/configurations/Nisqually.json",
+      "parentUuid": "9ee8eff1_1d4782e2",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "100cf9bd_27632aed",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -48,6 +66,24 @@
       "writtenOn": "2021-01-27T18:44:53Z",
       "side": 1,
       "message": "Seems like most of the rest of this code is common with the other ctor.  Could probably refactor to a common method called by both ctors if you wanted.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cba766_aefe1887",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "Yes, I suppose that could be done. As noted in earlier comment, I do not think there were plans to keep both JSON configuration and entity-manager configuration, so the end result would be one constructor doing this. I am not sure if it would still be desirable to refactor this out into a common method.",
+      "parentUuid": "100cf9bd_27632aed",
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "7eff1c2b_63bebb03",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "Yes, this min/max PSUs information apparently ended up getting added here a bit prematurely. It could/should be related to configuration checking, but the details of that are not currently reflected in the entity-manager schemas or configurations.\n\nI suppose it could be removed altogether, but it would likely need to be added back in later.",
+      "parentUuid": "3cd70fa2_2cdd244b",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c45d79cd_1cee1939",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -82,6 +136,24 @@
       "writtenOn": "2021-01-27T18:44:53Z",
       "side": 1,
       "message": "I see in the Witherspoon json file the address string looks like \"0068\".  Is that hex or decimal?  From your testcase changes, it seems like maybe hex?\n\nWondering if this cast will convert it properly.  e.g. will it convert it to the value 0x68 or the decimal value 68?\n\nAnother question is whether it will treat the number as octal since it has a leading 0.\n\nIf you\u0027ve already read the docs and tested it and it is fine, then please disregard.",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3015c382_7292b32b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "The Witherspoon JSON file with that \"0068\" address is hexadecimal. The addresses get indicated that way in the Linux kernel sysfs paths. I think that has something to do with larger address ranges (10-bit address?).\n\nI thought I saw this converting properly, but perhaps I overlooked this in testing, due to plans to remove support of both JSON and entity-manager configuration loading.\n\nI could (should?) test this with a JSON configuration file.",
+      "parentUuid": "c45d79cd_1cee1939",
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "70b4ec4e_dc76c9fa",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "I am not sure how earlier testing in the simulator appeared to work out okay, but later testing revealed that I must have been timing lucky, or perhaps (most like) I had tested these changes by loading a patch AFTER entity-manager had already put these on D-Bus.\n\nLater testing and hackery revealed that I need some method to wait for those D-Bus updates to be done.\n\nI need an interfacesAdded watch and corresponding handling code.",
+      "parentUuid": "572e5a2a_32872503",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90d80a73_d395e705",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -116,6 +206,24 @@
       "writtenOn": "2021-01-27T18:44:53Z",
       "side": 1,
       "message": "Not sure if that psuname could ever be empty here, such as EM not set up quite right?  If so, behavior of .back() is undefined.\n\nAlso, this assumes we never have more than 9 PSUs I guess?",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0442362f_3cd5bfe4",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "I am not aware of anything that requires the string to not be empty: https://github.com/openbmc/entity-manager/blob/master/schemas/IBM.json \nWhat do you think would be the best way to handle such a scenario?\n\nAt first, I was not clear how you came to the limit of 9 PSUs. I then realized I am grabbing the last character (https://en.cppreference.com/w/cpp/string/basic_string/back). I do not foresee a system with greater than 9 power supplies (was working with maximum of 4 power supplies in mind), but is that a bad assumption? Should I attempt to handle this differently?",
+      "parentUuid": "90d80a73_d395e705",
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -139,6 +247,24 @@
     },
     {
       "key": {
+        "uuid": "0bf54cc3_433a184d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a0d5295b_2d06c167",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9ef0a98_3e3e20fa",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 5
@@ -150,6 +276,24 @@
       "writtenOn": "2021-01-27T18:44:53Z",
       "side": 1,
       "message": "Is the plan to support both JSON and EM based config long term?\n\nOr are you just leaving the JSON config file stuff here as a temporary measure?",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dcbc7b2_5c170c07",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "The plan is to NOT support both JSON and entity-manager based configuration in the long term. This is left here as a temporary measure.\n\nI thought I had a commit to pull the JSON stuff out, but the closest to that so far (apparently) is: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/38139",
+      "parentUuid": "a9ef0a98_3e3e20fa",
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -170,6 +314,24 @@
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e5ad0b0_41b7a1a3",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:12:56Z",
+      "side": 1,
+      "message": "Editor automagic fail.",
+      "parentUuid": "a910a37c_8f26aa63",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
