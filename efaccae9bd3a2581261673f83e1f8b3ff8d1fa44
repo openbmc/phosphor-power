@@ -16,6 +16,24 @@
       "revId": "efaccae9bd3a2581261673f83e1f8b3ff8d1fa44",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a337dcc_9432cb9f",
+        "filename": "phosphor-power-supply/main.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-11T22:20:16Z",
+      "side": 1,
+      "message": "That is a problem. I replied in that other commit. I think I had dumb luck in earlier testing. I need something that holds off trying to load up the configuration and the start of monitoring if nothing has put the configuration information out on D-Bus yet.\n\nThat most probably is related to interfacesAdded signal watching, as I am quite certain it cannot be handled via service file updates (already tried that).",
+      "parentUuid": "25e77bde_bc0769bf",
+      "revId": "efaccae9bd3a2581261673f83e1f8b3ff8d1fa44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
