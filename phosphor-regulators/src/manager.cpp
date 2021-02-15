@@ -22,6 +22,8 @@
 #include "rule.hpp"
 #include "utility.hpp"
 
+#include <xyz/openbmc_project/Common/error.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <exception>
@@ -101,14 +103,18 @@ void Manager::configure()
     }
     else
     {
+        // Write error message to journal
         services.getJournal().logError("Unable to configure regulator devices: "
                                        "Configuration file not loaded");
-        // TODO: Log error
-    }
 
-    // TODO Configuration errors that should halt poweron,
-    // throw InternalFailure exception (or similar) to
-    // fail the call(busctl) to this method
+        // Log critical error since regulators could not be configured.  Could
+        // cause hardware damage if default regulator settings are very wrong.
+        services.getErrorLogging().logConfigFileError(Entry::Level::Critical,
+                                                      services.getJournal());
+
+        // Throw InternalFailure to propogate error status to D-Bus client
+        throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure{};
+    }
 }
 
 void Manager::interfacesAddedHandler(sdbusplus::message::message& msg)
@@ -331,7 +337,9 @@ void Manager::loadConfigFile()
         services.getJournal().logError(exception_utils::getMessages(e));
         services.getJournal().logError("Unable to load configuration file");
 
-        // TODO: Create error log entry
+        // Log error
+        services.getErrorLogging().logConfigFileError(Entry::Level::Error,
+                                                      services.getJournal());
     }
 }
 

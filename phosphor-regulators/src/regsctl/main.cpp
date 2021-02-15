@@ -19,6 +19,7 @@
 #include <CLI/CLI.hpp>
 
 #include <algorithm>
+#include <exception>
 #include <iostream>
 #include <string>
 
@@ -28,66 +29,47 @@ int main(int argc, char* argv[])
 {
     auto rc = 0;
 
-    bool monitorEnable = false;
-    bool monitorDisable = false;
-
-    CLI::App app{"Regulators control app for OpenBMC phosphor-regulators"};
-
-    // Add dbus methods group
-    auto methods = app.add_option_group("Methods");
-    // Configure method
-    CLI::App* config =
-        methods->add_subcommand("config", "Configure regulators");
-    config->set_help_flag("-h,--help", "Configure regulators method help");
-    // Monitor method
-    CLI::App* monitor =
-        methods->add_subcommand("monitor", "Monitor regulators");
-    monitor->set_help_flag("-h,--help", "Monitor regulators method help");
-    monitor->add_flag("-e,--enable", monitorEnable,
-                      "Enable regulator monitoring");
-    monitor->add_flag("-d,--disable", monitorDisable,
-                      "Disable regulator monitoring");
-    // Monitor subcommand requires only 1 option be provided
-    monitor->require_option(1);
-    // Methods group requires only 1 subcommand to be given
-    methods->require_subcommand(1);
-
-    CLI11_PARSE(app, argc, argv);
-
-    if (app.got_subcommand("config"))
+    try
     {
-        auto resp = callMethod("Configure");
-        if (!resp)
+        bool monitorEnable = false;
+        bool monitorDisable = false;
+
+        CLI::App app{"Regulators control app for OpenBMC phosphor-regulators"};
+
+        // Add dbus methods group
+        auto methods = app.add_option_group("Methods");
+        // Configure method
+        CLI::App* config =
+            methods->add_subcommand("config", "Configure regulators");
+        config->set_help_flag("-h,--help", "Configure regulators method help");
+        // Monitor method
+        CLI::App* monitor =
+            methods->add_subcommand("monitor", "Monitor regulators");
+        monitor->set_help_flag("-h,--help", "Monitor regulators method help");
+        monitor->add_flag("-e,--enable", monitorEnable,
+                          "Enable regulator monitoring");
+        monitor->add_flag("-d,--disable", monitorDisable,
+                          "Disable regulator monitoring");
+        // Monitor subcommand requires only 1 option be provided
+        monitor->require_option(1);
+        // Methods group requires only 1 subcommand to be given
+        methods->require_subcommand(1);
+
+        CLI11_PARSE(app, argc, argv);
+
+        if (app.got_subcommand("config"))
         {
-            rc = -1;
-            std::cerr << "regsctl: Failed to begin configuring regulators"
-                      << std::endl;
+            callMethod("Configure");
+        }
+        else if (app.got_subcommand("monitor"))
+        {
+            callMethod("Monitor", monitorEnable);
         }
     }
-    if (app.got_subcommand("monitor"))
+    catch (const std::exception& e)
     {
-        if (monitorEnable)
-        {
-            auto resp = callMethod("Monitor", true);
-            if (!resp)
-            {
-                rc = -1;
-                std::cerr << "regsctl: Failed to enable "
-                             "monitoring of regulators"
-                          << std::endl;
-            }
-        }
-        if (monitorDisable)
-        {
-            auto resp = callMethod("Monitor", false);
-            if (!resp)
-            {
-                rc = -1;
-                std::cerr << "regsctl: Failed to disable "
-                             "monitoring of regulators"
-                          << std::endl;
-            }
-        }
+        rc = 1;
+        std::cerr << e.what() << std::endl;
     }
 
     return rc;

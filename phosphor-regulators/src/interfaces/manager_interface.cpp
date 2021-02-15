@@ -54,7 +54,7 @@ int ManagerInterface::callbackConfigure(sd_bus_message* msg, void* context,
 
             reply.method_return();
         }
-        catch (sdbusplus::internal_exception_t& e)
+        catch (sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -89,7 +89,7 @@ int ManagerInterface::callbackMonitor(sd_bus_message* msg, void* context,
 
             reply.method_return();
         }
-        catch (sdbusplus::internal_exception_t& e)
+        catch (sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
