@@ -44,6 +44,22 @@ class Journal
     virtual ~Journal() = default;
 
     /**
+     * Gets the journal messages that have the specified field set to the
+     * specified value.
+     *
+     * The messages in the returned vector are ordered from oldest to newest.
+     *
+     * @param field journal field name
+     * @param fieldValue expected field value
+     * @param max Maximum number of messages to return.  Specify 0 to return all
+     *            matching messages.
+     * @return matching messages from the journal
+     */
+    virtual std::vector<std::string> getMessages(const std::string& field,
+                                                 const std::string& fieldValue,
+                                                 unsigned int max = 0) = 0;
+
+    /**
      * Logs a debug message in the system journal.
      *
      * @param message message to log
@@ -84,21 +100,6 @@ class Journal
      * @param messages messages to log
      */
     virtual void logInfo(const std::vector<std::string>& messages) = 0;
-
-    /**
-     * Gets the journal messages that have the specified field set to the
-     * specified value.
-     *
-     * @param field journal field to use during search
-     * @param fieldValue expected field value
-     * @param max Maximum number of messages to return.
-     *        Specify 0 to return all matching messages.
-     *
-     * @return matching messages from the journal
-     */
-    virtual std::vector<std::string> getMessages(const std::string& field,
-                                                 const std::string& fieldValue,
-                                                 unsigned int max = 0) = 0;
 };
 
 /**
@@ -172,13 +173,24 @@ class SystemdJournal : public Journal
 
   private:
     /**
-     * Gets the data object associated with a specific field from the
-     * current journal entry and return the data as string.
+     * Gets the value of the specified field for the current journal entry.
      *
-     * @param journal the current journal entry
-     * @param field journal field to use during search
+     * Returns an empty string if the current journal entry does not have the
+     * specified field.
+     *
+     * @param journal current journal entry
+     * @param field journal field name
+     * @return field value
      */
-    std::string getFieldValue(sd_journal* journal, const char* field) const;
+    std::string getFieldValue(sd_journal* journal, const std::string& field);
+
+    /**
+     * Gets the realtime (wallclock) timestamp for the current journal entry.
+     *
+     * @param journal current journal entry
+     * @return timestamp as a date/time string
+     */
+    std::string getTimeStamp(sd_journal* journal);
 };
 
 } // namespace phosphor::power::regulators
