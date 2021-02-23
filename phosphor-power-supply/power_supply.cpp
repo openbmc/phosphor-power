@@ -137,6 +137,7 @@ void PowerSupply::onOffConfig(uint8_t data)
 
 void PowerSupply::clearFaults()
 {
+    faultLogged = false;
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a
     // CLEAR_FAULTS after reading from any of the hwmon "files" in sysfs, so
@@ -151,7 +152,6 @@ void PowerSupply::clearFaults()
         statusMFR = 0;
         vinUVFault = false;
         readFail = 0;
-        faultLogged = false;
 
         try
         {
