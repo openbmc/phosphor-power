@@ -11,10 +11,6 @@ power supplies (ibm-cffps), run meson with `-Dibm-vpd=true`.
 
 The JSON configuration file should contain:
 
-## MaxPowerSupplies
-Optional property, integer, that indicates the maximum number of power supplies
-that should be present.
-
 ## PowerSupplies
 An array of power supply properties.
 
@@ -27,3 +23,11 @@ An integer specifying the I2C bus that the PMBus power supply is on.
 ### Address
 A string representing the 16-bit I2C address of the PMBus power supply.
 
+# D-Bus System Configuration
+
+Entity Manager provides information about the supported system configuration.
+The information is as follows:
+
+## Max Power Supplies
+Integer that indicates the maximum number of power supplies that should be
+present. This is exposed via the `MaxCount` property.

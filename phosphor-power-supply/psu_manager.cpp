@@ -11,6 +11,10 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
+constexpr auto supportedConfIntf =
+    "xyz.openbmc_project.Configuration.SupportedConfiguration";
+constexpr auto maxCountProp = "MaxCount";
+
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                        const std::string& configfile) :
     bus(bus)
@@ -18,6 +22,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     // Parse out the JSON properties
     sysProperties = {0};
     getJSONProperties(configfile);
+    getSystemProperties();
 
     using namespace sdeventplus;
     auto interval = std::chrono::milliseconds(1000);
@@ -44,21 +49,9 @@ void PSUManager::getJSONProperties(const std::string& path)
         throw std::runtime_error("Failed to load JSON configuration file");
     }
 
-    if (!configFileJSON.contains("SystemProperties"))
-    {
-        throw std::runtime_error("Missing required SystemProperties");
-    }
-
     if (!configFileJSON.contains("PowerSupplies"))
     {
         throw std::runtime_error("Missing required PowerSupplies");
-    }
-
-    auto sysProps = configFileJSON["SystemProperties"];
-
-    if (sysProps.contains("MaxPowerSupplies"))
-    {
-        sysProperties.maxPowerSupplies = sysProps["MaxPowerSupplies"];
     }
 
     for (auto psuJSON : configFileJSON["PowerSupplies"])
@@ -82,6 +75,82 @@ void PSUManager::getJSONProperties(const std::string& path)
     if (psus.empty())
     {
         throw std::runtime_error("No power supplies to monitor");
+    }
+}
+
+void PSUManager::getSystemProperties()
+{
+    // Subscribe to InterfacesAdded before doing a property read, otherwise
+    // the interface could be created after the read attempt but before the
+    // match is created.
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAdded() +
+            sdbusplus::bus::match::rules::sender(
+                "xyz.openbmc_project.EntityManager"),
+        std::bind(&PSUManager::supportedConfIfaceAdded, this,
+                  std::placeholders::_1));
+
+    uint64_t maxCount;
+    try
+    {
+        util::DbusSubtree subtree =
+            util::getSubTree(bus, INVENTORY_OBJ_PATH, supportedConfIntf, 0);
+        auto objectIt = subtree.cbegin();
+        if (objectIt == subtree.cend())
+        {
+            throw std::runtime_error("Supported Configuration Not Found");
+        }
+        std::string objPath = objectIt->first;
+        auto serviceIt = objectIt->second.cbegin();
+        if (serviceIt != objectIt->second.cend())
+        {
+            std::string service = serviceIt->first;
+            if (!service.empty())
+            {
+                util::getProperty<uint64_t>(supportedConfIntf, maxCountProp,
+                                            objPath, service, bus, maxCount);
+                sysProperties.maxPowerSupplies = maxCount;
+
+                // Don't need the match anymore
+                entityManagerIfacesAddedMatch.reset();
+            }
+        }
+    }
+    catch (std::exception& e)
+    {
+        // Interface or property not found. Let the Interfaces Added callback
+        // process the information once the interfaces are added to D-Bus.
+    }
+}
+
+void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
+{
+    try
+    {
+        sdbusplus::message::object_path objPath;
+        std::map<std::string, std::map<std::string, std::variant<uint64_t>>>
+            interfaces;
+        msg.read(objPath, interfaces);
+
+        auto itIntf = interfaces.find(supportedConfIntf);
+        if (itIntf == interfaces.cend())
+        {
+            return;
+        }
+
+        auto itProp = itIntf->second.find(maxCountProp);
+        if (itProp != itIntf->second.cend())
+        {
+            sysProperties.maxPowerSupplies = std::get<0>(itProp->second);
+
+            // Don't need the match anymore
+            entityManagerIfacesAddedMatch.reset();
+        }
+    }
+    catch (std::exception& e)
+    {
+        // Ignore, the property may be of a different type than expected.
     }
 }
 

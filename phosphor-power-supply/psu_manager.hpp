@@ -47,11 +47,16 @@ class PSUManager
                const std::string& configfile);
 
     /**
-     * @brief Initialize the system properties and PowerSupply objects from
-     *        the JSON config file.
+     * @brief Initialize the PowerSupply objects from the JSON config file.
      * @param[in] path - Path to the JSON config file
      */
     void getJSONProperties(const std::string& path);
+
+    /**
+     * @brief Initialize the system properties from the Supported Configuration
+     *        D-Bus object provided by Entity Manager.
+     */
+    void getSystemProperties();
 
     /**
      * Initializes the manager.
@@ -163,6 +168,9 @@ class PSUManager
     /** @brief Used to subscribe to D-Bus power on state changes */
     std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
 
+    /** @brief Used to subscribe to Entity Manager interfaces added */
+    std::unique_ptr<sdbusplus::bus::match_t> entityManagerIfacesAddedMatch;
+
     /**
      * @brief Callback for power state property changes
      *
@@ -171,6 +179,15 @@ class PSUManager
      * @param[in] msg - Data associated with the power state signal
      */
     void powerStateChanged(sdbusplus::message::message& msg);
+
+    /**
+     * @brief Callback for supported configuration interface added
+     *
+     * Process the information from the supported configuration interface
+     *
+     * @param[in] msg - Data associated with the interfaces added signal
+     */
+    void supportedConfIfaceAdded(sdbusplus::message::message& msg);
 
     /**
      * @brief Adds properties to the inventory.
