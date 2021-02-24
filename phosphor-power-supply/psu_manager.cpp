@@ -17,14 +17,14 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
 {
     // Parse out the JSON properties
     sys_properties properties;
-    getJSONProperties(configfile, bus, properties, psus);
+    getJSONProperties(configfile, bus, psus);
+    getSystemProperties(bus, properties);
 
     using namespace sdeventplus;
     auto interval = std::chrono::milliseconds(1000);
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::analyze, this), interval);
 
-    minPSUs = {properties.minPowerSupplies};
     maxPSUs = {properties.maxPowerSupplies};
 
     // Subscribe to power state changes
@@ -39,7 +39,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
 }
 
 void PSUManager::getJSONProperties(
-    const std::string& path, sdbusplus::bus::bus& bus, sys_properties& p,
+    const std::string& path, sdbusplus::bus::bus& bus,
     std::vector<std::unique_ptr<PowerSupply>>& psus)
 {
     nlohmann::json configFileJSON = util::loadJSONFromFile(path.c_str());
@@ -49,34 +49,9 @@ void PSUManager::getJSONProperties(
         throw std::runtime_error("Failed to load JSON configuration file");
     }
 
-    if (!configFileJSON.contains("SystemProperties"))
-    {
-        throw std::runtime_error("Missing required SystemProperties");
-    }
-
     if (!configFileJSON.contains("PowerSupplies"))
     {
         throw std::runtime_error("Missing required PowerSupplies");
-    }
-
-    auto sysProps = configFileJSON["SystemProperties"];
-
-    if (sysProps.contains("MinPowerSupplies"))
-    {
-        p.minPowerSupplies = sysProps["MinPowerSupplies"];
-    }
-    else
-    {
-        p.minPowerSupplies = 0;
-    }
-
-    if (sysProps.contains("MaxPowerSupplies"))
-    {
-        p.maxPowerSupplies = sysProps["MaxPowerSupplies"];
-    }
-    else
-    {
-        p.maxPowerSupplies = 0;
     }
 
     for (auto psuJSON : configFileJSON["PowerSupplies"])
@@ -101,6 +76,35 @@ void PSUManager::getJSONProperties(
     {
         throw std::runtime_error("No power supplies to monitor");
     }
+}
+
+void PSUManager::getSystemProperties(sdbusplus::bus::bus& bus,
+                                     sys_properties& p)
+{
+    constexpr auto supportedConfigurationIntf =
+        "xyz.openbmc_project.Configuration.SupportedConfiguration";
+    constexpr auto maxCountProp = "MaxCount";
+    uint64_t maxCount = 0;
+
+    util::DbusSubtree subtree = util::getSubTree(bus, INVENTORY_OBJ_PATH,
+                                                 supportedConfigurationIntf, 0);
+    auto objectIt = subtree.cbegin();
+    if (objectIt != subtree.cend())
+    {
+        std::string objPath = objectIt->first;
+        auto serviceIt = objectIt->second.cbegin();
+        if (serviceIt != objectIt->second.cend())
+        {
+            std::string service = serviceIt->first;
+            if (!service.empty())
+            {
+                util::getProperty<uint64_t>(supportedConfigurationIntf,
+                                            maxCountProp, objPath, service, bus,
+                                            maxCount);
+            }
+        }
+    }
+    p.maxPowerSupplies = maxCount;
 }
 
 void PSUManager::powerStateChanged(sdbusplus::message::message& msg)

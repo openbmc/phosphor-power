@@ -11,14 +11,6 @@ power supplies (ibm-cffps), run meson with `-Dibm-vpd=true`.
 
 The JSON configuration file should contain:
 
-## MinPowerSupplies
-Optional property, integer, that indicates the minimum number of power supplies
-that should be present.
-
-## MaxPowerSupplies
-Optional property, integer, that indicates the maximum number of power supplies
-that should be present.
-
 ## PowerSupplies
 An array of power supply properties.
 
