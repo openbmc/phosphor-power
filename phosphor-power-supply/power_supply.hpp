@@ -72,8 +72,8 @@ class PowerSupply
         presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
             bus,
             sdbusplus::bus::match::rules::interfacesAdded() +
-                sdbusplus::bus::match::rules::path_namespace(inventoryPath),
-            [this](auto& msg) { this->inventoryChanged(msg); });
+                sdbusplus::bus::match::rules::argNpath(0, inventoryPath),
+            std::bind(std::mem_fn(&PowerSupply::inventoryAdded), this, std::placeholders::_1));
         // Get the current state of the Present property.
         updatePresence();
     }
@@ -313,6 +313,15 @@ class PowerSupply
      * @param[in]  msg - Data associated with Present change signal
      **/
     void inventoryChanged(sdbusplus::message::message& msg);
+
+    /**
+     * @brief Callback for inventory property added.
+     *
+     * Process add of the interface with the Present property for power supply.
+     *
+     * @param[in]  msg - Data associated with Present change signal
+     **/
+    void inventoryAdded(sdbusplus::message::message& msg);
 };
 
 } // namespace phosphor::power::psu
