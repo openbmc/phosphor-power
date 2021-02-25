@@ -200,6 +200,36 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
     }
 }
 
+void PowerSupply::inventoryAdded(sdbusplus::message::message& msg)
+{
+    sdbusplus::message::object_path path;
+    msg.read(path);
+    // Make sure the signal is for the PSU inventory path
+    if (path == inventoryPath)
+    {
+        std::map<std::string, std::map<std::string, std::variant<bool>>>
+            interfaces;
+        // Get map of interfaces and their properties
+        msg.read(interfaces);
+
+        auto properties = interfaces.find(INVENTORY_IFACE);
+        if (properties != interfaces.end())
+        {
+            auto property = properties->second.find(PRESENT_PROP);
+            if (property != properties->second.end())
+            {
+                present = std::get<bool>(property->second);
+            }
+
+            log<level::INFO>(fmt::format("Power Supply {} Present {}",
+                                         inventoryPath, present)
+                                 .c_str());
+
+            updateInventory();
+        }
+    }
+}
+
 void PowerSupply::updateInventory()
 {
     using namespace phosphor::pmbus;
