@@ -201,6 +201,38 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
     }
 }
 
+void PowerSupply::inventoryAdded(sdbusplus::message::message& msg)
+{
+    log<level::INFO>(fmt::format("inventoryAdded: {}", inventoryPath).c_str());
+    sdbusplus::message::object_path path;
+    // TODO - Why this map? What is in these positions?
+    std::map<std::string, std::map<std::string, std::variant<bool>>> interfaces;
+
+    msg.read(path, interfaces);
+
+    auto properties = interfaces.find(INVENTORY_IFACE);
+    if (properties != interfaces.end())
+    {
+        auto property = properties->second.find(PRESENT_PROP);
+        if (property != properties->second.end())
+        {
+            present = std::get<bool>(property->second);
+        }
+
+        if (present)
+        {
+            log<level::INFO>(fmt::format("{} present", inventoryPath).c_str());
+        }
+        else
+        {
+            log<level::INFO>(
+                fmt::format("{} NOT present", inventoryPath).c_str());
+        }
+
+        updateInventory();
+    }
+}
+
 void PowerSupply::updateInventory()
 {
     using namespace phosphor::pmbus;
