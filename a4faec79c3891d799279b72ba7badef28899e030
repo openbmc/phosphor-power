@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0563cb21_e09f3852",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T18:17:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "978355a4_b984ee15",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "494ec38d_c7844556",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d79f696c_f172edd2",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T18:17:25Z",
+      "side": 1,
+      "message": "These get worked on slightly differently from the present fault. I was not sure if I should clear these if the power supply was not present.",
+      "parentUuid": "494ec38d_c7844556",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 21
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b72bf959_17feb6e8",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2021-02-26T18:07:23Z",
       "side": 1,
       "message": "I assume this should be removed?",
+      "range": {
+        "startLine": 155,
+        "startChar": 8,
+        "endLine": 155,
+        "endChar": 28
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dd137bb_5aded9de",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T18:17:25Z",
+      "side": 1,
+      "message": "Oops! I thought I did a cut/paste, looks like I did a copy paste. I will remove this one.",
+      "parentUuid": "b72bf959_17feb6e8",
       "range": {
         "startLine": 155,
         "startChar": 8,
