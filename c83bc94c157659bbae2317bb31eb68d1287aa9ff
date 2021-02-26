@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "4e0145d5_93a30d0c",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T18:23:54Z",
+      "side": 1,
+      "message": "Huh... I will give that whirl: https://github.com/openbmc/phosphor-power/blob/415094c105adde801bb961f2cfe83d8373c4fef1/phosphor-regulators/src/manager.cpp#L77",
+      "parentUuid": "73bb10f9_49a80bfe",
+      "range": {
+        "startLine": 76,
+        "startChar": 22,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "63b6b82d_ae282a5d",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
@@ -162,6 +186,30 @@
       "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b938417_0604b05f",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T18:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "63b6b82d_ae282a5d",
+      "range": {
+        "startLine": 323,
+        "startChar": 54,
+        "endLine": 323,
+        "endChar": 61
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
