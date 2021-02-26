@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "799f8654_4097f8b1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T20:18:46Z",
+      "side": 1,
+      "message": "I wonder if this should be a DEBUG trace as well.\n\nFeb 26 19:50:54 rainier systemd[1]: Started Phosphor GPIO 0 Presence.\nFeb 26 19:50:54 rainier systemd[1]: Started Phosphor GPIO 1 Presence.\nFeb 26 19:50:54 rainier systemd[1]: Started Phosphor Power Supply Monitor.\nFeb 26 19:50:55 rainier phosphor-gpio-presence[350]: Updating inventory present property\nFeb 26 19:50:55 rainier phosphor-gpio-presence[351]: Updating inventory present property\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: D-Bus property /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0 access failure exception\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: D-Bus property /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1 access failure exception\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: inventoryAdded: /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: inventoryAdded: /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: inventoryAdded: /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0\nFeb 26 19:50:55 rainier phosphor-psu-monitor[355]: inventoryAdded: /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply1",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 79
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd0e1836_91f7df85",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
