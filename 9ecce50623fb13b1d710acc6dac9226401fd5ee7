@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af3a2324_ecc662d7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-02-26T20:58:12Z",
+      "side": 1,
+      "message": "I suspect that this code runs before entity-manager has put anything on D-Bus.  I\u0027m not sure if there\u0027s a way to hold off until all interfaces are available and then hit go, or if each interface desired has to have an interfacesAdded/propertiesChanged watch on it?\n\nBrandon, did you have a plan here?",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
