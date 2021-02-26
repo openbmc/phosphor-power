@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec4d7f8c_a18d01ca",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T17:40:24Z",
+      "side": 1,
+      "message": "Ack, I thought I removed this before pushing it up. :-/",
+      "parentUuid": "cd0e1836_91f7df85",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 55
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8a692eb_7697821e",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2021-02-26T16:09:33Z",
       "side": 1,
       "message": "I assume this is just for debug?  I believe phosphor-gpio-presence already traces when presence changes.  You are welcome to change to a DEBUG trace of course, or just remove it.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 9
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf1e9fd4_1542188c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T17:40:24Z",
+      "side": 1,
+      "message": "I added this for debug, as while I could see phosphor-gpio-presence doing the tracing, I was not so sure the power supply monitor was getting the information. Perhaps make these DEBUG in case it is something one REALLY wants to see.",
+      "parentUuid": "a8a692eb_7697821e",
       "range": {
         "startLine": 222,
         "startChar": 0,
