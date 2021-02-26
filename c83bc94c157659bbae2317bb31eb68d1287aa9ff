@@ -49,6 +49,29 @@
     },
     {
       "key": {
+        "uuid": "1af57fc1_1ebfb4d6",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T17:55:49Z",
+      "side": 1,
+      "message": "I think you need to check that the path matches the PSU inventory path you are expecting.\n\nThe argNpath matching stuff is weird and kind of a wildcard.  Here is part of the description of how it works from the D-Bus spec:\n\n\"Argument path matches provide a specialised form of wildcard matching for path-like namespaces. They can match arguments whose type is either STRING or OBJECT_PATH. As with normal argument matches, if the argument is exactly equal to the string given in the match rule then the rule is satisfied. Additionally, there is also a match when either the string given in the match rule or the appropriate message argument ends with \u0027/\u0027 and is a prefix of the other. An example argument path match is arg0path\u003d\u0027/aa/bb/\u0027. This would match messages with first arguments of \u0027/\u0027, \u0027/aa/\u0027, \u0027/aa/bb/\u0027, \u0027/aa/bb/cc/\u0027 and \u0027/aa/bb/cc\u0027. It would not match messages with first arguments of \u0027/aa/b\u0027, \u0027/aa\u0027 or even \u0027/aa/bb\u0027.\"\n\nSee the spec for more details.  The bottom line, if I am reading this correctly, is that you may get unexpected extra calls to your inventoryAdded() method for other inventory paths.  So you should make sure this call is for the path you are expecting.",
+      "range": {
+        "startLine": 211,
+        "startChar": 13,
+        "endLine": 211,
+        "endChar": 17
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8a692eb_7697821e",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -89,6 +112,52 @@
         "startChar": 0,
         "endLine": 230,
         "endChar": 9
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73bb10f9_49a80bfe",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T17:55:49Z",
+      "side": 1,
+      "message": "I think you can skip the std::mem_fn() wrapper and just specify \u0026PowerSupply::inventoryAdded for the first arg.  That worked in the regulator code at least.",
+      "range": {
+        "startLine": 76,
+        "startChar": 22,
+        "endLine": 76,
+        "endChar": 34
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b6b82d_ae282a5d",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T17:55:49Z",
+      "side": 1,
+      "message": "add?",
+      "range": {
+        "startLine": 323,
+        "startChar": 54,
+        "endLine": 323,
+        "endChar": 61
       },
       "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
