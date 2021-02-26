@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "978355a4_b984ee15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T18:07:23Z",
+      "side": 1,
+      "message": "Nit: typo",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "494ec38d_c7844556",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T18:07:23Z",
+      "side": 1,
+      "message": "Is there a reason these wouldn\u0027t be moved outside this if as well?  Just curious; I don\u0027t know your algorithms.",
+      "range": {
+        "startLine": 149,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 21
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b72bf959_17feb6e8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-26T18:07:23Z",
+      "side": 1,
+      "message": "I assume this should be removed?",
+      "range": {
+        "startLine": 155,
+        "startChar": 8,
+        "endLine": 155,
+        "endChar": 28
+      },
+      "revId": "a4faec79c3891d799279b72ba7badef28899e030",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
