@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "abe543e5_8b41c518",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T20:54:27Z",
+      "side": 1,
+      "message": "Okay, side chat on this, going to remove this, seems excessive.",
+      "parentUuid": "799f8654_4097f8b1",
+      "range": {
+        "startLine": 206,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 79
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd0e1836_91f7df85",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -154,6 +178,30 @@
       "side": 1,
       "message": "I added this for debug, as while I could see phosphor-gpio-presence doing the tracing, I was not so sure the power supply monitor was getting the information. Perhaps make these DEBUG in case it is something one REALLY wants to see.",
       "parentUuid": "a8a692eb_7697821e",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 230,
+        "endChar": 9
+      },
+      "revId": "c83bc94c157659bbae2317bb31eb68d1287aa9ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "384a072d_cd0d5ce8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-02-26T20:54:27Z",
+      "side": 1,
+      "message": "After a side chat, going to make this INFO, combine it into a single trace line. This should rarely get called, mainly on initial startup, or if the persisted inventory is cleared and the process starts up again.",
+      "parentUuid": "cf1e9fd4_1542188c",
       "range": {
         "startLine": 222,
         "startChar": 0,
