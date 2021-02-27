@@ -16,6 +16,133 @@
       "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad28c75c_8c592b97",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "I agree.  I needed to add an interfacesAdded signal handler to cover this case in the regulators code.  Perhaps that is coming in a subsequent patch though?",
+      "parentUuid": "af3a2324_ecc662d7",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3ed56f_ead79f58",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "Why are we passing bus and psus, when they are data members?  I realize this problem existed, but if you are modifying the signature anyway it seems like this could be removed.",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d133fa4_2074a226",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "Why are we passing bus, when it is a data member?",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 27
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a637b3ec_0df78c97",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "Is there a scenario where one of the two DBus queries could throw an exception?  If so, do you want to catch it here and deal with it vs. letting it escape out (to main?).  Not sure just something to consider.",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "667a1563_664ed5bd",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "Nit: Missing doxygen to describe method.  I realize that problem existed before this commit, but given how similar this method and the new one are named, it would help to briefly document both.",
+      "range": {
+        "startLine": 49,
+        "startChar": 9,
+        "endLine": 49,
+        "endChar": 26
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb174fc_027d8726",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-02-27T00:17:23Z",
+      "side": 1,
+      "message": "Nit: Missing doxygen",
+      "range": {
+        "startLine": 52,
+        "startChar": 9,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
