@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "e7b49ecf_6a1d89da",
+        "filename": "phosphor-power-supply/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-02T21:19:38Z",
+      "side": 1,
+      "message": "Should there be some mention about the MaxPowerSupplies, well, MaxCount, being a property that is read off of D-Bus?",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af3a2324_ecc662d7",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -77,6 +94,48 @@
         "endLine": 20,
         "endChar": 37
       },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7aa73dd_0df011a1",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-02T21:19:38Z",
+      "side": 1,
+      "message": "Oh dear! How did that get overlooked? I think this stuck around as this used to be a separate function not in this class. I agree that at this point it is not really needed to be passed around.",
+      "parentUuid": "ce3ed56f_ead79f58",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c72cc2c_7b6b8119",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-02T21:19:38Z",
+      "side": 1,
+      "message": "This was pointed out in my commits for getting the power supply configuration data (i2c bus, address...) from entity-manager. I lucked out in some earlier testing, but then started to see race conditions and crashing in later testing.\n\nSome kind of interfacesAdded logic is needed here, but I did not quite work out the best way to do that just yet.",
+      "parentUuid": "ad28c75c_8c592b97",
       "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
