@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19b1d02b_094ca605",
+        "filename": "phosphor-regulators/src/manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-02T18:21:38Z",
+      "side": 1,
+      "message": "Probably can add a TODO comment to wait for EM to publish the interface.",
+      "revId": "d46600f2ed45ef3d541a0587984704f296df92d7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
