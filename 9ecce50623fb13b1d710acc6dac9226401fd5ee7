@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "58763c21_a441279f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-02T21:06:15Z",
+      "side": 1,
+      "message": "Are we sure we do not need the min number of PSUs? In this first case, we would need at least one, which yeah, is a bit silly... bigger configurations might require 2 out of 4, 3 out of 6, etc.",
+      "range": {
+        "startLine": 11,
+        "startChar": 17,
+        "endLine": 12,
+        "endChar": 44
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af3a2324_ecc662d7",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
