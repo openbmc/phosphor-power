@@ -109,11 +109,15 @@ void Manager::configure()
 
         // Log critical error since regulators could not be configured.  Could
         // cause hardware damage if default regulator settings are very wrong.
+        /*
         services.getErrorLogging().logConfigFileError(Entry::Level::Critical,
                                                       services.getJournal());
+        */
 
         // Throw InternalFailure to propogate error status to D-Bus client
+        /*
         throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure{};
+        */
     }
 }
 
