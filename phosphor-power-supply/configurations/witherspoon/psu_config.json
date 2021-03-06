@@ -1,6 +1,5 @@
 {
     "SystemProperties" : {
-        "MinPowerSupplies" : 1,
         "MaxPowerSupplies" : 2
     },
     "PowerSupplies": [

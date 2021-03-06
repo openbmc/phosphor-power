@@ -11,7 +11,6 @@
 
 struct sys_properties
 {
-    int minPowerSupplies;
     int maxPowerSupplies;
 };
 
@@ -47,9 +46,12 @@ class PSUManager
     PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                const std::string& configfile);
 
-    void getJSONProperties(const std::string& path, sdbusplus::bus::bus& bus,
-                           sys_properties& p,
-                           std::vector<std::unique_ptr<PowerSupply>>& psus);
+    /**
+     * @brief Initialize the system properties and PowerSupply objects from
+     *        the JSON config file.
+     * @param[in] path - Path to the JSON config file
+     */
+    void getJSONProperties(const std::string& path);
 
     /**
      * Initializes the manager.
@@ -188,14 +190,9 @@ class PSUManager
     }
 
     /**
-     * @brief Minimum number of power supplies to operate.
+     * @brief The system properties.
      */
-    int minPSUs = 1;
-
-    /**
-     * @brief Maximum number of power supplies possible.
-     */
-    int maxPSUs = 1;
+    sys_properties sysProperties;
 
     /**
      * @brief The vector for power supplies.

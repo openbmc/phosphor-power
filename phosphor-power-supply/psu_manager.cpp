@@ -16,16 +16,13 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     bus(bus)
 {
     // Parse out the JSON properties
-    sys_properties properties;
-    getJSONProperties(configfile, bus, properties, psus);
+    sysProperties = {0};
+    getJSONProperties(configfile);
 
     using namespace sdeventplus;
     auto interval = std::chrono::milliseconds(1000);
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::analyze, this), interval);
-
-    minPSUs = {properties.minPowerSupplies};
-    maxPSUs = {properties.maxPowerSupplies};
 
     // Subscribe to power state changes
     powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
@@ -38,9 +35,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     initialize();
 }
 
-void PSUManager::getJSONProperties(
-    const std::string& path, sdbusplus::bus::bus& bus, sys_properties& p,
-    std::vector<std::unique_ptr<PowerSupply>>& psus)
+void PSUManager::getJSONProperties(const std::string& path)
 {
     nlohmann::json configFileJSON = util::loadJSONFromFile(path.c_str());
 
@@ -61,22 +56,9 @@ void PSUManager::getJSONProperties(
 
     auto sysProps = configFileJSON["SystemProperties"];
 
-    if (sysProps.contains("MinPowerSupplies"))
-    {
-        p.minPowerSupplies = sysProps["MinPowerSupplies"];
-    }
-    else
-    {
-        p.minPowerSupplies = 0;
-    }
-
     if (sysProps.contains("MaxPowerSupplies"))
     {
-        p.maxPowerSupplies = sysProps["MaxPowerSupplies"];
-    }
-    else
-    {
-        p.maxPowerSupplies = 0;
+        sysProperties.maxPowerSupplies = sysProps["MaxPowerSupplies"];
     }
 
     for (auto psuJSON : configFileJSON["PowerSupplies"])
