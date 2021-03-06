@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba62a4c1_cd48ede7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Yeah, talking with Derek, there\u0027s not a use case for it, so removed it with a new commit to do some cleanup as well: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/41114",
+      "parentUuid": "58763c21_a441279f",
+      "range": {
+        "startLine": 11,
+        "startChar": 17,
+        "endLine": 12,
+        "endChar": 44
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7b49ecf_6a1d89da",
         "filename": "phosphor-power-supply/README.md",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139dd93f_a8229aba",
+        "filename": "phosphor-power-supply/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done. Good point, added a section for it.",
+      "parentUuid": "e7b49ecf_6a1d89da",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +184,48 @@
     },
     {
       "key": {
+        "uuid": "306656ad_538b06af",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done. Yeah, no need to copy/paste the old :) . Removed.",
+      "parentUuid": "d7aa73dd_0df011a1",
+      "range": {
+        "startLine": 20,
+        "startChar": 34,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b19bfc1_b1fac7da",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Added match to wait for EM if not present.",
+      "parentUuid": "5c72cc2c_7b6b8119",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8d133fa4_2074a226",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -165,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "efe5ab3d_2460fa73",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done. Removed.",
+      "parentUuid": "8d133fa4_2074a226",
+      "range": {
+        "startLine": 21,
+        "startChar": 24,
+        "endLine": 21,
+        "endChar": 27
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a637b3ec_0df78c97",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -179,6 +287,24 @@
       "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1fea0de_1e75d83b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done. Yeah, added a try/catch block.",
+      "parentUuid": "a637b3ec_0df78c97",
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -205,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "4a0da242_d3fe0ba7",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done. Did the cleanup in a separate commit: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/41114",
+      "parentUuid": "667a1563_664ed5bd",
+      "range": {
+        "startLine": 49,
+        "startChar": 9,
+        "endLine": 49,
+        "endChar": 26
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdb174fc_027d8726",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
@@ -225,6 +375,30 @@
       "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3784de_e2e6d878",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-06T17:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdb174fc_027d8726",
+      "range": {
+        "startLine": 52,
+        "startChar": 9,
+        "endLine": 52,
+        "endChar": 28
+      },
+      "revId": "9ecce50623fb13b1d710acc6dac9226401fd5ee7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
