@@ -37,6 +37,47 @@
     },
     {
       "key": {
+        "uuid": "fc897ecd_c0c329ca",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-08T22:34:03Z",
+      "side": 1,
+      "message": "Yeah, I think I had problems with that in the power supply class, so the properties changed and interfaces added is before the property get/read.",
+      "parentUuid": "5fd061e9_8912870b",
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f50441d5_eac02255",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-08T22:34:03Z",
+      "side": 1,
+      "message": "If the recommended interfacesAdded is done first, we need a try/catch above this in the stack somewhere?",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 91,
+        "endChar": 74
+      },
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9496402_fd16b1ab",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -48,6 +89,30 @@
       "writtenOn": "2021-03-08T20:57:32Z",
       "side": 1,
       "message": "Nit: I don\u0027t think this is required.  I didn\u0027t use the std::mem_fn() wrapper in phosphor-regulators/src/manager.cpp and it seemed to work fine.",
+      "range": {
+        "startLine": 115,
+        "startChar": 26,
+        "endLine": 115,
+        "endChar": 38
+      },
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9e9320c_18c83a36",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-08T22:34:03Z",
+      "side": 1,
+      "message": "+1 - I recently had the same suggested changed and it worked fine without std::mem_fn().",
+      "parentUuid": "a9496402_fd16b1ab",
       "range": {
         "startLine": 115,
         "startChar": 26,
