@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f57bbe1_2ef90d7c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-08T19:16:31Z",
+      "side": 1,
+      "message": "I think it\u0027s usually recommended that one always adds the match for interfacesAdded before doing the get.  That\u0027s because there is a very small window where the signal can come in after the fail but before your code has gotten a chance to create the match.",
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
