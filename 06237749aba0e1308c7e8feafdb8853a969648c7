@@ -16,6 +16,81 @@
       "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd061e9_8912870b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-08T20:57:32Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "4f57bbe1_2ef90d7c",
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9496402_fd16b1ab",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-08T20:57:32Z",
+      "side": 1,
+      "message": "Nit: I don\u0027t think this is required.  I didn\u0027t use the std::mem_fn() wrapper in phosphor-regulators/src/manager.cpp and it seemed to work fine.",
+      "range": {
+        "startLine": 115,
+        "startChar": 26,
+        "endLine": 115,
+        "endChar": 38
+      },
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22d28599_8e5b3ba7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-08T20:57:32Z",
+      "side": 1,
+      "message": "Do you think a try/catch is required here to avoid the app exiting due to an uncaught sdbusplus exception?\n\nI\u0027m not sure if an exception could happen, but it seems possible.  For example, you are registering to get all interfacesAdded signals from EntityManager.  Some of those signals are for different interfaces than the one you are looking for, and those interfaces have properties whose values are not of type uint64_t.  I\u0027m not sure what the sdbusplus wrapper does if we specify std::variant\u003cuint64_t\u003e\u003e and the actual property type is vector\u003cstring\u003e.",
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09fd3997_1115c0d1",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-08T20:57:32Z",
+      "side": 1,
+      "message": "This parameter does not exist",
+      "revId": "06237749aba0e1308c7e8feafdb8853a969648c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
