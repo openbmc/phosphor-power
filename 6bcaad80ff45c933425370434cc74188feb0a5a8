@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "009e4bf3_fd832de3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-09T22:42:21Z",
+      "side": 1,
+      "message": "Reference to I45b724238cffe6fb7f1f8f9947fa1c2c9e9e8015 added.",
+      "parentUuid": "1065166a_965928ec",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "100cf9bd_27632aed",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -122,6 +140,24 @@
       "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc13aeb6_1a9aef69",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-09T22:42:21Z",
+      "side": 1,
+      "message": "This will get merged out after resolving conflicts.",
+      "parentUuid": "7eff1c2b_63bebb03",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
