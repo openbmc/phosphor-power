@@ -5,6 +5,7 @@ project(
         'warning_level=3',
         'werror=true',
         'cpp_std=c++17',
+        'buildtype=debugoptimized',
         'prefix=/usr'
     ],
     license: 'Apache-2.0',
@@ -90,6 +91,12 @@ conf.set10(
 conf.set10('IBM_VPD', get_option('ibm-vpd'))
 
 configure_file(output: 'config.h', configuration: conf)
+
+# Disable FORTIFY_SOURCE when compiling with no optimization
+if(get_option('optimization') == '0')
+    add_project_arguments('-U_FORTIFY_SOURCE',language:['cpp','c'])
+      message('Disabling FORTIFY_SOURCE as optimization is set to 0')
+    endif
 
 # Ensure the generated header here winds up in the correct path in the build
 # tree such that it actually get used and doesn't get found in the sysroot
