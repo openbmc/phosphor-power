@@ -5,6 +5,7 @@ project(
         'warning_level=3',
         'werror=true',
         'cpp_std=c++17',
+        'buildtype=debugoptimized',
         'prefix=/usr'
     ],
     license: 'Apache-2.0',
