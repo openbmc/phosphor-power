@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b28ee1d4_5a27c305",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-09T22:52:15Z",
+      "side": 1,
+      "message": "As noted in header file, I don\u0027t think this bus parameter is needed.",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 29
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a68f9fd_66d46ae0",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-09T22:52:15Z",
+      "side": 1,
+      "message": "PS5 comment from Matt Spinler still applies. I cannot be sure that this interface (xyz.openbmc_project.Configuration.IBMCFFPSConnector) will be there if entity-manager has not started or has not finished.\n\nI still need some way to handle this via an interfacesAdded match.",
+      "range": {
+        "startLine": 120,
+        "startChar": 40,
+        "endLine": 120,
+        "endChar": 49
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99de58a0_f405cc11",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-09T22:52:15Z",
+      "side": 1,
+      "message": "I suspect the bus parameter is not needed here, similar to how it was not needed for getJSONProperties().",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 51
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
