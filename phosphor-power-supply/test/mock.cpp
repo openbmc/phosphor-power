@@ -1,4 +1,4 @@
-#include <mock.hpp>
+#include "mock.hpp"
 
 namespace phosphor
 {
@@ -10,6 +10,28 @@ std::unique_ptr<PMBusBase> createPMBus(std::uint8_t /*bus*/,
 {
     return std::make_unique<MockedPMBus>();
 }
-
 } // namespace pmbus
+
+namespace power
+{
+namespace psu
+{
+static std::unique_ptr<MockedUtil> util;
+
+const UtilBase& getUtils()
+{
+    if (!util)
+    {
+        util = std::make_unique<MockedUtil>();
+    }
+    return *util;
+}
+
+void freeUtils()
+{
+    util.reset();
+}
+
+} // namespace psu
+} // namespace power
 } // namespace phosphor

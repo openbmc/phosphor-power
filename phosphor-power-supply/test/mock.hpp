@@ -31,6 +31,7 @@ namespace power
 {
 namespace psu
 {
+
 class MockedUtil : public UtilBase
 {
   public:
@@ -41,20 +42,9 @@ class MockedUtil : public UtilBase
                 (const, override));
 };
 
-static std::unique_ptr<MockedUtil> util;
-inline const UtilBase& getUtils()
-{
-    if (!util)
-    {
-        util = std::make_unique<MockedUtil>();
-    }
-    return *util;
-}
+const UtilBase& getUtils();
 
-inline void freeUtils()
-{
-    util.reset();
-}
+void freeUtils();
 
 } // namespace psu
 } // namespace power
