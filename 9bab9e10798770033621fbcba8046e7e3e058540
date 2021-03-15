@@ -22,6 +22,30 @@
       "revId": "9bab9e10798770033621fbcba8046e7e3e058540",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7dd9ba6_03f287dd",
+        "filename": "phosphor-power-supply/test/mock.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-15T20:55:40Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "682c1593_f1d920ce",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 6
+      },
+      "revId": "9bab9e10798770033621fbcba8046e7e3e058540",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
