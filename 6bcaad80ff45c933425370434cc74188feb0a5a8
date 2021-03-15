@@ -266,6 +266,24 @@
     },
     {
       "key": {
+        "uuid": "669b1620_aed4c456",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-15T23:52:24Z",
+      "side": 1,
+      "message": "\u003e\u003e I am not aware of anything that requires the string to not be empty:\n\u003e\u003e https://github.com/openbmc/entity-manager/blob/master/schemas/IBM.json \n\u003e\u003e What do you think would be the best way to handle such a scenario?\n\nIf psuname is empty, then would you want to skip creating this PSU object since we don\u0027t know what inv path it should have?\n\nIf so, then maybe\n\n  if (!psuname.empty)\n  {\n    invpath.push_back(psuname.back());\n    log\u003clevel::INFO\u003e(fmt::format(\"Inventory Path: {}\", invpath).c_str());\n    ...\n\n\u003e\u003e I do not foresee a system with greater than 9 power supplies (was working with maximum of 4\n\u003e\u003e power supplies in mind), but is that a bad assumption? Should I attempt to handle this\n\u003e\u003e differently?\n\nI was just noticing that you were making two assumptions here:\n* psuname from EM ends with a unique PSU number\n* PSU number is only 1 digit\n\nIf the EM PSU schema defines it that way, seems like you are in good shape.  If not, this could be a good first pass but you might want to enhance it later.  Otherwise a psuname of \"psu10\" will result in a second inv path of /.../powersupply0.",
+      "parentUuid": "0442362f_3cd5bfe4",
+      "revId": "6bcaad80ff45c933425370434cc74188feb0a5a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0d5295b_2d06c167",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5

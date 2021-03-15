@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "e42bb68b_4cb30231",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-15T23:52:24Z",
+      "side": 1,
+      "message": "Did this work OK when you tested it?  The way I understand these matches, I\u0027m not sure it is doing what you intend.\n\nAll D-Bus messages have an object path attribute.  This is the object path that the message was sent from or to.  This is what the path() and path_namespace() matchers are for.\n\nThe interfacesAdded() signal message has two arguments:\n  org.freedesktop.DBus.ObjectManager.InterfacesAdded (OBJPATH object_path,\n                                                      DICT\u003cSTRING,DICT\u003cSTRING,VARIANT\u003e\u003e interfaces_and_properties);\n\nThese can be matched using the arg*() matchers.\n\nI think when a PSU is added, the PSU inventory path will be arg 0.  However, I\u0027m not sure if it is *also* the object path of the message.  The object path of the message might be the top level object path of InventoryManager, since that might be the object actually sending the signal.\n\nThe old code used the argNpath() matcher.  That can target arg 0, which is great.  Unfortunately it has kind of strange wildcard behavior.\n\nIt would be nice it you could use argN() instead, since you want an exact match.  I\u0027m not sure if it will work here, though, since it says it is expecting a \u0027string\u0027 argument type rather than an \u0027object path\u0027 argument type.\n\nIf you already tested this and figured it out, feel free to ignore.",
+      "range": {
+        "startLine": 42,
+        "startChar": 42,
+        "endLine": 42,
+        "endChar": 56
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8582d828_2a0c802d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-15T23:52:24Z",
+      "side": 1,
+      "message": "inventoryAdded() ?",
+      "range": {
+        "startLine": 43,
+        "startChar": 34,
+        "endLine": 43,
+        "endChar": 50
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b28ee1d4_5a27c305",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 6
@@ -41,6 +87,29 @@
         "startChar": 40,
         "endLine": 120,
         "endChar": 49
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01a4acde_c54468d7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-15T23:52:24Z",
+      "side": 1,
+      "message": "This will result in 3 D-Bus calls to get properties for the same object/interface, right?\n\nD-Bus calls are kind of slow.  It might be faster to call org.freedesktop.DBus.Properties.GetAll and get all of them in one D-Bus call.  However, feel free to ignore if you already tried that and it was slower (such as if it had to return 20 other, unrelated properties).",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 42
       },
       "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
