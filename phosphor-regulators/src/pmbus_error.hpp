@@ -42,10 +42,34 @@ class PMBusError : public std::exception
      * Constructor.
      *
      * @param error error message
+     * @param deviceID unique ID of the device where error occurred
+     * @param inventoryPath inventory path of the device where error occurred
      */
-    explicit PMBusError(const std::string& error) :
-        error{"PMBusError: " + error}
+    explicit PMBusError(const std::string& error, const std::string& deviceID,
+                        const std::string& inventoryPath) :
+        error{"PMBusError: " + error},
+        deviceID{deviceID}, inventoryPath{inventoryPath}
     {
+    }
+
+    /**
+     * Returns the unique ID of the device where the error occurred.
+     *
+     * @return device ID
+     */
+    const std::string& getDeviceID() const
+    {
+        return deviceID;
+    }
+
+    /**
+     * Returns the inventory path of the device where the error occurred.
+     *
+     * @return inventory path
+     */
+    const std::string& getInventoryPath() const
+    {
+        return inventoryPath;
     }
 
     /**
@@ -63,6 +87,16 @@ class PMBusError : public std::exception
      * Error message.
      */
     const std::string error{};
+
+    /**
+     * Unique ID of the device where the error occurred.
+     */
+    const std::string deviceID{};
+
+    /**
+     * Inventory path of the device where the error occurred.
+     */
+    const std::string inventoryPath{};
 };
 
 } // namespace phosphor::power::regulators

@@ -299,6 +299,9 @@ TEST(PMBusReadSensorActionTests, Execute)
             EXPECT_STREQ(
                 pe.what(),
                 "PMBusError: VOUT_MODE contains unsupported data format");
+            EXPECT_EQ(pe.getDeviceID(), "reg1");
+            EXPECT_EQ(pe.getInventoryPath(), "/xyz/openbmc_project/inventory/"
+                                             "system/chassis/motherboard/reg1");
         }
         catch (...)
         {

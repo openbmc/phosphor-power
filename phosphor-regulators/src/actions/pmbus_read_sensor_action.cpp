@@ -48,8 +48,7 @@ bool PMBusReadSensorAction::execute(ActionEnvironment& environment)
                 break;
             case pmbus_utils::SensorDataFormat::linear_16:
                 // Get exponent value for converting linear format to volts
-                // value
-                int8_t exponentValue = getExponentValue(interface);
+                int8_t exponentValue = getExponentValue(environment, interface);
 
                 // Convert linear_16 format to a normal decimal number
                 reading.value =
@@ -92,7 +91,8 @@ std::string PMBusReadSensorAction::toString() const
     return ss.str();
 }
 
-int8_t PMBusReadSensorAction::getExponentValue(i2c::I2CInterface& interface)
+int8_t PMBusReadSensorAction::getExponentValue(ActionEnvironment& environment,
+                                               i2c::I2CInterface& interface)
 {
     // Check if an exponent value is defined for this action
     if (exponent.has_value())
@@ -112,7 +112,9 @@ int8_t PMBusReadSensorAction::getExponentValue(i2c::I2CInterface& interface)
     // Verify format is linear; other formats not currently supported
     if (format != pmbus_utils::VoutDataFormat::linear)
     {
-        throw PMBusError("VOUT_MODE contains unsupported data format");
+        throw PMBusError("VOUT_MODE contains unsupported data format",
+                         environment.getDeviceID(),
+                         environment.getDevice().getFRU());
     }
 
     // Return parameter value; it contains the exponent when format is linear

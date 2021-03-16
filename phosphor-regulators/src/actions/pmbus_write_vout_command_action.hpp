@@ -189,10 +189,12 @@ class PMBusWriteVoutCommandAction : public I2CAction
      *
      * Throws an exception if an error occurs.
      *
+     * @param environment action execution environment
      * @param interface I2C interface to the current device
      * @return exponent value
      */
-    int8_t getExponentValue(i2c::I2CInterface& interface);
+    int8_t getExponentValue(ActionEnvironment& environment,
+                            i2c::I2CInterface& interface);
 
     /**
      * Gets the volts value to write to VOUT_COMMAND.

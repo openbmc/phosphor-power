@@ -159,10 +159,12 @@ class PMBusReadSensorAction : public I2CAction
      *
      * Throws an exception if an error occurs.
      *
+     * @param environment action execution environment
      * @param interface I2C interface to the current device
      * @return exponent value
      */
-    int8_t getExponentValue(i2c::I2CInterface& interface);
+    int8_t getExponentValue(ActionEnvironment& environment,
+                            i2c::I2CInterface& interface);
 
     /**
      * Sensor value type.

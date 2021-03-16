@@ -21,14 +21,38 @@ using namespace phosphor::power::regulators;
 
 TEST(PMBusErrorTests, Constructor)
 {
-    PMBusError error("VOUT_MODE contains unsupported data format");
+    PMBusError error(
+        "VOUT_MODE contains unsupported data format", "vdd_reg",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getDeviceID(), "vdd_reg");
+    EXPECT_EQ(error.getInventoryPath(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
     EXPECT_STREQ(error.what(),
                  "PMBusError: VOUT_MODE contains unsupported data format");
 }
 
+TEST(PMBusErrorTests, GetDeviceID)
+{
+    PMBusError error(
+        "VOUT_MODE contains unsupported data format", "vdd_reg",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getDeviceID(), "vdd_reg");
+}
+
+TEST(PMBusErrorTests, GetInventoryPath)
+{
+    PMBusError error(
+        "VOUT_MODE contains unsupported data format", "vdd_reg",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getInventoryPath(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+}
+
 TEST(PMBusErrorTests, What)
 {
-    PMBusError error("Unable to convert value to linear data format");
+    PMBusError error(
+        "VOUT_MODE contains unsupported data format", "vdd_reg",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
     EXPECT_STREQ(error.what(),
-                 "PMBusError: Unable to convert value to linear data format");
+                 "PMBusError: VOUT_MODE contains unsupported data format");
 }

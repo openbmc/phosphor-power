@@ -38,7 +38,7 @@ bool PMBusWriteVoutCommandAction::execute(ActionEnvironment& environment)
         i2c::I2CInterface& interface = getI2CInterface(environment);
 
         // Get exponent value for converting volts value to linear format
-        int8_t exponentValue = getExponentValue(interface);
+        int8_t exponentValue = getExponentValue(environment, interface);
 
         // Convert volts value to linear data format
         uint16_t linearValue =
@@ -92,8 +92,8 @@ std::string PMBusWriteVoutCommandAction::toString() const
     return ss.str();
 }
 
-int8_t
-    PMBusWriteVoutCommandAction::getExponentValue(i2c::I2CInterface& interface)
+int8_t PMBusWriteVoutCommandAction::getExponentValue(
+    ActionEnvironment& environment, i2c::I2CInterface& interface)
 {
     // Check if an exponent value is defined for this action
     if (exponent.has_value())
@@ -113,7 +113,9 @@ int8_t
     // Verify format is linear; other formats not currently supported
     if (format != pmbus_utils::VoutDataFormat::linear)
     {
-        throw PMBusError("VOUT_MODE contains unsupported data format");
+        throw PMBusError("VOUT_MODE contains unsupported data format",
+                         environment.getDeviceID(),
+                         environment.getDevice().getFRU());
     }
 
     // Return parameter value; it contains the exponent when format is linear
