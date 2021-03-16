@@ -78,6 +78,13 @@ void PSUManager::getJSONProperties(const std::string& path)
     }
 }
 
+void PSUManager::populateSysProperties(util::DbusPropertyMap properties)
+{
+    uint64_t* count = std::get_if<uint64_t>(&properties[maxCountProp]);
+
+    sysProperties.maxPowerSupplies = *count;
+}
+
 void PSUManager::getSystemProperties()
 {
     // Subscribe to InterfacesAdded before doing a property read, otherwise
@@ -91,30 +98,22 @@ void PSUManager::getSystemProperties()
         std::bind(&PSUManager::supportedConfIfaceAdded, this,
                   std::placeholders::_1));
 
-    uint64_t maxCount;
     try
     {
         util::DbusSubtree subtree =
             util::getSubTree(bus, INVENTORY_OBJ_PATH, supportedConfIntf, 0);
-        auto objectIt = subtree.cbegin();
-        if (objectIt == subtree.cend())
+        if (subtree.empty())
         {
             throw std::runtime_error("Supported Configuration Not Found");
         }
-        std::string objPath = objectIt->first;
-        auto serviceIt = objectIt->second.cbegin();
-        if (serviceIt != objectIt->second.cend())
-        {
-            std::string service = serviceIt->first;
-            if (!service.empty())
-            {
-                util::getProperty<uint64_t>(supportedConfIntf, maxCountProp,
-                                            objPath, service, bus, maxCount);
-                sysProperties.maxPowerSupplies = maxCount;
 
-                // Don't need the match anymore
-                entityManagerIfacesAddedMatch.reset();
-            }
+        for (const auto& object : subtree)
+        {
+            std::string objPath = object.first;
+            std::string service = object.second.begin()->first;
+            auto properties = util::getAllProperties(bus, service, objPath,
+                                                     supportedConfIntf);
+            populateSysProperties(properties);
         }
     }
     catch (std::exception& e)
@@ -129,7 +128,7 @@ void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
     try
     {
         sdbusplus::message::object_path objPath;
-        std::map<std::string, std::map<std::string, std::variant<uint64_t>>>
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         msg.read(objPath, interfaces);
 
@@ -139,14 +138,7 @@ void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
             return;
         }
 
-        auto itProp = itIntf->second.find(maxCountProp);
-        if (itProp != itIntf->second.cend())
-        {
-            sysProperties.maxPowerSupplies = std::get<0>(itProp->second);
-
-            // Don't need the match anymore
-            entityManagerIfacesAddedMatch.reset();
-        }
+        populateSysProperties(itIntf->second);
     }
     catch (std::exception& e)
     {
