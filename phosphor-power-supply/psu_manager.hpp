@@ -208,6 +208,13 @@ class PSUManager
     }
 
     /**
+     * @brief Helper function to populate the system properties
+     *
+     * @param[in] properties - A map of property names and values
+     */
+    void populateSysProperties(const util::DbusPropertyMap& properties);
+
+    /**
      * @brief The system properties.
      */
     sys_properties sysProperties;
