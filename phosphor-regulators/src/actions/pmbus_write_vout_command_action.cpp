@@ -161,7 +161,8 @@ void PMBusWriteVoutCommandAction::verifyWrite(ActionEnvironment& environment,
         ss << "device: " << environment.getDeviceID()
            << ", register: VOUT_COMMAND, value_written: 0x" << std::hex
            << std::uppercase << valueWritten << ", value_read: 0x" << valueRead;
-        throw WriteVerificationError(ss.str());
+        throw WriteVerificationError(ss.str(), environment.getDeviceID(),
+                                     environment.getDevice().getFRU());
     }
 }
 

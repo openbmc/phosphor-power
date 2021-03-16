@@ -21,18 +21,44 @@ using namespace phosphor::power::regulators;
 
 TEST(WriteVerificationErrorTests, Constructor)
 {
-    WriteVerificationError error("device: vdd1, register: 0x21, "
-                                 "value_written: 0xAD, value_read: 0x00");
+    WriteVerificationError error(
+        "device: vdd1, register: 0x21, value_written: 0xAD, value_read: 0x00",
+        "vdd1",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getDeviceID(), "vdd1");
+    EXPECT_EQ(error.getInventoryPath(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
     EXPECT_STREQ(error.what(),
                  "WriteVerificationError: device: vdd1, register: 0x21, "
                  "value_written: 0xAD, value_read: 0x00");
 }
 
+TEST(WriteVerificationErrorTests, GetDeviceID)
+{
+    WriteVerificationError error(
+        "device: vdd1, register: 0x21, value_written: 0xAD, value_read: 0x00",
+        "vdd1",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getDeviceID(), "vdd1");
+}
+
+TEST(WriteVerificationErrorTests, GetInventoryPath)
+{
+    WriteVerificationError error(
+        "device: vdd1, register: 0x21, value_written: 0xAD, value_read: 0x00",
+        "vdd1",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+    EXPECT_EQ(error.getInventoryPath(),
+              "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
+}
+
 TEST(WriteVerificationErrorTests, What)
 {
-    WriteVerificationError error("device: vdd2, register: 0x21, "
-                                 "value_written: 0x32, value_read: 0x33");
+    WriteVerificationError error(
+        "device: vdd1, register: 0x21, value_written: 0xAD, value_read: 0x00",
+        "vdd1",
+        "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2");
     EXPECT_STREQ(error.what(),
-                 "WriteVerificationError: device: vdd2, register: 0x21, "
-                 "value_written: 0x32, value_read: 0x33");
+                 "WriteVerificationError: device: vdd1, register: 0x21, "
+                 "value_written: 0xAD, value_read: 0x00");
 }

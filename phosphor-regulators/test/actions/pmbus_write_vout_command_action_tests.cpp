@@ -554,6 +554,9 @@ TEST(PMBusWriteVoutCommandActionTests, Execute)
                 we.what(),
                 "WriteVerificationError: device: reg1, register: VOUT_COMMAND, "
                 "value_written: 0x14D, value_read: 0x14C");
+            EXPECT_EQ(we.getDeviceID(), "reg1");
+            EXPECT_EQ(we.getInventoryPath(), "/xyz/openbmc_project/inventory/"
+                                             "system/chassis/motherboard/reg1");
         }
         catch (...)
         {
