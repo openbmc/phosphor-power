@@ -63,6 +63,20 @@ std::string getService(const std::string& path, const std::string& interface,
     return response.begin()->first;
 }
 
+DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
+                                 const std::string& service,
+                                 const std::string& path,
+                                 const std::string& interface)
+{
+    DbusPropertyMap properties;
+    auto method = bus.new_method_call(service.c_str(), path.c_str(),
+                                      PROPERTY_INTF, "GetAll");
+    method.append(interface);
+    auto reply = bus.call(method);
+    reply.read(properties);
+    return properties;
+}
+
 DbusSubtree getSubTree(sdbusplus::bus::bus& bus, const std::string& path,
                        const std::string& interface, int32_t depth)
 {
