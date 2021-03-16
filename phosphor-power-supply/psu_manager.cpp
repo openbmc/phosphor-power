@@ -13,7 +13,6 @@ namespace phosphor::power::manager
 
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
-constexpr auto maxCountProp = "MaxCount";
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                        const std::string& configfile) :
@@ -91,30 +90,33 @@ void PSUManager::getSystemProperties()
         std::bind(&PSUManager::supportedConfIfaceAdded, this,
                   std::placeholders::_1));
 
-    uint64_t maxCount;
     try
     {
         util::DbusSubtree subtree =
             util::getSubTree(bus, INVENTORY_OBJ_PATH, supportedConfIntf, 0);
-        auto objectIt = subtree.cbegin();
-        if (objectIt == subtree.cend())
+        if (subtree.empty())
         {
             throw std::runtime_error("Supported Configuration Not Found");
         }
-        std::string objPath = objectIt->first;
-        auto serviceIt = objectIt->second.cbegin();
-        if (serviceIt != objectIt->second.cend())
+        for (const auto& object : subtree)
         {
-            std::string service = serviceIt->first;
-            if (!service.empty())
+            std::string objPath = object.first;
+            std::string service = object.second.begin()->first;
+            auto properties = util::getAllProperties(bus, service, objPath,
+                                                     supportedConfIntf);
+            std::string* supportedType =
+                std::get_if<std::string>(&properties["SupportedType"]);
+            if (supportedType != nullptr)
+            if (*supportedType != "PowerSupply")
             {
-                util::getProperty<uint64_t>(supportedConfIntf, maxCountProp,
-                                            objPath, service, bus, maxCount);
-                sysProperties.maxPowerSupplies = maxCount;
-
-                // Don't need the match anymore
-                entityManagerIfacesAddedMatch.reset();
+                continue;
             }
+            uint64_t* count =
+                std::get_if<uint64_t>(&properties["RedundantCount"]);
+            sysProperties.maxPowerSupplies = *count;
+
+            // Don't need the match anymore
+            entityManagerIfacesAddedMatch.reset();
         }
     }
     catch (std::exception& e)
@@ -129,7 +131,7 @@ void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
     try
     {
         sdbusplus::message::object_path objPath;
-        std::map<std::string, std::map<std::string, std::variant<uint64_t>>>
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         msg.read(objPath, interfaces);
 
@@ -139,14 +141,19 @@ void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
             return;
         }
 
-        auto itProp = itIntf->second.find(maxCountProp);
-        if (itProp != itIntf->second.cend())
+        std::string* supportedType =
+            std::get_if<std::string>(&itIntf->second["SupportedType"]);
+        if (supportedType != nullptr)
+        if (*supportedType != "PowerSupply")
         {
-            sysProperties.maxPowerSupplies = std::get<0>(itProp->second);
-
-            // Don't need the match anymore
-            entityManagerIfacesAddedMatch.reset();
+            return;
         }
+        uint64_t* count =
+            std::get_if<uint64_t>(&itIntf->second["RedundantCount"]);
+        sysProperties.maxPowerSupplies = *count;
+
+        // Don't need the match anymore
+        entityManagerIfacesAddedMatch.reset();
     }
     catch (std::exception& e)
     {
