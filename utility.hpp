@@ -23,11 +23,15 @@ constexpr auto POWEROFF_TARGET = "obmc-chassis-hard-poweroff@0.target";
 constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
 
 using DbusPath = std::string;
+using DbusProperty = std::string;
 using DbusService = std::string;
 using DbusInterface = std::string;
 using DbusInterfaceList = std::vector<DbusInterface>;
 using DbusSubtree =
     std::map<DbusPath, std::map<DbusService, DbusInterfaceList>>;
+using DbusVariant =
+    std::variant<uint64_t, std::string, std::vector<std::string>>;
+using DbusPropertyMap = std::map<DbusProperty, DbusVariant>;
 /**
  * @brief Get the service name from the mapper for the
  *        interface and path passed in.
@@ -94,6 +98,21 @@ void setProperty(const std::string& interface, const std::string& propertyName,
 
     auto reply = bus.call(method);
 }
+
+/**
+ * @brief Get all D-Bus properties
+ *
+ * @param[in] bus - the D-Bus object
+ * @param[in] path - the D-Bus object path
+ * @param[in] interface - the D-Bus interface name
+ * @param[in] service - the D-Bus service name (optional)
+ *
+ * @return DbusPropertyMap - Map of property names and values
+ */
+DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
+                                 const std::string& path,
+                                 const std::string& interface,
+                                 const std::string& service = std::string());
 
 /** @brief Get subtree from the object mapper.
  *
