@@ -19,6 +19,13 @@
 namespace phosphor::power::regulators::exception_utils
 {
 
+std::vector<std::exception_ptr> getExceptions(std::exception_ptr eptr)
+{
+    std::vector<std::exception_ptr> exceptions;
+    internal::getExceptions(eptr, exceptions);
+    return exceptions;
+}
+
 std::vector<std::string> getMessages(const std::exception& e)
 {
     std::vector<std::string> messages{};
@@ -28,6 +35,30 @@ std::vector<std::string> getMessages(const std::exception& e)
 
 namespace internal
 {
+
+void getExceptions(std::exception_ptr eptr,
+                   std::vector<std::exception_ptr>& exceptions)
+{
+    // Verify exception pointer is not null
+    if (eptr)
+    {
+        // If this exception is nested, add inner exception(s) to vector
+        try
+        {
+            std::rethrow_exception(eptr);
+        }
+        catch (const std::nested_exception& e)
+        {
+            getExceptions(e.nested_ptr(), exceptions);
+        }
+        catch (...)
+        {
+        }
+
+        // Append this exception to vector
+        exceptions.emplace_back(eptr);
+    }
+}
 
 void getMessages(const std::exception& e, std::vector<std::string>& messages)
 {

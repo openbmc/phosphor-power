@@ -30,6 +30,21 @@ namespace phosphor::power::regulators::exception_utils
 {
 
 /**
+ * Returns a vector containing the specified exception and any nested inner
+ * exceptions.
+ *
+ * If the exception contains nested inner exceptions, the returned vector will
+ * be ordered from innermost exception to outermost exception.
+ *
+ * This function makes it easier to handle nested exceptions.  You can iterate
+ * over them in a simple loop instead of writing a recursive function.
+ *
+ * @param eptr exception pointer
+ * @return vector of exceptions, from innermost to outermost
+ */
+std::vector<std::exception_ptr> getExceptions(std::exception_ptr eptr);
+
+/**
  * Gets the error messages from the specified exception and any nested inner
  * exceptions.
  *
@@ -47,6 +62,19 @@ std::vector<std::string> getMessages(const std::exception& e);
  */
 namespace internal
 {
+
+/**
+ * Builds a vector containing the specified exception and any nested inner
+ * exceptions.
+ *
+ * Stores the exceptions in the specified vector, from innermost exception to
+ * outermost exception.
+ *
+ * @param eptr exception pointer
+ * @param exceptions vector where exceptions will be stored
+ */
+void getExceptions(std::exception_ptr eptr,
+                   std::vector<std::exception_ptr>& exceptions);
 
 /**
  * Gets the error messages from the specified exception and any nested inner
