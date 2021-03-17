@@ -15,46 +15,71 @@
  */
 #include "error_history.hpp"
 
-#include <cstdint>
-
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
 
+TEST(ErrorHistoryTests, ErrorType)
+{
+    EXPECT_EQ(static_cast<int>(ErrorType::internal), 3);
+    EXPECT_EQ(static_cast<int>(ErrorType::numTypes), 6);
+}
+
 TEST(ErrorHistoryTests, Constructor)
 {
     ErrorHistory history{};
-    EXPECT_EQ(history.count, 0);
-    EXPECT_EQ(history.wasLogged, false);
+    EXPECT_FALSE(history.wasLogged(ErrorType::configFile));
+    EXPECT_FALSE(history.wasLogged(ErrorType::dbus));
+    EXPECT_FALSE(history.wasLogged(ErrorType::i2c));
+    EXPECT_FALSE(history.wasLogged(ErrorType::internal));
+    EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
+    EXPECT_FALSE(history.wasLogged(ErrorType::writeVerification));
 }
 
 TEST(ErrorHistoryTests, Clear)
 {
     ErrorHistory history{};
-    history.count = 23;
-    history.wasLogged = true;
+
+    history.setWasLogged(ErrorType::configFile, true);
+    history.setWasLogged(ErrorType::dbus, true);
+    history.setWasLogged(ErrorType::i2c, true);
+    history.setWasLogged(ErrorType::internal, true);
+    history.setWasLogged(ErrorType::pmbus, true);
+    history.setWasLogged(ErrorType::writeVerification, true);
+
+    EXPECT_TRUE(history.wasLogged(ErrorType::configFile));
+    EXPECT_TRUE(history.wasLogged(ErrorType::dbus));
+    EXPECT_TRUE(history.wasLogged(ErrorType::i2c));
+    EXPECT_TRUE(history.wasLogged(ErrorType::internal));
+    EXPECT_TRUE(history.wasLogged(ErrorType::pmbus));
+    EXPECT_TRUE(history.wasLogged(ErrorType::writeVerification));
+
     history.clear();
-    EXPECT_EQ(history.count, 0);
-    EXPECT_EQ(history.wasLogged, false);
+
+    EXPECT_FALSE(history.wasLogged(ErrorType::configFile));
+    EXPECT_FALSE(history.wasLogged(ErrorType::dbus));
+    EXPECT_FALSE(history.wasLogged(ErrorType::i2c));
+    EXPECT_FALSE(history.wasLogged(ErrorType::internal));
+    EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
+    EXPECT_FALSE(history.wasLogged(ErrorType::writeVerification));
 }
 
-TEST(ErrorHistoryTests, IncrementCount)
+TEST(ErrorHistoryTests, SetWasLogged)
 {
     ErrorHistory history{};
+    EXPECT_FALSE(history.wasLogged(ErrorType::dbus));
+    history.setWasLogged(ErrorType::dbus, true);
+    EXPECT_TRUE(history.wasLogged(ErrorType::dbus));
+    history.setWasLogged(ErrorType::dbus, false);
+    EXPECT_FALSE(history.wasLogged(ErrorType::dbus));
+}
 
-    // Test where count is not near the max
-    EXPECT_EQ(history.count, 0);
-    history.incrementCount();
-    EXPECT_EQ(history.count, 1);
-    history.incrementCount();
-    EXPECT_EQ(history.count, 2);
-
-    // Test where count is near the max.  Verify it does not wrap/overflow.
-    history.count = SIZE_MAX - 2;
-    history.incrementCount();
-    EXPECT_EQ(history.count, SIZE_MAX - 1);
-    history.incrementCount();
-    EXPECT_EQ(history.count, SIZE_MAX);
-    history.incrementCount();
-    EXPECT_EQ(history.count, SIZE_MAX);
+TEST(ErrorHistoryTests, WasLogged)
+{
+    ErrorHistory history{};
+    EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
+    history.setWasLogged(ErrorType::pmbus, true);
+    EXPECT_TRUE(history.wasLogged(ErrorType::pmbus));
+    history.setWasLogged(ErrorType::pmbus, false);
+    EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
 }

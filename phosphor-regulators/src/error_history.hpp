@@ -15,21 +15,36 @@
  */
 #pragma once
 
-#include <cstddef>
-#include <cstdint>
+#include <bitset>
 
 namespace phosphor::power::regulators
 {
 
 /**
+ * @enum ErrorType
+ *
+ * The error types tracked by the ErrorHistory class.
+ *
+ * The enumerators must have consecutive integer values that start at 0.  The
+ * value of the last enumerator must be the number of error types.
+ */
+enum class ErrorType
+{
+    configFile = 0,
+    dbus = 1,
+    i2c = 2,
+    internal = 3,
+    pmbus = 4,
+    writeVerification = 5,
+    numTypes = 6
+};
+
+/**
  * @class ErrorHistory
  *
- * This class represents the history of an error.
+ * History of which error types have been logged.
  *
- * ErrorHistory tracks the error count and whether the error has been logged.
- *
- * This class is often used to limit the number of journal messages and error
- * logs created by code that runs repeatedly, such as sensor monitoring.
+ * The class is used to avoid creating duplicate error log entries.
  */
 class ErrorHistory
 {
@@ -44,36 +59,51 @@ class ErrorHistory
 
     /**
      * Clears the error history.
+     *
+     * Sets all error types to a 'not logged' state.
      */
     void clear()
     {
-        count = 0;
-        wasLogged = false;
+        // Set all bits to false
+        history.reset();
     }
 
     /**
-     * Increments the error count.
+     * Sets whether the specified error type has been logged.
      *
-     * Does nothing if the error count is already at the maximum.  This avoids
-     * wrapping back to 0 again.
+     * @param errorType error type
+     * @param wasLogged indicates whether an error was logged
      */
-    void incrementCount()
+    void setWasLogged(ErrorType errorType, bool wasLogged)
     {
-        if (count < SIZE_MAX)
-        {
-            ++count;
-        }
+        // Set bit value for the specified error type
+        history[static_cast<int>(errorType)] = wasLogged;
     }
 
     /**
-     * Error count.
+     * Returns whether the specified error type has been logged.
+     *
+     * @param errorType error type
+     * @return whether specified error type was logged
      */
-    std::size_t count{0};
+    bool wasLogged(ErrorType errorType) const
+    {
+        // Return bit value for the specified error type
+        return history[static_cast<int>(errorType)];
+    }
 
+  private:
     /**
-     * Indicates whether this error was logged, resulting in an error log entry.
+     * Bitset used to track which error types have been logged.
+     *
+     * Each bit indicates whether one error type was logged.
+     *
+     * Each ErrorType enum value is the position of the corresponding bit in the
+     * bitset.
+     *
+     * The numTypes enum value is the number of bits needed in the bitset.
      */
-    bool wasLogged{false};
+    std::bitset<static_cast<int>(ErrorType::numTypes)> history{};
 };
 
 } // namespace phosphor::power::regulators
