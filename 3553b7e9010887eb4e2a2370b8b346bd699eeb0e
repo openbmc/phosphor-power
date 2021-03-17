@@ -137,6 +137,30 @@
       "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c60cf72_7c711b07",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-17T17:42:39Z",
+      "side": 1,
+      "message": "Removing the bus parameter, it is not needed.",
+      "parentUuid": "99de58a0_f405cc11",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 51
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
