@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e26b9aa9_f218e847",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-17T21:08:51Z",
+      "side": 1,
+      "message": "can make this a const reference to avoid the copy.  Alternatively, could do:\n\nfor (const auto\u0026 [objPath, services] : subtree)",
+      "range": {
+        "startLine": 112,
+        "startChar": 12,
+        "endLine": 112,
+        "endChar": 24
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0695948_fca62ceb",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-17T21:08:51Z",
+      "side": 1,
+      "message": "Could be a reference?\n\nThough maybe not const since you use [] and it isn\u0027t const.",
+      "range": {
+        "startLine": 214,
+        "startChar": 31,
+        "endLine": 214,
+        "endChar": 53
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
