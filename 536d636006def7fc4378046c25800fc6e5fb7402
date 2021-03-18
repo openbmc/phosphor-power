@@ -22,6 +22,30 @@
       "revId": "536d636006def7fc4378046c25800fc6e5fb7402",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74da62f3_c07de55e",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-18T13:40:06Z",
+      "side": 1,
+      "message": "I understand what you are saying George, but there are performance advantages to the way Adriana implemented it.\n\nD-Bus calls are fairly slow/expensive, so we should try to avoid unnecessary ones where possible.  If the caller has to call getAllProperties() multiple times for the same service, it would be better to do the following:\n* Call getService() once\n* Call getAllProperties() multiple times, passing in the service name\n\nYou can certainly push up a commit with a second overload of getAllProperties() that automatically finds the service.  Then callers can choose the overload the fits their needs.",
+      "parentUuid": "b59def8d_38fac5dc",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 22
+      },
+      "revId": "536d636006def7fc4378046c25800fc6e5fb7402",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
