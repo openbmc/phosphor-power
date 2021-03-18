@@ -187,7 +187,7 @@ class PSUManager
      *
      * @param[in] msg - Data associated with the interfaces added signal
      */
-    void supportedConfIfaceAdded(sdbusplus::message::message& msg);
+    void entityManagerIfaceAdded(sdbusplus::message::message& msg);
 
     /**
      * @brief Adds properties to the inventory.
