@@ -22,6 +22,16 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
     // Parse out the JSON properties
     sysProperties = {0};
     getJSONProperties(configfile);
+    // Subscribe to InterfacesAdded before doing a property read, otherwise
+    // the interface could be created after the read attempt but before the
+    // match is created.
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAdded() +
+            sdbusplus::bus::match::rules::sender(
+                "xyz.openbmc_project.EntityManager"),
+        std::bind(&PSUManager::supportedConfIfaceAdded, this,
+                  std::placeholders::_1));
     getSystemProperties();
 
     using namespace sdeventplus;
@@ -80,16 +90,6 @@ void PSUManager::getJSONProperties(const std::string& path)
 
 void PSUManager::getSystemProperties()
 {
-    // Subscribe to InterfacesAdded before doing a property read, otherwise
-    // the interface could be created after the read attempt but before the
-    // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAdded() +
-            sdbusplus::bus::match::rules::sender(
-                "xyz.openbmc_project.EntityManager"),
-        std::bind(&PSUManager::supportedConfIfaceAdded, this,
-                  std::placeholders::_1));
 
     uint64_t maxCount;
     try
