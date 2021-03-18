@@ -30,7 +30,7 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
         sdbusplus::bus::match::rules::interfacesAdded() +
             sdbusplus::bus::match::rules::sender(
                 "xyz.openbmc_project.EntityManager"),
-        std::bind(&PSUManager::supportedConfIfaceAdded, this,
+        std::bind(&PSUManager::entityManagerIfaceAdded, this,
                   std::placeholders::_1));
     getSystemProperties();
 
@@ -124,7 +124,7 @@ void PSUManager::getSystemProperties()
     }
 }
 
-void PSUManager::supportedConfIfaceAdded(sdbusplus::message::message& msg)
+void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
 {
     try
     {
