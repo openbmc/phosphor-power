@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "43bf57ec_819683d1",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-18T18:45:12Z",
+      "side": 1,
+      "message": "Done. Added try/catch. I didn\u0027t see the daemon hang if property didn\u0027t exist, but agree on adding a check anyways, went with a loop of properties since we\u0027re going to add reading more than the psu count.",
+      "parentUuid": "ac252e0d_062ea9fc",
+      "range": {
+        "startLine": 83,
+        "startChar": 45,
+        "endLine": 83,
+        "endChar": 69
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9218693e_ea1290fb",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "fd36c97b_2c8868d6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-18T18:45:12Z",
+      "side": 1,
+      "message": "Done. Yeah, shouldn\u0027t assume it\u0027s always populated.",
+      "parentUuid": "16a6830a_1f9dd59b",
+      "range": {
+        "startLine": 85,
+        "startChar": 37,
+        "endLine": 85,
+        "endChar": 43
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e26b9aa9_f218e847",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "a3045bae_f9a36803",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-18T18:45:12Z",
+      "side": 1,
+      "message": "Done. Yep, good point, that works.",
+      "parentUuid": "e26b9aa9_f218e847",
+      "range": {
+        "startLine": 112,
+        "startChar": 12,
+        "endLine": 112,
+        "endChar": 24
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09a77513_e953237a",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -133,6 +205,24 @@
       "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387ba525_a7323f64",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-18T18:45:12Z",
+      "side": 1,
+      "message": "Done. I was assuming that the subtree would be empty if the interface didn\u0027t exist, but I guess it can still have an object path with empty services, so adding a check.",
+      "parentUuid": "09a77513_e953237a",
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +246,30 @@
       "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "881b53bf_989ac97c",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-18T18:45:12Z",
+      "side": 1,
+      "message": "Done. Yeah, good point.",
+      "parentUuid": "e0695948_fca62ceb",
+      "range": {
+        "startLine": 214,
+        "startChar": 31,
+        "endLine": 214,
+        "endChar": 53
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
