@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ac252e0d_062ea9fc",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-18T14:25:52Z",
+      "side": 1,
+      "message": "You could handle the \"not found\" case and also enable the parameter to be a const DbusPropertyMap\u0026 if you use find() instead.\n\ne.g.\n  auto propIt \u003d properties.find(maxCountProp);\n  if (propIt !\u003d properties.end())",
+      "parentUuid": "f0db3bb2_54d6e9f6",
+      "range": {
+        "startLine": 83,
+        "startChar": 45,
+        "endLine": 83,
+        "endChar": 69
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9218693e_ea1290fb",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2021-03-18T01:50:53Z",
       "side": 1,
       "message": "I think you need to check if count is null?",
+      "range": {
+        "startLine": 85,
+        "startChar": 37,
+        "endLine": 85,
+        "endChar": 43
+      },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16a6830a_1f9dd59b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-18T14:25:52Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "9218693e_ea1290fb",
       "range": {
         "startLine": 85,
         "startChar": 37,
@@ -65,6 +113,23 @@
         "endLine": 112,
         "endChar": 24
       },
+      "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a77513_e953237a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-18T14:25:52Z",
+      "side": 1,
+      "message": "The old code did two additional checks:\n* Verify map of service names -\u003e interfaces is not empty\n* Verify service name is not empty (\"\")\n\nAre these not necessary due to the way the mapper works?",
       "revId": "c975580adb57db1d5bbd2c2016759ed9a5d25dc5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
