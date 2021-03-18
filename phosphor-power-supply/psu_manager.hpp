@@ -181,13 +181,14 @@ class PSUManager
     void powerStateChanged(sdbusplus::message::message& msg);
 
     /**
-     * @brief Callback for supported configuration interface added
+     * @brief Callback for entity-manager interface added
      *
-     * Process the information from the supported configuration interface
+     * Process the information from the supported configuration and or IBM CFFPS
+     * Connector interface being added.
      *
      * @param[in] msg - Data associated with the interfaces added signal
      */
-    void supportedConfIfaceAdded(sdbusplus::message::message& msg);
+    void entityManagerIfaceAdded(sdbusplus::message::message& msg);
 
     /**
      * @brief Adds properties to the inventory.
