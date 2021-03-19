@@ -119,6 +119,29 @@
     },
     {
       "key": {
+        "uuid": "d44f88cf_c9bc14b3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T17:17:27Z",
+      "side": 1,
+      "message": "Working on the interfaces added stuff and realized that I don\u0027t need to be passing the psus around, as it is a member variable.\n\nI then realized that I end up using IBMCFFPSInterface in the function to handle the interfaces added, so move that up to be a constant in this namespace, and now it doesn\u0027t make sense to be passing the interface around either!",
+      "range": {
+        "startLine": 113,
+        "startChar": 30,
+        "endLine": 114,
+        "endChar": 51
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5a68f9fd_66d46ae0",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 6
