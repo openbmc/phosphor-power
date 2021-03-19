@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3581fd4d_bac2b2af",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T22:26:27Z",
+      "side": 1,
+      "message": "Ruh roh... rebase debacle...",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "fac18592c0a0fdc6eef1487d1c6ccf346e236653",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
