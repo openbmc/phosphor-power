@@ -10,6 +10,7 @@ phosphor_regulators_library_source_files = [
     'configuration.cpp',
     'device.cpp',
     'error_logging.cpp',
+    'error_logging_utils.cpp',
     'exception_utils.cpp',
     'ffdc_file.cpp',
     'id_map.cpp',
