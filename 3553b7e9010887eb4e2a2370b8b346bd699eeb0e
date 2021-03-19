@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3350c656_bc93763b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T22:24:30Z",
+      "side": 1,
+      "message": "Re-worked to allow adding/getting via interfaces added signal.",
+      "parentUuid": "b28ee1d4_5a27c305",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 29
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d44f88cf_c9bc14b3",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 6
@@ -162,6 +186,30 @@
       "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b43ec7_01fde721",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T22:24:30Z",
+      "side": 1,
+      "message": "Handled via entityManagerIfaceAdded().",
+      "parentUuid": "5a68f9fd_66d46ae0",
+      "range": {
+        "startLine": 120,
+        "startChar": 40,
+        "endLine": 120,
+        "endChar": 49
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -212,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "8000f5c6_c0a7ec03",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T22:24:30Z",
+      "side": 1,
+      "message": "Adriana needed a getAllProperties(), so rebased on top of that.",
+      "parentUuid": "5e3fb731_2a937469",
+      "range": {
+        "startLine": 136,
+        "startChar": 8,
+        "endLine": 141,
+        "endChar": 42
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99de58a0_f405cc11",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 6
@@ -247,6 +319,30 @@
       "side": 1,
       "message": "Removing the bus parameter, it is not needed.",
       "parentUuid": "99de58a0_f405cc11",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 51
+      },
+      "revId": "3553b7e9010887eb4e2a2370b8b346bd699eeb0e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f1f2b25_0344560d",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-19T22:24:30Z",
+      "side": 1,
+      "message": "This got re-swizzled to make it work better with interfaces added.",
+      "parentUuid": "9c60cf72_7c711b07",
       "range": {
         "startLine": 72,
         "startChar": 26,
