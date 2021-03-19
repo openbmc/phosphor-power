@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0f66b4b_744918c5",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2021-03-19T02:38:01Z",
+      "side": 1,
+      "message": "I think use `for` is redundant if you used `try-catch`.\nAlso, we only need to catch `properties[maxCountProp]`, Right?\n\n```\nuint64_t count \u003d 0;\ntry\n{\n  auto countPtr \u003d std::get_if\u003cuint64_t\u003e(\u0026properties[maxCountProp]);\n  if (conntPtr)\n  {\n    count \u003d *countPtr;\n  }\n}\ncatch (std::exception\u0026 e)\n{\n}\n\nsysProperties.maxPowerSupplies \u003d count;\n```",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
