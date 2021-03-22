@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90ebc77d_eacf2cef",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-03-22T17:31:36Z",
+      "side": 1,
+      "message": "Might want to add\n  \u0026\u0026 (!psuname-\u003eempty())\n\nOtherwise, as I noted in a previous review, if psuname \u003d\u003d \"\", psuname-\u003eback() behavior is undefined and could throw an exception or return garbage memory.",
+      "revId": "60e95c4f07c57738c77486f63c5ac2c4b0b6dc5a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
