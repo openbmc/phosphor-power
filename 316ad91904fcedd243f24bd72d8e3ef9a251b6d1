@@ -22,6 +22,30 @@
       "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdf4b0d8_1eb5fd67",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-22T20:25:28Z",
+      "side": 1,
+      "message": "Done. Yeah agree that it\u0027s redundant. We\u0027re going to process more properties in a subsequent patch, such as input voltage and psu model name, so keeping the \u0027for loop\u0027 instead of the \u0027try-catch\u0027.",
+      "parentUuid": "f0f66b4b_744918c5",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
