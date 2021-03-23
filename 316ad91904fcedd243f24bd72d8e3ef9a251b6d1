@@ -46,6 +46,30 @@
       "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "387de0e4_8ae9a1ef",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2021-03-23T00:55:39Z",
+      "side": 1,
+      "message": "\u003e such as input voltage and psu model name\n\nI think the above code is enough to support all your properties, can you show an example?\nSorry, please correct me if I am wrong.",
+      "parentUuid": "bdf4b0d8_1eb5fd67",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
