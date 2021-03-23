@@ -70,6 +70,30 @@
       "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "450383e2_03fe214f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-23T19:42:16Z",
+      "side": 1,
+      "message": "I understand now. Yeah I can do a find on additional properties. Changed it to the try/catch block and will push the change to look for the additional properties, just need to clean it up.",
+      "parentUuid": "387de0e4_8ae9a1ef",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "316ad91904fcedd243f24bd72d8e3ef9a251b6d1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
