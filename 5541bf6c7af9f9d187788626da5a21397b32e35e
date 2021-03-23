@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "66d568e4_c043c861",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-23T23:12:13Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "90b5c72b_be8eea99",
+      "range": {
+        "startLine": 23,
+        "startChar": 45,
+        "endLine": 23,
+        "endChar": 51
+      },
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edf14ebf_4fe5f170",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 8
@@ -81,6 +105,24 @@
       "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e91508_d669b407",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-23T23:12:13Z",
+      "side": 1,
+      "message": "Made interfacesAdded like this one.",
+      "parentUuid": "e4306bbe_0b9e25d9",
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -175,6 +217,30 @@
       "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40975f07_97a32ac7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-03-23T23:12:13Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "96d9094a_d29e754b",
+      "range": {
+        "startLine": 195,
+        "startChar": 15,
+        "endLine": 196,
+        "endChar": 80
+      },
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
