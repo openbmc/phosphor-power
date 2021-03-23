@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47d31e14_4002e715",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-23T13:43:37Z",
+      "side": 1,
+      "message": "nit: there\u0027s no need to make something passed in by value a const, and you already have i2cbus non const",
+      "range": {
+        "startLine": 23,
+        "startChar": 45,
+        "endLine": 23,
+        "endChar": 51
+      },
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edf14ebf_4fe5f170",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-23T13:43:37Z",
+      "side": 1,
+      "message": "as a suggestion, you could make this callback along with the callback on line 44 consistent, so either make them both a lamba, or use std::bind for each.",
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5af4d439_b327462b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-23T13:43:37Z",
+      "side": 1,
+      "message": "map",
+      "range": {
+        "startLine": 138,
+        "startChar": 22,
+        "endLine": 138,
+        "endChar": 28
+      },
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6758f7a_3c2eaa9f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-23T13:43:37Z",
+      "side": 1,
+      "message": "do you care?",
+      "range": {
+        "startLine": 195,
+        "startChar": 15,
+        "endLine": 196,
+        "endChar": 80
+      },
+      "revId": "5541bf6c7af9f9d187788626da5a21397b32e35e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
