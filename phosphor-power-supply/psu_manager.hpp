@@ -12,6 +12,7 @@
 struct sys_properties
 {
     int maxPowerSupplies;
+    int inputVoltage;
 };
 
 using namespace phosphor::power::psu;
@@ -221,9 +222,10 @@ class PSUManager
     void populateSysProperties(const util::DbusPropertyMap& properties);
 
     /**
-     * @brief The system properties.
+     * @brief Map of supported PSU configurations that include the model name
+     * and their properties.
      */
-    sys_properties sysProperties;
+    std::multimap<std::string, sys_properties> supportedConfigs;
 
     /**
      * @brief The vector for power supplies.
