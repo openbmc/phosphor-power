@@ -20,6 +20,7 @@
 #include "action_utils.hpp"
 #include "chassis.hpp"
 #include "device.hpp"
+#include "error_logging_utils.hpp"
 #include "exception_utils.hpp"
 #include "rail.hpp"
 #include "system.hpp"
@@ -72,7 +73,9 @@ void Configuration::execute(Services& services, System& system,
         services.getJournal().logError(exception_utils::getMessages(e));
         services.getJournal().logError("Unable to configure " + deviceOrRailID);
 
-        // TODO: Create error log entry
+        // Create error log entry
+        error_logging_utils::logError(std::current_exception(),
+                                      Entry::Level::Warning, services);
     }
 }
 

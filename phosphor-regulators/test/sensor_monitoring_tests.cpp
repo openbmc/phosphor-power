@@ -19,6 +19,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "mock_action.hpp"
+#include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
@@ -43,6 +44,7 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::pmbus_utils;
 
 using ::testing::A;
+using ::testing::Ref;
 using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
@@ -128,18 +130,23 @@ TEST(SensorMonitoringTests, Execute)
 
     // Test where fails
     {
-        // Create mock services.  Expect logError() to be called.
+        // Create mock services.  Expect logError() and logI2CError() to be
+        // called.
         MockServices services{};
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
         std::vector<std::string> expectedErrMessagesException{
             "I2CException: Failed to write byte: bus /dev/i2c-1, addr 0x70",
             "ActionError: pmbus_read_sensor: { type: iout, command: 0x8C, "
             "format: linear_11 }"};
-
         EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
         EXPECT_CALL(journal,
                     logError("Unable to monitor sensors for rail vio2"))
+            .Times(1);
+        EXPECT_CALL(errorLogging,
+                    logI2CError(Entry::Level::Warning, Ref(journal),
+                                "/dev/i2c-1", 0x70, 0))
             .Times(1);
 
         // Create PMBusReadSensorAction

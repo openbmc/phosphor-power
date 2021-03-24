@@ -20,6 +20,7 @@
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
 #include "mock_action.hpp"
+#include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
@@ -43,6 +44,7 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::test_utils;
 
 using ::testing::A;
+using ::testing::Ref;
 using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
@@ -273,14 +275,20 @@ TEST(DeviceTests, Close)
             .WillOnce(Throw(
                 i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
 
-        // Create mock services.  Expect logError() to be called.
+        // Create mock services.  Expect logError() and logI2CError() to be
+        // called.
         MockServices services{};
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
         MockJournal& journal = services.getMockJournal();
         std::vector<std::string> expectedErrMessagesException{
             "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70"};
         EXPECT_CALL(journal, logError("Unable to close device vdd_reg"))
             .Times(1);
         EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        EXPECT_CALL(errorLogging,
+                    logI2CError(Entry::Level::Notice, Ref(journal),
+                                "/dev/i2c-1", 0x70, 0))
+            .Times(1);
 
         // Create Device
         Device device{

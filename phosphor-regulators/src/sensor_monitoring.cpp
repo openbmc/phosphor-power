@@ -20,6 +20,7 @@
 #include "action_utils.hpp"
 #include "chassis.hpp"
 #include "device.hpp"
+#include "error_logging_utils.hpp"
 #include "exception_utils.hpp"
 #include "rail.hpp"
 #include "system.hpp"
@@ -48,7 +49,10 @@ void SensorMonitoring::execute(Services& services, System& system,
         services.getJournal().logError("Unable to monitor sensors for rail " +
                                        rail.getID());
 
-        // TODO: Create error log entry
+        // Create error log entry
+        // TODO: Add ErrorHistory data member and specify as parameter below
+        error_logging_utils::logError(std::current_exception(),
+                                      Entry::Level::Warning, services);
     }
 }
 

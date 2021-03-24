@@ -19,6 +19,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "mock_action.hpp"
+#include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_presence_service.hpp"
 #include "mock_services.hpp"
@@ -26,6 +27,8 @@
 #include "presence_detection.hpp"
 #include "rule.hpp"
 #include "system.hpp"
+
+#include <sdbusplus/exception.hpp>
 
 #include <memory>
 #include <stdexcept>
@@ -39,8 +42,38 @@
 
 using namespace phosphor::power::regulators;
 
+using ::testing::Ref;
 using ::testing::Return;
 using ::testing::Throw;
+
+/**
+ * Concrete subclass of sdbusplus::exception_t abstract base class.
+ */
+class TestSDBusError : public sdbusplus::exception_t
+{
+  public:
+    TestSDBusError(const std::string& error) : error{error}
+    {
+    }
+
+    const char* what() const noexcept override
+    {
+        return error.c_str();
+    }
+
+    const char* name() const noexcept override
+    {
+        return "";
+    }
+
+    const char* description() const noexcept override
+    {
+        return "";
+    }
+
+  private:
+    const std::string error{};
+};
 
 /**
  * Creates the parent objects that normally contain a PresenceDetection object.
@@ -239,8 +272,7 @@ TEST(PresenceDetectionTests, Execute)
                     isPresent("/xyz/openbmc_project/inventory/system/chassis/"
                               "motherboard/cpu2"))
             .Times(1)
-            .WillOnce(
-                Throw(std::runtime_error{"DBusError: Invalid object path."}));
+            .WillOnce(Throw(TestSDBusError{"DBusError: Invalid object path."}));
 
         // Define expected journal messages that should be passed to MockJournal
         MockJournal& journal = services.getMockJournal();
@@ -252,6 +284,12 @@ TEST(PresenceDetectionTests, Execute)
         EXPECT_CALL(journal, logError(exceptionMessages)).Times(1);
         EXPECT_CALL(journal,
                     logError("Unable to determine presence of vdd_reg"))
+            .Times(1);
+
+        // Expect logDBusError() to be called
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging,
+                    logDBusError(Entry::Level::Warning, Ref(journal)))
             .Times(1);
 
         // Execute PresenceDetection.  Should return true when an error occurs.
