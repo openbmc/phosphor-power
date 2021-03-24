@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9331893b_e1275579",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-24T22:01:42Z",
+      "side": 1,
+      "message": "you could make this const now if you wanted",
+      "range": {
+        "startLine": 91,
+        "startChar": 39,
+        "endLine": 91,
+        "endChar": 43
+      },
+      "revId": "583b243a53307ca8ffb6f86794a2c93be4930a10",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
