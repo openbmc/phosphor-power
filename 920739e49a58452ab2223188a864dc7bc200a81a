@@ -46,6 +46,30 @@
       "revId": "920739e49a58452ab2223188a864dc7bc200a81a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4210b63d_dae0d910",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-03-24T22:46:34Z",
+      "side": 1,
+      "message": "yep could definitely be possible.  currently not a combination in rainier, but we shouldn\u0027t prevent them from doing that if they\u0027d like.",
+      "parentUuid": "a56bf9f0_316323fd",
+      "range": {
+        "startLine": 222,
+        "startChar": 4,
+        "endLine": 222,
+        "endChar": 17
+      },
+      "revId": "920739e49a58452ab2223188a864dc7bc200a81a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
