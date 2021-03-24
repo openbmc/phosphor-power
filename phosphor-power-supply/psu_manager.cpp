@@ -21,41 +21,6 @@ constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 constexpr auto maxCountProp = "MaxCount";
 
-PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
-                       const std::string& configfile) :
-    bus(bus)
-{
-    sysProperties = {0};
-    // Parse out the JSON properties
-    getJSONProperties(configfile);
-    // Subscribe to InterfacesAdded before doing a property read, otherwise
-    // the interface could be created after the read attempt but before the
-    // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAdded() +
-            sdbusplus::bus::match::rules::sender(
-                "xyz.openbmc_project.EntityManager"),
-        std::bind(&PSUManager::entityManagerIfaceAdded, this,
-                  std::placeholders::_1));
-    getSystemProperties();
-
-    using namespace sdeventplus;
-    auto interval = std::chrono::milliseconds(1000);
-    timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
-        e, std::bind(&PSUManager::analyze, this), interval);
-
-    // Subscribe to power state changes
-    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
-    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
-                                                        POWER_IFACE),
-        [this](auto& msg) { this->powerStateChanged(msg); });
-
-    initialize();
-}
-
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus)
 {
@@ -87,44 +52,6 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
         [this](auto& msg) { this->powerStateChanged(msg); });
 
     initialize();
-}
-
-void PSUManager::getJSONProperties(const std::string& path)
-{
-    nlohmann::json configFileJSON = util::loadJSONFromFile(path.c_str());
-
-    if (configFileJSON == nullptr)
-    {
-        throw std::runtime_error("Failed to load JSON configuration file");
-    }
-
-    if (!configFileJSON.contains("PowerSupplies"))
-    {
-        throw std::runtime_error("Missing required PowerSupplies");
-    }
-
-    for (auto psuJSON : configFileJSON["PowerSupplies"])
-    {
-        if (psuJSON.contains("Inventory") && psuJSON.contains("Bus") &&
-            psuJSON.contains("Address"))
-        {
-            std::string invpath = psuJSON["Inventory"];
-            std::uint8_t i2cbus = psuJSON["Bus"];
-            std::uint16_t i2caddr = static_cast<uint16_t>(psuJSON["Address"]);
-            auto psu =
-                std::make_unique<PowerSupply>(bus, invpath, i2cbus, i2caddr);
-            psus.emplace_back(std::move(psu));
-        }
-        else
-        {
-            log<level::ERR>("Insufficient PowerSupply properties");
-        }
-    }
-
-    if (psus.empty())
-    {
-        throw std::runtime_error("No power supplies to monitor");
-    }
 }
 
 void PSUManager::getPSUConfiguration()
