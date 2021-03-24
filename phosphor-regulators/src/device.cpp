@@ -17,6 +17,7 @@
 #include "device.hpp"
 
 #include "chassis.hpp"
+#include "error_logging_utils.hpp"
 #include "exception_utils.hpp"
 #include "system.hpp"
 
@@ -63,7 +64,9 @@ void Device::close(Services& services)
         services.getJournal().logError(exception_utils::getMessages(e));
         services.getJournal().logError("Unable to close device " + id);
 
-        // TODO: Create error log entry
+        // Create error log entry
+        error_logging_utils::logError(std::current_exception(),
+                                      Entry::Level::Notice, services);
     }
 }
 

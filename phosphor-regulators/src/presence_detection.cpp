@@ -20,6 +20,7 @@
 #include "action_utils.hpp"
 #include "chassis.hpp"
 #include "device.hpp"
+#include "error_logging_utils.hpp"
 #include "exception_utils.hpp"
 #include "system.hpp"
 
@@ -54,7 +55,9 @@ bool PresenceDetection::execute(Services& services, System& system,
             services.getJournal().logError("Unable to determine presence of " +
                                            device.getID());
 
-            // TODO: Create error log entry
+            // Create error log entry
+            error_logging_utils::logError(std::current_exception(),
+                                          Entry::Level::Warning, services);
         }
     }
 
