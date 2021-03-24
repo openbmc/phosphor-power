@@ -13,14 +13,12 @@ namespace phosphor::power::manager
 
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
-constexpr auto maxCountProp = "MaxCount";
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
                        const std::string& configfile) :
     bus(bus)
 {
     // Parse out the JSON properties
-    sysProperties = {0};
     getJSONProperties(configfile);
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
@@ -92,14 +90,54 @@ void PSUManager::populateSysProperties(util::DbusPropertyMap& properties)
 {
     try
     {
-        auto propIt = properties.find(maxCountProp);
+        auto propIt = properties.find("SupportedType");
+        if (propIt == properties.end())
+        {
+            return;
+        }
+        const std::string* type = std::get_if<std::string>(&(propIt->second));
+        if ((type == nullptr) || (*type != "PowerSupply"))
+        {
+            return;
+        }
+
+        std::vector<std::string> models;
+        propIt = properties.find("SupportedModel");
+        if (propIt == properties.end())
+        {
+            return;
+        }
+        const std::vector<std::string>* modelsPtr =
+            std::get_if<std::vector<std::string>>(&(propIt->second));
+        if (modelsPtr == nullptr)
+        {
+            return;
+        }
+        models = *modelsPtr;
+
+        sys_properties sys{0, 0};
+        propIt = properties.find("RedundantCount");
         if (propIt != properties.end())
         {
             const uint64_t* count = std::get_if<uint64_t>(&(propIt->second));
             if (count != nullptr)
             {
-                sysProperties.maxPowerSupplies = *count;
+                sys.maxPowerSupplies = *count;
             }
+        }
+        propIt = properties.find("InputVoltage");
+        if (propIt != properties.end())
+        {
+            const uint64_t* voltage = std::get_if<uint64_t>(&(propIt->second));
+            if (voltage != nullptr)
+            {
+                sys.inputVoltage = *voltage;
+            }
+        }
+
+        for (const auto& model : models)
+        {
+            supportedConfigs.insert(std::make_pair(model, sys));
         }
     }
     catch (std::exception& e)
