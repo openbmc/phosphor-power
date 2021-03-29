@@ -94,6 +94,30 @@
       "revId": "920739e49a58452ab2223188a864dc7bc200a81a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01ad204e_26df35c8",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-29T17:40:08Z",
+      "side": 1,
+      "message": "To catch that scenario, I see the check being:\nfound 51E9\n  required count \u003d 2 // True\n  required voltage \u003d 220 // False (one is 110)\n     Log error!",
+      "parentUuid": "c9c282ea_96a727ac",
+      "range": {
+        "startLine": 222,
+        "startChar": 4,
+        "endLine": 222,
+        "endChar": 17
+      },
+      "revId": "920739e49a58452ab2223188a864dc7bc200a81a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
