@@ -1,6 +1,9 @@
 #pragma once
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/sdbus.hpp>
+
+#include <chrono>
 
 namespace phosphor::power::regulators::control
 {
@@ -24,7 +27,10 @@ auto callMethod(const std::string& method, Args&&... args)
         bus.new_method_call(busName, objPath, interface, method.c_str());
     reqMsg.append(std::forward<Args>(args)...);
 
-    return bus.call(reqMsg);
+    // Set timeout to 6 minutes; some regulator methods take over 5 minutes
+    using namespace std::chrono_literals;
+    sdbusplus::SdBusDuration timeout{6min};
+    return bus.call(reqMsg, timeout);
 }
 
 } // namespace phosphor::power::regulators::control

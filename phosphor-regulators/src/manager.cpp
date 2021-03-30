@@ -29,6 +29,7 @@
 #include <exception>
 #include <functional>
 #include <map>
+#include <thread>
 #include <tuple>
 #include <utility>
 #include <variant>
@@ -43,6 +44,7 @@ constexpr auto managerObjPath = "/xyz/openbmc_project/power/regulators/manager";
 constexpr auto compatibleIntf =
     "xyz.openbmc_project.Configuration.IBMCompatibleSystem";
 constexpr auto compatibleNamesProp = "Names";
+constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{5};
 
 /**
  * Default configuration file name.  This is used when the system does not
@@ -95,8 +97,11 @@ void Manager::configure()
     // Clear any cached data or error history related to hardware devices
     clearHardwareData();
 
-    // Verify System object exists; this means config file has been loaded
-    if (system)
+    // Wait until the config file has been loaded or hit max wait time
+    waitUntilConfigFileLoaded();
+
+    // Verify config file has been loaded and System object is valid
+    if (isConfigFileLoaded())
     {
         // Configure the regulator devices in the system
         system->configure(services);
@@ -107,20 +112,13 @@ void Manager::configure()
         services.getJournal().logError("Unable to configure regulator devices: "
                                        "Configuration file not loaded");
 
-        // TODO: Add code to wait for EntityManager to publish the compatible
-        // interface before logging this error.
-
         // Log critical error since regulators could not be configured.  Could
         // cause hardware damage if default regulator settings are very wrong.
-        /*
         services.getErrorLogging().logConfigFileError(Entry::Level::Critical,
                                                       services.getJournal());
-        */
 
         // Throw InternalFailure to propogate error status to D-Bus client
-        /*
         throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure{};
-        */
     }
 }
 
@@ -191,8 +189,8 @@ void Manager::monitor(bool enable)
             timers.clear();
         */
 
-        // Verify System object exists; this means config file has been loaded
-        if (system)
+        // Verify config file has been loaded and System object is valid
+        if (isConfigFileLoaded())
         {
             // Close the regulator devices in the system.  Monitoring is
             // normally disabled because the system is being powered off.  The
@@ -222,8 +220,8 @@ void Manager::clearHardwareData()
     services.getPresenceService().clearCache();
     services.getVPD().clearCache();
 
-    // Verify System object exists; this means config file has been loaded
-    if (system)
+    // Verify config file has been loaded and System object is valid
+    if (isConfigFileLoaded())
     {
         // Clear any cached hardware data in the System object
         system->clearCache();
@@ -347,6 +345,35 @@ void Manager::loadConfigFile()
         // Log error
         services.getErrorLogging().logConfigFileError(Entry::Level::Error,
                                                       services.getJournal());
+    }
+}
+
+void Manager::waitUntilConfigFileLoaded()
+{
+    // If config file not loaded and list of compatible system types is empty
+    if (!isConfigFileLoaded() && compatibleSystemTypes.empty())
+    {
+        // Loop until compatible system types found or waited max amount of time
+        auto start = std::chrono::system_clock::now();
+        std::chrono::system_clock::duration timeWaited{0};
+        while (compatibleSystemTypes.empty() &&
+               (timeWaited <= maxTimeToWaitForCompatTypes))
+        {
+            // Try to find list of compatible system types
+            findCompatibleSystemTypes();
+            if (!compatibleSystemTypes.empty())
+            {
+                // Compatible system types found; try to load config file
+                loadConfigFile();
+            }
+            else
+            {
+                // Sleep 10 seconds
+                using namespace std::chrono_literals;
+                std::this_thread::sleep_for(10s);
+            }
+            timeWaited = std::chrono::system_clock::now() - start;
+        }
     }
 }
 
