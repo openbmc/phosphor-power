@@ -131,6 +131,17 @@ class Manager : public ManagerObject
     std::filesystem::path findConfigFile();
 
     /**
+     * Returns whether the JSON configuration file has been loaded.
+     *
+     * @return true if config file loaded, false otherwise
+     */
+    bool isConfigFileLoaded() const
+    {
+        // If System object exists, the config file has been loaded
+        return (system != nullptr);
+    }
+
+    /**
      * Loads the JSON configuration file.
      *
      * Looks for the config file using findConfigFile().
@@ -140,6 +151,16 @@ class Manager : public ManagerObject
      * logged.
      */
     void loadConfigFile();
+
+    /**
+     * Waits until the JSON configuration file has been loaded.
+     *
+     * If the config file has not yet been loaded, waits until one of the
+     * following occurs:
+     * - config file is loaded
+     * - maximum amount of time to wait has elapsed
+     */
+    void waitUntilConfigFileLoaded();
 
     /**
      * The D-Bus bus
