@@ -296,6 +296,7 @@ void PowerSupply::updateInventory()
         {
             ccin = pmbusIntf->readString(CCIN, Type::HwmonDeviceDebug);
             assetProps.emplace(MODEL_PROP, ccin);
+            modelName = ccin;
         }
         catch (ReadFailure& e)
         {

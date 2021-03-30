@@ -208,6 +208,14 @@ class PowerSupply
         return fwVersion;
     }
 
+    /**
+     * @brief Returns the model name of the power supply
+     */
+    const std::string& getModelName() const
+    {
+        return modelName;
+    }
+
     /** @brief Returns true if the number of failed reads exceeds limit
      * TODO: or CML bit on.
      */
@@ -251,6 +259,9 @@ class PowerSupply
 
     /** @brief True if the power supply is present. */
     bool present = false;
+
+    /** @brief Power supply model name. */
+    std::string modelName;
 
     /** @brief D-Bus match variable used to subscribe to Present property
      * changes.
