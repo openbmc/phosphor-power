@@ -247,6 +247,14 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
                     .c_str());
             getPSUProperties(itIntf->second);
         }
+
+        // Call to validate the psu configuration if the power is on and both
+        // the IBMCFFPSConnector and SupportedConfiguration interfaces have been
+        // processed
+        if (powerOn && !psus.empty() && !supportedConfigs.empty())
+        {
+            validateConfig();
+        }
     }
     catch (std::exception& e)
     {
@@ -271,11 +279,13 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             powerOn = true;
+            validateConfig();
             clearFaults();
         }
         else
         {
             powerOn = false;
+            runValidateConfig = true;
         }
     }
 }
@@ -403,6 +413,51 @@ void PSUManager::analyze()
                     psu->setFaultLogged();
                 }
             }
+        }
+    }
+}
+
+void PSUManager::validateConfig()
+{
+    if (!runValidateConfig)
+    {
+        return;
+    }
+
+    // Check that all PSUs have the same model name. Initialize the model
+    // variable with the first PSU name found, then use it as a base to compare
+    // against the rest of the PSUs.
+    std::string model{};
+    for (const auto& p : psus)
+    {
+        auto psuModel = p->getModelName();
+        if (psuModel.empty())
+        {
+            continue;
+        }
+        if (model.empty())
+        {
+            model = psuModel;
+            continue;
+        }
+        if (psuModel.compare(model) != 0)
+        {
+            log<level::ERR>(
+                fmt::format("Mismatched power supply models: {}, {}",
+                            model.c_str(), psuModel.c_str())
+                    .c_str());
+            std::map<std::string, std::string> additionalData;
+            additionalData["EXPECTED_MODEL"] = model;
+            additionalData["ACTUAL_MODEL"] = psuModel;
+            additionalData["CALLOUT_INVENTORY_PATH"] = p->getInventoryPath();
+            createError(
+                "xyz.openbmc_project.Power.PowerSupply.Error.NotSupported",
+                additionalData);
+
+            // No need to do the validation anymore, a mismatched model needs to
+            // be fixed by the user.
+            runValidateConfig = false;
+            return;
         }
     }
 }

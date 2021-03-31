@@ -84,16 +84,19 @@ class PSUManager
             if (state)
             {
                 powerOn = true;
+                validateConfig();
             }
             else
             {
                 powerOn = false;
+                runValidateConfig = true;
             }
         }
         catch (std::exception& e)
         {
             log<level::INFO>("Failed to get power state. Assuming it is off.");
             powerOn = false;
+            runValidateConfig = true;
         }
 
         onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
@@ -220,6 +223,21 @@ class PSUManager
      * @param[in] properties - A map of property names and values
      */
     void populateSysProperties(const util::DbusPropertyMap& properties);
+
+    /**
+     * @brief Perform power supply configuration validation.
+     * @details Validates if the existing power supply properties are a
+     * supported configuration, and acts on its findings such as logging errors.
+     */
+    void validateConfig();
+
+    /**
+     * @brief Flag to indicate if the validateConfig() function should be run.
+     * Set to false once the configuration has been validated to avoid running
+     * multiple times due to interfaces added signal. Set to true during power
+     * off to trigger the validation on power on.
+     */
+    bool runValidateConfig = true;
 
     /**
      * @brief Map of supported PSU configurations that include the model name
