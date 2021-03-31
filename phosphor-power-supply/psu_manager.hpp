@@ -84,6 +84,7 @@ class PSUManager
             if (state)
             {
                 powerOn = true;
+                validateConfig();
             }
             else
             {
@@ -220,6 +221,13 @@ class PSUManager
      * @param[in] properties - A map of property names and values
      */
     void populateSysProperties(const util::DbusPropertyMap& properties);
+
+    /**
+     * @brief Perform power supply configuration validation.
+     * @details Validates if the existing power supply properties are a
+     * supported configuration, and acts on its findings such as logging errors.
+     */
+    void validateConfig();
 
     /**
      * @brief Map of supported PSU configurations that include the model name
