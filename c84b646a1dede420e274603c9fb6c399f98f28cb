@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8ce3d245_ddea1ca3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-31T20:06:30Z",
+      "side": 1,
+      "message": "Yeah, the plan would be to have a behavior based on a configuration option, so that the psu app could be compiled with an option to create an event log, and/or halt power on, bring the system to a lower power usage, etc, but all those being config options that can be opted in.\n\nDo we think that creating an event log should be the default and any system behavior be the opt-in options?",
+      "parentUuid": "af6841f1_39d76a1d",
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2788d82_04cf0fb8",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2021-03-31T19:49:53Z",
       "side": 1,
       "message": "nit: spelling",
+      "range": {
+        "startLine": 226,
+        "startChar": 55,
+        "endLine": 226,
+        "endChar": 65
+      },
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22f996dd_e97626f2",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-03-31T20:06:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a2788d82_04cf0fb8",
       "range": {
         "startLine": 226,
         "startChar": 55,
