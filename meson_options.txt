@@ -60,6 +60,10 @@ option(
     description: 'Enable support for power sequencer control'
 )
 option(
+    'sequencer-monitor-ng', type: 'boolean',
+    description: 'Enable support for power sequencer control'
+)
+option(
     'utils', type: 'boolean',
     description: 'Enable support for power supply utilities'
 )
