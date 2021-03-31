@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af6841f1_39d76a1d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-31T19:49:53Z",
+      "side": 1,
+      "message": "Do you have plans to create an event log too?",
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2788d82_04cf0fb8",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-03-31T19:49:53Z",
+      "side": 1,
+      "message": "nit: spelling",
+      "range": {
+        "startLine": 226,
+        "startChar": 55,
+        "endLine": 226,
+        "endChar": 65
+      },
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
