@@ -276,6 +276,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             powerOn = true;
+            validateConfig();
             clearFaults();
         }
         else
@@ -408,6 +409,35 @@ void PSUManager::analyze()
                     psu->setFaultLogged();
                 }
             }
+        }
+    }
+}
+
+void PSUManager::validateConfig()
+{
+    // Check that all PSUs have the same model name. Initialize the model
+    // variable with the first PSU name found, then use it as a base to compare
+    // against the rest of the PSUs.
+    std::string_view model;
+    for (const auto& p : psus)
+    {
+        auto psuModel = p->getModelName();
+        if (psuModel.empty())
+        {
+            continue;
+        }
+        if (model.empty())
+        {
+            model = psuModel;
+            continue;
+        }
+        if (psuModel.compare(model) != 0)
+        {
+            log<level::ERR>(
+                fmt::format("Mismatched power supply models: {}, {}",
+                            model.data(), psuModel.c_str())
+                    .c_str());
+            return;
         }
     }
 }
