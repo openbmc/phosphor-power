@@ -128,6 +128,9 @@ endif
 if get_option('sequencer-monitor')
     subdir('power-sequencer')
 endif
+if get_option('sequencer-monitor-ng')
+    subdir('phosphor-power-sequencer')
+endif
 if get_option('supply-monitor')
     subdir('power-supply')
 endif

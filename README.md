@@ -5,6 +5,8 @@ that deliver power to the system.
 
 * cold-redundancy: Application that makes power supplies work in Cold
   Redundancy mode and rotates them at intervals.
+* phosphor-power-sequencer: Applications for configuring and monitoring
+  power sequencer and relasted devices that support JSON-driven configuration.
 * [phosphor-power-supply](phosphor-power-supply/README.md): Next generation
   power supply monitoring application.
 * [phosphor-regulators](phosphor-regulators/README.md): JSON-driven application
