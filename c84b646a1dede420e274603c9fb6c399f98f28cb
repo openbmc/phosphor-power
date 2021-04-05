@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "43491f42_5de542d0",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-05T21:14:35Z",
+      "side": 1,
+      "message": "If IBM systems need the different behaviors then it makes sense to be an EM option.  If not, then chances are nobody would ever tweak this option you so you may as well just default to creating an error log.",
+      "parentUuid": "54aea01c_1ac8da2b",
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2788d82_04cf0fb8",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
