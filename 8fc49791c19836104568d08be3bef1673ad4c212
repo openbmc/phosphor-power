@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03a589f3_f3b8bf5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-05T18:53:23Z",
+      "side": 1,
+      "message": "Can the regulators be configured during the boot? Sounds like we won\u0027t prevent the boot from happening (instead an error is logged), so trying to see if we could call to configure the regulators when the EM interfaces added callback runs instead of blocking. Also if there are no compatible system types for that system, we\u0027d be blocking the boot for 5 min every time.",
+      "revId": "8fc49791c19836104568d08be3bef1673ad4c212",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
