@@ -52,6 +52,24 @@
       "revId": "8fc49791c19836104568d08be3bef1673ad4c212",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da086f01_f81c7084",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-05T20:30:13Z",
+      "side": 1,
+      "message": "I definitely tested where it had been blocked for several minutes and then restarted EM.  The boot did seem to successfully continue after EM published the interface.  I\u0027m not sure, however, exactly how long I waited.  It was probably in the 2-4 minute range.\n\nIf you do `obmcutil -w chassison`, obmcutil returns after about 30 seconds stating it couldn\u0027t tell if the boot succeeded.  But later, when the boot completes, `obmcutil state` will show that the chassis is powered on.\n\nThe regulators application starts running at BMC Ready and stays running whether the system is powered on or off.  During the boot, a tool called regsctl does a D-Bus method call on the regulators application to request that the regulators be configured.  I found that by default, this method call timed out after 20 or 30 seconds.  That is why I had to change the utility.hpp file used by regsctl and specify a 6 minute timeout.",
+      "parentUuid": "7654c309_78995e15",
+      "revId": "8fc49791c19836104568d08be3bef1673ad4c212",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
