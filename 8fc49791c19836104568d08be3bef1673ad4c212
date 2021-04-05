@@ -16,6 +16,24 @@
       "revId": "8fc49791c19836104568d08be3bef1673ad4c212",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62307ed_22f0a6a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-05T19:12:36Z",
+      "side": 1,
+      "message": "\u003e Can the regulators be configured during the boot?\n\nThe regulators need to be configured before they are powered on by the power sequencer.  That occurs very early in the boot.  Otherwise, if the default regulator settings (like output voltage) are significantly wrong, hardware damage could occur.  Also, some regulators don\u0027t allow certain configuration changes to be made after being powered on.\n\n\u003e Sounds like we won\u0027t prevent the boot from happening (instead an error is logged)\n\nThe requirement is actually to stop the boot if the app cannot configure the regulators.  The error logged has a special severity that will cause the boot to stop.\n\n\u003e Also if there are no compatible system types for that system, we\u0027d be blocking the boot for 5 min every time.\n\nThe regulators application is optional, so an OpenBMC system builder needs to \"opt into\" it.  When using the regulators app, there are two options for finding the JSON config file:\n* Use the default file name\n* Get file name based on EM info\n\nThe 5 minute wait will only occur in the following scenario:\n* Default file name not found, and\n* No compatible system types info found on D-Bus",
+      "parentUuid": "03a589f3_f3b8bf5f",
+      "revId": "8fc49791c19836104568d08be3bef1673ad4c212",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
