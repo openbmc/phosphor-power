@@ -70,6 +70,24 @@
       "revId": "8906c6e14563de09f2c1f914eca743bc39a2ca62",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecccd8d3_db197cc5",
+        "filename": "phosphor-regulators/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-05T22:25:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5e336c9_22dde2fe",
+      "revId": "8906c6e14563de09f2c1f914eca743bc39a2ca62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
