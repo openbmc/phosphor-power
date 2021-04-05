@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef42beea_a2d5076d",
+        "filename": "phosphor-regulators/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-05T21:08:42Z",
+      "side": 1,
+      "message": "You could probably shrink this some so that if it just barely missed it wouldn\u0027t be a full 10s penalty.  How about 5s?",
+      "revId": "8906c6e14563de09f2c1f914eca743bc39a2ca62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
