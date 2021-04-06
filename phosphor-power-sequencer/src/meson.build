@@ -8,6 +8,7 @@ phosphor_power_sequencer = executable(
     'power_control_main.cpp',
     'power_control.cpp',
     'power_interface.cpp',
+    'ucd90320_monitor.cpp',
     dependencies: [
         libgpiodcxx,
         phosphor_logging,

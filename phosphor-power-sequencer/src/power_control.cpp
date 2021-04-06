@@ -17,6 +17,7 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
+#include "ucd90320_monitor.hpp"
 
 #include <fmt/format.h>
 #include <sys/types.h>
@@ -98,6 +99,7 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
                 *name, *i2cBus, *i2cAddress)
                 .c_str());
         // Create device object
+        device = std::make_unique<UCD90320Monitor>(bus, *i2cBus, *i2cAddress);
     }
 }
 
