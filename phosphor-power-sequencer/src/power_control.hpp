@@ -1,6 +1,7 @@
 #pragma once
 
 #include "power_interface.hpp"
+#include "power_sequencer_monitor.hpp"
 #include "utility.hpp"
 
 #include <gpiod.hpp>
@@ -67,6 +68,11 @@ class PowerControl : public PowerObject
      * The D-Bus bus object
      */
     sdbusplus::bus::bus& bus;
+
+    /**
+     * The power sequencer device to monitor.
+     */
+    std::unique_ptr<PowerSequencerMonitor> device;
 
     /**
      * Indicates if a state transistion is taking place
