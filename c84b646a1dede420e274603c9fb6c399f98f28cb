@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "1d18d033_4d595487",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-06T15:13:19Z",
+      "side": 1,
+      "message": "Yeah good point. We\u0027ll likely use different options for the IBM systems since the original request was to add compile-time options. Ed mentioned that \u0027severities\u0027 could be added to EM, so that ERROR could be creating an error log, CRITICAL could be some action like power off, etc. Going to go add that to the schema and come back to this commit. Setting it as WIP.",
+      "parentUuid": "43491f42_5de542d0",
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2788d82_04cf0fb8",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
