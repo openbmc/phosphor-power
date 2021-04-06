@@ -17,6 +17,7 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
+#include "ucd90320_monitor.hpp"
 
 #include <fmt/format.h>
 #include <sys/types.h>
@@ -92,12 +93,13 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
 
     if (i2cBus && i2cAddress && name && !name->empty())
     {
-        log<level::INFO>(
+        log<level::DEBUG>(
             fmt::format(
                 "Found power sequencer device properties, name: {}, bus: {} addr: {:#02x} ",
                 *name, *i2cBus, *i2cAddress)
                 .c_str());
         // Create device object
+        device = std::make_unique<UCD90320Monitor>(bus, *i2cBus, *i2cAddress);
     }
 }
 

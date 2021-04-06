@@ -14,7 +14,22 @@
  * limitations under the License.
  */
 
-int main()
+#include "ucd90320_monitor.hpp"
+
+#include <fmt/format.h>
+
+#include <string>
+
+namespace phosphor::power::sequencer
 {
-    return 0;
+
+UCD90320Monitor::UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
+                                 std::uint16_t i2cAddress) :
+    PowerSequencerMonitor(),
+    bus{bus}, interface {
+    fmt::format("/sys/bus/i2c/devices/{}-{:04x}", i2cBus, i2cAddress).c_str(),
+        "ucd9000", 0
 }
+{}
+
+} // namespace phosphor::power::sequencer
