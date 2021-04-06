@@ -14,7 +14,30 @@
  * limitations under the License.
  */
 
-int main()
+#include <CLI/CLI.hpp>
+
+#include <chrono>
+#include <string>
+
+int main(int argc, char** argv)
 {
+    CLI::App app{"OpenBMC UCD90320 Power Sequncer Monitor"};
+
+    std::string action;
+    app.add_option("-a,--action", action,
+                   "Action: pgood-monitor or runtime-monitor")
+        ->required()
+        ->check(CLI::Validator(
+            CLI::IsMember({"pgood-monitor", "runtime-monitor"})));
+
+    uint32_t i{0};
+    app.add_option("-i,--interval", i, "Interval in milliseconds")
+        ->required()
+        ->check(CLI::Validator(CLI::PositiveNumber));
+
+    CLI11_PARSE(app, argc, argv);
+
+    std::chrono::milliseconds interval{i};
+
     return 0;
 }
