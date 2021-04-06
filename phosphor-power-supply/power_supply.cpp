@@ -267,7 +267,7 @@ void PowerSupply::updateInventory()
 {
     using namespace phosphor::pmbus;
 
-#ifdef IBM_VPD
+#if IBM_VPD
     std::string ccin;
     std::string pn;
     std::string fn;
@@ -291,7 +291,7 @@ void PowerSupply::updateInventory()
     {
         // TODO: non-IBM inventory updates?
 
-#ifdef IBM_VPD
+#if IBM_VPD
         try
         {
             ccin = pmbusIntf->readString(CCIN, Type::HwmonDeviceDebug);

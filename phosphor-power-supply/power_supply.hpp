@@ -11,7 +11,7 @@
 namespace phosphor::power::psu
 {
 
-#ifdef IBM_VPD
+#if IBM_VPD
 // PMBus device driver "file name" to read for CCIN value.
 constexpr auto CCIN = "ccin";
 constexpr auto PART_NUMBER = "part_number";
