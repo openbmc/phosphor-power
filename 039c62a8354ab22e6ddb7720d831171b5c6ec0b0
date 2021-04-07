@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79f222c9_9cf9ab84",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-07T19:27:11Z",
+      "side": 1,
+      "message": "Changed it to string, since need the model to stick around for the subsequent validation in the next commit.",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
