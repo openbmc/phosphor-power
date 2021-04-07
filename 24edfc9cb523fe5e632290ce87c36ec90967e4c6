@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "732b1752_c5888e01",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-07T15:16:26Z",
+      "side": 1,
+      "message": "As I continue to add more checks to this, started to think that maybe any error condition should be something like \"Error.NotSupported\" instead of specifics like \"Mismatched\", or \"NotEnough\" etc.",
+      "revId": "24edfc9cb523fe5e632290ce87c36ec90967e4c6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
