@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c982034a_fcfd7248",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-07T21:36:41Z",
+      "side": 1,
+      "message": "The additionalData contains strings, so you wouldn\u0027t need to do this.",
+      "range": {
+        "startLine": 481,
+        "startChar": 46,
+        "endLine": 481,
+        "endChar": 55
+      },
+      "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc7a4c26_fa9a2ace",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-07T21:36:41Z",
+      "side": 1,
+      "message": "maybe log EXPECTED_COUNT too?",
+      "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
