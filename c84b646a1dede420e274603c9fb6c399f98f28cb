@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "d1f27b44_c25528cd",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-07T15:05:47Z",
+      "side": 1,
+      "message": "Creating an error for now, we can change to choose behavior once we get feedback on the EM change.",
+      "parentUuid": "1d18d033_4d595487",
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a2788d82_04cf0fb8",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
@@ -153,6 +171,30 @@
       "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dab044ef_146b5619",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-07T15:05:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22f996dd_e97626f2",
+      "range": {
+        "startLine": 226,
+        "startChar": 55,
+        "endLine": 226,
+        "endChar": 65
+      },
+      "revId": "c84b646a1dede420e274603c9fb6c399f98f28cb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
