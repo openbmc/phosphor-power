@@ -16,6 +16,23 @@
       "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be99761f_e3cdb36c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-07T21:32:21Z",
+      "side": 1,
+      "message": "Would this need a FRU callout?\n\nIf nothing else, maybe you could put the inventory paths of the PSs in the additionalData assuming you can get it from the object.",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
