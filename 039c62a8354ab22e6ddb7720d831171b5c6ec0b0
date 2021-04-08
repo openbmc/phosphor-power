@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "dd4281b2_abde5111",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-08T19:45:41Z",
+      "side": 1,
+      "message": "If EM hasn\u0027t put the data needed for this yet on D-Bus, does it get checked later when the data is available?  Do we need a call to validateConfig() in the signal handler for EM interfaces added?",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -19,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "a66932b8_24f77f49",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-08T19:45:41Z",
+      "side": 1,
+      "message": "Since you are assigning into a std::string, is there a reason to use the C style string?  Same question on line below.",
+      "range": {
+        "startLine": 441,
+        "startChar": 47,
+        "endLine": 441,
+        "endChar": 60
+      },
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be99761f_e3cdb36c",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -30,6 +70,23 @@
       "writtenOn": "2021-04-07T21:32:21Z",
       "side": 1,
       "message": "Would this need a FRU callout?\n\nIf nothing else, maybe you could put the inventory paths of the PSs in the additionalData assuming you can get it from the object.",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8c3dc2d_21094aa7",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-08T19:45:41Z",
+      "side": 1,
+      "message": "Do you need to add a call to validateConfig() here (poll for power state) to match the call in powerStateChanged() (callback for power state change)?",
       "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
