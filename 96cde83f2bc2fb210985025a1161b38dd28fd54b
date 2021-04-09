@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fb3a69a_ed6f0582",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-09T15:41:10Z",
+      "side": 1,
+      "message": "I wouldn\u0027t suppose you are considering also having this app control the power sequencer, instead of just monitoring it?  Then it could also provide the pgood state and power on d-bus properties, and we could get rid of the old skeleton power control code for once and for all.\n\nTo get started down that direction, this would need to just start at multi-user.target and so wouldn\u0027t need any command line args.\n\nI\u0027m guessing you aren\u0027t :)  But doing it all in this app would save us from having to make two apps in the long run.",
+      "revId": "96cde83f2bc2fb210985025a1161b38dd28fd54b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
