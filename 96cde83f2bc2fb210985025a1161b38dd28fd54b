@@ -16,6 +16,24 @@
       "revId": "96cde83f2bc2fb210985025a1161b38dd28fd54b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01484b44_c64c4d8c",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-04-09T16:51:30Z",
+      "side": 1,
+      "message": "I hadn\u0027t thought of a combined app.  I had thought of replacing the skeleton app with a new app in this repository.  I think the combined app is the better idea.  Talked with Derek about this and he agreed.  I\u0027ll put this review in WIP for now.",
+      "parentUuid": "7fb3a69a_ed6f0582",
+      "revId": "96cde83f2bc2fb210985025a1161b38dd28fd54b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
