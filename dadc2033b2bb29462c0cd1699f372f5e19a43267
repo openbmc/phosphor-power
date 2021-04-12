@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c2fd542a_4dba9526",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:36:53Z",
+      "side": 1,
+      "message": "Done. Yep you\u0027re right.",
+      "parentUuid": "c629e910_bdb1cf41",
+      "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c982034a_fcfd7248",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "9cd37c43_679869c6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:36:53Z",
+      "side": 1,
+      "message": "Done. Thanks, too used to the phosphor-logging APIs, I do like this createError wrapper a lot :)",
+      "parentUuid": "c982034a_fcfd7248",
+      "range": {
+        "startLine": 481,
+        "startChar": 46,
+        "endLine": 481,
+        "endChar": 55
+      },
+      "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc7a4c26_fa9a2ace",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eea1794_c205b408",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:36:53Z",
+      "side": 1,
+      "message": "Done. Yep, added.",
+      "parentUuid": "cc7a4c26_fa9a2ace",
+      "revId": "dadc2033b2bb29462c0cd1699f372f5e19a43267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
