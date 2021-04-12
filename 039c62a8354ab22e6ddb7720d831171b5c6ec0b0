@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5bdaa3ed_c15243de",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:02:54Z",
+      "side": 1,
+      "message": "The challenge is that individual EM interfaces trigger the callback, so we don\u0027t know when all the interfaces are done being added to trigger the validation. I think we\u0027re ok on this rare case when the EM interfaces are not present and power on is issued, especially with the new regulators code that would block the power on until EM is present? https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/41824",
+      "parentUuid": "dd4281b2_abde5111",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -59,6 +77,30 @@
     },
     {
       "key": {
+        "uuid": "f6049376_3f303bb4",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:02:54Z",
+      "side": 1,
+      "message": "Done. Ugh thanks, just habit since the phosphor-logging APIs only take C strings.",
+      "parentUuid": "a66932b8_24f77f49",
+      "range": {
+        "startLine": 441,
+        "startChar": 47,
+        "endLine": 441,
+        "endChar": 60
+      },
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be99761f_e3cdb36c",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -70,6 +112,24 @@
       "writtenOn": "2021-04-07T21:32:21Z",
       "side": 1,
       "message": "Would this need a FRU callout?\n\nIf nothing else, maybe you could put the inventory paths of the PSs in the additionalData assuming you can get it from the object.",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d782c544_adda9557",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:02:54Z",
+      "side": 1,
+      "message": "Added the inventory path for now until we hear if a FRU callout is needed.",
+      "parentUuid": "be99761f_e3cdb36c",
       "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -90,6 +150,24 @@
       "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a8d7f9_2c989da3",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-04-12T19:02:54Z",
+      "side": 1,
+      "message": "Done. Yeah, i can see a scenario where the cec is at powered on, and the BMC is rebooted, so when the psu-monitor app starts up, the state is already set to power on. Added it.",
+      "parentUuid": "d8c3dc2d_21094aa7",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
