@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8db68f4a_3da54965",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-13T15:00:38Z",
+      "side": 1,
+      "message": "Is the name maxPowerSupplies misleading?\n\nJust from the name, I would expect that is the maximum count you could have, and it would be valid to have fewer.  So I would expect a \u003c\u003d condition.  However, it appears that the system must have exactly that many power supplies?",
+      "range": {
+        "startLine": 474,
+        "startChar": 12,
+        "endLine": 474,
+        "endChar": 58
+      },
+      "revId": "b311d54a72cff9a30e9df0c5f564bbb12eb5ce7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
