@@ -16,6 +16,24 @@
       "revId": "808f35dc23be8f9fa408d5b22afe36fca748436a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "813a33dd_f0c0b483",
+        "filename": "phosphor-regulators/src/sensors.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-13T21:38:10Z",
+      "side": 1,
+      "message": "I was intentionally leaving it vague at the abstract base class level.  Different implementations might have different internal details to perform.\n\nFor the D-Bus implementation, here is what I have planned at a high level:\n* startCycle()\n  * Clear data member that tracks which sensors have been updated this cycle.\n* startRail()\n  * Set data members for the current rail name, device inventory path, and chassis\n    inventory path.  This eliminates the rail level information from having to be\n    passed repeatedly in calls to setValue().\n* setValue()\n  * Set the current value of one sensor (rail + sensor data type).\n  * If D-Bus sensor does not exist, create it and the necessary mapper associations.\n  * May push data out to D-Bus immediately, or may wait and do in a batch during\n    endRail() or endCycle() based on performance testing.\n* endRail()\n  * If the parameter indicates an error occurred, set all D-Bus sensors\n    for this rail to an error state.\n  * Clear data members holding the current rail information\n  * Push all sensors for this rail to D-Bus if batching needed for performance\n* endCycle()\n  * Find any existing D-Bus sensors that were not updated during this cycle.\n    Delete them since the associated hardware has likely been removed or\n    replaced by a different version with different telemetry\n  * Push all sensors to D-Bus if batching needed for performance\n\nI can add a more generic version of the above to the base class doxygen if needed.",
+      "parentUuid": "62796316_2b51d51e",
+      "revId": "808f35dc23be8f9fa408d5b22afe36fca748436a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
