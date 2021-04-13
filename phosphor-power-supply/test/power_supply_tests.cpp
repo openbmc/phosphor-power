@@ -286,6 +286,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
         EXPECT_CALL(mockPMBus, readString(_, _)).WillRepeatedly(Return(""));
         psu.updateInventory();
 
+#if IBM_VPD
         EXPECT_CALL(mockPMBus, readString(_, _))
             .WillOnce(Return("CCIN"))
             .WillOnce(Return("PN3456"))
@@ -293,6 +294,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
             .WillOnce(Return("HEADER"))
             .WillOnce(Return("SN3456"))
             .WillOnce(Return("FW3456"));
+#endif
         psu.updateInventory();
         // TODO: D-Bus mocking to verify values stored on D-Bus (???)
     }
