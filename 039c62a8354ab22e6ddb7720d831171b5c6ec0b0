@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "c166208f_d400dc13",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-04-13T16:29:24Z",
+      "side": 1,
+      "message": "I thought I saw some cases where that Compatible interface stuff showed up prior to the IBMCFFPSConnector interfaces. I wonder if it was seen as more obvious when I had some debug tracing put in when trying to get the inerfacesAdded for IBMCFFPSConnector.\n\nIt would seem that maybe we would want to check if the interfacesAdded happens when the power is already on, but we probably would not want to run that twice.",
+      "parentUuid": "92691471_35e20b54",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
