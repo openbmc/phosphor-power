@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "92691471_35e20b54",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-13T14:48:39Z",
+      "side": 1,
+      "message": "Is the issue that you need one xyz.openbmc_project.Configuration.SupportedConfiguration interface to be found as well as N copies of the xyz.openbmc_project.Configuration.IBMCFFPSConnector interface before config validation can be done?\n\nDoes the power state change after pgoods have been established?  If so, you are correct that this code will run after the regulators app has waited for EM to publish the compatible systems interface.  I\u0027m not sure if there is a case where EM has published that interface but not the ones you are looking for.\n\nBrandon, what do you think here?",
+      "parentUuid": "5bdaa3ed_c15243de",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
