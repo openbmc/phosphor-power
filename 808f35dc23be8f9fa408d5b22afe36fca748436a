@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62796316_2b51d51e",
+        "filename": "phosphor-regulators/src/sensors.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-13T21:25:22Z",
+      "side": 1,
+      "message": "Could you comment some on what will go on in these start/end rail/cycle functions?  It isn\u0027t really clear what they\u0027ll be used for since there isn\u0027t any other code up yet.",
+      "revId": "808f35dc23be8f9fa408d5b22afe36fca748436a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
