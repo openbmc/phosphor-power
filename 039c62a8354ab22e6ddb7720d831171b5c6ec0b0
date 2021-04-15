@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "e5e63c9f_4abcbe9c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-04-15T15:46:47Z",
+      "side": 1,
+      "message": "Sorry for late response.\n\nIf the configs required from EM never shows up, I think we need to log an error because they might have incorrect ps\u0027s attached and could be at risk of system crashing and data loss.  Hopefully the likelyhood is extremely rare that the CompatibleSystems interface that the vrms use does show up but the ones we use for this don\u0027t, but I have heard nothing guarantees that this can\u0027t happen.\n\nSaying that, and I\u0027m assuming we do this ps validation after the vrm config happens and before we start the pon sequence, if we don\u0027t have the EM config yet when we do this can we log an error (details TBD), and let the boot continue.  If/when the EM data eventually shows up, then do the validation then, and log an error if it fails?\n\nWe\u0027d need to work out the details later what SRC do we log, what to put in the iso procedure for both cases etc.",
+      "parentUuid": "c166208f_d400dc13",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -184,6 +202,24 @@
       "side": 1,
       "message": "Looks like we used to basically point to the first power supply that we thought was not what it should be, with the PWRSPLY symbolic FRU, to an SRC for power supply missing. I am not sure if we want to mimic that for this or not. Adding the inventory path sounds good though.",
       "parentUuid": "d782c544_adda9557",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db5a163a_1f53cc27",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-04-15T15:46:47Z",
+      "side": 1,
+      "message": "Can we discuss the correct SRC and callout info when we resolve the potential EM timing issue above?",
+      "parentUuid": "204a5dc7_1bd9bea3",
       "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
