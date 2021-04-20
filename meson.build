@@ -42,6 +42,7 @@ pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
 fmt = dependency('fmt')
+libgpiodcxx = dependency('libgpiodcxx')
 
 systemd = dependency('systemd')
 servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
