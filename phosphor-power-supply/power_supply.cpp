@@ -7,11 +7,13 @@
 
 #include <fmt/format.h>
 
+#include <gpiod.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
 #include <cstdint> // uint8_t...
-#include <thread>  // sleep_for()
+#include <fstream>
+#include <thread> // sleep_for()
 
 namespace phosphor::power::psu
 {
@@ -20,37 +22,102 @@ using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
-                         std::uint8_t i2cbus, std::uint16_t i2caddr) :
+                         std::uint8_t i2cbus, std::uint16_t i2caddr,
+                         const std::string& gpioLineName,
+                         unsigned int bindDelay) :
     bus(bus),
-    inventoryPath(invpath)
+    inventoryPath(invpath), bindDelay(bindDelay)
 {
     if (inventoryPath.empty())
     {
         throw std::invalid_argument{"Invalid empty inventoryPath"};
     }
 
-    // Setup the functions to call when the D-Bus inventory path for the
-    // Present property changes.
-    presentMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::propertiesChanged(inventoryPath,
-                                                        INVENTORY_IFACE),
-        [this](auto& msg) { this->inventoryChanged(msg); });
-
-    presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAdded() +
-            sdbusplus::bus::match::rules::argNpath(0, inventoryPath),
-        [this](auto& msg) { this->inventoryAdded(msg); });
-
+    log<level::DEBUG>(
+        fmt::format("gpiod::find_line({})", gpioLineName).c_str());
+    gpioPresenceLine = gpiod::find_line(gpioLineName);
+    bindPath = "/sys/bus/i2c/drivers/ibm-cffps";
     std::ostringstream ss;
     ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
     std::string addrStr = ss.str();
+    std::string busStr = std::to_string(i2cbus);
+    bindDevice = busStr;
+    bindDevice.append("-");
+    bindDevice.append(addrStr);
+
     pmbusIntf = phosphor::pmbus::createPMBus(i2cbus, addrStr);
 
     // Get the current state of the Present property.
-    updatePresence();
-    updateInventory();
+    try
+    {
+        updatePresenceGpio();
+    }
+    catch (...)
+    {
+        // If the above attempt to use the GPIO failed, it likely means that the
+        // GPIOs are in use by the kernel, meaning it is using gpio-keys.
+        // So, I should rely on phosphor-gpio-presence to update D-Bus, and
+        // work that way for power supply presence.
+        presenceGpio = false;
+
+        // Setup the functions to call when the D-Bus inventory path for the
+        // Present property changes.
+        presentMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(inventoryPath,
+                                                            INVENTORY_IFACE),
+            [this](auto& msg) { this->inventoryChanged(msg); });
+
+        presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::interfacesAdded() +
+                sdbusplus::bus::match::rules::argNpath(0, inventoryPath),
+            [this](auto& msg) { this->inventoryAdded(msg); });
+
+        updatePresence();
+        updateInventory();
+    }
+}
+
+void PowerSupply::bindOrUnbindDriver(bool present)
+{
+    auto action = (present) ? "bind" : "unbind";
+    auto path = bindPath / action;
+
+    if (present)
+    {
+        log<level::INFO>(
+            fmt::format("Binding device driver. path: {} device: {}",
+                        path.string(), bindDevice)
+                .c_str());
+    }
+    else
+    {
+        log<level::INFO>(
+            fmt::format("Unbinding device driver. path: {} device: {}",
+                        path.string(), bindDevice)
+                .c_str());
+    }
+
+    std::ofstream file;
+
+    file.exceptions(std::ofstream::failbit | std::ofstream::badbit |
+                    std::ofstream::eofbit);
+
+    try
+    {
+        file.open(path);
+        file << bindDevice;
+        file.close();
+    }
+    catch (std::exception& e)
+    {
+        auto err = errno;
+
+        log<level::ERR>(
+            fmt::format("Failed binding or unbinding device. errno={}", err)
+                .c_str());
+    }
 }
 
 void PowerSupply::updatePresence()
@@ -70,9 +137,85 @@ void PowerSupply::updatePresence()
     }
 }
 
+void PowerSupply::updatePresenceGpio()
+{
+    bool present_old = present;
+
+    if (!gpioPresenceLine)
+    {
+        log<level::ERR>("Failed gpioPresenceLine");
+        return;
+    }
+
+    try
+    {
+        gpioPresenceLine.request({__FUNCTION__,
+                                  gpiod::line_request::DIRECTION_INPUT,
+                                  gpiod::line_request::FLAG_ACTIVE_LOW});
+        try
+        {
+            if (gpioPresenceLine.get_value())
+            {
+                present = true;
+            }
+            else
+            {
+                present = false;
+            }
+            // TODO: Toy throw to test things work?
+            // throw std::invalid_argument{"fake get_value() failure"};
+        }
+        catch (std::exception& e)
+        {
+            log<level::ERR>(
+                fmt::format("Failed to get_value of GPIO line: {}", e.what())
+                    .c_str());
+        }
+
+        log<level::DEBUG>("release() gpioPresenceLine");
+        gpioPresenceLine.release();
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>("Failed to request GPIO line",
+                        entry("MSG=%s", e.what()));
+        throw;
+    }
+
+    if (present_old != present)
+    {
+        log<level::DEBUG>(
+            fmt::format("present_old: {} present: {}", present_old, present)
+                .c_str());
+        if (present)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
+            bindOrUnbindDriver(present);
+            pmbusIntf->findHwmonDir();
+            onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
+            clearFaults();
+        }
+        else
+        {
+            bindOrUnbindDriver(present);
+        }
+
+        auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+        auto const lastSlashPos = invpath.find_last_of('/');
+        std::string prettyName = invpath.substr(lastSlashPos + 1);
+        setPresence(bus, invpath, present, prettyName);
+        updateInventory();
+    }
+}
+
 void PowerSupply::analyze()
 {
     using namespace phosphor::pmbus;
+
+    if (presenceGpio)
+    {
+        updatePresenceGpio();
+    }
 
     if ((present) && (readFail < LOG_LIMIT))
     {
@@ -161,10 +304,10 @@ void PowerSupply::onOffConfig(uint8_t data)
         catch (...)
         {
             // The underlying code in writeBinary will log a message to the
-            // journal if the write fails. If the ON_OFF_CONFIG is not setup as
-            // desired, later fault detection and analysis code should catch any
-            // of the fall out. We should not need to terminate the application
-            // if this write fails.
+            // journal if the write fails. If the ON_OFF_CONFIG is not setup
+            // as desired, later fault detection and analysis code should
+            // catch any of the fall out. We should not need to terminate
+            // the application if this write fails.
         }
     }
 }
@@ -195,9 +338,9 @@ void PowerSupply::clearFaults()
         catch (ReadFailure& e)
         {
             // Since I do not care what the return value is, I really do not
-            // care much if it gets a ReadFailure either. However, this should
-            // not prevent the application from continuing to run, so catching
-            // the read failure.
+            // care much if it gets a ReadFailure either. However, this
+            // should not prevent the application from continuing to run, so
+            // catching the read failure.
         }
     }
 }
@@ -215,8 +358,8 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
         if (std::get<bool>(valPropMap->second))
         {
             present = true;
-            // TODO: Immediately trying to read or write the "files" causes read
-            // or write failures.
+            // TODO: Immediately trying to read or write the "files" causes
+            // read or write failures.
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(20ms);
             pmbusIntf->findHwmonDir();
@@ -287,6 +430,9 @@ void PowerSupply::updateInventory()
     using ObjectMap = std::map<sdbusplus::message::object_path, InterfaceMap>;
     ObjectMap object;
 #endif
+    log<level::DEBUG>(
+        fmt::format("updateInventory() inventoryPath: {}", inventoryPath)
+            .c_str());
 
     if (present)
     {
@@ -301,7 +447,8 @@ void PowerSupply::updateInventory()
         }
         catch (ReadFailure& e)
         {
-            // Ignore the read failure, let pmbus code indicate failure, path...
+            // Ignore the read failure, let pmbus code indicate failure,
+            // path...
             // TODO - ibm918
             // https://github.com/openbmc/docs/blob/master/designs/vpd-collection.md
             // The BMC must log errors if any of the VPD cannot be properly
@@ -315,7 +462,8 @@ void PowerSupply::updateInventory()
         }
         catch (ReadFailure& e)
         {
-            // Ignore the read failure, let pmbus code indicate failure, path...
+            // Ignore the read failure, let pmbus code indicate failure,
+            // path...
         }
 
         try
@@ -324,7 +472,8 @@ void PowerSupply::updateInventory()
         }
         catch (ReadFailure& e)
         {
-            // Ignore the read failure, let pmbus code indicate failure, path...
+            // Ignore the read failure, let pmbus code indicate failure,
+            // path...
         }
 
         try
@@ -336,7 +485,8 @@ void PowerSupply::updateInventory()
         }
         catch (ReadFailure& e)
         {
-            // Ignore the read failure, let pmbus code indicate failure, path...
+            // Ignore the read failure, let pmbus code indicate failure,
+            // path...
         }
 
         try
@@ -347,7 +497,8 @@ void PowerSupply::updateInventory()
         }
         catch (ReadFailure& e)
         {
-            // Ignore the read failure, let pmbus code indicate failure, path...
+            // Ignore the read failure, let pmbus code indicate failure,
+            // path...
         }
 
         ipzvpdVINIProps.emplace("CC",

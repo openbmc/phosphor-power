@@ -4,8 +4,10 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <gpiod.hpp>
 #include <sdbusplus/bus/match.hpp>
 
+#include <filesystem>
 #include <stdexcept>
 
 namespace phosphor::power::psu
@@ -50,9 +52,12 @@ class PowerSupply
      * @param[in] invpath - String for inventory path to use
      * @param[in] i2cbus - The bus number this power supply is on
      * @param[in] i2caddr - The 16-bit I2C address of the power supply
+     * @param[in] gpioLineName - The string for the gpio-line-name to read for
+     * presence.
      */
     PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
-                std::uint8_t i2cbus, const std::uint16_t i2caddr);
+                std::uint8_t i2cbus, const std::uint16_t i2caddr,
+                const std::string& gpioLineName, unsigned int bindDelay);
 
     phosphor::pmbus::PMBusBase& getPMBus()
     {
@@ -257,6 +262,11 @@ class PowerSupply
      **/
     std::string inventoryPath;
 
+    /**
+     * @brief The libgpiod object for monitoring PSU presence
+     */
+    gpiod::line gpioPresenceLine;
+
     /** @brief True if the power supply is present. */
     bool present = false;
 
@@ -284,6 +294,31 @@ class PowerSupply
     std::string fwVersion;
 
     /**
+     * @brief The file system path used for binding the device driver.
+     */
+    std::filesystem::path bindPath;
+
+    /* @brief The string to pass in for binding the device driver. */
+    std::string bindDevice;
+
+    /** @brief Delay in milliseconds from present to bind device driver */
+    unsigned int bindDelay = 0;
+
+    /**
+     * @brief Binds or unbinds the power supply device driver
+     *
+     * Called when a presence change is detected to either bind the device
+     * driver for the power supply when it is installed, or unbind the device
+     * driver when the power supply is removed.
+     *
+     * Writes <device> to <path>/bind (or unbind)
+     *
+     * @param present - when true, will bind the device driver
+     *                  when false, will unbind the device driver
+     */
+    void bindOrUnbindDriver(bool present);
+
+    /**
      *  @brief Updates the presence status by querying D-Bus
      *
      * The D-Bus inventory properties for this power supply will be read to
@@ -293,9 +328,26 @@ class PowerSupply
     void updatePresence();
 
     /**
+     * @brief This is used to indicate if we should read the GPIOs for presence.
+     *
+     * Default to attempting to read the GPIOs for power supply presence. If
+     * that fails, set this to false, and fall back to using invetory added
+     * changed watches/matches.
+     */
+    bool presenceGpio = true;
+
+    /**
+     * @brief Updates the power supply presence by reading the GPIO line.
+     */
+    void updatePresenceGpio();
+
+    /**
      * @brief Callback for inventory property changes
      *
      * Process change of Present property for power supply.
+     *
+     * This is used if we are watching the D-Bus properties instead of reading
+     * the GPIO presence line ourselves.
      *
      * @param[in]  msg - Data associated with Present change signal
      **/
@@ -305,6 +357,9 @@ class PowerSupply
      * @brief Callback for inventory property added.
      *
      * Process add of the interface with the Present property for power supply.
+     *
+     * This is used if we are watching the D-Bus properties instead of reading
+     * the GPIO presence line ourselves.
      *
      * @param[in]  msg - Data associated with Present add signal
      **/
