@@ -16,6 +16,8 @@ constexpr auto IBMCFFPSInterface =
 constexpr auto i2cBusProp = "I2CBus";
 constexpr auto i2cAddressProp = "I2CAddress";
 constexpr auto psuNameProp = "Name";
+constexpr auto presLineName = "NamedPresenceGpio";
+constexpr auto bindDelayProp = "BindDelay";
 
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
@@ -98,6 +100,8 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
     uint64_t* i2cbus = nullptr;
     uint64_t* i2caddr = nullptr;
     std::string* psuname = nullptr;
+    std::string* presline = nullptr;
+    uint64_t* binddelayptr = nullptr;
 
     for (const auto& property : properties)
     {
@@ -115,6 +119,17 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             {
                 psuname = std::get_if<std::string>(&properties[psuNameProp]);
             }
+            else if (property.first == presLineName)
+            {
+                presline = std::get_if<std::string>(&properties[presLineName]);
+            }
+            else if (property.first == bindDelayProp)
+            {
+                log<level::DEBUG>(fmt::format(">bindDelayProp").c_str());
+                binddelayptr =
+                    std::get_if<uint64_t>(&properties[bindDelayProp]);
+                log<level::DEBUG>(fmt::format("<bindDelayProp").c_str());
+            }
         }
         catch (std::exception& e)
         {
@@ -125,11 +140,22 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
     {
         std::string invpath = basePSUInvPath;
         invpath.push_back(psuname->back());
+        auto binddelay = 0;
 
         log<level::DEBUG>(fmt::format("Inventory Path: {}", invpath).c_str());
 
-        auto psu =
-            std::make_unique<PowerSupply>(bus, invpath, *i2cbus, *i2caddr);
+        if (nullptr != binddelayptr)
+        {
+            binddelay = *binddelayptr;
+        }
+
+        log<level::DEBUG>(
+            fmt::format(
+                "make PowerSupply bus: {} addr: {} presline: {} delay: {}",
+                *i2cbus, *i2caddr, *presline, binddelay)
+                .c_str());
+        auto psu = std::make_unique<PowerSupply>(
+            bus, invpath, *i2cbus, *i2caddr, *presline, binddelay);
         psus.emplace_back(std::move(psu));
     }
 
