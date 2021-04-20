@@ -3,6 +3,10 @@
 #include "pmbus.hpp"
 #include "util_base.hpp"
 
+#include <gpiod.hpp>
+
+#include <bitset>
+
 #include <gmock/gmock.h>
 
 namespace phosphor
@@ -40,6 +44,16 @@ class MockedUtil : public UtilBase
     MOCK_METHOD(bool, getPresence,
                 (sdbusplus::bus::bus & bus, const std::string& invpath),
                 (const, override));
+    MOCK_METHOD(void, setPresence,
+                (sdbusplus::bus::bus & bus, const std::string& invpath,
+                 bool present, const std::string& name),
+                (const, override));
+};
+
+class MockedGPIOReader : public GPIOInterface
+{
+  public:
+    MOCK_METHOD(int, read, (), (override));
 };
 
 const UtilBase& getUtils();
