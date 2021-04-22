@@ -25,7 +25,7 @@ namespace phosphor::power::regulators
 /**
  * Voltage regulator sensor type.
  */
-enum class SensorType
+enum class SensorType : unsigned char
 {
     /**
      * Output current.
@@ -90,7 +90,7 @@ namespace sensors
  * @param type sensor type
  * @return sensor type name
  */
-std::string toString(SensorType type)
+inline std::string toString(SensorType type)
 {
     std::string name{};
     switch (type)

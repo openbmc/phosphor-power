@@ -8,6 +8,7 @@ phosphor_regulators_library_source_files = [
     'chassis.cpp',
     'config_file_parser.cpp',
     'configuration.cpp',
+    'dbus_sensor.cpp',
     'device.cpp',
     'error_logging.cpp',
     'error_logging_utils.cpp',
