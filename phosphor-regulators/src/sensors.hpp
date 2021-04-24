@@ -213,6 +213,8 @@ class Sensors
     /**
      * Sets the value of one sensor for the current voltage rail.
      *
+     * Throws an exception if an error occurs.
+     *
      * @param type sensor type
      * @param value sensor value
      * @param services system services

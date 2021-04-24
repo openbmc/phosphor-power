@@ -106,6 +106,9 @@ DBusSensor::DBusSensor(sdbusplus::bus::bus& bus, const std::string& name,
 
     // Now emit signal that object has been created
     dbusObject->emit_object_added();
+
+    // Set the last update time
+    setLastUpdateTime();
 }
 
 void DBusSensor::disable()
@@ -115,6 +118,9 @@ void DBusSensor::disable()
 
     // Set the sensor to unavailable since it is disabled
     dbusObject->available(false);
+
+    // Set the last update time
+    setLastUpdateTime();
 }
 
 void DBusSensor::setToErrorState()
@@ -124,6 +130,9 @@ void DBusSensor::setToErrorState()
 
     // Set the sensor to non-functional since it could not be read
     dbusObject->functional(false);
+
+    // Set the last update time
+    setLastUpdateTime();
 }
 
 void DBusSensor::setValue(double value)
@@ -139,6 +148,9 @@ void DBusSensor::setValue(double value)
 
     // Set the sensor to available since it is not disabled
     dbusObject->available(true);
+
+    // Set the last update time
+    setLastUpdateTime();
 }
 
 std::vector<AssocationTuple>

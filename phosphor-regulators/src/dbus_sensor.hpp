@@ -24,6 +24,7 @@
 #include <xyz/openbmc_project/State/Decorator/Availability/server.hpp>
 #include <xyz/openbmc_project/State/Decorator/OperationalStatus/server.hpp>
 
+#include <chrono>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -107,6 +108,8 @@ class DBusSensor
     /**
      * Constructor.
      *
+     * Throws an exception if an error occurs.
+     *
      * @param bus D-Bus bus object
      * @param name sensor name
      * @param type sensor type
@@ -132,6 +135,16 @@ class DBusSensor
      * Sensors are not read when the system is powered off.
      */
     void disable();
+
+    /**
+     * Return the last time this sensor was updated.
+     *
+     * @return last update time
+     */
+    const std::chrono::system_clock::time_point& getLastUpdateTime() const
+    {
+        return lastUpdateTime;
+    }
 
     /**
      * Return the sensor name.
@@ -277,6 +290,14 @@ class DBusSensor
                                 double& minValue, double& maxValue);
 
     /**
+     * Set the last time this sensor was updated.
+     */
+    void setLastUpdateTime()
+    {
+        lastUpdateTime = std::chrono::system_clock::now();
+    }
+
+    /**
      * Set the sensor value on D-Bus to NaN.
      */
     void setValueToNaN();
@@ -327,6 +348,11 @@ class DBusSensor
      * interfaces via templates and multiple inheritance.
      */
     std::unique_ptr<DBusSensorObject> dbusObject{};
+
+    /**
+     * Last time this sensor was updated.
+     */
+    std::chrono::system_clock::time_point lastUpdateTime{};
 };
 
 } // namespace phosphor::power::regulators
