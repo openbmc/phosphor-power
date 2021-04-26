@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff1a3489_52c392e6",
+        "filename": "phosphor-regulators/src/dbus_sensor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-26T21:15:35Z",
+      "side": 1,
+      "message": "I\u0027ve seen GPU voltages even on a previous system at 48V, which i think is also a standard OCP input voltage.  Just FYI, in case someone someday needs to change this.",
+      "range": {
+        "startLine": 65,
+        "startChar": 35,
+        "endLine": 65,
+        "endChar": 39
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40115614_05af90d1",
+        "filename": "phosphor-regulators/src/dbus_sensor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-26T21:15:35Z",
+      "side": 1,
+      "message": "An NaN must never be able to be passed in here? (I just don\u0027t see this called yet)",
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "568f9bcf_50a675c2",
+        "filename": "phosphor-regulators/src/dbus_sensor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-26T21:15:35Z",
+      "side": 1,
+      "message": "nit: usually explicit is only needed when there is one param.  did you include it here on purpose?",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 13
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9285b52_80fff12a",
+        "filename": "phosphor-regulators/src/dbus_sensor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-04-26T21:15:35Z",
+      "side": 1,
+      "message": "why did you even bother with this?",
+      "range": {
+        "startLine": 188,
+        "startChar": 35,
+        "endLine": 188,
+        "endChar": 48
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
