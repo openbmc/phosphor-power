@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "43e66b92_e8b5db6e",
+        "filename": "phosphor-regulators/src/dbus_sensor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-26T21:45:14Z",
+      "side": 1,
+      "message": "Good feedback!  I was not aware of devices using a rail \u003e 12V.\n\nWe discussed this offline, and I\u0027m going to leave this range here for now.  Will be easy to change in the future if needed.",
+      "parentUuid": "ff1a3489_52c392e6",
+      "range": {
+        "startLine": 65,
+        "startChar": 35,
+        "endLine": 65,
+        "endChar": 39
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "40115614_05af90d1",
         "filename": "phosphor-regulators/src/dbus_sensor.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2021-04-26T21:15:35Z",
       "side": 1,
       "message": "An NaN must never be able to be passed in here? (I just don\u0027t see this called yet)",
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19148869_4dd16bc3",
+        "filename": "phosphor-regulators/src/dbus_sensor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-26T21:45:14Z",
+      "side": 1,
+      "message": "Correct, use of NaN for a sensor value is supposed to be an internal implementation detail of this class.  I\u0027ll update the doxygen.",
+      "parentUuid": "40115614_05af90d1",
       "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "e1bbca80_61967be0",
+        "filename": "phosphor-regulators/src/dbus_sensor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-26T21:45:14Z",
+      "side": 1,
+      "message": "I just specify it for all constructors that are not supposed to do automatic type conversions.  Would be easy to forget to add the explicit later if the signature changed to one parameter later.\n\nI can remove if you think that is best.",
+      "parentUuid": "568f9bcf_50a675c2",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 120,
+        "endChar": 13
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9285b52_80fff12a",
         "filename": "phosphor-regulators/src/dbus_sensor.hpp",
         "patchSetId": 1
@@ -76,6 +142,30 @@
       "writtenOn": "2021-04-26T21:15:35Z",
       "side": 1,
       "message": "why did you even bother with this?",
+      "range": {
+        "startLine": 188,
+        "startChar": 35,
+        "endLine": 188,
+        "endChar": 48
+      },
+      "revId": "58e58701f50b6d2400cc5ac7c4352cb64977d38b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0555614_6a5c9007",
+        "filename": "phosphor-regulators/src/dbus_sensor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-04-26T21:45:14Z",
+      "side": 1,
+      "message": "By default an enum class uses an integer which consumes 4 bytes.  Specifying unsigned char here makes it only 1 byte.  I don\u0027t expect this enum to have \u003e 256 enumerators in the future (LOL).\n\nThere will be a large number of DBusSensor objects, and each one will have data member of this type.  Just trying to save memory.",
+      "parentUuid": "b9285b52_80fff12a",
       "range": {
         "startLine": 188,
         "startChar": 35,
