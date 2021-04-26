@@ -50,6 +50,7 @@ PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
 
     // Get the current state of the Present property.
     updatePresence();
+    updateInventory();
 }
 
 void PowerSupply::updatePresence()
