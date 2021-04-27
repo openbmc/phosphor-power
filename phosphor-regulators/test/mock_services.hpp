@@ -20,8 +20,10 @@
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_presence_service.hpp"
+#include "mock_sensors.hpp"
 #include "mock_vpd.hpp"
 #include "presence_service.hpp"
+#include "sensors.hpp"
 #include "services.hpp"
 #include "vpd.hpp"
 
@@ -70,6 +72,12 @@ class MockServices : public Services
         return presenceService;
     }
 
+    /** @copydoc Services::getSensors() */
+    virtual Sensors& getSensors() override
+    {
+        return sensors;
+    }
+
     /** @copydoc Services::getVPD() */
     virtual VPD& getVPD() override
     {
@@ -115,6 +123,18 @@ class MockServices : public Services
     }
 
     /**
+     * Returns the MockSensors object that implements the Sensors interface.
+     *
+     * This allows test cases to use the object in EXPECT_CALL() statements.
+     *
+     * @return mock sensors interface object
+     */
+    virtual MockSensors& getMockSensors()
+    {
+        return sensors;
+    }
+
+    /**
      * Returns the MockVPD object that implements the VPD interface.
      *
      * This allows test cases to use the object in EXPECT_CALL() statements.
@@ -146,6 +166,11 @@ class MockServices : public Services
      * Mock implementation of the PresenceService interface.
      */
     MockPresenceService presenceService{};
+
+    /**
+     * Mock implementation of the Sensors interface.
+     */
+    MockSensors sensors{};
 
     /**
      * Mock implementation of the VPD interface.

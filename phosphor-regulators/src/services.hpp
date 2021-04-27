@@ -15,9 +15,11 @@
  */
 #pragma once
 
+#include "dbus_sensors.hpp"
 #include "error_logging.hpp"
 #include "journal.hpp"
 #include "presence_service.hpp"
+#include "sensors.hpp"
 #include "vpd.hpp"
 
 #include <sdbusplus/bus.hpp>
@@ -74,6 +76,13 @@ class Services
     virtual PresenceService& getPresenceService() = 0;
 
     /**
+     * Returns the sensors interface.
+     *
+     * @return sensors interface
+     */
+    virtual Sensors& getSensors() = 0;
+
+    /**
      * Returns the interface to hardware VPD (Vital Product Data).
      *
      * @return hardware VPD interface
@@ -103,7 +112,8 @@ class BMCServices : public Services
      * @param bus D-Bus bus object
      */
     explicit BMCServices(sdbusplus::bus::bus& bus) :
-        bus{bus}, errorLogging{bus}, presenceService{bus}, vpd{bus}
+        bus{bus}, errorLogging{bus},
+        presenceService{bus}, sensors{bus}, vpd{bus}
     {
     }
 
@@ -129,6 +139,12 @@ class BMCServices : public Services
     virtual PresenceService& getPresenceService() override
     {
         return presenceService;
+    }
+
+    /** @copydoc Services::getSensors() */
+    virtual Sensors& getSensors() override
+    {
+        return sensors;
     }
 
     /** @copydoc Services::getVPD() */
@@ -158,6 +174,11 @@ class BMCServices : public Services
      * Implementation of the PresenceService interface using D-Bus method calls.
      */
     DBusPresenceService presenceService;
+
+    /**
+     * Implementation of the Sensors interface using D-Bus.
+     */
+    DBusSensors sensors;
 
     /**
      * Implementation of the VPD interface using D-Bus method calls.
