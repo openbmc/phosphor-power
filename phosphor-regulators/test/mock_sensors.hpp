@@ -16,7 +16,6 @@
 #pragma once
 
 #include "sensors.hpp"
-#include "services.hpp"
 
 #include <string>
 
@@ -41,25 +40,22 @@ class MockSensors : public Sensors
     MockSensors& operator=(MockSensors&&) = delete;
     virtual ~MockSensors() = default;
 
-    MOCK_METHOD(void, enable, (Services & services), (override));
+    MOCK_METHOD(void, enable, (), (override));
 
-    MOCK_METHOD(void, endCycle, (Services & services), (override));
+    MOCK_METHOD(void, endCycle, (), (override));
 
-    MOCK_METHOD(void, endRail, (bool errorOccurred, Services& services),
-                (override));
+    MOCK_METHOD(void, endRail, (bool errorOccurred), (override));
 
-    MOCK_METHOD(void, disable, (Services & services), (override));
+    MOCK_METHOD(void, disable, (), (override));
 
-    MOCK_METHOD(void, setValue,
-                (SensorType type, double value, Services& services),
-                (override));
+    MOCK_METHOD(void, setValue, (SensorType type, double value), (override));
 
-    MOCK_METHOD(void, startCycle, (Services & services), (override));
+    MOCK_METHOD(void, startCycle, (), (override));
 
     MOCK_METHOD(void, startRail,
                 (const std::string& rail,
                  const std::string& deviceInventoryPath,
-                 const std::string& chassisInventoryPath, Services& services),
+                 const std::string& chassisInventoryPath),
                 (override));
 };
 

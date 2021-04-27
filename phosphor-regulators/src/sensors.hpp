@@ -15,8 +15,6 @@
  */
 #pragma once
 
-#include "services.hpp"
-
 #include <string>
 
 namespace phosphor::power::regulators
@@ -177,18 +175,14 @@ class Sensors
      * While the service is enabled, the sensors that it provides will be in an
      * active state.  This indicates that their value is being updated
      * periodically.
-     *
-     * @param services system services
      */
-    virtual void enable(Services& services) = 0;
+    virtual void enable() = 0;
 
     /**
      * Notify the sensors service that the current sensor monitoring cycle has
      * ended.
-     *
-     * @param services system services
      */
-    virtual void endCycle(Services& services) = 0;
+    virtual void endCycle() = 0;
 
     /**
      * Notify the sensors service that sensor monitoring has ended for the
@@ -196,19 +190,16 @@ class Sensors
      *
      * @param errorOccurred specifies whether an error occurred while trying to
      *                      read all the sensors for the current rail
-     * @param services system services
      */
-    virtual void endRail(bool errorOccurred, Services& services) = 0;
+    virtual void endRail(bool errorOccurred) = 0;
 
     /**
      * Disable the sensors service.
      *
      * While the service is disabled, the sensors that it provides will be in an
      * inactive state.  This indicates that their value is not being updated.
-     *
-     * @param services system services
      */
-    virtual void disable(Services& services) = 0;
+    virtual void disable() = 0;
 
     /**
      * Sets the value of one sensor for the current voltage rail.
@@ -217,17 +208,13 @@ class Sensors
      *
      * @param type sensor type
      * @param value sensor value
-     * @param services system services
      */
-    virtual void setValue(SensorType type, double value,
-                          Services& services) = 0;
+    virtual void setValue(SensorType type, double value) = 0;
 
     /**
      * Notify the sensors service that a sensor monitoring cycle is starting.
-     *
-     * @param services system services
      */
-    virtual void startCycle(Services& services) = 0;
+    virtual void startCycle() = 0;
 
     /**
      * Notify the sensors service that sensor monitoring is starting for the
@@ -240,12 +227,10 @@ class Sensors
      *                            device that produces the rail
      * @param chassisInventoryPath D-Bus inventory path of the chassis that
      *                             contains the voltage regulator device
-     * @param services system services
      */
     virtual void startRail(const std::string& rail,
                            const std::string& deviceInventoryPath,
-                           const std::string& chassisInventoryPath,
-                           Services& services) = 0;
+                           const std::string& chassisInventoryPath) = 0;
 };
 
 } // namespace phosphor::power::regulators

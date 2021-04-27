@@ -21,13 +21,13 @@
 namespace phosphor::power::regulators
 {
 
-void DBusSensors::enable(Services& /*services*/)
+void DBusSensors::enable()
 {
     // Currently nothing to do here.  The next monitoring cycle will set the
     // values of all sensors, and that will set them to the enabled state.
 }
 
-void DBusSensors::endCycle(Services& services)
+void DBusSensors::endCycle()
 {
     // Delete any sensors that were not updated during this monitoring cycle.
     // This can happen if the hardware device producing the sensors was removed
@@ -43,13 +43,12 @@ void DBusSensors::endCycle(Services& services)
         // Check if last update time for sensor is before cycle start time
         if (sensor->getLastUpdateTime() < cycleStartTime)
         {
-            services.getJournal().logDebug("Deleted sensor " + sensorName);
             sensors.erase(sensorName);
         }
     }
 }
 
-void DBusSensors::endRail(bool errorOccurred, Services& /*services*/)
+void DBusSensors::endRail(bool errorOccurred)
 {
     // If an error occurred, set all sensors for current rail to the error state
     if (errorOccurred)
@@ -69,7 +68,7 @@ void DBusSensors::endRail(bool errorOccurred, Services& /*services*/)
     chassisInventoryPath.clear();
 }
 
-void DBusSensors::disable(Services& /*services*/)
+void DBusSensors::disable()
 {
     // Disable all sensors
     for (auto& [sensorName, sensor] : sensors)
@@ -78,7 +77,7 @@ void DBusSensors::disable(Services& /*services*/)
     }
 }
 
-void DBusSensors::setValue(SensorType type, double value, Services& services)
+void DBusSensors::setValue(SensorType type, double value)
 {
     // Build unique sensor name based on rail and sensor type
     std::string sensorName{rail + '_' + sensors::toString(type)};
@@ -97,11 +96,10 @@ void DBusSensors::setValue(SensorType type, double value, Services& services)
                                                    rail, deviceInventoryPath,
                                                    chassisInventoryPath);
         sensors.emplace(sensorName, std::move(sensor));
-        services.getJournal().logDebug("Created sensor " + sensorName);
     }
 }
 
-void DBusSensors::startCycle(Services& /*services*/)
+void DBusSensors::startCycle()
 {
     // Store the time when this monitoring cycle started.  This is used to
     // detect sensors that were not updated during this cycle.
@@ -110,8 +108,7 @@ void DBusSensors::startCycle(Services& /*services*/)
 
 void DBusSensors::startRail(const std::string& rail,
                             const std::string& deviceInventoryPath,
-                            const std::string& chassisInventoryPath,
-                            Services& /*services*/)
+                            const std::string& chassisInventoryPath)
 {
     // Store current rail information; used later by setValue() and endRail()
     this->rail = rail;
