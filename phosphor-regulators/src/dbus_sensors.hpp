@@ -17,7 +17,6 @@
 
 #include "dbus_sensor.hpp"
 #include "sensors.hpp"
-#include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server/manager.hpp>
@@ -57,29 +56,27 @@ class DBusSensors : public Sensors
     }
 
     /** @copydoc Sensors::enable() */
-    virtual void enable(Services& services) override;
+    virtual void enable() override;
 
     /** @copydoc Sensors::endCycle() */
-    virtual void endCycle(Services& services) override;
+    virtual void endCycle() override;
 
     /** @copydoc Sensors::endRail() */
-    virtual void endRail(bool errorOccurred, Services& services) override;
+    virtual void endRail(bool errorOccurred) override;
 
     /** @copydoc Sensors::disable() */
-    virtual void disable(Services& services) override;
+    virtual void disable() override;
 
     /** @copydoc Sensors::setValue() */
-    virtual void setValue(SensorType type, double value,
-                          Services& services) override;
+    virtual void setValue(SensorType type, double value) override;
 
     /** @copydoc Sensors::startCycle() */
-    virtual void startCycle(Services& services) override;
+    virtual void startCycle() override;
 
     /** @copydoc Sensors::startRail() */
     virtual void startRail(const std::string& rail,
                            const std::string& deviceInventoryPath,
-                           const std::string& chassisInventoryPath,
-                           Services& services) override;
+                           const std::string& chassisInventoryPath) override;
 
   private:
     /**
