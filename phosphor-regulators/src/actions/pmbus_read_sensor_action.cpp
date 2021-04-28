@@ -30,9 +30,6 @@ bool PMBusReadSensorAction::execute(ActionEnvironment& environment)
 {
     try
     {
-        pmbus_utils::SensorReading reading{};
-        reading.type = type;
-
         // Get I2C interface to current device
         i2c::I2CInterface& interface = getI2CInterface(environment);
 
@@ -40,23 +37,25 @@ bool PMBusReadSensorAction::execute(ActionEnvironment& environment)
         uint16_t value;
         interface.read(command, value);
 
+        // Convert PMBus 2-byte value to a double
+        // TODO: Store result of conversion in a double.  Not doing it yet
+        // because it results in an unused variable compile error during CI.
         switch (format)
         {
             case pmbus_utils::SensorDataFormat::linear_11:
                 // Convert linear_11 format to a normal decimal number
-                reading.value = pmbus_utils::convertFromLinear(value);
+                pmbus_utils::convertFromLinear(value);
                 break;
             case pmbus_utils::SensorDataFormat::linear_16:
                 // Get exponent value for converting linear format to volts
                 int8_t exponentValue = getExponentValue(environment, interface);
 
                 // Convert linear_16 format to a normal decimal number
-                reading.value =
-                    pmbus_utils::convertFromVoutLinear(value, exponentValue);
+                pmbus_utils::convertFromVoutLinear(value, exponentValue);
                 break;
         }
 
-        environment.addSensorReading(reading);
+        // TODO: Publish sensor value using Sensors service
     }
     // Nest the following exception types within an ActionError so the caller
     // will have both the low level error information and the action information
