@@ -19,6 +19,7 @@
 #include "i2c_action.hpp"
 #include "i2c_interface.hpp"
 #include "pmbus_utils.hpp"
+#include "sensors.hpp"
 
 #include <cstdint>
 #include <optional>
@@ -57,7 +58,7 @@ class PMBusReadSensorAction : public I2CAction
     /**
      * Constructor.
      *
-     * @param type Sensor value type.
+     * @param type Sensor type.
      * @param command PMBus command code.
      * @param format Data format of the sensor value returned by the device.
      * @param exponent Exponent value for linear_16 data format.
@@ -65,8 +66,7 @@ class PMBusReadSensorAction : public I2CAction
      *                 exponent value will be read from VOUT_MODE.
      *                 Should not be specified if the data format is linear_11.
      */
-    explicit PMBusReadSensorAction(pmbus_utils::SensorValueType type,
-                                   uint8_t command,
+    explicit PMBusReadSensorAction(SensorType type, uint8_t command,
                                    pmbus_utils::SensorDataFormat format,
                                    std::optional<int8_t> exponent) :
         type{type},
@@ -79,7 +79,7 @@ class PMBusReadSensorAction : public I2CAction
      *
      * Reads one sensor using the I2C interface.
      *
-     * The sensor value type is specified in the constructor.
+     * The sensor type is specified in the constructor.
      *
      * The PMBus command code is specified in the constructor.
      * It is the register to read on the device.
@@ -132,11 +132,11 @@ class PMBusReadSensorAction : public I2CAction
     }
 
     /**
-     * Returns the sensor value type.
+     * Returns the sensor type.
      *
-     * @return sensor value type.
+     * @return sensor type.
      */
-    pmbus_utils::SensorValueType getType() const
+    SensorType getType() const
     {
         return type;
     }
@@ -167,9 +167,9 @@ class PMBusReadSensorAction : public I2CAction
                             i2c::I2CInterface& interface);
 
     /**
-     * Sensor value type.
+     * Sensor type.
      */
-    const pmbus_utils::SensorValueType type{};
+    const SensorType type{};
 
     /**
      * PMBus command code.

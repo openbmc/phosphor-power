@@ -39,6 +39,7 @@
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 #include "sensor_monitoring.hpp"
+#include "sensors.hpp"
 #include "set_device_action.hpp"
 #include "temporary_file.hpp"
 
@@ -3187,7 +3188,7 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
         )"_json;
         std::unique_ptr<PMBusReadSensorAction> action =
             parsePMBusReadSensor(element);
-        EXPECT_EQ(action->getType(), pmbus_utils::SensorValueType::iout);
+        EXPECT_EQ(action->getType(), SensorType::iout);
         EXPECT_EQ(action->getCommand(), 0x8C);
         EXPECT_EQ(action->getFormat(),
                   pmbus_utils::SensorDataFormat::linear_11);
@@ -3206,7 +3207,7 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
         )"_json;
         std::unique_ptr<PMBusReadSensorAction> action =
             parsePMBusReadSensor(element);
-        EXPECT_EQ(action->getType(), pmbus_utils::SensorValueType::temperature);
+        EXPECT_EQ(action->getType(), SensorType::temperature);
         EXPECT_EQ(action->getCommand(), 0x7A);
         EXPECT_EQ(action->getFormat(),
                   pmbus_utils::SensorDataFormat::linear_16);
@@ -4456,103 +4457,88 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
     }
 }
 
-TEST(ConfigFileParserTests, ParseSensorValueType)
+TEST(ConfigFileParserTests, ParseSensorType)
 {
     // Test where works: iout
     {
         const json element = "iout";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::iout;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::iout);
     }
 
     // Test where works: iout_peak
     {
         const json element = "iout_peak";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::iout_peak;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::iout_peak);
     }
 
     // Test where works: iout_valley
     {
         const json element = "iout_valley";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::iout_valley;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::iout_valley);
     }
 
     // Test where works: pout
     {
         const json element = "pout";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::pout;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::pout);
     }
 
     // Test where works: temperature
     {
         const json element = "temperature";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::temperature;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::temperature);
     }
 
     // Test where works: temperature_peak
     {
         const json element = "temperature_peak";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::temperature_peak;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::temperature_peak);
     }
 
     // Test where works: vout
     {
         const json element = "vout";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::vout;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::vout);
     }
 
     // Test where works: vout_peak
     {
         const json element = "vout_peak";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::vout_peak;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::vout_peak);
     }
 
     // Test where works: vout_valley
     {
         const json element = "vout_valley";
-        pmbus_utils::SensorValueType value = parseSensorValueType(element);
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::vout_valley;
-        EXPECT_EQ(value, type);
+        SensorType type = parseSensorType(element);
+        EXPECT_EQ(type, SensorType::vout_valley);
     }
 
-    // Test where fails: Element is not a sensor value type
+    // Test where fails: Element is not a sensor type
     try
     {
         const json element = "foo";
-        parseSensorValueType(element);
+        parseSensorType(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not a sensor value type");
+        EXPECT_STREQ(e.what(), "Element is not a sensor type");
     }
 
     // Test where fails: Element is not a string
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parseSensorValueType(element);
+        parseSensorType(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)

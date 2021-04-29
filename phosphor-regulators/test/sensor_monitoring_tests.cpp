@@ -29,6 +29,7 @@
 #include "rail.hpp"
 #include "rule.hpp"
 #include "sensor_monitoring.hpp"
+#include "sensors.hpp"
 #include "system.hpp"
 
 #include <cstdint>
@@ -69,7 +70,7 @@ TEST(SensorMonitoringTests, Execute)
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create PMBusReadSensorAction
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};
@@ -150,7 +151,7 @@ TEST(SensorMonitoringTests, Execute)
             .Times(1);
 
         // Create PMBusReadSensorAction
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};

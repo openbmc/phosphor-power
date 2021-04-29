@@ -24,6 +24,7 @@
 #include "pmbus_error.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
+#include "sensors.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -48,13 +49,13 @@ TEST(PMBusReadSensorActionTests, Constructor)
     // Test where works: exponent value is specified
     try
     {
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
         std::optional<int8_t> exponent{-8};
         PMBusReadSensorAction action{type, command, format, exponent};
-        EXPECT_EQ(action.getType(), pmbus_utils::SensorValueType::iout);
+        EXPECT_EQ(action.getType(), SensorType::iout);
         EXPECT_EQ(action.getCommand(), 0x8C);
         EXPECT_EQ(action.getFormat(), pmbus_utils::SensorDataFormat::linear_16);
         EXPECT_EQ(action.getExponent().has_value(), true);
@@ -68,13 +69,13 @@ TEST(PMBusReadSensorActionTests, Constructor)
     // Test where works: exponent value is not specified
     try
     {
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};
         std::optional<int8_t> exponent{};
         PMBusReadSensorAction action{type, command, format, exponent};
-        EXPECT_EQ(action.getType(), pmbus_utils::SensorValueType::iout);
+        EXPECT_EQ(action.getType(), SensorType::iout);
         EXPECT_EQ(action.getCommand(), 0x8C);
         EXPECT_EQ(action.getFormat(), pmbus_utils::SensorDataFormat::linear_11);
         EXPECT_EQ(action.getExponent().has_value(), false);
@@ -115,7 +116,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};
@@ -127,7 +128,7 @@ TEST(PMBusReadSensorActionTests, Execute)
          *
          *  EXPECT_EQ(env.getSensorReadings().size(), 1);
          *  EXPECT_EQ(env.getSensorReadings()[0].type,
-         *            pmbus_utils::SensorValueType::iout);
+         *            SensorType::iout);
          *  EXPECT_DOUBLE_EQ(env.getSensorReadings()[0].value, 11.5);
          */
     }
@@ -164,7 +165,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::vout};
+        SensorType type{SensorType::vout};
         uint8_t command = 0x8B;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
@@ -176,7 +177,7 @@ TEST(PMBusReadSensorActionTests, Execute)
          *
          * EXPECT_EQ(env.getSensorReadings().size(), 1);
          * EXPECT_EQ(env.getSensorReadings()[0].type,
-         *           pmbus_utils::SensorValueType::vout);
+         *           SensorType::vout);
          * EXPECT_DOUBLE_EQ(env.getSensorReadings()[0].value, 16);
          */
     }
@@ -213,8 +214,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{
-            pmbus_utils::SensorValueType::vout_peak};
+        SensorType type{SensorType::vout_peak};
         uint8_t command = 0xC6;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
@@ -226,7 +226,7 @@ TEST(PMBusReadSensorActionTests, Execute)
          *
          * EXPECT_EQ(env.getSensorReadings().size(), 1);
          * EXPECT_EQ(env.getSensorReadings()[0].type,
-         *           pmbus_utils::SensorValueType::vout_peak);
+         *           SensorType::vout_peak);
          * EXPECT_DOUBLE_EQ(env.getSensorReadings()[0].value, 0.232421875);
          */
     }
@@ -244,7 +244,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::pout};
+        SensorType type{SensorType::pout};
         uint8_t command = 0x96;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};
@@ -287,7 +287,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::vout};
+        SensorType type{SensorType::vout};
         uint8_t command = 0x8B;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
@@ -351,8 +351,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{
-            pmbus_utils::SensorValueType::vout_peak};
+        SensorType type{SensorType::vout_peak};
         uint8_t command = 0xC6;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
@@ -412,7 +411,7 @@ TEST(PMBusReadSensorActionTests, Execute)
         ActionEnvironment env{idMap, "reg1", services};
 
         // Create and execute action
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::pout};
+        SensorType type{SensorType::pout};
         uint8_t command = 0x96;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};
@@ -450,7 +449,7 @@ TEST(PMBusReadSensorActionTests, Execute)
 
 TEST(PMBusReadSensorActionTests, GetCommand)
 {
-    pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+    SensorType type{SensorType::iout};
     uint8_t command = 0x8C;
     pmbus_utils::SensorDataFormat format{
         pmbus_utils::SensorDataFormat::linear_16};
@@ -461,7 +460,7 @@ TEST(PMBusReadSensorActionTests, GetCommand)
 
 TEST(PMBusReadSensorActionTests, GetExponent)
 {
-    pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+    SensorType type{SensorType::iout};
     uint8_t command = 0x8C;
     pmbus_utils::SensorDataFormat format{
         pmbus_utils::SensorDataFormat::linear_16};
@@ -484,7 +483,7 @@ TEST(PMBusReadSensorActionTests, GetExponent)
 
 TEST(PMBusReadSensorActionTests, GetFormat)
 {
-    pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+    SensorType type{SensorType::iout};
     uint8_t command = 0x8C;
     pmbus_utils::SensorDataFormat format{
         pmbus_utils::SensorDataFormat::linear_16};
@@ -495,20 +494,20 @@ TEST(PMBusReadSensorActionTests, GetFormat)
 
 TEST(PMBusReadSensorActionTests, GetType)
 {
-    pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::pout};
+    SensorType type{SensorType::pout};
     uint8_t command = 0x8C;
     pmbus_utils::SensorDataFormat format{
         pmbus_utils::SensorDataFormat::linear_16};
     std::optional<int8_t> exponent{-8};
     PMBusReadSensorAction action{type, command, format, exponent};
-    EXPECT_EQ(action.getType(), pmbus_utils::SensorValueType::pout);
+    EXPECT_EQ(action.getType(), SensorType::pout);
 }
 
 TEST(PMBusReadSensorActionTests, ToString)
 {
     // Test where exponent value is specified
     {
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::vout};
+        SensorType type{SensorType::vout};
         uint8_t command = 0x8B;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_16};
@@ -521,7 +520,7 @@ TEST(PMBusReadSensorActionTests, ToString)
 
     // Test where exponent value is not specified
     {
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};

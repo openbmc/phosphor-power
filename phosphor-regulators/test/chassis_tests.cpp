@@ -26,6 +26,7 @@
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
+#include "sensors.hpp"
 #include "system.hpp"
 #include "test_utils.hpp"
 
@@ -380,7 +381,7 @@ TEST(ChassisTests, MonitorSensors)
         std::vector<std::unique_ptr<Device>> devices{};
 
         // Create PMBusReadSensorAction
-        pmbus_utils::SensorValueType type{pmbus_utils::SensorValueType::iout};
+        SensorType type{SensorType::iout};
         uint8_t command = 0x8C;
         pmbus_utils::SensorDataFormat format{
             pmbus_utils::SensorDataFormat::linear_11};

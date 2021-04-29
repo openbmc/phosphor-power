@@ -690,7 +690,7 @@ std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
 
     // Required type property
     const json& typeElement = getRequiredProperty(element, "type");
-    pmbus_utils::SensorValueType type = parseSensorValueType(typeElement);
+    SensorType type = parseSensorType(typeElement);
     ++propertyCount;
 
     // Required command property
@@ -997,54 +997,54 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
     return std::make_unique<SensorMonitoring>(std::move(actions));
 }
 
-pmbus_utils::SensorValueType parseSensorValueType(const json& element)
+SensorType parseSensorType(const json& element)
 {
     if (!element.is_string())
     {
         throw std::invalid_argument{"Element is not a string"};
     }
     std::string value = element.get<std::string>();
-    pmbus_utils::SensorValueType type{};
+    SensorType type{};
 
     if (value == "iout")
     {
-        type = pmbus_utils::SensorValueType::iout;
+        type = SensorType::iout;
     }
     else if (value == "iout_peak")
     {
-        type = pmbus_utils::SensorValueType::iout_peak;
+        type = SensorType::iout_peak;
     }
     else if (value == "iout_valley")
     {
-        type = pmbus_utils::SensorValueType::iout_valley;
+        type = SensorType::iout_valley;
     }
     else if (value == "pout")
     {
-        type = pmbus_utils::SensorValueType::pout;
+        type = SensorType::pout;
     }
     else if (value == "temperature")
     {
-        type = pmbus_utils::SensorValueType::temperature;
+        type = SensorType::temperature;
     }
     else if (value == "temperature_peak")
     {
-        type = pmbus_utils::SensorValueType::temperature_peak;
+        type = SensorType::temperature_peak;
     }
     else if (value == "vout")
     {
-        type = pmbus_utils::SensorValueType::vout;
+        type = SensorType::vout;
     }
     else if (value == "vout_peak")
     {
-        type = pmbus_utils::SensorValueType::vout_peak;
+        type = SensorType::vout_peak;
     }
     else if (value == "vout_valley")
     {
-        type = pmbus_utils::SensorValueType::vout_valley;
+        type = SensorType::vout_valley;
     }
     else
     {
-        throw std::invalid_argument{"Element is not a sensor value type"};
+        throw std::invalid_argument{"Element is not a sensor type"};
     }
 
     return type;

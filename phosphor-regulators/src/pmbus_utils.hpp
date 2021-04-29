@@ -60,57 +60,6 @@ enum class SensorDataFormat
 };
 
 /**
- * Sensor Value Type.
- */
-enum class SensorValueType
-{
-    /**
-     * Output current.
-     */
-    iout,
-
-    /**
-     * Highest output current.
-     */
-    iout_peak,
-
-    /**
-     * Lowest output current.
-     */
-    iout_valley,
-
-    /**
-     * Output power.
-     */
-    pout,
-
-    /**
-     * Temperature.
-     */
-    temperature,
-
-    /**
-     * Highest temperature.
-     */
-    temperature_peak,
-
-    /**
-     * Output voltage.
-     */
-    vout,
-
-    /**
-     * Highest output voltage.
-     */
-    vout_peak,
-
-    /**
-     * Lowest output voltage.
-     */
-    vout_valley
-};
-
-/**
  * Data formats for output voltage.
  *
  * These formats are used for commanding and reading output voltage and related
@@ -167,14 +116,6 @@ void parseVoutMode(uint8_t voutModeValue, VoutDataFormat& format,
  * @return string corresponding to the enum value
  */
 std::string toString(SensorDataFormat format);
-
-/**
- * Converts the specified SensorValueType value to string.
- *
- * @param type SensorValueType type
- * @return string corresponding to the enum value
- */
-std::string toString(SensorValueType type);
 
 /**
  * Converts the specified VoutDataFormat value to string.

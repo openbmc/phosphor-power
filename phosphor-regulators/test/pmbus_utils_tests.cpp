@@ -116,66 +116,6 @@ TEST(PMBusUtilsTests, ToString)
         EXPECT_EQ(pmbus_utils::toString(format), "linear_16");
     }
 
-    // Sensor value type: SensorValueType::iout
-    {
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::iout;
-        EXPECT_EQ(pmbus_utils::toString(type), "iout");
-    }
-
-    // Sensor value type: SensorValueType::iout_peak
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::iout_peak;
-        EXPECT_EQ(pmbus_utils::toString(type), "iout_peak");
-    }
-
-    // Sensor value type: SensorValueType::iout_valley
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::iout_valley;
-        EXPECT_EQ(pmbus_utils::toString(type), "iout_valley");
-    }
-
-    // Sensor value type: SensorValueType::pout
-    {
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::pout;
-        EXPECT_EQ(pmbus_utils::toString(type), "pout");
-    }
-
-    // Sensor value type: SensorValueType::temperature
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::temperature;
-        EXPECT_EQ(pmbus_utils::toString(type), "temperature");
-    }
-
-    // Sensor value type: SensorValueType::temperature_peak
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::temperature_peak;
-        EXPECT_EQ(pmbus_utils::toString(type), "temperature_peak");
-    }
-
-    // Sensor value type: SensorValueType::vout
-    {
-        pmbus_utils::SensorValueType type = pmbus_utils::SensorValueType::vout;
-        EXPECT_EQ(pmbus_utils::toString(type), "vout");
-    }
-
-    // Sensor value type: SensorValueType::vout_peak
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::vout_peak;
-        EXPECT_EQ(pmbus_utils::toString(type), "vout_peak");
-    }
-
-    // Sensor value type: SensorValueType::vout_valley
-    {
-        pmbus_utils::SensorValueType type =
-            pmbus_utils::SensorValueType::vout_valley;
-        EXPECT_EQ(pmbus_utils::toString(type), "vout_valley");
-    }
-
     // Vout data format: VoutDataFormat::linear
     {
         pmbus_utils::VoutDataFormat format =

@@ -74,7 +74,7 @@ std::string PMBusReadSensorAction::toString() const
 {
     std::ostringstream ss;
     ss << "pmbus_read_sensor: { ";
-    ss << "type: " << pmbus_utils::toString(type) << ", " << std::hex
+    ss << "type: " << sensors::toString(type) << ", " << std::hex
        << std::uppercase;
     ss << "command: 0x" << static_cast<uint16_t>(command) << ", " << std::dec
        << std::nouppercase;

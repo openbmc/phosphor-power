@@ -39,6 +39,7 @@
 #include "rule.hpp"
 #include "run_rule_action.hpp"
 #include "sensor_monitoring.hpp"
+#include "sensors.hpp"
 #include "set_device_action.hpp"
 
 #include <nlohmann/json.hpp>
@@ -684,17 +685,16 @@ std::unique_ptr<SensorMonitoring>
     parseSensorMonitoring(const nlohmann::json& element);
 
 /**
- * Parses a JSON element containing a SensorValueType expressed as a string.
+ * Parses a JSON element containing a SensorType expressed as a string.
  *
- * Returns the corresponding SensorValueType enum value.
+ * Returns the corresponding SensorType enum value.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
- * @return SensorValueType enum value
+ * @return SensorType enum value
  */
-pmbus_utils::SensorValueType
-    parseSensorValueType(const nlohmann::json& element);
+SensorType parseSensorType(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a set_device action.

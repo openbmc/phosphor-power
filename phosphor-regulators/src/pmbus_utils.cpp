@@ -73,42 +73,6 @@ std::string toString(SensorDataFormat format)
     return returnValue;
 }
 
-std::string toString(SensorValueType type)
-{
-    std::string returnValue{};
-    switch (type)
-    {
-        case SensorValueType::iout:
-            returnValue = "iout";
-            break;
-        case SensorValueType::iout_peak:
-            returnValue = "iout_peak";
-            break;
-        case SensorValueType::iout_valley:
-            returnValue = "iout_valley";
-            break;
-        case SensorValueType::pout:
-            returnValue = "pout";
-            break;
-        case SensorValueType::temperature:
-            returnValue = "temperature";
-            break;
-        case SensorValueType::temperature_peak:
-            returnValue = "temperature_peak";
-            break;
-        case SensorValueType::vout:
-            returnValue = "vout";
-            break;
-        case SensorValueType::vout_peak:
-            returnValue = "vout_peak";
-            break;
-        case SensorValueType::vout_valley:
-            returnValue = "vout_valley";
-            break;
-    }
-    return returnValue;
-}
-
 std::string toString(VoutDataFormat format)
 {
     std::string returnValue{};
