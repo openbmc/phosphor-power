@@ -46,12 +46,17 @@ using ::testing::A;
 using ::testing::Return;
 using ::testing::TypedEq;
 
+// Default chassis inventory path
+static const std::string defaultInventoryPath{
+    "/xyz/openbmc_project/inventory/system/chassis"};
+
 TEST(ChassisTests, Constructor)
 {
     // Test where works: Only required parameters are specified
     {
-        Chassis chassis{2};
+        Chassis chassis{2, defaultInventoryPath};
         EXPECT_EQ(chassis.getNumber(), 2);
+        EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
         EXPECT_EQ(chassis.getDevices().size(), 0);
     }
 
@@ -63,15 +68,16 @@ TEST(ChassisTests, Constructor)
         devices.emplace_back(createDevice("vdd_reg2"));
 
         // Create Chassis
-        Chassis chassis{1, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
         EXPECT_EQ(chassis.getNumber(), 1);
+        EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
         EXPECT_EQ(chassis.getDevices().size(), 2);
     }
 
     // Test where fails: Invalid chassis number < 1
     try
     {
-        Chassis chassis{0};
+        Chassis chassis{0, defaultInventoryPath};
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -93,7 +99,7 @@ TEST(ChassisTests, AddToIDMap)
     devices.emplace_back(createDevice("reg3"));
 
     // Create Chassis
-    Chassis chassis{1, std::move(devices)};
+    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
 
     // Add Device and Rail objects within the Chassis to an IDMap
     IDMap idMap{};
@@ -132,7 +138,7 @@ TEST(ChassisTests, ClearCache)
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
     std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, std::move(devices));
+        std::make_unique<Chassis>(1, defaultInventoryPath, std::move(devices));
     Chassis* chassisPtr = chassis.get();
 
     // Create System that contains Chassis
@@ -163,7 +169,7 @@ TEST(ChassisTests, CloseDevices)
         EXPECT_CALL(journal, logDebug("Closing devices in chassis 2")).Times(1);
 
         // Create Chassis
-        Chassis chassis{2};
+        Chassis chassis{2, defaultInventoryPath};
 
         // Call closeDevices()
         chassis.closeDevices(services);
@@ -213,7 +219,7 @@ TEST(ChassisTests, CloseDevices)
         }
 
         // Create Chassis
-        Chassis chassis{1, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
 
         // Call closeDevices()
         chassis.closeDevices(services);
@@ -232,7 +238,8 @@ TEST(ChassisTests, Configure)
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Chassis
-        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(1);
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, defaultInventoryPath);
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -300,8 +307,8 @@ TEST(ChassisTests, Configure)
         }
 
         // Create Chassis
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(2, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            2, defaultInventoryPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -319,7 +326,7 @@ TEST(ChassisTests, GetDevices)
 {
     // Test where no devices were specified in constructor
     {
-        Chassis chassis{2};
+        Chassis chassis{2, defaultInventoryPath};
         EXPECT_EQ(chassis.getDevices().size(), 0);
     }
 
@@ -331,16 +338,22 @@ TEST(ChassisTests, GetDevices)
         devices.emplace_back(createDevice("vdd_reg2"));
 
         // Create Chassis
-        Chassis chassis{1, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
         EXPECT_EQ(chassis.getDevices().size(), 2);
         EXPECT_EQ(chassis.getDevices()[0]->getID(), "vdd_reg1");
         EXPECT_EQ(chassis.getDevices()[1]->getID(), "vdd_reg2");
     }
 }
 
+TEST(ChassisTests, GetInventoryPath)
+{
+    Chassis chassis{3, defaultInventoryPath};
+    EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
+}
+
 TEST(ChassisTests, GetNumber)
 {
-    Chassis chassis{3};
+    Chassis chassis{3, defaultInventoryPath};
     EXPECT_EQ(chassis.getNumber(), 3);
 }
 
@@ -356,8 +369,8 @@ TEST(ChassisTests, MonitorSensors)
 
         // Create Chassis
         std::vector<std::unique_ptr<Device>> devices{};
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, defaultInventoryPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -421,8 +434,8 @@ TEST(ChassisTests, MonitorSensors)
 
         // Create Chassis
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, defaultInventoryPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis

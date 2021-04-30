@@ -44,6 +44,9 @@ using ::testing::A;
 using ::testing::Return;
 using ::testing::TypedEq;
 
+static const std::string chassisInvPath{
+    "/xyz/openbmc_project/inventory/system/chassis"};
+
 TEST(RailTests, Constructor)
 {
     // Test where only required parameters are specified
@@ -115,7 +118,7 @@ TEST(RailTests, Configure)
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
         std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -169,7 +172,7 @@ TEST(RailTests, Configure)
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
         std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -250,7 +253,7 @@ TEST(RailTests, MonitorSensors)
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
         std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -316,7 +319,7 @@ TEST(RailTests, MonitorSensors)
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
         std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, std::move(devices));
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis

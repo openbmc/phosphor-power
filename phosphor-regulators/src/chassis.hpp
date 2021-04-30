@@ -61,15 +61,16 @@ class Chassis
      *
      * @param number Chassis number within the system.  Chassis numbers start at
      *               1 because chassis 0 represents the entire system.
+     * @param inventoryPath D-Bus inventory path for this chassis
      * @param devices Devices within this chassis, if any.  The vector should
      *                contain regulator devices and any related devices required
      *                to perform regulator operations.
      */
-    explicit Chassis(unsigned int number,
+    explicit Chassis(unsigned int number, const std::string& inventoryPath,
                      std::vector<std::unique_ptr<Device>> devices =
                          std::vector<std::unique_ptr<Device>>{}) :
         number{number},
-        devices{std::move(devices)}
+        inventoryPath{inventoryPath}, devices{std::move(devices)}
     {
         if (number < 1)
         {
@@ -122,6 +123,16 @@ class Chassis
     }
 
     /**
+     * Returns the D-Bus inventory path for this chassis.
+     *
+     * @return inventory path
+     */
+    const std::string& getInventoryPath() const
+    {
+        return inventoryPath;
+    }
+
+    /**
      * Returns the chassis number within the system.
      *
      * @return chassis number
@@ -150,6 +161,11 @@ class Chassis
      * system.
      */
     const unsigned int number{};
+
+    /**
+     * D-Bus inventory path for this chassis.
+     */
+    const std::string inventoryPath{};
 
     /**
      * Devices within this chassis, if any.

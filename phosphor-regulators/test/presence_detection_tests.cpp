@@ -107,8 +107,8 @@ std::tuple<std::unique_ptr<System>, Chassis*, Device*>
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, std::move(devices));
+    std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+        1, "/xyz/openbmc_project/inventory/system/chassis", std::move(devices));
     Chassis* chassisPtr = chassis.get();
 
     // Create System that contains Chassis

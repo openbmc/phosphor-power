@@ -43,6 +43,9 @@ using ::testing::A;
 using ::testing::Return;
 using ::testing::TypedEq;
 
+static const std::string chassisInvPath{
+    "/xyz/openbmc_project/inventory/system/chassis"};
+
 TEST(SystemTests, Constructor)
 {
     // Create Rules
@@ -53,7 +56,8 @@ TEST(SystemTests, Constructor)
     std::vector<std::unique_ptr<Chassis>> chassis{};
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(createDevice("reg1", {"rail1"}));
-    chassis.emplace_back(std::make_unique<Chassis>(1, std::move(devices)));
+    chassis.emplace_back(
+        std::make_unique<Chassis>(1, chassisInvPath, std::move(devices)));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
@@ -87,7 +91,7 @@ TEST(SystemTests, ClearCache)
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
     std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, std::move(devices));
+        std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
     Chassis* chassisPtr = chassis.get();
 
     // Create System that contains Chassis
@@ -123,8 +127,8 @@ TEST(SystemTests, CloseDevices)
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
-    chassis.emplace_back(std::make_unique<Chassis>(1));
-    chassis.emplace_back(std::make_unique<Chassis>(3));
+    chassis.emplace_back(std::make_unique<Chassis>(1, chassisInvPath + '1'));
+    chassis.emplace_back(std::make_unique<Chassis>(3, chassisInvPath + '3'));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
@@ -148,8 +152,8 @@ TEST(SystemTests, Configure)
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
-    chassis.emplace_back(std::make_unique<Chassis>(1));
-    chassis.emplace_back(std::make_unique<Chassis>(3));
+    chassis.emplace_back(std::make_unique<Chassis>(1, chassisInvPath + '1'));
+    chassis.emplace_back(std::make_unique<Chassis>(3, chassisInvPath + '3'));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
@@ -165,8 +169,8 @@ TEST(SystemTests, GetChassis)
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
-    chassis.emplace_back(std::make_unique<Chassis>(1));
-    chassis.emplace_back(std::make_unique<Chassis>(3));
+    chassis.emplace_back(std::make_unique<Chassis>(1, chassisInvPath + '1'));
+    chassis.emplace_back(std::make_unique<Chassis>(3, chassisInvPath + '3'));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
@@ -189,14 +193,16 @@ TEST(SystemTests, GetIDMap)
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(createDevice("reg1", {"rail1"}));
         devices.emplace_back(createDevice("reg2", {"rail2a", "rail2b"}));
-        chassis.emplace_back(std::make_unique<Chassis>(1, std::move(devices)));
+        chassis.emplace_back(std::make_unique<Chassis>(1, chassisInvPath + '1',
+                                                       std::move(devices)));
     }
     {
         // Chassis 2
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(createDevice("reg3", {"rail3a", "rail3b"}));
         devices.emplace_back(createDevice("reg4"));
-        chassis.emplace_back(std::make_unique<Chassis>(2, std::move(devices)));
+        chassis.emplace_back(std::make_unique<Chassis>(2, chassisInvPath + '2',
+                                                       std::move(devices)));
     }
 
     // Create System
@@ -233,7 +239,7 @@ TEST(SystemTests, GetRules)
 
     // Create Chassis
     std::vector<std::unique_ptr<Chassis>> chassis{};
-    chassis.emplace_back(std::make_unique<Chassis>(1));
+    chassis.emplace_back(std::make_unique<Chassis>(1, chassisInvPath));
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
@@ -293,7 +299,7 @@ TEST(SystemTests, MonitorSensors)
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
     std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, std::move(devices));
+        std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
 
     // Create System that contains Chassis
     std::vector<std::unique_ptr<Rule>> rules{};

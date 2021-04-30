@@ -760,6 +760,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         )"_json;
         std::unique_ptr<Chassis> chassis = parseChassis(element);
         EXPECT_EQ(chassis->getNumber(), 1);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis");
         EXPECT_EQ(chassis->getDevices().size(), 0);
     }
 
@@ -769,6 +771,7 @@ TEST(ConfigFileParserTests, ParseChassis)
             {
               "comments": [ "comments property" ],
               "number": 2,
+              "inventory_path": "system/chassis2",
               "devices": [
                 {
                   "id": "vdd_regulator",
@@ -785,6 +788,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         )"_json;
         std::unique_ptr<Chassis> chassis = parseChassis(element);
         EXPECT_EQ(chassis->getNumber(), 2);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis->getDevices().size(), 1);
         EXPECT_EQ(chassis->getDevices()[0]->getID(), "vdd_regulator");
     }
@@ -803,6 +808,40 @@ TEST(ConfigFileParserTests, ParseChassis)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an unsigned integer");
+    }
+
+    // Test where fails: inventory_path is invalid: Not a string
+    try
+    {
+        const json element = R"(
+            {
+              "number": 2,
+              "inventory_path": true
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: inventory_path is invalid: Empty string
+    try
+    {
+        const json element = R"(
+            {
+              "number": 2,
+              "inventory_path": ""
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 
     // Test where fails: Invalid property specified
