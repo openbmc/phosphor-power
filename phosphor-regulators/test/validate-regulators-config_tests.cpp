@@ -75,6 +75,7 @@ const json validConfigFile = R"(
         {
           "comments": [ "Chassis number 1 containing CPUs and memory" ],
           "number": 1,
+          "inventory_path": "system/chassis",
           "devices": [
             {
               "comments": [ "IR35221 regulator producing the Vdd rail" ],
@@ -513,10 +514,11 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         json configFile = validConfigFile;
         EXPECT_JSON_VALID(configFile);
     }
-    // Valid: test chassis with required properties.
+    // Valid: test chassis with only required properties.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0].erase("comments");
+        configFile["chassis"][0].erase("inventory_path");
         configFile["chassis"][0].erase("devices");
         EXPECT_JSON_VALID(configFile);
     }
@@ -540,6 +542,13 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         configFile["chassis"][0]["number"] = 1.3;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1.3 is not of type 'integer'");
+    }
+    // Invalid: test chassis with property inventory_path wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["inventory_path"] = 2;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "2 is not of type 'string'");
     }
     // Invalid: test chassis with property devices wrong type.
     {
@@ -568,6 +577,13 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         configFile["chassis"][0]["number"] = 0;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "0 is less than the minimum of 1");
+    }
+    // Invalid: test chassis with property inventory_path empty string.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["inventory_path"] = "";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'' is too short");
     }
 }
 TEST(ValidateRegulatorsConfigTest, ComparePresence)

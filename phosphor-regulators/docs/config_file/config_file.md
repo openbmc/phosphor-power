@@ -27,6 +27,7 @@ The root (outer-most) object in a phosphor-regulators configuration file.
   "chassis": [
     {
       "number": 1,
+      "inventory_path": "system/chassis",
       "devices": [
         ... details omitted ...
       ]

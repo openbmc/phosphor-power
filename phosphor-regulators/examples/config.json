@@ -52,6 +52,7 @@
     {
       "comments": [ "Chassis number 1 containing CPUs and memory" ],
       "number": 1,
+      "inventory_path": "system/chassis",
       "devices": [
         {
           "comments": [ "IR35221 regulator producing the Vdd rail" ],

@@ -136,7 +136,7 @@
             "type": "object",
             "properties":
             {
-                "fru": {"$ref": "#/definitions/fru" },
+                "fru": {"$ref": "#/definitions/inventory_path" },
 
                 "value": {"$ref": "#/definitions/boolean_value" }
             },
@@ -144,7 +144,7 @@
             "additionalProperties": false
         },
 
-        "fru":
+        "inventory_path":
         {
             "type": "string",
             "minLength": 1
@@ -160,7 +160,7 @@
             "type": "object",
             "properties":
             {
-                "fru": {"$ref": "#/definitions/fru" },
+                "fru": {"$ref": "#/definitions/inventory_path" },
 
                 "keyword": {"$ref": "#/definitions/keyword" },
 
@@ -372,6 +372,8 @@
 
                     "number": {"$ref": "#/definitions/number" },
 
+                    "inventory_path": {"$ref": "#/definitions/inventory_path" },
+
                     "devices": {"$ref": "#/definitions/devices" }
                 },
 
@@ -401,7 +403,7 @@
 
                     "is_regulator": {"$ref": "#/definitions/is_regulator" },
 
-                    "fru": {"$ref": "#/definitions/fru" },
+                    "fru": {"$ref": "#/definitions/inventory_path" },
 
                     "i2c_interface": {"$ref": "#/definitions/i2c_interface" },
 
