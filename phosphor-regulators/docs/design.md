@@ -43,6 +43,12 @@ and monitoring behavior that was specified in the JSON file.
   * Contains zero or more Rail objects.
 * Rail
   * Represents a voltage rail produced by a voltage regulator, such as 1.1V.
+* Services
+  * Abstract base class that provides access to a collection of system services
+    like error logging, journal, vpd, and hardware presence.
+  * The BMCServices child class provides the real implementation.
+  * The MockServices child class provides a mock implementation that can be
+    used in gtest test cases.
 
 
 ## Regulator Configuration
@@ -105,10 +111,15 @@ objects representing the system (System, Chassis, Device, and Rail).
 The sensor values for a Rail (such as iout, vout, and temperature) are read
 using [pmbus_read_sensor](config_file/pmbus_read_sensor.md) actions.
 
-The first time a sensor value is read, a corresponding Sensor object is created
-on D-Bus.  The D-Bus object implements the Sensor.Value and OperationalStatus
-interfaces.  On subsequent reads, the existing D-Bus Sensor object is updated
+The first time a sensor value is read, a corresponding sensor object is created
+on D-Bus.  On subsequent reads, the existing D-Bus sensor object is updated
 with the new sensor value.
+
+The D-Bus sensor object implements the following interfaces:
+* xyz.openbmc_project.Sensor.Value
+* xyz.openbmc_project.State.Decorator.OperationalStatus
+* xyz.openbmc_project.State.Decorator.Availability
+* xyz.openbmc_project.Association.Definitions
 
 An existing D-Bus Sensor object is removed from D-Bus if no corresponding
 sensor values are read during monitoring.  This can occur in the following
@@ -121,20 +132,20 @@ If an error occurs while reading the sensors for a Rail:
 * The error will be logged.  If the same error occurs repeatedly on a Rail, it
   will only be logged once per system boot.
 * Any remaining actions for the Rail will be skipped.
-* The value of all D-Bus Sensor objects for this Rail will be set to 0.
-* The Functional property of all D-Bus Sensor objects for this Rail will be set
-  to false.
-* Sensor monitoring will continue.
+* The following changes will be made to all D-Bus sensor objects for this Rail:
+  * The Value property will be set to NaN.
+  * The Functional property will be set to false.
+* Sensor monitoring will continue with the next Rail or Device.
 * The sensors for this Rail will be read again during the next monitoring
   cycle.
 
-If, after an error occurs, a subsequent attempt to read the sensors for a Rail
-is successful:
-* The D-Bus Sensor objects for this Rail will be set to the new sensor values.
-* The Functional property of the D-Bus Sensor objects for this Rail will be set
-  to true.
+If a subsequent attempt to read the sensors for the Rail is successful, the
+following changes will be made to the D-Bus sensor objects:
+* The Value property will be set to the new sensor reading.
+* The Functional property will be set to true.
 
-When regulator monitoring is disabled, the Manager object calls the
-`disableSensors()` method on all the objects representing the system (System,
-Chassis, Device, and Rail).  Each D-Bus Sensor object is set to the special
-value NaN to indicate the Sensor is inactive.
+When regulator monitoring is disabled, the following changes will be made to
+all of the D-Bus sensor objects:
+* The Value property will be set to NaN.
+* The Available property will be set to false.
+

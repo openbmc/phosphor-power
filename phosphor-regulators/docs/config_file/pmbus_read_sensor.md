@@ -7,8 +7,8 @@ directly using the [I2C interface](i2c_interface.md).
 This action should be executed during [sensor_monitoring](sensor_monitoring.md)
 for the rail.
 
-### Sensor Value Type
-Currently the following sensor value types are supported:
+### Sensor Type
+Currently the following sensor types are supported:
 
 | Type | Description |
 | :--- | :---------- |
@@ -23,9 +23,9 @@ Currently the following sensor value types are supported:
 | vout_valley | Lowest output voltage |
 
 Notes:
-* Some regulators only support a subset of these sensor value types.
-* Some of these sensor value types are not part of the PMBus specification and
-  must be obtained by reading from manufacturer-specific commands.
+* Some regulators only support a subset of these sensor types.
+* Some of these sensor types are not part of the PMBus specification and must
+  be obtained by reading from manufacturer-specific commands.
 
 ### Data Format
 Currently the following PMBus data formats are supported:
@@ -53,13 +53,14 @@ available to external interfaces like Redfish.
 
 D-Bus sensors have an object path with the following format:
 ```
-/xyz/openbmc_project/sensors/<type>/<label>
+/xyz/openbmc_project/sensors/<namespace>/<sensor_name>
 ```
 
-The D-Bus `<type>` is the hwmon class name.  The following table shows how the
-sensor value type is mapped to a D-Bus `<type>`.
+The D-Bus sensors `<namespace>` is the general category of the sensor.  The
+following table shows how the sensor type is mapped to a D-Bus sensors
+`<namespace>`.
 
-| Sensor Value Type | D-Bus `<type>` |
+| Sensor Type | D-Bus `<namespace>` |
 | :---------------- | :------------- |
 | iout | current |
 | iout_peak | current |
@@ -71,18 +72,26 @@ sensor value type is mapped to a D-Bus `<type>`.
 | vout_peak | voltage |
 | vout_valley | voltage |
 
-The D-Bus `<label>` is the sensor name.  It must be unique within the entire
-system.  The `<label>` will be set to the following:
+The D-Bus `<sensor_name>` must be unique across the entire system.  It will be
+set to the following:
 ```
-<rail_id>_<sensor_value_type>
+<rail_id>_<sensor_type>
 ```
 For example, if sensor monitoring for rail "vdd0" reads a "vout_peak" sensor,
-the resulting D-Bus `<label>` will be "vdd0_vout_peak".
+the resulting D-Bus `<sensor_name>` will be "vdd0_vout_peak".
+
+Peak and valley sensor values are calculated internally by the regulator since
+it can sample values very frequently and catch transient events.  When these
+peak/valley values are read over PMBus, the regulator will often clear its
+internal value and start calculating a new peak/valley.  To avoid losing
+information, the D-Bus sensor will contain the highest peak/lowest valley value
+that has been read since the system was powered on.  When the system is powered
+off, the D-Bus peak/valley sensor values are cleared.
 
 ## Properties
 | Name | Required | Type | Description |
 | :--- | :------: | :--- | :---------- |
-| type | yes | string | Sensor value type.  Specify one of the following: "iout", "iout_peak", "iout_valley", "pout", "temperature", "temperature_peak", "vout", "vout_peak", "vout_valley". |
+| type | yes | string | Sensor type.  Specify one of the following: "iout", "iout_peak", "iout_valley", "pout", "temperature", "temperature_peak", "vout", "vout_peak", "vout_valley". |
 | command | yes | string | PMBus command code expressed in hexadecimal.  Must be prefixed with 0x and surrounded by double quotes. |
 | format | yes | string | Data format of the sensor value returned by the device.  Specify one of the following: "linear_11", "linear_16".
 | exponent | no | number | Exponent value for "linear_16" data format.  Can be positive or negative.  If not specified, the exponent value will be read from VOUT_MODE. |
