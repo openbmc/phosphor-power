@@ -19,6 +19,8 @@
 #include "action_error.hpp"
 #include "pmbus_error.hpp"
 
+#include <sdbusplus/exception.hpp>
+
 #include <exception>
 #include <ios>
 #include <sstream>
@@ -33,37 +35,39 @@ bool PMBusReadSensorAction::execute(ActionEnvironment& environment)
         // Get I2C interface to current device
         i2c::I2CInterface& interface = getI2CInterface(environment);
 
-        // Read value of the PMBus command code
-        uint16_t value;
+        // Read two byte value of PMBus command code.  I2CInterface method reads
+        // low byte first as required by PMBus.
+        uint16_t value{0x00};
         interface.read(command, value);
 
-        // Convert PMBus 2-byte value to a double
-        // TODO: Store result of conversion in a double.  Not doing it yet
-        // because it results in an unused variable compile error during CI.
+        // Convert two byte PMBus value into a decimal sensor value
+        double sensorValue{0.0};
         switch (format)
         {
             case pmbus_utils::SensorDataFormat::linear_11:
-                // Convert linear_11 format to a normal decimal number
-                pmbus_utils::convertFromLinear(value);
+                sensorValue = pmbus_utils::convertFromLinear(value);
                 break;
             case pmbus_utils::SensorDataFormat::linear_16:
-                // Get exponent value for converting linear format to volts
                 int8_t exponentValue = getExponentValue(environment, interface);
-
-                // Convert linear_16 format to a normal decimal number
-                pmbus_utils::convertFromVoutLinear(value, exponentValue);
+                sensorValue =
+                    pmbus_utils::convertFromVoutLinear(value, exponentValue);
                 break;
         }
 
-        // TODO: Publish sensor value using Sensors service
+        // Publish sensor value using the Sensors service
+        environment.getServices().getSensors().setValue(type, sensorValue);
     }
     // Nest the following exception types within an ActionError so the caller
     // will have both the low level error information and the action information
-    catch (const i2c::I2CException& i2cError)
+    catch (const i2c::I2CException& e)
     {
         std::throw_with_nested(ActionError(*this));
     }
-    catch (const PMBusError& pmbusError)
+    catch (const PMBusError& e)
+    {
+        std::throw_with_nested(ActionError(*this));
+    }
+    catch (const sdbusplus::exception_t& e)
     {
         std::throw_with_nested(ActionError(*this));
     }

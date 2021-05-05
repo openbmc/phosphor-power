@@ -27,6 +27,7 @@
 #include "presence_detection.hpp"
 #include "rule.hpp"
 #include "system.hpp"
+#include "test_sdbus_error.hpp"
 
 #include <sdbusplus/exception.hpp>
 
@@ -45,35 +46,6 @@ using namespace phosphor::power::regulators;
 using ::testing::Ref;
 using ::testing::Return;
 using ::testing::Throw;
-
-/**
- * Concrete subclass of sdbusplus::exception_t abstract base class.
- */
-class TestSDBusError : public sdbusplus::exception_t
-{
-  public:
-    TestSDBusError(const std::string& error) : error{error}
-    {
-    }
-
-    const char* what() const noexcept override
-    {
-        return error.c_str();
-    }
-
-    const char* name() const noexcept override
-    {
-        return "";
-    }
-
-    const char* description() const noexcept override
-    {
-        return "";
-    }
-
-  private:
-    const std::string error{};
-};
 
 /**
  * Creates the parent objects that normally contain a PresenceDetection object.
