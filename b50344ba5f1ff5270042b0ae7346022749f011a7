@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "847f7c89_b4c9e388",
+        "filename": "phosphor-regulators/test/actions/pmbus_read_sensor_action_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-07T22:09:49Z",
+      "side": 1,
+      "message": "Not that this is new, but curious why these are not some defined constants.",
+      "range": {
+        "startLine": 54,
+        "startChar": 24,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "b50344ba5f1ff5270042b0ae7346022749f011a7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
