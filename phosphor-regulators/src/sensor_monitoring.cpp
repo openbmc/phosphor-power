@@ -23,6 +23,7 @@
 #include "error_logging_utils.hpp"
 #include "exception_utils.hpp"
 #include "rail.hpp"
+#include "sensors.hpp"
 #include "system.hpp"
 
 #include <exception>
@@ -31,8 +32,15 @@ namespace phosphor::power::regulators
 {
 
 void SensorMonitoring::execute(Services& services, System& system,
-                               Chassis& /*chassis*/, Device& device, Rail& rail)
+                               Chassis& chassis, Device& device, Rail& rail)
 {
+    // Notify sensors service that monitoring is starting for this rail
+    Sensors& sensors = services.getSensors();
+    sensors.startRail(rail.getID(), device.getFRU(),
+                      chassis.getInventoryPath());
+
+    // Read all sensors defined for this rail
+    bool errorOccurred{false};
     try
     {
         // Create ActionEnvironment
@@ -44,16 +52,25 @@ void SensorMonitoring::execute(Services& services, System& system,
     }
     catch (const std::exception& e)
     {
-        // Log error messages in journal
-        services.getJournal().logError(exception_utils::getMessages(e));
-        services.getJournal().logError("Unable to monitor sensors for rail " +
-                                       rail.getID());
+        // Set flag to notify sensors service that an error occurred
+        errorOccurred = true;
 
-        // Create error log entry
-        // TODO: Add ErrorHistory data member and specify as parameter below
+        // Log error messages in journal for the first 3 errors
+        if (++errorCount <= 3)
+        {
+            services.getJournal().logError(exception_utils::getMessages(e));
+            services.getJournal().logError(
+                "Unable to monitor sensors for rail " + rail.getID());
+        }
+
+        // Create error log entry if this type hasn't already been logged
         error_logging_utils::logError(std::current_exception(),
-                                      Entry::Level::Warning, services);
+                                      Entry::Level::Warning, services,
+                                      errorHistory);
     }
+
+    // Notify sensors service that monitoring has ended for this rail
+    sensors.endRail(errorOccurred);
 }
 
 } // namespace phosphor::power::regulators

@@ -22,12 +22,13 @@
 #include "mock_action.hpp"
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
+#include "mock_sensors.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
-#include "pmbus_read_sensor_action.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
+#include "sensor_monitoring.hpp"
 #include "sensors.hpp"
 #include "system.hpp"
 #include "test_utils.hpp"
@@ -732,87 +733,40 @@ TEST(DeviceTests, IsRegulator)
 TEST(DeviceTests, MonitorSensors)
 {
     // Test where device is not present
-    // TODO: Add this test when sensoring monitoring is fully implemented
-
-    // Test where Rails were not specified in constructor
     {
-        // Create mock services.  No logging should occur.
+        // Create mock services.  No Sensors methods should be called.
         MockServices services{};
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        MockSensors& sensors = services.getMockSensors();
+        EXPECT_CALL(sensors, startRail).Times(0);
+        EXPECT_CALL(sensors, setValue).Times(0);
+        EXPECT_CALL(sensors, endRail).Times(0);
 
-        // Create mock I2CInterface.  A two-byte read should NOT occur.
-        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
-            std::make_unique<i2c::MockedI2CInterface>();
-        EXPECT_CALL(*i2cInterface, read(A<uint8_t>(), A<uint16_t&>())).Times(0);
-
-        // Create Device
-        std::unique_ptr<Device> device = std::make_unique<Device>(
-            "reg1", true,
-            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
-            std::move(i2cInterface));
-        Device* devicePtr = device.get();
-
-        // Create Chassis that contains Device
-        std::vector<std::unique_ptr<Device>> devices{};
-        devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
-        Chassis* chassisPtr = chassis.get();
-
-        // Create System that contains Chassis
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassisVec{};
-        chassisVec.emplace_back(std::move(chassis));
-        System system{std::move(rules), std::move(chassisVec)};
-
-        // Call monitorSensors().
-        devicePtr->monitorSensors(services, system, *chassisPtr);
-    }
-
-    // Test where Rails were specified in constructor
-    {
-        // Create mock services.  No logging should occur.
-        MockServices services{};
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
-
-        std::vector<std::unique_ptr<Rail>> rails{};
-
-        // Create PMBusReadSensorAction
-        SensorType type{SensorType::iout};
-        uint8_t command = 0x8C;
-        pmbus_utils::SensorDataFormat format{
-            pmbus_utils::SensorDataFormat::linear_11};
-        std::optional<int8_t> exponent{};
-        std::unique_ptr<PMBusReadSensorAction> action =
-            std::make_unique<PMBusReadSensorAction>(type, command, format,
-                                                    exponent);
-
-        // Create mock I2CInterface.  A two-byte read should occur.
-        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
-            std::make_unique<i2c::MockedI2CInterface>();
-        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-        EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x8C), A<uint16_t&>()))
-            .Times(1);
-
-        // Create SensorMonitoring
-        std::vector<std::unique_ptr<Action>> actions{};
-        actions.emplace_back(std::move(action));
+        // Create SensorMonitoring.  Action inside it should not be executed.
+        std::unique_ptr<MockAction> sensAction = std::make_unique<MockAction>();
+        EXPECT_CALL(*sensAction, execute).Times(0);
+        std::vector<std::unique_ptr<Action>> sensActions{};
+        sensActions.emplace_back(std::move(sensAction));
         std::unique_ptr<SensorMonitoring> sensorMonitoring =
-            std::make_unique<SensorMonitoring>(std::move(actions));
+            std::make_unique<SensorMonitoring>(std::move(sensActions));
 
         // Create Rail
         std::unique_ptr<Configuration> configuration{};
         std::unique_ptr<Rail> rail = std::make_unique<Rail>(
-            "vdd0", std::move(configuration), std::move(sensorMonitoring));
-        rails.emplace_back(std::move(rail));
+            "vddr1", std::move(configuration), std::move(sensorMonitoring));
+
+        // Create PresenceDetection.  Indicates device is not present.
+        std::unique_ptr<MockAction> presAction = std::make_unique<MockAction>();
+        EXPECT_CALL(*presAction, execute).Times(1).WillOnce(Return(false));
+        std::vector<std::unique_ptr<Action>> presActions{};
+        presActions.emplace_back(std::move(presAction));
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            std::make_unique<PresenceDetection>(std::move(presActions));
 
         // Create Device
-        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
         std::unique_ptr<Configuration> deviceConfiguration{};
+        std::vector<std::unique_ptr<Rail>> rails{};
+        rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
@@ -833,7 +787,123 @@ TEST(DeviceTests, MonitorSensors)
         chassisVec.emplace_back(std::move(chassis));
         System system{std::move(rules), std::move(chassisVec)};
 
-        // Call monitorSensors().
+        // Call monitorSensors().  Should do nothing.
+        devicePtr->monitorSensors(services, system, *chassisPtr);
+    }
+
+    // Test where Rails were not specified in constructor
+    {
+        // Create mock services.  No Sensors methods should be called.
+        MockServices services{};
+        MockSensors& sensors = services.getMockSensors();
+        EXPECT_CALL(sensors, startRail).Times(0);
+        EXPECT_CALL(sensors, setValue).Times(0);
+        EXPECT_CALL(sensors, endRail).Times(0);
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().  Should do nothing.
+        devicePtr->monitorSensors(services, system, *chassisPtr);
+    }
+
+    // Test where Rails were specified in constructor
+    {
+        // Create mock services.  Set Sensors service expectations.
+        MockServices services{};
+        MockSensors& sensors = services.getMockSensors();
+        EXPECT_CALL(sensors, startRail("vdd0",
+                                       "/xyz/openbmc_project/inventory/system/"
+                                       "chassis/motherboard/reg1",
+                                       chassisInvPath))
+            .Times(1);
+        EXPECT_CALL(sensors, startRail("vio0",
+                                       "/xyz/openbmc_project/inventory/system/"
+                                       "chassis/motherboard/reg1",
+                                       chassisInvPath))
+            .Times(1);
+        EXPECT_CALL(sensors, setValue).Times(0);
+        EXPECT_CALL(sensors, endRail(false)).Times(2);
+
+        std::vector<std::unique_ptr<Rail>> rails{};
+
+        // Create Rail vdd0
+        {
+            // Create SensorMonitoring for Rail
+            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            std::unique_ptr<SensorMonitoring> sensorMonitoring =
+                std::make_unique<SensorMonitoring>(std::move(actions));
+
+            // Create Rail
+            std::unique_ptr<Configuration> configuration{};
+            std::unique_ptr<Rail> rail = std::make_unique<Rail>(
+                "vdd0", std::move(configuration), std::move(sensorMonitoring));
+            rails.emplace_back(std::move(rail));
+        }
+
+        // Create Rail vio0
+        {
+            // Create SensorMonitoring for Rail
+            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            std::unique_ptr<SensorMonitoring> sensorMonitoring =
+                std::make_unique<SensorMonitoring>(std::move(actions));
+
+            // Create Rail
+            std::unique_ptr<Configuration> configuration{};
+            std::unique_ptr<Rail> rail = std::make_unique<Rail>(
+                "vio0", std::move(configuration), std::move(sensorMonitoring));
+            rails.emplace_back(std::move(rail));
+        }
+
+        // Create Device that contains Rails
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<Device> device = std::make_unique<Device>(
+            "reg1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
+            std::move(i2cInterface), std::move(presenceDetection),
+            std::move(configuration), std::move(rails));
+        Device* devicePtr = device.get();
+
+        // Create Chassis that contains Device
+        std::vector<std::unique_ptr<Device>> devices{};
+        devices.emplace_back(std::move(device));
+        std::unique_ptr<Chassis> chassis =
+            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        Chassis* chassisPtr = chassis.get();
+
+        // Create System that contains Chassis
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassisVec{};
+        chassisVec.emplace_back(std::move(chassis));
+        System system{std::move(rules), std::move(chassisVec)};
+
+        // Call monitorSensors().  Should monitor sensors in both rails.
         devicePtr->monitorSensors(services, system, *chassisPtr);
     }
 }

@@ -16,6 +16,7 @@
 #pragma once
 
 #include "action.hpp"
+#include "error_history.hpp"
 #include "services.hpp"
 
 #include <memory>
@@ -67,6 +68,20 @@ class SensorMonitoring
     }
 
     /**
+     * Clears all error history.
+     *
+     * All data on previously logged errors will be deleted.  If errors occur
+     * again in the future they will be logged again.
+     *
+     * This method is normally called when the system is being powered on.
+     */
+    void clearErrorHistory()
+    {
+        errorHistory.clear();
+        errorCount = 0;
+    }
+
+    /**
      * Executes the actions to read the sensors for a rail.
      *
      * @param services system services like error logging and the journal
@@ -93,6 +108,19 @@ class SensorMonitoring
      * Actions that read the sensors for a rail.
      */
     std::vector<std::unique_ptr<Action>> actions{};
+
+    /**
+     * History of which error types have been logged.
+     *
+     * Since sensor monitoring runs repeatedly based on a timer, each error type
+     * is only logged once.
+     */
+    ErrorHistory errorHistory{};
+
+    /**
+     * Number of errors that have occurred.
+     */
+    unsigned int errorCount{0};
 };
 
 } // namespace phosphor::power::regulators
