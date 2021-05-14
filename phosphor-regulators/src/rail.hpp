@@ -68,6 +68,16 @@ class Rail
     }
 
     /**
+     * Clears all error history.
+     *
+     * All data on previously logged errors will be deleted.  If errors occur
+     * again in the future they will be logged again.
+     *
+     * This method is normally called when the system is being powered on.
+     */
+    void clearErrorHistory();
+
+    /**
      * Configure this rail.
      *
      * Applies the configuration changes that are defined for this rail, if any.

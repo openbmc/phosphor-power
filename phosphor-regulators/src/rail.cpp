@@ -23,6 +23,15 @@
 namespace phosphor::power::regulators
 {
 
+void Rail::clearErrorHistory()
+{
+    // If sensor monitoring is defined for this rail, clear its error history
+    if (sensorMonitoring)
+    {
+        sensorMonitoring->clearErrorHistory();
+    }
+}
+
 void Rail::configure(Services& services, System& system, Chassis& chassis,
                      Device& device)
 {
