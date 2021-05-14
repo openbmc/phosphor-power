@@ -43,6 +43,15 @@ void System::clearCache()
     }
 }
 
+void System::clearErrorHistory()
+{
+    // Clear error history in each chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->clearErrorHistory();
+    }
+}
+
 void System::closeDevices(Services& services)
 {
     // Close devices in each chassis

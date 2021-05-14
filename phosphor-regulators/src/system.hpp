@@ -66,6 +66,16 @@ class System
     void clearCache();
 
     /**
+     * Clears all error history.
+     *
+     * All data on previously logged errors will be deleted.  If errors occur
+     * again in the future they will be logged again.
+     *
+     * This method is normally called when the system is being powered on.
+     */
+    void clearErrorHistory();
+
+    /**
      * Close the regulator devices in the system.
      *
      * @param services system services like error logging and the journal
