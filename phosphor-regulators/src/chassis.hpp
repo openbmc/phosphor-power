@@ -92,6 +92,16 @@ class Chassis
     void clearCache();
 
     /**
+     * Clears all error history.
+     *
+     * All data on previously logged errors will be deleted.  If errors occur
+     * again in the future they will be logged again.
+     *
+     * This method is normally called when the system is being powered on.
+     */
+    void clearErrorHistory();
+
+    /**
      * Close the devices within this chassis, if any.
      *
      * @param services system services like error logging and the journal

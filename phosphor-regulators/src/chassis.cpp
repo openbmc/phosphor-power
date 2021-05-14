@@ -39,6 +39,15 @@ void Chassis::clearCache()
     }
 }
 
+void Chassis::clearErrorHistory()
+{
+    // Clear error history in each device
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->clearErrorHistory();
+    }
+}
+
 void Chassis::closeDevices(Services& services)
 {
     // Log debug message in journal
