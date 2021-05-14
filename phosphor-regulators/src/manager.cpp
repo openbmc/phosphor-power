@@ -225,9 +225,10 @@ void Manager::clearHardwareData()
     {
         // Clear any cached hardware data in the System object
         system->clearCache();
-    }
 
-    // TODO: Clear error history related to hardware devices
+        // Clear error history related to hardware devices in the System object
+        system->clearErrorHistory();
+    }
 }
 
 void Manager::findCompatibleSystemTypes()
