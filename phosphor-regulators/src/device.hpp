@@ -92,6 +92,16 @@ class Device
     void clearCache();
 
     /**
+     * Clears all error history.
+     *
+     * All data on previously logged errors will be deleted.  If errors occur
+     * again in the future they will be logged again.
+     *
+     * This method is normally called when the system is being powered on.
+     */
+    void clearErrorHistory();
+
+    /**
      * Closes this device.
      *
      * Closes any interfaces that are open to this device.  Releases any other

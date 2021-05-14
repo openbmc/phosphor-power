@@ -48,6 +48,15 @@ void Device::clearCache()
     }
 }
 
+void Device::clearErrorHistory()
+{
+    // Clear error history in each rail
+    for (std::unique_ptr<Rail>& rail : rails)
+    {
+        rail->clearErrorHistory();
+    }
+}
+
 void Device::close(Services& services)
 {
     try
