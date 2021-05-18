@@ -23,6 +23,7 @@
 #include "utility.hpp"
 
 #include <xyz/openbmc_project/Common/error.hpp>
+#include <xyz/openbmc_project/State/Chassis/server.hpp>
 
 #include <algorithm>
 #include <chrono>
@@ -44,7 +45,13 @@ constexpr auto managerObjPath = "/xyz/openbmc_project/power/regulators/manager";
 constexpr auto compatibleIntf =
     "xyz.openbmc_project.Configuration.IBMCompatibleSystem";
 constexpr auto compatibleNamesProp = "Names";
+constexpr auto chassisStatePath = "/xyz/openbmc_project/state/chassis0";
+constexpr auto chassisStateIntf = "xyz.openbmc_project.State.Chassis";
+constexpr auto chassisStateProp = "CurrentPowerState";
 constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{5};
+
+using PowerState =
+    sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
 /**
  * Default configuration file name.  This is used when the system does not
@@ -66,7 +73,7 @@ const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     ManagerObject{bus, managerObjPath, true}, bus{bus}, eventLoop{event},
-    services{bus}
+    services{bus}, timer{event, std::bind(&Manager::timerExpired, this)}
 {
     // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
     // notifies us if the compatible interface becomes available later.
@@ -88,8 +95,14 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     // Try to find and load the JSON configuration file
     loadConfigFile();
 
-    // Obtain dbus service name
+    // Obtain D-Bus service name
     bus.request_name(busName);
+
+    // If system is already powered on, enable monitoring
+    if (isSystemPoweredOn())
+    {
+        monitor(true);
+    }
 }
 
 void Manager::configure()
@@ -173,21 +186,32 @@ void Manager::interfacesAddedHandler(sdbusplus::message::message& msg)
 
 void Manager::monitor(bool enable)
 {
-    if (enable)
+    // Check whether already in the requested monitoring state
+    if (enable == isMonitoringEnabled)
     {
-        /* Temporarily comment out until monitoring is supported.
-            Timer timer(eventLoop, std::bind(&Manager::timerExpired, this));
-            // Set timer as a repeating 1sec timer
-            timer.restart(std::chrono::milliseconds(1000));
-            timers.emplace_back(std::move(timer));
-        */
+        return;
+    }
+
+    isMonitoringEnabled = enable;
+    if (isMonitoringEnabled)
+    {
+        services.getJournal().logDebug("Monitoring enabled");
+
+        // Restart timer to have a repeating 1 second interval
+        timer.restart(std::chrono::seconds(1));
+
+        // Enable sensors service; put all sensors in an active state
+        services.getSensors().enable();
     }
     else
     {
-        /* Temporarily comment out until monitoring is supported.
-            // Delete all timers to disable monitoring
-            timers.clear();
-        */
+        services.getJournal().logDebug("Monitoring disabled");
+
+        // Disable timer
+        timer.setEnabled(false);
+
+        // Disable sensors service; put all sensors in an inactive state
+        services.getSensors().disable();
 
         // Verify config file has been loaded and System object is valid
         if (isConfigFileLoaded())
@@ -210,8 +234,18 @@ void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
 
 void Manager::timerExpired()
 {
-    // TODO Analyze, refresh sensor status, and
-    // collect/update telemetry for each regulator
+    // Notify sensors service that a sensor monitoring cycle is starting
+    services.getSensors().startCycle();
+
+    // Verify config file has been loaded and System object is valid
+    if (isConfigFileLoaded())
+    {
+        // Monitor sensors for the voltage rails in the system
+        system->monitorSensors(services);
+    }
+
+    // Notify sensors service that current sensor monitoring cycle has ended
+    services.getSensors().endCycle();
 }
 
 void Manager::clearHardwareData()
@@ -312,6 +346,36 @@ fs::path Manager::findConfigFile()
 
     // No config file found; return empty path
     return fs::path{};
+}
+
+bool Manager::isSystemPoweredOn()
+{
+    bool isOn{false};
+
+    try
+    {
+        // Get D-Bus property that contains the current power state for
+        // chassis0, which represents the entire system (all chassis)
+        using namespace phosphor::power::util;
+        auto service = getService(chassisStatePath, chassisStateIntf, bus);
+        if (!service.empty())
+        {
+            PowerState currentPowerState;
+            getProperty(chassisStateIntf, chassisStateProp, chassisStatePath,
+                        service, bus, currentPowerState);
+            if (currentPowerState == PowerState::On)
+            {
+                isOn = true;
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Current power state might not be available yet.  The regulators
+        // application can start before the power state is published on D-Bus.
+    }
+
+    return isOn;
 }
 
 void Manager::loadConfigFile()

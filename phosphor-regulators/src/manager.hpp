@@ -59,7 +59,12 @@ class Manager : public ManagerObject
     Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
 
     /**
-     * Overridden manager object's configure method
+     * Implements the D-Bus "configure" method.
+     *
+     * Configures all the voltage regulators in the system.
+     *
+     * This method should be called when the system is being powered on.  It
+     * needs to occur before the regulators have been enabled/turned on.
      */
     void configure() override;
 
@@ -71,9 +76,30 @@ class Manager : public ManagerObject
     void interfacesAddedHandler(sdbusplus::message::message& msg);
 
     /**
-     * Overridden manager object's monitor method
+     * Implements the D-Bus "monitor" method.
      *
-     * @param enable Enable or disable regulator monitoring
+     * Sets whether regulator monitoring is enabled.
+     *
+     * When monitoring is enabled:
+     *   - regulator sensors will be read and published on D-Bus
+     *   - phase fault detection will be performed
+     *
+     * Regulator monitoring should be enabled when the system is being powered
+     * on.  It needs to occur after the regulators have been configured and
+     * enabled/turned on.
+     *
+     * Regulator monitoring should be disabled when the system is being powered
+     * off.  It needs to occur before the regulators have been disabled/turned
+     * off.
+     *
+     * Regulator monitoring can also be temporarily disabled and then re-enabled
+     * while the system is powered on.  This allows other applications or tools
+     * to temporarily communicate with the regulators for testing or debug.
+     * Monitoring should be disabled for only short periods of time; other
+     * applications, such as fan control, may be dependent on regulator sensors.
+     *
+     * @param enable true if monitoring should be enabled, false if it should be
+     *               disabled
      */
     void monitor(bool enable) override;
 
@@ -118,13 +144,13 @@ class Manager : public ManagerObject
     /**
      * Finds the JSON configuration file.
      *
-     * Looks for a configuration file based on the list of compatable system
+     * Looks for a configuration file based on the list of compatible system
      * types.  If no file is found, looks for a file with the default name.
      *
      * Looks for the file in the test directory and standard directory.
      *
      * Throws an exception if an operating system error occurs while checking
-     * for the existance of a file.
+     * for the existence of a file.
      *
      * @return absolute path to config file, or an empty path if none found
      */
@@ -140,6 +166,13 @@ class Manager : public ManagerObject
         // If System object exists, the config file has been loaded
         return (system != nullptr);
     }
+
+    /**
+     * Returns whether the system is currently powered on.
+     *
+     * @return true if system is powered on, false otherwise
+     */
+    bool isSystemPoweredOn();
 
     /**
      * Loads the JSON configuration file.
@@ -170,7 +203,7 @@ class Manager : public ManagerObject
     /**
      * Event to loop on
      */
-    sdeventplus::Event eventLoop;
+    const sdeventplus::Event& eventLoop;
 
     /**
      * System services like error logging and the journal.
@@ -178,14 +211,19 @@ class Manager : public ManagerObject
     BMCServices services;
 
     /**
-     * List of event timers
+     * Event timer used to initiate regulator monitoring.
      */
-    std::vector<Timer> timers{};
+    Timer timer;
 
     /**
-     * List of dbus signal matches
+     * List of D-Bus signal matches
      */
     std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals{};
+
+    /**
+     * Indicates whether regulator monitoring is enabled.
+     */
+    bool isMonitoringEnabled{false};
 
     /**
      * List of compatible system types for the current system.
