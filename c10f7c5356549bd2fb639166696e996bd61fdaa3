@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "2c8cf3ef_8c8c484c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Do we need an error log here, or is a journal message enough?",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e52cae47_7cb5bac9",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -76,6 +93,116 @@
     },
     {
       "key": {
+        "uuid": "7f1a9f52_0e0cd937",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Read can return -1 I think.  Should that be handled here?  Or should it throw an exception instead?",
+      "parentUuid": "711679df_8dd338a6",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48bf253c_cea21498",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "This can throw an exception.  I think PSUManager::analyze() calls PowerSupply::analyze(), and the PSUManager method doesn\u0027t have a try/catch.  The PSUManager method is called by a timer.  Is the exception supposed to go all the way back to main and terminate the application?",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 26
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a9d6e2b_4925ae17",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "I didn\u0027t quite understand this comment.  We know it is a string based on the \u0027const std::string\u0026\u0027 in the declaration.  Is the line name actually a number (like \"16\"), so specifying that it is in string format is important?\n\nAlso, I\u0027m not sure what \"gpio-line-name\" is.  Is that the D-Bus or EM property?  Or a device tree keyword?",
+      "range": {
+        "startLine": 56,
+        "startChar": 33,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573298e0_7c4bffcb",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Temporary code?  Remove?",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c3ad21_edf5886b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Is there a scenario where this could be nullptr?  It looked like it was always set if the constructor succeeded, but just wanted to check.\n\nThe behavior of * is undefined if the unique_ptr is null.  e.g. could throw, or return a garbage pointer, ...",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "92470fae_b371d47b",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -87,6 +214,282 @@
       "writtenOn": "2021-05-17T21:52:03Z",
       "side": 1,
       "message": "I was a little confused in the .cpp where both presenceGPIO and presenceGpio were used.  Would it  be possible to get rid of the bool, and just delete the presenceGPIO if you can\u0027t use it?  Then you can still use unique_ptr\u0027s bool operator to do:\nif (presenceGPIO)",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "131521ae_4a613138",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Yeah, I agree having two different data members whose names differ only in case is confusing.  Also, the OpenBMC coding conventions state that acronyms should be same case throughout (https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#naming-conventions).\n\nAnother option would be to adopt the standard convention of starting boolean variables with an is/was/are/does sort of prefix.  e.g. \"isUsingGPIO\" or \"isUsingGPIOForPresence\".\n\nI like Matt\u0027s suggestion too, but you\u0027ll probably need to put an if check in getPresenceGPIO() to handle when the unique_ptr is nullptr.  Or you could change it to return a GPIOInterface* and put the responsibility on the caller to check for nullptr.",
+      "parentUuid": "92470fae_b371d47b",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81805051_21b7e600",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Nit: updatePresenceGPIO()\n\nSee coding conventions comment above.",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 27
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838679bd_fa39189a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Temporary code to be deleted?  Same question for the other log 2 lines later.",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e54569df_6adc5952",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "This could be nullptr if the property was not found or an exception was thrown when parsing properties.  It is also dereferenced on the following line to create the PowerSupply object.\n\nShould the if on line 139 check to make sure this is not null?  Or if it can be null, should there be a separate local with a default value of \"\" like you did with the bind delay?",
+      "range": {
+        "startLine": 155,
+        "startChar": 35,
+        "endLine": 155,
+        "endChar": 44
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88bc3bd4_ec28bde4",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Normally it would look like:\n  MockedGPIOReader\u0026 mockPresenceGPIO \u003d static_cast\u003cMockedGPIOReader\u0026\u003e(psu.getPresenceGPIO());\n  EXPECT_CALL(mockPresenceGPIO, read).WillOnce(Throw(std::runtime_error{\"error\"}));\n  // Do stuff to cause the read() ...\n\nBut since this is a constructor, you can\u0027t call the getPresenceGPIO() method.  If the function that creates the MockedGPIOReader returned a static singleton, you could do it.  However, that might lead to other problems, since all the PSUs in test cases would be sharing a single MockedGPIOReader.",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "446381fc_1ac435c3",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Need to add test for when GPIO read throws an exception?",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11fe90e5_83ff18d4",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "What happens if the line name cannot be found?  Is line a zombie object, or does this throw an exception?",
+      "range": {
+        "startLine": 16,
+        "startChar": 18,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "584c066a_bbec3623",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Should this throw instead of returning -1?  For other issues it looks like you throw an exception.  Do callers know to check for a -1 value?",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24a8ca6b_4ff9c2d8",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "This doesn\u0027t happen if the inner try/catch re-threw the exception.  Is that what you want?",
+      "range": {
+        "startLine": 54,
+        "startChar": 13,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06fd7974_20d63952",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "properties?  or property map?",
+      "range": {
+        "startLine": 47,
+        "startChar": 55,
+        "endLine": 47,
+        "endChar": 63
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969e630a_3ec9701f",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "interfaces?  or interface map?",
+      "range": {
+        "startLine": 58,
+        "startChar": 46,
+        "endLine": 58,
+        "endChar": 55
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "736c110f_cb40c39e",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "I\u0027m guessing this and bus.call(invMsg) below could throw an exception.  Is your plan that the caller must catch and handle those?",
+      "range": {
+        "startLine": 69,
+        "startChar": 49,
+        "endLine": 69,
+        "endChar": 59
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "226200cf_01d7c7b6",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-18T18:02:39Z",
+      "side": 1,
+      "message": "Should probably document how it handles errors.  Does it throw?  Return -1?  Both?",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
