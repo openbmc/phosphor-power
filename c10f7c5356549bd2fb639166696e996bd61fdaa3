@@ -157,6 +157,30 @@
     },
     {
       "key": {
+        "uuid": "73cb4ae4_5f8897ff",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T00:52:56Z",
+      "side": 1,
+      "message": "Shortin it to \"The gpio-line-name...\" and add in a link to https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md ?",
+      "parentUuid": "7a9d6e2b_4925ae17",
+      "range": {
+        "startLine": 56,
+        "startChar": 33,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "573298e0_7c4bffcb",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -180,6 +204,30 @@
     },
     {
       "key": {
+        "uuid": "b4be8d9c_024de17e",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T00:52:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "573298e0_7c4bffcb",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 54
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8c3ad21_edf5886b",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -191,6 +239,30 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "Is there a scenario where this could be nullptr?  It looked like it was always set if the constructor succeeded, but just wanted to check.\n\nThe behavior of * is undefined if the unique_ptr is null.  e.g. could throw, or return a garbage pointer, ...",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28929d4d_a1364dff",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T00:52:56Z",
+      "side": 1,
+      "message": "I think I will go with returning GPIOInterface* as suggested below.",
+      "parentUuid": "a8c3ad21_edf5886b",
       "range": {
         "startLine": 73,
         "startChar": 16,
@@ -238,6 +310,24 @@
     },
     {
       "key": {
+        "uuid": "76eb2934_134a0b2a",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T00:52:56Z",
+      "side": 1,
+      "message": "Oops! I think this resulted from flawed thinking in some rewriting to handle unit testing via GMock. :-/ (and failure to follow coding conventions).",
+      "parentUuid": "131521ae_4a613138",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81805051_21b7e600",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -249,6 +339,30 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "Nit: updatePresenceGPIO()\n\nSee coding conventions comment above.",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 27
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a4c8647_2c9da84b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T00:52:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "81805051_21b7e600",
       "range": {
         "startLine": 351,
         "startChar": 9,
