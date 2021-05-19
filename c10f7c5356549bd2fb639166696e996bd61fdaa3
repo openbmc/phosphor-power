@@ -518,6 +518,30 @@
     },
     {
       "key": {
+        "uuid": "e511e0bb_059bc07b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:23:35Z",
+      "side": 1,
+      "message": "I had thought about removing this, but it was DEBUG, and the default level is INFO.\n\nThis should only show up once, per power supply, on startup, if DEBUG is enabled in the journal configuration file(s).\n\nShould I just remove it?",
+      "parentUuid": "838679bd_fa39189a",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e54569df_6adc5952",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 3
@@ -529,6 +553,30 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "This could be nullptr if the property was not found or an exception was thrown when parsing properties.  It is also dereferenced on the following line to create the PowerSupply object.\n\nShould the if on line 139 check to make sure this is not null?  Or if it can be null, should there be a separate local with a default value of \"\" like you did with the bind delay?",
+      "range": {
+        "startLine": 155,
+        "startChar": 35,
+        "endLine": 155,
+        "endChar": 44
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fac4254_495193a7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:23:35Z",
+      "side": 1,
+      "message": "I was going for this to be allowed as null, to avoid another dependency issue with a separate repository.",
+      "parentUuid": "e54569df_6adc5952",
       "range": {
         "startLine": 155,
         "startChar": 35,
@@ -558,6 +606,24 @@
     },
     {
       "key": {
+        "uuid": "0de61631_e120b853",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:23:35Z",
+      "side": 1,
+      "message": "I am not quite sure how to handle this. I apparently missed that I had a FIXME in here.",
+      "parentUuid": "88bc3bd4_ec28bde4",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "446381fc_1ac435c3",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 3
@@ -569,6 +635,24 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "Need to add test for when GPIO read throws an exception?",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "150aa456_56807a76",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:23:35Z",
+      "side": 1,
+      "message": "Not quite expected, at this point, but perhaps that was a bad assumption.",
+      "parentUuid": "446381fc_1ac435c3",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
