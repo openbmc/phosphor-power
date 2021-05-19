@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "55dc7227_a3afb0b8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5c5cde61_f79c676a",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3bc802e_5ccf1c1d",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2021-05-17T21:52:03Z",
       "side": 1,
       "message": "This seems a little dangerous.  Do you know the exact exception it is throwing?  Maybe you could just catch that one.",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf254ee2_903c56d5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "Um... oh dear, I did know at one point...",
+      "parentUuid": "f3bc802e_5ccf1c1d",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4ed4ab39_14faf1b0",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "This is semi-foolishly ~stolen~ borrowed from phosphor-gpio-monitor/presence. I was thinking it could continue to just be a journal message.",
+      "parentUuid": "2c8cf3ef_8c8c484c",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e52cae47_7cb5bac9",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -64,6 +118,30 @@
       "writtenOn": "2021-05-17T21:52:03Z",
       "side": 1,
       "message": "the rest of your vars are camelcase",
+      "range": {
+        "startLine": 145,
+        "startChar": 9,
+        "endLine": 145,
+        "endChar": 21
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "306e262d_6d3c0450",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "Moo!",
+      "parentUuid": "e52cae47_7cb5bac9",
       "range": {
         "startLine": 145,
         "startChar": 9,
@@ -111,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "a03165b2_f02ff1fe",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "Did I do something wrong here? \n\nIf I cannot get that gpiod code to find the line, should I throw an exception, so that we go back to the inventory handling methods?\n\nAm I forgetting some boolean logic conversion thing? Does -1 mean false?",
+      "parentUuid": "7f1a9f52_0e0cd937",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48bf253c_cea21498",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -122,6 +218,30 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "This can throw an exception.  I think PSUManager::analyze() calls PowerSupply::analyze(), and the PSUManager method doesn\u0027t have a try/catch.  The PSUManager method is called by a timer.  Is the exception supposed to go all the way back to main and terminate the application?",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 26
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08910ffc_f08bafe9",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-19T02:13:58Z",
+      "side": 1,
+      "message": "I would expect things to be seriously broken if we reach this point and updatePresenceGpio() throws an exception. Terminate application seems like the right thing to do to me. Do you disagree?",
+      "parentUuid": "48bf253c_cea21498",
       "range": {
         "startLine": 197,
         "startChar": 8,
