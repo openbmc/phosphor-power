@@ -225,6 +225,24 @@
     },
     {
       "key": {
+        "uuid": "c6433031_ce19cbc1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "I\u0027m not sure what the correct error handling is.  I was just mentioning that -1 is a special return value indicating error, and this code is not checking for that.  -1 (like any non-zero number) will be true.  So this code will think it worked and the PSU is present.  If that is your intention, maybe add a comment about that?",
+      "parentUuid": "a03165b2_f02ff1fe",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48bf253c_cea21498",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -272,6 +290,30 @@
     },
     {
       "key": {
+        "uuid": "eb4df147_13ed3088",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "It is certainly up to you, I was just pointing it out.\n\nIf you are going to be reading that GPIO periodically, and one exception takes down the app for all PSUs, that seems pretty severe.  But maybe if you don\u0027t know whether they are present the situation is really bad and re-starting the app is the way to go.",
+      "parentUuid": "08910ffc_f08bafe9",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 26
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a9d6e2b_4925ae17",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -307,6 +349,30 @@
       "side": 1,
       "message": "Shortin it to \"The gpio-line-name...\" and add in a link to https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md ?",
       "parentUuid": "7a9d6e2b_4925ae17",
+      "range": {
+        "startLine": 56,
+        "startChar": 33,
+        "endLine": 57,
+        "endChar": 16
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef02735c_374307f0",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "That is fine, or just saying it is the gpio-line-name from the device tree.  I just wasn\u0027t familiar with that term/property and didn\u0027t know where it was coming from.",
+      "parentUuid": "73cb4ae4_5f8897ff",
       "range": {
         "startLine": 56,
         "startChar": 33,
@@ -560,6 +626,30 @@
     },
     {
       "key": {
+        "uuid": "2ffabdd4_8ec0c8e6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "You don\u0027t have to.  I just looked like it might be temporary code used for testing this commit.",
+      "parentUuid": "e511e0bb_059bc07b",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e54569df_6adc5952",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 3
@@ -607,6 +697,30 @@
     },
     {
       "key": {
+        "uuid": "f490f304_9ec01eea",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "OK, but when you dereference a null pointer (*presline) you get undefined behavior and probably a core dump right?  That was why I asked if you wanted to assign it a default value of \"\" or something.  Another option would be to make it a std::optional\u003cstd::string\u003e, but either way you\u0027d need to check if it had a value before using it (e.g. on line 155).",
+      "parentUuid": "7fac4254_495193a7",
+      "range": {
+        "startLine": 155,
+        "startChar": 35,
+        "endLine": 155,
+        "endChar": 44
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88bc3bd4_ec28bde4",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 3
@@ -636,6 +750,24 @@
       "side": 1,
       "message": "I am not quite sure how to handle this. I apparently missed that I had a FIXME in here.",
       "parentUuid": "88bc3bd4_ec28bde4",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39be98a_2be9e7e2",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T20:43:17Z",
+      "side": 1,
+      "message": "You can leave the FIXME there if you want.  You\u0027ll just have to manually test that code branch then.",
+      "parentUuid": "0de61631_e120b853",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
