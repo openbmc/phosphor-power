@@ -22,6 +22,30 @@
       "revId": "d9c8be577d0479b12a7eb5ffe624b5f22605e4e0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e50c295d_ef6765a7",
+        "filename": "phosphor-regulators/src/manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-21T19:27:34Z",
+      "side": 1,
+      "message": "Good question.\n\nThe main benefit is that the startCycle()/endCycle() pair causes stale sensors that weren\u0027t updated to be removed from D-Bus.\n\nThis would apply in a scenario where a good config file was loaded, sensors were published, and then someone did a SIGHUP to try to load a new config that was invalid.  The sensors from the previous config file would get removed from D-Bus.",
+      "parentUuid": "ad86816f_69024886",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 29
+      },
+      "revId": "d9c8be577d0479b12a7eb5ffe624b5f22605e4e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
