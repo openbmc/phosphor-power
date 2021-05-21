@@ -650,6 +650,30 @@
     },
     {
       "key": {
+        "uuid": "401ab401_673e7a55",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-21T22:04:47Z",
+      "side": 1,
+      "message": "I removed the one below this.",
+      "parentUuid": "2ffabdd4_8ec0c8e6",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 5
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e54569df_6adc5952",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 3
@@ -709,6 +733,30 @@
       "side": 1,
       "message": "OK, but when you dereference a null pointer (*presline) you get undefined behavior and probably a core dump right?  That was why I asked if you wanted to assign it a default value of \"\" or something.  Another option would be to make it a std::optional\u003cstd::string\u003e, but either way you\u0027d need to check if it had a value before using it (e.g. on line 155).",
       "parentUuid": "7fac4254_495193a7",
+      "range": {
+        "startLine": 155,
+        "startChar": 35,
+        "endLine": 155,
+        "endChar": 44
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7a27597_4e1c6014",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-21T22:04:47Z",
+      "side": 1,
+      "message": "I think I handle this, similar to the binddelay, only defaulted a std::string to \"\".",
+      "parentUuid": "f490f304_9ec01eea",
       "range": {
         "startLine": 155,
         "startChar": 35,
