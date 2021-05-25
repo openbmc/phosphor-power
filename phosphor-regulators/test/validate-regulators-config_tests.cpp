@@ -652,6 +652,14 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = compareVpdFile;
         EXPECT_JSON_VALID(configFile);
     }
+    // Valid, using byte_values.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] = {
+            "0x01", "0x02"};
+        EXPECT_JSON_VALID(configFile);
+    }
 
     // Invalid: no FRU property.
     {
@@ -694,14 +702,14 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     }
 
     // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
-    // "PartNumber"
+    // "PartNumber", "HW"
     {
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] =
             "Number";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'Number' is not one of ['CCIN', "
-                            "'Manufacturer', 'Model', 'PartNumber']");
+                            "'Manufacturer', 'Model', 'PartNumber', 'HW']");
     }
 
     // Invalid: property value wrong type.
@@ -710,6 +718,39 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type 'string'");
+    }
+
+    // Invalid: property byte_values has wrong type
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] =
+            "0x50";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'0x50' is not of type 'array'");
+    }
+
+    // Invalid: property byte_values is empty
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+
+    // Invalid: properties byte_values and value both exist
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] = {
+            "0x01", "0x02"};
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'byte_values': ['0x01', '0x02'], 'fru': "
+            "'system/chassis/motherboard/regulator2', 'keyword': 'CCIN', "
+            "'value': '2D35'} is valid under each of {'required': "
+            "['byte_values']}, {'required': ['value']}");
     }
 }
 TEST(ValidateRegulatorsConfigTest, ConfigFile)

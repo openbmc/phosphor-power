@@ -30,7 +30,7 @@ bool CompareVPDAction::execute(ActionEnvironment& environment)
     try
     {
         // Get actual VPD keyword value
-        std::string actualValue =
+        std::vector<uint8_t> actualValue =
             environment.getServices().getVPD().getValue(fru, keyword);
 
         // Check if actual value equals expected value
@@ -51,7 +51,13 @@ std::string CompareVPDAction::toString() const
     ss << "compare_vpd: { ";
     ss << "fru: " << fru << ", ";
     ss << "keyword: " << keyword << ", ";
-    ss << "value: " << value << " }";
+    ss << "value: [ ";
+    ss << std::hex << std::uppercase;
+    for (unsigned int i = 0; i < value.size(); ++i)
+    {
+        ss << ((i > 0) ? ", " : "") << "0x" << static_cast<uint16_t>(value[i]);
+    }
+    ss << " ] }";
     return ss.str();
 }
 

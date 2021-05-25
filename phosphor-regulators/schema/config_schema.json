@@ -164,16 +164,22 @@
 
                 "keyword": {"$ref": "#/definitions/keyword" },
 
-                "value": {"$ref": "#/definitions/string_value" }
+                "value": {"$ref": "#/definitions/string_value" },
+
+                "byte_values": {"$ref": "#/definitions/bytes_values" }
             },
-            "required": ["fru", "keyword", "value"],
+            "required": ["fru", "keyword"],
+            "oneOf": [
+                {"required": ["value"]},
+                {"required": ["byte_values"]}
+            ],
             "additionalProperties": false
         },
 
         "keyword":
         {
             "type": "string",
-            "enum": ["CCIN", "Manufacturer", "Model", "PartNumber"]
+            "enum": ["CCIN", "Manufacturer", "Model", "PartNumber", "HW"]
         },
 
         "string_value":
