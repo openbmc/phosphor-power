@@ -22,10 +22,10 @@
 namespace phosphor::power::regulators
 {
 
-std::string DBusVPD::getValue(const std::string& inventoryPath,
-                              const std::string& keyword)
+std::vector<uint8_t> DBusVPD::getValue(const std::string& inventoryPath,
+                                       const std::string& keyword)
 {
-    std::string value{};
+    std::vector<uint8_t> value{};
 
     // Get cached keywords for the inventory path
     KeywordMap& cachedKeywords = cache[inventoryPath];
@@ -38,12 +38,28 @@ std::string DBusVPD::getValue(const std::string& inventoryPath,
     }
     else
     {
-        // Get keyword value from D-Bus interface/property.  The property name
-        // is normally the same as the VPD keyword name.  However, the CCIN
-        // keyword is stored in the Model property.
-        std::string property{(keyword == "CCIN") ? "Model" : keyword};
-        util::getProperty(ASSET_IFACE, property, inventoryPath,
-                          INVENTORY_MGR_IFACE, bus, value);
+        if (keyword == "HW")
+        {
+            // HW is a vector<uint8_t>, the others are a string.
+            util::getProperty("com.ibm.ipzvpd.VINI", "HW", inventoryPath,
+                              INVENTORY_MGR_IFACE, bus, value);
+        }
+        else
+        {
+            // Get keyword value from D-Bus interface/property.  The property
+            // name is normally the same as the VPD keyword name.  However, the
+            // CCIN keyword is stored in the Model property.
+            std::string property{(keyword == "CCIN") ? "Model" : keyword};
+            std::string stringValue;
+            util::getProperty(ASSET_IFACE, property, inventoryPath,
+                              INVENTORY_MGR_IFACE, bus, stringValue);
+
+            if (!stringValue.empty())
+            {
+                value.insert(value.begin(), stringValue.begin(),
+                             stringValue.end());
+            }
+        }
 
         // Cache keyword value
         cachedKeywords[keyword] = value;

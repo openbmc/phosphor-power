@@ -1085,7 +1085,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
 
 TEST(ConfigFileParserTests, ParseCompareVPD)
 {
-    // Test where works
+    // Test where works, using "value"
     {
         const json element = R"(
             {
@@ -1099,7 +1099,25 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(), "2D35");
+        EXPECT_EQ(action->getValue(),
+                  (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
+    }
+
+    // Test where works, using "byte_values"
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "byte_values": ["0x11", "0x22", "0x33"]
+            }
+        )"_json;
+        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{0x11, 0x22, 0x33}));
     }
 
     // Test where fails: Element is not an object
@@ -1181,7 +1199,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Required property missing: value");
+        EXPECT_STREQ(e.what(), "Invalid property: Must contain "
+                               "either value or byte_values");
     }
 
     // Test where fails: fru value is invalid
@@ -1228,6 +1247,24 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "fru": "system/chassis/disk_backplane",
               "keyword": "CCIN",
               "value": 1
+            }
+        )"_json;
+        parseCompareVPD(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: byte_values is wrong format
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "byte_values": [1, 2, 3]
             }
         )"_json;
         parseCompareVPD(element);

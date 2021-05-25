@@ -36,13 +36,14 @@ using namespace phosphor::power::regulators;
 
 TEST(CompareVPDActionTests, Constructor)
 {
+    std::vector<uint8_t> value{0x32, 0x44, 0x33, 0x35}; // "2D35"
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        value};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
     EXPECT_EQ(action.getKeyword(), "CCIN");
-    EXPECT_EQ(action.getValue(), "2D35");
+    EXPECT_EQ(action.getValue(), value);
 }
 
 TEST(CompareVPDActionTests, Execute)
@@ -51,39 +52,35 @@ TEST(CompareVPDActionTests, Execute)
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
         std::string keyword{"Model"};
+        std::vector<uint8_t> abcdValue{0x41, 0x42, 0x43, 0x44};
 
         // Create MockServices object.  VPD service will return "ABCD" as VPD
         // value 4 times.
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
         EXPECT_CALL(vpd, getValue(fru, keyword))
-            .Times(4)
-            .WillRepeatedly(Return("ABCD"));
+            .Times(3)
+            .WillRepeatedly(Return(abcdValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, "ABCD"};
+            CompareVPDAction action{fru, keyword, abcdValue};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword, "BEEF"};
+            CompareVPDAction action{fru, keyword,
+                                    std::vector<uint8_t>{1, 2, 3, 4}};
             EXPECT_FALSE(action.execute(environment));
         }
 
-        // Test where returns false: expected value differs by case
+        // Test where returns false: expected value is empty
         {
-            CompareVPDAction action{fru, keyword, "abcd"};
-            EXPECT_FALSE(action.execute(environment));
-        }
-
-        // Test where returns false: expected value is an empty string
-        {
-            CompareVPDAction action{fru, keyword, ""};
+            CompareVPDAction action{fru, keyword, std::vector<uint8_t>{}};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -92,6 +89,7 @@ TEST(CompareVPDActionTests, Execute)
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
         std::string keyword{"Model"};
+        std::vector<uint8_t> emptyValue{};
 
         // Create MockServices object.  VPD service will return "" as VPD value
         // 2 times.
@@ -99,20 +97,21 @@ TEST(CompareVPDActionTests, Execute)
         MockVPD& vpd = services.getMockVPD();
         EXPECT_CALL(vpd, getValue(fru, keyword))
             .Times(2)
-            .WillRepeatedly(Return(""));
+            .WillRepeatedly(Return(emptyValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, ""};
+            CompareVPDAction action{fru, keyword, emptyValue};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword, "ABCD"};
+            CompareVPDAction action{fru, keyword,
+                                    std::vector<uint8_t>{1, 2, 3}};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -135,7 +134,8 @@ TEST(CompareVPDActionTests, Execute)
 
         try
         {
-            CompareVPDAction action{fru, keyword, "ABCD"};
+            CompareVPDAction action{fru, keyword,
+                                    std::vector<uint8_t>{1, 2, 3}};
             action.execute(environment);
             ADD_FAILURE() << "Should not have reached this line.";
         }
@@ -143,7 +143,7 @@ TEST(CompareVPDActionTests, Execute)
         {
             EXPECT_STREQ(e.what(), "ActionError: compare_vpd: { fru: "
                                    "/xyz/openbmc_project/inventory/system, "
-                                   "keyword: Model, value: ABCD }");
+                                   "keyword: Model, value: 0x1, 0x2, 0x3 }");
             try
             {
                 // Re-throw inner exception
@@ -170,7 +170,7 @@ TEST(CompareVPDActionTests, GetFRU)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        std::vector<uint8_t>{1, 2, 3, 4}};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
 }
@@ -179,7 +179,7 @@ TEST(CompareVPDActionTests, GetKeyword)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        std::vector<uint8_t>{1, 2, 3, 4}};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
@@ -187,17 +187,17 @@ TEST(CompareVPDActionTests, GetValue)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
-    EXPECT_EQ(action.getValue(), "2D35");
+        std::vector<uint8_t>{1, 2, 3, 4}};
+    EXPECT_EQ(action.getValue(), (std::vector<uint8_t>{0x1, 0x2, 0x3, 0x4}));
 }
 
 TEST(CompareVPDActionTests, ToString)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        std::vector<uint8_t>{0x01, 0xA3, 0x0, 0xFF}};
     EXPECT_EQ(action.toString(), "compare_vpd: { fru: "
                                  "/xyz/openbmc_project/inventory/system/"
                                  "chassis/disk_backplane, keyword: "
-                                 "CCIN, value: 2D35 }");
+                                 "CCIN, value: 0x1, 0xa3, 0x0, 0xff }");
 }

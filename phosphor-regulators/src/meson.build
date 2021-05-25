@@ -55,6 +55,7 @@ phosphor_regulators = executable(
     'main.cpp',
     'manager.cpp',
     dependencies: [
+        fmt,
         libi2c_dep,
         phosphor_logging,
         sdbusplus,

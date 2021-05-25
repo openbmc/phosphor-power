@@ -19,6 +19,7 @@
 #include "action_environment.hpp"
 
 #include <string>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -52,7 +53,7 @@ class CompareVPDAction : public Action
      */
     explicit CompareVPDAction(const std::string& fru,
                               const std::string& keyword,
-                              const std::string& value) :
+                              const std::vector<uint8_t>& value) :
         fru{fru},
         keyword{keyword}, value{value}
     {
@@ -96,7 +97,7 @@ class CompareVPDAction : public Action
      *
      * @return value
      */
-    const std::string& getValue() const
+    const std::vector<uint8_t>& getValue() const
     {
         return value;
     }
@@ -124,7 +125,7 @@ class CompareVPDAction : public Action
     /**
      * Expected value.
      */
-    const std::string value{};
+    const std::vector<uint8_t> value{};
 };
 
 } // namespace phosphor::power::regulators

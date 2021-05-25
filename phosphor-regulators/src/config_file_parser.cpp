@@ -263,6 +263,7 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
+    std::vector<uint8_t> value{};
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
@@ -274,10 +275,27 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
     std::string keyword = parseString(keywordElement);
     ++propertyCount;
 
-    // Required value property
-    const json& valueElement = getRequiredProperty(element, "value");
-    std::string value = parseString(valueElement);
-    ++propertyCount;
+    // Either value or byte_values required property
+    auto valueIt = element.find("value");
+    auto byteValuesIt = element.find("byte_values");
+    if ((valueIt != element.end()) && (byteValuesIt == element.end()))
+    {
+        const json& valueElement = getRequiredProperty(element, "value");
+        std::string stringValue = parseString(valueElement);
+        value.insert(value.begin(), stringValue.begin(), stringValue.end());
+        ++propertyCount;
+    }
+    else if ((valueIt == element.end()) && (byteValuesIt != element.end()))
+    {
+        const json& valueElement = getRequiredProperty(element, "byte_values");
+        value = parseHexByteArray(valueElement);
+        ++propertyCount;
+    }
+    else
+    {
+        throw std::invalid_argument{
+            "Invalid property: Must contain either value or byte_values"};
+    }
 
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);

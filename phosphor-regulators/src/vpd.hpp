@@ -19,6 +19,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -60,8 +61,8 @@ class VPD
      * @param keyword VPD keyword
      * @return VPD keyword value
      */
-    virtual std::string getValue(const std::string& inventoryPath,
-                                 const std::string& keyword) = 0;
+    virtual std::vector<uint8_t> getValue(const std::string& inventoryPath,
+                                          const std::string& keyword) = 0;
 };
 
 /**
@@ -96,14 +97,14 @@ class DBusVPD : public VPD
     }
 
     /** @copydoc VPD::getValue() */
-    virtual std::string getValue(const std::string& inventoryPath,
-                                 const std::string& keyword) override;
+    virtual std::vector<uint8_t> getValue(const std::string& inventoryPath,
+                                          const std::string& keyword) override;
 
   private:
     /**
      * Type alias for map from keyword names to values.
      */
-    using KeywordMap = std::map<std::string, std::string>;
+    using KeywordMap = std::map<std::string, std::vector<uint8_t>>;
 
     /**
      * D-Bus bus object.

@@ -18,6 +18,8 @@
 
 #include "action_error.hpp"
 
+#include <fmt/format.h>
+
 #include <exception>
 #include <sstream>
 
@@ -30,7 +32,7 @@ bool CompareVPDAction::execute(ActionEnvironment& environment)
     try
     {
         // Get actual VPD keyword value
-        std::string actualValue =
+        std::vector<uint8_t> actualValue =
             environment.getServices().getVPD().getValue(fru, keyword);
 
         // Check if actual value equals expected value
@@ -51,7 +53,19 @@ std::string CompareVPDAction::toString() const
     ss << "compare_vpd: { ";
     ss << "fru: " << fru << ", ";
     ss << "keyword: " << keyword << ", ";
-    ss << "value: " << value << " }";
+    ss << "value: ";
+
+    if (!value.empty())
+    {
+        std::string valueString;
+        std::for_each(value.begin(), value.end(), [&valueString](uint8_t v) {
+            valueString += fmt::format("{0:#x}", v) + ", ";
+        });
+        valueString.resize(valueString.size() - 2);
+        valueString += " }";
+        ss << valueString;
+    }
+
     return ss.str();
 }
 

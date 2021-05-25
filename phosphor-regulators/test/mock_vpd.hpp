@@ -40,7 +40,7 @@ class MockVPD : public VPD
 
     MOCK_METHOD(void, clearCache, (), (override));
 
-    MOCK_METHOD(std::string, getValue,
+    MOCK_METHOD(std::vector<uint8_t>, getValue,
                 (const std::string& inventoryPath, const std::string& keyword),
                 (override));
 };

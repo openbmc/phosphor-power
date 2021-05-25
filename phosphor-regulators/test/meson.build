@@ -57,6 +57,7 @@ test('phosphor-regulators-tests',
      executable('phosphor-regulators-tests',
                 phosphor_regulators_tests_source_files,
                 dependencies: [
+                    fmt,
                     gmock,
                     gtest,
                     sdbusplus
