@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "70a2e27f_c2e5b465",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "We should eventually log a communication error, if the power supply is seen as present, but the bind fails, so we cannot communicate with it.",
+      "parentUuid": "4ed4ab39_14faf1b0",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e52cae47_7cb5bac9",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -237,6 +255,24 @@
       "side": 1,
       "message": "I\u0027m not sure what the correct error handling is.  I was just mentioning that -1 is a special return value indicating error, and this code is not checking for that.  -1 (like any non-zero number) will be true.  So this code will think it worked and the PSU is present.  If that is your intention, maybe add a comment about that?",
       "parentUuid": "a03165b2_f02ff1fe",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba4981cf_3180e7c7",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "That is not what I want, if -1 is returned, I don\u0027t think I should indicate it is present. I will check if \u003e 0 for the present \u003d true case.",
+      "parentUuid": "c6433031_ce19cbc1",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -880,6 +916,30 @@
     },
     {
       "key": {
+        "uuid": "e8d7d5b1_d13f8f71",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "It looks like it can throw an exception, but for whatever reason, I cannot get that to happen and roll up (with changes).",
+      "parentUuid": "11fe90e5_83ff18d4",
+      "range": {
+        "startLine": 16,
+        "startChar": 18,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "584c066a_bbec3623",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 3
@@ -903,6 +963,30 @@
     },
     {
       "key": {
+        "uuid": "a38a2de1_c55ef43e",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "Is this part of the reason my try/catch/throw above in the constructor failed to give me desired results?",
+      "parentUuid": "584c066a_bbec3623",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24a8ca6b_4ff9c2d8",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 3
@@ -914,6 +998,30 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "This doesn\u0027t happen if the inner try/catch re-threw the exception.  Is that what you want?",
+      "range": {
+        "startLine": 54,
+        "startChar": 13,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8b80170_789baf34",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "I think I had examined this and determined that was okay. I am not so sure you can release a line if the request failed.",
+      "parentUuid": "24a8ca6b_4ff9c2d8",
       "range": {
         "startLine": 54,
         "startChar": 13,
@@ -1006,6 +1114,24 @@
       "writtenOn": "2021-05-18T18:02:39Z",
       "side": 1,
       "message": "Should probably document how it handles errors.  Does it throw?  Return -1?  Both?",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "182e9d3f_6d21ce8b",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-05-26T02:05:58Z",
+      "side": 1,
+      "message": "Both, I think... perhaps it should not be both?",
+      "parentUuid": "226200cf_01d7c7b6",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
