@@ -987,6 +987,30 @@
     },
     {
       "key": {
+        "uuid": "e11ebdd1_073ffa19",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-26T14:29:13Z",
+      "side": 1,
+      "message": "Sorry, I\u0027m not sure what you mean here.  The constructor above (in this file) doesn\u0027t have a try/catch?\n\nI just meant that normally C functions return a special return code when they fail, and C++ functions throw an exception when they fail.  Mixing the two approaches in the same function seems a little confusing for the caller.  e.g. sometimes when it fails it throws and sometimes it returns -1.",
+      "parentUuid": "a38a2de1_c55ef43e",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24a8ca6b_4ff9c2d8",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 3
@@ -1022,6 +1046,30 @@
       "side": 1,
       "message": "I think I had examined this and determined that was okay. I am not so sure you can release a line if the request failed.",
       "parentUuid": "24a8ca6b_4ff9c2d8",
+      "range": {
+        "startLine": 54,
+        "startChar": 13,
+        "endLine": 54,
+        "endChar": 20
+      },
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6a94341_a3a76c81",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-26T14:29:13Z",
+      "side": 1,
+      "message": "I meant line.release() doesn\u0027t happen if line.get_value() throws.  You catch the exception but then rethrow.  Does the release need to happen in that scenario?",
+      "parentUuid": "a8b80170_789baf34",
       "range": {
         "startLine": 54,
         "startChar": 13,
@@ -1132,6 +1180,24 @@
       "side": 1,
       "message": "Both, I think... perhaps it should not be both?",
       "parentUuid": "226200cf_01d7c7b6",
+      "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93477e76_8262356e",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-26T14:29:13Z",
+      "side": 1,
+      "message": "Yeah, I think having one way of indicating an error would be better.  Normally (when exceptions are allowed) this is an exception in C++ code.\n\nHowever, if you need to distinguish between critical and non-critical errors, then maybe you need both?",
+      "parentUuid": "182e9d3f_6d21ce8b",
       "revId": "c10f7c5356549bd2fb639166696e996bd61fdaa3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
