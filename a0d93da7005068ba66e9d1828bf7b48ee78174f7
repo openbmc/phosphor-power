@@ -71,6 +71,86 @@
     },
     {
       "key": {
+        "uuid": "65a9a96a_c54a29f0",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "The array of byte values should start with \"[ \" and end with \" ]\".  If the value vector is empty, then we\u0027ll just get \"[  ]\".  See I2CCompareBytesAction::toString().",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20d1ba47_02c25fc9",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "Nit: Couldn\u0027t this be part of the string passed to fmt::format()?",
+      "range": {
+        "startLine": 62,
+        "startChar": 54,
+        "endLine": 62,
+        "endChar": 58
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f01d13_fe593f95",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "If the value vector is empty, this closing brace won\u0027t be written to ss.  So maybe this should be replaced by a \"ss \u003c\u003c \" }\" on line 68?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 6
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "472ffceb_29d26828",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "Nit: Should include \u003ccstdint\u003e too due to uint8_t.",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ac3a5c3_dbb17518",
         "filename": "phosphor-regulators/src/config_file_parser.cpp",
         "patchSetId": 1
@@ -105,6 +185,63 @@
         "endLine": 284,
         "endChar": 60
       },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea581440_44394e9e",
+        "filename": "phosphor-regulators/src/vpd.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "Also need to include \u003ccstdint\u003e for uint8_t.",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca323ff_38b733f3",
+        "filename": "phosphor-regulators/test/actions/compare_vpd_action_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "3",
+      "range": {
+        "startLine": 58,
+        "startChar": 17,
+        "endLine": 58,
+        "endChar": 18
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ada2c15_b3703524",
+        "filename": "phosphor-regulators/test/actions/compare_vpd_action_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T16:28:48Z",
+      "side": 1,
+      "message": "Should probably add a test where the value vector is empty, since the toString() code is different for that case.",
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
