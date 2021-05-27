@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4160151_d376b85f",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "Nit: Could you move this to a \u0027###\u0027 subsection within the Properties section, like in action.md, just for consistency across files?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a3f4d94_dde9aaea",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "Nit: Please put a blank line above this to separate sections.  Also, it should probably be \"Examples\" now since there are two.",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8d80957_d496920b",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "Missing \" at end of comment",
+      "range": {
+        "startLine": 48,
+        "startChar": 77,
+        "endLine": 48,
+        "endChar": 78
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ac3a5c3_dbb17518",
+        "filename": "phosphor-regulators/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "Nit: This could be moved down to where this property is parsed on line 279",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4220d373_dd7ee938",
+        "filename": "phosphor-regulators/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "You could just dereference the iterator here to avoid searching for \"value\" twice:\n\n  std::string stringValue \u003d parseString(*valueIt);\n\nSee parseRuleIDOrActionsProperty()\n\nSame comment for lines 290-291",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 60
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54eaf7e1_92af36fa",
+        "filename": "phosphor-regulators/test/config_file_parser_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "The test above checks when neither value nor byte_values is specified.\n\nWe should probably add another test when *both* value and bytes_values are specified.",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b8a6417_b7881ff3",
+        "filename": "phosphor-regulators/test/validate-regulators-config_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-27T03:46:37Z",
+      "side": 1,
+      "message": "Would be good to add three new tests here:\n* Invalid: property byte_values has wrong type.\n* Invalid: property byte_values is empty array.\n* Invalid: value and byte_values properties both specified.",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
