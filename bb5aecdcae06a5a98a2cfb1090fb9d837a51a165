@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4a8e5a7_3baadbc7",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-28T15:57:03Z",
+      "side": 1,
+      "message": "Did you mean to leave this here, commented out?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 3
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4e05c80_cdf91a70",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-28T15:57:03Z",
+      "side": 1,
+      "message": "Nit: typo",
+      "range": {
+        "startLine": 43,
+        "startChar": 61,
+        "endLine": 43,
+        "endChar": 65
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b7f8644_665d9ab3",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-05-28T15:57:03Z",
+      "side": 1,
+      "message": "I didn\u0027t see a response for this question.  Is the plan that the caller will handle the exception if getService() or bus.call() throws?",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
