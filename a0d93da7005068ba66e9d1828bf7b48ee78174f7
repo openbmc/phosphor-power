@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6a975a1d_9e303bf8",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:39:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a3f4d94_dde9aaea",
+      "range": {
+        "startLine": 35,
+        "startChar": 1,
+        "endLine": 35,
+        "endChar": 10
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8d80957_d496920b",
         "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
         "patchSetId": 1
