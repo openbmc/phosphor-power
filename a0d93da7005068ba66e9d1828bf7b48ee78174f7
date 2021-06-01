@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5c251e92_f8651ffa",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4160151_d376b85f",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a3f4d94_dde9aaea",
         "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
         "patchSetId": 1
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "9f8251d3_466a1b33",
+        "filename": "phosphor-regulators/docs/config_file/compare_vpd.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8d80957_d496920b",
+      "range": {
+        "startLine": 48,
+        "startChar": 77,
+        "endLine": 48,
+        "endChar": 78
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65a9a96a_c54a29f0",
         "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
         "patchSetId": 1
@@ -85,6 +133,24 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c111321_d88920e4",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65a9a96a_c54a29f0",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -108,6 +174,30 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d558c4d9_9cfd0ce9",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "i\u0027ll just change this section to use a for loop like i2c compare bytes so it looks the same.",
+      "parentUuid": "20d1ba47_02c25fc9",
+      "range": {
+        "startLine": 62,
+        "startChar": 54,
+        "endLine": 62,
+        "endChar": 58
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "ffe8d65e_6f9c906f",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_action.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "472ffceb_29d26828",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ac3a5c3_dbb17518",
         "filename": "phosphor-regulators/src/config_file_parser.cpp",
         "patchSetId": 1
@@ -165,6 +273,24 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "968aafea_ecf2c9f9",
+        "filename": "phosphor-regulators/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac3a5c3_dbb17518",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -191,6 +317,30 @@
     },
     {
       "key": {
+        "uuid": "dd60e335_1f36e64a",
+        "filename": "phosphor-regulators/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4220d373_dd7ee938",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 60
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea581440_44394e9e",
         "filename": "phosphor-regulators/src/vpd.hpp",
         "patchSetId": 1
@@ -205,6 +355,24 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1de8ecdd_f7259053",
+        "filename": "phosphor-regulators/src/vpd.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea581440_44394e9e",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -231,6 +399,30 @@
     },
     {
       "key": {
+        "uuid": "b9a11e5f_760b9662",
+        "filename": "phosphor-regulators/test/actions/compare_vpd_action_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ca323ff_38b733f3",
+      "range": {
+        "startLine": 58,
+        "startChar": 17,
+        "endLine": 58,
+        "endChar": 18
+      },
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ada2c15_b3703524",
         "filename": "phosphor-regulators/test/actions/compare_vpd_action_tests.cpp",
         "patchSetId": 1
@@ -245,6 +437,24 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e58f52ea_5f58ccea",
+        "filename": "phosphor-regulators/test/actions/compare_vpd_action_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ada2c15_b3703524",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -265,6 +475,24 @@
     },
     {
       "key": {
+        "uuid": "c29e56b0_87fb3ab8",
+        "filename": "phosphor-regulators/test/config_file_parser_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54eaf7e1_92af36fa",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b8a6417_b7881ff3",
         "filename": "phosphor-regulators/test/validate-regulators-config_tests.cpp",
         "patchSetId": 1
@@ -279,6 +507,24 @@
       "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c5e4da5_ad99cc09",
+        "filename": "phosphor-regulators/test/validate-regulators-config_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T14:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b8a6417_b7881ff3",
+      "revId": "a0d93da7005068ba66e9d1828bf7b48ee78174f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
