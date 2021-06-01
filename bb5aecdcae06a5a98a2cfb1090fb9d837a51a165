@@ -25,6 +25,63 @@
     },
     {
       "key": {
+        "uuid": "a669833a_418e7d1b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "you can make this const.  Also bindDelay.",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c15b6e1_fc14faf3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "since there isn\u0027t a {} arg in this, you probably don\u0027t need format:\n    log\u003clevel::DEBUG\u003e(\"bindDelayProp\");",
+      "range": {
+        "startLine": 129,
+        "startChar": 34,
+        "endLine": 129,
+        "endChar": 70
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720e91e6_b09db51c",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "You can make a mock function throw with \u0027Throw\u0027, like from device_tests.cpp in phosphor-regulators:\n\n     EXPECT_CALL(*action, execute)\n         .WillRepeatedly(Throw(TestSDBusError{\"Unable to set sensor value\"}));",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4e05c80_cdf91a70",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 4
@@ -59,6 +116,69 @@
       "writtenOn": "2021-05-28T15:57:03Z",
       "side": 1,
       "message": "I didn\u0027t see a response for this question.  Is the plan that the caller will handle the exception if getService() or bus.call() throws?",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8350279_ce86bf13",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "the is_method_error calls aren\u0027t needed anymore.  bus.call will just throw on any problems.",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 36
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34ae2346_8ca807bb",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "Add the doxygen for the rest of this class?  (or I suppose remove this, to make it consistent)",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "130f9cb9_5f4cfd85",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-01T21:50:21Z",
+      "side": 1,
+      "message": "this looks like the GPIOReader description?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 7
+      },
       "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
