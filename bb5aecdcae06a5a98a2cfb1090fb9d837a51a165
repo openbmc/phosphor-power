@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b59484af_6013793b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "No, I should have removed that, as the init is up above as Spinler had suggested.",
+      "parentUuid": "f4a8e5a7_3baadbc7",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 3
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a669833a_418e7d1b",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 4
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "455d7380_c2bb22ec",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a669833a_418e7d1b",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c15b6e1_fc14faf3",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -53,6 +95,30 @@
       "writtenOn": "2021-06-01T21:50:21Z",
       "side": 1,
       "message": "since there isn\u0027t a {} arg in this, you probably don\u0027t need format:\n    log\u003clevel::DEBUG\u003e(\"bindDelayProp\");",
+      "range": {
+        "startLine": 129,
+        "startChar": 34,
+        "endLine": 129,
+        "endChar": 70
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8412a190_5f8c4636",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": ":-P",
+      "parentUuid": "2c15b6e1_fc14faf3",
       "range": {
         "startLine": 129,
         "startChar": 34,
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "d94bd696_268c538f",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e4e05c80_cdf91a70",
+      "range": {
+        "startLine": 43,
+        "startChar": 61,
+        "endLine": 43,
+        "endChar": 65
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b7f8644_665d9ab3",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 4
@@ -116,6 +206,24 @@
       "writtenOn": "2021-05-28T15:57:03Z",
       "side": 1,
       "message": "I didn\u0027t see a response for this question.  Is the plan that the caller will handle the exception if getService() or bus.call() throws?",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10e3831a_d538e083",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "I am not sure how I missed this one.\n\nhttps://github.com/openbmc/phosphor-power/blob/aacc2aafa5b599ca9719dcc174b966c976568ab1/utility.cpp#L36\n\nI suppose this could throw an exception. I am thinking I would probably handle it similar to below, where an ERROR trace is tossed in the journal and the InternalFailure is logged.",
+      "parentUuid": "4b7f8644_665d9ab3",
       "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -162,6 +270,24 @@
     },
     {
       "key": {
+        "uuid": "4d1e320e_43e2e2fe",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "34ae2346_8ca807bb",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "130f9cb9_5f4cfd85",
         "filename": "phosphor-power-supply/util_base.hpp",
         "patchSetId": 4
@@ -173,6 +299,30 @@
       "writtenOn": "2021-06-01T21:50:21Z",
       "side": 1,
       "message": "this looks like the GPIOReader description?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 7
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39419ab_426eadcc",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:45:25Z",
+      "side": 1,
+      "message": "As in I suppose this belongs over in util.hpp, not here?",
+      "parentUuid": "130f9cb9_5f4cfd85",
       "range": {
         "startLine": 45,
         "startChar": 0,
