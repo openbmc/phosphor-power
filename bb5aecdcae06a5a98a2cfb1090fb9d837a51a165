@@ -84,6 +84,29 @@
     },
     {
       "key": {
+        "uuid": "a7b32aac_fe047895",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T23:11:16Z",
+      "side": 1,
+      "message": "Local CI failures over in power_supply.cpp:48 if I make this const.",
+      "range": {
+        "startLine": 310,
+        "startChar": 4,
+        "endLine": 310,
+        "endChar": 27
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2c15b6e1_fc14faf3",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
