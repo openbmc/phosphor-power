@@ -271,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "4419fdeb_0b5fe72a",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:55:35Z",
+      "side": 1,
+      "message": "So, I would want something like:\ntry\n{\n    auto invMgrResponseMsg - bus.call(invMsg);\n}\ncatch (std::exception\u0026 e)\n{\n    log\u003clevel::ERR\u003e(fmt::format(\"Error in inventory manager call to update inventory: {}\", e.what()).c_str()));\n    elog\u003cInternalFailure\u003e();\n}\n???",
+      "parentUuid": "b8350279_ce86bf13",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 36
+      },
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34ae2346_8ca807bb",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 4
