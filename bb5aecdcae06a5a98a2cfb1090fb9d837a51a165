@@ -148,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "8313a495_2c7207f0",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-02T22:55:01Z",
+      "side": 1,
+      "message": "Where I was stumbling with this is that it is a Constructor test, and I need to run the constructor to get the GPIOInterface into the MockGPIOReader in order to tell it that I want it to Throw an exception, which will be after the fact.",
+      "parentUuid": "720e91e6_b09db51c",
+      "revId": "bb5aecdcae06a5a98a2cfb1090fb9d837a51a165",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4e05c80_cdf91a70",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 4
