@@ -154,44 +154,39 @@ void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
             return;
         }
 
-        std::vector<std::string> models;
         propIt = properties.find("SupportedModel");
         if (propIt == properties.end())
         {
             return;
         }
-        const std::vector<std::string>* modelsPtr =
-            std::get_if<std::vector<std::string>>(&(propIt->second));
-        if (modelsPtr == nullptr)
+        const std::string* model = std::get_if<std::string>(&(propIt->second));
+        if (model == nullptr)
         {
             return;
         }
-        models = *modelsPtr;
 
-        sys_properties sys{0, 0};
+        sys_properties sys;
         propIt = properties.find("RedundantCount");
         if (propIt != properties.end())
         {
             const uint64_t* count = std::get_if<uint64_t>(&(propIt->second));
             if (count != nullptr)
             {
-                sys.maxPowerSupplies = *count;
+                sys.powerSupplyCount = *count;
             }
         }
         propIt = properties.find("InputVoltage");
         if (propIt != properties.end())
         {
-            const uint64_t* voltage = std::get_if<uint64_t>(&(propIt->second));
+            const std::vector<uint64_t>* voltage =
+                std::get_if<std::vector<uint64_t>>(&(propIt->second));
             if (voltage != nullptr)
             {
                 sys.inputVoltage = *voltage;
             }
         }
 
-        for (const auto& model : models)
-        {
-            supportedConfigs.insert(std::make_pair(model, sys));
-        }
+        supportedConfigs.emplace(*model, sys);
     }
     catch (std::exception& e)
     {

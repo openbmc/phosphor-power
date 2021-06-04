@@ -11,8 +11,8 @@
 
 struct sys_properties
 {
-    int maxPowerSupplies;
-    int inputVoltage;
+    int powerSupplyCount;
+    std::vector<uint64_t> inputVoltage;
 };
 
 using namespace phosphor::power::psu;
@@ -225,7 +225,7 @@ class PSUManager
      * @brief Map of supported PSU configurations that include the model name
      * and their properties.
      */
-    std::multimap<std::string, sys_properties> supportedConfigs;
+    std::map<std::string, sys_properties> supportedConfigs;
 
     /**
      * @brief The vector for power supplies.
