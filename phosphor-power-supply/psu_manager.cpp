@@ -17,7 +17,7 @@ constexpr auto i2cBusProp = "I2CBus";
 constexpr auto i2cAddressProp = "I2CAddress";
 constexpr auto psuNameProp = "Name";
 constexpr auto presLineName = "NamedPresenceGpio";
-constexpr auto bindDelayProp = "BindDelay";
+constexpr auto bindDelayProp = "DelayBind";
 
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
