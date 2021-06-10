@@ -419,7 +419,7 @@ void PSUManager::analyze()
 
 void PSUManager::validateConfig()
 {
-    if (!runValidateConfig)
+    if (!runValidateConfig || supportedConfigs.empty())
     {
         return;
     }
@@ -427,6 +427,8 @@ void PSUManager::validateConfig()
     // Check that all PSUs have the same model name. Initialize the model
     // variable with the first PSU name found, then use it as a base to compare
     // against the rest of the PSUs.
+    // Also record the number of present PSUs to verify afterwards.
+    auto presentCount = 0;
     std::string model{};
     for (const auto& p : psus)
     {
@@ -434,6 +436,10 @@ void PSUManager::validateConfig()
         if (psuModel.empty())
         {
             continue;
+        }
+        if (p->isPresent())
+        {
+            presentCount++;
         }
         if (model.empty())
         {
@@ -459,6 +465,39 @@ void PSUManager::validateConfig()
             runValidateConfig = false;
             return;
         }
+    }
+
+    // Validate the supported configurations. A system may support more than one
+    // power supply model configuration.
+    bool supported = false;
+    std::map<std::string, std::string> additionalData;
+    for (const auto& config : supportedConfigs)
+    {
+        if (config.first.compare(model) != 0)
+        {
+            continue;
+        }
+        if (presentCount != config.second.powerSupplyCount)
+        {
+            additionalData["EXPECTED_COUNT"] =
+                std::to_string(config.second.powerSupplyCount);
+            continue;
+        }
+        supported = true;
+        runValidateConfig = false;
+        break;
+    }
+    if (!supported)
+    {
+        additionalData["ACTUAL_MODEL"] = model;
+        additionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
+        createError("xyz.openbmc_project.Power.PowerSupply.Error.NotSupported",
+                    additionalData);
+
+        // Return without setting the runValidateConfig flag to false because
+        // it may be that an additional supported configuration interface is
+        // added and we need to validate it to see if it matches this system.
+        return;
     }
 }
 
