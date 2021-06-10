@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a59f8016_290b1fd9",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-10T23:14:52Z",
+      "side": 1,
+      "message": "Changing the bindDelay (DelayBind) to just be a hardcoded value, rather than over-complicating things for data driven when probably not needed. See: https://gerrit.openbmc-project.xyz/c/openbmc/entity-manager/+/43009/6//COMMIT_MSG#9",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 13
+      },
+      "revId": "6d4851151c09b3e582a38c1f687ebd545ee33840",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
