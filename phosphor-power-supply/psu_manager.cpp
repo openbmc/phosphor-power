@@ -419,7 +419,7 @@ void PSUManager::analyze()
 
 void PSUManager::validateConfig()
 {
-    if (!runValidateConfig)
+    if (!runValidateConfig || supportedConfigs.empty())
     {
         return;
     }
@@ -427,6 +427,8 @@ void PSUManager::validateConfig()
     // Check that all PSUs have the same model name. Initialize the model
     // variable with the first PSU name found, then use it as a base to compare
     // against the rest of the PSUs.
+    // Also record the number of present PSUs to verify afterwards.
+    auto presentCount = 0;
     std::string model{};
     for (const auto& p : psus)
     {
@@ -434,6 +436,10 @@ void PSUManager::validateConfig()
         if (psuModel.empty())
         {
             continue;
+        }
+        if (p->isPresent())
+        {
+            presentCount++;
         }
         if (model.empty())
         {
@@ -456,6 +462,38 @@ void PSUManager::validateConfig()
             return;
         }
     }
+
+    // Validate the supported configurations. Different combinations can be
+    // possible for the same model name, therefore loop through the supported
+    // configs and once the model is found, check the expected properties such
+    // as count. If there is not a match, continue as a different configuration
+    // may exist.
+    bool supported = false;
+    std::map<std::string, std::string> additionalData;
+    for (const auto& config : supportedConfigs)
+    {
+        if (config.first.compare(model) != 0)
+        {
+            continue;
+        }
+        if (presentCount != config.second.powerSupplyCount)
+        {
+            additionalData["EXPECTED_COUNT"] =
+                std::to_string(config.second.powerSupplyCount);
+            continue;
+        }
+        supported = true;
+        break;
+    }
+    if (!supported)
+    {
+        additionalData["ACTUAL_MODEL"] = model;
+        additionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
+        createError("xyz.openbmc_project.Power.PowerSupply.Error.NotSupported",
+                    additionalData);
+        return;
+    }
+
     runValidateConfig = false;
 }
 
