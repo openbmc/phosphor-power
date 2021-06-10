@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "65a719c4_c3ff72ce",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-10T20:09:32Z",
+      "side": 1,
+      "message": "Added a check so that on interfaces added we call the validation if both the interfaces have been processed:\nif (powerOn \u0026\u0026 !psus.empty() \u0026\u0026 !supportedConfigs.empty())\n\nAlso added a flag to mark if the validation has passed, to avoid doing the validation multiple times in a row.",
+      "parentUuid": "e5e63c9f_4abcbe9c",
+      "revId": "039c62a8354ab22e6ddb7720d831171b5c6ec0b0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "79f222c9_9cf9ab84",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
