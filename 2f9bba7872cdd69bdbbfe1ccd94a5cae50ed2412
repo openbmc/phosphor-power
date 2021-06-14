@@ -34,6 +34,24 @@
       "revId": "2f9bba7872cdd69bdbbfe1ccd94a5cae50ed2412",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041b4c61_a73216b2",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-14T15:33:24Z",
+      "side": 1,
+      "message": "Done. Setting it to false on mismatched levels, but not setting it if the supported config doesn\u0027t match on the next commit, added comments for clarity.",
+      "parentUuid": "38369e12_cdd8cf71",
+      "revId": "2f9bba7872cdd69bdbbfe1ccd94a5cae50ed2412",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
