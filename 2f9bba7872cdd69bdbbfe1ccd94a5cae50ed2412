@@ -16,6 +16,24 @@
       "revId": "2f9bba7872cdd69bdbbfe1ccd94a5cae50ed2412",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38369e12_cdd8cf71",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-14T15:23:55Z",
+      "side": 1,
+      "message": "The thought was to only set the runValidateConfig if the validation was successful to handle the EM interfaces added being triggered. This is probably more obvious in the next commit, where in the corner case where there are more than one different supported configuration defined for the system, and the first one that showed up in dbus didn\u0027t validate, an error is created, then the next supported config that appears on d-bus gets validated then the flag is set so that future d-bus interfaces if any don\u0027t trigger the validation anymore since the supported one has been found.\n\nBut in the case of mismatched models, a future d-bus interface is not going to fix things, so it can probably be set the false so it doesn\u0027t run again. Will add it.",
+      "parentUuid": "a496d573_03b2b6e6",
+      "revId": "2f9bba7872cdd69bdbbfe1ccd94a5cae50ed2412",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
