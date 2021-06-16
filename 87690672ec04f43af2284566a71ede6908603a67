@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a36a903d_02ecfa4f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-16T21:08:05Z",
+      "side": 1,
+      "message": "Does this bool get set to true if a PSU is added or removed (presence changes)?\n\nSeems like that would be necessary since the PSU count is one of the conditions checked.\n\nSorry if you are already doing this and I missed it.  I looked around a little bit, but it could have been in a previous commit/review.",
+      "range": {
+        "startLine": 422,
+        "startChar": 9,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1594fa8_64262c6a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-16T21:08:05Z",
+      "side": 1,
+      "message": "Is this still true?  I thought this was simplified to a single model -\u003e properties mapping in a change to a previous commit/review.",
+      "range": {
+        "startLine": 470,
+        "startChar": 47,
+        "endLine": 471,
+        "endChar": 39
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f335f97f_da860efb",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-16T21:08:05Z",
+      "side": 1,
+      "message": "Nit: extra word",
+      "range": {
+        "startLine": 500,
+        "startChar": 26,
+        "endLine": 500,
+        "endChar": 30
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
