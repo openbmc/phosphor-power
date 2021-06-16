@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70a9efdb_7d6ca72d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-16T16:13:23Z",
+      "side": 1,
+      "message": "Nit: I think you can use emplace to make this simpler:\n\n  supportedConfigs.emplace(*model, sys);",
+      "range": {
+        "startLine": 189,
+        "startChar": 8,
+        "endLine": 189,
+        "endChar": 61
+      },
+      "revId": "f06e8ab6a9470126591a2ec41d46bd6de3cd2e14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
