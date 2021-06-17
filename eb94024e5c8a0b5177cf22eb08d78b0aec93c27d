@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c2c8003_5d466373",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-17T16:50:59Z",
+      "side": 1,
+      "message": "How is this going to work if this is starting up with power on, and entity-manager is adding inthe IBMCFFPSConnector entries?\n\nThe sequence I would typically see is:\nifacesAdded for Compatible Type.\n...\nifacesAdded for IBMCFFPSConnector\n...\nifacesAdded for IBMCFFPSConnector\n...\n\nIn other words, there is an interfaces added for each power supply. After the first one, psus.empty() would be false, but we did not add all the power supplies yet.\n\nWouldn\u0027t this only run validateConfig() with one power supply in the configuration, and then stop, even if there were say 3 more to add to finish out getting all the power supplies in the system?",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 30
+      },
+      "revId": "eb94024e5c8a0b5177cf22eb08d78b0aec93c27d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
