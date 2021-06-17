@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "f5e10816_195d9121",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-17T20:41:39Z",
+      "side": 1,
+      "message": "That sounds reasonable.  You could probably do that in a separate commit if you so desired.",
+      "parentUuid": "df03bb8d_ce9d65b2",
+      "revId": "5a0ddd62b3e48c07c2a3ce0690e51fc516080acb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "188cbee8_f89f565c",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 8
