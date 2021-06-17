@@ -22,6 +22,29 @@
       "revId": "f03746c4ee05c2ca0c1665a44aacf483f6080d00",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "050f261a_b267c190",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-17T17:05:35Z",
+      "side": 1,
+      "message": "Some confusion on comparing ps4 to ps5, there is a comment in ps4 here.",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 55
+      },
+      "revId": "f03746c4ee05c2ca0c1665a44aacf483f6080d00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
