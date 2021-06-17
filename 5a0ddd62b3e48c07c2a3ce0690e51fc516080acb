@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "eaef51d5_e4d77f92",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-06-17T15:50:07Z",
+      "side": 1,
+      "message": "OK, sounds like your stance is this code only works with IBM power supplies.",
+      "parentUuid": "4d7deb97_755b403f",
+      "revId": "5a0ddd62b3e48c07c2a3ce0690e51fc516080acb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "188cbee8_f89f565c",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 8
