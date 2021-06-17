@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c2886bde_275d90fd",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-17T17:03:29Z",
+      "side": 1,
+      "message": "Oh, this seems similar to the question I had in the previous commit.\n\nAssuming:\nPower is on.\nInterfaces added for Supported Config.\nInterfaces added for first PSU.\nvalidateConfig()\nInterfaces added for second PSU.\n...",
+      "parentUuid": "a36a903d_02ecfa4f",
+      "range": {
+        "startLine": 422,
+        "startChar": 9,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1594fa8_64262c6a",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2021-06-16T21:08:05Z",
       "side": 1,
       "message": "Is this still true?  I thought this was simplified to a single model -\u003e properties mapping in a change to a previous commit/review.",
+      "range": {
+        "startLine": 470,
+        "startChar": 47,
+        "endLine": 471,
+        "endChar": 39
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c1e2246_c2e73fb9",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-06-17T17:03:29Z",
+      "side": 1,
+      "message": "I think this is still true.\n\nExample:\nModel: 51E9\nCount: 2\nInputVoltage: 200\n\nModel: 51E9\nCount: 4\nInputVoltage: 110\n\n(I don\u0027t think 51E9 is a good example, but maybe could have 2 at high voltage, or 4 at low voltage)",
+      "parentUuid": "b1594fa8_64262c6a",
       "range": {
         "startLine": 470,
         "startChar": 47,
