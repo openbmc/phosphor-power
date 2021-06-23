@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "265f6ed4_fed283fd",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-23T18:38:25Z",
+      "side": 1,
+      "message": "The bool doesn\u0027t change on interfaces added, therefore like Brandon mentions, the validation would run every time a PSU is added, causing an error log until the total count is achieved. We just don\u0027t have a way of knowing when all the interfaces are done being added. This would only happen if the power is on and EM hadn\u0027t started for some reason, which should be rare. Scenario:\n\nPower is on.\nInterfaces added for Supported Config.\nInterfaces added for first PSU.\nvalidateConfig()\n\u003d\u003d\u003e Log error for count (1) \u003c expected count\nInterfaces added for second PSU.\nvalidateConfig()\n\u003d\u003d\u003e Validation passed, count (2) \u003d expected count",
+      "parentUuid": "c2886bde_275d90fd",
+      "range": {
+        "startLine": 422,
+        "startChar": 9,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b1594fa8_64262c6a",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "52dc3b63_f6d61831",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-23T18:38:25Z",
+      "side": 1,
+      "message": "Corrected the comment, yeah in the new schema, there\u0027s only one model per supported configuration, and a system can support more than one model. Brandon\u0027s scenario has been addressed by having a vector of input voltages, although there\u0027s not a use case for different numbers of high voltage or low voltage, just that a PSU can run on either voltage without needing to change the number of PSUs.",
+      "parentUuid": "5c1e2246_c2e73fb9",
+      "range": {
+        "startLine": 470,
+        "startChar": 47,
+        "endLine": 471,
+        "endChar": 39
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f335f97f_da860efb",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -116,6 +164,30 @@
       "revId": "87690672ec04f43af2284566a71ede6908603a67",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75b1c379_a9f5cea1",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-23T18:38:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f335f97f_da860efb",
+      "range": {
+        "startLine": 500,
+        "startChar": 26,
+        "endLine": 500,
+        "endChar": 30
+      },
+      "revId": "87690672ec04f43af2284566a71ede6908603a67",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }

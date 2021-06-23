@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7e22170f_326b07b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-23T18:38:25Z",
+      "side": 1,
+      "message": "Done. Thanks.",
+      "parentUuid": "6ed321fb_90a7d94e",
+      "range": {
+        "startLine": 13,
+        "startChar": 41,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "f03746c4ee05c2ca0c1665a44aacf483f6080d00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "050f261a_b267c190",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "f03746c4ee05c2ca0c1665a44aacf483f6080d00",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c6b1bc9_7be54cdf",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-06-23T18:38:25Z",
+      "side": 1,
+      "message": "Done. Yep replied to the comment in ps4.",
+      "parentUuid": "050f261a_b267c190",
+      "range": {
+        "startLine": 422,
+        "startChar": 0,
+        "endLine": 422,
+        "endChar": 55
+      },
+      "revId": "f03746c4ee05c2ca0c1665a44aacf483f6080d00",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
