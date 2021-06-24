@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "psu_manager.hpp"
 
 #include "utility.hpp"
@@ -11,8 +13,6 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
-constexpr auto PSInterface =
-    "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
 constexpr auto i2cBusProp = "I2CBus";
 constexpr auto i2cAddressProp = "I2CAddress";
 constexpr auto psuNameProp = "Name";
@@ -56,7 +56,7 @@ void PSUManager::getPSUConfiguration()
 {
     using namespace phosphor::power::util;
     auto depth = 0;
-    auto objects = getSubTree(bus, "/", PSInterface, depth);
+    auto objects = getSubTree(bus, "/", SUPPLY_INTERFACE, depth);
 
     psus.clear();
 
@@ -74,7 +74,8 @@ void PSUManager::getPSUConfiguration()
 
         // For each object in the array of objects, I want to get properties
         // from the service, path, and interface.
-        auto properties = getAllProperties(bus, path, PSInterface, service);
+        auto properties =
+            getAllProperties(bus, path, SUPPLY_INTERFACE, service);
 
         getPSUProperties(properties);
     }
@@ -238,11 +239,12 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
             populateSysProperties(itIntf->second);
         }
 
-        itIntf = interfaces.find(PSInterface);
+        itIntf = interfaces.find(SUPPLY_INTERFACE);
         if (itIntf != interfaces.cend())
         {
             log<level::INFO>(
-                fmt::format("InterfacesAdded for: {}", PSInterface).c_str());
+                fmt::format("InterfacesAdded for: {}", SUPPLY_INTERFACE)
+                    .c_str());
             getPSUProperties(itIntf->second);
         }
     }
