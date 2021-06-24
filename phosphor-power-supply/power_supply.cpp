@@ -27,7 +27,8 @@ PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
                          std::uint8_t i2cbus, std::uint16_t i2caddr,
                          const std::string& gpioLineName) :
     bus(bus),
-    inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/ibm-cffps")
+    inventoryPath(invpath),
+    bindPath("/sys/bus/i2c/drivers/" + std::string{SUPPLY_DRIVER})
 {
     if (inventoryPath.empty())
     {
