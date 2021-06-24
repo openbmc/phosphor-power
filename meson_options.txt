@@ -23,6 +23,11 @@ option(
 )
 
 option(
+    'power_supply', type: 'string', value: 'ibm',
+    description: 'The power supply type',
+)
+
+option(
     'device-access', type: 'boolean', value: true,
     description: 'Enable UCD90160 hardware access.',
 )
