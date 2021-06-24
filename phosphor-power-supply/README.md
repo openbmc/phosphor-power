@@ -10,7 +10,7 @@ power supplies (ibm-cffps), run meson with `-Dibm-vpd=true`.
 # D-Bus System Configuration
 
 Entity Manager provides information about the supported system configuration
-and the power supply connectors (IBMCFFPSConnector).
+and the power supply connectors (PSInterface, such as IBMCFFPSConnector).
 
 The information is as follows:
 
