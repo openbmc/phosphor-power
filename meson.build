@@ -78,6 +78,15 @@ else
     error('power sequencer is incorrect')
 endif
 
+# Get the power supply type name
+supply = get_option('power_supply')
+if supply == 'ibm'
+    supply_driver = 'ibm-cffps'
+else
+    # power supply is incorrect
+    error('power supply is incorrect')
+endif
+
 conf = configuration_data()
 conf.set_quoted(
     'INPUT_HISTORY_BUSNAME_ROOT', get_option('input-history-busname-root'))
@@ -87,6 +96,8 @@ conf.set_quoted(
     'PSU_JSON_PATH', '/usr/share/phosphor-power/psu.json')
 conf.set(
     'SEQUENCER', sequencer_class)
+conf.set_quoted(
+    'SUPPLY_DRIVER', supply_driver)
 conf.set10(
     'DEVICE_ACCESS', get_option('device-access'))
 conf.set10('IBM_VPD', get_option('ibm-vpd'))
