@@ -327,6 +327,25 @@ void PSUManager::analyze()
 
     if (powerOn)
     {
+        // Determine if the expected number of PSUs are present
+        auto presentCount = 0;
+        for (auto& psu : psus)
+        {
+            if (psu->isPresent())
+            {
+                presentCount++;
+            }
+        }
+        bool missingPSU = true;
+        for (const auto& config : supportedConfigs)
+        {
+            if (presentCount == config.second.powerSupplyCount)
+            {
+                missingPSU = false;
+                break;
+            }
+        }
+
         for (auto& psu : psus)
         {
             std::map<std::string, std::string> additionalData;
@@ -334,13 +353,16 @@ void PSUManager::analyze()
             // TODO: Fault priorities #918
             if (!psu->isFaultLogged() && !psu->isPresent())
             {
-                // Create error for power supply missing.
-                additionalData["CALLOUT_INVENTORY_PATH"] =
-                    psu->getInventoryPath();
-                additionalData["CALLOUT_PRIORITY"] = "H";
-                createError(
-                    "xyz.openbmc_project.Power.PowerSupply.Error.Missing",
-                    additionalData);
+                if (missingPSU)
+                {
+                    // Create error for power supply missing.
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+                    additionalData["CALLOUT_PRIORITY"] = "H";
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Missing",
+                        additionalData);
+                }
                 psu->setFaultLogged();
             }
             else if (!psu->isFaultLogged() && psu->isFaulted())
