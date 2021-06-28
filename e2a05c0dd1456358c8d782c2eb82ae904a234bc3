@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7e0850c_014575db",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-28T20:36:11Z",
+      "side": 1,
+      "message": "This method is already pretty long.  It might be helpful to put this new code in a separate method (e.g. hasRequiredNumberOfPSUs() or isRequiredPSUMissing())",
+      "revId": "e2a05c0dd1456358c8d782c2eb82ae904a234bc3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef09eb5_05dd6b1a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-28T20:36:11Z",
+      "side": 1,
+      "message": "If I understand the supportedConfigs code/data structure, there is a model mapped to a PSU count and voltage.  Do we need to check the model or voltage here to decide if this supportedConfig is a match?",
+      "revId": "e2a05c0dd1456358c8d782c2eb82ae904a234bc3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
