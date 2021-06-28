@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4588b482_5de63a3c",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-28T18:54:30Z",
+      "side": 1,
+      "message": "The advantage of this approach is that the generic PSU type could map to multiple config file variables.  The disadvantage is that if someone has a non-IBM PSU, they need to modify this file to add support for it.\n\nAn alternative approach would be a power_supply_interface build option that is set directly to the D-Bus interface name.  For example, -Dpower_supply_interface\u003dxyz.openbmc_project.Acme.PSU.  Then no changes are required to this file for non-IBM PSUs; it would just be a recipe change.  However, I\u0027m not sure if you want an option that granular.\n\nIs changing the interface name inside EntityManager to something generic not possible/practical?  That might avoid the need for this build option.\n\nNote that if someone does specify a different D-Bus interface, the interface will need to provide the same property names for the current C++ code to work.",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
