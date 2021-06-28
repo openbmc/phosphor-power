@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e918cce9_705592ca",
+        "filename": "phosphor-power-supply/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-28T18:20:00Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean here.  Does \"PSInterface\" refer to the C++ constant, or a D-Bus interface, or ?",
+      "range": {
+        "startLine": 13,
+        "startChar": 32,
+        "endLine": 13,
+        "endChar": 72
+      },
+      "revId": "8bf1b5a8788a2b0b9c18f34d5429c44b2cde0183",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9e115d2_bd046020",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-06-28T18:20:00Z",
+      "side": 1,
+      "message": "Nit: OpenBMC naming conventions say constants should start with a lower case letter (like the others you have below this one).",
+      "range": {
+        "startLine": 14,
+        "startChar": 15,
+        "endLine": 14,
+        "endChar": 27
+      },
+      "revId": "8bf1b5a8788a2b0b9c18f34d5429c44b2cde0183",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
