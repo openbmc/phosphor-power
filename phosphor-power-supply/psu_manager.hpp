@@ -240,6 +240,17 @@ class PSUManager
     bool runValidateConfig = true;
 
     /**
+     * @brief Check that all PSUs have the same model name and that the system
+     * has the required number of PSUs present as specified in the Supported
+     * Configuration interface.
+     *
+     * @param[out] additionalData - Contains debug information on why the check
+     *             might have failed. Can be used to fill in error logs.
+     * @return true if all the required PSUs are present, false otherwise.
+     */
+    bool hasRequiredPSUs(std::map<std::string, std::string>& additionalData);
+
+    /**
      * @brief Map of supported PSU configurations that include the model name
      * and their properties.
      */
