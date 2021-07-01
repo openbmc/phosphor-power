@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "142ea7fd_aa54e511",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-01T23:27:14Z",
+      "side": 1,
+      "message": "I was kind of thinking ahead here.\n\nI originally had this change and https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/44456 in the same commit, but then split it into two commits as the other one depends on the changes to use libgpiod.\n\nI was thinking we could get both the interface name and the device driver name based on a passed in power supply type variable.",
+      "parentUuid": "58e0b89a_bd54e5ca",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "069ff7a3_1850718d",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2021-06-29T09:42:20Z",
       "side": 1,
       "message": "Hi,\n\nWith the \"I2CBus\" and \"I2CAddress\", Must we configure the property name like that in https://github.com/openbmc/entity-manager/tree/master/configurations ?",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db9a1f70_ac5317c3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-01T23:27:14Z",
+      "side": 1,
+      "message": "Yes.\n\nSo, for the IBM systems, the power supply information is coming from:\nhttps://github.com/openbmc/entity-manager/blob/master/configurations/Nisqually.json\nand \nhttps://github.com/openbmc/entity-manager/blob/master/configurations/Bellavista.json\n\nThose depend on the schema:\nhttps://github.com/openbmc/entity-manager/blob/master/schemas/IBM.json\n\nIt now looks even more apparently that something could maybe be a bit more generic for these as well.",
+      "parentUuid": "069ff7a3_1850718d",
       "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
