@@ -55,6 +55,29 @@
     },
     {
       "key": {
+        "uuid": "949c9272_2e653fe7",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-01T23:41:36Z",
+      "side": 1,
+      "message": "Shawn, this ends up being SUPPLY_INTERFACE in config.h, which kind of sort of ... eliminates the PSInterface coding standards violation... I think.",
+      "range": {
+        "startLine": 99,
+        "startChar": 5,
+        "endLine": 99,
+        "endChar": 21
+      },
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "069ff7a3_1850718d",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
