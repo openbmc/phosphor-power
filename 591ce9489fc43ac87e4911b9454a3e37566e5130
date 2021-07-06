@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5304a054_44c3ef55",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-07-06T13:02:07Z",
+      "side": 1,
+      "message": "\u003e An alternative approach would be\n\nI have another alternative to consider - simply support any number of PSU specific interfaces without any build time configuration.  This lets you support systems with different power supplies.\n\n\u003e Is changing the interface name inside EntityManager to something generic not possible/practical?\n\nI think if IBMCFFPSConnector is already being used for non IBMCFFPS PSUs, the schema itself is already \"generic\" - from a functional point of view the name is not really all that important.  It could just stay as it is.\n\n\u003e I was thinking we could get both the interface name and the device driver name based on a passed in power supply type variable.\n\nYou could maintain a mapping between interface names and device driver names in a header file.  This is what entity-manager does:\n\nhttps://github.com/openbmc/entity-manager/blob/master/include/devices.hpp\n\nAgain, this approach lets you support multiple power supply types at the same time and requires no build time configuration.  win-win.",
+      "parentUuid": "142ea7fd_aa54e511",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "949c9272_2e653fe7",
         "filename": "meson.build",
         "patchSetId": 1
@@ -107,6 +125,24 @@
       "side": 1,
       "message": "Yes.\n\nSo, for the IBM systems, the power supply information is coming from:\nhttps://github.com/openbmc/entity-manager/blob/master/configurations/Nisqually.json\nand \nhttps://github.com/openbmc/entity-manager/blob/master/configurations/Bellavista.json\n\nThose depend on the schema:\nhttps://github.com/openbmc/entity-manager/blob/master/schemas/IBM.json\n\nIt now looks even more apparently that something could maybe be a bit more generic for these as well.",
       "parentUuid": "069ff7a3_1850718d",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd1522d0_cb2c9d19",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2021-07-06T13:02:07Z",
+      "side": 1,
+      "message": "\u003e It now looks even more apparently that something could maybe be a bit more generic for these as well.\n\nIf the schema works and is being used for someone besides IBM it is already general purpose - it doesn\u0027t matter what the name is or what file it is in.",
+      "parentUuid": "db9a1f70_ac5317c3",
       "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
