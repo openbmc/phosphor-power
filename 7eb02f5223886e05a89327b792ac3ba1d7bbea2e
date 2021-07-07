@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ceed1ea8_5c0bf65a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-07T23:47:12Z",
+      "side": 1,
+      "message": "Just curious, is there a reason to use compare() here and on line 479 vs. the simpler !\u003d operator?  I thought compare() was normally used when you need the less than/greater than info for sorting.",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f50e102b_0dc3369c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-07T23:47:12Z",
+      "side": 1,
+      "message": "In the commit message it said:\n\n\u003e\u003e The new scenario is that if EM\n\u003e\u003e starts after psu-monitor and more than one PSU is found with a\n\u003e\u003e mismatched model name, then an error log will be created for each, which\n\u003e\u003e it may be better since each error log will have the inventory path to\n\u003e\u003e the mismatched PSU.\n\nI might be misunderstanding, but it seems like this code quits after the first mismatched model is found.  And it doesn\u0027t check if it has previously logged an error against that PSU.  So if new PSUs are added incrementally as EM comes up, and the new ones are added to the end of the psus list, then it would call out the same first mismatched PSU multiple times?",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db2efeb0_bce63d4a",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-07T23:47:12Z",
+      "side": 1,
+      "message": "Nit: Missing @return tag documenting return value",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
