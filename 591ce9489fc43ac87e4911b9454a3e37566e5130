@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "e7251250_92915dde",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-08T22:28:18Z",
+      "side": 1,
+      "message": "\u003e \u003e An alternative approach would be\n\u003e \n\u003e I have another alternative to consider - simply support any number of PSU specific interfaces without any build time configuration.  This lets you support systems with different power supplies.\n\u003e \nHow would one \"support any number of PSU specific interfaces\"?\n\n\u003e \u003e Is changing the interface name inside EntityManager to something generic not possible/practical?\n\u003e \n\u003e I think if IBMCFFPSConnector is already being used for non IBMCFFPS PSUs, the schema itself is already \"generic\" - from a functional point of view the name is not really all that important.  It could just stay as it is.\n\u003e \n\nWhy would I need to support any number of PSU specific interfaces, if we do not need specific interfaces, due to IBMCFFPSConnector already being generic enough, despite the name?\n\nI do not see evidence of anyone else using IBMCFFPSConnector, at least not in the current code I just fetched from github.ibm.com/openbmc/entity-manager.\n\n\u003e \u003e I was thinking we could get both the interface name and the device driver name based on a passed in power supply type variable.\n\u003e \n\u003e You could maintain a mapping between interface names and device driver names in a header file.  This is what entity-manager does:\n\u003e \n\u003e https://github.com/openbmc/entity-manager/blob/master/include/devices.hpp\n\u003e \n\u003e Again, this approach lets you support multiple power supply types at the same time and requires no build time configuration.  win-win.\n\nIf IBMCFFPSConnector is generic enough, how does one do a mapping from the generic interface to the device driver to use for the power supply?",
+      "parentUuid": "5304a054_44c3ef55",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "949c9272_2e653fe7",
         "filename": "meson.build",
         "patchSetId": 1
