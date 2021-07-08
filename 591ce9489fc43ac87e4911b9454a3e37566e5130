@@ -146,6 +146,24 @@
       "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9635920_c04cca4b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-08T20:17:56Z",
+      "side": 1,
+      "message": "Chanh,\n\nHow are you currently using this application to monitor your non-IBM PSUs?\n\nDo you use a different D-Bus interface?  A different driver?  Both?",
+      "parentUuid": "fd1522d0_cb2c9d19",
+      "revId": "591ce9489fc43ac87e4911b9454a3e37566e5130",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
