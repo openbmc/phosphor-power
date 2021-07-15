@@ -31,6 +31,11 @@ std::unique_ptr<GPIOInterface>
     return std::make_unique<GPIOReader>(namedGpio);
 }
 
+std::string GPIOReader::getName()
+{
+    return line.name();
+}
+
 int GPIOReader::read()
 {
     using namespace phosphor::logging;
