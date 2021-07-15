@@ -60,7 +60,6 @@ int GPIOReader::read()
             throw;
         }
 
-        log<level::DEBUG>("release() line");
         line.release();
     }
     catch (std::exception& e)
