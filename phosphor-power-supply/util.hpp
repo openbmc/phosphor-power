@@ -121,6 +121,11 @@ class GPIOReader : public GPIOInterface
      */
     int read() override;
 
+    /**
+     * @brief Returns the name of the GPIO, if not empty.
+     */
+    std::string getName() const override;
+
   private:
     gpiod::line line;
 };

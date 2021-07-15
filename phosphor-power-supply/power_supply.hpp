@@ -70,6 +70,18 @@ class PowerSupply
         return presenceGPIO.get();
     }
 
+    std::string getPresenceGPIOName() const
+    {
+        if (presenceGPIO != nullptr)
+        {
+            return presenceGPIO->getName();
+        }
+        else
+        {
+            return std::string();
+        }
+    }
+
     /**
      * Power supply specific function to analyze for faults/errors.
      *
