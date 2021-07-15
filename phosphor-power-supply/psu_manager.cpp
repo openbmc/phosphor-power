@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <regex>
+
 using namespace phosphor::logging;
 
 namespace phosphor::power::manager
@@ -139,6 +141,54 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         if (nullptr != preslineptr)
         {
             presline = *preslineptr;
+        }
+
+        auto invMatch =
+            std::find_if(psus.begin(), psus.end(), [&invpath](auto& psu) {
+                return psu->getInventoryPath() == invpath;
+            });
+        if (invMatch != psus.end())
+        {
+            // This power supply has the same inventory path as the one with
+            // information just added to D-Bus. See if any other fields are
+            // different.
+            auto presMatch =
+                std::find_if(psus.begin(), psus.end(), [&presline](auto& psu) {
+                    return psu->getPresenceGPIOName() == presline;
+                });
+
+            auto i2cMatch = std::find_if(
+                psus.begin(), psus.end(), [&i2cbus, &i2caddr](auto& psu) {
+                    auto devicePath = psu->getDevicePath();
+                    log<level::DEBUG>(
+                        fmt::format("devicePath: {}", devicePath).c_str());
+                    std::smatch match;
+                    // Look for i2c-A/A-00BB
+                    // where A = bus number and BB = address
+                    std::regex regex{"i2c/devices/([0-9]+)-00([0-9a-f]{2})"};
+
+                    std::regex_search(devicePath, match, regex);
+
+                    if (match.size() != 3)
+                    {
+                        std::string msg =
+                            "Could not get I2C bus and address from " +
+                            devicePath;
+                        throw std::invalid_argument{msg.c_str()};
+                    }
+
+                    size_t bus = std::stoul(match[1].str(), nullptr, 0);
+                    bus = bus % 100;
+
+                    uint8_t address = std::stoul(match[2].str(), nullptr, 16);
+
+                    return ((bus == *i2cbus) && (address == *i2caddr));
+                });
+
+            if ((presMatch != psus.end()) && (i2cMatch != psus.end()))
+            {
+                return;
+            }
         }
 
         log<level::DEBUG>(
