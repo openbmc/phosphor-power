@@ -43,6 +43,7 @@ class GPIOInterface
     virtual ~GPIOInterface() = default;
 
     virtual int read() = 0;
+    virtual std::string getName() const = 0;
 };
 
 } // namespace phosphor::power::psu

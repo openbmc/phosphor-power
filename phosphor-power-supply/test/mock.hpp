@@ -54,6 +54,7 @@ class MockedGPIOReader : public GPIOInterface
 {
   public:
     MOCK_METHOD(int, read, (), (override));
+    MOCK_METHOD(std::string, getName, (), (const, override));
 };
 
 const UtilBase& getUtils();
