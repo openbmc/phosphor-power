@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ce95474d_c3fe3be2",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-19T18:08:49Z",
+      "side": 1,
+      "message": "Done. Yeah good point, changed to !\u003d here and below.",
+      "parentUuid": "ceed1ea8_5c0bf65a",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f50e102b_0dc3369c",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb919c48_f22ceae4",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-19T18:08:49Z",
+      "side": 1,
+      "message": "Done. You\u0027re right, updated the commit msg to say that the same error log will be created multiple times for each interface added.",
+      "parentUuid": "f50e102b_0dc3369c",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -73,6 +109,48 @@
       "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77a2fceb_fcd30346",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-19T18:08:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d832394b_f9be3596",
+      "range": {
+        "startLine": 248,
+        "startChar": 13,
+        "endLine": 248,
+        "endChar": 17
+      },
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "741f291f_06c6ff26",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-07-19T18:08:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db2efeb0_bce63d4a",
+      "revId": "7eb02f5223886e05a89327b792ac3ba1d7bbea2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
