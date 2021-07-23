@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9986d4ef_1536dfe7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-07-23T15:25:26Z",
+      "side": 1,
+      "message": "It replaces the \"new\" power sequencing app I began.  At Matt\u0027s suggestion, there will now be a combined app where power control invokes power sequencing.\n\nEventually the p10bmc image contains this combined application and not the existing skeleton power control or phosphor power power sequencing applications.",
+      "parentUuid": "018b319d_da1ca206",
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52a0f6c4_f17892ff",
         "filename": "phosphor-power-sequencer/src/meson.build",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2021-07-23T14:49:18Z",
       "side": 1,
       "message": "Since you are renaming the app, are there corresponding openbmc bitbake recipe changes that have to be merged at the same time?\n\nI see pseq-monitor in meta-phosphor/recipes-phosphor/power/phosphor-power_git.bb, but I don\u0027t see phosphor-pseq-ucd90320-monitor in there.",
+      "range": {
+        "startLine": 2,
+        "startChar": 5,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48ee0e31_60cda121",
+        "filename": "phosphor-power-sequencer/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-07-23T15:25:26Z",
+      "side": 1,
+      "message": "We can\u0027t break power on or power sequence monitoring for the p10bmc systems, so the timing will need to be that enough of this application is merged before the switch is made.  There will eventually be a service file for this application and bitbake recipe changes.  The pseq-monitor service file remains for the system which use it. The need for a phosphor-pseq-ucd90320-monitor service file has gone away.",
+      "parentUuid": "52a0f6c4_f17892ff",
       "range": {
         "startLine": 2,
         "startChar": 5,
