@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "018b319d_da1ca206",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-23T14:49:18Z",
+      "side": 1,
+      "message": "Is this app going to eventually replace pseq-monitor, or do they do different things?",
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52a0f6c4_f17892ff",
+        "filename": "phosphor-power-sequencer/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-07-23T14:49:18Z",
+      "side": 1,
+      "message": "Since you are renaming the app, are there corresponding openbmc bitbake recipe changes that have to be merged at the same time?\n\nI see pseq-monitor in meta-phosphor/recipes-phosphor/power/phosphor-power_git.bb, but I don\u0027t see phosphor-pseq-ucd90320-monitor in there.",
+      "range": {
+        "startLine": 2,
+        "startChar": 5,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
