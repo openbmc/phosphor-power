@@ -52,6 +52,24 @@
       "revId": "99adfce9a46a2fcd7c34f1e26209d6878fb3cd57",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84963371_db3359e0",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-26T18:34:54Z",
+      "side": 1,
+      "message": "I seem to have a hard time finding a good answer on if I should release the line right after reading it or what.\n\nI was hoping to avoid holding the line and preventing things like gpioinfo and the related tools from also peaking at these presence lines.\n\nThis would seem to indicate I am doing it right:\nhttps://www.ics.com/blog/gpio-programming-exploring-libgpiod-library\n\nIt is not really clear to me of ownership is something I want to keep all the time or not: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/cxx/gpiod.hpp?h\u003dv1.6.x",
+      "parentUuid": "44351e47_bcc4a622",
+      "revId": "99adfce9a46a2fcd7c34f1e26209d6878fb3cd57",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
