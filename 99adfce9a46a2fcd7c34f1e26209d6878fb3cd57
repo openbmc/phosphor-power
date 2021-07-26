@@ -70,6 +70,24 @@
       "revId": "99adfce9a46a2fcd7c34f1e26209d6878fb3cd57",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7348686e_bb5eae94",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-07-26T18:59:11Z",
+      "side": 1,
+      "message": "Should PSU monitor be requesting and releasing GPIO on every read? #7\nhttps://github.com/openbmc/phosphor-power/issues/7",
+      "parentUuid": "84963371_db3359e0",
+      "revId": "99adfce9a46a2fcd7c34f1e26209d6878fb3cd57",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
