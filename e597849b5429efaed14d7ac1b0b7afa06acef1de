@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9056e7f7_e1b3b34f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-07-26T16:11:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "9986d4ef_1536dfe7",
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52a0f6c4_f17892ff",
         "filename": "phosphor-power-sequencer/src/meson.build",
         "patchSetId": 1
@@ -81,6 +99,30 @@
       "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e292d04b_f1e22949",
+        "filename": "phosphor-power-sequencer/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-07-26T16:11:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "48ee0e31_60cda121",
+      "range": {
+        "startLine": 2,
+        "startChar": 5,
+        "endLine": 2,
+        "endChar": 27
+      },
+      "revId": "e597849b5429efaed14d7ac1b0b7afa06acef1de",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
