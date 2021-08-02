@@ -509,6 +509,43 @@ bool PSUManager::hasRequiredPSUs(
             additionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
             continue;
         }
+
+        bool voltageValidated = true;
+        for (const auto& psu : psus)
+        {
+            if (!psu->isPresent())
+            {
+                // Only present PSUs report a valid input voltage
+                continue;
+            }
+
+            double actualInputVoltage;
+            int inputVoltage;
+            psu->getInputVoltage(actualInputVoltage, inputVoltage);
+
+            if (std::find(config.second.inputVoltage.begin(),
+                          config.second.inputVoltage.end(),
+                          inputVoltage) == config.second.inputVoltage.end())
+            {
+                additionalData["ACTUAL_VOLTAGE"] =
+                    std::to_string(actualInputVoltage);
+                for (const auto& voltage : config.second.inputVoltage)
+                {
+                    additionalData["EXPECTED_VOLTAGE"] +=
+                        std::to_string(voltage) + " ";
+                }
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+
+                voltageValidated = false;
+                break;
+            }
+        }
+        if (!voltageValidated)
+        {
+            continue;
+        }
+
         return true;
     }
 
