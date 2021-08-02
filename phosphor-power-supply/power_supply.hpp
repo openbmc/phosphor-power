@@ -235,6 +235,14 @@ class PowerSupply
         return readFail >= LOG_LIMIT;
     }
 
+    /**
+     * @brief Reads the pmbus input voltage and returns the actual voltage in
+     *        Volts based on predefined thresholds.
+     * @return The PSU input voltage in Volts, 0 if PSU is not present or a read
+     *         error occurred.
+     */
+    int getInputVoltage() const;
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
