@@ -235,6 +235,12 @@ class PowerSupply
         return readFail >= LOG_LIMIT;
     }
 
+    /**
+     * @brief Returns READ_VIN in millivolts, 0 if PSU is not present or a read
+     * error occurred.
+     */
+    int getInputVoltage() const;
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;

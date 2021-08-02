@@ -1,5 +1,6 @@
 #include "psu_manager.hpp"
 
+#include "pmbus.hpp"
 #include "utility.hpp"
 
 #include <fmt/format.h>
@@ -490,6 +491,40 @@ bool PSUManager::hasRequiredPSUs(
         }
     }
 
+    // Check that all the present PSUs have the same input voltage. Store the
+    // input voltage to be validated against the supported configuration.
+    constexpr int undefinedVoltage = -1;
+    int inputVoltage = undefinedVoltage;
+    for (const auto& psu : psus)
+    {
+        if (!psu->isPresent())
+        {
+            // A non-present PSU would return an input voltage value of 0, which
+            // is expected.
+            continue;
+        }
+
+        // Get the PSU voltage measured by pmbus in Volts.
+        auto pmbusVoltage = psu->getInputVoltage() / 1000;
+
+        // Get the actual voltage based on voltage thresholds.
+        auto psuVoltage =
+            phosphor::pmbus::in_input::getActualVoltage(pmbusVoltage);
+
+        if (inputVoltage == undefinedVoltage)
+        {
+            inputVoltage = psuVoltage;
+            continue;
+        }
+        if (psuVoltage != inputVoltage)
+        {
+            additionalData["EXPECTED_VOLTAGE"] = std::to_string(inputVoltage);
+            additionalData["ACTUAL_VOLTAGE"] = std::to_string(psuVoltage);
+            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
+            return false;
+        }
+    }
+
     auto presentCount =
         std::count_if(psus.begin(), psus.end(),
                       [](const auto& psu) { return psu->isPresent(); });
@@ -508,6 +543,16 @@ bool PSUManager::hasRequiredPSUs(
                 std::to_string(config.second.powerSupplyCount);
             additionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
             continue;
+        }
+        for (const auto supportedVoltage : config.second.inputVoltage)
+        {
+            if (inputVoltage != static_cast<int>(supportedVoltage))
+            {
+                additionalData["EXPECTED_VOLTAGE"] =
+                    std::to_string(supportedVoltage);
+                additionalData["ACTUAL_VOLTAGE"] = std::to_string(inputVoltage);
+                continue;
+            }
         }
         return true;
     }

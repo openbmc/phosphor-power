@@ -551,4 +551,25 @@ void PowerSupply::updateInventory()
     }
 }
 
+int PowerSupply::getInputVoltage() const
+{
+    if (present)
+    {
+        try
+        {
+            auto inputVoltageStr = pmbusIntf->readString(
+                phosphor::pmbus::READ_VIN, phosphor::pmbus::Type::Hwmon);
+            return std::stoi(inputVoltageStr);
+        }
+        catch (ReadFailure& e)
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 } // namespace phosphor::power::psu
