@@ -16,33 +16,15 @@
 
 #include "power_control.hpp"
 
-#include "types.hpp"
-
-#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
-#include <sdeventplus/utility/timer.hpp>
 
-#include <chrono>
-#include <exception>
-
-using namespace phosphor::logging;
-
-namespace phosphor::power::sequencer
+int main()
 {
+    auto bus = sdbusplus::bus::new_default();
+    auto event = sdeventplus::Event::get_default();
+    bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-PowerControl::PowerControl(sdbusplus::bus::bus& bus,
-                           const sdeventplus::Event& event) :
-    bus{bus},
-    eventLoop{event}, timer{event, std::bind(&PowerControl::pollPgood, this),
-                            std::chrono::milliseconds(pollInterval)}
-{
-    // Obtain dbus service name
-    bus.request_name(POWER_IFACE);
+    phosphor::power::sequencer::PowerControl control{bus, event};
+    return event.loop();
 }
-
-void PowerControl::pollPgood()
-{
-}
-
-} // namespace phosphor::power::sequencer
