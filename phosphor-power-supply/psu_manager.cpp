@@ -495,7 +495,10 @@ bool PSUManager::hasRequiredPSUs(
                       [](const auto& psu) { return psu->isPresent(); });
 
     // Validate the supported configurations. A system may support more than one
-    // power supply model configuration.
+    // power supply model configuration. Since all configurations need to be
+    // checked, the additional data would contain only the information of the
+    // last configuration that did not match.
+    std::map<std::string, std::string> tmpAdditionalData;
     for (const auto& config : supportedConfigs)
     {
         if (config.first != model)
@@ -504,14 +507,54 @@ bool PSUManager::hasRequiredPSUs(
         }
         if (presentCount != config.second.powerSupplyCount)
         {
-            additionalData["EXPECTED_COUNT"] =
+            tmpAdditionalData.clear();
+            tmpAdditionalData["EXPECTED_COUNT"] =
                 std::to_string(config.second.powerSupplyCount);
-            additionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
+            tmpAdditionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
             continue;
         }
+
+        bool voltageValidated = true;
+        for (const auto& psu : psus)
+        {
+            if (!psu->isPresent())
+            {
+                // Only present PSUs report a valid input voltage
+                continue;
+            }
+
+            double actualInputVoltage;
+            int inputVoltage;
+            psu->getInputVoltage(actualInputVoltage, inputVoltage);
+
+            if (std::find(config.second.inputVoltage.begin(),
+                          config.second.inputVoltage.end(),
+                          inputVoltage) == config.second.inputVoltage.end())
+            {
+                tmpAdditionalData.clear();
+                tmpAdditionalData["ACTUAL_VOLTAGE"] =
+                    std::to_string(actualInputVoltage);
+                for (const auto& voltage : config.second.inputVoltage)
+                {
+                    tmpAdditionalData["EXPECTED_VOLTAGE"] +=
+                        std::to_string(voltage) + " ";
+                }
+                tmpAdditionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+
+                voltageValidated = false;
+                break;
+            }
+        }
+        if (!voltageValidated)
+        {
+            continue;
+        }
+
         return true;
     }
 
+    additionalData.insert(tmpAdditionalData.begin(), tmpAdditionalData.end());
     return false;
 }
 

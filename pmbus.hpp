@@ -11,6 +11,24 @@ namespace pmbus
 
 namespace fs = std::filesystem;
 
+// The file name Linux uses to capture the READ_VIN from pmbus.
+constexpr auto READ_VIN = "in1_input";
+
+namespace in_input
+{
+// VIN thresholds in Volts
+constexpr auto VIN_VOLTAGE_MIN = 20;
+constexpr auto VIN_VOLTAGE_110_THRESHOLD = 160;
+
+// VIN actual values in Volts
+// VIN_VOLTAGE_0:   VIN < VIN_VOLTAGE_MIN
+// VIN_VOLTAGE_110: VIN_VOLTAGE_MIN < VIN < VIN_VOLTAGE_110_THRESHOLD
+// VIN_VOLTAGE_220: VIN_VOLTAGE_110_THRESHOLD < VIN
+constexpr auto VIN_VOLTAGE_0 = 0;
+constexpr auto VIN_VOLTAGE_110 = 110;
+constexpr auto VIN_VOLTAGE_220 = 220;
+} // namespace in_input
+
 // The file name Linux uses to capture the STATUS_WORD from pmbus.
 constexpr auto STATUS_WORD = "status0";
 

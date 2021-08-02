@@ -551,4 +551,44 @@ void PowerSupply::updateInventory()
     }
 }
 
+void PowerSupply::getInputVoltage(double& actualInputVoltage,
+                                  int& inputVoltage) const
+{
+    using namespace phosphor::pmbus;
+
+    actualInputVoltage = in_input::VIN_VOLTAGE_0;
+    inputVoltage = in_input::VIN_VOLTAGE_0;
+
+    if (present)
+    {
+        try
+        {
+            // Read input voltage in millivolts
+            auto inputVoltageStr = pmbusIntf->readString(READ_VIN, Type::Hwmon);
+
+            // Convert to volts
+            actualInputVoltage = std::stod(inputVoltageStr) / 1000;
+
+            // Calculate the voltage based on voltage thresholds
+            if (actualInputVoltage < in_input::VIN_VOLTAGE_MIN)
+            {
+                inputVoltage = in_input::VIN_VOLTAGE_0;
+            }
+            else if (actualInputVoltage < in_input::VIN_VOLTAGE_110_THRESHOLD)
+            {
+                inputVoltage = in_input::VIN_VOLTAGE_110;
+            }
+            else
+            {
+                inputVoltage = in_input::VIN_VOLTAGE_220;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            log<level::ERR>(
+                fmt::format("READ_VIN read error: {}", e.what()).c_str());
+        }
+    }
+}
+
 } // namespace phosphor::power::psu

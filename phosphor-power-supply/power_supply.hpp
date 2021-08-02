@@ -235,6 +235,15 @@ class PowerSupply
         return readFail >= LOG_LIMIT;
     }
 
+    /**
+     * @brief Reads the pmbus input voltage and returns that actual voltage
+     *        reading and the calculated input voltage based on thresholds.
+     * @param[out] actualInputVoltage - The actual voltage reading, in Volts.
+     * @param[out] inputVoltage - A rounded up/down value of the actual input
+     *             voltage based on thresholds, in Volts.
+     */
+    void getInputVoltage(double& actualInputVoltage, int& inputVoltage) const;
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
