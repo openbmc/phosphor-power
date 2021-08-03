@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "38998dec_44d0bc68",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-03T13:33:12Z",
+      "side": 1,
+      "message": "This can be in the initalization list up above.  If you\u0027re never going to delete the object, then also it doesn\u0027t need to be a unique_ptr",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c1f684a_626952eb",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-03T13:33:12Z",
+      "side": 1,
+      "message": "main() should be in a file by itself",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70676762_0a329032",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-03T13:33:12Z",
+      "side": 1,
+      "message": "systemd puts traces in the journal when it starts services that look similar to this, so I\u0027m not sure if this is necessary.",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "061f88ad_cc6322de",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-03T13:33:12Z",
+      "side": 1,
+      "message": "you can save typing with: PowerControl control{bus, event};",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3686304d_9a468f02",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-03T13:33:12Z",
+      "side": 1,
+      "message": "Since you\u0027re just tracing the exceptions, you can just let them go uncaught.  Systemd will print the what() upon termination.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
