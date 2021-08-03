@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4f7e27a0_76b72316",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-03T21:39:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38998dec_44d0bc68",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c1f684a_626952eb",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ea2d81389497500c578adaba6779a4949f533b34",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28fb2bed_7ab2f1ea",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-03T21:39:39Z",
+      "side": 1,
+      "message": "Done, is there a reason behind this convention?",
+      "parentUuid": "3c1f684a_626952eb",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d1c5644e_e753c887",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-03T21:39:39Z",
+      "side": 1,
+      "message": "Done, I liked that I could grep down to just the application journal entries, but I can live without it.",
+      "parentUuid": "70676762_0a329032",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "061f88ad_cc6322de",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "ea2d81389497500c578adaba6779a4949f533b34",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f46cf2bd_1043d5c5",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-03T21:39:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "061f88ad_cc6322de",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
@@ -90,6 +162,30 @@
       "revId": "ea2d81389497500c578adaba6779a4949f533b34",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0076d6e9_87df280d",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-03T21:39:39Z",
+      "side": 1,
+      "message": "Done, from my testing it fails a little harder this way.",
+      "parentUuid": "3686304d_9a468f02",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
