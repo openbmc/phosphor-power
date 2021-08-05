@@ -22,6 +22,30 @@
       "revId": "6c16a17766c56874756ab29c601aafeeb35a881e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "674cf7d8_6695cfc0",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-05T19:37:46Z",
+      "side": 1,
+      "message": "Done. Yeah that\u0027s a good idea. It\u0027d look like this now:\nAug 05 18:50:15 p10bmc phosphor-psu-monitor[3615]: ACTUAL_VOLTAGE: 208.000000",
+      "parentUuid": "ed6935a3_d48d929b",
+      "range": {
+        "startLine": 528,
+        "startChar": 32,
+        "endLine": 528,
+        "endChar": 46
+      },
+      "revId": "6c16a17766c56874756ab29c601aafeeb35a881e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
