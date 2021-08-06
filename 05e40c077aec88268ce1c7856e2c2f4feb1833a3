@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6402c935_0d71b9bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-08-06T22:26:44Z",
+      "side": 1,
+      "message": "Would this be pseq-ng? 😊",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cddfa52_0d658c4d",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-08-06T22:26:44Z",
+      "side": 1,
+      "message": "Not that this is bad, but how did we come up with a polling interval of 3000 milliseconds?",
+      "range": {
+        "startLine": 54,
+        "startChar": 38,
+        "endLine": 54,
+        "endChar": 42
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
