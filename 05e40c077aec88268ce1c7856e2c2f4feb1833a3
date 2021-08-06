@@ -49,6 +49,69 @@
     },
     {
       "key": {
+        "uuid": "b9598484_a7bfce2b",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:15:15Z",
+      "side": 1,
+      "message": "Nit: Using braces (which is preferred) for initialization elsewhere.",
+      "range": {
+        "startLine": 36,
+        "startChar": 7,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd2d68b1_06ddddaf",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:15:15Z",
+      "side": 1,
+      "message": "Do you need this?  Don\u0027t you just need to pass in the constructor arguments?",
+      "range": {
+        "startLine": 38,
+        "startChar": 10,
+        "endLine": 38,
+        "endChar": 71
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d219e2_3c057922",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:15:15Z",
+      "side": 1,
+      "message": "Should this mention it does pgood monitoring too?",
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7cddfa52_0d658c4d",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 4
