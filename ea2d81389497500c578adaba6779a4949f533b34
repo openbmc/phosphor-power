@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "7c52666e_0f9f1b06",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T15:21:55Z",
+      "side": 1,
+      "message": "If you use the -u parameter, you can see the journal messages from your service + the journal messages from systemd about your service.\n\n  $ journalctl -u phosphor-regulators.service\n  -- Journal begins at Wed 2021-08-04 13:57:06 UTC, ends at Thu 2021-08-05 23:10:26 UTC. --\n  Aug 04 13:57:07 p10bmc systemd[1]: Started Phosphor Power Regulators Daemon.\n  Aug 04 13:57:32 p10bmc phosphor-regulators[336]: Loading configuration file /usr/share/phosphor-regulators/ibm_everest.json\n  Aug 05 23:02:44 p10bmc phosphor-regulators[336]: Loading configuration file /etc/phosphor-regulators/ibm_everest.json\n  Aug 05 23:02:44 p10bmc systemd[1]: phosphor-regulators.service: Sent signal SIGHUP to main process 336 (phosphor-regula) on client request.\n  Aug 05 23:05:01 p10bmc phosphor-regulators[336]: Configuring chassis 1",
+      "parentUuid": "d1c5644e_e753c887",
+      "revId": "ea2d81389497500c578adaba6779a4949f533b34",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "061f88ad_cc6322de",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 3
