@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bd51dbec_78e75877",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2021-08-06T01:11:11Z",
+      "side": 1,
+      "message": "\u003e Looking at std::from_chars, seems like it doesn\u0027t handle any characters other than 0, so a string of \"0x33\" would be converted to 0, versus std::stoi would convert it to 51. I see that some pmbus values are hex strings, such as status0:\n\n\nI did a test:\n```\nstd::string str \u003d \"0x33\";\nstd::cerr \u003c\u003c \"str value \u003d \" \u003c\u003c std::stoi(str) \u003c\u003c std::endl;\n```\n\nThe printed result is 0, and this result value is the same as `std::from_chars`.\nSorry, Maybe I missing something?",
+      "parentUuid": "49c90f7d_472494da",
+      "range": {
+        "startLine": 556,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 5
+      },
+      "revId": "81403b99590898d18b4302e27b15ffef3332f057",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e36c7ad0_4249659f",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 1
