@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a6f51bdc_d417f0cc",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-06T13:22:36Z",
+      "side": 1,
+      "message": "std::stoi has other arguments that say which base the value is in, or if it should be autodetected.",
+      "parentUuid": "bd51dbec_78e75877",
+      "range": {
+        "startLine": 556,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 5
+      },
+      "revId": "81403b99590898d18b4302e27b15ffef3332f057",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e36c7ad0_4249659f",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 1
