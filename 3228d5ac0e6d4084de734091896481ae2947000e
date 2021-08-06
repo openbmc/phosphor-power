@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf8989aa_ff04044c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:55:35Z",
+      "side": 1,
+      "message": "If std::stod() fails due to an invalid string value, it will throw one of two std exceptions.  Would we want to catch them here too?  If so, maybe change catch parameter to \u0027const std::exception\u0026)",
+      "range": {
+        "startLine": 583,
+        "startChar": 15,
+        "endLine": 583,
+        "endChar": 29
+      },
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a9a96d1_65504d25",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:55:35Z",
+      "side": 1,
+      "message": "Nit: If you initialize the output parameters to these values at the top of the function, then you don\u0027t need an else clause.  Would make this method a little shorter and easier to read.",
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387407ea_bdef9557",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-06T23:55:35Z",
+      "side": 1,
+      "message": "If the PSU count or input voltage is wrong, this loop stores info in additionalData and then continues to the next configuration.\n\nCan two configurations exist that both initially match but then fail the count or voltage test?  \n\nIf so, additionalData will have a mixture of data from both failed configs.\n\nFor example, if the first config has the wrong count and the second config has the wrong voltage, additionalData will contain keys/values from both configs.  Or if both configs have the wrong voltage, EXPECTED_VOLTAGE will have a list with values from both configs.\n\nMaybe this can\u0027t happen or is what you want to occur in that situation.  If so, please ignore.",
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
