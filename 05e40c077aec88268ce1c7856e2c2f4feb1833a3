@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6411d8a4_589066a1",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-08T22:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9598484_a7bfce2b",
+      "range": {
+        "startLine": 36,
+        "startChar": 7,
+        "endLine": 36,
+        "endChar": 12
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd2d68b1_06ddddaf",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 4
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c194fa18_1dd4b092",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-08T22:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd2d68b1_06ddddaf",
+      "range": {
+        "startLine": 38,
+        "startChar": 10,
+        "endLine": 38,
+        "endChar": 71
+      },
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9d219e2_3c057922",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 4
@@ -109,6 +157,24 @@
       "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e15069_52e0d60a",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-08T22:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9d219e2_3c057922",
+      "revId": "05e40c077aec88268ce1c7856e2c2f4feb1833a3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
