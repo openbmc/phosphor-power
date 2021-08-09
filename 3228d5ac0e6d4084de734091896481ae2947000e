@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7962d79f_50dd976b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-09T20:03:27Z",
+      "side": 1,
+      "message": "Done. Yeah good point, changed to \"const std::exception\u0026\" and added a log msg to help debug.",
+      "parentUuid": "bf8989aa_ff04044c",
+      "range": {
+        "startLine": 583,
+        "startChar": 15,
+        "endLine": 583,
+        "endChar": 29
+      },
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a9a96d1_65504d25",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "6802b25c_797dcc2f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-09T20:03:27Z",
+      "side": 1,
+      "message": "Done. Indeed it would, added the initialized parameters at the top.",
+      "parentUuid": "0a9a96d1_65504d25",
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "387407ea_bdef9557",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 3
@@ -56,6 +98,24 @@
       "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff0132c8_f5990bb8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-09T20:03:27Z",
+      "side": 1,
+      "message": "Done. That scenario could be possible, I can see how it\u0027d be confusing. Changed it so that on each mismatched configuration we clear the additional data of a previous mismatch, so that we only have the data from the last mismatch instead of a combination of multiple ones.",
+      "parentUuid": "387407ea_bdef9557",
+      "revId": "3228d5ac0e6d4084de734091896481ae2947000e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
