@@ -7,6 +7,7 @@ Actions are executed to perform the following regulator operations:
 * [presence_detection](presence_detection.md)
 * [configuration](configuration.md)
 * [sensor_monitoring](sensor_monitoring.md)
+* [phase_fault_detection](phase_fault_detection.md)
 
 Many actions read from or write to a hardware device.  Initially this is the
 [device](device.md) that contains the regulator operation.  However, the device
@@ -19,6 +20,8 @@ can be changed using the [set_device](set_device.md) action.
 | and | see [notes](#notes) | array of actions | Action type [and](and.md). |
 | compare_presence | see [notes](#notes) | [compare_presence](compare_presence.md) | Action type [compare_presence](compare_presence.md). |
 | compare_vpd | see [notes](#notes) | [compare_vpd](compare_vpd.md) | Action type [compare_vpd](compare_vpd.md). |
+| detect_phase_fault | see [notes](#notes) | [detect_phase_fault](#detect_phase_fault) | See [detect_phase_fault](#detect_phase_fault). |
+| i2c_capture_bytes | see [notes](#notes) | [i2c_capture_bytes](i2c_capture_bytes.md) | Action type [i2c_capture_bytes](i2c_capture_bytes.md). |
 | i2c_compare_bit | see [notes](#notes) | [i2c_compare_bit](i2c_compare_bit.md) | Action type [i2c_compare_bit](i2c_compare_bit.md). |
 | i2c_compare_byte | see [notes](#notes) | [i2c_compare_byte](i2c_compare_byte.md) | Action type [i2c_compare_byte](i2c_compare_byte.md). |
 | i2c_compare_bytes | see [notes](#notes) | [i2c_compare_bytes](i2c_compare_bytes.md) | Action type [i2c_compare_bytes](i2c_compare_bytes.md). |
@@ -26,6 +29,7 @@ can be changed using the [set_device](set_device.md) action.
 | i2c_write_byte | see [notes](#notes) | [i2c_write_byte](i2c_write_byte.md) | Action type [i2c_write_byte](i2c_write_byte.md). |
 | i2c_write_bytes | see [notes](#notes) | [i2c_write_bytes](i2c_write_bytes.md) | Action type [i2c_write_bytes](i2c_write_bytes.md). |
 | if | see [notes](#notes) | [if](if.md) | Action type [if](if.md). |
+| log_phase_fault | see [notes](#notes) | [log_phase_fault](log_phase_fault.md) | Action type [log_phase_fault](log_phase_fault.md). |
 | not | see [notes](#notes) | action | Action type [not](not.md). |
 | or | see [notes](#notes) | array of actions | Action type [or](or.md). |
 | pmbus_read_sensor | see [notes](#notes) | [pmbus_read_sensor](pmbus_read_sensor.md) | Action type [pmbus_read_sensor](pmbus_read_sensor.md). |

@@ -18,7 +18,8 @@ The following devices should be defined in the config file:
 | i2c_interface | yes | [i2c_interface](i2c_interface.md) | I2C interface to this device. |
 | presence_detection | no | [presence_detection](presence_detection.md) | Specifies how to detect whether this device is present.  If this property is not specified, the device is assumed to always be present. |
 | configuration | no | [configuration](configuration.md) | Specifies configuration changes that should be applied to this device.  These changes usually override hardware default settings.  The configuration changes are applied during the boot before regulators are enabled. |
-| rails | no | array of [rails](rail.md) | One or more voltage rails produced by this device.  This property can only be specified if the "is_regulator" property is true. |
+| phase_fault_detection | no | [phase_fault_detection](phase_fault_detection.md) | Specifies how to detect and log redundant phase faults in this voltage regulator.  Can only be specified if the "is_regulator" property is true. |
+| rails | no | array of [rails](rail.md) | One or more voltage rails produced by this device.  Can only be specified if the "is_regulator" property is true. |
 
 ## Example
 ```

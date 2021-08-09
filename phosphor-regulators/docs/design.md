@@ -149,3 +149,22 @@ all of the D-Bus sensor objects:
 * The Value property will be set to NaN.
 * The Available property will be set to false.
 
+### Phase Fault Monitoring
+
+When regulator monitoring is enabled, phase fault detection is performed every
+15 seconds.  The timer in the Manager object calls the `detectPhaseFaults()`
+method on all the objects representing the system (System, Chassis, Device).
+
+A phase fault must be detected two consecutive times (15 seconds apart) before
+an error is logged.  This provides "de-glitching" to ignore transient hardware
+problems.
+
+A phase fault error will only be logged for a regulator once per system boot.
+
+If a different error occurs while detecting phase faults in a regulator:
+* The error will be logged.  If the same error occurs repeatedly on regulator,
+  it will only be logged once per system boot.
+* Any remaining actions for the regulator will be skipped.
+* Phase fault detection will continue with the next regulator.
+* Phase fault detection will be attempted again for this regulator during the
+  next monitoring cycle.

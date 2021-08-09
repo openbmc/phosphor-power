@@ -9,8 +9,8 @@ as [configuration](configuration.md) or
 [sensor_monitoring](sensor_monitoring.md).
 
 Use "set_device" if you need to change the hardware device used by actions.
-For example, you need to check a bit in an I/O expander before setting the
-output voltage of a regulator.
+For example, you need to check a bit in two different I/O expanders to detect a
+phase fault.
 
 ## Property Value
 String containing the unique ID of the [device](device.md).

@@ -9,6 +9,7 @@ For example, the following action sequences might be sharable using a rule:
 * Actions that set the output voltage of a regulator rail
 * Actions that read all the sensors of a regulator rail
 * Actions that detect down-level hardware using version registers
+* Actions that detect phase faults
 
 ## Properties
 | Name | Required | Type | Description |

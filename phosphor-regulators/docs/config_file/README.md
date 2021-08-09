@@ -20,6 +20,7 @@ on voltage regulators in the system:
 * Modify regulator configuration, such as output voltage or overcurrent
   settings
 * Read sensor values
+* Detect redundant phase faults (if necessary)
 
 The config file does not control how voltage regulators are enabled or how to
 monitor their Power Good (pgood) status.  Those operations are typically
@@ -90,6 +91,7 @@ The config file typically contains the following structure:
 * Array of [rules](rule.md)
   * Rules defining how to modify configuration of regulators
   * Rules defining how to read sensors
+  * Rules defining how to detect redundant phase faults (if necessary)
 * Array of [chassis](chassis.md) in the system
   * Array of regulator [devices](device.md) in the chassis
     * Array of voltage [rails](rail.md) produced by the regulator
@@ -112,6 +114,7 @@ The following JSON object types are supported:
 * [config_file](config_file.md)
 * [configuration](configuration.md)
 * [device](device.md)
+* [i2c_capture_bytes](i2c_capture_bytes.md)
 * [i2c_compare_bit](i2c_compare_bit.md)
 * [i2c_compare_byte](i2c_compare_byte.md)
 * [i2c_compare_bytes](i2c_compare_bytes.md)
@@ -120,8 +123,10 @@ The following JSON object types are supported:
 * [i2c_write_byte](i2c_write_byte.md)
 * [i2c_write_bytes](i2c_write_bytes.md)
 * [if](if.md)
+* [log_phase_fault](log_phase_fault.md)
 * [not](not.md)
 * [or](or.md)
+* [phase_fault_detection](phase_fault_detection.md)
 * [pmbus_read_sensor](pmbus_read_sensor.md)
 * [pmbus_write_vout_command](pmbus_write_vout_command.md)
 * [presence_detection](presence_detection.md)

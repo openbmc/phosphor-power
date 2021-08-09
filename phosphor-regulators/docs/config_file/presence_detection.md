@@ -12,9 +12,10 @@ Some devices are only present in certain system configurations.  For example:
 Device presence is detected by executing actions, such as
 [compare_presence](compare_presence.md) and [compare_vpd](compare_vpd.md).
 
-Device operations like [configuration](configuration.md) and [sensor
-monitoring](sensor_monitoring.md) will only be performed if the actions
-indicate the device is present.
+Device operations like [configuration](configuration.md),
+[sensor monitoring](sensor_monitoring.md), and
+[phase fault detection](phase_fault_detection.md) will only be performed if the
+actions indicate the device is present.
 
 The actions can be specified in two ways:
 * Use the "rule_id" property to specify a standard rule to run.
