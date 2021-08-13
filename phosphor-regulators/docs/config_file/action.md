@@ -20,7 +20,6 @@ can be changed using the [set_device](set_device.md) action.
 | and | see [notes](#notes) | array of actions | Action type [and](and.md). |
 | compare_presence | see [notes](#notes) | [compare_presence](compare_presence.md) | Action type [compare_presence](compare_presence.md). |
 | compare_vpd | see [notes](#notes) | [compare_vpd](compare_vpd.md) | Action type [compare_vpd](compare_vpd.md). |
-| detect_phase_fault | see [notes](#notes) | [detect_phase_fault](#detect_phase_fault) | See [detect_phase_fault](#detect_phase_fault). |
 | i2c_capture_bytes | see [notes](#notes) | [i2c_capture_bytes](i2c_capture_bytes.md) | Action type [i2c_capture_bytes](i2c_capture_bytes.md). |
 | i2c_compare_bit | see [notes](#notes) | [i2c_compare_bit](i2c_compare_bit.md) | Action type [i2c_compare_bit](i2c_compare_bit.md). |
 | i2c_compare_byte | see [notes](#notes) | [i2c_compare_byte](i2c_compare_byte.md) | Action type [i2c_compare_byte](i2c_compare_byte.md). |
