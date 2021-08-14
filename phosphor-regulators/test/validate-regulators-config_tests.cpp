@@ -68,6 +68,34 @@ const json validConfigFile = R"(
               }
             }
           ]
+        },
+        {
+          "comments": [ "Detects presence of regulators associated with CPU3" ],
+          "id": "detect_presence_rule",
+          "actions": [
+            {
+              "compare_presence": {
+                "fru": "system/chassis/motherboard/cpu3",
+                "value": true
+              }
+            }
+          ]
+        },
+        {
+          "comments": [ "Detects and logs redundant phase faults" ],
+          "id": "detect_phase_faults_rule",
+          "actions": [
+            {
+              "if": {
+                "condition": {
+                  "i2c_compare_bit": { "register": "0x02", "position": 3, "value": 1 }
+                },
+                "then": [
+                  { "log_phase_fault": { "type": "n" } }
+                ]
+              }
+            }
+          ]
         }
       ],
 
@@ -187,7 +215,10 @@ void expectFileInvalid(const std::string& configFileName,
     std::string outputMessage;
     EXPECT_EQ(runToolForOutput(configFileName, outputMessage, errorMessage), 1);
     EXPECT_EQ(errorMessage, expectedErrorMessage);
-    EXPECT_EQ(outputMessage, expectedOutputMessage);
+    if (expectedOutputMessage != "")
+    {
+        EXPECT_EQ(outputMessage, expectedOutputMessage);
+    }
 }
 
 void writeDataToFile(const json configFileJson, std::string fileName)
@@ -277,6 +308,14 @@ TEST(ValidateRegulatorsConfigTest, Action)
         configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
         EXPECT_JSON_VALID(configFile);
     }
+    // Valid: i2c_capture_bytes action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["register"] =
+            "0xA0";
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["count"] = 2;
+        EXPECT_JSON_VALID(configFile);
+    }
     // Valid: i2c_compare_bit action type specified
     {
         json configFile = validConfigFile;
@@ -341,13 +380,19 @@ TEST(ValidateRegulatorsConfigTest, Action)
     // Valid: if action type specified
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["if"]["condition"]["run_rule"] =
+        configFile["rules"][4]["actions"][0]["if"]["condition"]["run_rule"] =
             "set_voltage_rule";
-        configFile["rules"][2]["actions"][0]["if"]["then"][0]["run_rule"] =
+        configFile["rules"][4]["actions"][0]["if"]["then"][0]["run_rule"] =
             "read_sensors_rule";
-        configFile["rules"][2]["actions"][0]["if"]["else"][0]["run_rule"] =
+        configFile["rules"][4]["actions"][0]["if"]["else"][0]["run_rule"] =
             "read_sensors_rule";
-        configFile["rules"][2]["id"] = "rule_if";
+        configFile["rules"][4]["id"] = "rule_if";
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: log_phase_fault action type specified
+    {
+        json configFile = validConfigFile;
+        configFile["rules"][0]["actions"][1]["log_phase_fault"]["type"] = "n+1";
         EXPECT_JSON_VALID(configFile);
     }
     // Valid: not action type specified
@@ -447,6 +492,7 @@ TEST(ValidateRegulatorsConfigTest, Action)
             "Additional properties are not allowed ('foo' was unexpected)");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, And)
 {
     // Valid.
@@ -507,6 +553,7 @@ TEST(ValidateRegulatorsConfigTest, And)
                             "'foo' is not of type 'object'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Chassis)
 {
     // Valid: test chassis.
@@ -586,6 +633,7 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
                             "'' is too short");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, ComparePresence)
 {
     json comparePresenceFile = validConfigFile;
@@ -639,6 +687,7 @@ TEST(ValidateRegulatorsConfigTest, ComparePresence)
                             "1 is not of type 'string'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, CompareVpd)
 {
     json compareVpdFile = validConfigFile;
@@ -753,6 +802,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
             "['byte_values']}, {'required': ['value']}");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, ConfigFile)
 {
     // Valid: Only required properties specified
@@ -845,6 +895,7 @@ TEST(ValidateRegulatorsConfigTest, ConfigFile)
             "Additional properties are not allowed ('foo' was unexpected)");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Configuration)
 {
     json configurationFile = validConfigFile;
@@ -912,13 +963,7 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
                       "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["configuration"]["actions"][0]
                   ["compare_presence"]["value"] = true;
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "{'actions': [{'compare_presence': {'fru': "
-            "'system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
-            "['Set rail to 1.25V using standard rule'], 'rule_id': "
-            "'set_voltage_rule', 'volts': 1.25} is valid under each of "
-            "{'required': ['actions']}, {'required': ['rule_id']}");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
     }
     // Invalid: test configuration with no rule_id and actions.
     {
@@ -980,9 +1025,9 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
                             "[] is too short");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Device)
 {
-
     // Valid: test devices.
     {
         json configFile = validConfigFile;
@@ -994,6 +1039,7 @@ TEST(ValidateRegulatorsConfigTest, Device)
         configFile["chassis"][0]["devices"][0].erase("comments");
         configFile["chassis"][0]["devices"][0].erase("presence_detection");
         configFile["chassis"][0]["devices"][0].erase("configuration");
+        configFile["chassis"][0]["devices"][0].erase("phase_fault_detection");
         configFile["chassis"][0]["devices"][0].erase("rails");
         EXPECT_JSON_VALID(configFile);
     }
@@ -1024,6 +1070,29 @@ TEST(ValidateRegulatorsConfigTest, Device)
         configFile["chassis"][0]["devices"][0].erase("i2c_interface");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'i2c_interface' is a required property");
+    }
+    // Invalid: is_regulator=false: phase_fault_detection specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["is_regulator"] = false;
+        configFile["chassis"][0]["devices"][0].erase("rails");
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = "detect_phase_faults_rule";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
+    }
+    // Invalid: is_regulator=false: rails specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["is_regulator"] = false;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
+    }
+    // Invalid: is_regulator=false: phase_fault_detection and rails specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["is_regulator"] = false;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = "detect_phase_faults_rule";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
     }
     // Invalid: test devices with property comments wrong type.
     {
@@ -1075,6 +1144,13 @@ TEST(ValidateRegulatorsConfigTest, Device)
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "True is not of type 'object'");
     }
+    // Invalid: test devices with property phase_fault_detection wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'object'");
+    }
     // Invalid: test devices with property rails wrong type.
     {
         json configFile = validConfigFile;
@@ -1111,6 +1187,83 @@ TEST(ValidateRegulatorsConfigTest, Device)
                             "[] is too short");
     }
 }
+
+TEST(ValidateRegulatorsConfigTest, I2CCaptureBytes)
+{
+    json initialFile = validConfigFile;
+    initialFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["register"] =
+        "0xA0";
+    initialFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["count"] = 2;
+
+    // Valid: All required properties
+    {
+        json configFile = initialFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: register not specified
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"].erase(
+            "register");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'register' is a required property");
+    }
+
+    // Invalid: count not specified
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"].erase(
+            "count");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'count' is a required property");
+    }
+
+    // Invalid: invalid property specified
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["foo"] = true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+
+    // Invalid: register has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["register"] =
+            1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "1 is not of type 'string'");
+    }
+
+    // Invalid: register has wrong format
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["register"] =
+            "0xA00";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'0xA00' does not match '^0x[0-9A-Fa-f]{2}$'");
+    }
+
+    // Invalid: count has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["count"] =
+            3.1;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "3.1 is not of type 'integer'");
+    }
+
+    // Invalid: count < 1
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["i2c_capture_bytes"]["count"] = 0;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "0 is less than the minimum of 1");
+    }
+}
+
 TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
 {
     json i2cCompareBitFile = validConfigFile;
@@ -1207,6 +1360,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBit)
                             "-1 is less than the minimum of 0");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
 {
     json i2cCompareByteFile = validConfigFile;
@@ -1364,6 +1518,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareByte)
                             "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
 {
     json i2cCompareBytesFile = validConfigFile;
@@ -1542,6 +1697,7 @@ TEST(ValidateRegulatorsConfigTest, I2CCompareBytes)
                             "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CInterface)
 {
     // Valid: test i2c_interface.
@@ -1598,6 +1754,7 @@ TEST(ValidateRegulatorsConfigTest, I2CInterface)
                             "'0x700' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
 {
     json i2cWriteBitFile = validConfigFile;
@@ -1689,6 +1846,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBit)
                             "-1 is less than the minimum of 0");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
 {
     json i2cWriteByteFile = validConfigFile;
@@ -1841,6 +1999,7 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteByte)
                             "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
 {
     json i2cWriteBytesFile = validConfigFile;
@@ -2016,16 +2175,17 @@ TEST(ValidateRegulatorsConfigTest, I2CWriteBytes)
                             "'0xG1' does not match '^0x[0-9A-Fa-f]{2}$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, If)
 {
     json ifFile = validConfigFile;
-    ifFile["rules"][2]["actions"][0]["if"]["condition"]["run_rule"] =
+    ifFile["rules"][4]["actions"][0]["if"]["condition"]["run_rule"] =
         "set_voltage_rule";
-    ifFile["rules"][2]["actions"][0]["if"]["then"][0]["run_rule"] =
+    ifFile["rules"][4]["actions"][0]["if"]["then"][0]["run_rule"] =
         "read_sensors_rule";
-    ifFile["rules"][2]["actions"][0]["if"]["else"][0]["run_rule"] =
+    ifFile["rules"][4]["actions"][0]["if"]["else"][0]["run_rule"] =
         "read_sensors_rule";
-    ifFile["rules"][2]["id"] = "rule_if";
+    ifFile["rules"][4]["id"] = "rule_if";
     // Valid: test if.
     {
         json configFile = ifFile;
@@ -2034,59 +2194,105 @@ TEST(ValidateRegulatorsConfigTest, If)
     // Valid: test if with required properties.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"].erase("else");
+        configFile["rules"][4]["actions"][0]["if"].erase("else");
         EXPECT_JSON_VALID(configFile);
     }
     // Invalid: test if with no property condition.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"].erase("condition");
+        configFile["rules"][4]["actions"][0]["if"].erase("condition");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'condition' is a required property");
     }
     // Invalid: test if with no property then.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"].erase("then");
+        configFile["rules"][4]["actions"][0]["if"].erase("then");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'then' is a required property");
     }
     // Invalid: test if with property then empty array.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"]["then"] = json::array();
+        configFile["rules"][4]["actions"][0]["if"]["then"] = json::array();
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "[] is too short");
     }
     // Invalid: test if with property else empty array.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"]["else"] = json::array();
+        configFile["rules"][4]["actions"][0]["if"]["else"] = json::array();
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "[] is too short");
     }
     // Invalid: test if with property condition wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"]["condition"] = 1;
+        configFile["rules"][4]["actions"][0]["if"]["condition"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type 'object'");
     }
     // Invalid: test if with property then wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"]["then"] = 1;
+        configFile["rules"][4]["actions"][0]["if"]["then"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type 'array'");
     }
     // Invalid: test if with property else wrong type.
     {
         json configFile = ifFile;
-        configFile["rules"][2]["actions"][0]["if"]["else"] = 1;
+        configFile["rules"][4]["actions"][0]["if"]["else"] = 1;
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "1 is not of type 'array'");
     }
 }
+
+TEST(ValidateRegulatorsConfigTest, LogPhaseFault)
+{
+    json initialFile = validConfigFile;
+    initialFile["rules"][0]["actions"][1]["log_phase_fault"]["type"] = "n";
+
+    // Valid: All required properties
+    {
+        json configFile = initialFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: type not specified
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["log_phase_fault"].erase("type");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'type' is a required property");
+    }
+
+    // Invalid: invalid property specified
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["log_phase_fault"]["foo"] = true;
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+
+    // Invalid: type has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["log_phase_fault"]["type"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
+    }
+
+    // Invalid: type has invalid value
+    {
+        json configFile = initialFile;
+        configFile["rules"][0]["actions"][1]["log_phase_fault"]["type"] = "n+2";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'n+2' is not one of ['n+1', 'n']");
+    }
+}
+
 TEST(ValidateRegulatorsConfigTest, Not)
 {
     json notFile = validConfigFile;
@@ -2107,6 +2313,7 @@ TEST(ValidateRegulatorsConfigTest, Not)
                             "1 is not of type 'object'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Or)
 {
     json orFile = validConfigFile;
@@ -2138,6 +2345,139 @@ TEST(ValidateRegulatorsConfigTest, Or)
                             "1 is not of type 'array'");
     }
 }
+
+TEST(ValidateRegulatorsConfigTest, PhaseFaultDetection)
+{
+    json initialFile = validConfigFile;
+    initialFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+               ["rule_id"] = "detect_phase_faults_rule";
+
+    // Valid: comments specified
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["comments"][0] = "Detect phase faults";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: device_id specified
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["device_id"] = "vdd_regulator";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: rule_id specified
+    {
+        json configFile = initialFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: actions specified
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["actions"][0]["run_rule"] = "detect_phase_faults_rule";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: rule_id and actions specified
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["actions"][0]["run_rule"] = "detect_phase_faults_rule";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
+    }
+
+    // Invalid: neither rule_id nor actions specified
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"].erase(
+            "rule_id");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'rule_id' is a required property");
+    }
+
+    // Invalid: comments has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["comments"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+
+    // Invalid: device_id has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["device_id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
+    }
+
+    // Invalid: rule_id has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'string'");
+    }
+
+    // Invalid: actions has wrong data type
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["actions"] = true;
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "True is not of type 'array'");
+    }
+
+    // Invalid: device_id has invalid format
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["device_id"] = "id@";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'id@' does not match '^[A-Za-z0-9_]+$'");
+    }
+
+    // Invalid: rule_id has invalid format
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = "id@";
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'id@' does not match '^[A-Za-z0-9_]+$'");
+    }
+
+    // Invalid: comments array is empty
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["comments"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+
+    // Invalid: actions array is empty
+    {
+        json configFile = initialFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"].erase(
+            "rule_id");
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["actions"] = json::array();
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "[] is too short");
+    }
+}
+
 TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
 {
     json pmbusReadSensorFile = validConfigFile;
@@ -2244,6 +2584,7 @@ TEST(ValidateRegulatorsConfigTest, PmbusReadSensor)
                             "'foo' is not one of ['linear_11', 'linear_16']");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
 {
     json pmbusWriteVoutCommandFile = validConfigFile;
@@ -2321,14 +2662,15 @@ TEST(ValidateRegulatorsConfigTest, PmbusWriteVoutCommand)
                             "'foo' is not one of ['linear']");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, PresenceDetection)
 {
     json presenceDetectionFile = validConfigFile;
-    presenceDetectionFile
-        ["chassis"][0]["devices"][0]["presence_detection"]["comments"][0] =
-            "Regulator is only present on the FooBar backplane";
     presenceDetectionFile["chassis"][0]["devices"][0]["presence_detection"]
-                         ["rule_id"] = "set_voltage_rule";
+                         ["comments"][0] =
+                             "Regulator is only present if CPU3 is present";
+    presenceDetectionFile["chassis"][0]["devices"][0]["presence_detection"]
+                         ["rule_id"] = "detect_presence_rule";
     // Valid: test presence_detection with only property rule_id.
     {
         json configFile = presenceDetectionFile;
@@ -2356,13 +2698,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
                       "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["presence_detection"]["actions"]
                   [0]["compare_presence"]["value"] = true;
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "{'actions': [{'compare_presence': {'fru': "
-            "'system/chassis/motherboard/cpu3', 'value': True}}], 'comments': "
-            "['Regulator is only present on the FooBar backplane'], 'rule_id': "
-            "'set_voltage_rule'} is valid under each of {'required': "
-            "['actions']}, {'required': ['rule_id']}");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
     }
     // Invalid: test presence_detection with no rule_id and actions.
     {
@@ -2425,6 +2761,7 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
                             "[] is too short");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Rail)
 {
     // Valid: test rail.
@@ -2495,6 +2832,7 @@ TEST(ValidateRegulatorsConfigTest, Rail)
                             "'id~' does not match '^[A-Za-z0-9_]+$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, Rule)
 {
     // valid test comments property, id property,
@@ -2582,6 +2920,7 @@ TEST(ValidateRegulatorsConfigTest, Rule)
                             "[] is too short");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, RunRule)
 {
     json runRuleFile = validConfigFile;
@@ -2607,6 +2946,7 @@ TEST(ValidateRegulatorsConfigTest, RunRule)
             "'set_voltage_rule%' does not match '^[A-Za-z0-9_]+$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
 {
     // Valid: test rails sensor_monitoring with only property rule id.
@@ -2637,12 +2977,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
                       "system/chassis/motherboard/cpu3";
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
                   ["actions"][0]["compare_presence"]["value"] = true;
-        EXPECT_JSON_INVALID(
-            configFile, "Validation failed.",
-            "{'actions': [{'compare_presence': {'fru': "
-            "'system/chassis/motherboard/cpu3', 'value': True}}], 'rule_id': "
-            "'read_sensors_rule'} is valid under each of {'required': "
-            "['actions']}, {'required': ['rule_id']}");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.", "");
     }
     // Invalid: test rails sensor_monitoring with no rule_id and actions.
     {
@@ -2705,6 +3040,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
                             "[] is too short");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, SetDevice)
 {
     json setDeviceFile = validConfigFile;
@@ -2729,17 +3065,19 @@ TEST(ValidateRegulatorsConfigTest, SetDevice)
                             "'io_expander2%' does not match '^[A-Za-z0-9_]+$'");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, DuplicateRuleID)
 {
     // Invalid: test duplicate ID in rule.
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["id"] = "set_voltage_rule";
-        configFile["rules"][2]["actions"][0]["pmbus_write_vout_command"]
+        configFile["rules"][4]["id"] = "set_voltage_rule";
+        configFile["rules"][4]["actions"][0]["pmbus_write_vout_command"]
                   ["format"] = "linear";
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate rule ID.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, DuplicateChassisNumber)
 {
     // Invalid: test duplicate number in chassis.
@@ -2749,6 +3087,7 @@ TEST(ValidateRegulatorsConfigTest, DuplicateChassisNumber)
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate chassis number.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, DuplicateDeviceID)
 {
     // Invalid: test duplicate ID in device.
@@ -2764,6 +3103,7 @@ TEST(ValidateRegulatorsConfigTest, DuplicateDeviceID)
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate device ID.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, DuplicateRailID)
 {
     // Invalid: test duplicate ID in rail.
@@ -2773,6 +3113,7 @@ TEST(ValidateRegulatorsConfigTest, DuplicateRailID)
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate rail ID.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, DuplicateObjectID)
 {
     // Invalid: test duplicate object ID in device and rail.
@@ -2785,8 +3126,8 @@ TEST(ValidateRegulatorsConfigTest, DuplicateObjectID)
     // Invalid: test duplicate object ID in device and rule.
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["id"] = "vdd_regulator";
-        configFile["rules"][2]["actions"][0]["pmbus_write_vout_command"]
+        configFile["rules"][4]["id"] = "vdd_regulator";
+        configFile["rules"][4]["actions"][0]["pmbus_write_vout_command"]
                   ["format"] = "linear";
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate ID.", "");
     }
@@ -2798,59 +3139,63 @@ TEST(ValidateRegulatorsConfigTest, DuplicateObjectID)
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate ID.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, InfiniteLoops)
 {
     // Invalid: test run_rule with infinite loop (rules run each other).
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
-        configFile["rules"][2]["id"] = "set_voltage_rule1";
-        configFile["rules"][3]["actions"][0]["run_rule"] = "set_voltage_rule1";
-        configFile["rules"][3]["id"] = "set_voltage_rule2";
+        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][4]["id"] = "set_voltage_rule1";
+        configFile["rules"][5]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][5]["id"] = "set_voltage_rule2";
         EXPECT_JSON_INVALID(configFile,
                             "Infinite loop caused by run_rule actions.", "");
     }
     // Invalid: test run_rule with infinite loop (rule runs itself).
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule1";
-        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][4]["id"] = "set_voltage_rule1";
         EXPECT_JSON_INVALID(configFile,
                             "Infinite loop caused by run_rule actions.", "");
     }
     // Invalid: test run_rule with infinite loop (indirect loop).
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
-        configFile["rules"][2]["id"] = "set_voltage_rule1";
-        configFile["rules"][3]["actions"][0]["run_rule"] = "set_voltage_rule3";
-        configFile["rules"][3]["id"] = "set_voltage_rule2";
-        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule1";
-        configFile["rules"][4]["id"] = "set_voltage_rule3";
+        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][4]["id"] = "set_voltage_rule1";
+        configFile["rules"][5]["actions"][0]["run_rule"] = "set_voltage_rule3";
+        configFile["rules"][5]["id"] = "set_voltage_rule2";
+        configFile["rules"][6]["actions"][0]["run_rule"] = "set_voltage_rule1";
+        configFile["rules"][6]["id"] = "set_voltage_rule3";
         EXPECT_JSON_INVALID(configFile,
                             "Infinite loop caused by run_rule actions.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, RunRuleValueExists)
 {
     // Invalid: test run_rule actions specify a rule ID that does not exist.
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["run_rule"] = "set_voltage_rule2";
-        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][4]["actions"][0]["run_rule"] = "set_voltage_rule2";
+        configFile["rules"][4]["id"] = "set_voltage_rule1";
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, SetDeviceValueExists)
 {
     // Invalid: test set_device actions specify a device ID that does not exist.
     {
         json configFile = validConfigFile;
-        configFile["rules"][2]["actions"][0]["set_device"] = "vdd_regulator2";
-        configFile["rules"][2]["id"] = "set_voltage_rule1";
+        configFile["rules"][4]["actions"][0]["set_device"] = "vdd_regulator2";
+        configFile["rules"][4]["id"] = "set_voltage_rule1";
         EXPECT_JSON_INVALID(configFile, "Error: Device ID does not exist.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, RuleIDExists)
 {
     // Invalid: test rule_id property in configuration specifies a rule ID that
@@ -2878,6 +3223,7 @@ TEST(ValidateRegulatorsConfigTest, RuleIDExists)
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
 {
     // Invalid: test number of elements in masks not equal to number in values
@@ -2907,6 +3253,7 @@ TEST(ValidateRegulatorsConfigTest, NumberOfElementsInMasks)
                             "Error: Invalid i2c_write_bytes action.", "");
     }
 }
+
 TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
 {
     std::string validateTool =
