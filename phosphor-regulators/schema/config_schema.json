@@ -6,48 +6,38 @@
     "type": "object",
     "properties":
     {
-        "comments":
-        {
-            "$ref": "#/definitions/comments"
-        },
-        "rules":
-        {
-            "$ref": "#/definitions/rules"
-        },
-        "chassis":
-        {
-            "$ref": "#/definitions/chassis"
-        }
+        "comments": {"$ref": "#/definitions/comments" },
+        "rules": {"$ref": "#/definitions/rules" },
+        "chassis": {"$ref": "#/definitions/chassis" }
     },
     "required": ["chassis"],
     "additionalProperties": false,
     "definitions":
     {
+        "rule":
+        {
+            "type": "object",
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+                "id": {"$ref": "#/definitions/id" },
+                "actions": {"$ref": "#/definitions/actions" }
+            },
+            "required": ["id", "actions"],
+            "additionalProperties": false
+        },
+
         "rules":
         {
             "type": "array",
-            "items":
-            {
-                "type": "object",
-                "properties":
-                {
-                    "comments": {"$ref": "#/definitions/comments" },
-                    "id": {"$ref": "#/definitions/id" },
-                    "actions": {"$ref": "#/definitions/actions" }
-                },
-                "required": ["id", "actions"],
-                "additionalProperties": false
-            },
+            "items": {"$ref": "#/definitions/rule" },
             "minItems": 1
         },
 
         "comments":
         {
             "type": "array",
-            "items":
-            {
-                "type": "string"
-            },
+            "items": {"type": "string" },
             "minItems": 1
         },
 
@@ -325,22 +315,24 @@
             "enum": ["linear_11", "linear_16"]
         },
 
+        "chassis_object":
+        {
+            "type": "object",
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+                "number": {"$ref": "#/definitions/number" },
+                "inventory_path": {"$ref": "#/definitions/inventory_path" },
+                "devices": {"$ref": "#/definitions/devices" }
+            },
+            "required": ["number"],
+            "additionalProperties": false
+        },
+
         "chassis":
         {
             "type": "array",
-            "items":
-            {
-                "type": "object",
-                "properties":
-                {
-                    "comments": {"$ref": "#/definitions/comments" },
-                    "number": {"$ref": "#/definitions/number" },
-                    "inventory_path": {"$ref": "#/definitions/inventory_path" },
-                    "devices": {"$ref": "#/definitions/devices" }
-                },
-                "required": ["number"],
-                "additionalProperties": false
-            },
+            "items": {"$ref": "#/definitions/chassis_object" },
             "minItems": 1
         },
 
@@ -350,34 +342,36 @@
             "minimum": 1
         },
 
+        "device":
+        {
+            "type": "object",
+            "properties":
+            {
+                "comments": {"$ref": "#/definitions/comments" },
+                "id": {"$ref": "#/definitions/id" },
+                "is_regulator": {"$ref": "#/definitions/is_regulator" },
+                "fru": {"$ref": "#/definitions/inventory_path" },
+                "i2c_interface": {"$ref": "#/definitions/i2c_interface" },
+                "presence_detection": {"$ref": "#/definitions/presence_detection" },
+                "configuration": {"$ref": "#/definitions/configuration" },
+                "rails": {"$ref": "#/definitions/rails" }
+            },
+            "required": ["id", "is_regulator", "fru", "i2c_interface"],
+            "if":
+            {
+                "properties": { "is_regulator": { "const": false } }
+            },
+            "then":
+            {
+                "not" : { "required" : ["rails"] }
+            },
+            "additionalProperties": false
+        },
+
         "devices":
         {
             "type": "array",
-            "items":
-            {
-                "type": "object",
-                "properties":
-                {
-                    "comments": {"$ref": "#/definitions/comments" },
-                    "id": {"$ref": "#/definitions/id" },
-                    "is_regulator": {"$ref": "#/definitions/is_regulator" },
-                    "fru": {"$ref": "#/definitions/inventory_path" },
-                    "i2c_interface": {"$ref": "#/definitions/i2c_interface" },
-                    "presence_detection": {"$ref": "#/definitions/presence_detection" },
-                    "configuration": {"$ref": "#/definitions/configuration" },
-                    "rails": {"$ref": "#/definitions/rails" }
-                },
-                "required": ["id", "is_regulator", "fru", "i2c_interface"],
-                "if":
-                {
-                    "properties": { "is_regulator": { "const": false } }
-                },
-                "then":
-                {
-                    "not" : { "required" : ["rails"] }
-                },
-                "additionalProperties": false
-            },
+            "items": {"$ref": "#/definitions/device" },
             "minItems": 1
         },
 
