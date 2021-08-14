@@ -4,7 +4,6 @@
     "$id": "https://github.com/openbmc/phosphor-power/tree/master/phosphor-regulators/schema/config_schema.json",
     "description": "This schema describes the JSON format for the phosphor-regulators configuration file.",
     "type": "object",
-
     "properties":
     {
         "comments":
@@ -20,10 +19,8 @@
             "$ref": "#/definitions/chassis"
         }
     },
-
     "required": ["chassis"],
     "additionalProperties": false,
-
     "definitions":
     {
         "rules":
@@ -35,12 +32,9 @@
                 "properties":
                 {
                     "comments": {"$ref": "#/definitions/comments" },
-
                     "id": {"$ref": "#/definitions/id" },
-
                     "actions": {"$ref": "#/definitions/actions" }
                 },
-
                 "required": ["id", "actions"],
                 "additionalProperties": false
             },
@@ -54,7 +48,6 @@
             {
                 "type": "string"
             },
-
             "minItems": 1
         },
 
@@ -70,37 +63,21 @@
             "properties":
             {
                 "comments": {"$ref": "#/definitions/comments" },
-
                 "and": {"$ref": "#/definitions/actions" },
-
                 "compare_presence": {"$ref": "#/definitions/compare_presence" },
-
                 "compare_vpd": {"$ref": "#/definitions/compare_vpd" },
-
                 "i2c_compare_bit": {"$ref": "#/definitions/i2c_bit" },
-
                 "i2c_compare_byte": {"$ref": "#/definitions/i2c_byte" },
-
                 "i2c_compare_bytes": {"$ref": "#/definitions/i2c_bytes" },
-
                 "i2c_write_bit": {"$ref": "#/definitions/i2c_bit" },
-
                 "i2c_write_byte": {"$ref": "#/definitions/i2c_byte" },
-
                 "i2c_write_bytes": {"$ref": "#/definitions/i2c_bytes" },
-
                 "if": {"$ref": "#/definitions/if" },
-
                 "not": {"$ref": "#/definitions/action" },
-
                 "or": {"$ref": "#/definitions/actions" },
-
                 "pmbus_read_sensor": {"$ref": "#/definitions/pmbus_read_sensor" },
-
                 "pmbus_write_vout_command": {"$ref": "#/definitions/pmbus_write_vout_command" },
-
                 "run_rule": {"$ref": "#/definitions/id" },
-
                 "set_device": {"$ref": "#/definitions/id" }
             },
             "additionalProperties": false,
@@ -137,7 +114,6 @@
             "properties":
             {
                 "fru": {"$ref": "#/definitions/inventory_path" },
-
                 "value": {"$ref": "#/definitions/boolean_value" }
             },
             "required": ["fru", "value"],
@@ -161,11 +137,8 @@
             "properties":
             {
                 "fru": {"$ref": "#/definitions/inventory_path" },
-
                 "keyword": {"$ref": "#/definitions/keyword" },
-
                 "value": {"$ref": "#/definitions/string_value" },
-
                 "byte_values": {"$ref": "#/definitions/bytes_values" }
             },
             "required": ["fru", "keyword"],
@@ -193,9 +166,7 @@
             "properties":
             {
                 "register": {"$ref": "#/definitions/register" },
-
                 "position": {"$ref": "#/definitions/position" },
-
                 "value": {"$ref": "#/definitions/bit_value" }
             },
             "required": ["register", "position","value"],
@@ -228,9 +199,7 @@
             "properties":
             {
                 "register": {"$ref": "#/definitions/register" },
-
                 "value": {"$ref": "#/definitions/byte_value" },
-
                 "mask": {"$ref": "#/definitions/byte_mask" }
             },
             "required": ["register", "value"],
@@ -255,9 +224,7 @@
             "properties":
             {
                 "register": {"$ref": "#/definitions/register" },
-
                 "values": {"$ref": "#/definitions/bytes_values" },
-
                 "masks": {"$ref": "#/definitions/bytes_masks" }
             },
             "required": ["register", "values"],
@@ -284,9 +251,7 @@
             "properties":
             {
                 "condition": {"$ref": "#/definitions/action" },
-
                 "then": {"$ref": "#/definitions/actions" },
-
                 "else": {"$ref": "#/definitions/actions" }
             },
             "required": ["condition", "then"],
@@ -299,11 +264,8 @@
             "properties":
             {
                 "volts": {"$ref": "#/definitions/volts" },
-
                 "format": {"$ref": "#/definitions/write_vout_format" },
-
                 "exponent": {"$ref": "#/definitions/exponent" },
-
                 "is_verified": {"$ref": "#/definitions/is_verified" }
             },
             "required": ["format"],
@@ -337,11 +299,8 @@
             "properties":
             {
                 "type": {"$ref": "#/definitions/pmbus_read_sensor_type" },
-
                 "command": {"$ref": "#/definitions/pmbus_read_sensor_command" },
-
                 "format": {"$ref": "#/definitions/read_sensor_format" },
-
                 "exponent": {"$ref": "#/definitions/exponent" }
             },
             "required": ["type", "command", "format"],
@@ -375,14 +334,10 @@
                 "properties":
                 {
                     "comments": {"$ref": "#/definitions/comments" },
-
                     "number": {"$ref": "#/definitions/number" },
-
                     "inventory_path": {"$ref": "#/definitions/inventory_path" },
-
                     "devices": {"$ref": "#/definitions/devices" }
                 },
-
                 "required": ["number"],
                 "additionalProperties": false
             },
@@ -404,19 +359,12 @@
                 "properties":
                 {
                     "comments": {"$ref": "#/definitions/comments" },
-
                     "id": {"$ref": "#/definitions/id" },
-
                     "is_regulator": {"$ref": "#/definitions/is_regulator" },
-
                     "fru": {"$ref": "#/definitions/inventory_path" },
-
                     "i2c_interface": {"$ref": "#/definitions/i2c_interface" },
-
                     "presence_detection": {"$ref": "#/definitions/presence_detection" },
-
                     "configuration": {"$ref": "#/definitions/configuration" },
-
                     "rails": {"$ref": "#/definitions/rails" }
                 },
                 "required": ["id", "is_regulator", "fru", "i2c_interface"],
@@ -441,14 +389,11 @@
         "i2c_interface":
         {
             "type": "object",
-
             "properties":
             {
                 "bus": {"$ref": "#/definitions/bus" },
-
                 "address": {"$ref": "#/definitions/address" }
             },
-
             "required": ["bus", "address"],
             "additionalProperties": false
         },
@@ -468,13 +413,10 @@
         "presence_detection":
         {
             "type": "object",
-
             "properties":
             {
                 "comments": {"$ref": "#/definitions/comments" },
-
                 "rule_id": {"$ref": "#/definitions/id" },
-
                 "actions": {"$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
@@ -487,15 +429,11 @@
         "configuration":
         {
             "type": "object",
-
             "properties":
             {
                 "comments": {"$ref": "#/definitions/comments" },
-
                 "volts": {"$ref": "#/definitions/volts" },
-
                 "rule_id": {"$ref": "#/definitions/id" },
-
                 "actions": {"$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
@@ -511,14 +449,10 @@
             "properties":
             {
                 "comments": {"$ref": "#/definitions/comments" },
-
                 "id": {"$ref": "#/definitions/id" },
-
                 "configuration": {"$ref": "#/definitions/configuration" },
-
                 "sensor_monitoring": {"$ref": "#/definitions/sensor_monitoring" }
             },
-
             "required": ["id"],
             "additionalProperties": false
         },
@@ -533,13 +467,10 @@
         "sensor_monitoring":
         {
             "type": "object",
-
             "properties":
             {
                 "comments": {"$ref": "#/definitions/comments" },
-
                 "rule_id": {"$ref": "#/definitions/id" },
-
                 "actions": {"$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
@@ -548,6 +479,5 @@
                 {"required": ["actions"]}
             ]
         }
-
     }
 }
