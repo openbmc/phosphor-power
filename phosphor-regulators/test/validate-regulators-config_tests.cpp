@@ -3211,7 +3211,15 @@ TEST(ValidateRegulatorsConfigTest, RuleIDExists)
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"]
-                  ["rule_id"] = "set_voltage_rule2";
+                  ["rule_id"] = "detect_presence_rule2";
+        EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+    // Invalid: test rule_id property in phase_fault_detection specifies a rule
+    // ID that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = "detect_phase_faults_rule2";
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
     }
     // Invalid: test rule_id property in sensor_monitoring specifies a rule ID
@@ -3219,8 +3227,22 @@ TEST(ValidateRegulatorsConfigTest, RuleIDExists)
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
-                  ["rule_id"] = "set_voltage_rule2";
+                  ["rule_id"] = "read_sensors_rule2";
         EXPECT_JSON_INVALID(configFile, "Error: Rule ID does not exist.", "");
+    }
+}
+
+TEST(ValidateRegulatorsConfigTest, DeviceIDExists)
+{
+    // Invalid: test device_id property in phase_fault_detection specifies a
+    // device ID that does not exist.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["device_id"] = "vdd_regulator2";
+        configFile["chassis"][0]["devices"][0]["phase_fault_detection"]
+                  ["rule_id"] = "detect_phase_faults_rule";
+        EXPECT_JSON_INVALID(configFile, "Error: Device ID does not exist.", "");
     }
 }
 
