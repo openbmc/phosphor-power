@@ -19,6 +19,7 @@
 #include "id_map.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault.hpp"
 #include "rule.hpp"
 
 #include <cstddef> // for size_t
@@ -53,8 +54,10 @@ TEST(ActionEnvironmentTests, Constructor)
     try
     {
         ActionEnvironment env{idMap, "regulator1", services};
+        EXPECT_EQ(env.getAdditionalErrorData().size(), 0);
         EXPECT_EQ(env.getDevice().getID(), "regulator1");
         EXPECT_EQ(env.getDeviceID(), "regulator1");
+        EXPECT_EQ(env.getPhaseFaults().size(), 0);
         EXPECT_EQ(env.getRuleDepth(), 0);
         EXPECT_EQ(env.getVolts().has_value(), false);
     }
@@ -62,6 +65,44 @@ TEST(ActionEnvironmentTests, Constructor)
     {
         ADD_FAILURE() << "Should not have caught exception.";
     }
+}
+
+TEST(ActionEnvironmentTests, AddAdditionalErrorData)
+{
+    IDMap idMap{};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
+    EXPECT_EQ(env.getAdditionalErrorData().size(), 0);
+
+    env.addAdditionalErrorData("foo", "foo_value");
+    env.addAdditionalErrorData("bar", "bar_value");
+    EXPECT_EQ(env.getAdditionalErrorData().size(), 2);
+    EXPECT_EQ(env.getAdditionalErrorData().at("foo"), "foo_value");
+    EXPECT_EQ(env.getAdditionalErrorData().at("bar"), "bar_value");
+}
+
+TEST(ActionEnvironmentTests, AddPhaseFault)
+{
+    IDMap idMap{};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
+    EXPECT_EQ(env.getPhaseFaults().size(), 0);
+
+    // Add N phase fault
+    env.addPhaseFault(PhaseFaultType::n);
+    EXPECT_EQ(env.getPhaseFaults().size(), 1);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n), 1);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n_plus_1), 0);
+
+    // Add N+1 phase fault
+    env.addPhaseFault(PhaseFaultType::n_plus_1);
+    EXPECT_EQ(env.getPhaseFaults().size(), 2);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n), 1);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n_plus_1), 1);
+
+    // Add N+1 phase fault again; should be ignored since stored in a std::set
+    env.addPhaseFault(PhaseFaultType::n_plus_1);
+    EXPECT_EQ(env.getPhaseFaults().size(), 2);
 }
 
 TEST(ActionEnvironmentTests, DecrementRuleDepth)
@@ -79,6 +120,22 @@ TEST(ActionEnvironmentTests, DecrementRuleDepth)
     EXPECT_EQ(env.getRuleDepth(), 0);
     env.decrementRuleDepth();
     EXPECT_EQ(env.getRuleDepth(), 0);
+}
+
+TEST(ActionEnvironmentTests, GetAdditionalErrorData)
+{
+    IDMap idMap{};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
+    EXPECT_EQ(env.getAdditionalErrorData().size(), 0);
+
+    env.addAdditionalErrorData("foo", "foo_value");
+    EXPECT_EQ(env.getAdditionalErrorData().size(), 1);
+    EXPECT_EQ(env.getAdditionalErrorData().at("foo"), "foo_value");
+
+    env.addAdditionalErrorData("bar", "bar_value");
+    EXPECT_EQ(env.getAdditionalErrorData().size(), 2);
+    EXPECT_EQ(env.getAdditionalErrorData().at("bar"), "bar_value");
 }
 
 TEST(ActionEnvironmentTests, GetDevice)
@@ -138,6 +195,20 @@ TEST(ActionEnvironmentTests, GetDeviceID)
     EXPECT_EQ(env.getDeviceID(), "");
     env.setDeviceID("regulator1");
     EXPECT_EQ(env.getDeviceID(), "regulator1");
+}
+
+TEST(ActionEnvironmentTests, GetPhaseFaults)
+{
+    IDMap idMap{};
+    MockServices services{};
+    ActionEnvironment env{idMap, "", services};
+    EXPECT_EQ(env.getPhaseFaults().size(), 0);
+
+    env.addPhaseFault(PhaseFaultType::n);
+    env.addPhaseFault(PhaseFaultType::n_plus_1);
+    EXPECT_EQ(env.getPhaseFaults().size(), 2);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n), 1);
+    EXPECT_EQ(env.getPhaseFaults().count(PhaseFaultType::n_plus_1), 1);
 }
 
 TEST(ActionEnvironmentTests, GetRule)

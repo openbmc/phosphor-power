@@ -16,10 +16,13 @@
 #pragma once
 
 #include "id_map.hpp"
+#include "phase_fault.hpp"
 #include "services.hpp"
 
 #include <cstddef> // for size_t
+#include <map>
 #include <optional>
+#include <set>
 #include <stdexcept>
 #include <string>
 
@@ -40,6 +43,9 @@ class Rule;
  *   - current volts value (if any)
  *   - mapping from device and rule IDs to the corresponding objects
  *   - rule call stack depth (to detect infinite recursion)
+ *   - reference to system services
+ *   - faults detected by actions (if any)
+ *   - additional error data captured by actions (if any)
  */
 class ActionEnvironment
 {
@@ -72,6 +78,33 @@ class ActionEnvironment
     }
 
     /**
+     * Adds the specified key/value pair to the map of additional error data
+     * that has been captured.
+     *
+     * This data provides more information about an error and will be stored in
+     * the error log.
+     *
+     * @param key key name
+     * @param value value expressed as a string
+     */
+    void addAdditionalErrorData(const std::string& key,
+                                const std::string& value)
+    {
+        additionalErrorData.emplace(key, value);
+    }
+
+    /**
+     * Adds the specified phase fault to the set of faults that have been
+     * detected.
+     *
+     * @param type phase fault type
+     */
+    void addPhaseFault(PhaseFaultType type)
+    {
+        phaseFaults.emplace(type);
+    }
+
+    /**
      * Decrements the rule call stack depth by one.
      *
      * Should be used when a call to a rule returns.  Does nothing if depth is
@@ -83,6 +116,16 @@ class ActionEnvironment
         {
             --ruleDepth;
         }
+    }
+
+    /**
+     * Returns the additional error data that has been captured (if any).
+     *
+     * @return additional error data
+     */
+    const std::map<std::string, std::string>& getAdditionalErrorData() const
+    {
+        return additionalErrorData;
     }
 
     /**
@@ -105,6 +148,16 @@ class ActionEnvironment
     const std::string& getDeviceID() const
     {
         return deviceID;
+    }
+
+    /**
+     * Returns the set of phase faults that have been detected (if any).
+     *
+     * @return phase faults detected
+     */
+    const std::set<PhaseFaultType>& getPhaseFaults() const
+    {
+        return phaseFaults;
     }
 
     /**
@@ -218,6 +271,16 @@ class ActionEnvironment
      * Rule call stack depth.
      */
     size_t ruleDepth{0};
+
+    /**
+     * Redundant phase faults that have been detected.
+     */
+    std::set<PhaseFaultType> phaseFaults{};
+
+    /**
+     * Additional error data that has been captured.
+     */
+    std::map<std::string, std::string> additionalErrorData{};
 };
 
 } // namespace phosphor::power::regulators
