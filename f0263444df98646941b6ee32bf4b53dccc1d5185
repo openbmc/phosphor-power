@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c57a338b_ea37bb0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-25T23:15:53Z",
+      "side": 1,
+      "message": "I think the org.openbmc namespace is old.  Would it make sense to move to xyz.openbmc_project.control.Power, or is that too much change across the BMC apps?",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "478ac14d_4da14ac9",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-25T23:15:53Z",
+      "side": 1,
+      "message": "I am not an sd-bus expert by any means, but I noticed a difference here vs. phosphor-regulators/src/interfaces/manager_interface.cpp\n\nIn the callback methods there, it has the following sequence:\n  auto m \u003d sdbusplus::message::message(msg);\n  auto reply \u003d m.new_method_return();\n  reply.method_return();\n\nHere it looks like you are appending the response to the request message rather than the reply?  It could be a difference between calling a method vs. getting a property though.",
+      "range": {
+        "startLine": 56,
+        "startChar": 12,
+        "endLine": 56,
+        "endChar": 59
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2affe32e_eda4eee1",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-25T23:15:53Z",
+      "side": 1,
+      "message": "Nit: typo",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 25
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "987361cf_67ddd4fd",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-25T23:15:53Z",
+      "side": 1,
+      "message": "Where is this interface defined?  I didn\u0027t see it in phosphor-dbus-interfaces.",
+      "range": {
+        "startLine": 16,
+        "startChar": 27,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30e85ab_52832b16",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-25T23:15:53Z",
+      "side": 1,
+      "message": "I take it the interface doesn\u0027t define an enum?  That would be nice so we know what the various values mean.",
+      "range": {
+        "startLine": 79,
+        "startChar": 26,
+        "endLine": 79,
+        "endChar": 30
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
