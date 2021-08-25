@@ -46,6 +46,30 @@
       "revId": "70f95dfd5b707eec44c84d4a0d9357adc4eebdf1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "690db5a5_17833565",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-25T21:28:36Z",
+      "side": 1,
+      "message": "what I meant that was the properties you are checking here are properties of the hardware and there should be no reason for them to change in between entity-manager restarts.  So personally I think just checking for a duplicate inventory path is good enough.",
+      "parentUuid": "151d454a_c697fe77",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 25
+      },
+      "revId": "70f95dfd5b707eec44c84d4a0d9357adc4eebdf1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
