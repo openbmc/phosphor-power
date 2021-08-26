@@ -282,6 +282,30 @@
       "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04d3e222_ba65c975",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-26T19:56:53Z",
+      "side": 1,
+      "message": "Wow that didn\u0027t make any sense.  One more try:\n\nMaybe your description above should be added to the doxygen for getState() and setState()?",
+      "parentUuid": "0569b638_db26c03a",
+      "range": {
+        "startLine": 79,
+        "startChar": 26,
+        "endLine": 79,
+        "endChar": 30
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
