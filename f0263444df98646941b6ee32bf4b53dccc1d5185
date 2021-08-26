@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a97bb2d1_78586fae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-26T19:45:46Z",
+      "side": 1,
+      "message": "Good question, Matt Spinler and I have also discussed.  In addition to the Chassis component usage to control power on and off, there are a number of OBMC applications using the pgood property and associated signals to know the power state of the system.\n\nI propose the following plan:\n1. Create a compatible \"org.openbmc.control.Power\" application (this commit).\n2. Add \"xyz...\" interface to this application (future commit).\n3. Begin transition of existing applications to new interface (future commits).",
+      "parentUuid": "c57a338b_ea37bb0f",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "478ac14d_4da14ac9",
         "filename": "phosphor-power-sequencer/src/power_interface.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2021-08-25T23:15:53Z",
       "side": 1,
       "message": "I am not an sd-bus expert by any means, but I noticed a difference here vs. phosphor-regulators/src/interfaces/manager_interface.cpp\n\nIn the callback methods there, it has the following sequence:\n  auto m \u003d sdbusplus::message::message(msg);\n  auto reply \u003d m.new_method_return();\n  reply.method_return();\n\nHere it looks like you are appending the response to the request message rather than the reply?  It could be a difference between calling a method vs. getting a property though.",
+      "range": {
+        "startLine": 56,
+        "startChar": 12,
+        "endLine": 56,
+        "endChar": 59
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d23c03d3_8c41664b",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-26T19:45:46Z",
+      "side": 1,
+      "message": "I think it\u0027s the difference between a method and property.  I can\u0027t seem to find the example I based this code from though.",
+      "parentUuid": "478ac14d_4da14ac9",
       "range": {
         "startLine": 56,
         "startChar": 12,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c40afe20_101deb32",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-26T19:45:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2affe32e_eda4eee1",
+      "range": {
+        "startLine": 116,
+        "startChar": 15,
+        "endLine": 116,
+        "endChar": 25
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "987361cf_67ddd4fd",
         "filename": "phosphor-power-sequencer/src/power_interface.hpp",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "864ead27_2f675b44",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-26T19:45:46Z",
+      "side": 1,
+      "message": "https://github.com/openbmc/skeleton/blob/master/libopenbmc_intf/openbmc_intf.xml#L112\n\nI suspect this interface predates phosphor-dbus-interfaces.\n\nIn case it helps, here is the busctl tree and introspect from the skeleton application:\nroot@rainier:~# busctl tree org.openbmc.control.Power\n|-----/org\n  |-----/org/openbmc\n    |-----/org/openbmc/control\n      |-----/org/openbmc/control/power0\nroot@rainier:~# busctl introspect org.openbmc.control.Power /org/openbmc/control/power0\nNAME                                TYPE      SIGNATURE RESULT/VALUE FLAGS\norg.freedesktop.DBus.Introspectable interface -         -            -\n.Introspect                         method    -         s            -\norg.freedesktop.DBus.Peer           interface -         -            -\n.GetMachineId                       method    -         s            -\n.Ping                               method    -         -            -\norg.freedesktop.DBus.Properties     interface -         -            -\n.Get                                method    ss        v            -\n.GetAll                             method    s         a{sv}        -\n.Set                                method    ssv       -            -\n.PropertiesChanged                  signal    sa{sv}as  -            -\norg.openbmc.Control                 interface -         -            -\n.init                               method    -         -            -\n.heatbeat                           property  i         0            emits-change\n.poll_interval                      property  i         3000         emits-change writable\n.Heartbeat                          signal    s         -            -\n.Started                            signal    -         -            -\norg.openbmc.control.Power           interface -         -            -\n.getPowerState                      method    -         i            -\n.setPowerState                      method    i         -            -\n.pgood                              property  i         0            emits-change\n.pgood_timeout                      property  i         10           emits-change writable\n.state                              property  i         0            emits-change\n.PowerGood                          signal    -         -            -\n.PowerLost                          signal    -         -            -",
+      "parentUuid": "987361cf_67ddd4fd",
+      "range": {
+        "startLine": 16,
+        "startChar": 27,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f30e85ab_52832b16",
         "filename": "phosphor-power-sequencer/src/power_interface.hpp",
         "patchSetId": 1
@@ -105,6 +201,30 @@
       "writtenOn": "2021-08-25T23:15:53Z",
       "side": 1,
       "message": "I take it the interface doesn\u0027t define an enum?  That would be nice so we know what the various values mean.",
+      "range": {
+        "startLine": 79,
+        "startChar": 26,
+        "endLine": 79,
+        "endChar": 30
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956ed403_61f38551",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-26T19:45:46Z",
+      "side": 1,
+      "message": "Correct, for compatibility I need to use int.  Power off is 0.  Power on is 1.  Other values are not valid.",
+      "parentUuid": "f30e85ab_52832b16",
       "range": {
         "startLine": 79,
         "startChar": 26,
