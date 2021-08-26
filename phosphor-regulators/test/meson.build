@@ -40,6 +40,7 @@ phosphor_regulators_tests_source_files = [
     'actions/i2c_write_byte_action_tests.cpp',
     'actions/i2c_write_bytes_action_tests.cpp',
     'actions/if_action_tests.cpp',
+    'actions/log_phase_fault_action_tests.cpp',
     'actions/not_action_tests.cpp',
     'actions/or_action_tests.cpp',
     'actions/pmbus_read_sensor_action_tests.cpp',
