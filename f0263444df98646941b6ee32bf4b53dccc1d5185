@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3c3a9cc7_8334f8ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-08-27T13:30:58Z",
+      "side": 1,
+      "message": "Jim, maybe you could update the commit message with your with your comment here that explains your plans for how/why this is used.",
+      "parentUuid": "bb4d6dd1_8a19757f",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "478ac14d_4da14ac9",
         "filename": "phosphor-power-sequencer/src/power_interface.cpp",
         "patchSetId": 1
