@@ -22,7 +22,7 @@ using namespace phosphor::power::regulators;
 TEST(ErrorHistoryTests, ErrorType)
 {
     EXPECT_EQ(static_cast<int>(ErrorType::internal), 3);
-    EXPECT_EQ(static_cast<int>(ErrorType::numTypes), 6);
+    EXPECT_EQ(static_cast<int>(ErrorType::numTypes), 8);
 }
 
 TEST(ErrorHistoryTests, Constructor)
@@ -34,6 +34,8 @@ TEST(ErrorHistoryTests, Constructor)
     EXPECT_FALSE(history.wasLogged(ErrorType::internal));
     EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
     EXPECT_FALSE(history.wasLogged(ErrorType::writeVerification));
+    EXPECT_FALSE(history.wasLogged(ErrorType::phaseFaultN));
+    EXPECT_FALSE(history.wasLogged(ErrorType::phaseFaultNPlus1));
 }
 
 TEST(ErrorHistoryTests, Clear)
@@ -46,6 +48,8 @@ TEST(ErrorHistoryTests, Clear)
     history.setWasLogged(ErrorType::internal, true);
     history.setWasLogged(ErrorType::pmbus, true);
     history.setWasLogged(ErrorType::writeVerification, true);
+    history.setWasLogged(ErrorType::phaseFaultN, true);
+    history.setWasLogged(ErrorType::phaseFaultNPlus1, true);
 
     EXPECT_TRUE(history.wasLogged(ErrorType::configFile));
     EXPECT_TRUE(history.wasLogged(ErrorType::dbus));
@@ -53,6 +57,8 @@ TEST(ErrorHistoryTests, Clear)
     EXPECT_TRUE(history.wasLogged(ErrorType::internal));
     EXPECT_TRUE(history.wasLogged(ErrorType::pmbus));
     EXPECT_TRUE(history.wasLogged(ErrorType::writeVerification));
+    EXPECT_TRUE(history.wasLogged(ErrorType::phaseFaultN));
+    EXPECT_TRUE(history.wasLogged(ErrorType::phaseFaultNPlus1));
 
     history.clear();
 
@@ -62,6 +68,8 @@ TEST(ErrorHistoryTests, Clear)
     EXPECT_FALSE(history.wasLogged(ErrorType::internal));
     EXPECT_FALSE(history.wasLogged(ErrorType::pmbus));
     EXPECT_FALSE(history.wasLogged(ErrorType::writeVerification));
+    EXPECT_FALSE(history.wasLogged(ErrorType::phaseFaultN));
+    EXPECT_FALSE(history.wasLogged(ErrorType::phaseFaultNPlus1));
 }
 
 TEST(ErrorHistoryTests, SetWasLogged)

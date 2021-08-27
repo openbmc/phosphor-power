@@ -36,7 +36,9 @@ enum class ErrorType
     internal = 3,
     pmbus = 4,
     writeVerification = 5,
-    numTypes = 6
+    phaseFaultN = 6,
+    phaseFaultNPlus1 = 7,
+    numTypes = 8
 };
 
 /**
