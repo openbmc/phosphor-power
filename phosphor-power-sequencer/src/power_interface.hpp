@@ -49,31 +49,31 @@ class PowerInterface
     void emitPropertyChangedSignal(const char* property);
 
     /**
-     * Implementation for the getPgood method
+     * Returns the power good of the chassis
      * @return power good
      */
-    virtual int getPgood() = 0;
+    virtual int getPgood() const = 0;
 
     /**
-     * Implementation for the getPgoodTimeout method
+     * Returns the power good timeout
      * @return power good timeout
      */
-    virtual int getPgoodTimeout() = 0;
+    virtual int getPgoodTimeout() const = 0;
 
     /**
-     * Implementation for the getState method
+     * Returns the value of the last requested power state
      * @return power state. A power on request is value 1. Power off is 0.
      */
-    virtual int getState() = 0;
+    virtual int getState() const = 0;
 
     /**
-     * Implementation for the setPgoodTimeout method
+     * Sets the power good timeout
      * @param[in] timeout power good timeout
      */
     virtual void setPgoodTimeout(int timeout) = 0;
 
     /**
-     * Implementation for the setState method
+     * Initiates a chassis power state change
      * @param[in] state power state. Request power on with a value of 1. Request
      * power off with a value of 0. Other values will be rejected.
      */

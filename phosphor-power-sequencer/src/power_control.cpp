@@ -18,6 +18,8 @@
 
 #include "types.hpp"
 
+#include <fmt/format.h>
+
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
@@ -33,16 +35,54 @@ namespace phosphor::power::sequencer
 
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
-    bus{bus},
-    eventLoop{event}, timer{event, std::bind(&PowerControl::pollPgood, this),
-                            std::chrono::milliseconds(pollInterval)}
+    PowerObject{bus, POWER_OBJ_PATH, true},
+    bus{bus}, timer{event, std::bind(&PowerControl::pollPgood, this),
+                    pollInterval}
 {
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
 }
 
+int PowerControl::getPgood() const
+{
+    return pgood;
+}
+
+int PowerControl::getPgoodTimeout() const
+{
+    return timeout.count();
+}
+
+int PowerControl::getState() const
+{
+    return state;
+}
+
 void PowerControl::pollPgood()
 {
+}
+
+void PowerControl::setPgoodTimeout(int t)
+{
+    if (timeout.count() != t)
+    {
+        timeout = std::chrono::seconds(t);
+        emitPropertyChangedSignal("pgood_timeout");
+    }
+}
+
+void PowerControl::setState(int s)
+{
+    if (state == s)
+    {
+        log<level::INFO>(
+            fmt::format("Power already at requested state: {}", state).c_str());
+        return;
+    }
+
+    log<level::INFO>(fmt::format("setState: {}", s).c_str());
+    state = s;
+    emitPropertyChangedSignal("state");
 }
 
 } // namespace phosphor::power::sequencer
