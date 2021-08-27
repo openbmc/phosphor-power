@@ -1,5 +1,7 @@
 #pragma once
 
+#include "power_interface.hpp"
+
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
@@ -11,12 +13,14 @@
 namespace phosphor::power::sequencer
 {
 
+using PowerObject = sdbusplus::server::object::object<PowerInterface>;
+
 /**
  * @class PowerControl
  * This class implements GPIO control of power on / off, and monitoring of the
  * chassis power good.
  */
-class PowerControl
+class PowerControl : public PowerObject
 {
   public:
     PowerControl() = delete;
@@ -33,6 +37,36 @@ class PowerControl
      */
     PowerControl(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
 
+    /**
+     * Overridden power object's getPgood method
+     * @return power good
+     */
+    int getPgood() override;
+
+    /**
+     * Overridden power object's getPgoodTimeout method
+     * @return power good timeout
+     */
+    int getPgoodTimeout() override;
+
+    /**
+     * Overridden power object's getState method
+     * @return power state
+     */
+    int getState() override;
+
+    /**
+     * Overridden power object's setPgoodTimeout method
+     * @param[in] timeout power good timeout
+     */
+    void setPgoodTimeout(int timeout) override;
+
+    /**
+     * Overridden power object's setState method
+     * @param[in] state power state.
+     */
+    void setState(int state) override;
+
   private:
     /**
      * The D-Bus bus object
@@ -40,19 +74,34 @@ class PowerControl
     sdbusplus::bus::bus& bus;
 
     /**
-     * Event to loop on
+     * Power good
      */
-    sdeventplus::Event eventLoop;
+    int pgood{0};
 
     /**
-     * Timer to poll the pgood
+     * Power good timeout constant
      */
-    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> timer;
+    static constexpr int pgoodTimeout{10}; // Seconds
 
     /**
      * Poll interval constant
      */
     static constexpr int pollInterval{3000}; // Milliseconds
+
+    /**
+     * Power state
+     */
+    int state{0};
+
+    /**
+     * Power good timeout
+     */
+    int timeout{pgoodTimeout};
+
+    /**
+     * Timer to poll the pgood
+     */
+    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> timer;
 
     /**
      * Polling method for monitoring the system power good
