@@ -16,6 +16,7 @@
 #pragma once
 
 #include "error_logging.hpp"
+#include "phase_fault.hpp"
 
 #include <gmock/gmock.h>
 
@@ -51,6 +52,12 @@ class MockErrorLogging : public ErrorLogging
 
     MOCK_METHOD(void, logInternalError,
                 (Entry::Level severity, Journal& journal), (override));
+
+    MOCK_METHOD(void, logPhaseFault,
+                (Entry::Level severity, Journal& journal, PhaseFaultType type,
+                 const std::string& inventoryPath,
+                 (std::map<std::string, std::string> additionalData)),
+                (override));
 
     MOCK_METHOD(void, logPMBusError,
                 (Entry::Level severity, Journal& journal,

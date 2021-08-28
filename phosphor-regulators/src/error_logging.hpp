@@ -17,6 +17,7 @@
 
 #include "ffdc_file.hpp"
 #include "journal.hpp"
+#include "phase_fault.hpp"
 #include "xyz/openbmc_project/Logging/Create/server.hpp"
 #include "xyz/openbmc_project/Logging/Entry/server.hpp"
 
@@ -98,6 +99,23 @@ class ErrorLogging
     virtual void logInternalError(Entry::Level severity, Journal& journal) = 0;
 
     /**
+     * Log a phase fault error.
+     *
+     * This error is logged when a regulator has lost a redundant phase.
+     *
+     * @param severity severity level
+     * @param journal system journal
+     * @param type phase fault type
+     * @param inventoryPath D-Bus inventory path of the device where the error
+     *                      occurred
+     * @param additionalData additional error data (if any)
+     */
+    virtual void
+        logPhaseFault(Entry::Level severity, Journal& journal,
+                      PhaseFaultType type, const std::string& inventoryPath,
+                      std::map<std::string, std::string> additionalData) = 0;
+
+    /**
      * Log a PMBus error.
      *
      * This error is logged when the I2C communication was successful, but the
@@ -167,6 +185,12 @@ class DBusErrorLogging : public ErrorLogging
     /** @copydoc ErrorLogging::logInternalError() */
     virtual void logInternalError(Entry::Level severity,
                                   Journal& journal) override;
+
+    /** @copydoc ErrorLogging::logPhaseFault() */
+    virtual void logPhaseFault(
+        Entry::Level severity, Journal& journal, PhaseFaultType type,
+        const std::string& inventoryPath,
+        std::map<std::string, std::string> additionalData) override;
 
     /** @copydoc ErrorLogging::logPMBusError() */
     virtual void logPMBusError(Entry::Level severity, Journal& journal,

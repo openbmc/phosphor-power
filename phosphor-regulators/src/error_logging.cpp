@@ -86,6 +86,19 @@ void DBusErrorLogging::logInternalError(Entry::Level severity, Journal& journal)
              additionalData, journal);
 }
 
+void DBusErrorLogging::logPhaseFault(
+    Entry::Level severity, Journal& journal, PhaseFaultType type,
+    const std::string& inventoryPath,
+    std::map<std::string, std::string> additionalData)
+{
+    std::string message =
+        (type == PhaseFaultType::n)
+            ? "xyz.openbmc_project.Power.Regulators.Error.PhaseFault.N"
+            : "xyz.openbmc_project.Power.Regulators.Error.PhaseFault.NPlus1";
+    additionalData.emplace("CALLOUT_INVENTORY_PATH", inventoryPath);
+    logError(message, severity, additionalData, journal);
+}
+
 void DBusErrorLogging::logPMBusError(Entry::Level severity, Journal& journal,
                                      const std::string& inventoryPath)
 {
