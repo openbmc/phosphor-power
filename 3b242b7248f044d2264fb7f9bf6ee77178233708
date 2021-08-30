@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72b30661_ae815463",
+        "filename": "phosphor-regulators/src/actions/i2c_capture_bytes_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-30T21:04:44Z",
+      "side": 1,
+      "message": "Would be useful to have a comment on how the additional error data is expected to look like, like \"vdd_register 0x03 0x06 blah\"",
+      "revId": "3b242b7248f044d2264fb7f9bf6ee77178233708",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9611b8a_c15b5e4f",
+        "filename": "phosphor-regulators/src/actions/i2c_capture_bytes_action.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-08-30T21:04:44Z",
+      "side": 1,
+      "message": "nit: says it fails if any input is invalid, but register is not checked, only count?",
+      "revId": "3b242b7248f044d2264fb7f9bf6ee77178233708",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
