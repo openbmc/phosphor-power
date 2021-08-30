@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "f49c06e8_f2071c3d",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-30T14:05:09Z",
+      "side": 1,
+      "message": "If the getters just return a copy of the data members and don\u0027t have to do any D-Bus stuff, should they be declared const (here and in the parent class)?",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43ccc18f_62eb6434",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-30T14:05:09Z",
+      "side": 1,
+      "message": "Not a bug, but if the doxygen is identical to the parent class you can use the doxygen @copydoc command (https://www.doxygen.nl/manual/commands.html#cmdcopydoc).\n\nThis avoids the need for copy/paste and dual-maintaining the docs if something changes.\n\nExample: phosphor-regulators/src/error_logging.hpp, DBusErrorLogging child class.",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffe8112c_4f3b8077",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-30T14:05:09Z",
+      "side": 1,
+      "message": "Nit: It might be helpful if all the data members were grouped together, such as before or after the private methods.\n\nFor example, it is easier to review constructors to make sure they initialize all the data members when the data members are grouped together.",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6856f0b9_80e40ed8",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
