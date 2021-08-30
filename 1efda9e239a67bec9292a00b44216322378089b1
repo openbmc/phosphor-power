@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a14e140_bab78a46",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-30T19:29:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f49c06e8_f2071c3d",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43ccc18f_62eb6434",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "493efe6a_b9f3fd5a",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-30T19:29:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43ccc18f_62eb6434",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffe8112c_4f3b8077",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2021-08-30T14:05:09Z",
       "side": 1,
       "message": "Nit: It might be helpful if all the data members were grouped together, such as before or after the private methods.\n\nFor example, it is easier to review constructors to make sure they initialize all the data members when the data members are grouped together.",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c52e6a1d_68ea4c25",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-30T19:29:17Z",
+      "side": 1,
+      "message": "I\u0027m not sure what change you are looking for here?  I think I have a group of public methods, then a group of private data, then a private method.  Each in alphabetical order.",
+      "parentUuid": "ffe8112c_4f3b8077",
       "revId": "1efda9e239a67bec9292a00b44216322378089b1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "f974a9d1_992f5163",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-30T19:29:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6856f0b9_80e40ed8",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2036b0f7_9bea1d11",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
@@ -84,6 +156,24 @@
       "revId": "1efda9e239a67bec9292a00b44216322378089b1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd417828_007ef38f",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-08-30T19:29:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2036b0f7_9bea1d11",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
