@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "30001c89_f1ab97f3",
+        "filename": "phosphor-regulators/src/actions/i2c_capture_bytes_action.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-31T15:04:05Z",
+      "side": 1,
+      "message": "Good idea.  Since you said it didn\u0027t need to hold up this review, I\u0027ll update it in my next new commit.",
+      "parentUuid": "72b30661_ae815463",
+      "revId": "3b242b7248f044d2264fb7f9bf6ee77178233708",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d9611b8a_c15b5e4f",
         "filename": "phosphor-regulators/src/actions/i2c_capture_bytes_action.hpp",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2021-08-30T21:04:44Z",
       "side": 1,
       "message": "nit: says it fails if any input is invalid, but register is not checked, only count?",
+      "revId": "3b242b7248f044d2264fb7f9bf6ee77178233708",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d95f9a2_cf140169",
+        "filename": "phosphor-regulators/src/actions/i2c_capture_bytes_action.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-31T15:04:05Z",
+      "side": 1,
+      "message": "Yeah the wording should be improved.  Since you said it didn\u0027t need to hold up this review, I\u0027ll update it in my next new commit.",
+      "parentUuid": "d9611b8a_c15b5e4f",
       "revId": "3b242b7248f044d2264fb7f9bf6ee77178233708",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
