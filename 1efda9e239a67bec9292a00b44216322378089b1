@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "4fc363bd_3e252d1f",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-08-31T18:34:19Z",
+      "side": 1,
+      "message": "Sorry, I think I must have had my glasses upside down or something.  I thought a few of the data members below were method declarations due to mistaking the {} for ().\n\nMy bad.",
+      "parentUuid": "c52e6a1d_68ea4c25",
+      "revId": "1efda9e239a67bec9292a00b44216322378089b1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6856f0b9_80e40ed8",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
