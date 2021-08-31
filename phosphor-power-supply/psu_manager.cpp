@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <regex>
+
 using namespace phosphor::logging;
 
 namespace phosphor::power::manager
@@ -139,6 +141,21 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         if (nullptr != preslineptr)
         {
             presline = *preslineptr;
+        }
+
+        auto invMatch =
+            std::find_if(psus.begin(), psus.end(), [&invpath](auto& psu) {
+                return psu->getInventoryPath() == invpath;
+            });
+        if (invMatch != psus.end())
+        {
+            // This power supply has the same inventory path as the one with
+            // information just added to D-Bus.
+            // Changes to GPIO line name unlikely, so skip checking.
+            // Changes to the I2C bus and address unlikely, as that would
+            // require corresponding device tree updates.
+            // Return out to avoid duplicate object creation.
+            return;
         }
 
         log<level::DEBUG>(
