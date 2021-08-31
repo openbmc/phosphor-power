@@ -20,18 +20,21 @@
 
 #include <fmt/format.h>
 
+#include <phosphor-logging/elog-errors.hpp>
+#include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
-#include <sdbusplus/bus.hpp>
-#include <sdeventplus/event.hpp>
-#include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/Common/error.hpp>
 
-#include <chrono>
 #include <exception>
+#include <string>
 
 using namespace phosphor::logging;
 
 namespace phosphor::power::sequencer
 {
+
+const std::string powerControlLineName = "power-chassis-control";
+const std::string pgoodLineName = "power-chassis-good";
 
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
@@ -41,6 +44,7 @@ PowerControl::PowerControl(sdbusplus::bus::bus& bus,
 {
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
+    setUpGpio();
 }
 
 int PowerControl::getPgood() const
@@ -59,7 +63,37 @@ int PowerControl::getState() const
 }
 
 void PowerControl::pollPgood()
-{}
+{
+    if (inStateTransition)
+    {
+        const auto now = std::chrono::steady_clock::now();
+        if (now > pgoodTimeoutTime)
+        {
+            log<level::ERR>("ERROR PowerControl: Pgood poll timeout");
+            inStateTransition = false;
+            return;
+        }
+    }
+
+    int pgoodState = pgoodLine.get_value();
+    if (pgoodState != pgood)
+    {
+        pgood = pgoodState;
+        if (pgoodState == 0)
+        {
+            emitPowerLostSignal();
+        }
+        else
+        {
+            emitPowerGoodSignal();
+        }
+        emitPropertyChangedSignal("pgood");
+    }
+    if (pgoodState == state)
+    {
+        inStateTransition = false;
+    }
+}
 
 void PowerControl::setPgoodTimeout(int t)
 {
@@ -80,8 +114,46 @@ void PowerControl::setState(int s)
     }
 
     log<level::INFO>(fmt::format("setState: {}", s).c_str());
+    powerControlLine.request(
+        {"phosphor-power-control", gpiod::line_request::DIRECTION_OUTPUT, 0});
+    powerControlLine.set_value(s);
+    powerControlLine.release();
+
+    pgoodTimeoutTime = std::chrono::steady_clock::now() + timeout;
+    inStateTransition = true;
     state = s;
     emitPropertyChangedSignal("state");
+}
+
+void PowerControl::setUpGpio()
+{
+    pgoodLine = gpiod::find_line(pgoodLineName);
+    if (!pgoodLine)
+    {
+        std::string errorString =
+            fmt::format("GPIO line name not found: {}", pgoodLineName);
+        log<level::ERR>(errorString.c_str());
+        report<
+            sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
+        throw std::runtime_error(errorString);
+    }
+    powerControlLine = gpiod::find_line(powerControlLineName);
+    if (!powerControlLine)
+    {
+        std::string errorString =
+            fmt::format("GPIO line name not found: {}", powerControlLineName);
+        log<level::ERR>(errorString.c_str());
+        report<
+            sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
+        throw std::runtime_error(errorString);
+    }
+
+    pgoodLine.request(
+        {"phosphor-power-control", gpiod::line_request::DIRECTION_INPUT, 0});
+    int pgoodState = pgoodLine.get_value();
+    pgood = pgoodState;
+    state = pgoodState;
+    log<level::INFO>(fmt::format("Pgood state: {}", pgoodState).c_str());
 }
 
 } // namespace phosphor::power::sequencer

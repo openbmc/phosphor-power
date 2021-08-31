@@ -9,6 +9,7 @@ phosphor_power_sequencer = executable(
     'power_control.cpp',
     'power_interface.cpp',
     dependencies: [
+        libgpiodcxx,
         phosphor_logging,
         sdbusplus,
         sdeventplus,

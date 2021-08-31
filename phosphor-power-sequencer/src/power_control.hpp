@@ -2,9 +2,11 @@
 
 #include "power_interface.hpp"
 
+#include <gpiod.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
+#include <sdeventplus/clock.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
@@ -59,9 +61,19 @@ class PowerControl : public PowerObject
     sdbusplus::bus::bus& bus;
 
     /**
+     * Indicates if a state transistion is taking place
+     */
+    bool inStateTransition{false};
+
+    /**
      * Power good
      */
     int pgood{0};
+
+    /**
+     * GPIO line object for chassis power good
+     */
+    gpiod::line pgoodLine;
 
     /**
      * Power good timeout constant
@@ -70,10 +82,20 @@ class PowerControl : public PowerObject
         std::chrono::seconds(10)};
 
     /**
+     * Point in time at which power good timeout will take place
+     */
+    std::chrono::time_point<std::chrono::steady_clock> pgoodTimeoutTime;
+
+    /**
      * Poll interval constant
      */
     static constexpr std::chrono::milliseconds pollInterval{
         std::chrono::milliseconds(3000)};
+
+    /**
+     * GPIO line object for power-on / power-off control
+     */
+    gpiod::line powerControlLine;
 
     /**
      * Power state
@@ -94,6 +116,11 @@ class PowerControl : public PowerObject
      * Polling method for monitoring the system power good
      */
     void pollPgood();
+
+    /**
+     * Set up GPIOs
+     */
+    void setUpGpio();
 };
 
 } // namespace phosphor::power::sequencer
