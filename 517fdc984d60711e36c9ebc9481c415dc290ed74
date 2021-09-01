@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "94870093_ac9b4536",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-09-01T00:31:38Z",
+      "side": 1,
+      "message": "Dropped the extra comparisons.",
+      "parentUuid": "5f2b6d69_985b3341",
+      "revId": "517fdc984d60711e36c9ebc9481c415dc290ed74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4b54a94_fae70edb",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -84,6 +102,30 @@
     },
     {
       "key": {
+        "uuid": "7bf83014_7508ce1c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-09-01T00:31:38Z",
+      "side": 1,
+      "message": "Dropped i2cMatch.",
+      "parentUuid": "5bdca20c_d6d03708",
+      "range": {
+        "startLine": 166,
+        "startChar": 20,
+        "endLine": 167,
+        "endChar": 60
+      },
+      "revId": "517fdc984d60711e36c9ebc9481c415dc290ed74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87a974a8_1c490b40",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
@@ -104,6 +146,30 @@
       "revId": "517fdc984d60711e36c9ebc9481c415dc290ed74",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e0a569_47408ed5",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-09-01T00:31:38Z",
+      "side": 1,
+      "message": "Dropped i2cMatch.",
+      "parentUuid": "87a974a8_1c490b40",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 11
+      },
+      "revId": "517fdc984d60711e36c9ebc9481c415dc290ed74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     },
     {
       "key": {
