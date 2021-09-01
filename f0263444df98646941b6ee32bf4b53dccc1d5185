@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "c9b58d62_5ce1d79a",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-09-01T16:47:49Z",
+      "side": 1,
+      "message": "FWIW, here\u0027s an example, but in systemd not sdbusplus: https://github.com/openbmc/obmc-console/blob/master/console-server.c#L360",
+      "parentUuid": "d23c03d3_8c41664b",
+      "range": {
+        "startLine": 56,
+        "startChar": 12,
+        "endLine": 56,
+        "endChar": 59
+      },
+      "revId": "f0263444df98646941b6ee32bf4b53dccc1d5185",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2affe32e_eda4eee1",
         "filename": "phosphor-power-sequencer/src/power_interface.cpp",
         "patchSetId": 1
