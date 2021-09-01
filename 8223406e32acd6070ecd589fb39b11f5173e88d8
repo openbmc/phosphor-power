@@ -16,6 +16,24 @@
       "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55a3d942_ce1ec1bf",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-09-01T14:04:50Z",
+      "side": 1,
+      "message": "that being said, if this is just the temporary org.openbmc.Power interface that you\u0027re going to remove anyway, then it probably isn\u0027t worth the work.",
+      "parentUuid": "c8051af2_fae6a2c4",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
