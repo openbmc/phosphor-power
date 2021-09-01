@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8051af2_fae6a2c4",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-09-01T14:04:13Z",
+      "side": 1,
+      "message": "You can have event driven GPIOs so you don\u0027t have to poll.  Attention handler is one example that does it, and there are others.",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
