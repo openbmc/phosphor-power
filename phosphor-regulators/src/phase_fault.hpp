@@ -15,6 +15,8 @@
  */
 #pragma once
 
+#include "error_history.hpp"
+
 #include <string>
 
 namespace phosphor::power::regulators
@@ -49,6 +51,29 @@ enum class PhaseFaultType : unsigned char
      */
     n_plus_1
 };
+
+/**
+ * Returns the ErrorType that corresponds to the specified PhaseFaultType.
+ *
+ * The ErrorType enum is used with the ErrorHistory class.
+ *
+ * @param type phase fault type
+ * @return error type
+ */
+inline ErrorType toErrorType(PhaseFaultType type)
+{
+    ErrorType errorType;
+    switch (type)
+    {
+        case PhaseFaultType::n:
+            errorType = ErrorType::phaseFaultN;
+            break;
+        case PhaseFaultType::n_plus_1:
+            errorType = ErrorType::phaseFaultNPlus1;
+            break;
+    }
+    return errorType;
+}
 
 /**
  * Returns the name of the specified PhaseFaultType.

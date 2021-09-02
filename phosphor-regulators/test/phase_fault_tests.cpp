@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "error_history.hpp"
 #include "phase_fault.hpp"
 
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
+
+TEST(PhaseFaultTests, ToErrorType)
+{
+    EXPECT_EQ(toErrorType(PhaseFaultType::n), ErrorType::phaseFaultN);
+    EXPECT_EQ(toErrorType(PhaseFaultType::n_plus_1),
+              ErrorType::phaseFaultNPlus1);
+}
 
 TEST(PhaseFaultTests, ToString)
 {
