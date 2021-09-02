@@ -17,6 +17,7 @@ phosphor_regulators_library_source_files = [
     'ffdc_file.cpp',
     'id_map.cpp',
     'journal.cpp',
+    'phase_fault_detection.cpp',
     'pmbus_utils.cpp',
     'presence_detection.cpp',
     'presence_service.cpp',

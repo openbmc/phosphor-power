@@ -14,6 +14,7 @@ phosphor_regulators_tests_source_files = [
     'exception_utils_tests.cpp',
     'ffdc_file_tests.cpp',
     'id_map_tests.cpp',
+    'phase_fault_detection_tests.cpp',
     'phase_fault_tests.cpp',
     'pmbus_error_tests.cpp',
     'pmbus_utils_tests.cpp',
