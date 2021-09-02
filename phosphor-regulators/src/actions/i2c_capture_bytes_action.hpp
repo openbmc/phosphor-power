@@ -47,7 +47,7 @@ class I2CCaptureBytesAction : public I2CAction
     /**
      * Constructor.
      *
-     * Throws an exception if any of the input parameters are invalid.
+     * Throws an exception if the count parameter is invalid.
      *
      * @param reg Device register address.  Note: named 'reg' because 'register'
      *            is a reserved keyword.
