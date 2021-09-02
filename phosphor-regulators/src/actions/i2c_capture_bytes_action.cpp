@@ -37,13 +37,13 @@ bool I2CCaptureBytesAction::execute(ActionEnvironment& environment)
         uint8_t values[UINT8_MAX];
         interface.read(reg, size, values, i2c::I2CInterface::Mode::I2C);
 
-        // Build additional error data key
+        // Build additional error data key: <deviceID>_register_<register>
         std::ostringstream kss;
         kss << environment.getDeviceID() << "_register_0x" << std::hex
             << std::uppercase << static_cast<uint16_t>(reg);
         std::string key = kss.str();
 
-        // Build additional error data value
+        // Build additional error data value: [ <byte 0>, <byte 1>, ... ]
         std::ostringstream vss;
         vss << "[ " << std::hex << std::uppercase;
         for (unsigned int i = 0; i < count; ++i)
