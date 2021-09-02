@@ -130,7 +130,7 @@ void PowerSupply::updatePresence()
     {
         present = getPresence(bus, inventoryPath);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::exception& e)
     {
         // Relying on property change or interface added to retry.
         // Log an informational trace to the journal.

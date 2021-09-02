@@ -41,7 +41,7 @@ bool DBusPresenceService::isPresent(const std::string& inventoryPath)
             util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
                               INVENTORY_MGR_IFACE, bus, present);
         }
-        catch (const sdbusplus::exception::SdBusError& e)
+        catch (const sdbusplus::exception::exception& e)
         {
             // If exception type is expected and indicates hardware not present
             if (isExpectedException(e))
@@ -63,7 +63,7 @@ bool DBusPresenceService::isPresent(const std::string& inventoryPath)
 }
 
 bool DBusPresenceService::isExpectedException(
-    const sdbusplus::exception::SdBusError& e)
+    const sdbusplus::exception::exception& e)
 {
     // Initially assume exception is not one of the expected types
     bool isExpected{false};
