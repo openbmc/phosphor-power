@@ -22,6 +22,7 @@
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
 #include "pmbus_error.hpp"
+#include "test_sdbus_error.hpp"
 #include "write_verification_error.hpp"
 
 #include <errno.h>
@@ -299,8 +300,8 @@ TEST(ErrorLoggingUtilsTests, LogError_4Parameters)
         std::exception_ptr eptr;
         try
         {
-            // Throw InvalidEnumString; exception_t is a pure virtual base class
-            throw sdbusplus::exception::InvalidEnumString{};
+            // Throw TestSDBusError; exception_t is a pure virtual base class
+            throw TestSDBusError{"DBusError: Invalid object path."};
         }
         catch (...)
         {
@@ -646,8 +647,8 @@ TEST(ErrorLoggingUtilsTests, GetExceptionToLog)
         {
             try
             {
-                // Throw InvalidEnumString; exception_t is pure virtual class
-                throw sdbusplus::exception::InvalidEnumString{};
+                // Throw TestSDBusError; exception_t is pure virtual class
+                throw TestSDBusError{"DBusError: Invalid object path."};
             }
             catch (...)
             {
