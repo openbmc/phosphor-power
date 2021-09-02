@@ -103,7 +103,7 @@ class DBusPresenceService : public PresenceService
      *
      * @return true if exception type is expected, false otherwise
      */
-    bool isExpectedException(const sdbusplus::exception::SdBusError& e);
+    bool isExpectedException(const sdbusplus::exception::exception& e);
 
     /**
      * D-Bus bus object.
