@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "5655036b_a3031984",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-09-07T17:44:44Z",
+      "side": 1,
+      "message": "it\u0027s not the asio that would either poll/not poll, it would be libgpio.",
+      "parentUuid": "ca8b2b14_1b02ce07",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
