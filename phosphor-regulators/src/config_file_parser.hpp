@@ -22,6 +22,7 @@
 #include "compare_vpd_action.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
+#include "i2c_capture_bytes_action.hpp"
 #include "i2c_compare_bit_action.hpp"
 #include "i2c_compare_byte_action.hpp"
 #include "i2c_compare_bytes_action.hpp"
@@ -356,6 +357,19 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
  * @return vector of uint8_t
  */
 std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_capture_bytes action.
+ *
+ * Returns the corresponding C++ I2CCaptureBytesAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return I2CCaptureBytesAction object
+ */
+std::unique_ptr<I2CCaptureBytesAction>
+    parseI2CCaptureBytes(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_compare_bit action.
