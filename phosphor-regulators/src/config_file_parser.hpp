@@ -33,6 +33,7 @@
 #include "if_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
+#include "phase_fault.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
@@ -537,6 +538,18 @@ std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
  * @return OrAction object
  */
 std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a PhaseFaultType expressed as a string.
+ *
+ * Returns the corresponding PhaseFaultType enum value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return PhaseFaultType enum value
+ */
+PhaseFaultType parsePhaseFaultType(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a pmbus_read_sensor action.

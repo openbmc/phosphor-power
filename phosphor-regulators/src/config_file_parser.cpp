@@ -738,6 +738,27 @@ std::unique_ptr<OrAction> parseOr(const json& element)
     return std::make_unique<OrAction>(std::move(actions));
 }
 
+PhaseFaultType parsePhaseFaultType(const json& element)
+{
+    std::string value = parseString(element);
+    PhaseFaultType type{};
+
+    if (value == "n")
+    {
+        type = PhaseFaultType::n;
+    }
+    else if (value == "n+1")
+    {
+        type = PhaseFaultType::n_plus_1;
+    }
+    else
+    {
+        throw std::invalid_argument{"Element is not a phase fault type"};
+    }
+
+    return type;
+}
+
 std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
 {
     verifyIsObject(element);
@@ -1054,11 +1075,7 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
 
 SensorType parseSensorType(const json& element)
 {
-    if (!element.is_string())
-    {
-        throw std::invalid_argument{"Element is not a string"};
-    }
-    std::string value = element.get<std::string>();
+    std::string value = parseString(element);
     SensorType type{};
 
     if (value == "iout")
