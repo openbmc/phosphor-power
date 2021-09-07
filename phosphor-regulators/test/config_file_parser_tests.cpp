@@ -32,6 +32,7 @@
 #include "i2c_write_bytes_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
+#include "phase_fault.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
@@ -3396,6 +3397,47 @@ TEST(ConfigFileParserTests, ParseOr)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePhaseFaultType)
+{
+    // Test where works: n
+    {
+        const json element = "n";
+        PhaseFaultType type = parsePhaseFaultType(element);
+        EXPECT_EQ(type, PhaseFaultType::n);
+    }
+
+    // Test where works: n+1
+    {
+        const json element = "n+1";
+        PhaseFaultType type = parsePhaseFaultType(element);
+        EXPECT_EQ(type, PhaseFaultType::n_plus_1);
+    }
+
+    // Test where fails: Element is not a phase fault type
+    try
+    {
+        const json element = "n+2";
+        parsePhaseFaultType(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a phase fault type");
+    }
+
+    // Test where fails: Element is not a string
+    try
+    {
+        const json element = R"( { "foo": "bar" } )"_json;
+        parsePhaseFaultType(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
     }
 }
 
