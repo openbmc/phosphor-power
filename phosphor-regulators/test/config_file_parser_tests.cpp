@@ -34,6 +34,7 @@
 #include "not_action.hpp"
 #include "or_action.hpp"
 #include "phase_fault.hpp"
+#include "phase_fault_detection.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
@@ -3486,6 +3487,156 @@ TEST(ConfigFileParserTests, ParseOr)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
+{
+    // Test where works: actions specified: optional properties not specified
+    {
+        const json element = R"(
+            {
+              "actions": [
+                { "run_rule": "detect_phase_fault_rule" }
+              ]
+            }
+        )"_json;
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
+            parsePhaseFaultDetection(element);
+        EXPECT_EQ(phaseFaultDetection->getActions().size(), 1);
+        EXPECT_EQ(phaseFaultDetection->getDeviceID(), "");
+    }
+
+    // Test where works: rule_id specified: optional properties specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "Detect phase fault using I/O expander" ],
+              "device_id": "io_expander",
+              "rule_id": "detect_phase_fault_rule"
+            }
+        )"_json;
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
+            parsePhaseFaultDetection(element);
+        EXPECT_EQ(phaseFaultDetection->getActions().size(), 1);
+        EXPECT_EQ(phaseFaultDetection->getDeviceID(), "io_expander");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "foo", "bar" ] )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: device_id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "device_id": 1,
+              "rule_id": "detect_phase_fault_rule"
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: rule_id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": 1
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: actions object is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "actions": 1
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Required actions or rule_id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "device_id": "io_expander"
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Required actions or rule_id property both specified
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": "detect_phase_fault_rule",
+              "actions": [
+                { "run_rule": "detect_phase_fault_rule" }
+              ]
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
+                               "either rule_id or actions");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar",
+              "actions": [
+                { "run_rule": "detect_phase_fault_rule" }
+              ]
+            }
+        )"_json;
+        parsePhaseFaultDetection(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
     }
 }
 

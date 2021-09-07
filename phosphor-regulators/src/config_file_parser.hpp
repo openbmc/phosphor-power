@@ -35,6 +35,7 @@
 #include "not_action.hpp"
 #include "or_action.hpp"
 #include "phase_fault.hpp"
+#include "phase_fault_detection.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
@@ -256,7 +257,7 @@ std::unique_ptr<CompareVPDAction>
     parseCompareVPD(const nlohmann::json& element);
 
 /**
- * Parses a JSON element containing a configuration.
+ * Parses a JSON element containing a configuration object.
  *
  * Returns the corresponding C++ Configuration object.
  *
@@ -554,6 +555,19 @@ std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
 std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
 
 /**
+ * Parses a JSON element containing a phase_fault_detection object.
+ *
+ * Returns the corresponding C++ PhaseFaultDetection object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return PhaseFaultDetection object
+ */
+std::unique_ptr<PhaseFaultDetection>
+    parsePhaseFaultDetection(const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing a PhaseFaultType expressed as a string.
  *
  * Returns the corresponding PhaseFaultType enum value.
@@ -592,7 +606,7 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
     parsePMBusWriteVoutCommand(const nlohmann::json& element);
 
 /**
- * Parses a JSON element containing a presence detection operation.
+ * Parses a JSON element containing a presence_detection object.
  *
  * Returns the corresponding C++ PresenceDetection object.
  *
@@ -713,7 +727,7 @@ pmbus_utils::SensorDataFormat
     parseSensorDataFormat(const nlohmann::json& element);
 
 /**
- * Parses a JSON element containing a sensor monitoring operation.
+ * Parses a JSON element containing a sensor_monitoring object.
  *
  * Returns the corresponding C++ SensorMonitoring object.
  *
