@@ -120,6 +120,11 @@ std::unique_ptr<Action> parseAction(const json& element)
         action = parseIf(element["if"]);
         ++propertyCount;
     }
+    else if (element.contains("log_phase_fault"))
+    {
+        action = parseLogPhaseFault(element["log_phase_fault"]);
+        ++propertyCount;
+    }
     else if (element.contains("not"))
     {
         action = parseNot(element["not"]);
@@ -713,6 +718,22 @@ std::string parseInventoryPath(const json& element)
     }
     absPath += inventoryPath;
     return absPath;
+}
+
+std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required type property
+    const json& typeElement = getRequiredProperty(element, "type");
+    PhaseFaultType type = parsePhaseFaultType(typeElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<LogPhaseFaultAction>(type);
 }
 
 std::unique_ptr<NotAction> parseNot(const json& element)

@@ -31,6 +31,7 @@
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
 #include "if_action.hpp"
+#include "log_phase_fault_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
 #include "phase_fault.hpp"
@@ -514,6 +515,19 @@ inline int8_t parseInt8(const nlohmann::json& element)
  * @return absolute D-Bus inventory path
  */
 std::string parseInventoryPath(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing a log_phase_fault action.
+ *
+ * Returns the corresponding C++ LogPhaseFaultAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return LogPhaseFaultAction object
+ */
+std::unique_ptr<LogPhaseFaultAction>
+    parseLogPhaseFault(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a not action.

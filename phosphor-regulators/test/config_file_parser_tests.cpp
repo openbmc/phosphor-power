@@ -30,6 +30,7 @@
 #include "i2c_write_bit_action.hpp"
 #include "i2c_write_byte_action.hpp"
 #include "i2c_write_bytes_action.hpp"
+#include "log_phase_fault_action.hpp"
 #include "not_action.hpp"
 #include "or_action.hpp"
 #include "phase_fault.hpp"
@@ -403,6 +404,19 @@ TEST(ConfigFileParserTests, ParseAction)
                 "condition": { "run_rule": "is_downlevel_regulator" },
                 "then": [ { "run_rule": "configure_downlevel_regulator" } ],
                 "else": [ { "run_rule": "configure_standard_regulator" } ]
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
+
+    // Test where works: log_phase_fault action type specified
+    {
+        const json element = R"(
+            {
+              "log_phase_fault": {
+                "type": "n+1"
               }
             }
         )"_json;
@@ -3326,6 +3340,81 @@ TEST(ConfigFileParserTests, ParseInventoryPath)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseLogPhaseFault)
+{
+    // Test where works
+    {
+        const json element = R"(
+            {
+              "type": "n+1"
+            }
+        )"_json;
+        std::unique_ptr<LogPhaseFaultAction> action =
+            parseLogPhaseFault(element);
+        EXPECT_EQ(action->getType(), PhaseFaultType::n_plus_1);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseLogPhaseFault(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required type property not specified
+    try
+    {
+        const json element = R"(
+            {
+            }
+        )"_json;
+        parseLogPhaseFault(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: type");
+    }
+
+    // Test where fails: type value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "n+2"
+            }
+        )"_json;
+        parseLogPhaseFault(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a phase fault type");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "n+1",
+              "foo": 1
+            }
+        )"_json;
+        parseLogPhaseFault(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
     }
 }
 
