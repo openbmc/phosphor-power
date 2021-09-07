@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "ca8b2b14_1b02ce07",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2021-09-07T15:01:09Z",
+      "side": 1,
+      "message": "this is a good intro into how ASIO works: https://www.boost.org/doc/libs/1_77_0/doc/html/boost_asio/overview/core/basics.html it\u0027s all based on an execution_context object. the pattern is that you register all tasks (read/write/error/quit) with the execution context and call run() on it. If you decide to use it and want help feel free to shoot me a message. I\u0027ve used it before and can help you get set up.",
+      "parentUuid": "72549d35_9f10157c",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
