@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "72549d35_9f10157c",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-09-07T14:47:15Z",
+      "side": 1,
+      "message": "The GPIOs will remain however we decide to wrap them in dbus interface.\n\nI started looking into this. Attention handler uses Boost ASIO which I am unfamiliar with and we don\u0027t currently use within phosphor power. Initially I\u0027d like to determine if the ASIO code does not poll or does it poll for you?",
+      "parentUuid": "8d29a24e_e09c4c0e",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
