@@ -22,6 +22,7 @@
 #include "config_file_parser_error.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
+#include "i2c_capture_bytes_action.hpp"
 #include "i2c_compare_bit_action.hpp"
 #include "i2c_compare_byte_action.hpp"
 #include "i2c_compare_bytes_action.hpp"
@@ -285,6 +286,20 @@ TEST(ConfigFileParserTests, ParseAction)
                 "fru": "system/chassis/disk_backplane",
                 "keyword": "CCIN",
                 "value": "2D35"
+              }
+            }
+        )"_json;
+        std::unique_ptr<Action> action = parseAction(element);
+        EXPECT_NE(action.get(), nullptr);
+    }
+
+    // Test where works: i2c_capture_bytes action type specified
+    {
+        const json element = R"(
+            {
+              "i2c_capture_bytes": {
+                "register": "0xA0",
+                "count": 2
               }
             }
         )"_json;
@@ -1983,6 +1998,119 @@ TEST(ConfigFileParserTests, ParseHexByteArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
+{
+    // Test where works
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "count": 2
+            }
+        )"_json;
+        std::unique_ptr<I2CCaptureBytesAction> action =
+            parseI2CCaptureBytes(element);
+        EXPECT_EQ(action->getRegister(), 0xA0);
+        EXPECT_EQ(action->getCount(), 2);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: register value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x0Z",
+              "count": 2
+            }
+        )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: count value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "count": 0
+            }
+        )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid byte count: Must be > 0");
+    }
+
+    // Test where fails: Required register property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "count": 2
+            }
+        )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: register");
+    }
+
+    // Test where fails: Required count property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0"
+            }
+        )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: count");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0xA0",
+              "count": 2,
+              "foo": 3
+            }
+        )"_json;
+        parseI2CCaptureBytes(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
     }
 }
 

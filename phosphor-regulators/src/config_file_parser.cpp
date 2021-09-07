@@ -80,6 +80,11 @@ std::unique_ptr<Action> parseAction(const json& element)
         action = parseCompareVPD(element["compare_vpd"]);
         ++propertyCount;
     }
+    else if (element.contains("i2c_capture_bytes"))
+    {
+        action = parseI2CCaptureBytes(element["i2c_capture_bytes"]);
+        ++propertyCount;
+    }
     else if (element.contains("i2c_compare_bit"))
     {
         action = parseI2CCompareBit(element["i2c_compare_bit"]);
@@ -427,6 +432,31 @@ std::vector<uint8_t> parseHexByteArray(const json& element)
         values.emplace_back(parseHexByte(valueElement));
     }
     return values;
+}
+
+std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required register property
+    const json& regElement = getRequiredProperty(element, "register");
+    uint8_t reg = parseHexByte(regElement);
+    ++propertyCount;
+
+    // Required count property
+    const json& countElement = getRequiredProperty(element, "count");
+    uint8_t count = parseUint8(countElement);
+    if (count < 1)
+    {
+        throw std::invalid_argument{"Invalid byte count: Must be > 0"};
+    }
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<I2CCaptureBytesAction>(reg, count);
 }
 
 std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(const json& element)
