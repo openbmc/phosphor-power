@@ -759,6 +759,38 @@ std::unique_ptr<OrAction> parseOr(const json& element)
     return std::make_unique<OrAction>(std::move(actions));
 }
 
+std::unique_ptr<PhaseFaultDetection>
+    parsePhaseFaultDetection(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Optional device_id property
+    std::string deviceID{};
+    auto deviceIDIt = element.find("device_id");
+    if (deviceIDIt != element.end())
+    {
+        deviceID = parseString(*deviceIDIt);
+        ++propertyCount;
+    }
+
+    // Required rule_id or actions property
+    std::vector<std::unique_ptr<Action>> actions{};
+    actions = parseRuleIDOrActionsProperty(element);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<PhaseFaultDetection>(std::move(actions), deviceID);
+}
+
 PhaseFaultType parsePhaseFaultType(const json& element)
 {
     std::string value = parseString(element);
