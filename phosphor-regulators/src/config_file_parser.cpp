@@ -394,6 +394,20 @@ std::unique_ptr<Device> parseDevice(const json& element)
         ++propertyCount;
     }
 
+    // Optional phase_fault_detection property
+    std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
+    auto phaseFaultDetectionIt = element.find("phase_fault_detection");
+    if (phaseFaultDetectionIt != element.end())
+    {
+        if (!isRegulator)
+        {
+            throw std::invalid_argument{"Invalid phase_fault_detection "
+                                        "property when is_regulator is false"};
+        }
+        phaseFaultDetection = parsePhaseFaultDetection(*phaseFaultDetectionIt);
+        ++propertyCount;
+    }
+
     // Optional rails property
     std::vector<std::unique_ptr<Rail>> rails{};
     auto railsIt = element.find("rails");
@@ -411,10 +425,10 @@ std::unique_ptr<Device> parseDevice(const json& element)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Device>(id, isRegulator, fru,
-                                    std::move(i2cInterface),
-                                    std::move(presenceDetection),
-                                    std::move(configuration), std::move(rails));
+    return std::make_unique<Device>(
+        id, isRegulator, fru, std::move(i2cInterface),
+        std::move(presenceDetection), std::move(configuration),
+        std::move(phaseFaultDetection), std::move(rails));
 }
 
 std::vector<std::unique_ptr<Device>> parseDeviceArray(const json& element)

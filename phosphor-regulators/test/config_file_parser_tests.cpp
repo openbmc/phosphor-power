@@ -1532,6 +1532,7 @@ TEST(ConfigFileParserTests, ParseDevice)
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_EQ(device->getPresenceDetection(), nullptr);
         EXPECT_EQ(device->getConfiguration(), nullptr);
+        EXPECT_EQ(device->getPhaseFaultDetection(), nullptr);
         EXPECT_EQ(device->getRails().size(), 0);
     }
 
@@ -1539,6 +1540,7 @@ TEST(ConfigFileParserTests, ParseDevice)
     {
         const json element = R"(
             {
+              "comments": [ "VDD Regulator" ],
               "id": "vdd_regulator",
               "is_regulator": true,
               "fru": "system/chassis/motherboard/regulator2",
@@ -1547,13 +1549,17 @@ TEST(ConfigFileParserTests, ParseDevice)
                   "bus": 1,
                   "address": "0x70"
               },
+              "presence_detection":
+              {
+                  "rule_id": "is_foobar_backplane_installed_rule"
+              },
               "configuration":
               {
                   "rule_id": "configure_ir35221_rule"
               },
-              "presence_detection":
+              "phase_fault_detection":
               {
-                  "rule_id": "is_foobar_backplane_installed_rule"
+                  "rule_id": "detect_phase_fault_rule"
               },
               "rails":
               [
@@ -1571,7 +1577,37 @@ TEST(ConfigFileParserTests, ParseDevice)
         EXPECT_NE(&(device->getI2CInterface()), nullptr);
         EXPECT_NE(device->getPresenceDetection(), nullptr);
         EXPECT_NE(device->getConfiguration(), nullptr);
+        EXPECT_NE(device->getPhaseFaultDetection(), nullptr);
         EXPECT_EQ(device->getRails().size(), 1);
+    }
+
+    // Test where fails: phase_fault_detection property exists and is_regulator
+    // is false
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": false,
+              "fru": "system/chassis/motherboard/regulator2",
+              "i2c_interface":
+              {
+                  "bus": 1,
+                  "address": "0x70"
+              },
+              "phase_fault_detection":
+              {
+                  "rule_id": "detect_phase_fault_rule"
+              }
+            }
+        )"_json;
+        parseDevice(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid phase_fault_detection property when "
+                               "is_regulator is false");
     }
 
     // Test where fails: rails property exists and is_regulator is false

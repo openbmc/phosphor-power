@@ -24,6 +24,7 @@
 #include "mock_sensors.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault_detection.hpp"
 #include "pmbus_read_sensor_action.hpp"
 #include "pmbus_utils.hpp"
 #include "presence_detection.hpp"
@@ -87,13 +88,15 @@ std::tuple<std::unique_ptr<System>, Chassis*, Device*, i2c::MockedI2CInterface*,
     // Create Device that contains Rail
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> deviceConfiguration{};
+    std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
     std::vector<std::unique_ptr<Rail>> rails{};
     rails.emplace_back(std::move(rail));
     std::unique_ptr<Device> device = std::make_unique<Device>(
         "vdd_reg", true,
         "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
         std::move(i2cInterface), std::move(presenceDetection),
-        std::move(deviceConfiguration), std::move(rails));
+        std::move(deviceConfiguration), std::move(phaseFaultDetection),
+        std::move(rails));
     Device* devicePtr = device.get();
 
     // Create Chassis that contains Device

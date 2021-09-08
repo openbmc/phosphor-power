@@ -19,6 +19,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "mock_action.hpp"
+#include "phase_fault_detection.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
@@ -72,10 +73,11 @@ inline std::unique_ptr<Device>
     std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> configuration{};
-    return std::make_unique<Device>(id, isRegulator, fru,
-                                    std::move(i2cInterface),
-                                    std::move(presenceDetection),
-                                    std::move(configuration), std::move(rails));
+    std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
+    return std::make_unique<Device>(
+        id, isRegulator, fru, std::move(i2cInterface),
+        std::move(presenceDetection), std::move(configuration),
+        std::move(phaseFaultDetection), std::move(rails));
 }
 
 /**
