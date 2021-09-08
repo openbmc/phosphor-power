@@ -25,6 +25,7 @@
 #include "mock_sensors.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault_detection.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
 #include "rule.hpp"
@@ -73,6 +74,7 @@ TEST(DeviceTests, Constructor)
         EXPECT_EQ(&(device.getI2CInterface()), i2cInterfacePtr);
         EXPECT_EQ(device.getPresenceDetection(), nullptr);
         EXPECT_EQ(device.getConfiguration(), nullptr);
+        EXPECT_EQ(device.getPhaseFaultDetection(), nullptr);
         EXPECT_EQ(device.getRails().size(), 0);
     }
 
@@ -96,6 +98,14 @@ TEST(DeviceTests, Constructor)
         std::unique_ptr<Configuration> configuration =
             std::make_unique<Configuration>(volts, std::move(actions));
 
+        // Create PhaseFaultDetection
+        actions.clear();
+        actions.push_back(std::make_unique<MockAction>());
+        actions.push_back(std::make_unique<MockAction>());
+        actions.push_back(std::make_unique<MockAction>());
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
+            std::make_unique<PhaseFaultDetection>(std::move(actions));
+
         // Create vector of Rail objects
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.push_back(std::make_unique<Rail>("vdd0"));
@@ -109,6 +119,7 @@ TEST(DeviceTests, Constructor)
             std::move(i2cInterface),
             std::move(presenceDetection),
             std::move(configuration),
+            std::move(phaseFaultDetection),
             std::move(rails)};
         EXPECT_EQ(device.getID(), "vdd_reg");
         EXPECT_EQ(device.isRegulator(), false);
@@ -121,6 +132,8 @@ TEST(DeviceTests, Constructor)
         EXPECT_NE(device.getConfiguration(), nullptr);
         EXPECT_EQ(device.getConfiguration()->getVolts().has_value(), false);
         EXPECT_EQ(device.getConfiguration()->getActions().size(), 2);
+        EXPECT_NE(device.getPhaseFaultDetection(), nullptr);
+        EXPECT_EQ(device.getPhaseFaultDetection()->getActions().size(), 3);
         EXPECT_EQ(device.getRails().size(), 2);
     }
 }
@@ -129,6 +142,7 @@ TEST(DeviceTests, AddToIDMap)
 {
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> configuration{};
+    std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
 
     // Create vector of Rail objects
     std::vector<std::unique_ptr<Rail>> rails{};
@@ -143,6 +157,7 @@ TEST(DeviceTests, AddToIDMap)
         std::move(createI2CInterface()),
         std::move(presenceDetection),
         std::move(configuration),
+        std::move(phaseFaultDetection),
         std::move(rails)};
 
     // Add Device and Rail objects to an IDMap
@@ -239,13 +254,15 @@ TEST(DeviceTests, ClearErrorHistory)
         std::make_unique<i2c::MockedI2CInterface>();
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> deviceConfiguration{};
+    std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
     std::vector<std::unique_ptr<Rail>> rails{};
     rails.emplace_back(std::move(rail));
     std::unique_ptr<Device> device = std::make_unique<Device>(
         "reg1", true,
         "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
         std::move(i2cInterface), std::move(presenceDetection),
-        std::move(deviceConfiguration), std::move(rails));
+        std::move(deviceConfiguration), std::move(phaseFaultDetection),
+        std::move(rails));
     Device* devicePtr = device.get();
 
     // Create Chassis that contains Device
@@ -535,11 +552,13 @@ TEST(DeviceTests, Configure)
         // Create Device
         std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
         std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(configuration), std::move(rails));
+            std::move(configuration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device
@@ -628,6 +647,41 @@ TEST(DeviceTests, GetID)
     EXPECT_EQ(device.getID(), "vdd_reg");
 }
 
+TEST(DeviceTests, GetPhaseFaultDetection)
+{
+    // Test where PhaseFaultDetection was not specified in constructor
+    {
+        Device device{
+            "vdd_reg", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface())};
+        EXPECT_EQ(device.getPhaseFaultDetection(), nullptr);
+    }
+
+    // Test where PhaseFaultDetection was specified in constructor
+    {
+        // Create PhaseFaultDetection
+        std::vector<std::unique_ptr<Action>> actions{};
+        actions.push_back(std::make_unique<MockAction>());
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
+            std::make_unique<PhaseFaultDetection>(std::move(actions));
+
+        // Create Device
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> configuration{};
+        Device device{
+            "vdd_reg",
+            false,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",
+            std::move(createI2CInterface()),
+            std::move(presenceDetection),
+            std::move(configuration),
+            std::move(phaseFaultDetection)};
+        EXPECT_NE(device.getPhaseFaultDetection(), nullptr);
+        EXPECT_EQ(device.getPhaseFaultDetection()->getActions().size(), 1);
+    }
+}
+
 TEST(DeviceTests, GetPresenceDetection)
 {
     // Test where PresenceDetection was not specified in constructor
@@ -672,6 +726,7 @@ TEST(DeviceTests, GetRails)
     {
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
 
         // Create vector of Rail objects
         std::vector<std::unique_ptr<Rail>> rails{};
@@ -686,6 +741,7 @@ TEST(DeviceTests, GetRails)
             std::move(createI2CInterface()),
             std::move(presenceDetection),
             std::move(configuration),
+            std::move(phaseFaultDetection),
             std::move(rails)};
         EXPECT_EQ(device.getRails().size(), 2);
         EXPECT_EQ(device.getRails()[0]->getID(), "vdd0");
@@ -846,13 +902,15 @@ TEST(DeviceTests, MonitorSensors)
         // Create Device
         std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
         std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(deviceConfiguration), std::move(rails));
+            std::move(deviceConfiguration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device
@@ -964,11 +1022,13 @@ TEST(DeviceTests, MonitorSensors)
         std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> configuration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(configuration), std::move(rails));
+            std::move(configuration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device

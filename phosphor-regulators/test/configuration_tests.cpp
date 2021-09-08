@@ -24,6 +24,7 @@
 #include "mock_journal.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault_detection.hpp"
 #include "pmbus_utils.hpp"
 #include "pmbus_write_vout_command_action.hpp"
 #include "presence_detection.hpp"
@@ -305,13 +306,15 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Device that contains Rail
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(deviceConfiguration), std::move(rails));
+            std::move(deviceConfiguration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device
@@ -374,13 +377,15 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Device that contains Rail
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(deviceConfiguration), std::move(rails));
+            std::move(deviceConfiguration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device
@@ -450,13 +455,15 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Device that contains Rail
         std::unique_ptr<PresenceDetection> presenceDetection{};
         std::unique_ptr<Configuration> deviceConfiguration{};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(std::move(rail));
         std::unique_ptr<Device> device = std::make_unique<Device>(
             "reg1", true,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
             std::move(i2cInterface), std::move(presenceDetection),
-            std::move(deviceConfiguration), std::move(rails));
+            std::move(deviceConfiguration), std::move(phaseFaultDetection),
+            std::move(rails));
         Device* devicePtr = device.get();
 
         // Create Chassis that contains Device
