@@ -47,6 +47,11 @@ class TestSDBusError : public sdbusplus::exception_t
         return "";
     }
 
+    int get_errno() const noexcept override
+    {
+        return EIO;
+    }
+
   private:
     const std::string error{};
 };
