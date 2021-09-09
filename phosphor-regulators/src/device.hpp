@@ -134,6 +134,20 @@ class Device
     void configure(Services& services, System& system, Chassis& chassis);
 
     /**
+     * Detect redundant phase faults in this device.
+     *
+     * Does nothing if phase fault detection is not defined for this device.
+     *
+     * This method should be called every 15 seconds.
+     *
+     * @param services system services like error logging and the journal
+     * @param system system that contains the chassis
+     * @param chassis chassis that contains the device
+     */
+    void detectPhaseFaults(Services& services, System& system,
+                           Chassis& chassis);
+
+    /**
      * Returns the configuration changes to apply to this device, if any.
      *
      * @return Pointer to Configuration object.  Will equal nullptr if no

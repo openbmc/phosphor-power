@@ -98,6 +98,20 @@ void Device::configure(Services& services, System& system, Chassis& chassis)
     }
 }
 
+void Device::detectPhaseFaults(Services& services, System& system,
+                               Chassis& chassis)
+{
+    // Verify device is present
+    if (isPresent(services, system, chassis))
+    {
+        // If phase fault detection is defined for this device, execute it
+        if (phaseFaultDetection)
+        {
+            phaseFaultDetection->execute(services, system, chassis, *this);
+        }
+    }
+}
+
 void Device::monitorSensors(Services& services, System& system,
                             Chassis& chassis)
 {

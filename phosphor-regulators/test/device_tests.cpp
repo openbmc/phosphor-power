@@ -19,12 +19,14 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "log_phase_fault_action.hpp"
 #include "mock_action.hpp"
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_sensors.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault.hpp"
 #include "phase_fault_detection.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -520,6 +522,122 @@ TEST_F(DeviceTests, Configure)
 
         // Call configure().
         device.configure(services, *system, *chassis);
+    }
+}
+
+TEST_F(DeviceTests, DetectPhaseFaults)
+{
+    // Test where device is not present
+    {
+        // Create mock services.  No errors should be logged.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logPhaseFault).Times(0);
+
+        // Create PresenceDetection.  Indicates device is not present.
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        {
+            auto action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(false));
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            presenceDetection =
+                std::make_unique<PresenceDetection>(std::move(actions));
+        }
+
+        // Create PhaseFaultDetection.  Action inside it should not be executed.
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
+        {
+            auto action = std::make_unique<MockAction>();
+            EXPECT_CALL(*action, execute).Times(0);
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.emplace_back(std::move(action));
+            phaseFaultDetection =
+                std::make_unique<PhaseFaultDetection>(std::move(actions));
+        }
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<Configuration> configuration{};
+        Device device{"reg2",
+                      true,
+                      deviceInvPath,
+                      std::move(i2cInterface),
+                      std::move(presenceDetection),
+                      std::move(configuration),
+                      std::move(phaseFaultDetection)};
+
+        // Call detectPhaseFaults() 5 times.  Should do nothing.
+        for (int i = 1; i <= 5; ++i)
+        {
+            device.detectPhaseFaults(services, *system, *chassis);
+        }
+    }
+
+    // Test where PhaseFaultDetection was not specified in constructor
+    {
+        // Create mock services.  No errors should be logged.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logPhaseFault).Times(0);
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        Device device{"reg2", true, deviceInvPath, std::move(i2cInterface)};
+
+        // Call detectPhaseFaults() 5 times.  Should do nothing.
+        for (int i = 1; i <= 5; ++i)
+        {
+            device.detectPhaseFaults(services, *system, *chassis);
+        }
+    }
+
+    // Test where PhaseFaultDetection was specified in constructor
+    {
+        // Create mock services with the following expectations:
+        // - 2 error messages in journal for N phase fault detected
+        // - 1 N phase fault error logged
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg2: count=1"))
+            .Times(1);
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg2: count=2"))
+            .Times(1);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logPhaseFault).Times(1);
+
+        // Create PhaseFaultDetection
+        auto action = std::make_unique<LogPhaseFaultAction>(PhaseFaultType::n);
+        std::vector<std::unique_ptr<Action>> actions{};
+        actions.push_back(std::move(action));
+        auto phaseFaultDetection =
+            std::make_unique<PhaseFaultDetection>(std::move(actions));
+
+        // Create Device
+        std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
+        std::unique_ptr<PresenceDetection> presenceDetection{};
+        std::unique_ptr<Configuration> configuration{};
+        Device device{"reg2",
+                      true,
+                      deviceInvPath,
+                      std::move(i2cInterface),
+                      std::move(presenceDetection),
+                      std::move(configuration),
+                      std::move(phaseFaultDetection)};
+
+        // Call detectPhaseFaults() 5 times
+        for (int i = 1; i <= 5; ++i)
+        {
+            device.detectPhaseFaults(services, *system, *chassis);
+        }
     }
 }
 
