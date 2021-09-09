@@ -50,6 +50,12 @@ void Device::clearCache()
 
 void Device::clearErrorHistory()
 {
+    // Clear error history in phase fault detection, if defined
+    if (phaseFaultDetection)
+    {
+        phaseFaultDetection->clearErrorHistory();
+    }
+
     // Clear error history in each rail
     for (std::unique_ptr<Rail>& rail : rails)
     {
