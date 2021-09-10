@@ -73,7 +73,10 @@ const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     ManagerObject{bus, managerObjPath, true}, bus{bus}, eventLoop{event},
-    services{bus}, timer{event, std::bind(&Manager::timerExpired, this)}
+    services{bus}, phaseFaultTimer{event,
+                                   std::bind(&Manager::phaseFaultTimerExpired,
+                                             this)},
+    sensorTimer{event, std::bind(&Manager::sensorTimerExpired, this)}
 {
     // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
     // notifies us if the compatible interface becomes available later.
@@ -197,8 +200,11 @@ void Manager::monitor(bool enable)
     {
         services.getJournal().logDebug("Monitoring enabled");
 
-        // Restart timer to have a repeating 1 second interval
-        timer.restart(std::chrono::seconds(1));
+        // Restart phase fault detection timer with repeating 15 second interval
+        phaseFaultTimer.restart(std::chrono::seconds(15));
+
+        // Restart sensor monitoring timer with repeating 1 second interval
+        sensorTimer.restart(std::chrono::seconds(1));
 
         // Enable sensors service; put all sensors in an active state
         services.getSensors().enable();
@@ -207,8 +213,9 @@ void Manager::monitor(bool enable)
     {
         services.getJournal().logDebug("Monitoring disabled");
 
-        // Disable timer
-        timer.setEnabled(false);
+        // Disable timers
+        phaseFaultTimer.setEnabled(false);
+        sensorTimer.setEnabled(false);
 
         // Disable sensors service; put all sensors in an inactive state
         services.getSensors().disable();
@@ -225,14 +232,17 @@ void Manager::monitor(bool enable)
     }
 }
 
-void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
-                            const struct signalfd_siginfo* /*sigInfo*/)
+void Manager::phaseFaultTimerExpired()
 {
-    // Reload the JSON configuration file
-    loadConfigFile();
+    // Verify config file has been loaded and System object is valid
+    if (isConfigFileLoaded())
+    {
+        // Detect redundant phase faults in regulator devices in the system
+        system->detectPhaseFaults(services);
+    }
 }
 
-void Manager::timerExpired()
+void Manager::sensorTimerExpired()
 {
     // Notify sensors service that a sensor monitoring cycle is starting
     services.getSensors().startCycle();
@@ -246,6 +256,13 @@ void Manager::timerExpired()
 
     // Notify sensors service that current sensor monitoring cycle has ended
     services.getSensors().endCycle();
+}
+
+void Manager::sighupHandler(sdeventplus::source::Signal& /*sigSrc*/,
+                            const struct signalfd_siginfo* /*sigInfo*/)
+{
+    // Reload the JSON configuration file
+    loadConfigFile();
 }
 
 void Manager::clearHardwareData()
