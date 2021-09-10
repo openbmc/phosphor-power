@@ -52,11 +52,29 @@ using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
 
-// Default chassis inventory path
-static const std::string defaultInventoryPath{
-    "/xyz/openbmc_project/inventory/system/chassis"};
+class ChassisTests : public ::testing::Test
+{
+  public:
+    /**
+     * Constructor.
+     *
+     * Creates the System object needed for calling some Chassis methods.
+     */
+    ChassisTests() : ::testing::Test{}
+    {
+        std::vector<std::unique_ptr<Rule>> rules{};
+        std::vector<std::unique_ptr<Chassis>> chassis{};
+        system = std::make_unique<System>(std::move(rules), std::move(chassis));
+    }
 
-TEST(ChassisTests, Constructor)
+  protected:
+    const std::string defaultInventoryPath{
+        "/xyz/openbmc_project/inventory/system/chassis"};
+
+    std::unique_ptr<System> system{};
+};
+
+TEST_F(ChassisTests, Constructor)
 {
     // Test where works: Only required parameters are specified
     {
@@ -96,7 +114,7 @@ TEST(ChassisTests, Constructor)
     }
 }
 
-TEST(ChassisTests, AddToIDMap)
+TEST_F(ChassisTests, AddToIDMap)
 {
     // Create vector of Device objects
     std::vector<std::unique_ptr<Device>> devices{};
@@ -124,17 +142,17 @@ TEST(ChassisTests, AddToIDMap)
     EXPECT_THROW(idMap.getRail("rail3"), std::invalid_argument);
 }
 
-TEST(ChassisTests, ClearCache)
+TEST_F(ChassisTests, ClearCache)
 {
     // Create PresenceDetection
     std::vector<std::unique_ptr<Action>> actions{};
-    std::unique_ptr<PresenceDetection> presenceDetection =
+    auto presenceDetection =
         std::make_unique<PresenceDetection>(std::move(actions));
     PresenceDetection* presenceDetectionPtr = presenceDetection.get();
 
     // Create Device that contains PresenceDetection
-    std::unique_ptr<i2c::I2CInterface> i2cInterface = createI2CInterface();
-    std::unique_ptr<Device> device = std::make_unique<Device>(
+    auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+    auto device = std::make_unique<Device>(
         "reg1", true,
         "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
         std::move(i2cInterface), std::move(presenceDetection));
@@ -143,53 +161,44 @@ TEST(ChassisTests, ClearCache)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, defaultInventoryPath, std::move(devices));
-    Chassis* chassisPtr = chassis.get();
-
-    // Create System that contains Chassis
-    std::vector<std::unique_ptr<Rule>> rules{};
-    std::vector<std::unique_ptr<Chassis>> chassisVec{};
-    chassisVec.emplace_back(std::move(chassis));
-    System system{std::move(rules), std::move(chassisVec)};
+    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
 
     // Cache presence value in PresenceDetection
     MockServices services{};
-    presenceDetectionPtr->execute(services, system, *chassisPtr, *devicePtr);
+    presenceDetectionPtr->execute(services, *system, chassis, *devicePtr);
     EXPECT_TRUE(presenceDetectionPtr->getCachedPresence().has_value());
 
     // Clear cached data in Chassis
-    chassisPtr->clearCache();
+    chassis.clearCache();
 
     // Verify presence value no longer cached in PresenceDetection
     EXPECT_FALSE(presenceDetectionPtr->getCachedPresence().has_value());
 }
 
-TEST(ChassisTests, ClearErrorHistory)
+TEST_F(ChassisTests, ClearErrorHistory)
 {
     // Create SensorMonitoring.  Will fail with a DBus exception.
-    std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+    auto action = std::make_unique<MockAction>();
     EXPECT_CALL(*action, execute)
         .WillRepeatedly(Throw(TestSDBusError{"Unable to set sensor value"}));
     std::vector<std::unique_ptr<Action>> actions{};
     actions.emplace_back(std::move(action));
-    std::unique_ptr<SensorMonitoring> sensorMonitoring =
+    auto sensorMonitoring =
         std::make_unique<SensorMonitoring>(std::move(actions));
 
     // Create Rail
     std::unique_ptr<Configuration> configuration{};
-    std::unique_ptr<Rail> rail = std::make_unique<Rail>(
-        "vddr1", std::move(configuration), std::move(sensorMonitoring));
+    auto rail = std::make_unique<Rail>("vddr1", std::move(configuration),
+                                       std::move(sensorMonitoring));
 
     // Create Device that contains Rail
-    std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
-        std::make_unique<i2c::MockedI2CInterface>();
+    auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
     std::unique_ptr<PresenceDetection> presenceDetection{};
     std::unique_ptr<Configuration> deviceConfiguration{};
     std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
     std::vector<std::unique_ptr<Rail>> rails{};
     rails.emplace_back(std::move(rail));
-    std::unique_ptr<Device> device = std::make_unique<Device>(
+    auto device = std::make_unique<Device>(
         "reg1", true,
         "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg1",
         std::move(i2cInterface), std::move(presenceDetection),
@@ -199,15 +208,7 @@ TEST(ChassisTests, ClearErrorHistory)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    std::unique_ptr<Chassis> chassis =
-        std::make_unique<Chassis>(1, defaultInventoryPath, std::move(devices));
-    Chassis* chassisPtr = chassis.get();
-
-    // Create System that contains Chassis
-    std::vector<std::unique_ptr<Rule>> rules{};
-    std::vector<std::unique_ptr<Chassis>> chassisVec{};
-    chassisVec.emplace_back(std::move(chassis));
-    System system{std::move(rules), std::move(chassisVec)};
+    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
 
     // Create mock services
     MockServices services{};
@@ -232,21 +233,21 @@ TEST(ChassisTests, ClearErrorHistory)
     // times, and log one error.
     for (int i = 1; i <= 5; ++i)
     {
-        chassisPtr->monitorSensors(services, system);
+        chassis.monitorSensors(services, *system);
     }
 
     // Clear error history
-    chassisPtr->clearErrorHistory();
+    chassis.clearErrorHistory();
 
     // Monitor sensors 5 times again.  Should fail every time, write to journal
     // 3 times, and log one error.
     for (int i = 1; i <= 5; ++i)
     {
-        chassisPtr->monitorSensors(services, system);
+        chassis.monitorSensors(services, *system);
     }
 }
 
-TEST(ChassisTests, CloseDevices)
+TEST_F(ChassisTests, CloseDevices)
 {
     // Test where no devices were specified in constructor
     {
@@ -274,13 +275,12 @@ TEST(ChassisTests, CloseDevices)
         // Create Device vdd0_reg
         {
             // Create mock I2CInterface: isOpen() and close() should be called
-            std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
-                std::make_unique<i2c::MockedI2CInterface>();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            std::unique_ptr<Device> device =
+            auto device =
                 std::make_unique<Device>("vdd0_reg", true,
                                          "/xyz/openbmc_project/inventory/"
                                          "system/chassis/motherboard/vdd0_reg",
@@ -291,13 +291,12 @@ TEST(ChassisTests, CloseDevices)
         // Create Device vdd1_reg
         {
             // Create mock I2CInterface: isOpen() and close() should be called
-            std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
-                std::make_unique<i2c::MockedI2CInterface>();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            std::unique_ptr<Device> device =
+            auto device =
                 std::make_unique<Device>("vdd1_reg", true,
                                          "/xyz/openbmc_project/inventory/"
                                          "system/chassis/motherboard/vdd1_reg",
@@ -313,7 +312,7 @@ TEST(ChassisTests, CloseDevices)
     }
 }
 
-TEST(ChassisTests, Configure)
+TEST_F(ChassisTests, Configure)
 {
     // Test where no devices were specified in constructor
     {
@@ -325,18 +324,10 @@ TEST(ChassisTests, Configure)
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Chassis
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, defaultInventoryPath);
-        Chassis* chassisPtr = chassis.get();
-
-        // Create System that contains Chassis
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassisVec{};
-        chassisVec.emplace_back(std::move(chassis));
-        System system{std::move(rules), std::move(chassisVec)};
+        Chassis chassis{1, defaultInventoryPath};
 
         // Call configure()
-        chassisPtr->configure(services, system);
+        chassis.configure(services, *system);
     }
 
     // Test where devices were specified in constructor
@@ -357,14 +348,13 @@ TEST(ChassisTests, Configure)
         {
             // Create Configuration
             std::vector<std::unique_ptr<Action>> actions{};
-            std::unique_ptr<Configuration> configuration =
+            auto configuration =
                 std::make_unique<Configuration>(1.3, std::move(actions));
 
             // Create Device
-            std::unique_ptr<i2c::I2CInterface> i2cInterface =
-                createI2CInterface();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             std::unique_ptr<PresenceDetection> presenceDetection{};
-            std::unique_ptr<Device> device = std::make_unique<Device>(
+            auto device = std::make_unique<Device>(
                 "vdd0_reg", true,
                 "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
                 "vdd0_reg",
@@ -377,14 +367,13 @@ TEST(ChassisTests, Configure)
         {
             // Create Configuration
             std::vector<std::unique_ptr<Action>> actions{};
-            std::unique_ptr<Configuration> configuration =
+            auto configuration =
                 std::make_unique<Configuration>(1.2, std::move(actions));
 
             // Create Device
-            std::unique_ptr<i2c::I2CInterface> i2cInterface =
-                createI2CInterface();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             std::unique_ptr<PresenceDetection> presenceDetection{};
-            std::unique_ptr<Device> device = std::make_unique<Device>(
+            auto device = std::make_unique<Device>(
                 "vdd1_reg", true,
                 "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
                 "vdd1_reg",
@@ -394,22 +383,14 @@ TEST(ChassisTests, Configure)
         }
 
         // Create Chassis
-        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
-            2, defaultInventoryPath, std::move(devices));
-        Chassis* chassisPtr = chassis.get();
-
-        // Create System that contains Chassis
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassisVec{};
-        chassisVec.emplace_back(std::move(chassis));
-        System system{std::move(rules), std::move(chassisVec)};
+        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
 
         // Call configure()
-        chassisPtr->configure(services, system);
+        chassis.configure(services, *system);
     }
 }
 
-TEST(ChassisTests, GetDevices)
+TEST_F(ChassisTests, GetDevices)
 {
     // Test where no devices were specified in constructor
     {
@@ -432,19 +413,19 @@ TEST(ChassisTests, GetDevices)
     }
 }
 
-TEST(ChassisTests, GetInventoryPath)
+TEST_F(ChassisTests, GetInventoryPath)
 {
     Chassis chassis{3, defaultInventoryPath};
     EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
 }
 
-TEST(ChassisTests, GetNumber)
+TEST_F(ChassisTests, GetNumber)
 {
     Chassis chassis{3, defaultInventoryPath};
     EXPECT_EQ(chassis.getNumber(), 3);
 }
 
-TEST(ChassisTests, MonitorSensors)
+TEST_F(ChassisTests, MonitorSensors)
 {
     // Test where no devices were specified in constructor
     {
@@ -456,18 +437,10 @@ TEST(ChassisTests, MonitorSensors)
         EXPECT_CALL(sensors, endRail).Times(0);
 
         // Create Chassis
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, defaultInventoryPath);
-        Chassis* chassisPtr = chassis.get();
-
-        // Create System that contains Chassis
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassisVec{};
-        chassisVec.emplace_back(std::move(chassis));
-        System system{std::move(rules), std::move(chassisVec)};
+        Chassis chassis{1, defaultInventoryPath};
 
         // Call monitorSensors().  Should do nothing.
-        chassisPtr->monitorSensors(services, system);
+        chassis.monitorSensors(services, *system);
     }
 
     // Test where devices were specified in constructor
@@ -493,27 +466,26 @@ TEST(ChassisTests, MonitorSensors)
         // Create Device vdd0_reg
         {
             // Create SensorMonitoring for Rail
-            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            auto action = std::make_unique<MockAction>();
             EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
             std::vector<std::unique_ptr<Action>> actions{};
             actions.emplace_back(std::move(action));
-            std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            auto sensorMonitoring =
                 std::make_unique<SensorMonitoring>(std::move(actions));
 
             // Create Rail
             std::unique_ptr<Configuration> configuration{};
-            std::unique_ptr<Rail> rail = std::make_unique<Rail>(
-                "vdd0", std::move(configuration), std::move(sensorMonitoring));
+            auto rail = std::make_unique<Rail>("vdd0", std::move(configuration),
+                                               std::move(sensorMonitoring));
 
             // Create Device
-            std::unique_ptr<i2c::I2CInterface> i2cInterface =
-                createI2CInterface();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Configuration> deviceConfiguration{};
             std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
             std::vector<std::unique_ptr<Rail>> rails{};
             rails.emplace_back(std::move(rail));
-            std::unique_ptr<Device> device = std::make_unique<Device>(
+            auto device = std::make_unique<Device>(
                 "vdd0_reg", true,
                 "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
                 "vdd0_reg",
@@ -526,27 +498,26 @@ TEST(ChassisTests, MonitorSensors)
         // Create Device vdd1_reg
         {
             // Create SensorMonitoring for Rail
-            std::unique_ptr<MockAction> action = std::make_unique<MockAction>();
+            auto action = std::make_unique<MockAction>();
             EXPECT_CALL(*action, execute).Times(1).WillOnce(Return(true));
             std::vector<std::unique_ptr<Action>> actions{};
             actions.emplace_back(std::move(action));
-            std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            auto sensorMonitoring =
                 std::make_unique<SensorMonitoring>(std::move(actions));
 
             // Create Rail
             std::unique_ptr<Configuration> configuration{};
-            std::unique_ptr<Rail> rail = std::make_unique<Rail>(
-                "vdd1", std::move(configuration), std::move(sensorMonitoring));
+            auto rail = std::make_unique<Rail>("vdd1", std::move(configuration),
+                                               std::move(sensorMonitoring));
 
             // Create Device
-            std::unique_ptr<i2c::I2CInterface> i2cInterface =
-                createI2CInterface();
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Configuration> deviceConfiguration{};
             std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
             std::vector<std::unique_ptr<Rail>> rails{};
             rails.emplace_back(std::move(rail));
-            std::unique_ptr<Device> device = std::make_unique<Device>(
+            auto device = std::make_unique<Device>(
                 "vdd1_reg", true,
                 "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
                 "vdd1_reg",
@@ -557,17 +528,9 @@ TEST(ChassisTests, MonitorSensors)
         }
 
         // Create Chassis that contains Devices
-        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
-            2, defaultInventoryPath, std::move(devices));
-        Chassis* chassisPtr = chassis.get();
-
-        // Create System that contains Chassis
-        std::vector<std::unique_ptr<Rule>> rules{};
-        std::vector<std::unique_ptr<Chassis>> chassisVec{};
-        chassisVec.emplace_back(std::move(chassis));
-        System system{std::move(rules), std::move(chassisVec)};
+        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
 
         // Call monitorSensors()
-        chassisPtr->monitorSensors(services, system);
+        chassis.monitorSensors(services, *system);
     }
 }
