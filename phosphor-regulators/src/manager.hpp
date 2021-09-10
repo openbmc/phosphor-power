@@ -104,6 +104,16 @@ class Manager : public ManagerObject
     void monitor(bool enable) override;
 
     /**
+     * Phase fault detection timer expired callback function.
+     */
+    void phaseFaultTimerExpired();
+
+    /**
+     * Sensor monitoring timer expired callback function.
+     */
+    void sensorTimerExpired();
+
+    /**
      * Callback function to handle receiving a HUP signal
      * to reload the configuration data.
      *
@@ -112,11 +122,6 @@ class Manager : public ManagerObject
      */
     void sighupHandler(sdeventplus::source::Signal& sigSrc,
                        const struct signalfd_siginfo* sigInfo);
-
-    /**
-     * Timer expired callback function
-     */
-    void timerExpired();
 
   private:
     /**
@@ -211,9 +216,14 @@ class Manager : public ManagerObject
     BMCServices services;
 
     /**
-     * Event timer used to initiate regulator monitoring.
+     * Event timer used to initiate phase fault detection.
      */
-    Timer timer;
+    Timer phaseFaultTimer;
+
+    /**
+     * Event timer used to initiate sensor monitoring.
+     */
+    Timer sensorTimer;
 
     /**
      * List of D-Bus signal matches
