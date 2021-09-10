@@ -120,6 +120,16 @@ class Chassis
     void configure(Services& services, System& system);
 
     /**
+     * Detect redundant phase faults in regulator devices in this chassis.
+     *
+     * This method should be called every 15 seconds.
+     *
+     * @param services system services like error logging and the journal
+     * @param system system that contains this chassis
+     */
+    void detectPhaseFaults(Services& services, System& system);
+
+    /**
      * Returns the devices within this chassis, if any.
      *
      * The vector contains regulator devices and any related devices

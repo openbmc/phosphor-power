@@ -19,12 +19,14 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "id_map.hpp"
+#include "log_phase_fault_action.hpp"
 #include "mock_action.hpp"
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_sensors.hpp"
 #include "mock_services.hpp"
 #include "mocked_i2c_interface.hpp"
+#include "phase_fault.hpp"
 #include "phase_fault_detection.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -387,6 +389,114 @@ TEST_F(ChassisTests, Configure)
 
         // Call configure()
         chassis.configure(services, *system);
+    }
+}
+
+TEST_F(ChassisTests, DetectPhaseFaults)
+{
+    // Test where no devices were specified in constructor
+    {
+        // Create mock services.  No errors should be logged.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logPhaseFault).Times(0);
+
+        // Create Chassis
+        Chassis chassis{1, defaultInventoryPath};
+
+        // Call detectPhaseFaults() 5 times.  Should do nothing.
+        for (int i = 1; i <= 5; ++i)
+        {
+            chassis.detectPhaseFaults(services, *system);
+        }
+    }
+
+    // Test where devices were specified in constructor
+    {
+        // Create mock services with the following expectations:
+        // - 2 error messages in journal for N phase fault detected in reg0
+        // - 2 error messages in journal for N phase fault detected in reg1
+        // - 1 N phase fault error logged for reg0
+        // - 1 N phase fault error logged for reg1
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg0: count=1"))
+            .Times(1);
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg0: count=2"))
+            .Times(1);
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg1: count=1"))
+            .Times(1);
+        EXPECT_CALL(
+            journal,
+            logError("n phase fault detected in regulator reg1: count=2"))
+            .Times(1);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logPhaseFault).Times(2);
+
+        std::vector<std::unique_ptr<Device>> devices{};
+
+        // Create Device reg0
+        {
+            // Create PhaseFaultDetection
+            auto action =
+                std::make_unique<LogPhaseFaultAction>(PhaseFaultType::n);
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.push_back(std::move(action));
+            auto phaseFaultDetection =
+                std::make_unique<PhaseFaultDetection>(std::move(actions));
+
+            // Create Device
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+            std::unique_ptr<PresenceDetection> presenceDetection{};
+            std::unique_ptr<Configuration> configuration{};
+            auto device = std::make_unique<Device>(
+                "reg0", true,
+                "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
+                "reg0",
+                std::move(i2cInterface), std::move(presenceDetection),
+                std::move(configuration), std::move(phaseFaultDetection));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Device reg1
+        {
+            // Create PhaseFaultDetection
+            auto action =
+                std::make_unique<LogPhaseFaultAction>(PhaseFaultType::n);
+            std::vector<std::unique_ptr<Action>> actions{};
+            actions.push_back(std::move(action));
+            auto phaseFaultDetection =
+                std::make_unique<PhaseFaultDetection>(std::move(actions));
+
+            // Create Device
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+            std::unique_ptr<PresenceDetection> presenceDetection{};
+            std::unique_ptr<Configuration> configuration{};
+            auto device = std::make_unique<Device>(
+                "reg1", true,
+                "/xyz/openbmc_project/inventory/system/chassis/motherboard/"
+                "reg1",
+                std::move(i2cInterface), std::move(presenceDetection),
+                std::move(configuration), std::move(phaseFaultDetection));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Chassis
+        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
+
+        // Call detectPhaseFaults() 5 times
+        for (int i = 1; i <= 5; ++i)
+        {
+            chassis.detectPhaseFaults(services, *system);
+        }
     }
 }
 
