@@ -74,6 +74,15 @@ void Chassis::configure(Services& services, System& system)
     }
 }
 
+void Chassis::detectPhaseFaults(Services& services, System& system)
+{
+    // Detect phase faults in each device
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->detectPhaseFaults(services, system, *this);
+    }
+}
+
 void Chassis::monitorSensors(Services& services, System& system)
 {
     // Monitor sensors in each device
