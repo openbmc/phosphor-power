@@ -93,6 +93,15 @@ class System
     void configure(Services& services);
 
     /**
+     * Detect redundant phase faults in regulator devices in the system.
+     *
+     * This method should be called every 15 seconds.
+     *
+     * @param services system services like error logging and the journal
+     */
+    void detectPhaseFaults(Services& services);
+
+    /**
      * Returns the chassis in the system.
      *
      * @return chassis
