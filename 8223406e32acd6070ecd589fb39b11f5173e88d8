@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "ae965d51_adb43e0d",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-09-13T21:14:54Z",
+      "side": 1,
+      "message": "\u003e it\u0027s not the asio that would either poll/not poll, it would be libgpio.\n\nOK, was it a libgpio line event_wait() call you are proposing to do here?\nIf so, a couple questions:\n1. Aren\u0027t we just having libgpio poll for us?  https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/lib/core.c?h\u003dv1.6.x#n1027\n2. How would you propose going from an indefinite wait while powered on to a timed wait for powering down?",
+      "parentUuid": "5655036b_a3031984",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
