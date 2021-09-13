@@ -10,6 +10,8 @@
 #include <phosphor-logging/elog.hpp>
 #include <phosphor-logging/log.hpp>
 
+#include <bitset>
+
 namespace phosphor::power::psu
 {
 
@@ -120,6 +122,17 @@ class GPIOReader : public GPIOInterface
      * @return 1 for active (low/present), 0 for not active (high/not present).
      */
     int read() override;
+
+    /**
+     * @brief Attempts to set the state of the GPIO line to the specified value.
+     *
+     * Throws an exception if line not found, request line fails, or set_value
+     * to line fails.
+     *
+     * @param[in] value - The value to set the state of the GPIO line, 1 or 0.
+     * @param[in] flags - Additional line request flags as defined in gpiod.hpp.
+     */
+    void write(int value, std::bitset<32> flags) override;
 
     /**
      * @brief Returns the name of the GPIO, if not empty.
