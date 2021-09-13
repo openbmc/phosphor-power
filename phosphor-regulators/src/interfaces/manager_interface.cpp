@@ -35,8 +35,7 @@ namespace interface
 
 ManagerInterface::ManagerInterface(sdbusplus::bus::bus& bus, const char* path) :
     _serverInterface(bus, path, interface, _vtable, this)
-{
-}
+{}
 
 int ManagerInterface::callbackConfigure(sd_bus_message* msg, void* context,
                                         sd_bus_error* error)

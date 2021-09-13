@@ -64,8 +64,7 @@ class SensorMonitoring
      */
     explicit SensorMonitoring(std::vector<std::unique_ptr<Action>> actions) :
         actions{std::move(actions)}
-    {
-    }
+    {}
 
     /**
      * Clears all error history.

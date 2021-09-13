@@ -60,8 +60,7 @@ class Rule
                   std::vector<std::unique_ptr<Action>> actions) :
         id{id},
         actions{std::move(actions)}
-    {
-    }
+    {}
 
     /**
      * Executes the actions in this rule.

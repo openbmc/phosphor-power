@@ -74,8 +74,7 @@ class Configuration
                            std::vector<std::unique_ptr<Action>> actions) :
         volts{volts},
         actions{std::move(actions)}
-    {
-    }
+    {}
 
     /**
      * Executes the actions to configure the specified device.

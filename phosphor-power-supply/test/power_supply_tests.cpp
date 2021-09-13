@@ -251,8 +251,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         psu.onOffConfig(data);
     }
     catch (...)
-    {
-    }
+    {}
 
     // Test where PSU is present
     try
@@ -273,8 +272,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         psu.onOffConfig(data);
     }
     catch (...)
-    {
-    }
+    {}
 }
 
 TEST_F(PowerSupplyTests, ClearFaults)

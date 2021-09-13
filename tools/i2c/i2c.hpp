@@ -73,8 +73,7 @@ class I2CDevice : public I2CInterface
             close();
         }
         catch (...)
-        {
-        }
+        {}
     }
 
     /** @brief Get I2C adapter functionality

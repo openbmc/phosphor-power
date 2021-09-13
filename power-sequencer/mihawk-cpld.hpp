@@ -55,8 +55,7 @@ class MihawkCPLD : public Device
      * Clears faults in the device
      */
     void clearFaults() override
-    {
-    }
+    {}
 
   private:
     /**

@@ -72,8 +72,7 @@ class PresenceDetection
      */
     explicit PresenceDetection(std::vector<std::unique_ptr<Action>> actions) :
         actions{std::move(actions)}
-    {
-    }
+    {}
 
     /**
      * Clears the cached presence value.

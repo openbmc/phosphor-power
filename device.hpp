@@ -31,8 +31,7 @@ class Device
      * @param inst - the device instance
      */
     Device(const std::string& name, size_t inst) : name(name), instance(inst)
-    {
-    }
+    {}
 
     /**
      * Returns the instance number
@@ -61,8 +60,7 @@ class Device
      * is required
      */
     virtual void onFailure()
-    {
-    }
+    {}
 
     /**
      * Pure virtual function to clear faults on the device

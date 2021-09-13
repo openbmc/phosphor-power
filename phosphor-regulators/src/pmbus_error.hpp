@@ -49,8 +49,7 @@ class PMBusError : public std::exception
                         const std::string& inventoryPath) :
         error{"PMBusError: " + error},
         deviceID{deviceID}, inventoryPath{inventoryPath}
-    {
-    }
+    {}
 
     /**
      * Returns the unique ID of the device where the error occurred.

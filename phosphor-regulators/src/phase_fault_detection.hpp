@@ -79,8 +79,7 @@ class PhaseFaultDetection
                                  const std::string& deviceID = "") :
         actions{std::move(actions)},
         deviceID{deviceID}
-    {
-    }
+    {}
 
     /**
      * Clears all error history.

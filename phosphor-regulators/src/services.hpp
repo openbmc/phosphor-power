@@ -114,8 +114,7 @@ class BMCServices : public Services
     explicit BMCServices(sdbusplus::bus::bus& bus) :
         bus{bus}, errorLogging{bus},
         presenceService{bus}, sensors{bus}, vpd{bus}
-    {
-    }
+    {}
 
     /** @copydoc Services::getBus() */
     virtual sdbusplus::bus::bus& getBus() override

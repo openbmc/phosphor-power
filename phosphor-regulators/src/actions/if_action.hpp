@@ -71,8 +71,7 @@ class IfAction : public Action
                           std::vector<std::unique_ptr<Action>>{}) :
         conditionAction{std::move(conditionAction)},
         thenActions{std::move(thenActions)}, elseActions{std::move(elseActions)}
-    {
-    }
+    {}
 
     /**
      * Executes the condition action specified in the constructor.

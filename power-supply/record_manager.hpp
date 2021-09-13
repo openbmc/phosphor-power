@@ -29,8 +29,7 @@ class InvalidRecordException : public std::runtime_error
 {
   public:
     InvalidRecordException() : std::runtime_error("Invalid history record")
-    {
-    }
+    {}
 };
 
 /**
@@ -72,8 +71,7 @@ class RecordManager
      *                     records to keep at a time
      */
     RecordManager(size_t maxRec) : RecordManager(maxRec, LAST_SEQUENCE_ID)
-    {
-    }
+    {}
 
     /**
      * @brief Constructor
@@ -85,8 +83,7 @@ class RecordManager
      */
     RecordManager(size_t maxRec, size_t lastSequenceID) :
         maxRecords(maxRec), lastSequenceID(lastSequenceID)
-    {
-    }
+    {}
 
     /**
      * @brief Adds a new entry to the history

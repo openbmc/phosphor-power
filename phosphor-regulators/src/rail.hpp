@@ -64,8 +64,7 @@ class Rail
         id{id},
         configuration{std::move(configuration)}, sensorMonitoring{std::move(
                                                      sensorMonitoring)}
-    {
-    }
+    {}
 
     /**
      * Clears all error history.

@@ -57,8 +57,7 @@ class CompareVPDAction : public Action
                               const std::vector<uint8_t>& value) :
         fru{fru},
         keyword{keyword}, value{value}
-    {
-    }
+    {}
 
     /**
      * Executes this action.

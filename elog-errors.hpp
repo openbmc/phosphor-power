@@ -1145,9 +1145,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _Shutdown
-{
-
-} // namespace _Shutdown
+{} // namespace _Shutdown
 
 struct Shutdown
 {
@@ -1181,9 +1179,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _PowerOnFailure
-{
-
-} // namespace _PowerOnFailure
+{} // namespace _PowerOnFailure
 
 struct PowerOnFailure
 {
@@ -1217,9 +1213,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode0
-{
-
-} // namespace _ErrorCode0
+{} // namespace _ErrorCode0
 
 struct ErrorCode0
 {
@@ -1253,9 +1247,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode1
-{
-
-} // namespace _ErrorCode1
+{} // namespace _ErrorCode1
 
 struct ErrorCode1
 {
@@ -1289,9 +1281,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode2
-{
-
-} // namespace _ErrorCode2
+{} // namespace _ErrorCode2
 
 struct ErrorCode2
 {
@@ -1325,9 +1315,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode3
-{
-
-} // namespace _ErrorCode3
+{} // namespace _ErrorCode3
 
 struct ErrorCode3
 {
@@ -1361,9 +1349,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode4
-{
-
-} // namespace _ErrorCode4
+{} // namespace _ErrorCode4
 
 struct ErrorCode4
 {
@@ -1397,9 +1383,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode5
-{
-
-} // namespace _ErrorCode5
+{} // namespace _ErrorCode5
 
 struct ErrorCode5
 {
@@ -1433,9 +1417,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode6
-{
-
-} // namespace _ErrorCode6
+{} // namespace _ErrorCode6
 
 struct ErrorCode6
 {
@@ -1469,9 +1451,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode7
-{
-
-} // namespace _ErrorCode7
+{} // namespace _ErrorCode7
 
 struct ErrorCode7
 {
@@ -1505,9 +1485,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode8
-{
-
-} // namespace _ErrorCode8
+{} // namespace _ErrorCode8
 
 struct ErrorCode8
 {
@@ -1541,9 +1519,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode9
-{
-
-} // namespace _ErrorCode9
+{} // namespace _ErrorCode9
 
 struct ErrorCode9
 {
@@ -1577,9 +1553,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode10
-{
-
-} // namespace _ErrorCode10
+{} // namespace _ErrorCode10
 
 struct ErrorCode10
 {
@@ -1613,9 +1587,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode11
-{
-
-} // namespace _ErrorCode11
+{} // namespace _ErrorCode11
 
 struct ErrorCode11
 {
@@ -1649,9 +1621,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode12
-{
-
-} // namespace _ErrorCode12
+{} // namespace _ErrorCode12
 
 struct ErrorCode12
 {
@@ -1685,9 +1655,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode13
-{
-
-} // namespace _ErrorCode13
+{} // namespace _ErrorCode13
 
 struct ErrorCode13
 {
@@ -1721,9 +1689,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode14
-{
-
-} // namespace _ErrorCode14
+{} // namespace _ErrorCode14
 
 struct ErrorCode14
 {
@@ -1757,9 +1723,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode15
-{
-
-} // namespace _ErrorCode15
+{} // namespace _ErrorCode15
 
 struct ErrorCode15
 {
@@ -1793,9 +1757,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode16
-{
-
-} // namespace _ErrorCode16
+{} // namespace _ErrorCode16
 
 struct ErrorCode16
 {
@@ -1829,9 +1791,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode17
-{
-
-} // namespace _ErrorCode17
+{} // namespace _ErrorCode17
 
 struct ErrorCode17
 {
@@ -1865,9 +1825,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode18
-{
-
-} // namespace _ErrorCode18
+{} // namespace _ErrorCode18
 
 struct ErrorCode18
 {
@@ -1901,9 +1859,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode19
-{
-
-} // namespace _ErrorCode19
+{} // namespace _ErrorCode19
 
 struct ErrorCode19
 {
@@ -1937,9 +1893,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode20
-{
-
-} // namespace _ErrorCode20
+{} // namespace _ErrorCode20
 
 struct ErrorCode20
 {
@@ -1973,9 +1927,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode21
-{
-
-} // namespace _ErrorCode21
+{} // namespace _ErrorCode21
 
 struct ErrorCode21
 {
@@ -2009,9 +1961,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode22
-{
-
-} // namespace _ErrorCode22
+{} // namespace _ErrorCode22
 
 struct ErrorCode22
 {
@@ -2045,9 +1995,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode23
-{
-
-} // namespace _ErrorCode23
+{} // namespace _ErrorCode23
 
 struct ErrorCode23
 {
@@ -2081,9 +2029,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode24
-{
-
-} // namespace _ErrorCode24
+{} // namespace _ErrorCode24
 
 struct ErrorCode24
 {
@@ -2117,9 +2063,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode25
-{
-
-} // namespace _ErrorCode25
+{} // namespace _ErrorCode25
 
 struct ErrorCode25
 {
@@ -2153,9 +2097,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode26
-{
-
-} // namespace _ErrorCode26
+{} // namespace _ErrorCode26
 
 struct ErrorCode26
 {
@@ -2189,9 +2131,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode27
-{
-
-} // namespace _ErrorCode27
+{} // namespace _ErrorCode27
 
 struct ErrorCode27
 {
@@ -2225,9 +2165,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode28
-{
-
-} // namespace _ErrorCode28
+{} // namespace _ErrorCode28
 
 struct ErrorCode28
 {
@@ -2261,9 +2199,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode29
-{
-
-} // namespace _ErrorCode29
+{} // namespace _ErrorCode29
 
 struct ErrorCode29
 {
@@ -2297,9 +2233,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode30
-{
-
-} // namespace _ErrorCode30
+{} // namespace _ErrorCode30
 
 struct ErrorCode30
 {
@@ -2333,9 +2267,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode31
-{
-
-} // namespace _ErrorCode31
+{} // namespace _ErrorCode31
 
 struct ErrorCode31
 {
@@ -2369,9 +2301,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode32
-{
-
-} // namespace _ErrorCode32
+{} // namespace _ErrorCode32
 
 struct ErrorCode32
 {
@@ -2405,9 +2335,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode33
-{
-
-} // namespace _ErrorCode33
+{} // namespace _ErrorCode33
 
 struct ErrorCode33
 {
@@ -2441,9 +2369,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode34
-{
-
-} // namespace _ErrorCode34
+{} // namespace _ErrorCode34
 
 struct ErrorCode34
 {
@@ -2477,9 +2403,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode35
-{
-
-} // namespace _ErrorCode35
+{} // namespace _ErrorCode35
 
 struct ErrorCode35
 {
@@ -2513,9 +2437,7 @@ namespace Witherspoon
 namespace Fault
 {
 namespace _ErrorCode36
-{
-
-} // namespace _ErrorCode36
+{} // namespace _ErrorCode36
 
 struct ErrorCode36
 {

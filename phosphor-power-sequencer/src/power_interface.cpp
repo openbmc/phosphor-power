@@ -35,8 +35,7 @@ namespace phosphor::power::sequencer
 
 PowerInterface::PowerInterface(sdbusplus::bus::bus& bus, const char* path) :
     _serverInterface(bus, path, POWER_IFACE, _vtable, this)
-{
-}
+{}
 
 int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
                                      const char* /*interface*/,

@@ -58,8 +58,7 @@ class I2CCompareByteAction : public I2CAction
                                   uint8_t mask = 0xFF) :
         reg{reg},
         value{value}, mask{mask}
-    {
-    }
+    {}
 
     /**
      * Executes this action.

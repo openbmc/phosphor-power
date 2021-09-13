@@ -79,8 +79,7 @@ class Device
         configuration{std::move(configuration)},
         phaseFaultDetection{std::move(phaseFaultDetection)}, rails{std::move(
                                                                  rails)}
-    {
-    }
+    {}
 
     /**
      * Adds this Device object to the specified IDMap.

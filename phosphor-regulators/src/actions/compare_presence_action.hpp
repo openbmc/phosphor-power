@@ -50,8 +50,7 @@ class ComparePresenceAction : public Action
      */
     explicit ComparePresenceAction(const std::string& fru, bool value) :
         fru{fru}, value{value}
-    {
-    }
+    {}
 
     /**
      * Executes this action.

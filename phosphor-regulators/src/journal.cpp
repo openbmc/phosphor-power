@@ -44,8 +44,7 @@ class JournalCloser
     JournalCloser& operator=(JournalCloser&&) = delete;
 
     JournalCloser(sd_journal* journal) : journal{journal}
-    {
-    }
+    {}
 
     ~JournalCloser()
     {

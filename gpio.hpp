@@ -12,8 +12,8 @@ namespace phosphor
 namespace gpio
 {
 
-typedef std::remove_reference<decltype(
-    gpiohandle_request::lineoffsets[0])>::type gpioNum_t;
+typedef std::remove_reference<
+    decltype(gpiohandle_request::lineoffsets[0])>::type gpioNum_t;
 
 typedef std::remove_reference<decltype(gpiohandle_data::values[0])>::type
     gpioValue_t;
@@ -62,8 +62,7 @@ class GPIO
      */
     GPIO(const std::string& device, gpioNum_t gpio, Direction direction) :
         device(device), gpio(gpio), direction(direction)
-    {
-    }
+    {}
 
     /**
      * Reads the GPIO value

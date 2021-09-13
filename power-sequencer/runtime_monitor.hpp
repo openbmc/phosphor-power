@@ -55,8 +55,7 @@ class RuntimeMonitor : public DeviceMonitor
         bus(b), match(bus, getMatchString(),
                       std::bind(std::mem_fn(&RuntimeMonitor::onPowerLost), this,
                                 std::placeholders::_1))
-    {
-    }
+    {}
 
     /**
      * Clears faults and then runs DeviceMonitor::run to

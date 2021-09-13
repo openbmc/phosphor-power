@@ -29,8 +29,7 @@ class TestSDBusError : public sdbusplus::exception_t
 {
   public:
     TestSDBusError(const std::string& error) : error{error}
-    {
-    }
+    {}
 
     const char* what() const noexcept override
     {

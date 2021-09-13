@@ -126,8 +126,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             }
         }
         catch (std::exception& e)
-        {
-        }
+        {}
     }
 
     if ((i2cbus) && (i2caddr) && (psuname) && (!psuname->empty()))
@@ -223,8 +222,7 @@ void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
         supportedConfigs.emplace(*model, sys);
     }
     catch (std::exception& e)
-    {
-    }
+    {}
 }
 
 void PSUManager::getSystemProperties()

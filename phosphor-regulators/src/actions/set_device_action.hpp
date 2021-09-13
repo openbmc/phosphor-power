@@ -47,8 +47,7 @@ class SetDeviceAction : public Action
      * @param deviceID device ID
      */
     explicit SetDeviceAction(const std::string& deviceID) : deviceID{deviceID}
-    {
-    }
+    {}
 
     /**
      * Executes this action.

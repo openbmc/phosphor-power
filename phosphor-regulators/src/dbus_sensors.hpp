@@ -52,8 +52,7 @@ class DBusSensors : public Sensors
      */
     explicit DBusSensors(sdbusplus::bus::bus& bus) :
         bus{bus}, manager{bus, sensorsObjectPath}
-    {
-    }
+    {}
 
     /** @copydoc Sensors::enable() */
     virtual void enable() override;

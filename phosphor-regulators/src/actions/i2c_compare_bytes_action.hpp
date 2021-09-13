@@ -60,8 +60,7 @@ class I2CCompareBytesAction : public I2CAction
                                    const std::vector<uint8_t>& values) :
         I2CCompareBytesAction(reg, values,
                               std::vector<uint8_t>(values.size(), 0xFF))
-    {
-    }
+    {}
 
     /**
      * Constructor.

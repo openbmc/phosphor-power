@@ -638,8 +638,7 @@ void PowerSupply::updateInventory()
                             : "");
             }
             catch (ReadFailure& e)
-            {
-            }
+            {}
         }
     }
 

@@ -74,8 +74,7 @@ class ActionEnvironment
                                Services& services) :
         idMap{idMap},
         deviceID{deviceID}, services{services}
-    {
-    }
+    {}
 
     /**
      * Adds the specified key/value pair to the map of additional error data

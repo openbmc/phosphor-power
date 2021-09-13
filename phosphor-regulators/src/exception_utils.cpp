@@ -52,8 +52,7 @@ void getExceptions(std::exception_ptr eptr,
             getExceptions(e.nested_ptr(), exceptions);
         }
         catch (...)
-        {
-        }
+        {}
 
         // Append this exception to vector
         exceptions.emplace_back(eptr);
@@ -72,8 +71,7 @@ void getMessages(const std::exception& e, std::vector<std::string>& messages)
         getMessages(inner, messages);
     }
     catch (...)
-    {
-    }
+    {}
 
     // Append error message from this exception
     messages.emplace_back(e.what());

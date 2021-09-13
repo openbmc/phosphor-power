@@ -49,8 +49,7 @@ class ConfigFileParserError : public std::exception
                                    const std::string& error) :
         pathName{pathName},
         error{"ConfigFileParserError: " + pathName.string() + ": " + error}
-    {
-    }
+    {}
 
     /**
      * Returns the configuration file path name.

@@ -59,8 +59,7 @@ int PowerControl::getState() const
 }
 
 void PowerControl::pollPgood()
-{
-}
+{}
 
 void PowerControl::setPgoodTimeout(int t)
 {

@@ -71,8 +71,7 @@ class PMBusReadSensorAction : public I2CAction
                                    std::optional<int8_t> exponent) :
         type{type},
         command{command}, format{format}, exponent{exponent}
-    {
-    }
+    {}
 
     /**
      * Executes this action.

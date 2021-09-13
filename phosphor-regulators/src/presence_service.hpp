@@ -84,8 +84,7 @@ class DBusPresenceService : public PresenceService
      * @param bus D-Bus bus object
      */
     explicit DBusPresenceService(sdbusplus::bus::bus& bus) : bus{bus}
-    {
-    }
+    {}
 
     /** @copydoc PresenceService::clearCache() */
     virtual void clearCache(void) override
