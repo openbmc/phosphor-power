@@ -4,6 +4,8 @@
 
 #include <sdbusplus/bus/match.hpp>
 
+#include <bitset>
+
 namespace phosphor::power::psu
 {
 
@@ -43,6 +45,7 @@ class GPIOInterfaceBase
     virtual ~GPIOInterfaceBase() = default;
 
     virtual int read() = 0;
+    virtual void write(int value, std::bitset<32> flags) = 0;
     virtual std::string getName() const = 0;
 };
 

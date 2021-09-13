@@ -81,6 +81,32 @@ int GPIOInterface::read()
     return value;
 }
 
+void GPIOInterface::write(int value, std::bitset<32> flags)
+{
+    using namespace phosphor::logging;
+
+    if (!line)
+    {
+        log<level::ERR>("Failed line");
+        throw std::runtime_error{std::string{"Failed to find line"}};
+    }
+
+    try
+    {
+        line.request(
+            {__FUNCTION__, gpiod::line_request::DIRECTION_OUTPUT, flags},
+            value);
+
+        line.release();
+    }
+    catch (std::exception& e)
+    {
+        log<level::ERR>("Failed to set GPIO line", entry("MSG=%s", e.what()),
+                        entry("VALUE=%d", value));
+        throw;
+    }
+}
+
 std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio)
 {
     return GPIOInterface::createGPIO(namedGpio);
