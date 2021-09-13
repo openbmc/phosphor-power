@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9548132f_78713208",
+        "filename": "gpio.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-09-13T23:15:01Z",
+      "side": 1,
+      "message": "No changes:\ndiff --git a/gpio.hpp b/gpio.hpp\nindex 0969995..a57dcbf 100644\n--- a/gpio.hpp\n+++ b/gpio.hpp\n@@ -12,8 +12,8 @@ namespace phosphor\n namespace gpio\n {\n\n-typedef std::remove_reference\u003cdecltype(\n-    gpiohandle_request::lineoffsets[0])\u003e::type gpioNum_t;\n+typedef std::remove_reference\u003c\n+    decltype(gpiohandle_request::lineoffsets[0])\u003e::type gpioNum_t;\n-----\nYuck... okay.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 66
+      },
+      "revId": "0c9a33d66f74a76c1842990f41da678f79fa0c05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    }
+  ]
+}
