@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da399264_ffadfd4b",
+        "filename": "phosphor-regulators/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-09-14T14:17:53Z",
+      "side": 1,
+      "message": "Hardcoding this interval in a comment that isn\u0027t near the actual timer seems like a good way to get an out of date comment when you change the interval later :)",
+      "range": {
+        "startLine": 125,
+        "startChar": 7,
+        "endLine": 125,
+        "endChar": 53
+      },
+      "revId": "8f9eaacc20b421634a8538a9338071cc3ac17133",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
