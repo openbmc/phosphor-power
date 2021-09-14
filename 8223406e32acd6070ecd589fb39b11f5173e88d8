@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "06e8a944_ee9812df",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-09-14T13:32:33Z",
+      "side": 1,
+      "message": "1. Someone other than me could probably give a better answer.  I suspect Brad knows.\n2. The asio framework has you providing a callback function/lambda when the GPIO changes, so if that calls a function on your class, since your class would know which part of the power on its in it could handle it.",
+      "parentUuid": "ae965d51_adb43e0d",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
