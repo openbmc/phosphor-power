@@ -122,7 +122,7 @@ class Chassis
     /**
      * Detect redundant phase faults in regulator devices in this chassis.
      *
-     * This method should be called every 15 seconds.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      * @param system system that contains this chassis
@@ -166,7 +166,7 @@ class Chassis
      * Monitors the sensors for the voltage rails produced by this chassis, if
      * any.
      *
-     * This method should be called once per second.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      * @param system system that contains the chassis

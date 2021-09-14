@@ -95,7 +95,7 @@ class System
     /**
      * Detect redundant phase faults in regulator devices in the system.
      *
-     * This method should be called every 15 seconds.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      */
@@ -138,7 +138,7 @@ class System
      * Monitors the sensors for the voltage rails produced by this system, if
      * any.
      *
-     * This method should be called once per second.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      */

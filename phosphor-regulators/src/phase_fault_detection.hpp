@@ -51,9 +51,9 @@ class System;
  * hardware.  Often a bit is checked in a status register.  The status register
  * could exist in the regulator or in a related I/O expander.
  *
- * Phase fault detection is performed every 15 seconds.  A phase fault must be
- * detected two consecutive times (15 seconds apart) before an error is logged.
- * This provides "de-glitching" to ignore transient hardware problems.
+ * Phase fault detection is executed repeatedly based on a timer.  A phase fault
+ * must be detected two consecutive times before an error is logged.  This
+ * provides "de-glitching" to ignore transient hardware problems.
  *
  * Phase faults are detected by executing actions.
  */

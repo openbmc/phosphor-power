@@ -40,8 +40,8 @@ class System;
  *
  * Sensor values are measured, actual values rather than target values.
  *
- * Sensors are read once per second.  The sensor values are stored on D-Bus,
- * making them available to external interfaces like Redfish.
+ * Sensors are read repeatedly based on a timer.  The sensor values are stored
+ * on D-Bus, making them available to external interfaces like Redfish.
  *
  * Sensors are read by executing actions, such as PMBusReadSensorAction.  To
  * read multiple sensors for a rail, multiple actions need to be executed.

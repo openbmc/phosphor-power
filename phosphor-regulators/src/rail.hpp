@@ -119,7 +119,7 @@ class Rail
      * Sensor monitoring is optional.  If sensor monitoring is defined for this
      * rail, the sensor values are read.
      *
-     * This method should be called once per second.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      * @param system system that contains the chassis

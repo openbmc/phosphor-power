@@ -137,7 +137,7 @@ class Device
      *
      * Does nothing if phase fault detection is not defined for this device.
      *
-     * This method should be called every 15 seconds.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      * @param system system that contains the chassis
@@ -255,7 +255,7 @@ class Device
      * Monitors the sensors for the voltage rails produced by this device, if
      * any.
      *
-     * This method should be called once per second.
+     * This method should be called repeatedly based on a timer.
      *
      * @param services system services like error logging and the journal
      * @param system system that contains the chassis
