@@ -5,6 +5,7 @@ Before=obmc-host-stop-pre@0.target
 Conflicts=phosphor-regulators-monitor-enable.service
 
 [Service]
+Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl monitor --disable
 
