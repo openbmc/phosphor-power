@@ -180,6 +180,24 @@
     },
     {
       "key": {
+        "uuid": "bab9d81c_d8f1ac8d",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-09-15T16:38:40Z",
+      "side": 1,
+      "message": "\u003e 1. Someone other than me could probably give a better answer.  I suspect Brad knows.\n\nI sent Brad a note and he replied describing the advantages of letting the kernel poll vs the user space polling I have implemented here.\n\nI propose changing to event driven as requested, but in a future commit.  This would allow me to prioritize some other pieces of this application and time to learn the event driven framework.",
+      "parentUuid": "06e8a944_ee9812df",
+      "revId": "8223406e32acd6070ecd589fb39b11f5173e88d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e67c51d0_3c66c691",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
