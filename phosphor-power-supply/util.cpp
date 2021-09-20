@@ -13,15 +13,10 @@ const UtilBase& getUtils()
 
 GPIOReader::GPIOReader(const std::string& namedGpio)
 {
-    try
+    line = gpiod::find_line(namedGpio);
+    if (!line)
     {
-        line = gpiod::find_line(namedGpio);
-    }
-    catch (std::exception& e)
-    {
-        phosphor::logging::log<phosphor::logging::level::ERR>(
-            fmt::format("Failed to find line: {}", e.what()).c_str());
-        throw;
+        throw std::runtime_error("Failed to find line: " + namedGpio);
     }
 }
 
