@@ -16,6 +16,10 @@ GPIOReader::GPIOReader(const std::string& namedGpio)
     try
     {
         line = gpiod::find_line(namedGpio);
+        if (!line)
+        {
+            throw std::runtime_error("Line does not exist: " + namedGpio);
+        }
     }
     catch (std::exception& e)
     {
