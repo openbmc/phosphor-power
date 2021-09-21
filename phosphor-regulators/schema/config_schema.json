@@ -364,7 +364,7 @@
                 "inventory_path": {"$ref": "#/definitions/inventory_path" },
                 "devices": {"$ref": "#/definitions/devices" }
             },
-            "required": ["number"],
+            "required": ["number", "inventory_path"],
             "additionalProperties": false
         },
 

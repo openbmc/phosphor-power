@@ -565,7 +565,6 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
     {
         json configFile = validConfigFile;
         configFile["chassis"][0].erase("comments");
-        configFile["chassis"][0].erase("inventory_path");
         configFile["chassis"][0].erase("devices");
         EXPECT_JSON_VALID(configFile);
     }
@@ -575,6 +574,13 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         configFile["chassis"][0].erase("number");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'number' is a required property");
+    }
+    // Invalid: test chassis with no inventory_path.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0].erase("inventory_path");
+        EXPECT_JSON_INVALID(configFile, "Validation failed.",
+                            "'inventory_path' is a required property");
     }
     // Invalid: test chassis with property comments wrong type.
     {
@@ -809,6 +815,7 @@ TEST(ValidateRegulatorsConfigTest, ConfigFile)
     {
         json configFile;
         configFile["chassis"][0]["number"] = 1;
+        configFile["chassis"][0]["inventory_path"] = "system/chassis";
         EXPECT_JSON_VALID(configFile);
     }
     // Valid: All properties specified
@@ -3084,6 +3091,7 @@ TEST(ValidateRegulatorsConfigTest, DuplicateChassisNumber)
     {
         json configFile = validConfigFile;
         configFile["chassis"][1]["number"] = 1;
+        configFile["chassis"][1]["inventory_path"] = "system/chassis2";
         EXPECT_JSON_INVALID(configFile, "Error: Duplicate chassis number.", "");
     }
 }

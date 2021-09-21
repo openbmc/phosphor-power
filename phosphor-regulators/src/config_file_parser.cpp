@@ -213,14 +213,11 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     }
     ++propertyCount;
 
-    // Optional inventory_path property.  Will be required in future.
-    std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis"};
-    auto inventoryPathIt = element.find("inventory_path");
-    if (inventoryPathIt != element.end())
-    {
-        inventoryPath = parseInventoryPath(*inventoryPathIt);
-        ++propertyCount;
-    }
+    // Required inventory_path property
+    const json& inventoryPathElement =
+        getRequiredProperty(element, "inventory_path");
+    std::string inventoryPath = parseInventoryPath(inventoryPathElement);
+    ++propertyCount;
 
     // Optional devices property
     std::vector<std::unique_ptr<Device>> devices{};

@@ -105,9 +105,9 @@ TEST(ConfigFileParserTests, Parse)
                 }
               ],
               "chassis": [
-                { "number": 1 },
-                { "number": 2 },
-                { "number": 3 }
+                { "number": 1, "inventory_path": "system/chassis1" },
+                { "number": 2, "inventory_path": "system/chassis2" },
+                { "number": 3, "inventory_path": "system/chassis3" }
               ]
             }
         )"_json;
@@ -126,8 +126,14 @@ TEST(ConfigFileParserTests, Parse)
 
         EXPECT_EQ(chassis.size(), 3);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
         EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis[2]->getNumber(), 3);
+        EXPECT_EQ(chassis[2]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis3");
     }
 
     // Test where fails: File does not exist
@@ -147,7 +153,9 @@ TEST(ConfigFileParserTests, Parse)
     {
         const json configFileContents = R"(
             {
-              "chassis": [ { "number": 1 } ]
+              "chassis": [
+                { "number": 1, "inventory_path": "system/chassis1" }
+              ]
             }
         )"_json;
 
@@ -786,13 +794,14 @@ TEST(ConfigFileParserTests, ParseChassis)
     {
         const json element = R"(
             {
-              "number": 1
+              "number": 1,
+              "inventory_path": "system/chassis1"
             }
         )"_json;
         std::unique_ptr<Chassis> chassis = parseChassis(element);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getInventoryPath(),
-                  "/xyz/openbmc_project/inventory/system/chassis");
+                  "/xyz/openbmc_project/inventory/system/chassis1");
         EXPECT_EQ(chassis->getDevices().size(), 0);
     }
 
@@ -830,7 +839,8 @@ TEST(ConfigFileParserTests, ParseChassis)
     {
         const json element = R"(
             {
-              "number": 0.5
+              "number": 0.5,
+              "inventory_path": "system/chassis"
             }
         )"_json;
         parseChassis(element);
@@ -881,6 +891,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         const json element = R"(
             {
               "number": 1,
+              "inventory_path": "system/chassis",
               "foo": 2
             }
         )"_json;
@@ -897,18 +908,7 @@ TEST(ConfigFileParserTests, ParseChassis)
     {
         const json element = R"(
             {
-              "devices": [
-                {
-                  "id": "vdd_regulator",
-                  "is_regulator": true,
-                  "fru": "system/chassis/motherboard/regulator2",
-                  "i2c_interface":
-                  {
-                      "bus": 1,
-                      "address": "0x70"
-                  }
-                }
-              ]
+              "inventory_path": "system/chassis"
             }
         )"_json;
         parseChassis(element);
@@ -917,6 +917,22 @@ TEST(ConfigFileParserTests, ParseChassis)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+
+    // Test where fails: Required inventory_path property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1
+            }
+        )"_json;
+        parseChassis(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: inventory_path");
     }
 
     // Test where fails: Element is not an object
@@ -936,7 +952,8 @@ TEST(ConfigFileParserTests, ParseChassis)
     {
         const json element = R"(
             {
-              "number": 0
+              "number": 0,
+              "inventory_path": "system/chassis"
             }
         )"_json;
         parseChassis(element);
@@ -953,6 +970,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         const json element = R"(
             {
               "number": 1,
+              "inventory_path": "system/chassis",
               "devices": 2
             }
         )"_json;
@@ -971,15 +989,19 @@ TEST(ConfigFileParserTests, ParseChassisArray)
     {
         const json element = R"(
             [
-              { "number": 1 },
-              { "number": 2 }
+              { "number": 1, "inventory_path": "system/chassis1" },
+              { "number": 2, "inventory_path": "system/chassis2" }
             ]
         )"_json;
         std::vector<std::unique_ptr<Chassis>> chassis =
             parseChassisArray(element);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
         EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
     }
 
     // Test where fails: Element is not an array
@@ -4404,7 +4426,7 @@ TEST(ConfigFileParserTests, ParseRoot)
         const json element = R"(
             {
               "chassis": [
-                { "number": 1 }
+                { "number": 1, "inventory_path": "system/chassis" }
               ]
             }
         )"_json;
@@ -4429,8 +4451,8 @@ TEST(ConfigFileParserTests, ParseRoot)
                 }
               ],
               "chassis": [
-                { "number": 1 },
-                { "number": 3 }
+                { "number": 1, "inventory_path": "system/chassis1" },
+                { "number": 3, "inventory_path": "system/chassis3" }
               ]
             }
         )"_json;
@@ -4483,7 +4505,7 @@ TEST(ConfigFileParserTests, ParseRoot)
             {
               "remarks": [ "Config file for a FooBar one-chassis system" ],
               "chassis": [
-                { "number": 1 }
+                { "number": 1, "inventory_path": "system/chassis" }
               ]
             }
         )"_json;
