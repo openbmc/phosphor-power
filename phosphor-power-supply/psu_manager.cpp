@@ -485,29 +485,10 @@ void PSUManager::validateConfig()
 bool PSUManager::hasRequiredPSUs(
     std::map<std::string, std::string>& additionalData)
 {
-    // Check that all PSUs have the same model name. Initialize the model
-    // variable with the first PSU name found, then use it as a base to compare
-    // against the rest of the PSUs.
     std::string model{};
-    for (const auto& psu : psus)
+    if (!validateModelName(model, additionalData))
     {
-        auto psuModel = psu->getModelName();
-        if (psuModel.empty())
-        {
-            continue;
-        }
-        if (model.empty())
-        {
-            model = psuModel;
-            continue;
-        }
-        if (psuModel != model)
-        {
-            additionalData["EXPECTED_MODEL"] = model;
-            additionalData["ACTUAL_MODEL"] = psuModel;
-            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
-            return false;
-        }
+        return false;
     }
 
     auto presentCount =
@@ -576,6 +557,37 @@ bool PSUManager::hasRequiredPSUs(
 
     additionalData.insert(tmpAdditionalData.begin(), tmpAdditionalData.end());
     return false;
+}
+
+bool PSUManager::validateModelName(
+    std::string& model, std::map<std::string, std::string>& additionalData)
+{
+    // Check that all PSUs have the same model name. Initialize the model
+    // variable with the first PSU name found, then use it as a base to compare
+    // against the rest of the PSUs.
+    model.clear();
+    for (const auto& psu : psus)
+    {
+        auto psuModel = psu->getModelName();
+        if (psuModel.empty())
+        {
+            continue;
+        }
+        if (model.empty())
+        {
+            model = psuModel;
+            continue;
+        }
+        if (psuModel != model)
+        {
+            additionalData["EXPECTED_MODEL"] = model;
+            additionalData["ACTUAL_MODEL"] = psuModel;
+            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
+            model.clear();
+            return false;
+        }
+    }
+    return true;
 }
 
 } // namespace phosphor::power::manager

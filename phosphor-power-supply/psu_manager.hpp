@@ -263,6 +263,17 @@ class PSUManager
     bool hasRequiredPSUs(std::map<std::string, std::string>& additionalData);
 
     /**
+     * @brief Helper function to validate that all PSUs have the same model name
+     *
+     * @param[out] model - The model name. Empty if there is a mismatch.
+     * @param[out] additionalData - If there is a mismatch, it contains debug
+     *             information such as the mismatched model name.
+     * @return true if all the PSUs have the same model name, false otherwise.
+     */
+    bool validateModelName(std::string& model,
+                           std::map<std::string, std::string>& additionalData);
+
+    /**
      * @brief Map of supported PSU configurations that include the model name
      * and their properties.
      */
