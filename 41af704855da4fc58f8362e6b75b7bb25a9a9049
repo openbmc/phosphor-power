@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a78ee0d_292e99da",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-09-24T18:08:15Z",
+      "side": 1,
+      "message": "Am I missing something?\n\nhttps://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/cxx/chip.cpp?h\u003dv1.6.x#n131\n\tThere is a throw.\n\nThat is used by: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/tree/bindings/cxx/line.cpp?h\u003dv1.6.x#n327\n\nSo, it might throw system_error, or return an empty line?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 5
+      },
+      "revId": "41af704855da4fc58f8362e6b75b7bb25a9a9049",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
