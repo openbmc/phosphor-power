@@ -21,6 +21,10 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
+// Validation timeout. The EM interfaces are added about every second or less,
+// so double that time to 2s for the timeout value.
+constexpr auto validationTimeout = std::chrono::milliseconds(2000);
+
 /**
  * @class PSUManager
  *
@@ -84,7 +88,7 @@ class PSUManager
             if (state)
             {
                 powerOn = true;
-                validateConfig();
+                validationTimer->restartOnce(validationTimeout);
             }
             else
             {
@@ -152,6 +156,14 @@ class PSUManager
     std::unique_ptr<
         sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
         timer;
+
+    /**
+     * The timer that performs power supply validation as the entity manager
+     * interfaces show up in d-bus.
+     */
+    std::unique_ptr<
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
+        validationTimer;
 
     /**
      * Create an error
