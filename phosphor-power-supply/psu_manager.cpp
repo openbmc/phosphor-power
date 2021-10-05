@@ -44,6 +44,9 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::analyze, this), interval);
 
+    validationTimer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+        e, std::bind(&PSUManager::validateConfig, this));
+
     // Subscribe to power state changes
     powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
     powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
@@ -285,7 +288,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
         // processed
         if (powerOn && !psus.empty() && !supportedConfigs.empty())
         {
-            validateConfig();
+            validationTimer->restartOnce(validationTimeout);
         }
     }
     catch (const std::exception& e)
@@ -311,7 +314,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             powerOn = true;
-            validateConfig();
+            validationTimer->restartOnce(validationTimeout);
             clearFaults();
         }
         else
