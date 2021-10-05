@@ -23,6 +23,10 @@ constexpr auto presLineName = "NamedPresenceGpio";
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 
+// Validation timeout. The EM interfaces are added about every second or less,
+// so double that time to 2s for the timeout value.
+constexpr auto validationTimeout = std::chrono::milliseconds(2000);
+
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus)
 {
@@ -43,6 +47,9 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     auto interval = std::chrono::milliseconds(1000);
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::analyze, this), interval);
+
+    validationTimer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+        e, std::bind(&PSUManager::validateConfig, this));
 
     // Subscribe to power state changes
     powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
@@ -285,7 +292,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
         // processed
         if (powerOn && !psus.empty() && !supportedConfigs.empty())
         {
-            validateConfig();
+            validationTimer->restartOnce(validationTimeout);
         }
     }
     catch (std::exception& e)
@@ -311,7 +318,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         if (state)
         {
             powerOn = true;
-            validateConfig();
+            validationTimer->restartOnce(validationTimeout);
             clearFaults();
         }
         else
