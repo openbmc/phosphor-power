@@ -154,6 +154,14 @@ class PSUManager
         timer;
 
     /**
+     * The timer that performs power supply validation as the entity manager
+     * interfaces show up in d-bus.
+     */
+    std::unique_ptr<
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
+        validationTimer;
+
+    /**
      * Create an error
      *
      * @param[in] faultName - 'name' message for the BMC error log entry
