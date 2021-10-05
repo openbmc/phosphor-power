@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ee191b94_625d8aae",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-10-05T00:04:16Z",
+      "side": 1,
+      "message": "Yes, in response to Mike\u0027s comment so that the app would end with a unique message / error instead of just \"Internal Error\".  If we get to this spot in the code, the system is not going to power on and the app does not need to continue.  What I really want to do, is what ever a well behaved OBMC app does in that situation.",
+      "parentUuid": "a1166b65_15759fcf",
+      "revId": "287e2e161bc8d12058f84843d6b255eb7117f370",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aa7150f_cf26fb15",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "287e2e161bc8d12058f84843d6b255eb7117f370",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdefc447_d07540ea",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-10-05T00:04:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aa7150f_cf26fb15",
+      "range": {
+        "startLine": 136,
+        "startChar": 39,
+        "endLine": 136,
+        "endChar": 58
+      },
+      "revId": "287e2e161bc8d12058f84843d6b255eb7117f370",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
