@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43406fb6_eb85d9db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-06T20:24:06Z",
+      "side": 1,
+      "message": "Nit: D-Bus",
+      "range": {
+        "startLine": 10,
+        "startChar": 55,
+        "endLine": 10,
+        "endChar": 60
+      },
+      "revId": "19b26e4b6d0931c283667ee6ff42f840689e8154",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30246b15_ce17473f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-06T20:24:06Z",
+      "side": 1,
+      "message": "It is not really that all present power supplies are on D-Bus, is it? It is that the information to determine which power supplies might be present is missing from the the configuration information entity-manager publishes on D-Bus.",
+      "range": {
+        "startLine": 11,
+        "startChar": 37,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "19b26e4b6d0931c283667ee6ff42f840689e8154",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d55dcff4_d56bb3ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-06T20:24:06Z",
+      "side": 1,
+      "message": "Nit: traces",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "19b26e4b6d0931c283667ee6ff42f840689e8154",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
