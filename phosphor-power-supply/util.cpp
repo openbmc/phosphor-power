@@ -21,7 +21,7 @@ GPIOReader::GPIOReader(const std::string& namedGpio)
             throw std::runtime_error("Line does not exist: " + namedGpio);
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         phosphor::logging::log<phosphor::logging::level::ERR>(
             fmt::format("Failed to find line: {}", e.what()).c_str());
@@ -60,7 +60,7 @@ int GPIOReader::read()
         {
             value = line.get_value();
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             log<level::ERR>(
                 fmt::format("Failed to get_value of GPIO line: {}", e.what())
@@ -71,7 +71,7 @@ int GPIOReader::read()
 
         line.release();
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>("Failed to request GPIO line",
                         entry("MSG=%s", e.what()));

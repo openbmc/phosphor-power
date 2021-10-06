@@ -88,7 +88,7 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
             records.pop_back();
         }
     }
-    catch (InvalidRecordException& e)
+    catch (const InvalidRecordException& e)
     {
         return false;
     }

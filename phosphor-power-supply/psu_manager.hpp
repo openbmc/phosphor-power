@@ -92,7 +92,7 @@ class PSUManager
                 runValidateConfig = true;
             }
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             log<level::INFO>("Failed to get power state. Assuming it is off.");
             powerOn = false;

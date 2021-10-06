@@ -72,7 +72,7 @@ void UCD90160::onFailure()
             createPowerFaultLog();
         }
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         if (!accessError)
         {
@@ -91,7 +91,7 @@ void UCD90160::analyze()
 
         checkPGOODFaults(true);
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         if (!accessError)
         {
@@ -156,7 +156,7 @@ bool UCD90160::checkVOUTFaults()
                 nv.add("STATUS_VOUT", vout);
                 nv.add("MFR_STATUS", readMFRStatus());
             }
-            catch (device_error::ReadFailure& e)
+            catch (const device_error::ReadFailure& e)
             {
                 log<level::ERR>("ReadFailure when collecting metadata");
                 commit<device_error::ReadFailure>();
@@ -221,7 +221,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
 
             gpiStatus = gpio->second->read();
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             if (!accessError)
             {
@@ -254,7 +254,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
                 nv.add("MFR_STATUS", readMFRStatus());
                 nv.add("INPUT_STATUS", status);
             }
-            catch (device_error::ReadFailure& e)
+            catch (const device_error::ReadFailure& e)
             {
                 log<level::ERR>("ReadFailure when collecting metadata");
                 commit<device_error::ReadFailure>();
@@ -285,7 +285,7 @@ void UCD90160::createPowerFaultLog()
         nv.add("STATUS_WORD", readStatusWord());
         nv.add("MFR_STATUS", readMFRStatus());
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         log<level::ERR>("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
@@ -383,7 +383,7 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
             value = g.read();
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             if (!gpioAccessError)
             {
@@ -449,7 +449,7 @@ void UCD90160::gpuPGOODError(const std::string& callout)
         nv.add("STATUS_WORD", readStatusWord());
         nv.add("MFR_STATUS", readMFRStatus());
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         log<level::ERR>("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
@@ -471,7 +471,7 @@ void UCD90160::gpuOverTempError(const std::string& callout)
         nv.add("STATUS_WORD", readStatusWord());
         nv.add("MFR_STATUS", readMFRStatus());
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         log<level::ERR>("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
@@ -493,7 +493,7 @@ void UCD90160::memGoodError(const std::string& callout)
         nv.add("STATUS_WORD", readStatusWord());
         nv.add("MFR_STATUS", readMFRStatus());
     }
-    catch (device_error::ReadFailure& e)
+    catch (const device_error::ReadFailure& e)
     {
         log<level::ERR>("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();

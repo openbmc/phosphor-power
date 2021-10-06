@@ -57,7 +57,7 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message::message&)
 
         util::powerOff<Shutdown>(bus);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         // No need to crash
         log<level::ERR>(e.what());

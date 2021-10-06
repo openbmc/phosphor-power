@@ -114,7 +114,7 @@ int PGOODMonitor::run()
 
         return timer.get_event().loop();
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(e.what());
         log<level::ERR>("Unexpected failure prevented PGOOD checking");

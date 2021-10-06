@@ -125,7 +125,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
                     std::get_if<std::string>(&properties[presLineName]);
             }
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {}
     }
 
@@ -221,7 +221,7 @@ void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
 
         supportedConfigs.emplace(*model, sys);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {}
 }
 
@@ -249,7 +249,7 @@ void PSUManager::getSystemProperties()
             populateSysProperties(properties);
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         // Interface or property not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
@@ -288,7 +288,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
             validateConfig();
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         // Ignore, the property may be of a different type than expected.
     }
@@ -350,7 +350,7 @@ void PSUManager::createError(
 
         auto reply = bus.call(method);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
             fmt::format(

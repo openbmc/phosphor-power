@@ -168,7 +168,7 @@ bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState)
         getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH, service, bus,
                              state);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::INFO>("Failed to get power state.");
     }

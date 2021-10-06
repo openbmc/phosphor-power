@@ -78,7 +78,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          std::string(PowerSupplyInputFault::errName));
         }
     }
-    catch (ReadFailure& e)
+    catch (const ReadFailure& e)
     {
         log<level::INFO>("Unable to read the 2 byte STATUS_WORD value to check "
                          "for power-supply input faults.");
@@ -122,7 +122,7 @@ void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
             auto val = pmbusIntf.read(cmd, type);
             nv.add(cmd, val);
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             log<level::INFO>("Unable to capture metadata",
                              entry("CMD=%s", cmd.c_str()));
@@ -158,7 +158,7 @@ void PowerSupply::analyze()
             updateHistory();
         }
     }
-    catch (ReadFailure& e)
+    catch (const ReadFailure& e)
     {
         if (readFail < FAULT_COUNT)
         {
@@ -597,7 +597,7 @@ void PowerSupply::resolveError(const std::string& callout,
             }
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::INFO>("Failed to resolve error",
                          entry("CALLOUT=%s", callout.c_str()),
@@ -637,7 +637,7 @@ void PowerSupply::updateInventory()
                                                    inventoryPMBusAccessType)
                             : "");
             }
-            catch (ReadFailure& e)
+            catch (const ReadFailure& e)
             {}
         }
     }
@@ -670,7 +670,7 @@ void PowerSupply::updateInventory()
 
         auto reply = bus.call(method);
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(e.what(), entry("PATH=%s", inventoryPath.c_str()));
     }
@@ -699,7 +699,7 @@ void PowerSupply::syncHistory()
 
         recordManager->clear();
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         // Do nothing.  There would already be a journal entry.
     }

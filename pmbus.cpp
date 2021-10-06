@@ -98,7 +98,7 @@ std::string PMBus::getDeviceName()
         file.open(path);
         file >> name;
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>((std::string("Unable to read PMBus device name "
                                      "PATH=") +
@@ -147,7 +147,7 @@ bool PMBus::readBit(const std::string& name, Type type)
             elog<InternalFailure>();
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         auto rc = errno;
 
@@ -189,7 +189,7 @@ uint64_t PMBus::read(const std::string& name, Type type)
         file.open(path);
         file >> std::hex >> data;
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         auto rc = errno;
         log<level::ERR>((std::string("Failed to read sysfs file "
@@ -222,7 +222,7 @@ std::string PMBus::readString(const std::string& name, Type type)
         file.open(path);
         file >> data;
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         auto rc = errno;
         log<level::ERR>((std::string("Failed to read sysfs file "

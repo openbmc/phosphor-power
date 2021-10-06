@@ -114,7 +114,7 @@ void PowerSupply::bindOrUnbindDriver(bool present)
         file << bindDevice;
         file.close();
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         auto err = errno;
 
@@ -156,7 +156,7 @@ void PowerSupply::updatePresenceGPIO()
             present = false;
         }
     }
-    catch (std::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
             fmt::format("presenceGPIO read fail: {}", e.what()).c_str());
@@ -261,7 +261,7 @@ void PowerSupply::analyze()
                 vinUVFault = false;
             }
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             readFail++;
             phosphor::logging::commit<ReadFailure>();
@@ -316,7 +316,7 @@ void PowerSupply::clearFaults()
             static_cast<void>(
                 pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Since I do not care what the return value is, I really do not
             // care much if it gets a ReadFailure either. However, this
@@ -426,7 +426,7 @@ void PowerSupply::updateInventory()
             assetProps.emplace(MODEL_PROP, ccin);
             modelName = ccin;
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Ignore the read failure, let pmbus code indicate failure,
             // path...
@@ -441,7 +441,7 @@ void PowerSupply::updateInventory()
             pn = pmbusIntf->readString(PART_NUMBER, Type::HwmonDeviceDebug);
             assetProps.emplace(PN_PROP, pn);
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Ignore the read failure, let pmbus code indicate failure,
             // path...
@@ -451,7 +451,7 @@ void PowerSupply::updateInventory()
         {
             fn = pmbusIntf->readString(FRU_NUMBER, Type::HwmonDeviceDebug);
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Ignore the read failure, let pmbus code indicate failure,
             // path...
@@ -464,7 +464,7 @@ void PowerSupply::updateInventory()
             sn = pmbusIntf->readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
             assetProps.emplace(SN_PROP, sn);
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Ignore the read failure, let pmbus code indicate failure,
             // path...
@@ -476,7 +476,7 @@ void PowerSupply::updateInventory()
                 pmbusIntf->readString(FW_VERSION, Type::HwmonDeviceDebug);
             versionProps.emplace(VERSION_PROP, fwVersion);
         }
-        catch (ReadFailure& e)
+        catch (const ReadFailure& e)
         {
             // Ignore the read failure, let pmbus code indicate failure,
             // path...
@@ -541,7 +541,7 @@ void PowerSupply::updateInventory()
 
             auto reply = bus.call(method);
         }
-        catch (std::exception& e)
+        catch (const std::exception& e)
         {
             log<level::ERR>(
                 std::string(e.what() + std::string(" PATH=") + inventoryPath)

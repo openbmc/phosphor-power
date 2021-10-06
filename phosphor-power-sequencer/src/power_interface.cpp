@@ -54,7 +54,7 @@ int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
 
             sdbusplus::message::message(msg).append(pgood);
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -87,7 +87,7 @@ int PowerInterface::callbackGetPgoodTimeout(sd_bus* /*bus*/,
 
             sdbusplus::message::message(msg).append(timeout);
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -121,7 +121,7 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
             reply.append(pgood);
             reply.method_return();
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -157,7 +157,7 @@ int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
                 fmt::format("callbackSetPgoodTimeout: {}", timeout).c_str());
             pwrObj->setPgoodTimeout(timeout);
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -190,7 +190,7 @@ int PowerInterface::callbackGetState(sd_bus* /*bus*/, const char* /*path*/,
 
             sdbusplus::message::message(msg).append(state);
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
@@ -231,7 +231,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
 
             m.new_method_return().method_return();
         }
-        catch (sdbusplus::exception_t& e)
+        catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
         }
