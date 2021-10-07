@@ -16,6 +16,24 @@
       "revId": "2faac48e192d79a7d9bd8b579bcb183ba3ff3508",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "684c71a1_d8293ab2",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-07T15:24:32Z",
+      "side": 1,
+      "message": "Done. Yes! missed it, thanks. Added it and updated the commit with testing results.",
+      "parentUuid": "a4b480db_0e0cbadb",
+      "revId": "2faac48e192d79a7d9bd8b579bcb183ba3ff3508",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
