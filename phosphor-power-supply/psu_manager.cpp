@@ -377,6 +377,7 @@ void PSUManager::analyze()
 
         for (auto& psu : psus)
         {
+            additionalData.clear();
             // TODO: Fault priorities #918
             if (!psu->isFaultLogged() && !psu->isPresent())
             {
