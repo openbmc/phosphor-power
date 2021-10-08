@@ -325,9 +325,8 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
     }
 }
 
-void PSUManager::createError(
-    const std::string& faultName,
-    const std::map<std::string, std::string>& additionalData)
+void PSUManager::createError(const std::string& faultName,
+                             std::map<std::string, std::string>& additionalData)
 {
     using namespace sdbusplus::xyz::openbmc_project;
     constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
@@ -336,6 +335,8 @@ void PSUManager::createError(
 
     try
     {
+        additionalData["_PID"] = std::to_string(getpid());
+
         auto service =
             util::getService(loggingObjectPath, loggingCreateInterface, bus);
 
@@ -377,7 +378,6 @@ void PSUManager::analyze()
 
         for (auto& psu : psus)
         {
-            additionalData["_PID"] = std::to_string(getpid());
             // TODO: Fault priorities #918
             if (!psu->isFaultLogged() && !psu->isPresent())
             {

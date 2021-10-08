@@ -172,7 +172,7 @@ class PSUManager
      * @param[in] additionalData - The AdditionalData property for the error
      */
     void createError(const std::string& faultName,
-                     const std::map<std::string, std::string>& additionalData);
+                     std::map<std::string, std::string>& additionalData);
 
     /**
      * Analyze the status of each of the power supplies.
