@@ -378,6 +378,7 @@ void PSUManager::analyze()
 
         for (auto& psu : psus)
         {
+            additionalData.clear();
             additionalData["_PID"] = std::to_string(getpid());
             // TODO: Fault priorities #918
             if (!psu->isFaultLogged() && !psu->isPresent())
