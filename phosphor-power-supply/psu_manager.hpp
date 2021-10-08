@@ -169,10 +169,10 @@ class PSUManager
      * Create an error
      *
      * @param[in] faultName - 'name' message for the BMC error log entry
-     * @param[in] additionalData - The AdditionalData property for the error
+     * @param[in,out] additionalData - The AdditionalData property for the error
      */
     void createError(const std::string& faultName,
-                     const std::map<std::string, std::string>& additionalData);
+                     std::map<std::string, std::string>& additionalData);
 
     /**
      * Analyze the status of each of the power supplies.
