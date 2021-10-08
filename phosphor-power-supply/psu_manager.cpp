@@ -374,15 +374,17 @@ void PSUManager::analyze()
     if (powerOn)
     {
         std::map<std::string, std::string> additionalData;
-        auto requiredPSUsPresent = hasRequiredPSUs(additionalData);
 
         for (auto& psu : psus)
         {
             // TODO: Fault priorities #918
             if (!psu->isFaultLogged() && !psu->isPresent())
             {
+                std::map<std::string, std::string> requiredPSUsData;
+                auto requiredPSUsPresent = hasRequiredPSUs(requiredPSUsData);
                 if (!requiredPSUsPresent)
                 {
+                    additionalData.merge(requiredPSUsData);
                     // Create error for power supply missing.
                     additionalData["CALLOUT_INVENTORY_PATH"] =
                         psu->getInventoryPath();
