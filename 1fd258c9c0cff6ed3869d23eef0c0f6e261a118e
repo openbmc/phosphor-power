@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0058e3b5_600107ee",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2021-10-09T08:58:51Z",
+      "side": 1,
+      "message": "Sorry, I am not following.\nWhy can not this line be moved to L:389?",
+      "range": {
+        "startLine": 338,
+        "startChar": 8,
+        "endLine": 338,
+        "endChar": 45
+      },
+      "revId": "1fd258c9c0cff6ed3869d23eef0c0f6e261a118e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ce64cf6_d1514bf0",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2021-10-09T08:58:51Z",
+      "side": 1,
+      "message": "Nit: in, out",
+      "range": {
+        "startLine": 172,
+        "startChar": 14,
+        "endLine": 172,
+        "endChar": 16
+      },
+      "revId": "1fd258c9c0cff6ed3869d23eef0c0f6e261a118e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
