@@ -21,9 +21,9 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
-// Validation timeout. The EM interfaces are added about every second or less,
-// so double that time to 2s for the timeout value.
-constexpr auto validationTimeout = std::chrono::milliseconds(2000);
+// Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
+// before performing the validation.
+constexpr auto validationTimeout = std::chrono::seconds(10);
 
 /**
  * @class PSUManager
