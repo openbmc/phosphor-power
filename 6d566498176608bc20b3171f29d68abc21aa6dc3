@@ -16,6 +16,24 @@
       "revId": "6d566498176608bc20b3171f29d68abc21aa6dc3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "017ba3d6_ddcfc4c8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-11T19:24:23Z",
+      "side": 1,
+      "message": "That initially seems like a good idea, but if a power supply is missing, but is not required, then we end up plopping junk in additionalData.\n\nIf this statement/question applies to the current form, requiredPSUData, then I would say yes, that makes a bit more sense.",
+      "parentUuid": "59d5e9ad_f1e87bd3",
+      "revId": "6d566498176608bc20b3171f29d68abc21aa6dc3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
