@@ -213,11 +213,12 @@ void PowerSupply::analyze()
                 {
                     if (!inputFault)
                     {
-                        log<level::INFO>(fmt::format("INPUT fault: "
-                                                     "status word = {:#04x}, "
-                                                     "MFR fault = {:#02x}",
-                                                     statusWord, statusMFR)
-                                             .c_str());
+                        log<level::INFO>(
+                            fmt::format("INPUT fault: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
                     }
 
                     faultFound = true;
@@ -228,11 +229,12 @@ void PowerSupply::analyze()
                 {
                     if (!mfrFault)
                     {
-                        log<level::ERR>(fmt::format("MFR fault: "
-                                                    "status word = {:#04x} "
-                                                    "MFR fault =  {:#02x}",
-                                                    statusWord, statusMFR)
-                                            .c_str());
+                        log<level::ERR>(
+                            fmt::format("MFR fault: "
+                                        "STATUS_WORD = {:#04x} "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
                     }
                     faultFound = true;
                     mfrFault = true;
@@ -242,11 +244,12 @@ void PowerSupply::analyze()
                 {
                     if (!vinUVFault)
                     {
-                        log<level::INFO>(fmt::format("VIN_UV fault: "
-                                                     "status word = {:#04x}, "
-                                                     "MFR fault = {:#02x}",
-                                                     statusWord, statusMFR)
-                                             .c_str());
+                        log<level::INFO>(
+                            fmt::format("VIN_UV fault: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
                     }
 
                     faultFound = true;
