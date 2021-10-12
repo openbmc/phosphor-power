@@ -395,10 +395,15 @@ void PSUManager::analyze()
             }
             else if (!psu->isFaultLogged() && psu->isFaulted())
             {
-                additionalData["STATUS_WORD"] =
-                    std::to_string(psu->getStatusWord());
-                additionalData["STATUS_MFR"] =
-                    std::to_string(psu->getMFRFault());
+                // String stream to use for hexadecimal format data
+                std::ostringstream ss;
+                ss << "0x" << std::hex << std::uppercase
+                   << static_cast<uint16_t>(psu->getStatusWord());
+                additionalData["STATUS_WORD"] = ss.str();
+                ss.str("");
+                ss << "0x" << std::hex << std::uppercase
+                   << static_cast<uint16_t>(psu->getMFRFault());
+                additionalData["STATUS_MFR"] = ss.str();
                 // If there are faults being reported, they possibly could be
                 // related to a bug in the firmware version running on the power
                 // supply. Capture that data into the error as well.
