@@ -395,10 +395,12 @@ void PSUManager::analyze()
             }
             else if (!psu->isFaultLogged() && psu->isFaulted())
             {
+                // Add STATUS_WORD and STATUS_MFR last response, in padded
+                // hexadecimal format.
                 additionalData["STATUS_WORD"] =
-                    std::to_string(psu->getStatusWord());
+                    fmt::format("{:#04x}", psu->getStatusWord());
                 additionalData["STATUS_MFR"] =
-                    std::to_string(psu->getMFRFault());
+                    fmt::format("{:#02x}", psu->getMFRFault());
                 // If there are faults being reported, they possibly could be
                 // related to a bug in the firmware version running on the power
                 // supply. Capture that data into the error as well.
