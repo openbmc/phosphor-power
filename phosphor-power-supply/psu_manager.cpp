@@ -411,6 +411,12 @@ void PSUManager::analyze()
 
                 if ((psu->hasInputFault() || psu->hasVINUVFault()))
                 {
+                    // Include STATUS_INPUT for input faults.
+                    ss.str("");
+                    ss << "0x" << std::hex << std::uppercase
+                       << static_cast<uint16_t>(psu->getStatusInput());
+                    additionalData["STATUS_INPUT"] = ss.str();
+
                     /* The power supply location might be needed if the input
                      * fault is due to a problem with the power supply itself.
                      * Include the inventory path with a call out priority of

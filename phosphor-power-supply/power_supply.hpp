@@ -145,6 +145,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last read value from STATUS_INPUT.
+     */
+    uint64_t getStatusInput() const
+    {
+        return statusInput;
+    }
+
+    /**
      * @brief Returns the last read value from STATUS_MFR.
      */
     uint64_t getMFRFault() const
@@ -262,6 +270,9 @@ class PowerSupply
 
     /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
+
+    /** @brief Will be updated to the latest/lastvalue read from STATUS_INPUT.*/
+    uint64_t statusInput = 0;
 
     /** @brief Will be updated to the latest/lastvalue read from STATUS_MFR.*/
     uint64_t statusMFR = 0;

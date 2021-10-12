@@ -208,16 +208,17 @@ void PowerSupply::analyze()
 
             if (statusWord)
             {
+                statusInput = pmbusIntf->read(STATUS_INPUT, Type::Debug);
                 statusMFR = pmbusIntf->read(STATUS_MFR, Type::Debug);
                 if (statusWord & status_word::INPUT_FAULT_WARN)
                 {
                     if (!inputFault)
                     {
                         log<level::INFO>(
-                            fmt::format("INPUT fault: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
-                                        statusWord, statusMFR)
+                            fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_INPUT = {:#02x}",
+                                        statusWord, statusMFR, statusInput)
                                 .c_str());
                     }
 
@@ -245,10 +246,10 @@ void PowerSupply::analyze()
                     if (!vinUVFault)
                     {
                         log<level::INFO>(
-                            fmt::format("VIN_UV fault: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
-                                        statusWord, statusMFR)
+                            fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_INPUT = {:#02x}",
+                                        statusWord, statusMFR, statusInput)
                                 .c_str());
                     }
 
