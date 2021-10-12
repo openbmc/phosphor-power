@@ -152,7 +152,8 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.isPresent(), false);
 
     // STATUS_WORD 0x0000 is powered on, no faults.
-    // It will read STATUS_MFR at the same time, so there are 2 reads.
+    // It will read STATUS_INPUT and STATUS_MFR at the same time, so there are
+    // should be 3 reads expected.
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
     EXPECT_CALL(mockPMBus, read(_, _)).Times(2).WillRepeatedly(Return(0x0000));
     psu2.analyze();
@@ -163,10 +164,20 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.hasVINUVFault(), false);
 
     // STATUS_WORD input fault/warn
-    EXPECT_CALL(mockPMBus, read(_, _))
-        .Times(2)
-        .WillOnce(Return(status_word::INPUT_FAULT_WARN))
-        .WillOnce(Return(0x0000));
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+        .Times(1)
+        .WillOnce(Return(status_word::INPUT_FAULT_WARN));
+    // STATUS_INPUT fault bits ... on.
+    EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        .Times(1)
+        .WillOnce(Return(0x38));
+    // STATUS_MFR don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
+
+    // EXPECT_CALL(mockPMBus, read(_, _))
+    //    .Times(2)
+    //    .WillOnce(Return(status_word::INPUT_FAULT_WARN))
+    //    .WillOnce(Return(0x0000));
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
     EXPECT_EQ(psu2.isFaulted(), true);
@@ -176,10 +187,22 @@ TEST_F(PowerSupplyTests, Analyze)
 
     // STATUS_WORD INPUT/UV fault.
     // First need it to return good status, then the fault
-    EXPECT_CALL(mockPMBus, read(_, _))
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+        .Times(2)
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::VIN_UV_FAULT))
-        .WillOnce(Return(0x0000));
+        .WillOnce(Return(
+            (status_word::INPUT_FAULT_WARN | status_word::VIN_UV_FAULT)));
+    // STATUS_INPUT fault bits ... on.
+    EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        .Times(1)
+        .WillOnce(Return(0x38));
+    // STATUS_MFR don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
+
+    // EXPECT_CALL(mockPMBus, read(_, _))
+    //    .WillOnce(Return(0x0000))
+    //    .WillOnce(Return(status_word::VIN_UV_FAULT))
+    //    .WillOnce(Return(0x0000));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -189,10 +212,22 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.hasVINUVFault(), true);
 
     // STATUS_WORD MFR fault.
-    EXPECT_CALL(mockPMBus, read(_, _))
+    // First need it to return good status, then the fault
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+        .Times(2)
         .WillOnce(Return(0x0000))
-        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT))
-        .WillOnce(Return(1)); // mock return for read(STATUS_MFR... )
+        .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT));
+    // STATUS_INPUT fault bits ... on.
+    EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        .Times(1)
+        .WillOnce(Return(0x00));
+    // STATUS_MFR bits on.
+    EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0xFF));
+
+    // EXPECT_CALL(mockPMBus, read(_, _))
+    //    .WillOnce(Return(0x0000))
+    //    .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT))
+    //    .WillOnce(Return(1)); // mock return for read(STATUS_MFR... )
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -205,6 +240,8 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
         .WillOnce(Return(status_word::TEMPERATURE_FAULT_WARN))
+        .WillOnce(Return(0x00))
+        .WillOnce(Return(0x00))
         .WillOnce(Return(0x0000));
     psu2.analyze();
     psu2.analyze();
@@ -218,7 +255,8 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_CALL(mockPMBus, read(_, _))
         .WillOnce(Return(0x0000))
         .WillOnce(Return(status_word::FAN_FAULT))
-        .WillOnce(Return(0x0000));
+        .WillOnce(Return(0x00))
+        .WillOnce(Return(0x00));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
