@@ -47,6 +47,16 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     validationTimer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&PSUManager::validateConfig, this));
 
+    try
+    {
+        powerConfigGPIO = createGPIO("power-config-full-load");
+    }
+    catch (const std::exception& e)
+    {
+        // Ignore error, GPIO may not be implemented in this system.
+        powerConfigGPIO = nullptr;
+    }
+
     // Subscribe to power state changes
     powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
     powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
@@ -316,6 +326,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
             powerOn = true;
             validationTimer->restartOnce(validationTimeout);
             clearFaults();
+            setPowerConfigGPIO();
         }
         else
         {
@@ -586,6 +597,32 @@ bool PSUManager::validateModelName(
         }
     }
     return true;
+}
+
+void PSUManager::setPowerConfigGPIO()
+{
+    if (!powerConfigGPIO)
+    {
+        return;
+    }
+
+    std::string model{};
+    std::map<std::string, std::string> additionalData;
+    if (!validateModelName(model, additionalData))
+    {
+        return;
+    }
+
+    auto config = supportedConfigs.find(model);
+    if (config != supportedConfigs.end())
+    {
+        // The power-config-full-load is an open drain GPIO. Set it to low (0)
+        // when the system is expected to have 4 PSUs, else set it to high (1)
+        // to signal that 2 PSUs are expected, this is the default.
+        auto powerConfigCount = (config->second.powerSupplyCount == 4 ? 0 : 1);
+        auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
+        powerConfigGPIO->write(powerConfigCount, flags);
+    }
 }
 
 } // namespace phosphor::power::manager

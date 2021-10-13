@@ -106,6 +106,7 @@ class PSUManager
         onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
         clearFaults();
         updateInventory();
+        setPowerConfigGPIO();
     }
 
     /**
@@ -274,6 +275,12 @@ class PSUManager
                            std::map<std::string, std::string>& additionalData);
 
     /**
+     * @brief Set the power-config-full-load GPIO depending on the number of
+     *        power supplies the system should have.
+     */
+    void setPowerConfigGPIO();
+
+    /**
      * @brief Map of supported PSU configurations that include the model name
      * and their properties.
      */
@@ -283,6 +290,11 @@ class PSUManager
      * @brief The vector for power supplies.
      */
     std::vector<std::unique_ptr<PowerSupply>> psus;
+
+    /**
+     * @brief The libgpiod object for setting the power supply config
+     */
+    std::unique_ptr<GPIOInterface> powerConfigGPIO = nullptr;
 };
 
 } // namespace phosphor::power::manager
