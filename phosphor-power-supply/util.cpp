@@ -23,9 +23,8 @@ GPIOInterface::GPIOInterface(const std::string& namedGpio)
     }
     catch (const std::exception& e)
     {
-        phosphor::logging::log<phosphor::logging::level::ERR>(
-            fmt::format("Failed to find line: {}", e.what()).c_str());
-        throw;
+        throw std::runtime_error(std::string("Failed to find line: ") +
+                                 e.what());
     }
 }
 
