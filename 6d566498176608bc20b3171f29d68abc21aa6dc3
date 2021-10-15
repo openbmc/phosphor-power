@@ -70,6 +70,24 @@
       "revId": "6d566498176608bc20b3171f29d68abc21aa6dc3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "929ef066_192feb14",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-15T19:32:54Z",
+      "side": 1,
+      "message": "Ah! I had not thought about the periodic calling of this analyze() function. I will move it.",
+      "parentUuid": "eadac520_90eff46f",
+      "revId": "6d566498176608bc20b3171f29d68abc21aa6dc3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
