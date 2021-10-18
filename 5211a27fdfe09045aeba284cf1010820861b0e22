@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea7222f9_b7d7bbf9",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-10-18T23:34:08Z",
+      "side": 1,
+      "message": "How does request() handle a value other than 0 or 1?  Does it flag that as an error, or just treat everything that is !\u003d 0 as 1, or ?\n\nJust wondering what would happen if someone tries to write 2 or -99.",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 17
+      },
+      "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b27a4790_5bc4324f",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-10-18T23:34:08Z",
+      "side": 1,
+      "message": "Should the class name be changed now that it supports writing as well?",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 17
+      },
+      "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
