@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "119c87a2_119b4421",
+        "filename": "OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-18T19:07:22Z",
+      "side": 1,
+      "message": "The names and sections look fine, but:\n# It is expected that these 4 sections will be listed in the order above and\n# data within them will be kept sorted.\n\nNot sure why they should be sorted. Compared to openbmc/OWNERS and pldm/OWNERS. The pldm/OWNERS has things sorted in the sections.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "fa96f409712d1792bfd4196a3fd571b5fa204814",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
