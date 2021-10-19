@@ -408,6 +408,8 @@ void PSUManager::analyze()
 
                 if (psu->hasCommFault())
                 {
+                    additionalData["STATUS_CML"] =
+                        fmt::format("{:#02x}", psu->getStatusCML());
                     /* Attempts to communicate with the power supply have
                      * reached there limit. Create an error. */
                     additionalData["CALLOUT_DEVICE_PATH"] =
