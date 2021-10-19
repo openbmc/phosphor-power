@@ -406,7 +406,20 @@ void PSUManager::analyze()
                 // supply. Capture that data into the error as well.
                 additionalData["FW_VERSION"] = psu->getFWVersion();
 
-                if ((psu->hasInputFault() || psu->hasVINUVFault()))
+                if (psu->hasCommFault())
+                {
+                    /* Attempts to communicate with the power supply have
+                     * reached there limit. Create an error. */
+                    additionalData["CALLOUT_DEVICE_PATH"] =
+                        psu->getDevicePath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if ((psu->hasInputFault() || psu->hasVINUVFault()))
                 {
                     // Include STATUS_INPUT for input faults.
                     additionalData["STATUS_INPUT"] =
@@ -441,19 +454,6 @@ void PSUManager::analyze()
 
                     createError(
                         "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
-                        additionalData);
-
-                    psu->setFaultLogged();
-                }
-                else if (psu->hasCommFault())
-                {
-                    /* Attempts to communicate with the power supply have
-                     * reached there limit. Create an error. */
-                    additionalData["CALLOUT_DEVICE_PATH"] =
-                        psu->getDevicePath();
-
-                    createError(
-                        "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
                         additionalData);
 
                     psu->setFaultLogged();
