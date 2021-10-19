@@ -151,11 +151,11 @@ TEST_F(PowerSupplyTests, Analyze)
 
     EXPECT_EQ(psu2.isPresent(), false);
 
-    // STATUS_WORD 0x0000 is powered on, no faults (0x0000).
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
     // Presence change from missing to present will trigger in1_input read in
     // an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
+    // STATUS_WORD 0x0000 is powered on, no faults.
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(0x0000));
@@ -171,14 +171,16 @@ TEST_F(PowerSupplyTests, Analyze)
         .Times(1)
         .WillOnce(Return(status_word::INPUT_FAULT_WARN));
     // Due to the fault bit on in STATUS_WORD, there will also be a read of
-    // STATUS_INPUT and STATUS_MFR, so there should be 3 reads total expected.
+    // STATUS_INPUT, STATUS_MFR, and STATUS_CML, so there should be 4 reads
+    // total expected.
     // STATUS_INPUT fault bits ... on.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x38));
     // STATUS_MFR don't care
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
-
+    // STATUS_CML don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0));
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
     EXPECT_EQ(psu2.isFaulted(), true);
@@ -199,7 +201,8 @@ TEST_F(PowerSupplyTests, Analyze)
         .WillOnce(Return(0x38));
     // STATUS_MFR don't care
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
-
+    // STATUS_CML don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -220,7 +223,8 @@ TEST_F(PowerSupplyTests, Analyze)
         .WillOnce(Return(0x00));
     // STATUS_MFR bits on.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0xFF));
-
+    // STATUS_CML don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -235,14 +239,16 @@ TEST_F(PowerSupplyTests, Analyze)
         .Times(2)
         .WillOnce(Return(0x0000))
         .WillOnce(Return(status_word::TEMPERATURE_FAULT_WARN));
-    // If STATUS_WORD bits set, should read STATUS_MFR_SPECIFIC and STATUS_INPUT
+    // If the STATUS_WORD has bits on, STATUS_MFR_SPECIFIC, STATUS_INPUT, and
+    // STATUS_CML will also be read.
     // STATUS_INPUT fault bits ... don't care.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x00));
     // STATUS_MFR don't care
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
-
+    // STATUS_CML don't care
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -251,19 +257,43 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.hasMFRFault(), false);
     EXPECT_EQ(psu2.hasVINUVFault(), false);
 
+    // CML fault
+    // First STATUS_WORD wit no bits set, then with CML fault.
+    // STATUS_WORD with CML fault bit on.
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+        .WillOnce(Return(0x0000))
+        .WillOnce(Return(status_word::CML_FAULT));
+    psu2.analyze();
+    // If the STATUS_WORD has bits on, STATUS_MFR_SPECIFIC, STATUS_INPUT, and
+    // STATUS_CML will also be read.
+    EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        .Times(1)
+        .WillOnce(Return(0x00));
+    EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0x00));
+    // Turn on STATUS_CML fault bit(s)
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0xFF));
+    psu2.analyze();
+    EXPECT_EQ(psu2.isPresent(), true);
+    EXPECT_EQ(psu2.isFaulted(), true);
+    EXPECT_EQ(psu2.hasInputFault(), false);
+    EXPECT_EQ(psu2.hasMFRFault(), false);
+    EXPECT_EQ(psu2.hasVINUVFault(), false);
+    EXPECT_EQ(psu2.hasCommFault(), true);
+
     // Ignore fan fault
     // First STATUS_WORD with no bits set, then with fan fault.
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(2)
         .WillOnce(Return(0x0000))
         .WillOnce(Return(status_word::FAN_FAULT));
-    // STATUS_WORD bits set causes read STATUS_MFR_SPECIFIC and STATUS_INPUT.
+    // If the STATUS_WORD has bits on, STATUS_MFR_SPECIFIC, STATUS_INPUT, and
+    // STATUS_CML will also be read.
     // Don't care if bits set or not.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x00));
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0));
-
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0));
     psu2.analyze();
     psu2.analyze();
     EXPECT_EQ(psu2.isPresent(), true);
@@ -336,24 +366,28 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasInputFault(), false);
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
+    EXPECT_EQ(psu.hasCommFault(), false);
     // STATUS_WORD with fault bits galore!
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(0xFFFF));
-    // If STATUS_WORD has any fault bits on, STATUS_MFR_SPECIFIC and
-    // STATUS_INPUT will be read.
+    // If STATUS_WORD has any fault bits on, STATUS_MFR_SPECIFIC, STATUS_INPUT
+    // and STATUS_CML will be read.
     // STATUS_INPUT with fault bits on.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0xFF));
     // STATUS_MFR_SPEFIC with bits on.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0xFF));
+    // STATUS_CML with bits on.
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0xFF));
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), true);
     EXPECT_EQ(psu.hasInputFault(), true);
     EXPECT_EQ(psu.hasMFRFault(), true);
     EXPECT_EQ(psu.hasVINUVFault(), true);
+    EXPECT_EQ(psu.hasCommFault(), true);
     EXPECT_CALL(mockPMBus, read("in1_input", _))
         .Times(1)
         .WillOnce(Return(209000));
@@ -363,6 +397,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasInputFault(), false);
     EXPECT_EQ(psu.hasMFRFault(), false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
+    EXPECT_EQ(psu.hasCommFault(), false);
 
     // TODO: Faults clear on missing/present?
 }
@@ -445,13 +480,16 @@ TEST_F(PowerSupplyTests, IsFaulted)
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(0xFFFF));
-    // If STATUS_WORD has bit(s) on, STATUS_MFR_SPECIFIC and STATUS_INPUT read.
+    // Fault bit(s) on in STATUS_WORD causes read of STATUS_MFR_SPECIFIC,
+    // STATUS_INPUT, and STATUS_CML.
     // STATUS_INPUT with fault bits on.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0xFF));
     // STATUS_MFR_SPECIFIC with faults bits on.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0xFF));
+    // STATUS_CML with faults bits on.
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0xFF));
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), true);
 }
@@ -475,13 +513,16 @@ TEST_F(PowerSupplyTests, HasInputFault)
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(status_word::INPUT_FAULT_WARN));
-    // If STATUS_WORD has bit(s) on, STATUS_MFR_SPECIFIC and STATUS_INPUT read.
+    // Fault bit(s) on in STATUS_WORD causes read of STATUS_MFR_SPECIFIC,
+    // STATUS_INPUT, and STATUS_CML.
     // STATUS_INPUT with an input fault bit on.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x80));
     // STATUS_MFR don't care.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0x00));
+    // STATUS_CML don't care.
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0x00));
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), true);
     // STATUS_WORD with no bits on.
@@ -514,13 +555,16 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(status_word::MFR_SPECIFIC_FAULT));
-    // If STATUS_WORD has bits on, STATUS_MFR_SPECIFIC and STATUS_INPUT read.
+    // Fault bit(s) on in STATUS_WORD causes read of STATUS_MFR_SPECIFIC,
+    // STATUS_INPUT, and STATUS_CML.
     // STATUS_INPUT don't care
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x00));
     // STATUS_MFR_SPEFIC with bit(s) on.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0xFF));
+    // STATUS_CML don't care.
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0x00));
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), true);
     // Back to no bits on in STATUS_WORD
@@ -552,15 +596,17 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
         .WillOnce(Return(status_word::VIN_UV_FAULT));
-    // Fault bits on in STATUS_WORD causes read of STATUS_MFR_SPECIFIC and
-    // STATUS_INPUT.
-    // Curious disagreement between PMBus Spec. Part II Figure 16 and 33.
-    // Go by Figure 16, and assume bits on in STATUS_INPUT.
+    // Fault bit(s) on in STATUS_WORD causes read of STATUS_MFR_SPECIFIC,
+    // STATUS_INPUT, and STATUS_CML.
+    // Curious disagreement between PMBus Spec. Part II Figure 16 and 33. Go by
+    // Figure 16, and assume bits on in STATUS_INPUT.
     EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
         .Times(1)
         .WillOnce(Return(0x18));
     // STATUS_MFR don't care.
     EXPECT_CALL(mockPMBus, read(STATUS_MFR, _)).Times(1).WillOnce(Return(0x00));
+    // STATUS_CML don't care.
+    EXPECT_CALL(mockPMBus, read(STATUS_CML, _)).Times(1).WillOnce(Return(0x00));
 
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), true);

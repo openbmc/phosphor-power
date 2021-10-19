@@ -161,6 +161,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last read value from STATUS_CML.
+     */
+    uint64_t getStatusCML() const
+    {
+        return statusCML;
+    }
+
+    /**
      * @brief Returns true if a fault was found.
      */
     bool isFaulted() const
@@ -252,7 +260,7 @@ class PowerSupply
      */
     bool hasCommFault() const
     {
-        return readFail >= LOG_LIMIT;
+        return ((readFail >= LOG_LIMIT) || (cmlFault));
     }
 
     /**
@@ -277,11 +285,17 @@ class PowerSupply
     /** @brief Will be updated to the latest/lastvalue read from STATUS_MFR.*/
     uint64_t statusMFR = 0;
 
+    /** @brief Will be updated to the latest/last value read from STATUS_CML.*/
+    uint64_t statusCML = 0;
+
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
 
     /** @brief True if an error for a fault has already been logged. */
     bool faultLogged = false;
+
+    /** @brief True if bit 2 of STATUS_WORD low byte is on. */
+    bool cmlFault = false;
 
     /** @brief True if bit 5 of STATUS_WORD high byte is on. */
     bool inputFault = false;
