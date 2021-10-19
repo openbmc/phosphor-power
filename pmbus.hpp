@@ -60,6 +60,9 @@ constexpr auto STATUS_FANS_1_2 = "status0_fans12";
 // overtemperature warning, undertemperature warning, undertemperature fault.
 constexpr auto STATUS_TEMPERATURE = "status0_temp";
 
+// Reports on the communication, memory, logic fault(s).
+constexpr auto STATUS_CML = "status0_cml";
+
 namespace status_word
 {
 constexpr auto VOUT_FAULT = 0x8000;
@@ -101,6 +104,9 @@ constexpr auto VIN_UV_FAULT = 0x0008;
 // STATUS_WORD. Bit 2 of the low byte (STATUS_BYTE).
 constexpr auto TEMPERATURE_FAULT_WARN = 0x0004;
 
+// The bit mask representing the CML (Communication, Memory, and/or Logic) fault
+// bit of the STATUS_WORD. Bit 1 of the low byte (STATUS_BYTE).
+constexpr auto CML_FAULT = 0x0002;
 } // namespace status_word
 
 namespace status_vout

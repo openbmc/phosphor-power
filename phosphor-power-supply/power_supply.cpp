@@ -210,6 +210,21 @@ void PowerSupply::analyze()
             {
                 statusInput = pmbusIntf->read(STATUS_INPUT, Type::Debug);
                 statusMFR = pmbusIntf->read(STATUS_MFR, Type::Debug);
+                statusCML = pmbusIntf->read(STATUS_CML, Type::Debug);
+                if (statusWord & status_word::CML_FAULT)
+                {
+                    if (!cmlFault)
+                    {
+                        log<level::INFO>(
+                            fmt::format("CML fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_CML = {:#02x}",
+                                        statusWord, statusCML)
+                                .c_str());
+                    }
+                    faultFound = true;
+                    cmlFault = true;
+                }
+
                 if (statusWord & status_word::INPUT_FAULT_WARN)
                 {
                     if (!inputFault)
@@ -260,6 +275,7 @@ void PowerSupply::analyze()
             else
             {
                 faultFound = false;
+                cmlFault = false;
                 inputFault = false;
                 mfrFault = false;
                 vinUVFault = false;
@@ -313,6 +329,7 @@ void PowerSupply::clearFaults()
         mfrFault = false;
         statusMFR = 0;
         vinUVFault = false;
+        cmlFault = false;
         readFail = 0;
 
         try
