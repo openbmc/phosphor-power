@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cd6db8d6_7109cc67",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-20T20:33:22Z",
+      "side": 1,
+      "message": "good question!, I checked with some debug traces and yes, everything that is !\u003d 0 is set to 1, no error msgs are logged:\n\nOct 20 20:17:35 localhost phosphor-psu-monitor[1124]: Setting gpio to 1\nOct 20 20:17:36 localhost phosphor-psu-monitor[1124]: Read value after write: 1\nOct 20 20:17:37 localhost phosphor-psu-monitor[1124]: Setting gpio to 0\nOct 20 20:17:38 localhost phosphor-psu-monitor[1124]: Read value after write: 0\nOct 20 20:17:39 localhost phosphor-psu-monitor[1124]: Setting gpio to 2\nOct 20 20:17:40 localhost phosphor-psu-monitor[1124]: Read value after write: 1\nOct 20 20:17:41 localhost phosphor-psu-monitor[1124]: Setting gpio to -99\nOct 20 20:17:42 localhost phosphor-psu-monitor[1124]: Read value after write: 1",
+      "parentUuid": "ea7222f9_b7d7bbf9",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 17
+      },
+      "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27a4790_5bc4324f",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 2
@@ -69,6 +93,30 @@
       "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae29ddac_5413ad7f",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-20T20:33:22Z",
+      "side": 1,
+      "message": "Done. Makes sense, changed to \"class GPIOInterface : public GPIOInterfaceBase\" in a new commit https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/48014 and rebased this one on top.",
+      "parentUuid": "71e14124_8ac72c3a",
+      "range": {
+        "startLine": 96,
+        "startChar": 6,
+        "endLine": 96,
+        "endChar": 17
+      },
+      "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
