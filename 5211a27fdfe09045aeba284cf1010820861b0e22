@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8a74e47f_870791b9",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-10-20T20:54:34Z",
+      "side": 1,
+      "message": "I should add that I looked at the libgpiod binding code and doesn\u0027t seem it\u0027s been handled there, so the logic seems to be deeper in the libgpio code.",
+      "parentUuid": "cd6db8d6_7109cc67",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 17
+      },
+      "revId": "5211a27fdfe09045aeba284cf1010820861b0e22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b27a4790_5bc4324f",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 2
