@@ -32,9 +32,9 @@ void freeUtils()
     util.reset();
 }
 
-std::unique_ptr<GPIOInterface> createGPIO(const std::string& /*namedGpio*/)
+std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& /*namedGpio*/)
 {
-    return std::make_unique<MockedGPIOReader>();
+    return std::make_unique<MockedGPIOInterface>();
 }
 
 } // namespace psu

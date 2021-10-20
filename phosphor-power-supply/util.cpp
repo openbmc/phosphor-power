@@ -11,7 +11,7 @@ const UtilBase& getUtils()
     return util;
 }
 
-GPIOReader::GPIOReader(const std::string& namedGpio)
+GPIOInterface::GPIOInterface(const std::string& namedGpio)
 {
     try
     {
@@ -29,18 +29,18 @@ GPIOReader::GPIOReader(const std::string& namedGpio)
     }
 }
 
-std::unique_ptr<GPIOInterface>
-    GPIOReader::createGPIO(const std::string& namedGpio)
+std::unique_ptr<GPIOInterfaceBase>
+    GPIOInterface::createGPIO(const std::string& namedGpio)
 {
-    return std::make_unique<GPIOReader>(namedGpio);
+    return std::make_unique<GPIOInterface>(namedGpio);
 }
 
-std::string GPIOReader::getName() const
+std::string GPIOInterface::getName() const
 {
     return line.name();
 }
 
-int GPIOReader::read()
+int GPIOInterface::read()
 {
     using namespace phosphor::logging;
 
@@ -81,9 +81,9 @@ int GPIOReader::read()
     return value;
 }
 
-std::unique_ptr<GPIOInterface> createGPIO(const std::string& namedGpio)
+std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio)
 {
-    return GPIOReader::createGPIO(namedGpio);
+    return GPIOInterface::createGPIO(namedGpio);
 }
 
 } // namespace phosphor::power::psu

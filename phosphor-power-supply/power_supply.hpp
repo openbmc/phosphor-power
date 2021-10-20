@@ -65,7 +65,7 @@ class PowerSupply
         return *pmbusIntf;
     }
 
-    GPIOInterface* getPresenceGPIO()
+    GPIOInterfaceBase* getPresenceGPIO()
     {
         return presenceGPIO.get();
     }
@@ -292,7 +292,7 @@ class PowerSupply
     /**
      * @brief The libgpiod object for monitoring PSU presence
      */
-    std::unique_ptr<GPIOInterface> presenceGPIO = nullptr;
+    std::unique_ptr<GPIOInterfaceBase> presenceGPIO = nullptr;
 
     /** @brief True if the power supply is present. */
     bool present = false;

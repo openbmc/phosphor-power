@@ -50,7 +50,7 @@ class MockedUtil : public UtilBase
                 (const, override));
 };
 
-class MockedGPIOReader : public GPIOInterface
+class MockedGPIOInterface : public GPIOInterfaceBase
 {
   public:
     MOCK_METHOD(int, read, (), (override));

@@ -37,10 +37,10 @@ inline void setPresence(sdbusplus::bus::bus& bus, const std::string& invpath,
     return getUtils().setPresence(bus, invpath, present, name);
 }
 
-class GPIOInterface
+class GPIOInterfaceBase
 {
   public:
-    virtual ~GPIOInterface() = default;
+    virtual ~GPIOInterfaceBase() = default;
 
     virtual int read() = 0;
     virtual std::string getName() const = 0;

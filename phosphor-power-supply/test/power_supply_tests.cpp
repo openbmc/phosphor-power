@@ -130,8 +130,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // getPresence().
 
     PowerSupply psu{bus, PSUInventoryPath, 4, 0x69, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(0));
 
     psu.analyze();
@@ -145,8 +145,8 @@ TEST_F(PowerSupplyTests, Analyze)
     PowerSupply psu2{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
     // In order to get the various faults tested, the power supply needs to
     // be present in order to read from the PMBus device(s).
-    MockedGPIOReader* mockPresenceGPIO2 =
-        static_cast<MockedGPIOReader*>(psu2.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO2 =
+        static_cast<MockedGPIOInterface*>(psu2.getPresenceGPIO());
     ON_CALL(*mockPresenceGPIO2, read()).WillByDefault(Return(1));
 
     EXPECT_EQ(psu2.isPresent(), false);
@@ -241,8 +241,8 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         // Assume GPIO presence, not inventory presence?
         PowerSupply psu{bus, PSUInventoryPath, 4, 0x69, PSUGPIOLineName};
 
-        MockedGPIOReader* mockPresenceGPIO =
-            static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+        MockedGPIOInterface* mockPresenceGPIO =
+            static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         ON_CALL(*mockPresenceGPIO, read()).WillByDefault(Return(0));
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // Constructor should set initial presence, default read returns 0.
@@ -258,8 +258,8 @@ TEST_F(PowerSupplyTests, OnOffConfig)
     {
         // Assume GPIO presence, not inventory presence?
         PowerSupply psu{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
-        MockedGPIOReader* mockPresenceGPIO =
-            static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+        MockedGPIOInterface* mockPresenceGPIO =
+            static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         ON_CALL(*mockPresenceGPIO, read()).WillByDefault(Return(1));
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // TODO: expect setPresence call?
@@ -279,8 +279,8 @@ TEST_F(PowerSupplyTests, ClearFaults)
 {
     auto bus = sdbusplus::bus::new_default();
     PowerSupply psu{bus, PSUInventoryPath, 13, 0x68, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // GPIO read return 1 to indicate present.
     ON_CALL(*mockPresenceGPIO, read()).WillByDefault(Return(1));
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
@@ -334,8 +334,8 @@ TEST_F(PowerSupplyTests, UpdateInventory)
     try
     {
         PowerSupply psu{bus, PSUInventoryPath, 13, 0x69, PSUGPIOLineName};
-        MockedGPIOReader* mockPresenceGPIO =
-            static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+        MockedGPIOInterface* mockPresenceGPIO =
+            static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         // GPIO read return 1 to indicate present.
         EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(1));
         psu.analyze();
@@ -366,8 +366,8 @@ TEST_F(PowerSupplyTests, IsPresent)
     auto bus = sdbusplus::bus::new_default();
 
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x68, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     EXPECT_EQ(psu.isPresent(), false);
 
     // Change GPIO read to return 1 to indicate present.
@@ -381,8 +381,8 @@ TEST_F(PowerSupplyTests, IsFaulted)
     auto bus = sdbusplus::bus::new_default();
 
     PowerSupply psu{bus, PSUInventoryPath, 11, 0x6f, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     psu.analyze();
@@ -401,8 +401,8 @@ TEST_F(PowerSupplyTests, HasInputFault)
     auto bus = sdbusplus::bus::new_default();
 
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x68, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     psu.analyze();
@@ -427,8 +427,8 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     auto bus = sdbusplus::bus::new_default();
 
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x68, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     psu.analyze();
@@ -453,8 +453,8 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     auto bus = sdbusplus::bus::new_default();
 
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x68, PSUGPIOLineName};
-    MockedGPIOReader* mockPresenceGPIO =
-        static_cast<MockedGPIOReader*>(psu.getPresenceGPIO());
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     psu.analyze();

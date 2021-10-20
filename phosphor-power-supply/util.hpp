@@ -89,26 +89,26 @@ class Util : public UtilBase
     }
 };
 
-std::unique_ptr<GPIOInterface> createGPIO(const std::string& namedGpio);
+std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio);
 
-class GPIOReader : public GPIOInterface
+class GPIOInterface : public GPIOInterfaceBase
 {
   public:
-    GPIOReader() = delete;
-    virtual ~GPIOReader() = default;
-    GPIOReader(const GPIOReader&) = default;
-    GPIOReader& operator=(const GPIOReader&) = default;
-    GPIOReader(GPIOReader&&) = default;
-    GPIOReader& operator=(GPIOReader&&) = default;
+    GPIOInterface() = delete;
+    virtual ~GPIOInterface() = default;
+    GPIOInterface(const GPIOInterface&) = default;
+    GPIOInterface& operator=(const GPIOInterface&) = default;
+    GPIOInterface(GPIOInterface&&) = default;
+    GPIOInterface& operator=(GPIOInterface&&) = default;
 
     /**
      * Constructor
      *
      * @param[in] namedGpio - The string for the gpio-line-name
      */
-    GPIOReader(const std::string& namedGpio);
+    GPIOInterface(const std::string& namedGpio);
 
-    static std::unique_ptr<GPIOInterface>
+    static std::unique_ptr<GPIOInterfaceBase>
         createGPIO(const std::string& namedGpio);
 
     /**
