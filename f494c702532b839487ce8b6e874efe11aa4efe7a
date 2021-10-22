@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5ee8c395_8fc1c43d",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:38:22Z",
+      "side": 1,
+      "message": "Oops! I see what happened here.\n\nI created the object, and then indicated that the presence GPIO would return a value indicating the power supply is missing.\n\nI then add in the expectation that it changes to present, which will result in clearing faults, and part of that does a read of \"in1_input\" as that was  expected to result in the CLEAR_FAULTS command being sent through the hwmon /pmbus operations in the base/core code. That read does not care what value is returned, so the return of 0 just worked out okay.\n\nSo, what should happen is analyze() gets called, it updates the presence status, the presence changed from missing to present, so that results in writing the ON_OFF_CONFIG and reading the in1_input as part of the clearing of faults, the analyze function then moves onto reading STATUS_WORD, since the power supply is present.\n\nI am missing the expected read of in1_input.",
+      "parentUuid": "f8ab9691_cf15a3b1",
+      "range": {
+        "startLine": 156,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 34
+      },
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ece1e4b_56edb611",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 4
