@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8ab9691_cf15a3b1",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:18:54Z",
+      "side": 1,
+      "message": "I must have messed something up in moving and updating things. I wonder if this isn\u0027t one of those \"wait, what did vim just do\" moments I had.\n\nIf STATUS_WORD is 0, there are no faults, so STATUS_INPUT and STATUS_MFR will not be read. Below, there is one call to analyze(), the function doing the read of STATUS_WORD. There should just be one read, of STATUS_WORD, which returns 0.",
+      "parentUuid": "41164383_ceb10bf3",
+      "range": {
+        "startLine": 156,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 34
+      },
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ece1e4b_56edb611",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2021-10-22T00:11:22Z",
       "side": 1,
       "message": "Should this be deleted?",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 36
+      },
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd38f985_c8e92fa2",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:18:54Z",
+      "side": 1,
+      "message": "Oops...I think I removed it in a later commit, but should be removed from this one.",
+      "parentUuid": "9ece1e4b_56edb611",
       "range": {
         "startLine": 177,
         "startChar": 0,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "78a9e023_163ee9ba",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:18:54Z",
+      "side": 1,
+      "message": "Huh... I suppose. There are two WillOnce parts, but missed the Times(2) part.",
+      "parentUuid": "43e131f7_aa4487db",
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "53805662_d9edebba",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 4
@@ -76,6 +142,24 @@
       "writtenOn": "2021-10-22T00:11:22Z",
       "side": 1,
       "message": "Missing Times(2)?",
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "798971d7_f9be94fe",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:18:54Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "53805662_d9edebba",
       "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
