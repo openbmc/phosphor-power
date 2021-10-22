@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1774b3f_f47cf384",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:40:40Z",
+      "side": 1,
+      "message": "I should have fixed this up in the STATUS_INPUT update commit.\nhttps://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/47779\n\nhttps://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/47779/4/phosphor-power-supply/test/power_supply_tests.cpp#156",
+      "revId": "cfa566a695a43c2bcf56bf35162781a57729d3e5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
