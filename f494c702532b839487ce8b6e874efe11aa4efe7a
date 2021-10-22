@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "f47ba5b2_83f3e999",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-22T19:41:06Z",
+      "side": 1,
+      "message": "https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/48017/1/phosphor-power-supply/test/power_supply_tests.cpp#157",
+      "parentUuid": "5ee8c395_8fc1c43d",
+      "range": {
+        "startLine": 156,
+        "startChar": 17,
+        "endLine": 156,
+        "endChar": 34
+      },
+      "revId": "f494c702532b839487ce8b6e874efe11aa4efe7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ece1e4b_56edb611",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 4
