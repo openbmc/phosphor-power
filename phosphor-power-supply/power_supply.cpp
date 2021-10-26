@@ -217,7 +217,7 @@ void PowerSupply::analyze()
                 {
                     if (!cmlFault)
                     {
-                        log<level::INFO>(
+                        log<level::ERR>(
                             fmt::format("CML fault: STATUS_WORD = {:#04x}, "
                                         "STATUS_CML = {:#02x}",
                                         statusWord, statusCML)
@@ -231,7 +231,7 @@ void PowerSupply::analyze()
                 {
                     if (!inputFault)
                     {
-                        log<level::INFO>(
+                        log<level::ERR>(
                             fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
                                         "STATUS_MFR_SPECIFIC = {:#02x}, "
                                         "STATUS_INPUT = {:#02x}",
@@ -247,7 +247,7 @@ void PowerSupply::analyze()
                 {
                     if (!voutOVFault)
                     {
-                        log<level::INFO>(
+                        log<level::ERR>(
                             fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
                                         "STATUS_MFR_SPECIFIC = {:#02x}, "
                                         "STATUS_VOUT = {:#02x}",
@@ -277,7 +277,7 @@ void PowerSupply::analyze()
                 {
                     if (!vinUVFault)
                     {
-                        log<level::INFO>(
+                        log<level::ERR>(
                             fmt::format("VIN_UV fault: STATUS_WORD = {:#04x}, "
                                         "STATUS_MFR_SPECIFIC = {:#02x}, "
                                         "STATUS_INPUT = {:#02x}",
