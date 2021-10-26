@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e01e474e_adf93978",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-10-26T18:46:25Z",
+      "side": 1,
+      "message": "could faultFound just be an OR of all the individual faults?\n\nbool faultFound() { return ... || ... } ?",
+      "range": {
+        "startLine": 277,
+        "startChar": 16,
+        "endLine": 277,
+        "endChar": 26
+      },
+      "revId": "b821549636d7218ce4c121934f563e51129f569d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
