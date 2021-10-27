@@ -440,6 +440,21 @@ void PSUManager::analyze()
                                 additionalData);
                     psu->setFaultLogged();
                 }
+                else if (psu->hasVoutOVFault())
+                {
+                    // Include STATUS_VOUT for Vout faults.
+                    additionalData["STATUS_VOUT"] =
+                        fmt::format("{:#02x}", psu->getStatusVout());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
                 else if (psu->hasMFRFault())
                 {
                     /* This can represent a variety of faults that result in

@@ -211,6 +211,8 @@ void PowerSupply::analyze()
                 statusInput = pmbusIntf->read(STATUS_INPUT, Type::Debug);
                 statusMFR = pmbusIntf->read(STATUS_MFR, Type::Debug);
                 statusCML = pmbusIntf->read(STATUS_CML, Type::Debug);
+                auto status0Vout = pmbusIntf->insertPageNum(STATUS_VOUT, 0);
+                statusVout = pmbusIntf->read(status0Vout, Type::Debug);
                 if (statusWord & status_word::CML_FAULT)
                 {
                     if (!cmlFault)
@@ -239,6 +241,21 @@ void PowerSupply::analyze()
 
                     faultFound = true;
                     inputFault = true;
+                }
+
+                if (statusWord & status_word::VOUT_OV_FAULT)
+                {
+                    if (!voutOVFault)
+                    {
+                        log<level::INFO>(
+                            fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_VOUT = {:#02x}",
+                                        statusWord, statusMFR, statusVout)
+                                .c_str());
+                    }
+                    faultFound = true;
+                    voutOVFault = true;
                 }
 
                 if (statusWord & status_word::MFR_SPECIFIC_FAULT)
@@ -279,6 +296,7 @@ void PowerSupply::analyze()
                 inputFault = false;
                 mfrFault = false;
                 vinUVFault = false;
+                voutOVFault = false;
             }
         }
         catch (const ReadFailure& e)
@@ -330,6 +348,7 @@ void PowerSupply::clearFaults()
         statusMFR = 0;
         vinUVFault = false;
         cmlFault = false;
+        voutOVFault = false;
         readFail = 0;
 
         try
