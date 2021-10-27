@@ -171,6 +171,8 @@ class PMBusBase
                              Type type) = 0;
     virtual void findHwmonDir() = 0;
     virtual const fs::path& path() const = 0;
+    virtual std::string insertPageNum(const std::string& templateName,
+                                      size_t page) = 0;
 };
 
 /**
@@ -352,8 +354,8 @@ class PMBus : public PMBusBase
      *
      * @return string - the new string with the page number in it
      */
-    static std::string insertPageNum(const std::string& templateName,
-                                     size_t page);
+    std::string insertPageNum(const std::string& templateName,
+                              size_t page) override;
 
     /**
      * Finds the path relative to basePath to the hwmon directory
