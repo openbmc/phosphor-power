@@ -28,6 +28,8 @@ class MockedPMBus : public PMBusBase
                 (override));
     MOCK_METHOD(void, findHwmonDir, (), (override));
     MOCK_METHOD(const fs::path&, path, (), (const, override));
+    MOCK_METHOD(std::string, insertPageNum,
+                (const std::string& templateName, size_t page), (override));
 };
 } // namespace pmbus
 

@@ -169,6 +169,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last read value from STATUS_VOUT.
+     */
+    uint64_t getStatusVout() const
+    {
+        return statusVout;
+    }
+
+    /**
      * @brief Returns true if a fault was found.
      */
     bool isFaulted() const
@@ -214,6 +222,14 @@ class PowerSupply
     bool hasVINUVFault() const
     {
         return vinUVFault;
+    }
+
+    /**
+     * @brief Returns true if VOUT_OV_FAULT occurred.
+     */
+    bool hasVoutOVFault() const
+    {
+        return voutOVFault;
     }
 
     /**
@@ -288,6 +304,9 @@ class PowerSupply
     /** @brief Will be updated to the latest/last value read from STATUS_CML.*/
     uint64_t statusCML = 0;
 
+    /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
+    uint64_t statusVout = 0;
+
     /** @brief True if a fault has already been found and not cleared */
     bool faultFound = false;
 
@@ -305,6 +324,9 @@ class PowerSupply
 
     /** @brief True if bit 3 of STATUS_WORD low byte is on. */
     bool vinUVFault = false;
+
+    /** @brief True if bit 5 of STATUS_WORD low byte is on. */
+    bool voutOVFault = false;
 
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;
