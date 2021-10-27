@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "13adcbfa_447a0c76",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-27T23:31:37Z",
+      "side": 1,
+      "message": "https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/48367",
+      "parentUuid": "7942c2ed_87b0507f",
+      "revId": "b821549636d7218ce4c121934f563e51129f569d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e01e474e_adf93978",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
