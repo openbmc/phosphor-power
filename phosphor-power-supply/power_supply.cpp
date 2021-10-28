@@ -223,7 +223,7 @@ void PowerSupply::analyze()
                                         statusWord, statusCML)
                                 .c_str());
                     }
-                    faultFound = true;
+
                     cmlFault = true;
                 }
 
@@ -239,7 +239,6 @@ void PowerSupply::analyze()
                                 .c_str());
                     }
 
-                    faultFound = true;
                     inputFault = true;
                 }
 
@@ -254,7 +253,7 @@ void PowerSupply::analyze()
                                         statusWord, statusMFR, statusVout)
                                 .c_str());
                     }
-                    faultFound = true;
+
                     voutOVFault = true;
                 }
 
@@ -269,7 +268,7 @@ void PowerSupply::analyze()
                                         statusWord, statusMFR)
                                 .c_str());
                     }
-                    faultFound = true;
+
                     mfrFault = true;
                 }
 
@@ -285,13 +284,11 @@ void PowerSupply::analyze()
                                 .c_str());
                     }
 
-                    faultFound = true;
                     vinUVFault = true;
                 }
             }
             else
             {
-                faultFound = false;
                 cmlFault = false;
                 inputFault = false;
                 mfrFault = false;
@@ -342,7 +339,6 @@ void PowerSupply::clearFaults()
     // I do not care what the return value is.
     if (present)
     {
-        faultFound = false;
         inputFault = false;
         mfrFault = false;
         statusMFR = 0;

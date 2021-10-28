@@ -181,7 +181,8 @@ class PowerSupply
      */
     bool isFaulted() const
     {
-        return (faultFound || hasCommFault());
+        return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
+                mfrFault);
     }
 
     /**
@@ -306,9 +307,6 @@ class PowerSupply
 
     /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
     uint64_t statusVout = 0;
-
-    /** @brief True if a fault has already been found and not cleared */
-    bool faultFound = false;
 
     /** @brief True if an error for a fault has already been logged. */
     bool faultLogged = false;
