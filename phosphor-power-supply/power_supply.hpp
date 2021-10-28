@@ -198,7 +198,8 @@ class PowerSupply
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                ioutOCFault || tempFault || pgoodFault || mfrFault);
+                ioutOCFault || voutUVFault || tempFault || pgoodFault ||
+                mfrFault);
     }
 
     /**
@@ -255,6 +256,14 @@ class PowerSupply
     bool hasIoutOCFault() const
     {
         return ioutOCFault;
+    }
+
+    /**
+     * @brief Returns true if VOUT_UV_FAULT occurred.
+     */
+    bool hasVoutUVFault() const
+    {
+        return voutUVFault;
     }
 
     /**
@@ -377,10 +386,14 @@ class PowerSupply
     /** @brief True if bit 4 of STATUS_WORD low byte is on. */
     bool ioutOCFault = false;
 
+    /** @brief True if bit 7 of STATUS_WORD high byte is on. */
+    bool voutUVFault = false;
+
     /** @brief True if bit 2 of STATUS_WORD low byte is on. */
     bool tempFault = false;
 
-    /** @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive, or
+    /**
+     * @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive, or
      * the unit is off.
      */
     bool pgoodFault = false;
@@ -475,10 +488,11 @@ class PowerSupply
     /**
      * @brief Callback for inventory property added.
      *
-     * Process add of the interface with the Present property for power supply.
+     * Process add of the interface with the Present property for power
+     *supply.
      *
-     * This is used if we are watching the D-Bus properties instead of reading
-     * the GPIO presence line ourselves.
+     * This is used if we are watching the D-Bus properties instead of
+     *reading the GPIO presence line ourselves.
      *
      * @param[in]  msg - Data associated with Present add signal
      **/
