@@ -151,6 +151,7 @@ TEST_F(PowerSupplyTests, Constructor)
         EXPECT_EQ(psu->hasVINUVFault(), false);
         EXPECT_EQ(psu->hasVoutOVFault(), false);
         EXPECT_EQ(psu->hasIoutOCFault(), false);
+        EXPECT_EQ(psu->hasVoutUVFault(), false);
         EXPECT_EQ(psu->hasTempFault(), false);
         EXPECT_EQ(psu->hasPgoodFault(), false);
     }
@@ -199,6 +200,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu.hasCommFault(), false);
         EXPECT_EQ(psu.hasVoutOVFault(), false);
         EXPECT_EQ(psu.hasIoutOCFault(), false);
+        EXPECT_EQ(psu.hasVoutUVFault(), false);
         EXPECT_EQ(psu.hasTempFault(), false);
         EXPECT_EQ(psu.hasPgoodFault(), false);
     }
@@ -234,6 +236,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
 
@@ -251,6 +254,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -276,6 +280,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -300,6 +305,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -324,6 +330,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), true);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -348,6 +355,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), true);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -373,6 +381,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), true);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
@@ -398,6 +407,32 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), true);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
+        EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
+    }
+
+    // VOUT_UV_FAULT
+    {
+        // First STATUS_WORD with no bits set, then with VOUT fault.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // Change STATUS_WORD to indicate VOUT fault.
+        expectations.statusWordValue = (status_word::VOUT_FAULT);
+        // Turn on STATUS_VOUT fault bit(s)
+        expectations.statusVOUTValue = 0x30;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), true);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -419,12 +454,13 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
+    // PGOOD/OFF fault.
     {
-        // PGOOD/OFF fault.
         // First STATUS_WORD with no bits set.
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
@@ -444,6 +480,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasVoutUVFault(), false);
         EXPECT_EQ(psu2.hasIoutOCFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), true);
@@ -521,6 +558,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     EXPECT_EQ(psu.hasIoutOCFault(), false);
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 
@@ -548,8 +586,12 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), true);
     EXPECT_EQ(psu.hasVoutOVFault(), true);
     EXPECT_EQ(psu.hasIoutOCFault(), true);
+    // Cannot have VOUT_OV_FAULT and VOUT_UV_FAULT.
+    // Rely on HasVoutUVFault() to verify this sets and clears.
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
     EXPECT_EQ(psu.hasTempFault(), true);
     EXPECT_EQ(psu.hasPgoodFault(), true);
+
     EXPECT_CALL(mockPMBus, read("in1_input", _))
         .Times(1)
         .WillOnce(Return(209000));
@@ -562,6 +604,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     EXPECT_EQ(psu.hasIoutOCFault(), false);
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 
@@ -818,6 +861,36 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasIoutOCFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasVoutUVFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x6a, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
+    // Turn fault on.
+    expectations.statusWordValue = (status_word::VOUT_FAULT);
+    // STATUS_VOUT fault bit(s)
+    expectations.statusVOUTValue = 0x30;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasVoutUVFault(), true);
+    // Back to no fault bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
 }
 
 TEST_F(PowerSupplyTests, HasTempFault)
