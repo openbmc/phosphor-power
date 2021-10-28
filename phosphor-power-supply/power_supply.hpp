@@ -198,7 +198,8 @@ class PowerSupply
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                ioutOCFault || tempFault || pgoodFault || mfrFault);
+                ioutOCFault || voutUVFault || tempFault || pgoodFault ||
+                mfrFault);
     }
 
     /**
@@ -258,6 +259,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns true if VOUT_UV_FAULT occurred.
+     */
+    bool hasVoutUVFault() const
+    {
+        return voutUVFault;
+    }
+
+    /**
      * @brief Returns true if TEMPERATURE fault occurred.
      */
     bool hasTempFault() const
@@ -298,7 +307,8 @@ class PowerSupply
     }
 
     /**
-     * @brief Returns the firmware revision version read from the power supply
+     * @brief Returns the firmware revision version read from the power
+     * supply
      */
     const std::string& getFWVersion() const
     {
@@ -324,9 +334,10 @@ class PowerSupply
     /**
      * @brief Reads the pmbus input voltage and returns that actual voltage
      *        reading and the calculated input voltage based on thresholds.
-     * @param[out] actualInputVoltage - The actual voltage reading, in Volts.
-     * @param[out] inputVoltage - A rounded up/down value of the actual input
-     *             voltage based on thresholds, in Volts.
+     * @param[out] actualInputVoltage - The actual voltage reading, in
+     * Volts.
+     * @param[out] inputVoltage - A rounded up/down value of the actual
+     * input voltage based on thresholds, in Volts.
      */
     void getInputVoltage(double& actualInputVoltage, int& inputVoltage) const;
 
@@ -334,22 +345,28 @@ class PowerSupply
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
+    /** @brief Will be updated to the latest/lastvalue read from
+     * STATUS_WORD.*/
     uint64_t statusWord = 0;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_INPUT.*/
+    /** @brief Will be updated to the latest/lastvalue read from
+     * STATUS_INPUT.*/
     uint64_t statusInput = 0;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_MFR.*/
+    /** @brief Will be updated to the latest/lastvalue read from
+     * STATUS_MFR.*/
     uint64_t statusMFR = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_CML.*/
+    /** @brief Will be updated to the latest/last value read from
+     * STATUS_CML.*/
     uint64_t statusCML = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
+    /** @brief Will be updated to the latest/last value read from
+     * STATUS_VOUT.*/
     uint64_t statusVout = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_IOUT.*/
+    /** @brief Will be updated to the latest/last value read from
+     * STATUS_IOUT.*/
     uint64_t statusIout = 0;
 
     /** @brief Will be updated to the latest/last value read from
@@ -377,11 +394,14 @@ class PowerSupply
     /** @brief True if bit 4 of STATUS_WORD low byte is on. */
     bool ioutOCFault = false;
 
+    /** @brief True if bit 7 of STATUS_WORD high byte is on. */
+    bool voutUVFault = false;
+
     /** @brief True if bit 2 of STATUS_WORD low byte is on. */
     bool tempFault = false;
 
-    /** @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive, or
-     * the unit is off.
+    /** @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive,
+     * or the unit is off.
      */
     bool pgoodFault = false;
 
@@ -436,8 +456,8 @@ class PowerSupply
      * @brief Binds or unbinds the power supply device driver
      *
      * Called when a presence change is detected to either bind the device
-     * driver for the power supply when it is installed, or unbind the device
-     * driver when the power supply is removed.
+     * driver for the power supply when it is installed, or unbind the
+     * device driver when the power supply is removed.
      *
      * Writes <device> to <path>/bind (or unbind)
      *
@@ -465,8 +485,8 @@ class PowerSupply
      *
      * Process change of Present property for power supply.
      *
-     * This is used if we are watching the D-Bus properties instead of reading
-     * the GPIO presence line ourselves.
+     * This is used if we are watching the D-Bus properties instead of
+     *reading the GPIO presence line ourselves.
      *
      * @param[in]  msg - Data associated with Present change signal
      **/
@@ -475,10 +495,11 @@ class PowerSupply
     /**
      * @brief Callback for inventory property added.
      *
-     * Process add of the interface with the Present property for power supply.
+     * Process add of the interface with the Present property for power
+     *supply.
      *
-     * This is used if we are watching the D-Bus properties instead of reading
-     * the GPIO presence line ourselves.
+     * This is used if we are watching the D-Bus properties instead of
+     *reading the GPIO presence line ourselves.
      *
      * @param[in]  msg - Data associated with Present add signal
      **/
