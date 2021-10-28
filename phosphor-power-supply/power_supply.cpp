@@ -250,10 +250,11 @@ void PowerSupply::analyze()
                     if (!voutOVFault)
                     {
                         log<level::ERR>(
-                            fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_VOUT = {:#02x}",
-                                        statusWord, statusMFR, statusVout)
+                            fmt::format(
+                                "VOUT_OV_FAULT fault: STATUS_WORD = {:#04x}, "
+                                "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                "STATUS_VOUT = {:#02x}",
+                                statusWord, statusMFR, statusVout)
                                 .c_str());
                     }
 
@@ -273,6 +274,23 @@ void PowerSupply::analyze()
                     }
 
                     ioutOCFault = true;
+                }
+
+                if ((statusWord & status_word::VOUT_FAULT) &&
+                    !(statusWord & status_word::VOUT_OV_FAULT))
+                {
+                    if (!voutUVFault)
+                    {
+                        log<level::ERR>(
+                            fmt::format(
+                                "VOUT_UV_FAULT fault: STATUS_WORD = {:#04x}, "
+                                "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                "STATUS_VOUT = {:#02x}",
+                                statusWord, statusMFR, statusVout)
+                                .c_str());
+                    }
+
+                    voutUVFault = true;
                 }
 
                 if (statusWord & status_word::TEMPERATURE_FAULT_WARN)
@@ -346,6 +364,7 @@ void PowerSupply::analyze()
                 vinUVFault = false;
                 voutOVFault = false;
                 ioutOCFault = false;
+                voutUVFault = false;
                 tempFault = false;
                 pgoodFault = false;
             }
@@ -400,6 +419,7 @@ void PowerSupply::clearFaults()
         cmlFault = false;
         voutOVFault = false;
         ioutOCFault = false;
+        voutUVFault = false;
         tempFault = false;
         pgoodFault = false;
         readFail = 0;
