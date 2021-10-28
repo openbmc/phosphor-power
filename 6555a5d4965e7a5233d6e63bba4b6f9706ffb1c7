@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0574a5ee_09a5b728",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-28T19:24:57Z",
+      "side": 1,
+      "message": "Yes. https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/48367",
+      "parentUuid": "792fac81_bcbfd356",
+      "range": {
+        "startLine": 250,
+        "startChar": 35,
+        "endLine": 250,
+        "endChar": 39
+      },
+      "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feb2c2ff_fb7ca5d1",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "b8dbae1a_7c1c6003",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-28T19:24:57Z",
+      "side": 1,
+      "message": "I just noticed this as I was working on another change.",
+      "parentUuid": "feb2c2ff_fb7ca5d1",
+      "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49dc3d6b_5763da85",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
@@ -53,6 +95,30 @@
       "writtenOn": "2021-10-28T18:35:54Z",
       "side": 1,
       "message": "Since this block of EXPECT_CALL lines is getting pretty long and is repeated a bunch of times, it might be worth refactoring it into a separate method.\n\nSomething like:\n  void setPMBusExpectations(MockedPMBus\u0026 mockPMBus, uint16_t statusWordValue,\n                            uint8_t statusInputValue, ...)\n\nThen the test variations could look like:\n  uint16_t statusWordValue{status_word::INPUT_FAULT_WARN | status_word::VIN_UV_FAULT};\n  uint8_t statusInputValue{0x38}; // pithy comment\n  ...\n  setPmBusExpections(...);\n\nJust a suggestion not a bug.  It might reduce the duplication/boilerplate and let you focus on the actual PMBus values that are different across variations.",
+      "range": {
+        "startLine": 210,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 29
+      },
+      "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ca35d5c_22680d0b",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-28T19:24:57Z",
+      "side": 1,
+      "message": "🤔\nHrm... okay, I will try to do something like that.",
+      "parentUuid": "49dc3d6b_5763da85",
       "range": {
         "startLine": 210,
         "startChar": 0,
@@ -105,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "ec012e23_d68ad9e9",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-28T19:24:57Z",
+      "side": 1,
+      "message": "😞 Yeah...",
+      "parentUuid": "47f54061_8a116fdd",
+      "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b9e09cf2_04eee51a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
@@ -116,6 +200,24 @@
       "writtenOn": "2021-10-28T18:35:54Z",
       "side": 1,
       "message": "Need to add STATUS_VOUT?  Same comment in several other places in this test case.",
+      "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1ae06b7_a748f512",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-10-28T19:24:57Z",
+      "side": 1,
+      "message": "Yes sir!",
+      "parentUuid": "b9e09cf2_04eee51a",
       "revId": "6555a5d4965e7a5233d6e63bba4b6f9706ffb1c7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
