@@ -494,6 +494,21 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
+                else if (psu->hasVoutUVFault())
+                {
+                    // Include STATUS_VOUT for Vout faults.
+                    additionalData["STATUS_VOUT"] =
+                        fmt::format("{:#02x}", psu->getStatusVout());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
                 else if (psu->hasTempFault())
                 {
                     // Include STATUS_TEMPERATURE for temperature faults.
