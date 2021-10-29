@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58fac27e_16f2c85f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-10-29T15:58:19Z",
+      "side": 1,
+      "message": "Nit: Continuing?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "ef7a2b69ddb2360a3d6d02308d9e36d1f3f8fb8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "585d2457_5eb9f4ca",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-10-29T15:58:19Z",
+      "side": 1,
+      "message": "You could give all these default values of 0x00.\n\nThen when you call this function in the case where statusWordValue \u003d\u003d 0, you don\u0027t have to define and pass a bunch of other variables that won\u0027t be used.\n\ne.g.\n  uint16_t statusWordValue{0x0000};\n  setPMBusExpectations(mockPMBus, statusWordValue);",
+      "range": {
+        "startLine": 27,
+        "startChar": 26,
+        "endLine": 28,
+        "endChar": 48
+      },
+      "revId": "ef7a2b69ddb2360a3d6d02308d9e36d1f3f8fb8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2f2a79b_25d59989",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-10-29T15:58:19Z",
+      "side": 1,
+      "message": "I don\u0027t understand what this comment is referring to.  Did you intend to leave it in the code?",
+      "revId": "ef7a2b69ddb2360a3d6d02308d9e36d1f3f8fb8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
