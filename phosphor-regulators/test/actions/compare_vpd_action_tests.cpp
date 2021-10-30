@@ -36,19 +36,36 @@ using namespace phosphor::power::regulators;
 
 TEST(CompareVPDActionTests, Constructor)
 {
-    std::vector<uint8_t> value{0x32, 0x44, 0x33, 0x35}; // "2D35"
-    CompareVPDAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        value};
-    EXPECT_EQ(action.getFRU(),
-              "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
-    EXPECT_EQ(action.getKeyword(), "CCIN");
-    EXPECT_EQ(action.getValue(), value);
+    // Value vector is not empty
+    {
+        std::vector<uint8_t> value{0x32, 0x44, 0x33, 0x35}; // "2D35"
+        CompareVPDAction action{
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+            "CCIN", value};
+        EXPECT_EQ(
+            action.getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getKeyword(), "CCIN");
+        EXPECT_EQ(action.getValue(), value);
+    }
+
+    // Value vector is empty
+    {
+        std::vector<uint8_t> value{};
+        CompareVPDAction action{
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+            "CCIN", value};
+        EXPECT_EQ(
+            action.getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getKeyword(), "CCIN");
+        EXPECT_EQ(action.getValue(), value);
+    }
 }
 
 TEST(CompareVPDActionTests, Execute)
 {
-    // Test where works: Actual VPD value is not an empty string
+    // Test where works: Actual VPD value is not empty
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
         std::string keyword{"Model"};
@@ -85,13 +102,13 @@ TEST(CompareVPDActionTests, Execute)
         }
     }
 
-    // Test where works: Actual VPD value is an empty string
+    // Test where works: Actual VPD value is empty
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
         std::string keyword{"Model"};
         std::vector<uint8_t> emptyValue{};
 
-        // Create MockServices object.  VPD service will return "" as VPD value
+        // Create MockServices object.  VPD service will return empty VPD value
         // 2 times.
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
@@ -194,6 +211,7 @@ TEST(CompareVPDActionTests, GetValue)
 
 TEST(CompareVPDActionTests, ToString)
 {
+    // Test where value vector is not empty
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
@@ -204,6 +222,7 @@ TEST(CompareVPDActionTests, ToString)
                                      "CCIN, value: [ 0x1, 0xA3, 0x0, 0xFF ] }");
     }
 
+    // Test where value vector is empty
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",

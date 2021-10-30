@@ -1138,7 +1138,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
 
 TEST(ConfigFileParserTests, ParseCompareVPD)
 {
-    // Test where works, using "value"
+    // Test where works: value property: Not empty
     {
         const json element = R"(
             {
@@ -1156,7 +1156,24 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
                   (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
     }
 
-    // Test where works, using "byte_values"
+    // Test where works: value property: Empty
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "value": ""
+            }
+        )"_json;
+        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{}));
+    }
+
+    // Test where works: byte_values property: Not empty
     {
         const json element = R"(
             {
@@ -1171,6 +1188,23 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{0x11, 0x22, 0x33}));
+    }
+
+    // Test where works: byte_values property: Empty
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "byte_values": []
+            }
+        )"_json;
+        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{}));
     }
 
     // Test where fails: Element is not an object
@@ -1256,7 +1290,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
                                "either value or byte_values");
     }
 
-    // Test where fails: both value and byte_value specified
+    // Test where fails: both value and byte_values specified
     try
     {
         const json element = R"(

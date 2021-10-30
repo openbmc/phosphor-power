@@ -287,7 +287,7 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
     auto byteValuesIt = element.find("byte_values");
     if ((valueIt != element.end()) && (byteValuesIt == element.end()))
     {
-        std::string stringValue = parseString(*valueIt);
+        std::string stringValue = parseString(*valueIt, true);
         value.insert(value.begin(), stringValue.begin(), stringValue.end());
         ++propertyCount;
     }

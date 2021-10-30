@@ -133,7 +133,7 @@
                 "fru": {"$ref": "#/definitions/inventory_path" },
                 "keyword": {"$ref": "#/definitions/keyword" },
                 "value": {"$ref": "#/definitions/string_value" },
-                "byte_values": {"$ref": "#/definitions/bytes_values" }
+                "byte_values": {"$ref": "#/definitions/byte_values_min0" }
             },
             "required": ["fru", "keyword"],
             "oneOf": [
@@ -236,21 +236,28 @@
             "properties":
             {
                 "register": {"$ref": "#/definitions/register" },
-                "values": {"$ref": "#/definitions/bytes_values" },
-                "masks": {"$ref": "#/definitions/bytes_masks" }
+                "values": {"$ref": "#/definitions/byte_values" },
+                "masks": {"$ref": "#/definitions/byte_masks" }
             },
             "required": ["register", "values"],
             "additionalProperties": false
         },
 
-        "bytes_values":
+        "byte_values":
         {
             "type": "array",
             "items": {"$ref": "#/definitions/byte_value" },
             "minItems": 1
         },
 
-        "bytes_masks":
+        "byte_values_min0":
+        {
+            "type": "array",
+            "items": {"$ref": "#/definitions/byte_value" },
+            "minItems": 0
+        },
+
+        "byte_masks":
         {
             "type": "array",
             "items": {"$ref": "#/definitions/byte_mask" },
