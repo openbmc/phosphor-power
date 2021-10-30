@@ -702,17 +702,34 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["keyword"] = "CCIN";
     compareVpdFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "2D35";
 
-    // Valid.
+    // Valid: value property: not empty.
     {
         json configFile = compareVpdFile;
         EXPECT_JSON_VALID(configFile);
     }
-    // Valid, using byte_values.
+
+    // Valid: value property: empty.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["value"] = "";
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: byte_values property: not empty.
     {
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
         configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] = {
             "0x01", "0x02"};
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: byte_values property: empty.
+    {
+        json configFile = compareVpdFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
+        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] =
+            json::array();
         EXPECT_JSON_VALID(configFile);
     }
 
@@ -783,16 +800,6 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
             "0x50";
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
                             "'0x50' is not of type 'array'");
-    }
-
-    // Invalid: property byte_values is empty
-    {
-        json configFile = compareVpdFile;
-        configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
-        configFile["rules"][0]["actions"][1]["compare_vpd"]["byte_values"] =
-            json::array();
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "[] is too short");
     }
 
     // Invalid: properties byte_values and value both exist
