@@ -16,6 +16,7 @@
 #pragma once
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/exception.hpp>
 
 #include <cstdint>
 #include <map>
@@ -101,6 +102,32 @@ class DBusVPD : public VPD
                                           const std::string& keyword) override;
 
   private:
+    /**
+     * Gets the value of the specified VPD keyword from a D-Bus interface and
+     * property.
+     *
+     * Throws an exception if an error occurs while obtaining the VPD
+     * value.
+     *
+     * @param inventoryPath D-Bus inventory path of the hardware
+     * @param keyword VPD keyword
+     * @param value the resulting keyword value
+     */
+    void getDBusProperty(const std::string& inventoryPath,
+                         const std::string& keyword,
+                         std::vector<uint8_t>& value);
+
+    /**
+     * Returns whether the specified D-Bus exception indicates the VPD interface
+     * or property does not exist for the specified inventory path.
+     *
+     * This is treated as an "empty" keyword value rather than an error
+     * condition.
+     *
+     * @return true if exception indicates interface/property does not exist
+     */
+    bool isUnknownPropertyException(const sdbusplus::exception_t& e);
+
     /**
      * Type alias for map from keyword names to values.
      */

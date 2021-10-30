@@ -34,38 +34,82 @@ std::vector<uint8_t> DBusVPD::getValue(const std::string& inventoryPath,
     auto it = cachedKeywords.find(keyword);
     if (it != cachedKeywords.end())
     {
+        // Get keyword value from cache
         value = it->second;
     }
     else
     {
-        if (keyword == "HW")
-        {
-            // HW is a vector<uint8_t>, the others are a string.
-            util::getProperty("com.ibm.ipzvpd.VINI", "HW", inventoryPath,
-                              INVENTORY_MGR_IFACE, bus, value);
-        }
-        else
-        {
-            // Get keyword value from D-Bus interface/property.  The property
-            // name is normally the same as the VPD keyword name.  However, the
-            // CCIN keyword is stored in the Model property.
-            std::string property{(keyword == "CCIN") ? "Model" : keyword};
-            std::string stringValue;
-            util::getProperty(ASSET_IFACE, property, inventoryPath,
-                              INVENTORY_MGR_IFACE, bus, stringValue);
-
-            if (!stringValue.empty())
-            {
-                value.insert(value.begin(), stringValue.begin(),
-                             stringValue.end());
-            }
-        }
+        // Get keyword value from D-Bus interface/property
+        getDBusProperty(inventoryPath, keyword, value);
 
         // Cache keyword value
         cachedKeywords[keyword] = value;
     }
 
     return value;
+}
+
+void DBusVPD::getDBusProperty(const std::string& inventoryPath,
+                              const std::string& keyword,
+                              std::vector<uint8_t>& value)
+{
+    // Determine the D-Bus property name.  Normally this is the same as the VPD
+    // keyword name.  However, the CCIN keyword is stored in the Model property.
+    std::string property{(keyword == "CCIN") ? "Model" : keyword};
+
+    value.clear();
+    try
+    {
+        if (property == "HW")
+        {
+            // HW property in non-standard interface and has byte vector value
+            util::getProperty("com.ibm.ipzvpd.VINI", property, inventoryPath,
+                              INVENTORY_MGR_IFACE, bus, value);
+        }
+        else
+        {
+            // Other properties in standard interface and have string value
+            std::string stringValue;
+            util::getProperty(ASSET_IFACE, property, inventoryPath,
+                              INVENTORY_MGR_IFACE, bus, stringValue);
+            value.insert(value.begin(), stringValue.begin(), stringValue.end());
+        }
+    }
+    catch (const sdbusplus::exception_t& e)
+    {
+        // If exception indicates VPD interface or property doesn't exist
+        if (isUnknownPropertyException(e))
+        {
+            // Treat this as an empty keyword value
+            value.clear();
+        }
+        else
+        {
+            // Re-throw other exceptions
+            throw;
+        }
+    }
+}
+
+bool DBusVPD::isUnknownPropertyException(const sdbusplus::exception_t& e)
+{
+    // Initially assume exception was due to some other type of error
+    bool isUnknownProperty{false};
+
+    // If the D-Bus error name is set within the exception
+    if (e.name() != nullptr)
+    {
+        // Check if the error name indicates the specified interface or property
+        // does not exist on the specified object path
+        std::string name = e.name();
+        if ((name == SD_BUS_ERROR_UNKNOWN_INTERFACE) ||
+            (name == SD_BUS_ERROR_UNKNOWN_PROPERTY))
+        {
+            isUnknownProperty = true;
+        }
+    }
+
+    return isUnknownProperty;
 }
 
 } // namespace phosphor::power::regulators
