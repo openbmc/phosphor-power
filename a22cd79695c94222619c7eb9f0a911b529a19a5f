@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "eb060227_968a4b70",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-11-01T20:40:10Z",
+      "side": 1,
+      "message": "I agree this could be changed in a separate commit, if at all.  Another option would be to direct call libgpiod here, since the usage doesn\u0027t exact match the createGPIO utility.",
+      "parentUuid": "9137d7a9_b83be0c6",
+      "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "713b1f45_1c136f4e",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
