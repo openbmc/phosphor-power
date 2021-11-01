@@ -13,6 +13,7 @@ struct sys_properties
 {
     int powerSupplyCount;
     std::vector<uint64_t> inputVoltage;
+    bool powerConfigFullLoad;
 };
 
 using namespace phosphor::power::psu;

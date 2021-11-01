@@ -222,6 +222,19 @@ void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
             }
         }
 
+        // The PowerConfigFullLoad is an optional property, default it to false
+        // since that's the default value of the power-config-full-load GPIO.
+        sys.powerConfigFullLoad = false;
+        propIt = properties.find("PowerConfigFullLoad");
+        if (propIt != properties.end())
+        {
+            const bool* fullLoad = std::get_if<bool>(&(propIt->second));
+            if (fullLoad != nullptr)
+            {
+                sys.powerConfigFullLoad = *fullLoad;
+            }
+        }
+
         supportedConfigs.emplace(*model, sys);
     }
     catch (const std::exception& e)
