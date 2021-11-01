@@ -221,6 +221,15 @@ void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
                 sys.inputVoltage = *voltage;
             }
         }
+        propIt = properties.find("PowerConfigFullLoad");
+        if (propIt != properties.end())
+        {
+            const bool* fullLoad = std::get_if<bool>(&(propIt->second));
+            if (fullLoad != nullptr)
+            {
+                sys.powerConfigFullLoad = *fullLoad;
+            }
+        }
 
         supportedConfigs.emplace(*model, sys);
     }
