@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9137d7a9_b83be0c6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-11-01T19:39:16Z",
+      "side": 1,
+      "message": "Initially it was written for the presence gpio which is expected to always exist, and therefore throws if it doesn\u0027t. I don\u0027t think i should change the createGPIO() logic with this commit or we\u0027d need to add a throw for the presence gpio case.",
+      "parentUuid": "03c5ae8e_207a2720",
+      "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "713b1f45_1c136f4e",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "52e0cbca_1d37fc3a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-11-01T19:39:16Z",
+      "side": 1,
+      "message": "Agree. Added the property to entity manager to determine the value of the gpio.",
+      "parentUuid": "1517c9d9_374b22fc",
+      "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00785403_51e52518",
         "filename": "phosphor-power-supply/util.cpp",
         "patchSetId": 1
@@ -65,6 +101,24 @@
       "writtenOn": "2021-10-19T00:06:49Z",
       "side": 1,
       "message": "I understood from your commit message that you didn\u0027t want to write to the journal in the case of a system not supporting the \"full-load\" GPIO.\n\nWhat about the current usage of GPIOReader though?  I assume that journal messages were being written for errors accessing other GPIOs that are perhaps required by this app?  Do we need to move the journal message to a catch statement somewhere?",
+      "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b43b0c_4bf43a31",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-11-01T19:39:16Z",
+      "side": 1,
+      "message": "Interestingly the power_supply.cpp doesn\u0027t catch the error, so we\u0027ll be getting the same behavior as before where a message is logged if it doesn\u0027t exist and the app restarts. The power_supply.cpp only catches read errors, maybe Brandon can comment if the power_supply.cpp should catch the error if the presence gpio does not exist.",
+      "parentUuid": "00785403_51e52518",
       "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
