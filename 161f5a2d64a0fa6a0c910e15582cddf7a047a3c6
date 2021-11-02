@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8922168_9499866e",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-02T15:12:39Z",
+      "side": 1,
+      "message": "Is this property optional in the EM schema?\n\nIf so, should we be setting a default value in case it was not specified in EM?\n\nI\u0027m not sure if the default would be true or false.",
+      "revId": "161f5a2d64a0fa6a0c910e15582cddf7a047a3c6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
