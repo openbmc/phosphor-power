@@ -16,6 +16,24 @@
       "revId": "161f5a2d64a0fa6a0c910e15582cddf7a047a3c6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fcfe716_7062504a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-11-02T20:29:40Z",
+      "side": 1,
+      "message": "Done. Yeah agree. I thought about it but then thought if a system supports the gpio it should have this EM property set but that may not be the case. Setting it to false, since that\u0027s the gpio default value.",
+      "parentUuid": "c8922168_9499866e",
+      "revId": "161f5a2d64a0fa6a0c910e15582cddf7a047a3c6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
