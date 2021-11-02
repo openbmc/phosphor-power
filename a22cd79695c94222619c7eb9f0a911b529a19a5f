@@ -140,6 +140,24 @@
       "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "778b7888_2f11f00d",
+        "filename": "phosphor-power-supply/util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-02T20:03:03Z",
+      "side": 1,
+      "message": "I would think that the presence GPIO we expect, due to reading it from the D-Bus/entity-manager configuration information, would be bad, otherwise, why would we put it in the configuration information?",
+      "parentUuid": "74b43b0c_4bf43a31",
+      "revId": "a22cd79695c94222619c7eb9f0a911b529a19a5f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
