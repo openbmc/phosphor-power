@@ -460,11 +460,10 @@ class PowerSupply
 
     /**
      * @brief Returns true if the number of failed reads exceeds limit
-     * TODO: or CML bit on.
      */
     bool hasCommFault() const
     {
-        return ((readFail >= LOG_LIMIT) || (cmlFault >= DEGLITCH_LIMIT));
+        return (readFail >= LOG_LIMIT);
     }
 
     /**
