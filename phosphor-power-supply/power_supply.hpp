@@ -464,7 +464,7 @@ class PowerSupply
      */
     bool hasCommFault() const
     {
-        return ((readFail >= LOG_LIMIT) || (cmlFault >= DEGLITCH_LIMIT));
+        return (readFail >= LOG_LIMIT);
     }
 
     /**
