@@ -485,56 +485,6 @@ TEST_F(PowerSupplyTests, Analyze)
         }
     }
 
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
-    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
-        .Times(1)
-        .WillOnce(Return(1));
-    psu2.clearFaults();
-
-    // CML fault
-    {
-        // First STATUS_WORD wit no bits set, then with CML fault.
-        PMBusExpectations expectations;
-        setPMBusExpectations(mockPMBus, expectations);
-        EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
-            .Times(1)
-            .WillOnce(Return("214000"));
-        psu2.analyze();
-        // STATUS_WORD with CML fault bit on.
-        expectations.statusWordValue = (status_word::CML_FAULT);
-        // Turn on STATUS_CML fault bit(s)
-        expectations.statusCMLValue = 0xFF;
-        for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
-        {
-            setPMBusExpectations(mockPMBus, expectations);
-            EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
-                .Times(1)
-                .WillOnce(Return("215000"));
-            psu2.analyze();
-            EXPECT_EQ(psu2.isPresent(), true);
-            EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
-            EXPECT_EQ(psu2.hasCommFault(), x >= DEGLITCH_LIMIT);
-            EXPECT_EQ(psu2.hasInputFault(), false);
-            EXPECT_EQ(psu2.hasMFRFault(), false);
-            EXPECT_EQ(psu2.hasVINUVFault(), false);
-            EXPECT_EQ(psu2.hasVoutOVFault(), false);
-            EXPECT_EQ(psu2.hasIoutOCFault(), false);
-            EXPECT_EQ(psu2.hasVoutUVFault(), false);
-            EXPECT_EQ(psu2.hasFanFault(), false);
-            EXPECT_EQ(psu2.hasTempFault(), false);
-            EXPECT_EQ(psu2.hasPgoodFault(), false);
-            EXPECT_EQ(psu2.hasPSKillFault(), false);
-            EXPECT_EQ(psu2.hasPS12VcsFault(), false);
-            EXPECT_EQ(psu2.hasPSCS12VFault(), false);
-        }
-    }
-
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
-    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
-        .Times(1)
-        .WillOnce(Return(1));
-    psu2.clearFaults();
-
     // VOUT_OV_FAULT fault
     {
         // First STATUS_WORD with no bits set, then with VOUT/VOUT_OV fault.
@@ -942,8 +892,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasInputFault(), true);
     EXPECT_EQ(psu.hasMFRFault(), true);
     EXPECT_EQ(psu.hasVINUVFault(), true);
-    // True due to CML fault bits on
-    EXPECT_EQ(psu.hasCommFault(), true);
+    EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), true);
     EXPECT_EQ(psu.hasIoutOCFault(), true);
     // Cannot have VOUT_OV_FAULT and VOUT_UV_FAULT.
