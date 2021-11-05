@@ -22,37 +22,43 @@ using ::testing::StrEq;
 static auto PSUInventoryPath = "/xyz/bmc/inv/sys/chassis/board/powersupply0";
 static auto PSUGPIOLineName = "presence-ps0";
 
+struct PMBusExpectations
+{
+    uint16_t statusWordValue{0x0000};
+    uint8_t statusInputValue{0x00};
+    uint8_t statusMFRValue{0x00};
+    uint8_t statusCMLValue{0x00};
+    uint8_t statusVOUTValue{0x00};
+};
+
 // Helper function to setup expectations for various STATUS_* commands
-void setPMBusExpectations(MockedPMBus& mockPMBus, uint16_t statusWordValue,
-                          uint8_t statusInputValue = 0,
-                          uint8_t statusMFRValue = 0,
-                          uint8_t statusCMLValue = 0,
-                          uint8_t statusVOUTValue = 0)
+void setPMBusExpectations(MockedPMBus& mockPMBus,
+                          const PMBusExpectations& expectations)
 {
     EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
         .Times(1)
-        .WillOnce(Return(statusWordValue));
+        .WillOnce(Return(expectations.statusWordValue));
 
-    if (statusWordValue != 0)
+    if (expectations.statusWordValue != 0)
     {
         // If fault bits are on in STATUS_WORD, there will also be a read of
         // STATUS_INPUT, STATUS_MFR, and STATUS_CML.
         EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
             .Times(1)
-            .WillOnce(Return(statusInputValue));
+            .WillOnce(Return(expectations.statusInputValue));
         EXPECT_CALL(mockPMBus, read(STATUS_MFR, _))
             .Times(1)
-            .WillOnce(Return(statusMFRValue));
+            .WillOnce(Return(expectations.statusMFRValue));
         EXPECT_CALL(mockPMBus, read(STATUS_CML, _))
             .Times(1)
-            .WillOnce(Return(statusCMLValue));
+            .WillOnce(Return(expectations.statusCMLValue));
         // Page will need to be set to 0 to read STATUS_VOUT.
         EXPECT_CALL(mockPMBus, insertPageNum(STATUS_VOUT, 0))
             .Times(1)
             .WillOnce(Return("status0_vout"));
         EXPECT_CALL(mockPMBus, read("status0_vout", _))
             .Times(1)
-            .WillOnce(Return(statusVOUTValue));
+            .WillOnce(Return(expectations.statusVOUTValue));
     }
 }
 
@@ -162,23 +168,25 @@ TEST_F(PowerSupplyTests, Analyze)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    // If I default to reading the GPIO, I will NOT expect a call to
-    // getPresence().
+    {
+        // If I default to reading the GPIO, I will NOT expect a call to
+        // getPresence().
 
-    PowerSupply psu{bus, PSUInventoryPath, 4, 0x69, PSUGPIOLineName};
-    MockedGPIOInterface* mockPresenceGPIO =
-        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
-    EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(0));
+        PowerSupply psu{bus, PSUInventoryPath, 4, 0x69, PSUGPIOLineName};
+        MockedGPIOInterface* mockPresenceGPIO =
+            static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+        EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(0));
 
-    psu.analyze();
-    // By default, nothing should change.
-    EXPECT_EQ(psu.isPresent(), false);
-    EXPECT_EQ(psu.isFaulted(), false);
-    EXPECT_EQ(psu.hasInputFault(), false);
-    EXPECT_EQ(psu.hasMFRFault(), false);
-    EXPECT_EQ(psu.hasVINUVFault(), false);
-    EXPECT_EQ(psu.hasCommFault(), false);
-    EXPECT_EQ(psu.hasVoutOVFault(), false);
+        psu.analyze();
+        // By default, nothing should change.
+        EXPECT_EQ(psu.isPresent(), false);
+        EXPECT_EQ(psu.isFaulted(), false);
+        EXPECT_EQ(psu.hasInputFault(), false);
+        EXPECT_EQ(psu.hasMFRFault(), false);
+        EXPECT_EQ(psu.hasVINUVFault(), false);
+        EXPECT_EQ(psu.hasCommFault(), false);
+        EXPECT_EQ(psu.hasVoutOVFault(), false);
+    }
 
     PowerSupply psu2{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
     // In order to get the various faults tested, the power supply needs to
@@ -186,178 +194,169 @@ TEST_F(PowerSupplyTests, Analyze)
     MockedGPIOInterface* mockPresenceGPIO2 =
         static_cast<MockedGPIOInterface*>(psu2.getPresenceGPIO());
     ON_CALL(*mockPresenceGPIO2, read()).WillByDefault(Return(1));
-
     EXPECT_EQ(psu2.isPresent(), false);
 
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
     // Presence change from missing to present will trigger write to
     // ON_OFF_CONFIG.
     EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
-    // Presence change from missing to present will trigger in1_input read in
-    // an attempt to get CLEAR_FAULTS called.
+    // Presence change from missing to present will trigger in1_input read
+    // in an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
-    // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    uint8_t statusInputValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), false);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
 
-    // STATUS_WORD input fault/warn
-    statusWordValue = (status_word::INPUT_FAULT_WARN);
-    // STATUS_INPUT fault bits ... on.
-    statusInputValue = 0x38;
-    // STATUS_MFR, STATUS_CML, and STATUS_VOUT don't care
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), true);
-    EXPECT_EQ(psu2.hasInputFault(), true);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    // STATUS_WORD INPUT fault.
+    {
+        // Start with STATUS_WORD 0x0000. Powered on, no faults.
+        // Set expectations for a no fault
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+
+        // Update expectations for STATUS_WORD input fault/warn
+        expectations.statusWordValue = (status_word::INPUT_FAULT_WARN);
+        expectations.statusInputValue = 0x38;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), true);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
 
     // STATUS_WORD INPUT/UV fault.
-    // First need it to return good status, then the fault
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    // Now set fault bits in STATUS_WORD
-    statusWordValue =
-        (status_word::INPUT_FAULT_WARN | status_word::VIN_UV_FAULT);
-    // STATUS_INPUT fault bits ... on.
-    statusInputValue = 0x38;
-    // STATUS_MFR, STATUS_CML, and STATUS_VOUT don't care
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), true);
-    EXPECT_EQ(psu2.hasInputFault(), true);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), true);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    {
+        // First need it to return good status, then the fault
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // Now set fault bits in STATUS_WORD
+        expectations.statusWordValue =
+            (status_word::INPUT_FAULT_WARN | status_word::VIN_UV_FAULT);
+        // STATUS_INPUT fault bits ... on.
+        expectations.statusInputValue = 0x38;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), true);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), true);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
 
     // STATUS_WORD MFR fault.
-    // First need it to return good status, then the fault
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    // Now STATUS_WORD with MFR fault bit on.
-    statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
-    // STATUS_INPUT fault bits ... don't care.
-    statusInputValue = 0;
-    // STATUS_MFR bits on.
-    uint8_t statusMFRValue = 0xFF;
-    // STATUS_CML and STATUS_VOUT don't care
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), true);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), true);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    {
+        // First need it to return good status, then the fault
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // Now STATUS_WORD with MFR fault bit on.
+        expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+        // STATUS_MFR bits on.
+        expectations.statusMFRValue = 0xFF;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), true);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
 
     // Ignore Temperature fault.
-    // First STATUS_WORD with no bits set, then with temperature fault.
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    // STATUS_WORD with temperature fault bit on.
-    statusWordValue = (status_word::TEMPERATURE_FAULT_WARN);
-    // STATUS_INPUT, STATUS_MFR, STATUS_CML, and STATUS_VOUT fault bits ...
-    // don't care.
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), false);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    {
+        // First STATUS_WORD with no bits set, then with temperature fault.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // STATUS_WORD with temperature fault bit on.
+        expectations.statusWordValue = (status_word::TEMPERATURE_FAULT_WARN);
+        // STATUS_INPUT, STATUS_MFR, STATUS_CML, and STATUS_VOUT fault bits ...
+        // don't care (defaults).
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
 
     // CML fault
-    // First STATUS_WORD wit no bits set, then with CML fault.
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    // STATUS_WORD with CML fault bit on.
-    statusWordValue = (status_word::CML_FAULT);
-    // STATUS_INPUT fault bits ... don't care.
-    statusInputValue = 0;
-    // STATUS_MFR don't care
-    statusMFRValue = 0;
-    // Turn on STATUS_CML fault bit(s)
-    uint8_t statusCMLValue = 0xFF;
-    // STATUS_VOUT don't care
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue, statusCMLValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), true);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), true);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    {
+        // First STATUS_WORD wit no bits set, then with CML fault.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // STATUS_WORD with CML fault bit on.
+        expectations.statusWordValue = (status_word::CML_FAULT);
+        // Turn on STATUS_CML fault bit(s)
+        expectations.statusCMLValue = 0xFF;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), true);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
 
     // VOUT_OV_FAULT fault
-    // First STATUS_WORD with no bits set, then with VOUT/VOUT_OV fault.
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    // STATUS_WORD with VOUT/VOUT_OV fault.
-    statusWordValue =
-        ((status_word::VOUT_FAULT) | (status_word::VOUT_OV_FAULT));
-    // STATUS_INPUT fault bits ... don't care.
-    statusInputValue = 0;
-    // STATUS_MFR don't care
-    statusMFRValue = 0;
-    // STATUS_CML don't care
-    statusCMLValue = 0;
-    // Turn on STATUS_VOUT fault bit(s)
-    uint8_t statusVOUTValue = 0xA0;
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue, statusCMLValue, statusVOUTValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), true);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), true);
+    {
+        // First STATUS_WORD with no bits set, then with VOUT/VOUT_OV fault.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // STATUS_WORD with VOUT/VOUT_OV fault.
+        expectations.statusWordValue =
+            ((status_word::VOUT_FAULT) | (status_word::VOUT_OV_FAULT));
+        // Turn on STATUS_VOUT fault bit(s)
+        expectations.statusVOUTValue = 0xA0;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), true);
+    }
 
     // Ignore fan fault
-    // First STATUS_WORD with no bits set, then with fan
-    // fault.
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    statusWordValue = (status_word::FAN_FAULT);
-    // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT: Don't care if
-    // bits set or not.
-    setPMBusExpectations(mockPMBus, statusWordValue);
-    psu2.analyze();
-    EXPECT_EQ(psu2.isPresent(), true);
-    EXPECT_EQ(psu2.isFaulted(), false);
-    EXPECT_EQ(psu2.hasInputFault(), false);
-    EXPECT_EQ(psu2.hasMFRFault(), false);
-    EXPECT_EQ(psu2.hasVINUVFault(), false);
-    EXPECT_EQ(psu2.hasCommFault(), false);
-    EXPECT_EQ(psu2.hasVoutOVFault(), false);
-
+    {
+        // First STATUS_WORD with no bits set, then with fan fault.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        expectations.statusWordValue = (status_word::FAN_FAULT);
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+    }
     // TODO: ReadFailure
 }
 
@@ -419,8 +418,8 @@ TEST_F(PowerSupplyTests, ClearFaults)
     // an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
     // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
@@ -429,18 +428,18 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasVINUVFault(), false);
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
+
     // STATUS_WORD with fault bits galore!
-    statusWordValue = 0xFFFF;
+    expectations.statusWordValue = 0xFFFF;
     // STATUS_INPUT with fault bits on.
-    uint8_t statusInputValue = 0xFF;
+    expectations.statusInputValue = 0xFF;
     // STATUS_MFR_SPEFIC with bits on.
-    uint8_t statusMFRValue = 0xFF;
+    expectations.statusMFRValue = 0xFF;
     // STATUS_CML with bits on.
-    uint8_t statusCMLValue = 0xFF;
+    expectations.statusCMLValue = 0xFF;
     // STATUS_VOUT with bits on.
-    uint8_t statusVOUTValue = 0xFF;
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue, statusCMLValue, statusVOUTValue);
+    expectations.statusVOUTValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), true);
@@ -538,18 +537,18 @@ TEST_F(PowerSupplyTests, IsFaulted)
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), false);
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    PMBusExpectations expectations;
     // STATUS_WORD with fault bits on.
-    uint16_t statusWordValue = 0xFFFF;
+    expectations.statusWordValue = 0xFFFF;
     // STATUS_INPUT with fault bits on.
-    uint8_t statusInputValue = 0xFF;
+    expectations.statusInputValue = 0xFF;
     // STATUS_MFR_SPECIFIC with faults bits on.
-    uint8_t statusMFRValue = 0xFF;
+    expectations.statusMFRValue = 0xFF;
     // STATUS_CML with faults bits on.
-    uint8_t statusCMLValue = 0xFF;
+    expectations.statusCMLValue = 0xFF;
     // STATUS_VOUT with fault bits on.
-    uint8_t statusVOUTValue = 0xFF;
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue, statusCMLValue, statusVOUTValue);
+    expectations.statusVOUTValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), true);
 }
@@ -567,21 +566,20 @@ TEST_F(PowerSupplyTests, HasInputFault)
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasInputFault(), false);
     // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), false);
     // STATUS_WORD with input fault/warn on.
-    statusWordValue = (status_word::INPUT_FAULT_WARN);
+    expectations.statusWordValue = (status_word::INPUT_FAULT_WARN);
     // STATUS_INPUT with an input fault bit on.
-    uint8_t statusInputValue = 0x80;
-    // STATUS_MFR, STATUS_CML, and STATUS_VOUT don't care.
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue);
+    expectations.statusInputValue = 0x80;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), true);
     // STATUS_WORD with no bits on.
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), false);
 }
@@ -600,24 +598,20 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     EXPECT_EQ(psu.hasMFRFault(), false);
     // First return STATUS_WORD with no bits on.
     // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
-    statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
-    // STATUS_INPUT don't care
-    uint8_t statusInputValue = 0;
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
     // STATUS_MFR_SPEFIC with bit(s) on.
-    uint8_t statusMFRValue = 0xFF;
-    // STATUS_CML and STATUS_VOUT don't care.
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue);
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), true);
     // Back to no bits on in STATUS_WORD
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasMFRFault(), false);
 }
@@ -635,22 +629,21 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasVINUVFault(), false);
     // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
     // Turn fault on.
-    statusWordValue = (status_word::VIN_UV_FAULT);
+    expectations.statusWordValue = (status_word::VIN_UV_FAULT);
     // Curious disagreement between PMBus Spec. Part II Figure 16 and 33. Go by
     // Figure 16, and assume bits on in STATUS_INPUT.
-    uint8_t statusInputValue = 0x18;
-    // STATUS_MFR, STATUS_CML, and STATUS_VOUT don't care.
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue);
+    expectations.statusInputValue = 0x18;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), true);
     // Back to no fault bits on in STATUS_WORD
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
 }
@@ -668,27 +661,20 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     // STATUS_WORD 0x0000 is powered on, no faults.
-    uint16_t statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     // Turn fault on.
-    statusWordValue = (status_word::VOUT_OV_FAULT);
-    // STATUS_INPUT don't care.
-    uint8_t statusInputValue = 0;
-    // STATUS_MFR don't care.
-    uint8_t statusMFRValue = 0;
-    // STATUS_CML don't care.
-    uint8_t statusCMLValue = 0;
+    expectations.statusWordValue = (status_word::VOUT_OV_FAULT);
     // STATUS_VOUT fault bit(s)
-    uint8_t statusVOUTValue = 0x80;
-    setPMBusExpectations(mockPMBus, statusWordValue, statusInputValue,
-                         statusMFRValue, statusCMLValue, statusVOUTValue);
+    expectations.statusVOUTValue = 0x80;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVoutOVFault(), true);
     // Back to no fault bits on in STATUS_WORD
-    statusWordValue = 0;
-    setPMBusExpectations(mockPMBus, statusWordValue);
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVoutOVFault(), false);
 }
