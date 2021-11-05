@@ -19,11 +19,13 @@ class I2CDevice : public I2CInterface
      * @param[in] busId - The i2c bus ID
      * @param[in] devAddr - The device address of the I2C device
      * @param[in] initialState - Initial state of the I2CDevice object
+     * @param[in] maxRetries - Maximum number of times to retry an I2C operation
      */
     explicit I2CDevice(uint8_t busId, uint8_t devAddr,
-                       InitialState initialState = InitialState::OPEN) :
+                       InitialState initialState = InitialState::OPEN,
+                       int maxRetries = 0) :
         busId(busId),
-        devAddr(devAddr)
+        devAddr(devAddr), maxRetries(maxRetries)
     {
         busStr = "/dev/i2c-" + std::to_string(busId);
         if (initialState == InitialState::OPEN)
@@ -43,6 +45,9 @@ class I2CDevice : public I2CInterface
 
     /** @brief The i2c device address in the bus */
     uint8_t devAddr;
+
+    /** @brief Maximum number of times to retry an I2C operation */
+    int maxRetries = 0;
 
     /** @brief The file descriptor of the opened i2c device */
     int fd = INVALID_FD;
@@ -164,12 +169,14 @@ class I2CDevice : public I2CInterface
      * @param[in] busId - The i2c bus ID
      * @param[in] devAddr - The device address of the i2c
      * @param[in] initialState - Initial state of the I2CInterface object
+     * @param[in] maxRetries - Maximum number of times to retry an I2C operation
      *
      * @return The unique_ptr holding the I2CInterface
      */
     static std::unique_ptr<I2CInterface>
         create(uint8_t busId, uint8_t devAddr,
-               InitialState initialState = InitialState::OPEN);
+               InitialState initialState = InitialState::OPEN,
+               int maxRetries = 0);
 };
 
 } // namespace i2c

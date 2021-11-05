@@ -194,11 +194,13 @@ class I2CInterface
  * @param[in] busId - The i2c bus ID
  * @param[in] devAddr - The device address of the i2c
  * @param[in] initialState - Initial state of the I2CInterface object
+ * @param[in] maxRetries - Maximum number of times to retry an I2C operation
  *
  * @return The unique_ptr holding the I2CInterface
  */
 std::unique_ptr<I2CInterface> create(
     uint8_t busId, uint8_t devAddr,
-    I2CInterface::InitialState initialState = I2CInterface::InitialState::OPEN);
+    I2CInterface::InitialState initialState = I2CInterface::InitialState::OPEN,
+    int maxRetries = 0);
 
 } // namespace i2c
