@@ -177,12 +177,20 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last value read from STATUS_TEMPERATURE.
+     */
+    uint64_t getStatusTemperature() const
+    {
+        return statusTemperature;
+    }
+
+    /**
      * @brief Returns true if a fault was found.
      */
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                mfrFault);
+                tempFault || mfrFault);
     }
 
     /**
@@ -231,6 +239,14 @@ class PowerSupply
     bool hasVoutOVFault() const
     {
         return voutOVFault;
+    }
+
+    /**
+     * @brief Returns true if TEMPERATURE fault occurred.
+     */
+    bool hasTempFault() const
+    {
+        return tempFault;
     }
 
     /**
@@ -308,6 +324,10 @@ class PowerSupply
     /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
     uint64_t statusVout = 0;
 
+    /** @brief Will be updated to the latest/last value read from
+     * STATUS_TEMPERATURE.*/
+    uint64_t statusTemperature = 0;
+
     /** @brief True if an error for a fault has already been logged. */
     bool faultLogged = false;
 
@@ -325,6 +345,9 @@ class PowerSupply
 
     /** @brief True if bit 5 of STATUS_WORD low byte is on. */
     bool voutOVFault = false;
+
+    /** @brief True if bit 2 of STATUS_WORD low byte is on. */
+    bool tempFault = false;
 
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;

@@ -213,6 +213,8 @@ void PowerSupply::analyze()
                 statusCML = pmbusIntf->read(STATUS_CML, Type::Debug);
                 auto status0Vout = pmbusIntf->insertPageNum(STATUS_VOUT, 0);
                 statusVout = pmbusIntf->read(status0Vout, Type::Debug);
+                statusTemperature =
+                    pmbusIntf->read(STATUS_TEMPERATURE, Type::Debug);
                 if (statusWord & status_word::CML_FAULT)
                 {
                     if (!cmlFault)
@@ -257,6 +259,23 @@ void PowerSupply::analyze()
                     voutOVFault = true;
                 }
 
+                if (statusWord & status_word::TEMPERATURE_FAULT_WARN)
+                {
+                    if (!tempFault)
+                    {
+                        log<level::ERR>(
+                            fmt::format("TEMPERATURE fault/warning: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_TEMPERATURE = {:#02x}",
+                                        statusWord, statusMFR,
+                                        statusTemperature)
+                                .c_str());
+                    }
+
+                    tempFault = true;
+                }
+
                 if (statusWord & status_word::MFR_SPECIFIC_FAULT)
                 {
                     if (!mfrFault)
@@ -294,6 +313,7 @@ void PowerSupply::analyze()
                 mfrFault = false;
                 vinUVFault = false;
                 voutOVFault = false;
+                tempFault = false;
             }
         }
         catch (const ReadFailure& e)
@@ -345,6 +365,7 @@ void PowerSupply::clearFaults()
         vinUVFault = false;
         cmlFault = false;
         voutOVFault = false;
+        tempFault = false;
         readFail = 0;
 
         try
