@@ -517,6 +517,18 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
+                else if (psu->hasPgoodFault())
+                {
+                    /* POWER_GOOD# is not low, or OFF is on */
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
             }
         }
     }

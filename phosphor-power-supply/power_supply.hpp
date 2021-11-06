@@ -190,7 +190,7 @@ class PowerSupply
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                tempFault || mfrFault);
+                tempFault || pgoodFault || mfrFault);
     }
 
     /**
@@ -247,6 +247,15 @@ class PowerSupply
     bool hasTempFault() const
     {
         return tempFault;
+    }
+
+    /**
+     * @brief Returns true if there is a PGood fault (PGOOD# inactive, or OFF
+     * bit on).
+     */
+    bool hasPgoodFault() const
+    {
+        return pgoodFault;
     }
 
     /**
@@ -348,6 +357,11 @@ class PowerSupply
 
     /** @brief True if bit 2 of STATUS_WORD low byte is on. */
     bool tempFault = false;
+
+    /** @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive, or
+     * the unit is off.
+     */
+    bool pgoodFault = false;
 
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;
