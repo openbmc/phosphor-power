@@ -192,6 +192,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu.hasCommFault(), false);
         EXPECT_EQ(psu.hasVoutOVFault(), false);
         EXPECT_EQ(psu.hasTempFault(), false);
+        EXPECT_EQ(psu.hasPgoodFault(), false);
     }
 
     PowerSupply psu2{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
@@ -224,6 +225,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
 
         // Update expectations for STATUS_WORD input fault/warn
         // STATUS_INPUT fault bits ... on.
@@ -241,6 +243,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -266,6 +269,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -291,6 +295,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -315,6 +320,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), true);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -339,6 +345,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), true);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -366,6 +373,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), true);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
     {
@@ -387,7 +395,34 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
+
+    {
+        // PGOOD/OFF fault.
+        // First STATUS_WORD with no bits set.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isFaulted(), false);
+        // POWER_GOOD# inactive, and OFF bit on.
+        expectations.statusWordValue =
+            ((status_word::POWER_GOOD_NEGATED) | (status_word::UNIT_IS_OFF));
+        // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT, and
+        // STATUS_TEMPERATURE: Don't care if bits set or not (defaults).
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), true);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasMFRFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
+        EXPECT_EQ(psu2.hasCommFault(), false);
+        EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasTempFault(), false);
+        EXPECT_EQ(psu2.hasPgoodFault(), true);
+    }
+
     // TODO: ReadFailure
 }
 
@@ -460,6 +495,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
+    EXPECT_EQ(psu.hasPgoodFault(), false);
 
     // STATUS_WORD with fault bits galore!
     expectations.statusWordValue = 0xFFFF;
@@ -483,6 +519,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), true);
     EXPECT_EQ(psu.hasVoutOVFault(), true);
     EXPECT_EQ(psu.hasTempFault(), true);
+    EXPECT_EQ(psu.hasPgoodFault(), true);
     EXPECT_CALL(mockPMBus, read("in1_input", _))
         .Times(1)
         .WillOnce(Return(209000));
@@ -495,6 +532,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
+    EXPECT_EQ(psu.hasPgoodFault(), false);
 
     // TODO: Faults clear on missing/present?
 }
@@ -758,4 +796,53 @@ TEST_F(PowerSupplyTests, HasTempFault)
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasTempFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPgoodFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x6b, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    // Turn PGOOD# off (fault on).
+    expectations.statusWordValue = (status_word::POWER_GOOD_NEGATED);
+    // STATUS_INPUT don't care. (default)
+    // STATUS_MFR don't care. (default)
+    // STATUS_CML don't care. (default)
+    // STATUS_VOUT don't care. (default)
+    // STATUS_TEMPERATURE don't care. (default)
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), true);
+    // Back to no fault bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    // Turn OFF bit on
+    expectations.statusWordValue = (status_word::UNIT_IS_OFF);
+    // STATUS_INPUT don't care. (default)
+    // STATUS_MFR don't care. (default)
+    // STATUS_CML don't care. (default)
+    // STATUS_VOUT don't care. (default)
+    // STATUS_TEMPERATURE don't care. (default)
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), true);
+    // Back to no fault bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
 }

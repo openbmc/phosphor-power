@@ -276,6 +276,22 @@ void PowerSupply::analyze()
                     tempFault = true;
                 }
 
+                if ((statusWord & status_word::POWER_GOOD_NEGATED) ||
+                    (statusWord & status_word::UNIT_IS_OFF))
+                {
+                    if (!pgoodFault)
+                    {
+                        log<level::ERR>(
+                            fmt::format("PGOOD fault: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
+                    }
+
+                    pgoodFault = true;
+                }
+
                 if (statusWord & status_word::MFR_SPECIFIC_FAULT)
                 {
                     if (!mfrFault)
@@ -314,6 +330,7 @@ void PowerSupply::analyze()
                 vinUVFault = false;
                 voutOVFault = false;
                 tempFault = false;
+                pgoodFault = false;
             }
         }
         catch (const ReadFailure& e)
@@ -366,6 +383,7 @@ void PowerSupply::clearFaults()
         cmlFault = false;
         voutOVFault = false;
         tempFault = false;
+        pgoodFault = false;
         readFail = 0;
 
         try
