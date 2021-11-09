@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a0626ebb_edf09042",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-09T23:20:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb61732c_1d241b72",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 15
+      },
+      "revId": "571d94ac6fba01ef17f5468d9e65fda7c8b20490",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8d6bbbb_c21d9ce6",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2021-11-09T22:41:53Z",
       "side": 1,
       "message": "Need to add hasPgoodFault() ?",
+      "revId": "571d94ac6fba01ef17f5468d9e65fda7c8b20490",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c39b5e37_6328f60a",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-09T23:20:14Z",
+      "side": 1,
+      "message": "Yes, should verify that is false.",
+      "parentUuid": "f8d6bbbb_c21d9ce6",
       "revId": "571d94ac6fba01ef17f5468d9e65fda7c8b20490",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
