@@ -586,8 +586,13 @@ std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
     uint8_t address = parseHexByte(addressElement);
     ++propertyCount;
 
+    // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
-    return i2c::create(bus, address, i2c::I2CInterface::InitialState::CLOSED);
+
+    // Create I2CInterface object; retry failed I2C operations a max of 3 times.
+    int maxRetries{3};
+    return i2c::create(bus, address, i2c::I2CInterface::InitialState::CLOSED,
+                       maxRetries);
 }
 
 std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
