@@ -177,6 +177,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last value read from STATUS_IOUT.
+     */
+    uint64_t getStatusIout() const
+    {
+        return statusIout;
+    }
+
+    /**
      * @brief Returns the last value read from STATUS_TEMPERATURE.
      */
     uint64_t getStatusTemperature() const
@@ -190,7 +198,7 @@ class PowerSupply
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                tempFault || pgoodFault || mfrFault);
+                ioutOCFault || tempFault || pgoodFault || mfrFault);
     }
 
     /**
@@ -239,6 +247,14 @@ class PowerSupply
     bool hasVoutOVFault() const
     {
         return voutOVFault;
+    }
+
+    /**
+     * @brief Returns true if IOUT_OC fault occurred (bit 4 STATUS_BYTE).
+     */
+    bool hasIoutOCFault() const
+    {
+        return ioutOCFault;
     }
 
     /**
@@ -333,6 +349,9 @@ class PowerSupply
     /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
     uint64_t statusVout = 0;
 
+    /** @brief Will be updated to the latest/last value read from STATUS_IOUT.*/
+    uint64_t statusIout = 0;
+
     /** @brief Will be updated to the latest/last value read from
      * STATUS_TEMPERATURE.*/
     uint64_t statusTemperature = 0;
@@ -354,6 +373,9 @@ class PowerSupply
 
     /** @brief True if bit 5 of STATUS_WORD low byte is on. */
     bool voutOVFault = false;
+
+    /** @brief True if bit 4 of STATUS_WORD low byte is on. */
+    bool ioutOCFault = false;
 
     /** @brief True if bit 2 of STATUS_WORD low byte is on. */
     bool tempFault = false;
