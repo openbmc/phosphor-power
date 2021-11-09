@@ -22,6 +22,30 @@
       "revId": "5d23d9d6805b33423fc9a839980deec8e42b7404",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e51cb741_03c27e93",
+        "filename": "phosphor-regulators/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-09T17:10:50Z",
+      "side": 1,
+      "message": "I just thought it would make the code clearer/more self-documenting.  Sometimes people object to random looking constants in parameter lists like\n  doFoo(3, true, false, 7.0);\n\nvs.\n\n  doFoo(elementCount, isEmptyAllowed, isBarAllowed, capacityRatio);",
+      "parentUuid": "3848d688_d67690c8",
+      "range": {
+        "startLine": 593,
+        "startChar": 3,
+        "endLine": 593,
+        "endChar": 22
+      },
+      "revId": "5d23d9d6805b33423fc9a839980deec8e42b7404",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
