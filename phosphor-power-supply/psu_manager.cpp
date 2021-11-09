@@ -482,6 +482,18 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
+                else if (psu->hasIoutOCFault())
+                {
+                    // Include STATUS_IOUT for Iout faults.
+                    additionalData["STATUS_IOUT"] =
+                        fmt::format("{:#02x}", psu->getStatusIout());
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
                 else if (psu->hasTempFault())
                 {
                     // Include STATUS_TEMPERATURE for temperature faults.
