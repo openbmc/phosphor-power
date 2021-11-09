@@ -46,6 +46,52 @@
       "revId": "4ef6f64e8249902d7b4cbf85515a565d256a1931",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02dd8350_33344112",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-09T22:06:20Z",
+      "side": 1,
+      "message": "Using blocks like this to create separate PMBusExpectations objects is a great idea.  No accidental carry-over values from a previous test.\n\nI think it might help with readability if you moved the first comment to the line preceding the block.\n\nThen you have a nice high level overview of what test variation the block is covering.\n\ne.g.\n  // STATUS_WORD 0x0000 is powered on, no faults.\n  {\n    ...\n  }\n  \n  // STATUS_WORD INPUT/UV fault.\n  {\n    ...\n  }\n    \n  // STATUS_WORD MFR fault.\n  {\n    ...\n  }",
+      "range": {
+        "startLine": 207,
+        "startChar": 4,
+        "endLine": 207,
+        "endChar": 5
+      },
+      "revId": "4ef6f64e8249902d7b4cbf85515a565d256a1931",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "220c5aea_3cdb2949",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-09T22:06:20Z",
+      "side": 1,
+      "message": "I don\u0027t know if these comments are necessary any more here and in the other test variations.  The helper function and struct make things pretty self-describing IMO.  The reader can tell that fields not set in the struct will be 0.  This eliminates the need to update the list of fields that didn\u0027t need to be set when you add new fields.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 72
+      },
+      "revId": "4ef6f64e8249902d7b4cbf85515a565d256a1931",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
