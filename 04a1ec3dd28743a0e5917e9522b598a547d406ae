@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a966aa13_c85d0ef5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-09T23:55:09Z",
+      "side": 1,
+      "message": "Doesn\u0027t matter if in quotes or not:\nphosphor-power/.git/COMMIT_EDITMSG:9: OT \u003d\u003d\u003e TO, OF, OR",
+      "parentUuid": "89ad9a70_91d2c6fe",
+      "range": {
+        "startLine": 15,
+        "startChar": 57,
+        "endLine": 15,
+        "endChar": 60
+      },
+      "revId": "04a1ec3dd28743a0e5917e9522b598a547d406ae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ed8fd8d_273a52aa",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 1
