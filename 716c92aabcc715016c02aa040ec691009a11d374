@@ -16,6 +16,24 @@
       "revId": "716c92aabcc715016c02aa040ec691009a11d374",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7018f4e7_faf6c83f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-10T18:05:08Z",
+      "side": 1,
+      "message": "I was leaving sorting out the MFR faults for later, as I was not quite sure how well the ordering and description of those would go since it is based on STATUS_MFR_SPECIFIC:\n17.9. STATUS_MFR_SPECIFIC\nThe STATUS_MFR_SPECIFIC command returns one data byte with contents as\nfollows:\nTable 23. STATUS_MFR_SPECIFIC Data Byte\nBit Meaning\n7 Manufacturer Defined\n6 Manufacturer Defined\n5 Manufacturer Defined\n4 Manufacturer Defined\n3 Manufacturer Defined\n2 Manufacturer Defined\n1 Manufacturer Defined\n0 Manufacturer Defined\n\nI plan on splitting out the various meanings/values/possibilities in a later commit.",
+      "parentUuid": "6864ca8d_58c4c99e",
+      "revId": "716c92aabcc715016c02aa040ec691009a11d374",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
