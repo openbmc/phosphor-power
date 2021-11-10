@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d31900f8_dd96759e",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-11-10T17:24:19Z",
+      "side": 1,
+      "message": "just noticed this now, but the OC and UV faults should be detected\u0026logged before overtemp faults.  either fixing this now or with a different commit is fine.",
+      "revId": "b299f7fc7809f06b688f1886597ad5f6e09e6eb7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
