@@ -16,6 +16,24 @@
       "revId": "b299f7fc7809f06b688f1886597ad5f6e09e6eb7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "302f4c2e_63a6de14",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-10T18:09:10Z",
+      "side": 1,
+      "message": "Explained in earlier commit of this stack. I was planning to split out the various faults in STATUS_MFR_SPECIFIC and appropriately ordering them in a later commit.",
+      "parentUuid": "d31900f8_dd96759e",
+      "revId": "b299f7fc7809f06b688f1886597ad5f6e09e6eb7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
