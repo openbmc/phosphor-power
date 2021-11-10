@@ -384,7 +384,13 @@ void PowerSupply::analyze()
                 voutUVFault = false;
                 fanFault = false;
                 tempFault = false;
-                pgoodFault = false;
+                if (pgoodFault)
+                {
+                    log<level::INFO>(fmt::format("pgoodFault cleared path: {}",
+                                                 inventoryPath)
+                                         .c_str());
+                    pgoodFault = false;
+                }
             }
         }
         catch (const ReadFailure& e)
