@@ -112,6 +112,11 @@ void PowerControl::setState(int s)
             fmt::format("Power already at requested state: {}", state).c_str());
         return;
     }
+    if (s == 0)
+    {
+        // Wait for two seconds when powering down
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
 
     log<level::INFO>(fmt::format("setState: {}", s).c_str());
     powerControlLine.request(
@@ -130,8 +135,7 @@ void PowerControl::setUpGpio()
     pgoodLine = gpiod::find_line(pgoodLineName);
     if (!pgoodLine)
     {
-        std::string errorString =
-            fmt::format("GPIO line name not found: {}", pgoodLineName);
+        std::string errorString{"GPIO line name not found: " + pgoodLineName};
         log<level::ERR>(errorString.c_str());
         report<
             sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
@@ -140,8 +144,8 @@ void PowerControl::setUpGpio()
     powerControlLine = gpiod::find_line(powerControlLineName);
     if (!powerControlLine)
     {
-        std::string errorString =
-            fmt::format("GPIO line name not found: {}", powerControlLineName);
+        std::string errorString{"GPIO line name not found: " +
+                                powerControlLineName};
         log<level::ERR>(errorString.c_str());
         report<
             sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
