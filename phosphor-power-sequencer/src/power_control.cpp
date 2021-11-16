@@ -17,8 +17,11 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
+#include "utility.hpp"
 
 #include <fmt/format.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -92,6 +95,18 @@ void PowerControl::pollPgood()
     if (pgoodState == state)
     {
         inStateTransition = false;
+    }
+    else if (pgoodState == 0)
+    {
+        // If pgood failed, call for chassis hard power off
+        log<level::ERR>("Chassis pgood failure");
+
+        auto method =
+            bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                util::SYSTEMD_INTERFACE, "StartUnit");
+        method.append(util::POWEROFF_TARGET);
+        method.append("replace");
+        bus.call_noreply(method);
     }
 }
 
