@@ -17,6 +17,7 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
+#include "utility.hpp"
 
 #include <fmt/format.h>
 #include <sys/types.h>
@@ -68,6 +69,7 @@ void PowerControl::pollPgood()
 {
     if (inStateTransition)
     {
+        // In transition between power on and off, check for timeout
         const auto now = std::chrono::steady_clock::now();
         if (now > pgoodTimeoutTime)
         {
@@ -109,6 +111,7 @@ void PowerControl::pollPgood()
     int pgoodState = pgoodLine.get_value();
     if (pgoodState != pgood)
     {
+        // Power good has changed since last read
         pgood = pgoodState;
         if (pgoodState == 0)
         {
@@ -122,7 +125,21 @@ void PowerControl::pollPgood()
     }
     if (pgoodState == state)
     {
+        // Power good matches requested state
         inStateTransition = false;
+    }
+    else if (!inStateTransition && (pgoodState == 0))
+    {
+        // Not in power off state, not changing state, and power good is off
+        // Power good has failed, call for chassis hard power off
+        log<level::ERR>("Chassis pgood failure");
+
+        auto method =
+            bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                util::SYSTEMD_INTERFACE, "StartUnit");
+        method.append(util::POWEROFF_TARGET);
+        method.append("replace");
+        bus.call_noreply(method);
     }
 }
 
