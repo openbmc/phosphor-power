@@ -192,6 +192,9 @@ class PSUManager
     /** @brief Used to subscribe to D-Bus power on state changes */
     std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
 
+    /** @brief Used to subscribe to D-Bus power supply presence changes */
+    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> presenceMatches;
+
     /** @brief Used to subscribe to Entity Manager interfaces added */
     std::unique_ptr<sdbusplus::bus::match_t> entityManagerIfacesAddedMatch;
 
@@ -203,6 +206,15 @@ class PSUManager
      * @param[in] msg - Data associated with the power state signal
      */
     void powerStateChanged(sdbusplus::message::message& msg);
+
+    /**
+     * @brief Callback for inventory property changes
+     *
+     * Process change of the Present property for power supply.
+     *
+     * @param[in]  msg - Data associated with the Present change signal
+     **/
+    void presenceChanged(sdbusplus::message::message& msg);
 
     /**
      * @brief Callback for entity-manager interface added

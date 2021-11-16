@@ -177,6 +177,14 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         auto psu = std::make_unique<PowerSupply>(bus, invpath, *i2cbus,
                                                  *i2caddr, presline);
         psus.emplace_back(std::move(psu));
+
+        // Subscribe to power supply presence changes
+        auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(invpath,
+                                                            INVENTORY_IFACE),
+            [this](auto& msg) { this->presenceChanged(msg); });
+        presenceMatches.emplace_back(std::move(presenceMatch));
     }
 
     if (psus.empty())
@@ -345,6 +353,25 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         {
             powerOn = false;
             runValidateConfig = true;
+        }
+    }
+}
+
+void PSUManager::presenceChanged(sdbusplus::message::message& msg)
+{
+    std::string msgSensor;
+    std::map<std::string, std::variant<uint32_t, bool>> msgData;
+    msg.read(msgSensor, msgData);
+
+    // Check if it was the Present property that changed.
+    auto valPropMap = msgData.find(PRESENT_PROP);
+    if (valPropMap != msgData.end())
+    {
+        if (std::get<bool>(valPropMap->second))
+        {
+            // A PSU became present, force the PSU validation to run.
+            runValidateConfig = true;
+            validationTimer->restartOnce(validationTimeout);
         }
     }
 }
