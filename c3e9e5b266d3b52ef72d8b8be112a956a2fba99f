@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78b989d2_f079382a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-17T17:18:04Z",
+      "side": 1,
+      "message": "Nit: entries",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 56
+      },
+      "revId": "c3e9e5b266d3b52ef72d8b8be112a956a2fba99f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3e7495_a3ad8d86",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-17T17:18:04Z",
+      "side": 1,
+      "message": "I don\u0027t see these messages in the message registry.  Is that up for review, or coming later?",
+      "range": {
+        "startLine": 89,
+        "startChar": 29,
+        "endLine": 89,
+        "endChar": 75
+      },
+      "revId": "c3e9e5b266d3b52ef72d8b8be112a956a2fba99f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eaf1f59_14015d5c",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-17T17:18:04Z",
+      "side": 1,
+      "message": "The timeout occurred whether the error was successfully logged or not.  Would it be clearer to say something like \"Unable to log timeout error, ...\"?",
+      "range": {
+        "startLine": 99,
+        "startChar": 33,
+        "endLine": 99,
+        "endChar": 54
+      },
+      "revId": "c3e9e5b266d3b52ef72d8b8be112a956a2fba99f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
