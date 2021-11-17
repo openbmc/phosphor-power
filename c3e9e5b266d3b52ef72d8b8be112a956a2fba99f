@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "18a2a8d5_8f856f1f",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-11-17T17:31:03Z",
+      "side": 1,
+      "message": "https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-logging/+/48812",
+      "parentUuid": "dd3e7495_a3ad8d86",
+      "range": {
+        "startLine": 89,
+        "startChar": 29,
+        "endLine": 89,
+        "endChar": 75
+      },
+      "revId": "c3e9e5b266d3b52ef72d8b8be112a956a2fba99f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0eaf1f59_14015d5c",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
