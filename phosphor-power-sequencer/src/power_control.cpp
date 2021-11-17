@@ -19,6 +19,8 @@
 #include "types.hpp"
 
 #include <fmt/format.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -71,6 +73,34 @@ void PowerControl::pollPgood()
         {
             log<level::ERR>("ERROR PowerControl: Pgood poll timeout");
             inStateTransition = false;
+
+            try
+            {
+                auto method = bus.new_method_call(
+                    "xyz.openbmc_project.Logging",
+                    "/xyz/openbmc_project/logging",
+                    "xyz.openbmc_project.Logging.Create", "Create");
+
+                std::map<std::string, std::string> additionalData;
+                // Add PID to AdditionalData
+                additionalData.emplace("_PID", std::to_string(getpid()));
+
+                method.append(
+                    state ? "xyz.openbmc_project.Power.Error.PowerOnTimeout"
+                          : "xyz.openbmc_project.Power.Error.PowerOffTimeout",
+                    sdbusplus::xyz::openbmc_project::Logging::server::Entry::
+                        Level::Critical,
+                    additionalData);
+                bus.call_noreply(method);
+            }
+            catch (const std::exception& e)
+            {
+                log<level::ERR>(
+                    fmt::format("Error logging timeout, state: {}, error {}",
+                                state, e.what())
+                        .c_str());
+            }
+
             return;
         }
     }
