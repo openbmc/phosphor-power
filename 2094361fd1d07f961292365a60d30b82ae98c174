@@ -46,6 +46,30 @@
       "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad572830_5e499d46",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-18T19:29:47Z",
+      "side": 1,
+      "message": "Yeah, I ignored it because I did not have the message_registry.json update:\nNov 12 23:28:28 p10bmc phosphor-psu-monitor[460]: IOUT fault: STATUS_WORD \u003d 0x10, STATUS_MFR_SPECIFIC \u003d 0x0, STATUS_IOUT \u003d 0x0\nNov 12 23:28:28 p10bmc phosphor-log-manager[316]: Event not found in PEL message registry: xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault",
+      "parentUuid": "d2c4ce48_282d94d4",
+      "range": {
+        "startLine": 216,
+        "startChar": 16,
+        "endLine": 216,
+        "endChar": 27
+      },
+      "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
