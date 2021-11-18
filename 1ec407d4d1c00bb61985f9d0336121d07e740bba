@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75b6ca3b_7667e552",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-11-18T23:08:01Z",
+      "side": 1,
+      "message": "off by a character?",
+      "range": {
+        "startLine": 495,
+        "startChar": 5,
+        "endLine": 495,
+        "endChar": 7
+      },
+      "revId": "1ec407d4d1c00bb61985f9d0336121d07e740bba",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
