@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f64f86ac_a059486b",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-11-18T23:02:52Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be done by the ucd90320 app so that it can grab registers or something?",
+      "revId": "78ebaae34fb3009350001eb0d9f6a4f9a71ef733",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
