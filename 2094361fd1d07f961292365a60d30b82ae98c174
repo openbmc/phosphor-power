@@ -70,6 +70,53 @@
       "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f625ea54_f40b970e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-18T19:54:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad572830_5e499d46",
+      "range": {
+        "startLine": 216,
+        "startChar": 16,
+        "endLine": 216,
+        "endChar": 27
+      },
+      "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c812f12f_11400572",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-18T19:54:07Z",
+      "side": 1,
+      "message": "Noted inconsistent comment while fixing CI failure for WIP VOUT_UV commit.",
+      "range": {
+        "startLine": 382,
+        "startChar": 8,
+        "endLine": 382,
+        "endChar": 30
+      },
+      "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
