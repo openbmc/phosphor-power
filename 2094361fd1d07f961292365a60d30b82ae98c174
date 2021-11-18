@@ -22,6 +22,30 @@
       "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2c4ce48_282d94d4",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-18T19:26:39Z",
+      "side": 1,
+      "message": "Yikes! Copy/paste error. At one point, I think I saw it trace 0 and was a bit confused. This probably explains it.",
+      "parentUuid": "b7e90623_cbcac90f",
+      "range": {
+        "startLine": 216,
+        "startChar": 16,
+        "endLine": 216,
+        "endChar": 27
+      },
+      "revId": "2094361fd1d07f961292365a60d30b82ae98c174",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
