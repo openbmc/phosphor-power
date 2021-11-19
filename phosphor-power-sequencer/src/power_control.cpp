@@ -17,7 +17,6 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
-#include "utility.hpp"
 
 #include <fmt/format.h>
 #include <sys/types.h>
@@ -36,8 +35,10 @@ using namespace phosphor::logging;
 namespace phosphor::power::sequencer
 {
 
-const std::string powerControlLineName = "power-chassis-control";
-const std::string pgoodLineName = "power-chassis-good";
+const std::string interfaceName = "xyz.openbmc_project.Configuration.UCD90320";
+const std::string addressPropertyName = "Address";
+const std::string busPropertyName = "Bus";
+const std::string namePropertyName = "Name";
 
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
@@ -47,7 +48,57 @@ PowerControl::PowerControl(sdbusplus::bus::bus& bus,
 {
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
+
+    // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
+    // notifies us if the interface becomes available later.
+    match = std::make_unique<sdbusplus::server::match::match>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAdded() +
+            sdbusplus::bus::match::rules::sender(
+                "xyz.openbmc_project.EntityManager"),
+        std::bind(&PowerControl::interfacesAddedHandler, this,
+                  std::placeholders::_1));
+    setUpDevice();
     setUpGpio();
+}
+
+void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
+{
+    uint64_t* i2cBus = nullptr;
+    uint64_t* i2cAddress = nullptr;
+    std::string* name = nullptr;
+
+    for (const auto& property : properties)
+    {
+        try
+        {
+            if (property.first == busPropertyName)
+            {
+                i2cBus = std::get_if<uint64_t>(&properties[busPropertyName]);
+            }
+            else if (property.first == addressPropertyName)
+            {
+                i2cAddress =
+                    std::get_if<uint64_t>(&properties[addressPropertyName]);
+            }
+            else if (property.first == namePropertyName)
+            {
+                name = std::get_if<std::string>(&properties[namePropertyName]);
+            }
+        }
+        catch (std::exception& e)
+        {}
+    }
+
+    if (i2cBus && i2cAddress && name && !name->empty())
+    {
+        log<level::INFO>(
+            fmt::format(
+                "Found power sequencer device properties, name: {}, bus: {} addr: {:#02x} ",
+                *name, *i2cBus, *i2cAddress)
+                .c_str());
+        // Create device object
+    }
 }
 
 int PowerControl::getPgood() const
@@ -63,6 +114,38 @@ int PowerControl::getPgoodTimeout() const
 int PowerControl::getState() const
 {
     return state;
+}
+
+void PowerControl::interfacesAddedHandler(sdbusplus::message::message& msg)
+{
+    // Verify message is valid
+    if (!msg)
+    {
+        return;
+    }
+
+    try
+    {
+        // Read object path for object that was created or had interface added
+        sdbusplus::message::object_path objPath;
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
+            interfaces;
+        msg.read(objPath, interfaces);
+
+        // Find the device interface, if present
+        auto itIntf = interfaces.find(interfaceName);
+        if (itIntf != interfaces.cend())
+        {
+            log<level::INFO>(
+                fmt::format("InterfacesAdded for: {}", interfaceName).c_str());
+            getDeviceProperties(itIntf->second);
+        }
+    }
+    catch (const std::exception&)
+    {
+        // Error trying to read interfacesAdded message.  One possible cause
+        // could be a property whose value is not a std::vector<std::string>.
+    }
 }
 
 void PowerControl::pollPgood()
@@ -179,8 +262,41 @@ void PowerControl::setState(int s)
     emitPropertyChangedSignal("state");
 }
 
+void PowerControl::setUpDevice()
+{
+    try
+    {
+        auto objects = util::getSubTree(bus, "/", interfaceName, 0);
+
+        // Search for matching interface in returned objects
+        for (const auto& [path, services] : objects)
+        {
+            auto service = services.begin()->first;
+
+            if (path.empty() || service.empty())
+            {
+                continue;
+            }
+
+            // Get the properties for the device interface
+            auto properties =
+                util::getAllProperties(bus, path, interfaceName, service);
+
+            getDeviceProperties(properties);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Interface or property not found. Let the Interfaces Added callback
+        // process the information once the interfaces are added to D-Bus.
+    }
+}
+
 void PowerControl::setUpGpio()
 {
+    const std::string powerControlLineName = "power-chassis-control";
+    const std::string pgoodLineName = "power-chassis-good";
+
     pgoodLine = gpiod::find_line(pgoodLineName);
     if (!pgoodLine)
     {
