@@ -1,9 +1,11 @@
 #pragma once
 
 #include "power_interface.hpp"
+#include "utility.hpp"
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/clock.hpp>
@@ -48,6 +50,12 @@ class PowerControl : public PowerObject
     /** @copydoc PowerInterface::getState() */
     int getState() const override;
 
+    /**
+     * Callback function to handle interfacesAdded D-Bus signals
+     * @param msg Expanded sdbusplus message data
+     */
+    void interfacesAddedHandler(sdbusplus::message::message& msg);
+
     /** @copydoc PowerInterface::setPgoodTimeout() */
     void setPgoodTimeout(int timeout) override;
 
@@ -64,6 +72,11 @@ class PowerControl : public PowerObject
      * Indicates if a state transistion is taking place
      */
     bool inStateTransition{false};
+
+    /**
+     * The match to Entity Manager interfaces added.
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> match;
 
     /**
      * Power good
@@ -113,9 +126,20 @@ class PowerControl : public PowerObject
     sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> timer;
 
     /**
+     * Get the device properties
+     * @param[in] properties A map of property names and values
+     */
+    void getDeviceProperties(util::DbusPropertyMap& properties);
+
+    /**
      * Polling method for monitoring the system power good
      */
     void pollPgood();
+
+    /**
+     * Set up power sequencer device
+     */
+    void setUpDevice();
 
     /**
      * Set up GPIOs

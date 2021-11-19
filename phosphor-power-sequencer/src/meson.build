@@ -15,6 +15,9 @@ phosphor_power_sequencer = executable(
         sdeventplus,
         stdplus
     ],
+    link_with: [
+        libpower
+    ],
     implicit_include_directories: false,
     include_directories: phosphor_power_sequencer_include_directories,
     install: true
