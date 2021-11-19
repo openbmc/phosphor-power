@@ -177,6 +177,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the last value read from STATUS_FANS_1_2.
+     */
+    uint64_t getStatusFans12() const
+    {
+        return statusFans12;
+    }
+
+    /**
      * @brief Returns the last value read from STATUS_TEMPERATURE.
      */
     uint64_t getStatusTemperature() const
@@ -190,7 +198,7 @@ class PowerSupply
     bool isFaulted() const
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                tempFault || pgoodFault || mfrFault);
+                fanFault || tempFault || pgoodFault || mfrFault);
     }
 
     /**
@@ -239,6 +247,14 @@ class PowerSupply
     bool hasVoutOVFault() const
     {
         return voutOVFault;
+    }
+
+    /**
+     * @brief Returns true if fan fault occurred.
+     */
+    bool hasFanFault() const
+    {
+        return fanFault;
     }
 
     /**
@@ -334,6 +350,10 @@ class PowerSupply
     uint64_t statusVout = 0;
 
     /** @brief Will be updated to the latest/last value read from
+     * STATUS_FANS_1_2. */
+    uint64_t statusFans12 = 0;
+
+    /** @brief Will be updated to the latest/last value read from
      * STATUS_TEMPERATURE.*/
     uint64_t statusTemperature = 0;
 
@@ -354,6 +374,9 @@ class PowerSupply
 
     /** @brief True if bit 5 of STATUS_WORD low byte is on. */
     bool voutOVFault = false;
+
+    /** @brief True if FANS fault/warn bit on in STATUS_WORD. */
+    bool fanFault = false;
 
     /** @brief True if bit 2 of STATUS_WORD low byte is on. */
     bool tempFault = false;
