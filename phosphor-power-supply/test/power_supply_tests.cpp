@@ -29,6 +29,7 @@ struct PMBusExpectations
     uint8_t statusMFRValue{0x00};
     uint8_t statusCMLValue{0x00};
     uint8_t statusVOUTValue{0x00};
+    uint8_t statusFans12Value{0x00};
     uint8_t statusTempValue{0x00};
 };
 
@@ -61,6 +62,9 @@ void setPMBusExpectations(MockedPMBus& mockPMBus,
         EXPECT_CALL(mockPMBus, read("status0_vout", _))
             .Times(1)
             .WillOnce(Return(expectations.statusVOUTValue));
+        EXPECT_CALL(mockPMBus, read(STATUS_FANS_1_2, _))
+            .Times(1)
+            .WillOnce(Return(expectations.statusFans12Value));
         EXPECT_CALL(mockPMBus, read(STATUS_TEMPERATURE, _))
             .Times(1)
             .WillOnce(Return(expectations.statusTempValue));
@@ -146,6 +150,7 @@ TEST_F(PowerSupplyTests, Constructor)
         EXPECT_EQ(psu->hasMFRFault(), false);
         EXPECT_EQ(psu->hasVINUVFault(), false);
         EXPECT_EQ(psu->hasVoutOVFault(), false);
+        EXPECT_EQ(psu->hasFanFault(), false);
         EXPECT_EQ(psu->hasTempFault(), false);
         EXPECT_EQ(psu->hasPgoodFault(), false);
     }
@@ -193,6 +198,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu.hasVINUVFault(), false);
         EXPECT_EQ(psu.hasCommFault(), false);
         EXPECT_EQ(psu.hasVoutOVFault(), false);
+        EXPECT_EQ(psu.hasFanFault(), false);
         EXPECT_EQ(psu.hasTempFault(), false);
         EXPECT_EQ(psu.hasPgoodFault(), false);
     }
@@ -227,6 +233,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
 
@@ -243,6 +250,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -267,6 +275,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), true);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -290,6 +299,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -313,6 +323,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), true);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -336,6 +347,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), true);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -361,26 +373,30 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), true);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
-    // Ignore fan fault
+    // Fan fault
     {
         // First STATUS_WORD with no bits set, then with fan fault.
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
         psu2.analyze();
         expectations.statusWordValue = (status_word::FAN_FAULT);
+        // STATUS_FANS_1_2 with fan 1 warning & fault bits on.
+        expectations.statusFans12Value = 0xA0;
         setPMBusExpectations(mockPMBus, expectations);
         psu2.analyze();
         EXPECT_EQ(psu2.isPresent(), true);
-        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.isFaulted(), true);
         EXPECT_EQ(psu2.hasInputFault(), false);
         EXPECT_EQ(psu2.hasMFRFault(), false);
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), true);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
@@ -406,6 +422,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasVINUVFault(), false);
         EXPECT_EQ(psu2.hasCommFault(), false);
         EXPECT_EQ(psu2.hasVoutOVFault(), false);
+        EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), true);
     }
@@ -481,6 +498,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasVINUVFault(), false);
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
+    EXPECT_EQ(psu.hasFanFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 
@@ -494,6 +512,8 @@ TEST_F(PowerSupplyTests, ClearFaults)
     expectations.statusCMLValue = 0xFF;
     // STATUS_VOUT with bits on.
     expectations.statusVOUTValue = 0xFF;
+    // STATUS_FANS_1_2 with bits on.
+    expectations.statusFans12Value = 0xFF;
     // STATUS_TEMPERATURE with bits on.
     expectations.statusTempValue = 0xFF;
     setPMBusExpectations(mockPMBus, expectations);
@@ -505,6 +525,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasVINUVFault(), true);
     EXPECT_EQ(psu.hasCommFault(), true);
     EXPECT_EQ(psu.hasVoutOVFault(), true);
+    EXPECT_EQ(psu.hasFanFault(), true);
     EXPECT_EQ(psu.hasTempFault(), true);
     EXPECT_EQ(psu.hasPgoodFault(), true);
     EXPECT_CALL(mockPMBus, read("in1_input", _))
@@ -518,6 +539,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasVINUVFault(), false);
     EXPECT_EQ(psu.hasCommFault(), false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
+    EXPECT_EQ(psu.hasFanFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 
@@ -609,6 +631,8 @@ TEST_F(PowerSupplyTests, IsFaulted)
     expectations.statusCMLValue = 0xFF;
     // STATUS_VOUT with fault bits on.
     expectations.statusVOUTValue = 0xFF;
+    // STATUS_FANS_1_2 with bits on.
+    expectations.statusFans12Value = 0xFF;
     // STATUS_TEMPERATURE with fault bits on.
     expectations.statusTempValue = 0xFF;
     setPMBusExpectations(mockPMBus, expectations);
@@ -741,6 +765,37 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasVoutOVFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasFanFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+
+    PowerSupply psu{bus, PSUInventoryPath, 3, 0x6d, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    EXPECT_EQ(psu.hasFanFault(), false);
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasFanFault(), false);
+    // Turn fault on.
+    expectations.statusWordValue = (status_word::FAN_FAULT);
+    // STATUS_FANS_1_2 fault bit on (Fan 1 Fault)
+    expectations.statusFans12Value = 0x80;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasFanFault(), true);
+    // Back to no fault bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasFanFault(), false);
 }
 
 TEST_F(PowerSupplyTests, HasTempFault)

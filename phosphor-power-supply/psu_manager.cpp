@@ -482,6 +482,25 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
+                // A fan fault should have priority over a temperature fault,
+                // since a failed fan may lead to a temperature problem.
+                else if (psu->hasFanFault())
+                {
+                    // Include STATUS_TEMPERATURE and STATUS_FANS_1_2
+                    additionalData["STATUS_TEMPERATURE"] =
+                        fmt::format("{:#02x}", psu->getStatusTemperature());
+                    additionalData["STATUS_FANS_1_2"] =
+                        fmt::format("{:#02x}", psu->getStatusFans12());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.FanFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
                 else if (psu->hasTempFault())
                 {
                     // Include STATUS_TEMPERATURE for temperature faults.
