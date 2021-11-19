@@ -83,8 +83,8 @@ Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
     std::string matchStr = sdbusplus::bus::match::rules::interfacesAdded() +
                            sdbusplus::bus::match::rules::sender(
                                "xyz.openbmc_project.EntityManager");
-    std::unique_ptr<sdbusplus::server::match::match> matchPtr =
-        std::make_unique<sdbusplus::server::match::match>(
+    std::unique_ptr<sdbusplus::bus::match_t> matchPtr =
+        std::make_unique<sdbusplus::bus::match_t>(
             bus, matchStr,
             std::bind(&Manager::interfacesAddedHandler, this,
                       std::placeholders::_1));
