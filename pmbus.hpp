@@ -54,7 +54,7 @@ constexpr auto STATUS_IOUT = "status0_iout";
 constexpr auto STATUS_MFR = "status0_mfr";
 
 // Reports on the status of any fans installed in position 1 and 2.
-constexpr auto STATUS_FANS_1_2 = "status0_fans12";
+constexpr auto STATUS_FANS_1_2 = "status0_fan12";
 
 // Reports on temperature faults or warnings. Overtemperature fault,
 // overtemperature warning, undertemperature warning, undertemperature fault.
