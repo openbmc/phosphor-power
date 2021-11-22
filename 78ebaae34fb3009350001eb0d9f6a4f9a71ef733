@@ -88,6 +88,24 @@
       "revId": "78ebaae34fb3009350001eb0d9f6a4f9a71ef733",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1ca335a_b4e18dda",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-11-22T20:38:03Z",
+      "side": 1,
+      "message": "It\u0027s coming back.  It won\u0027t have a main() or command line arguments.\nIt will perform device specific power sequence monitoring.",
+      "parentUuid": "66e56b5c_8d3a5999",
+      "revId": "78ebaae34fb3009350001eb0d9f6a4f9a71ef733",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
