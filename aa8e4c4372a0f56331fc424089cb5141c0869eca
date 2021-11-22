@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5510dc8_00f4a5e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:25:04Z",
+      "side": 1,
+      "message": "Should be 0x30?",
+      "range": {
+        "startLine": 20,
+        "startChar": 88,
+        "endLine": 20,
+        "endChar": 91
+      },
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34f57183_a24340ff",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:25:04Z",
+      "side": 1,
+      "message": "and bit 5 of STATUS_WORD low byte is off?",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f225b760_e50b28fc",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:25:04Z",
+      "side": 1,
+      "message": "Missing hasVoutUVFault() ?",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f821c002_ffeca968",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:25:04Z",
+      "side": 1,
+      "message": "Missing Temp and Pgood?",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
