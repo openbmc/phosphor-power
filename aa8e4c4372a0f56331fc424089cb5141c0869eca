@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa42e196_6b395737",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-22T21:54:04Z",
+      "side": 1,
+      "message": "I looked back on my notes. I am not sure if I intentionally tested it this way, or if I hit a timing issue, or some glitch.\nEarlier test:\nNov 18 00:30:56 p10bmc phosphor-psu-monitor[466]: VOUT_UV_FAULT fault: STATUS_WORD \u003d 0x8000, STATUS_MFR_SPECIFIC \u003d 0x0, STATUS_VOUT \u003d 0x0\nLater test:\nNov 18 21:19:46 srainier2s2u phosphor-psu-monitor[455]: VOUT_UV_FAULT fault: STATUS_WORD \u003d 0x8000, STATUS_MFR_SPECIFIC \u003d 0x0, STATUS_VOUT \u003d 0x30\n\nBoth cases look like UV fault due to STATUS_WORD bit for VOUT_OV being off.",
+      "parentUuid": "a5510dc8_00f4a5e8",
+      "range": {
+        "startLine": 20,
+        "startChar": 88,
+        "endLine": 20,
+        "endChar": 91
+      },
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "34f57183_a24340ff",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2021-11-22T21:25:04Z",
       "side": 1,
       "message": "and bit 5 of STATUS_WORD low byte is off?",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e02c14b_a6c76505",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-22T21:54:04Z",
+      "side": 1,
+      "message": "Sure, worth commenting it that way, based on testing notes in commit message.",
+      "parentUuid": "34f57183_a24340ff",
       "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "aa0b4c72_1fe40351",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-22T21:54:04Z",
+      "side": 1,
+      "message": "Yeah, that should be off. I should add it to be consistent.",
+      "parentUuid": "f225b760_e50b28fc",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f821c002_ffeca968",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 4
@@ -70,6 +130,24 @@
       "writtenOn": "2021-11-22T21:25:04Z",
       "side": 1,
       "message": "Missing Temp and Pgood?",
+      "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5808de5a_81654b84",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-22T21:54:04Z",
+      "side": 1,
+      "message": "Yeah, another consistency thing.",
+      "parentUuid": "f821c002_ffeca968",
       "revId": "aa8e4c4372a0f56331fc424089cb5141c0869eca",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
