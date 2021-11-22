@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35101c8d_f64f0eda",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:08:40Z",
+      "side": 1,
+      "message": "Patrick wants these changed to sdbusplus::bus::match_t\n\nSee review 49000.",
+      "range": {
+        "startLine": 54,
+        "startChar": 29,
+        "endLine": 54,
+        "endChar": 60
+      },
+      "revId": "3fbd7a1fd2e43e09403c7af6ea6c01952f517dc4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6393f412_dd2562a6",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:08:40Z",
+      "side": 1,
+      "message": "you are also reading the map/dictionary whose keys are interface names and whose values are dictionaries containing the interface property names/values.",
+      "revId": "3fbd7a1fd2e43e09403c7af6ea6c01952f517dc4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ebd4a90_03a410ef",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:08:40Z",
+      "side": 1,
+      "message": "might want to change this to be \"data type is not in DBusVariant\".  The regulator code reads a property that is a vector\u003cstring\u003e, but DbusVariant doesn\u0027t contain that data type.",
+      "range": {
+        "startLine": 147,
+        "startChar": 37,
+        "endLine": 147,
+        "endChar": 76
+      },
+      "revId": "3fbd7a1fd2e43e09403c7af6ea6c01952f517dc4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1688644_884b1ba1",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:08:40Z",
+      "side": 1,
+      "message": "Missing @param for properties",
+      "revId": "3fbd7a1fd2e43e09403c7af6ea6c01952f517dc4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
