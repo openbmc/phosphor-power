@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d6b7a77a_f98ebc67",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:37:18Z",
+      "side": 1,
+      "message": "Don\u0027t you want to set the statusFans12Value field too?",
+      "revId": "6b6ed1ec016c9b11f7464bb3c080ff0777b662c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d67464df_51a3147f",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T21:37:18Z",
+      "side": 1,
+      "message": "Want to set statusFans12Value too?",
+      "revId": "6b6ed1ec016c9b11f7464bb3c080ff0777b662c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
