@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44680c44_5a391d90",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:22:20Z",
+      "side": 1,
+      "message": "sdbusplus::bus::match_t ?",
+      "range": {
+        "startLine": 182,
+        "startChar": 46,
+        "endLine": 182,
+        "endChar": 74
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfb7c8e8_016c1e98",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:22:20Z",
+      "side": 1,
+      "message": "If they removed a PSU, should validation be done?  e.g. if they are supposed to have 2 PSUs of XX Watts, and now they have one, is that an issue?\n\nIt is a bit tricky, because during a PSU replace we would need to give the service person enough time to unplug the bad one and then plug in the new one.  validationTimeout is 10 seconds, which might be a bit fast.\n\nMight want to ask Derek and/or Brandon about this one.  I\u0027m definitely not a PSU expert.",
+      "range": {
+        "startLine": 375,
+        "startChar": 7,
+        "endLine": 375,
+        "endChar": 9
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11930b9a_4fe730b7",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-22T22:22:20Z",
+      "side": 1,
+      "message": "I think this is the same as sdbusplus::bus::match_t.  Might be good to be consistent with the previous line (193).",
+      "range": {
+        "startLine": 196,
+        "startChar": 32,
+        "endLine": 196,
+        "endChar": 60
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
