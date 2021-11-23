@@ -189,6 +189,28 @@ void PowerSupply::updatePresenceGPIO()
     }
 }
 
+void PowerSupply::determineMFRFault()
+{
+    if (bindPath.string().find("ibm-cffps") != std::string::npos)
+    {
+        // IBM MFR_SPECIFIC[4] is PS_Kill fault
+        if (statusMFR & 0x10)
+        {
+            psKillFault = true;
+        }
+        // IBM MFR_SPECIFIC[6] is 12Vcs fault.
+        if (statusMFR & 0x40)
+        {
+            ps12VcsFault = true;
+        }
+        // IBM MFR_SPECIFIC[7] is 12V Current-Share fault.
+        if (statusMFR & 0x80)
+        {
+            psCS12VFault = true;
+        }
+    }
+}
+
 void PowerSupply::analyze()
 {
     using namespace phosphor::pmbus;
@@ -360,6 +382,7 @@ void PowerSupply::analyze()
                     }
 
                     mfrFault = true;
+                    determineMFRFault();
                 }
 
                 if (statusWord & status_word::VIN_UV_FAULT)
@@ -395,6 +418,9 @@ void PowerSupply::analyze()
                                          .c_str());
                     pgoodFault = 0;
                 }
+                psKillFault = false;
+                ps12VcsFault = false;
+                psCS12VFault = false;
             }
         }
         catch (const ReadFailure& e)
@@ -451,6 +477,9 @@ void PowerSupply::clearFaults()
         fanFault = false;
         tempFault = false;
         pgoodFault = 0;
+        psKillFault = false;
+        ps12VcsFault = false;
+        psCS12VFault = false;
         readFail = 0;
 
         try
