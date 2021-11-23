@@ -106,6 +106,24 @@
       "revId": "78ebaae34fb3009350001eb0d9f6a4f9a71ef733",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4a770d1_57a26ad5",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-23T16:17:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b1ca335a_b4e18dda",
+      "revId": "78ebaae34fb3009350001eb0d9f6a4f9a71ef733",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
