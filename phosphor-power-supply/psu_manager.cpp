@@ -467,6 +467,13 @@ void PSUManager::analyze()
                                 additionalData);
                     psu->setFaultLogged();
                 }
+                else if (psu->hasPSKillFault())
+                {
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.PSKillFault",
+                        additionalData);
+                    psu->setFaultLogged();
+                }
                 else if (psu->hasVoutOVFault())
                 {
                     // Include STATUS_VOUT for Vout faults.
@@ -494,7 +501,8 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
-                else if (psu->hasVoutUVFault())
+                else if (psu->hasVoutUVFault() || psu->hasPS12VcsFault() ||
+                         psu->hasPSCS12VFault())
                 {
                     // Include STATUS_VOUT for Vout faults.
                     additionalData["STATUS_VOUT"] =

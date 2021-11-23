@@ -159,6 +159,9 @@ TEST_F(PowerSupplyTests, Constructor)
         EXPECT_EQ(psu->hasFanFault(), false);
         EXPECT_EQ(psu->hasTempFault(), false);
         EXPECT_EQ(psu->hasPgoodFault(), false);
+        EXPECT_EQ(psu->hasPSKillFault(), false);
+        EXPECT_EQ(psu->hasPS12VcsFault(), false);
+        EXPECT_EQ(psu->hasPSCS12VFault(), false);
     }
     catch (...)
     {
@@ -209,6 +212,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu.hasFanFault(), false);
         EXPECT_EQ(psu.hasTempFault(), false);
         EXPECT_EQ(psu.hasPgoodFault(), false);
+        EXPECT_EQ(psu.hasPSKillFault(), false);
+        EXPECT_EQ(psu.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu.hasPSCS12VFault(), false);
     }
 
     PowerSupply psu2{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
@@ -216,7 +222,7 @@ TEST_F(PowerSupplyTests, Analyze)
     // be present in order to read from the PMBus device(s).
     MockedGPIOInterface* mockPresenceGPIO2 =
         static_cast<MockedGPIOInterface*>(psu2.getPresenceGPIO());
-    ON_CALL(*mockPresenceGPIO2, read()).WillByDefault(Return(1));
+    EXPECT_CALL(*mockPresenceGPIO2, read()).WillRepeatedly(Return(1));
     EXPECT_EQ(psu2.isPresent(), false);
 
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
@@ -246,6 +252,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
 
         // Update expectations for STATUS_WORD input fault/warn
         // STATUS_INPUT fault bits ... on.
@@ -265,6 +274,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // STATUS_WORD INPUT/UV fault.
@@ -292,6 +304,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // STATUS_WORD MFR fault.
@@ -318,6 +333,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), true);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), true);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), true);
     }
 
     // Temperature fault.
@@ -344,6 +362,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), true);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // CML fault
@@ -370,6 +391,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // VOUT_OV_FAULT fault
@@ -398,6 +422,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // IOUT_OC_FAULT fault
@@ -424,6 +451,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // VOUT_UV_FAULT
@@ -450,6 +480,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // Fan fault
@@ -475,6 +508,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), true);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // PGOOD/OFF fault.
@@ -503,6 +539,9 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), true);
+        EXPECT_EQ(psu2.hasPSKillFault(), false);
+        EXPECT_EQ(psu2.hasPS12VcsFault(), false);
+        EXPECT_EQ(psu2.hasPSCS12VFault(), false);
     }
 
     // TODO: ReadFailure
@@ -581,6 +620,9 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasFanFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
 
     // STATUS_WORD with fault bits galore!
     expectations.statusWordValue = 0xFFFF;
@@ -614,6 +656,9 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasFanFault(), true);
     EXPECT_EQ(psu.hasTempFault(), true);
     EXPECT_EQ(psu.hasPgoodFault(), true);
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
 
     EXPECT_CALL(mockPMBus, read("in1_input", _))
         .Times(1)
@@ -631,6 +676,9 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasFanFault(), false);
     EXPECT_EQ(psu.hasTempFault(), false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
 
     // TODO: Faults clear on missing/present?
 }
@@ -1018,4 +1066,130 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasPgoodFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPSKillFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 4, 0x6d, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 4 on.
+    expectations.statusMFRValue = 0x10;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPS12VcsFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 5, 0x6e, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 6 on.
+    expectations.statusMFRValue = 0x40;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPSCS12VFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 6, 0x6f, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 7 on.
+    expectations.statusMFRValue = 0x80;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
 }
