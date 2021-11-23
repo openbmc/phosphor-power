@@ -962,3 +962,129 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     psu.analyze();
     EXPECT_EQ(psu.hasPgoodFault(), false);
 }
+
+TEST_F(PowerSupplyTests, HasPSKillFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 4, 0x6d, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 4 on.
+    expectations.statusMFRValue = 0x10;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSKillFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPS12VcsFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 5, 0x6e, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 6 on.
+    expectations.statusMFRValue = 0x40;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPS12VcsFault(), false);
+}
+
+TEST_F(PowerSupplyTests, HasPSCS12VFault)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus, PSUInventoryPath, 6, 0x6f, PSUGPIOLineName};
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // STATUS_WORD 0x0000 is powered on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit(s) on.
+    expectations.statusMFRValue = 0xFF;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+    // Next return STATUS_WORD with MFR fault bit on.
+    expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
+    // STATUS_MFR_SPEFIC with bit 7 on.
+    expectations.statusMFRValue = 0x80;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
+    // Back to no bits on in STATUS_WORD
+    expectations.statusWordValue = 0;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPSCS12VFault(), false);
+}
