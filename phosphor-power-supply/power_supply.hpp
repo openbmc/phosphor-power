@@ -301,6 +301,30 @@ class PowerSupply
     }
 
     /**
+     * @brief Return true if there is a PS_Kill fault.
+     */
+    bool hasPSKillFault() const
+    {
+        return psKillFault;
+    }
+
+    /**
+     * @brief Returns true if there is a 12Vcs (standy power) fault.
+     */
+    bool hasPS12VcsFault() const
+    {
+        return ps12VcsFault;
+    }
+
+    /**
+     * @brief Returns true if there is a 12V current-share fault.
+     */
+    bool hasPSCS12VFault() const
+    {
+        return psCS12VFault;
+    }
+
+    /**
      * @brief Returns the device path
      *
      * This can be used for error call outs.
@@ -425,8 +449,33 @@ class PowerSupply
      */
     int pgoodFault = 0;
 
+    /**
+     * @brief Power Supply Kill fault.
+     */
+    bool psKillFault = false;
+
+    /**
+     * @brief Power Supply 12Vcs fault (standby power).
+     */
+    bool ps12VcsFault = false;
+
+    /**
+     * @brief Power Supply Current-Share fault in 12V domain.
+     */
+    bool psCS12VFault = false;
+
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;
+
+    /**
+     * @brief Determine possible manufacturer-specific faults from bits in
+     * STATUS_MFR.
+     *
+     * The bits in the STATUS_MFR_SPECIFIC command response have "Manufacturer
+     * Defined" meanings. Determine which faults, if any, are present based on
+     * the power supply (device driver) type.
+     */
+    void determineMFRFault();
 
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
