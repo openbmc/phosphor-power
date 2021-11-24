@@ -227,6 +227,8 @@ TEST_F(PowerSupplyTests, Analyze)
     // in an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
 
+    // TODO: presence change causes setPresence() call.
+
     // STATUS_WORD INPUT fault.
     {
         // Start with STATUS_WORD 0x0000. Powered on, no faults.
@@ -292,6 +294,21 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+
+        // Turning VIN_UV fault off causes clearing of faults, causing read of
+        // in1_input as an attempt to get CLEAR_FAULTS called.
+        expectations.statusWordValue = 0;
+        setPMBusExpectations(mockPMBus, expectations);
+        EXPECT_CALL(mockPMBus, read(READ_VIN, _))
+            .Times(1)
+            .WillOnce(Return(207000));
+        psu2.analyze();
+        // Should remain present, no longer be faulted, no input fault, no
+        // VIN_UV fault. Nothing else should change.
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
     }
 
     // STATUS_WORD MFR fault.
@@ -803,9 +820,16 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasVINUVFault(), false);
+    // Presence change from missing to present will trigger write to
+    // ON_OFF_CONFIG.
+    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
+    // Presence change from missing to present will trigger in1_input read in
+    // an attempt to get CLEAR_FAULTS called.
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
+
+    // TODO: missing/present will call setPresence()
+
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -822,6 +846,10 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     // Back to no fault bits on in STATUS_WORD
     expectations.statusWordValue = 0;
     setPMBusExpectations(mockPMBus, expectations);
+    // Updates now result in clearing faults if VIN_UV goes fron on to off.
+    // This will result in an read of in1_input (READ_VIN) in an attempt to get
+    // a CLEAR_FAULTS command sent out.
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(205000));
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
 }

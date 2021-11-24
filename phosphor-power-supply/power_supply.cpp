@@ -372,13 +372,37 @@ void PowerSupply::analyze()
 
                     vinUVFault = true;
                 }
+
+                // If had INPUT/VIN_UV fault, and now off.
+                // Clear faultLogged.
+                // Clear vinUVFault and other faults.
+                if (vinUVFault && !(statusWord & status_word::VIN_UV_FAULT))
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "VIN_UV fault cleared: STATUS_WORD = {:#04x}, "
+                            "STATUS_MFR_SPECIFIC = {:#02x}, "
+                            "STATUS_INPUT = {:#02x}",
+                            statusWord, statusMFR, statusInput)
+                            .c_str());
+                    clearFaults();
+                }
             }
             else
             {
+                // if INPUT/VIN_UV fault was on, it cleared, so clear all the
+                // faults to get faultLogged false. Re-detect and log faults.
+                if (vinUVFault)
+                {
+                    log<level::INFO>(
+                        fmt::format("Faults cleared: STATUS_WORD = {:#04x}",
+                                    statusWord)
+                            .c_str());
+                    clearFaults();
+                }
                 cmlFault = false;
                 inputFault = false;
                 mfrFault = false;
-                vinUVFault = false;
                 voutOVFault = false;
                 ioutOCFault = false;
                 voutUVFault = false;
