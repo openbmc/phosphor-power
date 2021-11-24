@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5a129fb_dba095e1",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-24T21:35:58Z",
+      "side": 1,
+      "message": "Magical rewrap? Why?",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 19
+      },
+      "revId": "e2eee6a904853ae5a0a46748dec18ece6150921b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee09af5c_a3bcd1bb",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-24T21:35:58Z",
+      "side": 1,
+      "message": "Okay, apparently the clang-format vim plugin sometimes gets confused or something.",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 327,
+        "endChar": 13
+      },
+      "revId": "e2eee6a904853ae5a0a46748dec18ece6150921b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
