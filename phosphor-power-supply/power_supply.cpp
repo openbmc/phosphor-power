@@ -399,13 +399,55 @@ void PowerSupply::analyze()
 
                     vinUVFault = true;
                 }
+
+                // If had INPUT/VIN_UV fault, and now off.
+                // Trace that odd behavior.
+                if (inputFault && !(statusWord & status_word::INPUT_FAULT_WARN))
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "INPUT fault cleared: STATUS_WORD = {:#04x}, "
+                            "STATUS_MFR_SPECIFIC = {:#02x}, "
+                            "STATUS_INPUT = {:#02x}",
+                            statusWord, statusMFR, statusInput)
+                            .c_str());
+                    inputFault = false;
+                }
+                if (vinUVFault && !(statusWord & status_word::VIN_UV_FAULT))
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "VIN_UV fault cleared: STATUS_WORD = {:#04x}, "
+                            "STATUS_MFR_SPECIFIC = {:#02x}, "
+                            "STATUS_INPUT = {:#02x}",
+                            statusWord, statusMFR, statusInput)
+                            .c_str());
+                    vinUVFault = false;
+                }
             }
             else
             {
+                // if INPUT/VIN_UV fault was on, it cleared, trace it.
+                if (inputFault)
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "INPUT fault cleared: STATUS_WORD = {:#04x}",
+                            statusWord)
+                            .c_str());
+                    inputFault = false;
+                }
+                if (vinUVFault)
+                {
+                    log<level::INFO>(
+                        fmt::format("VIN_UV cleared: STATUS_WORD = {:#04x}",
+                                    statusWord)
+                            .c_str());
+                    vinUVFault = false;
+                }
                 cmlFault = false;
                 inputFault = false;
                 mfrFault = false;
-                vinUVFault = false;
                 voutOVFault = false;
                 ioutOCFault = false;
                 voutUVFault = false;
@@ -421,6 +463,24 @@ void PowerSupply::analyze()
                 psKillFault = false;
                 ps12VcsFault = false;
                 psCS12VFault = false;
+            }
+
+            // Save off old inputVoltage value.
+            // Get latest inputVoltage.
+            // If voltage went from below minimum, and now is not, clear faults.
+            // Note: getInputVoltage() has its own try/catch.
+            int inputVoltageOld = inputVoltage;
+            double actualInputVoltage;
+            getInputVoltage(actualInputVoltage, inputVoltage);
+            if ((inputVoltageOld == in_input::VIN_VOLTAGE_0) &&
+                (inputVoltage != in_input::VIN_VOLTAGE_0))
+            {
+                log<level::INFO>(
+                    fmt::format(
+                        "READ_VIN back in range: inputVoltageOld = {} inputVoltage = {}",
+                        inputVoltageOld, inputVoltage)
+                        .c_str());
+                clearFaults();
             }
         }
         catch (const ReadFailure& e)
@@ -457,6 +517,8 @@ void PowerSupply::onOffConfig(uint8_t data)
 
 void PowerSupply::clearFaults()
 {
+    log<level::DEBUG>(
+        fmt::format("clearFaults() inventoryPath: {}", inventoryPath).c_str());
     faultLogged = false;
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a
