@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f216b95_1676ee0a",
+        "filename": "phosphor-power-sequencer/src/power_sequencer_monitor.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:42:18Z",
+      "side": 1,
+      "message": "This must be declared virtual.  Otherwise the correct destructor won\u0027t be run when the object is deleted via a PowerSequencerMonitor pointer.",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "91f50b969cc9cd416e9974b2aa3bca687b966f47",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95dfcbc9_440068b1",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:42:18Z",
+      "side": 1,
+      "message": "This should be declared virtual.  I think as long as it is virtual in the base class it is automatically virtual in the child class, but I think it is still good documentation.",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 20
+      },
+      "revId": "91f50b969cc9cd416e9974b2aa3bca687b966f47",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "845c4640_35d6909a",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:42:18Z",
+      "side": 1,
+      "message": "I think I2C only supports 7 and 10 bit addresses, so this comment is confusing.  Maybe this is something specific to that driver?",
+      "range": {
+        "startLine": 30,
+        "startChar": 33,
+        "endLine": 30,
+        "endChar": 39
+      },
+      "revId": "91f50b969cc9cd416e9974b2aa3bca687b966f47",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
