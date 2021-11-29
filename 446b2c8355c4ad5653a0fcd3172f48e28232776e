@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b689f40_b4488364",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f018544_ef2f1191",
+      "range": {
+        "startLine": 17,
+        "startChar": 25,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d32181f9_07ced19f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "22f3d570_62bcade2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "I am trying to recall if I ended up testing all three... I suppose I will go back and check or actually do that if I did not.",
+      "parentUuid": "d32181f9_07ced19f",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c36834c4_e5cb6de6",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -53,6 +95,30 @@
       "writtenOn": "2021-11-29T20:30:28Z",
       "side": 1,
       "message": "I think this can be removed.",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 41
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd3ba48_82bad44f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "Oops!",
+      "parentUuid": "c36834c4_e5cb6de6",
       "range": {
         "startLine": 212,
         "startChar": 4,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "40b1aefd_c4b2e2cf",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "It means power supply, I had added that prefix due to the fault variable starting with ps, since I seem to recall that C/C++ variables cannot start with numbers.",
+      "parentUuid": "859c161c_51297449",
+      "range": {
+        "startLine": 297,
+        "startChar": 12,
+        "endLine": 297,
+        "endChar": 14
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "717a91ad_bd5ee7dc",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 1
@@ -99,6 +189,30 @@
       "writtenOn": "2021-11-29T20:30:28Z",
       "side": 1,
       "message": "Is a 12V current-share fault different from a 12V fault?  Is this a well known term, or is it specific to IBM power supplies?  Maybe at least a one line explanation of what this is would help.",
+      "range": {
+        "startLine": 303,
+        "startChar": 45,
+        "endLine": 303,
+        "endChar": 58
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b4adc0c_d984aa38",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "\u003e Is a 12V current-share fault different from a 12V fault?\nIt is a specific kind of fault in the 12V domain.\n\n\u003e Is this a well known term, or is it specific to IBM power supplies?\nI believe it is a well known term. See PMBus Specification Part II, section 17.4 STATUS_IOUT. Bit 3 in that command response is for \"Current Share Fault\". \"[1] The conditions that cause the Current Share Fault bit to be set are defined by each device manufacturer.\"",
+      "parentUuid": "717a91ad_bd5ee7dc",
       "range": {
         "startLine": 303,
         "startChar": 45,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "2b599a24_9c9f986c",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "Oh! I suppose that can be removed. I for some reason thought this was unique to IBM power supplies.",
+      "parentUuid": "49b3bfc9_3394b323",
+      "range": {
+        "startLine": 427,
+        "startChar": 37,
+        "endLine": 427,
+        "endChar": 44
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3486610_1e2d0444",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 1
@@ -145,6 +283,30 @@
       "writtenOn": "2021-11-29T20:30:28Z",
       "side": 1,
       "message": "This sentence doesn\u0027t quite make sense to me.  Maybe change \"specific\" to \"manufacturer-specific\"?",
+      "range": {
+        "startLine": 445,
+        "startChar": 14,
+        "endLine": 445,
+        "endChar": 73
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ed1b6d2_4d7485e3",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3486610_1e2d0444",
       "range": {
         "startLine": 445,
         "startChar": 14,
@@ -174,6 +336,24 @@
     },
     {
       "key": {
+        "uuid": "1ebb7d02_2ab678d5",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "Debatable. Matt Spinler had a similar question on another fault where we refer to a procedure (or symbolic FRU).",
+      "parentUuid": "cbd0c692_9ebec187",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa2f15bd_2c238429",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
@@ -185,6 +365,24 @@
       "writtenOn": "2021-11-29T20:30:28Z",
       "side": 1,
       "message": "Don\u0027t you need to add the 3 new has*Fault() methods here?\n\nSame comment in many other places in this file.",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb6113f_cdc0dde8",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-11-29T23:05:21Z",
+      "side": 1,
+      "message": "I seem to be consistently inconsistent here. :-/",
+      "parentUuid": "aa2f15bd_2c238429",
       "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
