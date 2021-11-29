@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f018544_ef2f1191",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Nit: same",
+      "range": {
+        "startLine": 17,
+        "startChar": 25,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d32181f9_07ced19f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Seems like you\u0027d want to test all 3 types?",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c36834c4_e5cb6de6",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "I think this can be removed.",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 41
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "859c161c_51297449",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Does the \"PS\" prefix mean something here?  Same question for hasPSCS12VFault() and the associated data members.",
+      "range": {
+        "startLine": 297,
+        "startChar": 12,
+        "endLine": 297,
+        "endChar": 14
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717a91ad_bd5ee7dc",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Is a 12V current-share fault different from a 12V fault?  Is this a well known term, or is it specific to IBM power supplies?  Maybe at least a one line explanation of what this is would help.",
+      "range": {
+        "startLine": 303,
+        "startChar": 45,
+        "endLine": 303,
+        "endChar": 58
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b3bfc9_3394b323",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "I did a google search and found some other PSUs that have a PS_KILL signal.  So I think the (IBM) part can be removed.",
+      "range": {
+        "startLine": 427,
+        "startChar": 37,
+        "endLine": 427,
+        "endChar": 44
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3486610_1e2d0444",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "This sentence doesn\u0027t quite make sense to me.  Maybe change \"specific\" to \"manufacturer-specific\"?",
+      "range": {
+        "startLine": 445,
+        "startChar": 14,
+        "endLine": 445,
+        "endChar": 73
+      },
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbd0c692_9ebec187",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Don\u0027t you need to set CALLOUT_INVENTORY_PATH in additionalData so we get a callout?",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa2f15bd_2c238429",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-11-29T20:30:28Z",
+      "side": 1,
+      "message": "Don\u0027t you need to add the 3 new has*Fault() methods here?\n\nSame comment in many other places in this file.",
+      "revId": "446b2c8355c4ad5653a0fcd3172f48e28232776e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
