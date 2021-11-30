@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f0a3446_ab7f0f15",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 35
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-11-30T17:28:27Z",
+      "side": 1,
+      "message": "This would probably be better as a DEBUG trace, since it\u0027s just printing data that is hardcoded in entity manager.",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 44
+      },
+      "revId": "36c49b59f7bbbe8dc57544cd683f3416949a105d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
