@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e0605ef_acc0a671",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-01T18:42:39Z",
+      "side": 1,
+      "message": "Right, good point.  Right now I\u0027m only looking for a specific UCD90320 interface, but in the future when I\u0027m looking for multiple device type interfaces, I\u0027ll need to match on the name to create the correct device subclass.",
+      "parentUuid": "2be27f62_348e0431",
+      "range": {
+        "startLine": 102,
+        "startChar": 34,
+        "endLine": 102,
+        "endChar": 49
+      },
+      "revId": "1a9df5bfac06a231c48ce014d804cb1d46db7257",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "155c3dd5_2e27115c",
         "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
         "patchSetId": 36
@@ -36,6 +60,30 @@
       "writtenOn": "2021-12-01T18:22:40Z",
       "side": 1,
       "message": "Ooo! Fancy... odd formatting, but probably a complaint to take up with clang-format.",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 32,
+        "endChar": 1
+      },
+      "revId": "1a9df5bfac06a231c48ce014d804cb1d46db7257",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2f47bab_17a586ae",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-01T18:42:39Z",
+      "side": 1,
+      "message": "I hate the formatting, but our robots insist:\nhttps://jenkins.openbmc.org/job/ci-repository/30833/ : FAILURE\n\nThis is a different result than when I run clang-format locally.  Is one or the other out of date?",
+      "parentUuid": "155c3dd5_2e27115c",
       "range": {
         "startLine": 29,
         "startChar": 14,
