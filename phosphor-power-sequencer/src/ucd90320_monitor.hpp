@@ -4,6 +4,7 @@
 #include "power_sequencer_monitor.hpp"
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
 
 namespace phosphor::power::sequencer
 {
@@ -32,6 +33,12 @@ class UCD90320Monitor : public PowerSequencerMonitor
     UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
                     const std::uint16_t i2cAddress);
 
+    /**
+     * Callback function to handle interfacesAdded D-Bus signals
+     * @param msg Expanded sdbusplus message data
+     */
+    void interfacesAddedHandler(sdbusplus::message::message& msg);
+
   private:
     /**
      * The D-Bus bus object
@@ -42,6 +49,18 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * The read/write interface to this hardware
      */
     pmbus::PMBus interface;
+
+    /**
+     * The match to Entity Manager interfaces added.
+     */
+    sdbusplus::bus::match_t match;
+
+    /**
+     * Finds the list of compatible system types using D-Bus methods.
+     * This list is used to find the correct JSON configuration file for the
+     * current system.
+     */
+    void findCompatibleSystemTypes();
 };
 
 } // namespace phosphor::power::sequencer
