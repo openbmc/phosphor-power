@@ -37,24 +37,9 @@ bool I2CCaptureBytesAction::execute(ActionEnvironment& environment)
         uint8_t values[UINT8_MAX];
         interface.read(reg, size, values, i2c::I2CInterface::Mode::I2C);
 
-        // Build additional error data key: <deviceID>_register_<register>
-        std::ostringstream kss;
-        kss << environment.getDeviceID() << "_register_0x" << std::hex
-            << std::uppercase << static_cast<uint16_t>(reg);
-        std::string key = kss.str();
-
-        // Build additional error data value: [ <byte 0>, <byte 1>, ... ]
-        std::ostringstream vss;
-        vss << "[ " << std::hex << std::uppercase;
-        for (unsigned int i = 0; i < count; ++i)
-        {
-            vss << ((i > 0) ? ", " : "") << "0x"
-                << static_cast<uint16_t>(values[i]);
-        }
-        vss << " ]";
-        std::string value = vss.str();
-
-        // Store additional error data in action environment
+        // Store error data in action environment as a string key/value pair
+        std::string key = getErrorDataKey(environment);
+        std::string value = getErrorDataValue(values);
         environment.addAdditionalErrorData(key, value);
     }
     catch (const i2c::I2CException& e)
@@ -72,6 +57,51 @@ std::string I2CCaptureBytesAction::toString() const
     ss << "i2c_capture_bytes: { register: 0x" << std::hex << std::uppercase
        << static_cast<uint16_t>(reg) << ", count: " << std::dec
        << static_cast<uint16_t>(count) << " }";
+    return ss.str();
+}
+
+std::string
+    I2CCaptureBytesAction::getErrorDataKey(ActionEnvironment& environment) const
+{
+    // Additional error data key format: <deviceID>_register_<register>
+    std::ostringstream ss;
+    ss << environment.getDeviceID() << "_register_0x" << std::hex
+       << std::uppercase << static_cast<uint16_t>(reg);
+    std::string key = ss.str();
+
+    // Verify key does not already exist in the action environment.  This occurs
+    // when the same device and register is captured multiple times.
+    if (environment.getAdditionalErrorData().contains(key))
+    {
+        // Add counter suffix to key and loop until unused key is found
+        int counter = 2;
+        std::string keyWithSuffix;
+        do
+        {
+            keyWithSuffix = key + '_' + std::to_string(counter);
+            if (!environment.getAdditionalErrorData().contains(keyWithSuffix))
+            {
+                key = keyWithSuffix;
+                break;
+            }
+            ++counter;
+        } while (true);
+    }
+
+    return key;
+}
+
+std::string
+    I2CCaptureBytesAction::getErrorDataValue(const uint8_t* values) const
+{
+    // Additional error data value format: [ <byte 0>, <byte 1>, ... ]
+    std::ostringstream ss;
+    ss << "[ " << std::hex << std::uppercase;
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        ss << ((i > 0) ? ", " : "") << "0x" << static_cast<uint16_t>(values[i]);
+    }
+    ss << " ]";
     return ss.str();
 }
 

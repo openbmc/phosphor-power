@@ -111,6 +111,25 @@ class I2CCaptureBytesAction : public I2CAction
 
   private:
     /**
+     * Returns the key for storing additional error data as a key/value pair in
+     * the action environment.
+     *
+     * @param environment action execution environment
+     * @return error data key
+     */
+    std::string getErrorDataKey(ActionEnvironment& environment) const;
+
+    /**
+     * Returns the value for storing additional error data as a key/value pair
+     * in the action environment.
+     *
+     * @param values Array of byte values read from the device.  The count data
+     *               member specifies the number of bytes that were read.
+     * @return error data value
+     */
+    std::string getErrorDataValue(const uint8_t* values) const;
+
+    /**
      * Device register address.  Note: named 'reg' because 'register' is a
      * reserved keyword.
      */

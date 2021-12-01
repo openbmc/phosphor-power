@@ -139,6 +139,53 @@ TEST(I2CCaptureBytesActionTests, Execute)
         ADD_FAILURE() << "Should not have caught exception.";
     }
 
+    // Test where works: Same device + register captured multiple times
+    try
+    {
+        // Create mock I2CInterface: read() will be called 3 times and will
+        // return values 0xD7, 0x13, and 0xFB
+        std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
+            std::make_unique<i2c::MockedI2CInterface>();
+        uint8_t values_1[] = {0xD7};
+        uint8_t values_2[] = {0x13};
+        uint8_t values_3[] = {0xFB};
+        EXPECT_CALL(*i2cInterface, isOpen)
+            .Times(3)
+            .WillRepeatedly(Return(true));
+        EXPECT_CALL(*i2cInterface, read(0xCA, TypedEq<uint8_t&>(1), NotNull(),
+                                        i2c::I2CInterface::Mode::I2C))
+            .Times(3)
+            .WillOnce(SetArrayArgument<2>(values_1, values_1 + 1))
+            .WillOnce(SetArrayArgument<2>(values_2, values_2 + 1))
+            .WillOnce(SetArrayArgument<2>(values_3, values_3 + 1));
+
+        // Create Device, IDMap, MockServices, and ActionEnvironment
+        Device device{
+            "vdd1", true,
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/vdd1",
+            std::move(i2cInterface)};
+        IDMap idMap{};
+        idMap.addDevice(device);
+        MockServices services{};
+        ActionEnvironment env{idMap, "vdd1", services};
+
+        I2CCaptureBytesAction action{0xCA, 1};
+        EXPECT_EQ(action.execute(env), true);
+        EXPECT_EQ(action.execute(env), true);
+        EXPECT_EQ(action.execute(env), true);
+        EXPECT_EQ(env.getAdditionalErrorData().size(), 3);
+        EXPECT_EQ(env.getAdditionalErrorData().at("vdd1_register_0xCA"),
+                  "[ 0xD7 ]");
+        EXPECT_EQ(env.getAdditionalErrorData().at("vdd1_register_0xCA_2"),
+                  "[ 0x13 ]");
+        EXPECT_EQ(env.getAdditionalErrorData().at("vdd1_register_0xCA_3"),
+                  "[ 0xFB ]");
+    }
+    catch (...)
+    {
+        ADD_FAILURE() << "Should not have caught exception.";
+    }
+
     // Test where fails: Getting I2CInterface fails
     try
     {
