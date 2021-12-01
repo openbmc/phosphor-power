@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cc29f367_e2203c5e",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-12-01T15:11:10Z",
+      "side": 1,
+      "message": "Done. Yep.",
+      "parentUuid": "44680c44_5a391d90",
+      "range": {
+        "startLine": 182,
+        "startChar": 46,
+        "endLine": 182,
+        "endChar": 74
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfb7c8e8_016c1e98",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ca89870e_2f328b65",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-12-01T15:11:10Z",
+      "side": 1,
+      "message": "Done. Good question, i checked with Derek and there\u0027s no need/requirement to run the validation when a PSU is removed.",
+      "parentUuid": "bfb7c8e8_016c1e98",
+      "range": {
+        "startLine": 375,
+        "startChar": 7,
+        "endLine": 375,
+        "endChar": 9
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11930b9a_4fe730b7",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fcd81c1_a5b80629",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2021-12-01T15:11:10Z",
+      "side": 1,
+      "message": "Done. Ah yeah thanks, i copied it from a different place.",
+      "parentUuid": "11930b9a_4fe730b7",
+      "range": {
+        "startLine": 196,
+        "startChar": 32,
+        "endLine": 196,
+        "endChar": 60
+      },
+      "revId": "8a549e03e4dc1c6de5eea138aa321dfd8e35ebae",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
