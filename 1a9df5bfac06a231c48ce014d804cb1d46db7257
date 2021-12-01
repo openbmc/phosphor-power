@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2be27f62_348e0431",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-01T18:22:40Z",
+      "side": 1,
+      "message": "Probably something worthy as a later enhancement, but how do you know this should be a UCD90320Monitor type? Should type be something you get from D-Bus as well?",
+      "range": {
+        "startLine": 102,
+        "startChar": 34,
+        "endLine": 102,
+        "endChar": 49
+      },
+      "revId": "1a9df5bfac06a231c48ce014d804cb1d46db7257",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "155c3dd5_2e27115c",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-01T18:22:40Z",
+      "side": 1,
+      "message": "Ooo! Fancy... odd formatting, but probably a complaint to take up with clang-format.",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 32,
+        "endChar": 1
+      },
+      "revId": "1a9df5bfac06a231c48ce014d804cb1d46db7257",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
