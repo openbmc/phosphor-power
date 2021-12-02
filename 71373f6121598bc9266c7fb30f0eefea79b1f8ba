@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d53c720a_31d317a3",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-02T23:44:01Z",
+      "side": 1,
+      "message": "Property?",
+      "range": {
+        "startLine": 38,
+        "startChar": 33,
+        "endLine": 38,
+        "endChar": 43
+      },
+      "revId": "71373f6121598bc9266c7fb30f0eefea79b1f8ba",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc1a2654_2ae884d7",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-02T23:44:01Z",
+      "side": 1,
+      "message": "Will there be a default config file name for these systems?\n\nIf not and the interface is required, maybe this line should be deleted?",
+      "range": {
+        "startLine": 62,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 76
+      },
+      "revId": "71373f6121598bc9266c7fb30f0eefea79b1f8ba",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
