@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "277e67ac_408172e1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-02T15:55:56Z",
+      "side": 1,
+      "message": "probably good to add a journal entry if the vin_uv fault clears on it\u0027s own (without us sending the clear_fault cmd or a enable) like we did on fsp systems... that is a ps fw bug and could lead to weird system behavior",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df860b76_648f58ac",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
