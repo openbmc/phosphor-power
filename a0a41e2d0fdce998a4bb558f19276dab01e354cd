@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df860b76_648f58ac",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-02T02:33:08Z",
+      "side": 1,
+      "message": "Added these due to noted local CI test output clutter.",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 831,
+        "endChar": 52
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
