@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "caf49098_65232f7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-03T19:41:24Z",
+      "side": 1,
+      "message": "Not sure what you meant here.  \"re-detection of injected\"?",
+      "range": {
+        "startLine": 14,
+        "startChar": 31,
+        "endLine": 14,
+        "endChar": 51
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27198bfb_0952cec5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-03T19:41:24Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 16,
+        "startChar": 19,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59a336b7_d64a7bb5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-03T19:41:24Z",
+      "side": 1,
+      "message": "If I am understanding this correctly, this will lead to the following behavior:\n* One or more fault bits are set in statusWord\n* The code prior to this will set data members for those fault bits, like inputFault and mfrFault \n* If VIN_UV_FAULT has transitioned to off, all those bits will be cleared\n\nIs this the desired behavior?  Do we want to lose all the other error state?",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "277e67ac_408172e1",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -13,6 +76,46 @@
       "writtenOn": "2021-12-02T15:55:56Z",
       "side": 1,
       "message": "probably good to add a journal entry if the vin_uv fault clears on it\u0027s own (without us sending the clear_fault cmd or a enable) like we did on fsp systems... that is a ps fw bug and could lead to weird system behavior",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57542082_ce3e467d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-03T19:41:24Z",
+      "side": 1,
+      "message": "If we\u0027ve gotten here, then we know STATUS_WORD\u003d0x0000 right?  Although maybe it makes the journal entry make more sense.  Also, should this say VIN_UV fault cleared so we know why the faults are being cleared?",
+      "range": {
+        "startLine": 398,
+        "startChar": 53,
+        "endLine": 398,
+        "endChar": 74
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a7b5157_89848156",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-03T19:41:24Z",
+      "side": 1,
+      "message": "It is a little clunky having the list twice: here and in analyze().  Whenever you add a new flag, you have to add a duplicate assignment in two places.\n\nIf you add any more flags for other error types, it might make sense to refactor this list into a clearFaultFlags() method that both analyze() and clearFaults() call.",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
