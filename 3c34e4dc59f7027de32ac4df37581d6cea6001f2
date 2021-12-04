@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f65db0ee_0fa47f4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:36:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d7765df6_b754dc5a",
+      "range": {
+        "startLine": 16,
+        "startChar": 60,
+        "endLine": 16,
+        "endChar": 63
+      },
+      "revId": "3c34e4dc59f7027de32ac4df37581d6cea6001f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ccbb7a8_90f1d3b5",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "01ac8948_6a260336",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:36:15Z",
+      "side": 1,
+      "message": "The 12Vcs fault will result in the pgood dropping. The pgood fault would log a separate PEL if the 12Vcs was not also detected. This is just indicating that the PGOOD fault is due to the 12Vcs fault.",
+      "parentUuid": "3ccbb7a8_90f1d3b5",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 61
+      },
+      "revId": "3c34e4dc59f7027de32ac4df37581d6cea6001f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f68facae_41e98395",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2021-12-03T00:10:29Z",
       "side": 1,
       "message": "PELs and SRCs are specific to open power systems.  Not sure we should mention here.  Same comment on line 32.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 1
+      },
+      "revId": "3c34e4dc59f7027de32ac4df37581d6cea6001f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f93740d9_ad2fdf88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:36:15Z",
+      "side": 1,
+      "message": "Okay, I suppose I can remove that/those.",
+      "parentUuid": "f68facae_41e98395",
       "range": {
         "startLine": 28,
         "startChar": 0,
