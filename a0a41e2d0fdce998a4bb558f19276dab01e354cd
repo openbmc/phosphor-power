@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bee2e60a_a6dda371",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "Caused CML fault by causing an \"invalid/unsupported command\" to be sent.\n\nRemoved input voltage by using ePDU to drop the outlet power supplying input voltage to the power supply.\n\nRe-applied input voltage to the power supply by instructing ePDU to activate the outlet.\n\nAll fault conditions cleared. This was due to Input/VIN_UV fault clearing.\n\nCaused CML fault again, and new PEL logged. Showing that the fault condition was indeed cleared to allow re-logging of faults as PELs.\n\n(This will need to be redone, due to change to use READ_VIN)",
+      "parentUuid": "caf49098_65232f7d",
+      "range": {
+        "startLine": 14,
+        "startChar": 31,
+        "endLine": 14,
+        "endChar": 51
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27198bfb_0952cec5",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "75f9a255_27aa5012",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "I shall redact this word, and replace it with re-detect. (typo)",
+      "parentUuid": "27198bfb_0952cec5",
+      "range": {
+        "startLine": 16,
+        "startChar": 19,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "59a336b7_d64a7bb5",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -59,6 +107,24 @@
       "writtenOn": "2021-12-03T19:41:24Z",
       "side": 1,
       "message": "If I am understanding this correctly, this will lead to the following behavior:\n* One or more fault bits are set in statusWord\n* The code prior to this will set data members for those fault bits, like inputFault and mfrFault \n* If VIN_UV_FAULT has transitioned to off, all those bits will be cleared\n\nIs this the desired behavior?  Do we want to lose all the other error state?",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4250aa48_8d0ac182",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "This is changing. I will only trace the fact that vinUVFault was true (it got set in the past), but for some reason it is no longer on. This would be unexpected, as there are only specific conditions that should result in that fault clearing, one of those being that a CLEAR_FAULTS command was sent.\n\nIt might be possible that someone manually enabled single-bit clearing and sent a command to clear specific bits via i2cset. Manually tinkering could lead to \"weird system behavior\".\n\nThe clearFaults() call in this path will be removed, as pointed out by Derek.",
+      "parentUuid": "59a336b7_d64a7bb5",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -105,6 +171,30 @@
     },
     {
       "key": {
+        "uuid": "c7c6b4c5_c39fd569",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "Correct, if we get here, STATUS_WORD is 0x0000.\n\nI will change \"Faults cleared\" to \"\"VIN_UV cleared\".\n\nThe clearFaults() call in this path will be removed, a new path will call that dependent on a check of READ_VIN values instead, as pointed out by Derek.",
+      "parentUuid": "57542082_ce3e467d",
+      "range": {
+        "startLine": 398,
+        "startChar": 53,
+        "endLine": 398,
+        "endChar": 74
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8a7b5157_89848156",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -116,6 +206,41 @@
       "writtenOn": "2021-12-03T19:41:24Z",
       "side": 1,
       "message": "It is a little clunky having the list twice: here and in analyze().  Whenever you add a new flag, you have to add a duplicate assignment in two places.\n\nIf you add any more flags for other error types, it might make sense to refactor this list into a clearFaultFlags() method that both analyze() and clearFaults() call.",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d31e2711_12b09747",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "👍\nI think I have some more added in another patchset/commit. Interesting idea...may add/change later.",
+      "parentUuid": "8a7b5157_89848156",
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9c2210a_a01e6221",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-04T00:26:33Z",
+      "side": 1,
+      "message": "There are quite a few tests in here that result in some verbose output if a test fails, making it quite difficult to weed through and find the reason for the failing test. 😒\n\nI will be working on trying to reduce that verbosity.",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
