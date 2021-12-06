@@ -34,6 +34,7 @@ static constexpr auto FL_KW_SIZE = 20;
 #endif
 
 constexpr auto LOG_LIMIT = 3;
+constexpr auto DEGLITCH_LIMIT = 3;
 
 /**
  * @class PowerSupply
@@ -207,7 +208,7 @@ class PowerSupply
     {
         return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
                 ioutOCFault || voutUVFault || fanFault || tempFault ||
-                pgoodFault || mfrFault);
+                (pgoodFault >= DEGLITCH_LIMIT) || mfrFault);
     }
 
     /**
@@ -296,7 +297,7 @@ class PowerSupply
      */
     bool hasPgoodFault() const
     {
-        return pgoodFault;
+        return (pgoodFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -417,10 +418,12 @@ class PowerSupply
     bool tempFault = false;
 
     /**
-     * @brief True if bit 11 or 6 of STATUS_WORD is on. PGOOD# is inactive, or
-     * the unit is off.
+     * @brief Incremented if bit 11 or 6 of STATUS_WORD is on. PGOOD# is
+     * inactive, or the unit is off.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
      */
-    bool pgoodFault = false;
+    int pgoodFault = 0;
 
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;

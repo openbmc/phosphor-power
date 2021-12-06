@@ -216,16 +216,25 @@ TEST_F(PowerSupplyTests, Analyze)
     // be present in order to read from the PMBus device(s).
     MockedGPIOInterface* mockPresenceGPIO2 =
         static_cast<MockedGPIOInterface*>(psu2.getPresenceGPIO());
-    ON_CALL(*mockPresenceGPIO2, read()).WillByDefault(Return(1));
+    // Always return 1 to indicate present.
+    // Each analyze() call will trigger a read of the presence GPIO.
+    EXPECT_CALL(*mockPresenceGPIO2, read()).WillRepeatedly(Return(1));
+    // Not present until analyze() does the GPIO read.
     EXPECT_EQ(psu2.isPresent(), false);
 
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
+    // First analyze() call will trigger missing to present, requiring update
+    // to find the new HWMON directory.
+    EXPECT_CALL(mockPMBus, findHwmonDir());
     // Presence change from missing to present will trigger write to
     // ON_OFF_CONFIG.
     EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
     // Presence change from missing to present will trigger in1_input read
     // in an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
+    // Change from missing to present will trigger call to update Present
+    // property in the inventory
+    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
 
     // STATUS_WORD INPUT fault.
     {
@@ -477,7 +486,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasPgoodFault(), false);
     }
 
-    // PGOOD/OFF fault.
+    // PGOOD/OFF fault. Deglitched, needs to reach DEGLITCH_LIMIT.
     {
         // First STATUS_WORD with no bits set.
         PMBusExpectations expectations;
@@ -487,22 +496,39 @@ TEST_F(PowerSupplyTests, Analyze)
         // POWER_GOOD# inactive, and OFF bit on.
         expectations.statusWordValue =
             ((status_word::POWER_GOOD_NEGATED) | (status_word::UNIT_IS_OFF));
-        // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT, and
-        // STATUS_TEMPERATURE: Don't care if bits set or not (defaults).
-        setPMBusExpectations(mockPMBus, expectations);
-        psu2.analyze();
-        EXPECT_EQ(psu2.isPresent(), true);
-        EXPECT_EQ(psu2.isFaulted(), true);
-        EXPECT_EQ(psu2.hasInputFault(), false);
-        EXPECT_EQ(psu2.hasMFRFault(), false);
-        EXPECT_EQ(psu2.hasVINUVFault(), false);
-        EXPECT_EQ(psu2.hasCommFault(), false);
-        EXPECT_EQ(psu2.hasVoutOVFault(), false);
-        EXPECT_EQ(psu2.hasVoutUVFault(), false);
-        EXPECT_EQ(psu2.hasIoutOCFault(), false);
-        EXPECT_EQ(psu2.hasFanFault(), false);
-        EXPECT_EQ(psu2.hasTempFault(), false);
-        EXPECT_EQ(psu2.hasPgoodFault(), true);
+        for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
+        {
+            // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT, and
+            // STATUS_TEMPERATURE: Don't care if bits set or not (defaults).
+            setPMBusExpectations(mockPMBus, expectations);
+            psu2.analyze();
+            EXPECT_EQ(psu2.isPresent(), true);
+            if (x < DEGLITCH_LIMIT)
+            {
+                EXPECT_EQ(psu2.isFaulted(), false);
+            }
+            else
+            {
+                EXPECT_EQ(psu2.isFaulted(), true);
+            }
+            EXPECT_EQ(psu2.hasInputFault(), false);
+            EXPECT_EQ(psu2.hasMFRFault(), false);
+            EXPECT_EQ(psu2.hasVINUVFault(), false);
+            EXPECT_EQ(psu2.hasCommFault(), false);
+            EXPECT_EQ(psu2.hasVoutOVFault(), false);
+            EXPECT_EQ(psu2.hasVoutUVFault(), false);
+            EXPECT_EQ(psu2.hasIoutOCFault(), false);
+            EXPECT_EQ(psu2.hasFanFault(), false);
+            EXPECT_EQ(psu2.hasTempFault(), false);
+            if (x < DEGLITCH_LIMIT)
+            {
+                EXPECT_EQ(psu2.hasPgoodFault(), false);
+            }
+            else
+            {
+                EXPECT_EQ(psu2.hasPgoodFault(), true);
+            }
+        }
     }
 
     // TODO: ReadFailure
@@ -559,12 +585,19 @@ TEST_F(PowerSupplyTests, ClearFaults)
     PowerSupply psu{bus, PSUInventoryPath, 13, 0x68, PSUGPIOLineName};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
-    // GPIO read return 1 to indicate present.
-    ON_CALL(*mockPresenceGPIO, read()).WillByDefault(Return(1));
+    // Always return 1 to indicate present.
+    // Each analyze() call will trigger a read of the presence GPIO.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    // Change from missing to present will trigger HWMON directory update.
+    EXPECT_CALL(mockPMBus, findHwmonDir());
+    // Change from missing to present will trigger ON_OFF_CONFIG write.
+    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
     // Presence change from missing to present will trigger in1_input read in
     // an attempt to get CLEAR_FAULTS called.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
+    // Missing/present call will update Presence in inventory.
+    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -613,6 +646,14 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasVoutUVFault(), false);
     EXPECT_EQ(psu.hasFanFault(), true);
     EXPECT_EQ(psu.hasTempFault(), true);
+    // pgoodFault is deglitched up to DEGLITCH_LIMIT
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    // DEGLITCH_LIMIT reached for pgoodFault
     EXPECT_EQ(psu.hasPgoodFault(), true);
 
     EXPECT_CALL(mockPMBus, read("in1_input", _))
@@ -990,9 +1031,17 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasPgoodFault(), false);
+    EXPECT_CALL(mockPMBus, findHwmonDir());
+    // Presence change from missing to present will trigger write to
+    // ON_OFF_CONFIG.
+    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
+    // Missing/present will trigger read of "in1_input" to try CLEAR_FAULTS.
+    EXPECT_CALL(mockPMBus, read("in1_input", _))
+        .Times(1)
+        .WillOnce(Return(207000));
+    // Missing/present call will update Presence in inventory.
+    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1002,6 +1051,15 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     expectations.statusWordValue = (status_word::POWER_GOOD_NEGATED);
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
+    // Expect false until reaches DEGLITCH_LIMIT
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    // Expect false until reaches DEGLITCH_LIMIT
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    // DEGLITCH_LIMIT reached, expect true.
     EXPECT_EQ(psu.hasPgoodFault(), true);
     // Back to no fault bits on in STATUS_WORD
     expectations.statusWordValue = 0;
@@ -1010,6 +1068,12 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_EQ(psu.hasPgoodFault(), false);
     // Turn OFF bit on
     expectations.statusWordValue = (status_word::UNIT_IS_OFF);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasPgoodFault(), true);
