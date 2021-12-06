@@ -330,7 +330,7 @@ void PowerSupply::analyze()
                 if ((statusWord & status_word::POWER_GOOD_NEGATED) ||
                     (statusWord & status_word::UNIT_IS_OFF))
                 {
-                    if (!pgoodFault)
+                    if (pgoodFault < DEGLITCH_LIMIT)
                     {
                         log<level::ERR>(
                             fmt::format("PGOOD fault: "
@@ -338,9 +338,13 @@ void PowerSupply::analyze()
                                         "STATUS_MFR_SPECIFIC = {:#02x}",
                                         statusWord, statusMFR)
                                 .c_str());
-                    }
 
-                    pgoodFault = true;
+                        pgoodFault++;
+                    }
+                }
+                else
+                {
+                    pgoodFault = 0;
                 }
 
                 if (statusWord & status_word::MFR_SPECIFIC_FAULT)
@@ -384,12 +388,12 @@ void PowerSupply::analyze()
                 voutUVFault = false;
                 fanFault = false;
                 tempFault = false;
-                if (pgoodFault)
+                if (pgoodFault > 0)
                 {
                     log<level::INFO>(fmt::format("pgoodFault cleared path: {}",
                                                  inventoryPath)
                                          .c_str());
-                    pgoodFault = false;
+                    pgoodFault = 0;
                 }
             }
         }
@@ -446,7 +450,7 @@ void PowerSupply::clearFaults()
         voutUVFault = false;
         fanFault = false;
         tempFault = false;
-        pgoodFault = false;
+        pgoodFault = 0;
         readFail = 0;
 
         try
