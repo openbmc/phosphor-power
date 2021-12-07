@@ -16,6 +16,24 @@
       "revId": "4aecc2951d845d270aa55ecf1dae3fc96ae65fa8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94186818_5f90e476",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T17:22:58Z",
+      "side": 1,
+      "message": "I thought it might be important to show that it is active or inactive.",
+      "parentUuid": "d58aef43_c4a522d0",
+      "revId": "4aecc2951d845d270aa55ecf1dae3fc96ae65fa8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
     }
   ]
 }
