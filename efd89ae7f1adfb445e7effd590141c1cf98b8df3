@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "621e8994_4bb64e84",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T00:48:20Z",
+      "side": 1,
+      "message": "Intent was to always have this return 1 after the initial constructor set presence to false. Not doing it with the WillRepeatedly(Return(1)) resulted in some super verbose meson-logs/testlog.txt when local CI testing was failing.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 70
+      },
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5b35456_ab6ac87c",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T00:48:20Z",
+      "side": 1,
+      "message": "Another expectation I should have had in here for a while to avoid super-verbose logging output.",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 43
+      },
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6492225_0a7b7ce7",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T00:48:20Z",
+      "side": 1,
+      "message": "Yet another expectation I should have had to avoid super-verbose logging during local CI test.",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 56
+      },
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    }
+  ]
+}
