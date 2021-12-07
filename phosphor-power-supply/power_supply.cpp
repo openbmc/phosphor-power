@@ -592,6 +592,7 @@ void PowerSupply::updateInventory()
         try
         {
             fn = pmbusIntf->readString(FRU_NUMBER, Type::HwmonDeviceDebug);
+            assetProps.emplace(SPARE_PN_PROP, fn);
         }
         catch (const ReadFailure& e)
         {
