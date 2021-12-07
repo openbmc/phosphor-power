@@ -26,6 +26,7 @@ constexpr auto FW_VERSION = "fw_version";
 // The D-Bus property name to update with the CCIN value.
 constexpr auto MODEL_PROP = "Model";
 constexpr auto PN_PROP = "PartNumber";
+constexpr auto SPARE_PN_PROP = "SparePartNumber";
 constexpr auto SN_PROP = "SerialNumber";
 constexpr auto VERSION_PROP = "Version";
 
