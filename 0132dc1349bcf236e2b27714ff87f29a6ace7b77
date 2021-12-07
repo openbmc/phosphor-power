@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccd1af27_a28caa36",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-07T20:42:18Z",
+      "side": 1,
+      "message": "won\u0027t this roll over?",
+      "revId": "0132dc1349bcf236e2b27714ff87f29a6ace7b77",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
