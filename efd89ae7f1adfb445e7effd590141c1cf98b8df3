@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "b4277a1e_a030d30f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-07T15:08:41Z",
+      "side": 1,
+      "message": "I think the intention is the \"else\" path will clear it out.  Probably good enough for this quick patch, but long term we should clear the fault counts out every time the ps turns on (so we\u0027d relog an error each pup), and do a decrement instead of setting back to 0 on good responses.\n\nThe increment should be inside the \"if\" test though right, otherwise the variable will eventually roll over?",
+      "parentUuid": "635b2918_93db85e8",
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "621e8994_4bb64e84",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
