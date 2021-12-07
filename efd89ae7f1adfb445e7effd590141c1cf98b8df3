@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "635b2918_93db85e8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-12-07T14:53:24Z",
+      "side": 1,
+      "message": "Isn\u0027t a decrement needed somewhere?  Otherwise couldn\u0027t these increments be spread out over hours/days/months?",
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "621e8994_4bb64e84",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
