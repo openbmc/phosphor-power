@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9197786d_3882fff0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T17:26:39Z",
+      "side": 1,
+      "message": "I was not sure how much more to describe this.",
+      "parentUuid": "2203c04c_c1b38a1f",
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "635b2918_93db85e8",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "I think the intention is the \"else\" path will clear it out.  Probably good enough for this quick patch, but long term we should clear the fault counts out every time the ps turns on (so we\u0027d relog an error each pup), and do a decrement instead of setting back to 0 on good responses.\n\nThe increment should be inside the \"if\" test though right, otherwise the variable will eventually roll over?",
       "parentUuid": "635b2918_93db85e8",
+      "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6530d4a_cac949e8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-07T17:26:39Z",
+      "side": 1,
+      "message": "The else state, and a call to clearFaults would set this to 0.\n\nThe clearFaults should be called during a power on: https://github.com/openbmc/phosphor-power/blob/7945dd2763cecdd19ddf1bfbff3595166cc0cc8b/phosphor-power-supply/psu_manager.cpp#L341",
+      "parentUuid": "b4277a1e_a030d30f",
       "revId": "efd89ae7f1adfb445e7effd590141c1cf98b8df3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
