@@ -92,6 +92,24 @@ class PowerSupplyTests : public ::testing::Test
     const MockedUtil& mockedUtil;
 };
 
+// Helper function for when a power supply goes from missing to present.
+// void PowerSupplyTests::setMissingToPresentExpects(MockedPMBus& pmbus)
+void setMissingToPresentExpects(MockedPMBus& pmbus, const MockedUtil& util)
+{
+    // Call to analyze() will update to present, that will trigger updating
+    // to the correct/latest HWMON directory, in case it changes.
+    EXPECT_CALL(pmbus, findHwmonDir());
+    // Presence change from missing to present will trigger write to
+    // ON_OFF_CONFIG.
+    EXPECT_CALL(pmbus, writeBinary(ON_OFF_CONFIG, _, _));
+    // Presence change from missing to present will trigger in1_input read
+    // in an attempt to get CLEAR_FAULTS called.
+    EXPECT_CALL(pmbus, read(READ_VIN, _)).Times(1).WillOnce(Return(1));
+    // Missing/present call will update Presence in inventory.
+    // EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
+    EXPECT_CALL(util, setPresence(_, _, true, _));
+}
+
 TEST_F(PowerSupplyTests, Constructor)
 {
     /**
@@ -223,18 +241,7 @@ TEST_F(PowerSupplyTests, Analyze)
     EXPECT_EQ(psu2.isPresent(), false);
 
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu2.getPMBus());
-    // First analyze() call will trigger missing to present, requiring update
-    // to find the new HWMON directory.
-    EXPECT_CALL(mockPMBus, findHwmonDir());
-    // Presence change from missing to present will trigger write to
-    // ON_OFF_CONFIG.
-    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
-    // Presence change from missing to present will trigger in1_input read
-    // in an attempt to get CLEAR_FAULTS called.
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
-    // Change from missing to present will trigger call to update Present
-    // property in the inventory
-    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
 
     // STATUS_WORD INPUT fault.
     {
@@ -301,6 +308,16 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu2.hasFanFault(), false);
         EXPECT_EQ(psu2.hasTempFault(), false);
         EXPECT_EQ(psu2.hasPgoodFault(), false);
+
+        expectations.statusWordValue = 0;
+        setPMBusExpectations(mockPMBus, expectations);
+        psu2.analyze();
+        // Should remain present, no longer be faulted, no input fault, no
+        // VIN_UV fault. Nothing else should change.
+        EXPECT_EQ(psu2.isPresent(), true);
+        EXPECT_EQ(psu2.isFaulted(), false);
+        EXPECT_EQ(psu2.hasInputFault(), false);
+        EXPECT_EQ(psu2.hasVINUVFault(), false);
     }
 
     // STATUS_WORD MFR fault.
@@ -564,14 +581,19 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         PowerSupply psu{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
-        ON_CALL(*mockPresenceGPIO, read()).WillByDefault(Return(1));
+        // There will potentially be multiple calls, we want it to continue
+        // returning 1 for the GPIO read to keep the power supply present.
+        EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-        // TODO: expect setPresence call?
-        // updatePresence() private function reads gpio, called by analyze().
+        setMissingToPresentExpects(mockPMBus, mockedUtil);
+        // If I am calling analyze(), I should probably give it good data.
+        // STATUS_WORD 0x0000 is powered on, no faults.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
         psu.analyze();
-        // TODO: ???should I check the filename?
-        EXPECT_CALL(mockPMBus,
-                    writeBinary(_, ElementsAre(0x15), Type::HwmonDeviceDebug))
+        // I definitely should be writting ON_OFF_CONFIG if I call the function
+        EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, ElementsAre(0x15),
+                                           Type::HwmonDeviceDebug))
             .Times(1);
         psu.onOffConfig(data);
     }
@@ -589,15 +611,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     // Each analyze() call will trigger a read of the presence GPIO.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    // Change from missing to present will trigger HWMON directory update.
-    EXPECT_CALL(mockPMBus, findHwmonDir());
-    // Change from missing to present will trigger ON_OFF_CONFIG write.
-    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
-    // Presence change from missing to present will trigger in1_input read in
-    // an attempt to get CLEAR_FAULTS called.
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(206000));
-    // Missing/present call will update Presence in inventory.
-    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -656,9 +670,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     // DEGLITCH_LIMIT reached for pgoodFault
     EXPECT_EQ(psu.hasPgoodFault(), true);
 
-    EXPECT_CALL(mockPMBus, read("in1_input", _))
-        .Times(1)
-        .WillOnce(Return(209000));
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(207000));
     psu.clearFaults();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
@@ -700,8 +712,13 @@ TEST_F(PowerSupplyTests, UpdateInventory)
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         // GPIO read return 1 to indicate present.
         EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(1));
-        psu.analyze();
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+        setMissingToPresentExpects(mockPMBus, mockedUtil);
+        // STATUS_WORD 0x0000 is powered on, no faults.
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+        // Need analyze call to update power supply from missing to present.
+        psu.analyze();
         EXPECT_CALL(mockPMBus, readString(_, _)).WillRepeatedly(Return(""));
         psu.updateInventory();
 
@@ -734,6 +751,14 @@ TEST_F(PowerSupplyTests, IsPresent)
 
     // Change GPIO read to return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(1));
+    // Call to analyze() will update to present, that will trigger updating
+    // to the correct/latest HWMON directory, in case it changes.
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
+    // Call to analyze things will trigger read of STATUS_WORD and READ_VIN.
+    // Default expectations will be on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
 }
@@ -747,10 +772,14 @@ TEST_F(PowerSupplyTests, IsFaulted)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
+    // Call to analyze things will trigger read of STATUS_WORD and READ_VIN.
+    // Default expectations will be on, no faults.
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.isFaulted(), false);
-    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    PMBusExpectations expectations;
     // STATUS_WORD with fault bits on.
     expectations.statusWordValue = 0xFFFF;
     // STATUS_INPUT with fault bits on.
@@ -781,9 +810,8 @@ TEST_F(PowerSupplyTests, HasInputFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasInputFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -812,9 +840,8 @@ TEST_F(PowerSupplyTests, HasMFRFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasMFRFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // First return STATUS_WORD with no bits on.
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
@@ -844,9 +871,8 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasVINUVFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -876,9 +902,8 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasVoutOVFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -908,9 +933,8 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasIoutOCFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -939,9 +963,9 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasVoutUVFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
+    // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
@@ -969,9 +993,8 @@ TEST_F(PowerSupplyTests, HasFanFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasFanFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1000,9 +1023,8 @@ TEST_F(PowerSupplyTests, HasTempFault)
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    psu.analyze();
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_EQ(psu.hasTempFault(), false);
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1032,18 +1054,13 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     // Always return 1 to indicate present.
     EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
     MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    EXPECT_CALL(mockPMBus, findHwmonDir());
-    // Presence change from missing to present will trigger write to
-    // ON_OFF_CONFIG.
-    EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, _, _));
-    // Missing/present will trigger read of "in1_input" to try CLEAR_FAULTS.
-    EXPECT_CALL(mockPMBus, read("in1_input", _))
-        .Times(1)
-        .WillOnce(Return(207000));
-    // Missing/present call will update Presence in inventory.
-    EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    psu.analyze();
+    EXPECT_EQ(psu.hasPgoodFault(), false);
+    // Setup another expectation of no faults.
     setPMBusExpectations(mockPMBus, expectations);
     psu.analyze();
     EXPECT_EQ(psu.hasPgoodFault(), false);
