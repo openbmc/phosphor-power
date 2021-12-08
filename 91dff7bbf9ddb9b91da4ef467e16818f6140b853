@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4b3f20c_b5bc85b5",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-08T00:06:04Z",
+      "side": 1,
+      "message": "Since this now may be based on STATUS_MFR, should you capture that register in the additional data?",
+      "revId": "91dff7bbf9ddb9b91da4ef467e16818f6140b853",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e878e31_0d88f873",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-08T00:06:04Z",
+      "side": 1,
+      "message": "Why are there now two \"CML fault\" variations?\n\nThis one has the 3 new has*Fault() methods, whereas the one after it does not.",
+      "revId": "91dff7bbf9ddb9b91da4ef467e16818f6140b853",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
