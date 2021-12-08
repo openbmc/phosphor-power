@@ -6,8 +6,17 @@
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/bus/match.hpp>
 
+#include <filesystem>
+#include <vector>
+
 namespace phosphor::power::sequencer
 {
+
+struct Pin
+{
+    std::string name;
+    int line;
+};
 
 /**
  * @class UCD90320Monitor
@@ -51,9 +60,19 @@ class UCD90320Monitor : public PowerSequencerMonitor
     sdbusplus::bus::match_t match;
 
     /**
+     * List of pins
+     */
+    std::vector<Pin> pins;
+
+    /**
      * The read/write interface to this hardware
      */
     pmbus::PMBus pmbusInterface;
+
+    /**
+     * List of reil names
+     */
+    std::vector<std::string> rails;
 
     /**
      * Finds the list of compatible system types using D-Bus methods.
@@ -61,6 +80,22 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * current system.
      */
     void findCompatibleSystemTypes();
+
+    /**
+     * Finds the JSON configuration file.
+     * Looks for a configuration file based on the list of compatable system
+     * types.
+     * Throws an exception if an operating system error occurs while checking
+     * for the existance of a file.
+     * @param[in] compatibleSystemTypes List of compatable system types
+     */
+    void findConfigFile(std::vector<std::string> compatibleSystemTypes);
+
+    /**
+     * Parse the JSON configuration file.
+     * @param[in] pathName the path name
+     */
+    void parseConfigFile(const std::filesystem::path pathName);
 };
 
 } // namespace phosphor::power::sequencer

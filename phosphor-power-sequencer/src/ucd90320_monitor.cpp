@@ -21,15 +21,18 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
+#include <nlohmann/json.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 
+#include <fstream>
 #include <map>
 #include <string>
 
 namespace phosphor::power::sequencer
 {
 
+using json = nlohmann::json;
 using namespace phosphor::logging;
 using namespace phosphor::power;
 
@@ -88,6 +91,7 @@ void UCD90320Monitor::findCompatibleSystemTypes()
                                     compatibleSystemTypes)
                             .c_str());
                     // Use compatible systems information to find config file
+                    findConfigFile(compatibleSystemTypes);
                 }
             }
         }
@@ -98,10 +102,34 @@ void UCD90320Monitor::findCompatibleSystemTypes()
     }
 }
 
+void UCD90320Monitor::findConfigFile(
+    std::vector<std::string> compatibleSystemTypes)
+{
+    // Expected config file path name:
+    // /usr/share/phosphor-power-sequencer/UCD90320Monitor_<systemTyoe>.json
+
+    // Add possible file names based on compatible system types (if any)
+    for (const std::string& systemType : compatibleSystemTypes)
+    {
+        // Check if file exists
+        std::filesystem::path pathName{
+            "/usr/share/phosphor-power-sequencer/UCD90320Monitor_" +
+            systemType + ".json"};
+        if (std::filesystem::exists(pathName))
+        {
+            log<level::INFO>(
+                fmt::format("Config file path: {}", pathName.string()).c_str());
+            parseConfigFile(pathName);
+            break;
+        }
+    }
+}
+
 void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message::message& msg)
 {
-    // Verify message is valid
-    if (!msg)
+    // Only continue if message is valid and rails / pins have not already been
+    // found
+    if (!msg || !rails.empty())
     {
         return;
     }
@@ -134,6 +162,7 @@ void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message::message& msg)
                             .c_str());
 
                     // Use compatible systems information to find config file
+                    findConfigFile(propValue);
                 }
             }
         }
@@ -141,6 +170,64 @@ void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message::message& msg)
     catch (const std::exception&)
     {
         // Error trying to read interfacesAdded message.
+    }
+}
+
+void UCD90320Monitor::parseConfigFile(const std::filesystem::path pathName)
+{
+    try
+    {
+        std::ifstream file{pathName};
+        json rootElement = json::parse(file);
+
+        // Parse rail information from config file
+        auto railsIterator = rootElement.find("rails");
+        if (railsIterator != rootElement.end())
+        {
+            json railsArray = *railsIterator;
+
+            for (const auto& railElement : railsArray)
+            {
+                std::string rail = railElement.get<std::string>();
+                rails.emplace_back(std::move(rail));
+            }
+        }
+        log<level::DEBUG>(fmt::format("Found rails: {}", rails).c_str());
+
+        // Parse pin information from config file
+        auto pinsIterator = rootElement.find("pins");
+        if (pinsIterator != rootElement.end())
+        {
+            json pinsArray = *pinsIterator;
+
+            for (const auto& pinElement : pinsArray)
+            {
+                auto nameIterator = pinElement.find("name");
+                json nameElement = *nameIterator;
+
+                std::string name = nameElement.get<std::string>();
+
+                auto lineIterator = pinElement.find("line");
+                json lineElement = *lineIterator;
+
+                int line = lineElement.get<int>();
+
+                log<level::DEBUG>(
+                    fmt::format("Found pin, name: {}, line: {} ", name, line)
+                        .c_str());
+                Pin pin;
+                pin.name = name;
+                pin.line = line;
+                pins.emplace_back(std::move(pin));
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Log error message in journal
+        log<level::ERR>(std::string("Esception parsing configuration file: " +
+                                    std::string(e.what()))
+                            .c_str());
     }
 }
 
