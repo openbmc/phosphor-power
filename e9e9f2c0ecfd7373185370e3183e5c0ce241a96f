@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "da9da239_9f855c7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T23:57:38Z",
+      "side": 1,
+      "message": "I think a NiceMock treats anything that you didn\u0027t put EXPECT statements in for as uninteresting.\n\nI haven\u0027t tried it, but it is briefly documented here: https://github.com/google/googletest/blob/main/docs/gmock_cheat_sheet.md#mocking-a-normal-class-mockclass\n\nI think there are pros/cons to NiceMock.  It can avoid the need to put expects in for a bunch of stuff that is truly uninteresting.  However, you might not realize a call is occurring that really shouldn\u0027t be either.  Given the way our CI runs, you wouldn\u0027t see the warning from NaggyMock unless the test actually fails for some other reason.  Your choice.",
+      "parentUuid": "4182f855_95699f92",
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ac7c2ba_ddf4a67a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
