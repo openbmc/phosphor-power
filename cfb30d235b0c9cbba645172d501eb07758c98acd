@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d28539a3_4f207338",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-09T23:20:46Z",
+      "side": 1,
+      "message": "I guess not, these should all be here now.",
+      "parentUuid": "c714c6da_669eca22",
+      "revId": "cfb30d235b0c9cbba645172d501eb07758c98acd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95a8f9bd_8c2e5662",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2021-12-09T21:02:14Z",
       "side": 1,
       "message": "what fault is in here that isn\u0027t already checked above?",
+      "revId": "cfb30d235b0c9cbba645172d501eb07758c98acd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94ee75e4_7697a49a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-09T23:20:46Z",
+      "side": 1,
+      "message": "Other bits that might come on. They shouldn\u0027t for IBM power supplies though.",
+      "parentUuid": "95a8f9bd_8c2e5662",
       "revId": "cfb30d235b0c9cbba645172d501eb07758c98acd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
