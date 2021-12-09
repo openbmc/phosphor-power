@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "48b9fee0_7da91ed8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-12-09T21:47:49Z",
+      "side": 1,
+      "message": "fyi, you can also use a NiceMock\u003c\u003e that won\u0027t warn on uninteresting calls.",
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ac7c2ba_ddf4a67a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
