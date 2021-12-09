@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "262a17a1_032f63d5",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:40:50Z",
+      "side": 1,
+      "message": "I think he copied that from the regulators app.\n\nI saw it in another app, and when I traced through the sdbusplus code it looked maybe important.  Maybe it is not needed any more.\n\nFrom sdbusplus/message.hpp\n\n    /** @brief Check if message contains a real pointer. (non-nullptr). */\n    explicit operator bool() const\n    {\n        return bool(_msg);\n    }",
+      "parentUuid": "f6a05811_4dcc35a5",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 13
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b640824c_32a28b62",
         "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
         "patchSetId": 3
