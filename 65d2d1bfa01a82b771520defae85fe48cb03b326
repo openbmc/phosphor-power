@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "f6a05811_4dcc35a5",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-12-09T20:24:40Z",
+      "side": 1,
+      "message": "You must see this in other places?  I don\u0027t think it\u0027s common practice.",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 13
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b640824c_32a28b62",
         "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
         "patchSetId": 3
@@ -168,6 +191,29 @@
     },
     {
       "key": {
+        "uuid": "c92a40ef_47ebb72e",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-12-09T20:24:40Z",
+      "side": 1,
+      "message": "const vector\u0026 is preferred.",
+      "range": {
+        "startLine": 92,
+        "startChar": 24,
+        "endLine": 92,
+        "endChar": 48
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9ac9a5ae_49c7cd05",
         "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
         "patchSetId": 3
@@ -185,6 +231,23 @@
         "endLine": 98,
         "endChar": 52
       },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9f182eb_7c497d9a",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2021-12-09T20:24:40Z",
+      "side": 1,
+      "message": "reference here too",
       "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
