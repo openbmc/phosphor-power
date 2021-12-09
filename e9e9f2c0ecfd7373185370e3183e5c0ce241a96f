@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9cb59543_5d1e3d7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-09T23:26:36Z",
+      "side": 1,
+      "message": "I suppose they could be called warnings.\n\nIt could also be called \"not Nice\" apparently (see below).",
+      "parentUuid": "4dd02625_4516a0c3",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48b9fee0_7da91ed8",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "4182f855_95699f92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-09T23:26:36Z",
+      "side": 1,
+      "message": "I was not so sure that NiceMock was a great idea. How does it now it is an uninteresting call?",
+      "parentUuid": "48b9fee0_7da91ed8",
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ac7c2ba_ddf4a67a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2021-12-09T19:34:46Z",
       "side": 1,
       "message": "I think this same block of new expects appears many times in this file.  Maybe it should be refactored into another utility method?  Trying to avoid copy/paste because it makes things harder to read and maintain.",
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4b4f89c_1f012f89",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-09T23:26:36Z",
+      "side": 1,
+      "message": "There was a lot of copy/paste. I originally busted Analyze and IsFaulted...I think. Started to fix those, then things snowballed from there and I had a mess to figure out.\n\nUp to line 738 might make sense to refactor into some kind of \"this is what happens when it goes missing/present\" helper.",
+      "parentUuid": "2ac7c2ba_ddf4a67a",
       "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
