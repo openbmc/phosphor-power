@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90870abb_2393e186",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Nit: systemType",
+      "range": {
+        "startLine": 109,
+        "startChar": 61,
+        "endLine": 109,
+        "endChar": 70
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "478117c4_7febae41",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Maybe should be a constant?",
+      "range": {
+        "startLine": 116,
+        "startChar": 13,
+        "endLine": 116,
+        "endChar": 48
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b640824c_32a28b62",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "else?  Should it log an error?  Write to the journal?",
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd2d279_9e22222f",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "What happens if name was not found and nameIterator \u003d\u003d end()?  Does it throw an exception, and is that what you want?  Same question on line 204.",
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2005fd8_a2ce96fd",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "else log an error or write to journal?",
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a968a7c3_dc200f38",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Nit: compatible",
+      "range": {
+        "startLine": 86,
+        "startChar": 59,
+        "endLine": 86,
+        "endChar": 70
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b9a354_8e36343b",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Nit: compatible",
+      "range": {
+        "startLine": 90,
+        "startChar": 48,
+        "endLine": 90,
+        "endChar": 59
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d28d25b_82df4c78",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Should this be a \"const std::vector\u003cstd::string\u003e\u0026\" ?",
+      "range": {
+        "startLine": 92,
+        "startChar": 24,
+        "endLine": 92,
+        "endChar": 48
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac9a5ae_49c7cd05",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-09T20:20:31Z",
+      "side": 1,
+      "message": "Should this be \"const std::filesystem::path\u0026\"?\n\nNormally parameters have one of the following type signatures:\n* const X\u0026:  Read-only reference (no copy)\n* X\u0026: Writable reference (no copy)\n* X: Make a copy so I can modify it for internal reasons\n\nconst X doesn\u0027t normally make a lot of sense.  Since it is already a copy, the caller doesn\u0027t care if you are changing your copy.",
+      "range": {
+        "startLine": 98,
+        "startChar": 31,
+        "endLine": 98,
+        "endChar": 52
+      },
+      "revId": "65d2d1bfa01a82b771520defae85fe48cb03b326",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
