@@ -246,6 +246,43 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
     return 1;
 }
 
+int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
+                                                void* context,
+                                                sd_bus_error* error)
+{
+    if (msg != nullptr && context != nullptr)
+    {
+        try
+        {
+            auto m = sdbusplus::message::message(msg);
+
+            std::string psError{};
+            m.read(psError);
+
+            auto pwrObj = static_cast<PowerInterface*>(context);
+            log<level::INFO>(
+                fmt::format("callbackSetPowerSupplyError: {}", psError)
+                    .c_str());
+            pwrObj->setPowerSupplyError(psError);
+
+            m.new_method_return().method_return();
+        }
+        catch (const sdbusplus::exception_t& e)
+        {
+            return sd_bus_error_set(error, e.name(), e.description());
+        }
+    }
+    else
+    {
+        // The message or context were null
+        log<level::ERR>(
+            "Unable to service setPowerSupplyError method callback");
+        return -1;
+    }
+
+    return 1;
+}
+
 void PowerInterface::emitPowerGoodSignal()
 {
     log<level::INFO>("emitPowerGoodSignal");
@@ -286,6 +323,9 @@ const sdbusplus::vtable::vtable_t PowerInterface::_vtable[] = {
     sdbusplus::vtable::property("pgood_timeout", "i", callbackGetPgoodTimeout,
                                 callbackSetPgoodTimeout,
                                 sdbusplus::vtable::property_::emits_change),
+    // Method setPowerSupplyError takes a string parameter and returns void
+    sdbusplus::vtable::method("setPowerSupplyError", "s", "",
+                              callbackSetPowerSupplyError),
     sdbusplus::vtable::end()};
 
 } // namespace phosphor::power::sequencer

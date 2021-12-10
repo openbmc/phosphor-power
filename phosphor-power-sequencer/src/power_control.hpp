@@ -63,6 +63,9 @@ class PowerControl : public PowerObject
     /** @copydoc PowerInterface::setState() */
     void setState(int state) override;
 
+    /** @copydoc PowerInterface::setPowerSupplyError() */
+    void setPowerSupplyError(const std::string& error) override;
+
   private:
     /**
      * The D-Bus bus object
@@ -72,7 +75,13 @@ class PowerControl : public PowerObject
     /**
      * The power sequencer device to monitor.
      */
-    std::unique_ptr<PowerSequencerMonitor> device;
+    std::unique_ptr<PowerSequencerMonitor> device{
+        std::make_unique<PowerSequencerMonitor>()};
+
+    /**
+     * Indicates if a specific power sequencer device has already been found.
+     */
+    bool deviceFound{false};
 
     /**
      * Indicates if a state transistion is taking place
@@ -82,7 +91,7 @@ class PowerControl : public PowerObject
     /**
      * The match to Entity Manager interfaces added.
      */
-    std::unique_ptr<sdbusplus::bus::match_t> match;
+    sdbusplus::bus::match_t match;
 
     /**
      * Power good
@@ -115,6 +124,11 @@ class PowerControl : public PowerObject
      * GPIO line object for power-on / power-off control
      */
     gpiod::line powerControlLine;
+
+    /**
+     * Power supply error
+     */
+    std::string powerSupplyError;
 
     /**
      * Power state
