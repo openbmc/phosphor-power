@@ -44,21 +44,17 @@ const std::string namePropertyName = "Name";
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
     PowerObject{bus, POWER_OBJ_PATH, true},
-    bus{bus}, timer{event, std::bind(&PowerControl::pollPgood, this),
-                    pollInterval}
+    bus{bus}, match{bus,
+                    sdbusplus::bus::match::rules::interfacesAdded() +
+                        sdbusplus::bus::match::rules::sender(
+                            "xyz.openbmc_project.EntityManager"),
+                    std::bind(&PowerControl::interfacesAddedHandler, this,
+                              std::placeholders::_1)},
+    timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
 {
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
 
-    // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
-    // notifies us if the interface becomes available later.
-    match = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAdded() +
-            sdbusplus::bus::match::rules::sender(
-                "xyz.openbmc_project.EntityManager"),
-        std::bind(&PowerControl::interfacesAddedHandler, this,
-                  std::placeholders::_1));
     setUpDevice();
     setUpGpio();
 }
@@ -100,6 +96,7 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
                 .c_str());
         // Create device object
         device = std::make_unique<UCD90320Monitor>(bus, *i2cBus, *i2cAddress);
+        deviceFound = true;
     }
 }
 
@@ -120,8 +117,8 @@ int PowerControl::getState() const
 
 void PowerControl::interfacesAddedHandler(sdbusplus::message::message& msg)
 {
-    // Verify message is valid
-    if (!msg)
+    // Only continue if message is valid and device has not already been found
+    if (!msg || deviceFound)
     {
         return;
     }
@@ -234,6 +231,11 @@ void PowerControl::setPgoodTimeout(int t)
         timeout = std::chrono::seconds(t);
         emitPropertyChangedSignal("pgood_timeout");
     }
+}
+
+void PowerControl::setPowerSupplyError(std::string error)
+{
+    powerSupplyError = error;
 }
 
 void PowerControl::setState(int s)

@@ -79,6 +79,16 @@ class PowerInterface
      */
     virtual void setState(int state) = 0;
 
+    /**
+     * Sets the power supply error. The error should be of great enough severity
+     * that a power good failure may occur and will be issued in preference to
+     * the power good error.
+     * @param[in] error power supply error. The value should be a message
+     * argument for a phosphor-logging Create call, e.g.
+     * "xyz.openbmc_project.Power.PowerSupply.Error.PSKillFault"
+     */
+    virtual void setPowerSupplyError(std::string error) = 0;
+
   private:
     /**
      * Holder for the instance of this interface to be on dbus
@@ -131,6 +141,12 @@ class PowerInterface
                                        const char* property,
                                        sd_bus_message* msg, void* context,
                                        sd_bus_error* error);
+
+    /**
+     * Systemd bus callback for the setPowerSupplyError method
+     */
+    static int callbackSetPowerSupplyError(sd_bus_message* msg, void* context,
+                                           sd_bus_error* error);
 
     /**
      * Systemd bus callback for the setPowerState method
