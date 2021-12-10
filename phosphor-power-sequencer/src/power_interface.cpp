@@ -151,10 +151,10 @@ int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
 
             int timeout{};
             m.read(timeout);
-
-            auto pwrObj = static_cast<PowerInterface*>(context);
             log<level::INFO>(
                 fmt::format("callbackSetPgoodTimeout: {}", timeout).c_str());
+
+            auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setPgoodTimeout(timeout);
         }
         catch (const sdbusplus::exception_t& e)
@@ -223,10 +223,10 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
                                         "org.openbmc.ControlPower.Error.Failed",
                                         "Invalid power state");
             }
-
-            auto pwrObj = static_cast<PowerInterface*>(context);
             log<level::INFO>(
                 fmt::format("callbackSetPowerState: {}", state).c_str());
+
+            auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setState(state);
 
             m.new_method_return().method_return();
@@ -240,6 +240,43 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
     {
         // The message or context were null
         log<level::ERR>("Unable to service setPowerState method callback");
+        return -1;
+    }
+
+    return 1;
+}
+
+int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
+                                                void* context,
+                                                sd_bus_error* error)
+{
+    if (msg != nullptr && context != nullptr)
+    {
+        try
+        {
+            auto m = sdbusplus::message::message(msg);
+
+            std::string psError{};
+            m.read(psError);
+            log<level::INFO>(
+                fmt::format("callbackSetPowerSupplyError: {}", psError)
+                    .c_str());
+
+            auto pwrObj = static_cast<PowerInterface*>(context);
+            pwrObj->setPowerSupplyError(psError);
+
+            m.new_method_return().method_return();
+        }
+        catch (const sdbusplus::exception_t& e)
+        {
+            return sd_bus_error_set(error, e.name(), e.description());
+        }
+    }
+    else
+    {
+        // The message or context were null
+        log<level::ERR>(
+            "Unable to service setPowerSupplyError method callback");
         return -1;
     }
 
@@ -286,6 +323,9 @@ const sdbusplus::vtable::vtable_t PowerInterface::_vtable[] = {
     sdbusplus::vtable::property("pgood_timeout", "i", callbackGetPgoodTimeout,
                                 callbackSetPgoodTimeout,
                                 sdbusplus::vtable::property_::emits_change),
+    // Method setPowerSupplyError takes a string parameter and returns void
+    sdbusplus::vtable::method("setPowerSupplyError", "s", "",
+                              callbackSetPowerSupplyError),
     sdbusplus::vtable::end()};
 
 } // namespace phosphor::power::sequencer
