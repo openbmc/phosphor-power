@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "88759c3a_b3f7f6dd",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-13T20:31:49Z",
+      "side": 1,
+      "message": "I think that was inadvertently added in patchset 1. It was part of another commit that is being reworked.",
+      "parentUuid": "cd82220a_beb93de6",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 47
+      },
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ac7c2ba_ddf4a67a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
