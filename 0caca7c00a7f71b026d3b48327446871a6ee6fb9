@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00ea04a3_f945db29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T23:46:54Z",
+      "side": 1,
+      "message": "Should it also pass which PSU had the error (such as the PSU inventory path) for callout purposes?",
+      "range": {
+        "startLine": 13,
+        "startChar": 43,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45e46a94_afe8c661",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T23:46:54Z",
+      "side": 1,
+      "message": "Is this change part of this commit?  It seems like I saw this in a previous commit, but maybe I\u0027m confused.",
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "637194f1_5e978995",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T23:46:54Z",
+      "side": 1,
+      "message": "Is this supposed to be part of this commit?  Also, is\n  if (deviceFound)\nthe same as\n  if (device)\n?\n\nhttps://en.cppreference.com/w/cpp/memory/unique_ptr/operator_bool",
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d19b7014_aaec4e25",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T23:46:54Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 87,
+        "endChar": 17
+      },
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
