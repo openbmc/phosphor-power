@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bced9940_c035cb1f",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T16:26:19Z",
+      "side": 1,
+      "message": "Is this line supposed to be here?",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 1
+      },
+      "revId": "0926ea041a3298c5f1c0189d3d162884e4477442",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}

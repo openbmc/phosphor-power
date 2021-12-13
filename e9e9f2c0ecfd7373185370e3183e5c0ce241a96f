@@ -144,6 +144,29 @@
     },
     {
       "key": {
+        "uuid": "ca9ae6c6_8817fd35",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-13T16:26:19Z",
+      "side": 1,
+      "message": "Did you intend to delete all this?",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 313,
+        "endChar": 47
+      },
+      "revId": "e9e9f2c0ecfd7373185370e3183e5c0ce241a96f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ac7c2ba_ddf4a67a",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 1
