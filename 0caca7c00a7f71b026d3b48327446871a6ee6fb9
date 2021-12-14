@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3b90b146_c57a693a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-14T17:56:20Z",
+      "side": 1,
+      "message": "I was thinking no, my reasoning being:\n1. PS app has already logged its errors\n2. To cause pgood failure, the problem has to occurring in more then one power supply\n3. I\u0027ll put the additional data like a pgood error to also capture that",
+      "parentUuid": "00ea04a3_f945db29",
+      "range": {
+        "startLine": 13,
+        "startChar": 43,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45e46a94_afe8c661",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "126d67cd_e15c0fe4",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-14T17:56:20Z",
+      "side": 1,
+      "message": "Right, same changes different class",
+      "parentUuid": "45e46a94_afe8c661",
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "637194f1_5e978995",
         "filename": "phosphor-power-sequencer/src/power_control.hpp",
         "patchSetId": 1
@@ -53,6 +95,24 @@
       "writtenOn": "2021-12-13T23:46:54Z",
       "side": 1,
       "message": "Is this supposed to be part of this commit?  Also, is\n  if (deviceFound)\nthe same as\n  if (device)\n?\n\nhttps://en.cppreference.com/w/cpp/memory/unique_ptr/operator_bool",
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ce5d66_944334f2",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-14T17:56:20Z",
+      "side": 1,
+      "message": "\u003e Is this supposed to be part of this commit?\nI added it intentionally. It\u0027s follow through on applicable comments from other reviews. It is a tuck, and could be done as two separate commits, if that is desired.\n\n\u003e  Also, is\n\u003e   if (deviceFound)\n\u003e the same as\n\u003e   if (device)\n\u003e ?\n\u003e \n\u003e https://en.cppreference.com/w/cpp/memory/unique_ptr/operator_bool\nI intended for the device object to always be set, but see that I haven\u0027t actually done that.\nThis will be useful to me when I add the pgood error handling. Added initialization of the object above.",
+      "parentUuid": "637194f1_5e978995",
       "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
@@ -79,6 +139,30 @@
       "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1846bd2_a1dd6774",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-14T17:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d19b7014_aaec4e25",
+      "range": {
+        "startLine": 87,
+        "startChar": 7,
+        "endLine": 87,
+        "endChar": 17
+      },
+      "revId": "0caca7c00a7f71b026d3b48327446871a6ee6fb9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
