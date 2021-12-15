@@ -174,7 +174,7 @@ bool PMBus::exists(const std::string& name, Type type)
     return fs::exists(path);
 }
 
-uint64_t PMBus::read(const std::string& name, Type type)
+uint64_t PMBus::read(const std::string& name, Type type, bool errTrace)
 {
     uint64_t data = 0;
     std::ifstream file;
@@ -192,16 +192,26 @@ uint64_t PMBus::read(const std::string& name, Type type)
     catch (const std::exception& e)
     {
         auto rc = errno;
-        log<level::ERR>((std::string("Failed to read sysfs file "
-                                     "errno=") +
-                         std::to_string(rc) + " FILENAME=" + path.string())
-                            .c_str());
 
-        using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
+        if (errTrace)
+        {
+            log<level::ERR>((std::string("Failed to read sysfs file "
+                                         "errno=") +
+                             std::to_string(rc) + " FILENAME=" + path.string())
+                                .c_str());
 
-        elog<ReadFailure>(
-            metadata::CALLOUT_ERRNO(rc),
-            metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
+            using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
+
+            elog<ReadFailure>(
+                metadata::CALLOUT_ERRNO(rc),
+                metadata::CALLOUT_DEVICE_PATH(fs::canonical(basePath).c_str()));
+        }
+        else
+        {
+            // throw<ReadFailure>;
+            // throw<ReadFailure>;
+            throw ReadFailure();
+        }
     }
 
     return data;

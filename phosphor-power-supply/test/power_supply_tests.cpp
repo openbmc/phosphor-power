@@ -38,7 +38,7 @@ struct PMBusExpectations
 void setPMBusExpectations(MockedPMBus& mockPMBus,
                           const PMBusExpectations& expectations)
 {
-    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _, _))
         .Times(1)
         .WillOnce(Return(expectations.statusWordValue));
 
@@ -47,29 +47,29 @@ void setPMBusExpectations(MockedPMBus& mockPMBus,
         // If fault bits are on in STATUS_WORD, there will also be a read of
         // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT (page 0), and
         // STATUS_TEMPERATURE.
-        EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusInputValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_MFR, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_MFR, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusMFRValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_CML, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_CML, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusCMLValue));
         // Page will need to be set to 0 to read STATUS_VOUT.
         EXPECT_CALL(mockPMBus, insertPageNum(STATUS_VOUT, 0))
             .Times(1)
             .WillOnce(Return("status0_vout"));
-        EXPECT_CALL(mockPMBus, read("status0_vout", _))
+        EXPECT_CALL(mockPMBus, read("status0_vout", _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusVOUTValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_IOUT, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_IOUT, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusIOUTValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_FANS_1_2, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_FANS_1_2, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusFans12Value));
-        EXPECT_CALL(mockPMBus, read(STATUS_TEMPERATURE, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_TEMPERATURE, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusTempValue));
     }
@@ -103,7 +103,7 @@ void setMissingToPresentExpects(MockedPMBus& pmbus, const MockedUtil& util)
     EXPECT_CALL(pmbus, writeBinary(ON_OFF_CONFIG, _, _));
     // Presence change from missing to present will trigger in1_input read
     // in an attempt to get CLEAR_FAULTS called.
-    EXPECT_CALL(pmbus, read(READ_VIN, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(pmbus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
     // Missing/present call will update Presence in inventory.
     // EXPECT_CALL(mockedUtil, setPresence(_, _, true, _));
     EXPECT_CALL(util, setPresence(_, _, true, _));
@@ -700,7 +700,9 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasPS12VcsFault(), true);
     EXPECT_EQ(psu.hasPSCS12VFault(), true);
 
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(207000));
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
+        .Times(1)
+        .WillOnce(Return(207000));
     psu.clearFaults();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
