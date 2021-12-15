@@ -38,7 +38,7 @@ struct PMBusExpectations
 void setPMBusExpectations(MockedPMBus& mockPMBus,
                           const PMBusExpectations& expectations)
 {
-    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _))
+    EXPECT_CALL(mockPMBus, read(STATUS_WORD, _, _))
         .Times(1)
         .WillOnce(Return(expectations.statusWordValue));
 
@@ -47,29 +47,29 @@ void setPMBusExpectations(MockedPMBus& mockPMBus,
         // If fault bits are on in STATUS_WORD, there will also be a read of
         // STATUS_INPUT, STATUS_MFR, STATUS_CML, STATUS_VOUT (page 0), and
         // STATUS_TEMPERATURE.
-        EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_INPUT, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusInputValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_MFR, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_MFR, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusMFRValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_CML, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_CML, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusCMLValue));
         // Page will need to be set to 0 to read STATUS_VOUT.
         EXPECT_CALL(mockPMBus, insertPageNum(STATUS_VOUT, 0))
             .Times(1)
             .WillOnce(Return("status0_vout"));
-        EXPECT_CALL(mockPMBus, read("status0_vout", _))
+        EXPECT_CALL(mockPMBus, read("status0_vout", _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusVOUTValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_IOUT, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_IOUT, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusIOUTValue));
-        EXPECT_CALL(mockPMBus, read(STATUS_FANS_1_2, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_FANS_1_2, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusFans12Value));
-        EXPECT_CALL(mockPMBus, read(STATUS_TEMPERATURE, _))
+        EXPECT_CALL(mockPMBus, read(STATUS_TEMPERATURE, _, _))
             .Times(1)
             .WillOnce(Return(expectations.statusTempValue));
     }
@@ -107,7 +107,7 @@ void setMissingToPresentExpects(MockedPMBus& pmbus, const MockedUtil& util)
     // voltage to the current reading, triggering another clearing of faults
     // due to below minimum to within range voltage.
     // This READ_VIN for CLEAR_FAULTS does not check the returned value.
-    EXPECT_CALL(pmbus, read(READ_VIN, _))
+    EXPECT_CALL(pmbus, read(READ_VIN, _, _))
         .Times(2)
         .WillOnce(Return(1))
         .WillOnce(Return(2));
@@ -351,7 +351,9 @@ TEST_F(PowerSupplyTests, Analyze)
             .Times(1)
             .WillOnce(Return("209000"));
         // The call for CLEAR_FAULTS command
-        EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(3));
+        EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
+            .Times(1)
+            .WillOnce(Return(3));
         psu2.analyze();
         // Should remain present, no longer be faulted, no input fault, no
         // VIN_UV fault. Nothing else should change.
@@ -801,7 +803,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_EQ(psu.hasPS12VcsFault(), true);
     EXPECT_EQ(psu.hasPSCS12VFault(), true);
     // This is the CLEAR_FAULTS read that does not check the return value.
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(3));
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(3));
     psu.clearFaults();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
@@ -837,7 +839,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     // STATUS_TEMPERATURE with bits on.
     expectations.statusTempValue = 0xFF;
     setPMBusExpectations(mockPMBus, expectations);
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(0));
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(0));
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("0"));
@@ -1152,7 +1154,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         .Times(1)
         .WillOnce(Return("201300"));
     // Went from below minimum to within range, expect CLEAR_FAULTS.
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _)).Times(1).WillOnce(Return(3));
+    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(3));
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
 }
