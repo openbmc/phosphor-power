@@ -475,11 +475,12 @@ void PowerSupply::analyze()
         updatePresenceGPIO();
     }
 
-    if ((present) && (readFail < LOG_LIMIT))
+    if (present)
     {
         try
         {
-            statusWord = pmbusIntf->read(STATUS_WORD, Type::Debug);
+            statusWord = pmbusIntf->read(STATUS_WORD, Type::Debug,
+                                         (readFail < LOG_LIMIT));
             // Read worked, reset the fail count.
             readFail = 0;
 
@@ -565,8 +566,14 @@ void PowerSupply::analyze()
         }
         catch (const ReadFailure& e)
         {
-            readFail++;
-            phosphor::logging::commit<ReadFailure>();
+            if (readFail < SIZE_MAX)
+            {
+                readFail++;
+            }
+            if (readFail == LOG_LIMIT)
+            {
+                phosphor::logging::commit<ReadFailure>();
+            }
         }
     }
 }

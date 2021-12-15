@@ -19,7 +19,8 @@ class MockedPMBus : public PMBusBase
   public:
     virtual ~MockedPMBus() = default;
 
-    MOCK_METHOD(uint64_t, read, (const std::string& name, Type type),
+    MOCK_METHOD(uint64_t, read,
+                (const std::string& name, Type type, bool errTrace),
                 (override));
     MOCK_METHOD(std::string, readString, (const std::string& name, Type type),
                 (override));
