@@ -165,7 +165,8 @@ class PMBusBase
   public:
     virtual ~PMBusBase() = default;
 
-    virtual uint64_t read(const std::string& name, Type type) = 0;
+    virtual uint64_t read(const std::string& name, Type type,
+                          bool errTrace = true) = 0;
     virtual std::string readString(const std::string& name, Type type) = 0;
     virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
                              Type type) = 0;
@@ -285,10 +286,12 @@ class PMBus : public PMBusBase
      *
      * @param[in] name   - path concatenated to basePath to read
      * @param[in] type   - Path type
+     * @param[in] errTrace - true to enable tracing error (defaults to false)
      *
      * @return uint64_t - Up to 8 bytes of data read from file.
      */
-    uint64_t read(const std::string& name, Type type) override;
+    uint64_t read(const std::string& name, Type type,
+                  bool errTrace = false) override;
 
     /**
      * Read a string from file in sysfs.
