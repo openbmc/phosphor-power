@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "26d98012_f670714d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-16T16:58:28Z",
+      "side": 1,
+      "message": "do we need to check the input_fault_warning bit here too?",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e03e1a95_4997791b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
@@ -13,6 +30,40 @@
       "writtenOn": "2021-12-16T15:54:07Z",
       "side": 1,
       "message": "you don\u0027t need to do vinUVFault \u003d false here?",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27e95756_f59955f1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-16T16:58:28Z",
+      "side": 1,
+      "message": "how do we know in these 2 cases if it cleared without us sending the clear_fault (or reading the 0x7C)?  the lack of the \"READ_VIN back in range: inputVoltageOld \u003d {} inputVoltage \u003d {}\" entry?",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02163ad0_027ac30b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-16T16:58:28Z",
+      "side": 1,
+      "message": "are we guaranteed to do the next set of poll cmds after doing the clear faults here, and before we come into this routine the next second?",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
