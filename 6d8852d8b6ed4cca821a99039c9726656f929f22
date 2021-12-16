@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "60d0b187_9cc9d92c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-16T22:23:58Z",
+      "side": 1,
+      "message": "Supposedly INPUT_FAULT_WARN can come on for any of these:\n7 VIN OV Fault\n6 VIN OV Warning\n5 VIN UV Warning\n4 VIN UV Fault\n3 Unit Off For Low Input Voltage\n2 IIN OC Fault\n1 IIN OC Warning\n0 PIN OP Warning\nAre we thinking we want to trace for INPUT_FAULT_WARN magically going off as well?",
+      "parentUuid": "26d98012_f670714d",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e03e1a95_4997791b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
