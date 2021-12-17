@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1fd198cc_877bdb39",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-17T15:39:56Z",
+      "side": 1,
+      "message": "Well we\u0027ll log an AC loss error if input_fault bit is on (as we would for vin_uv), so it would seem to follow if the input_fault bit goes off we should do the same things that we do for vin_uv going off.  I.e., if we treat those bits the same for the error happening, shouldn\u0027t we treat them the same for the error clearing?\n\nOn FSP systems we wouldn\u0027t even look at vin_uv, all latched AC detection was based on the input_fault bit.  We told the ps guys we\u0027d look at vin_uv now on bmc as well, which is fine, but that doesn\u0027t mean we can ignore the input_fault bit.",
+      "parentUuid": "60d0b187_9cc9d92c",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e03e1a95_4997791b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "8b0b2dce_ad7a0942",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-17T15:39:56Z",
+      "side": 1,
+      "message": "No I\u0027m not thinking of a missing scenario, just the bits clearing either with or without us sending the clear faults.  I think the lack of the entry is fine.",
+      "parentUuid": "61753a76_68ea0f38",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02163ad0_027ac30b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "If we are in this routine, analyze(), and the power supply is present, we would attempt to read the STATUS_WORD.\n\nIf we are in this routine, analyze(), and the power supply is missing, we will not do any of the commands.\n\nAm I not following the question?",
       "parentUuid": "02163ad0_027ac30b",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e23aba_01a3a26f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-17T15:39:56Z",
+      "side": 1,
+      "message": "No you are not following the question.  Nothing to do with any ps missing.  We want to guarantee 1 and only 1 reading of the status registers between each time we go through this analyze() function.\n\nFor instance, in this path, we want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. analyze() called, we see the faults cleared correctly etc.\n\nWe DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n4. analyze() called, we see the faults not cleared because there was no \"poll\" cmds sent between the analyze() calls.\n\nand we DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. next \"poll\" cmds sent.\n5. analyze() called, but there were 2 sets of \"poll\" cmds sent in between.",
+      "parentUuid": "dda163e0_7dcac32c",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
