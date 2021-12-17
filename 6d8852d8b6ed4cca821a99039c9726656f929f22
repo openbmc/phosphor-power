@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "77bf3ee0_aa33c6b1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-17T19:34:03Z",
+      "side": 1,
+      "message": "Okay, I will add a similar check/trace/clear for the inputFault.",
+      "parentUuid": "1fd198cc_877bdb39",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e03e1a95_4997791b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
@@ -143,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "d4cd09fe_6ee85e68",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-17T19:34:03Z",
+      "side": 1,
+      "message": "Yes, the lack of seeing that \"READ_VIN back in range\" trace, aside from something like a power off/on, would be an indicator that we did not attempt to clear the faults. The PSUManager will call clearFaults() on the power state changing from off to on.\n\nOther possibilities: \n0) Already pointed out missing/present scenario.\n1) The power supply decided to clear it on its own, \n2) Something with phosphor-hwmon possibly cleared it.\n3) Someone manually cleared it (using say i2cset)",
+      "parentUuid": "8b0b2dce_ad7a0942",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02163ad0_027ac30b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
@@ -190,6 +226,24 @@
       "side": 1,
       "message": "No you are not following the question.  Nothing to do with any ps missing.  We want to guarantee 1 and only 1 reading of the status registers between each time we go through this analyze() function.\n\nFor instance, in this path, we want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. analyze() called, we see the faults cleared correctly etc.\n\nWe DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n4. analyze() called, we see the faults not cleared because there was no \"poll\" cmds sent between the analyze() calls.\n\nand we DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. next \"poll\" cmds sent.\n5. analyze() called, but there were 2 sets of \"poll\" cmds sent in between.",
       "parentUuid": "dda163e0_7dcac32c",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d3d5d1_f82e4c4c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-17T19:34:03Z",
+      "side": 1,
+      "message": "I believe the answer is yes, unless there is a read failure while attempting to read STATUS_WORD, then this will get skipped as we will go to the catch block.\n\nIf there are not read failures, then the normal sequence should be:\n1. Read STATUS_WORD\n2. Read READ_VIN (inputVoltage updated)\n\nIf there are no read failures, there is a fault, that we clear, that should be:\n1. Read STATUS_WORD, fault on.\n2. Read STATUS_*\n3. Set fault variable(s)\n4. Read READ_VIN (update inputVoltage, possibly goes low)\n5. Read STATUS_WORD, fault still on.\n6. Read STATUS_*\n7. Read READ_VIN (update invputVoltage, out of range to in range)\n8. Clear faults.\n9. Read STATUS_WORD, good.\n...",
+      "parentUuid": "04e23aba_01a3a26f",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
