@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1239a8ee_250a724e",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T20:12:22Z",
+      "side": 1,
+      "message": "One of the reasons for the CI failure was this missing.",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 441,
+        "endChar": 40
+      },
+      "revId": "4a6861e7b4c2c707e5ca5c44d361e7188e1b5743",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bcda55bc_a28fd04d",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T20:12:22Z",
+      "side": 1,
+      "message": "Another CI failure fix.",
+      "range": {
+        "startLine": 850,
+        "startChar": 0,
+        "endLine": 851,
+        "endChar": 40
+      },
+      "revId": "4a6861e7b4c2c707e5ca5c44d361e7188e1b5743",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    }
+  ]
+}
