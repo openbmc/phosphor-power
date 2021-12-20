@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0e34c13a_3667ffc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:08:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e778aed6_9c11f4b2",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd3e6f5e_c2a94a2b",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 5
@@ -30,6 +48,30 @@
       "writtenOn": "2021-12-20T16:45:09Z",
       "side": 1,
       "message": "Is that odd according to the PMBus spec, or according to specific PSUs we\u0027ve worked with in the past?\n\nI\u0027m just curious why we have this special behavior for these two faults and not any of the others.\n\nI think in general we want this code to match the PMBus spec.",
+      "range": {
+        "startLine": 404,
+        "startChar": 30,
+        "endLine": 404,
+        "endChar": 43
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f68545d_3af280ae",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:08:39Z",
+      "side": 1,
+      "message": "There are a variety of ways for the fault to clear, some of which are not implemented in the monitor, so if one of those methods is clearing these bits, it is not expected.\n\n10.2.1 - When a bit is set, it remains set until cleared as described in Section 10.2.3.\n\n10.2.3. Clearing Warning Or Fault Bits\n* The bit is individually cleared (Section 10.2.4),\nWe do not do this in the monitor program, so if that is how it got cleared, \nsomething else did it. Not expected.\n\n* A RESET signal (if one exists) is asserted,\nThe monitor does not do this, so if that cleared the fault, not expected.\n\n* The output is commanded through the CONTROL pin, the OPERATION command, or the combined action of the CONTROL pin and OPERATION command, to turn off and then to turn back on, or\nThat would be a power cycle. Hopefully that is via state manager. If not, it is unexpected.\n\n* Bias power is removed from the PMBus device. Removing the bias power usually means that the input power has been removed long enough that the voltage to the control circuit has decayed to zero. However, in some devices, the input power and the power to the control circuitry are separate. In this case, removing the bias power means removing the input power to the control circuitry.\nThat is essentially what we are checking with the READ_VIN logic.",
+      "parentUuid": "dd3e6f5e_c2a94a2b",
       "range": {
         "startLine": 404,
         "startChar": 30,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "e9d043bd_6a00558e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:08:39Z",
+      "side": 1,
+      "message": "I agree this is getting kind of long.",
+      "parentUuid": "d94b5996_de0313bc",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b50bf872_9dcf75ee",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 5
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "cbddc1ee_c0484e4d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:08:39Z",
+      "side": 1,
+      "message": "I would not expect that. I have not seen that. However, I suppose it might possibly happen. I am not so certain that extra logic here is warranted.",
+      "parentUuid": "b50bf872_9dcf75ee",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8e242092_cf3e31a1",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 5
@@ -87,6 +165,24 @@
       "writtenOn": "2021-12-20T16:45:09Z",
       "side": 1,
       "message": "Should these lines be deleted?",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d3cf592_59e7b43d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:08:39Z",
+      "side": 1,
+      "message": "Well, the FIXME line could definitely go.\n\nThere might be some utility to keeping that DEBUG journal entry around.",
+      "parentUuid": "8e242092_cf3e31a1",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
