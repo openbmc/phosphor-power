@@ -206,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "96ff7cfc_fd6fd665",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "I was not sure if I should do that, as there are some possible cases where that is not desired.",
+      "parentUuid": "d0a2bc5e_f37623dc",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7a9d3444_e7a330df",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 5
@@ -229,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "3175a6a9_c68fc193",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "The read(READ_VIN) was originally added as the only method for getting the CLEAR_FAULTS command sent out via the pmbus hwmon device driver code. It is noted, somewhere, that the return value in that case does not matter. I used the 1, 2, 3 values as somewhat of an indication of how many times I had expected this to be called that way.\n\nThe readString(READ_VIN) is used by the code that is getting the voltage in millivolts, and then using C++ conversion functions to get it to volts.",
+      "parentUuid": "7a9d3444_e7a330df",
+      "range": {
+        "startLine": 354,
+        "startChar": 36,
+        "endLine": 354,
+        "endChar": 44
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c5ce2c0_a47e01c3",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 5
@@ -240,6 +282,30 @@
       "writtenOn": "2021-12-20T16:45:09Z",
       "side": 1,
       "message": "Is there a reason you used the constant READ_VIN earlier in the file but not functions like HasInputFault(), HasMFRFault() and HasVoutOVFault()?",
+      "range": {
+        "startLine": 1031,
+        "startChar": 38,
+        "endLine": 1031,
+        "endChar": 49
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fb487c_f648ad0b",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "I thought I fixed all of these to use READ_VIN. :-/",
+      "parentUuid": "8c5ce2c0_a47e01c3",
       "range": {
         "startLine": 1031,
         "startChar": 38,
@@ -269,6 +335,24 @@
     },
     {
       "key": {
+        "uuid": "383869cf_251ba10c",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "274bbc2c_c65ad597",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4e56b6a_c492be49",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 5
@@ -286,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "8333aa45_3a16bac9",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "c4e56b6a_c492be49",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "646b4792_2687013f",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 5
@@ -297,6 +399,24 @@
       "writtenOn": "2021-12-20T16:45:09Z",
       "side": 1,
       "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa896d80_b1cc1245",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1615,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2021-12-20T19:16:04Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "646b4792_2687013f",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
