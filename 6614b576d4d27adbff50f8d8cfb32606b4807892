@@ -1,0 +1,209 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e778aed6_9c11f4b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Nit: This line is too long and wraps funny.",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3e6f5e_c2a94a2b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Is that odd according to the PMBus spec, or according to specific PSUs we\u0027ve worked with in the past?\n\nI\u0027m just curious why we have this special behavior for these two faults and not any of the others.\n\nI think in general we want this code to match the PMBus spec.",
+      "range": {
+        "startLine": 404,
+        "startChar": 30,
+        "endLine": 404,
+        "endChar": 43
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d94b5996_de0313bc",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "It is unfortunate that we have basically a copy/paste of these lines below in the else clause.  In general, this method is getting really long (\u003e250 lines) and is a candidate for refactoring.  You don\u0027t have to do it in this commit, but it would be good to find some common code or else just maybe break some parts of this into separate sub-methods.  It gets hard to test and read when it gets so long.",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50bf872_9dcf75ee",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Do we need hysteresis here?\n\nFor example, if a PSU has an input voltage that is oscillating between (VIN_VOLTAGE_MIN-1) and (VIN_VOLTAGE_M+1), are we going to fill the journal and error log with repeated errors and recoveries?",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e242092_cf3e31a1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Should these lines be deleted?",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a2bc5e_f37623dc",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Since these lines were inserted in many places, should this be added to setPMBusExpectations instead?",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a9d3444_e7a330df",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Just curious: why does it sometimes do a readString(READ_VIN) and other times do a read(READ_VIN)?  Does the returned value from read(READ_VIN) mean anything?  I noticed you set it to a value like 1 or 3.",
+      "range": {
+        "startLine": 354,
+        "startChar": 36,
+        "endLine": 354,
+        "endChar": 44
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c5ce2c0_a47e01c3",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Is there a reason you used the constant READ_VIN earlier in the file but not functions like HasInputFault(), HasMFRFault() and HasVoutOVFault()?",
+      "range": {
+        "startLine": 1031,
+        "startChar": 38,
+        "endLine": 1031,
+        "endChar": 49
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274bbc2c_c65ad597",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()?",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e56b6a_c492be49",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "646b4792_2687013f",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1615,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2021-12-20T16:45:09Z",
+      "side": 1,
+      "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
