@@ -529,6 +529,15 @@ class PowerSupply
     void analyzeVoutUVFault();
 
     /**
+     * @brief Examine STATUS_WORD for the fan fault/warning bit.
+     *
+     * If fanFault is not on, trace that the bit now came on, include
+     * STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_FANS_1_2 values as well, to
+     * help with understanding what may have caused it to be set.
+     */
+    void analyzeFanFault();
+
+    /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
     void analyzeTemperatureFault();
