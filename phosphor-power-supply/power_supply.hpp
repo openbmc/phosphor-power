@@ -448,7 +448,7 @@ class PowerSupply
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
-    int pgoodFault = 0;
+    size_t pgoodFault = 0;
 
     /**
      * @brief Power Supply Kill fault.
