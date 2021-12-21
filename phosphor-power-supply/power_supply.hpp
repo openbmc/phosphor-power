@@ -501,6 +501,16 @@ class PowerSupply
     void determineMFRFault();
 
     /**
+     * @brief Examine STATUS_WORD value read for MFRSPECIFIC bit on.
+     *
+     * "A manufacturer specific fault or warning has occurred."
+     *
+     * If it is on, call the determineMFRFault() helper function to examine the
+     * value read from STATUS_MFR_SPECIFIC.
+     */
+    void analyzeMFRFault();
+
+    /**
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
     std::string inventoryPath;
