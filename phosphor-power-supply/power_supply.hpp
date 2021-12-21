@@ -520,6 +520,15 @@ class PowerSupply
     void analyzeIoutOCFault();
 
     /**
+     * @brief Examines STATUS_WORD value read to see if there is a UV fault.
+     *
+     * Checks if the VOUT bit is on, indicating "An output voltage fault or
+     * warning has occurred", if it is on, but VOUT_OV_FAULT is off, it is
+     * determined to be an indication of an output under-voltage fault.
+     */
+    void analyzeVoutUVFault();
+
+    /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
     void analyzeTemperatureFault();

@@ -257,6 +257,25 @@ void PowerSupply::analyzeIoutOCFault()
     }
 }
 
+void PowerSupply::analyzeVoutUVFault()
+{
+    if ((statusWord & phosphor::pmbus::status_word::VOUT_FAULT) &&
+        !(statusWord & phosphor::pmbus::status_word::VOUT_OV_FAULT))
+    {
+        if (!voutUVFault)
+        {
+            log<level::ERR>(
+                fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#04x}, "
+                            "STATUS_MFR_SPECIFIC = {:#02x}, "
+                            "STATUS_VOUT = {:#02x}",
+                            statusWord, statusMFR, statusVout)
+                    .c_str());
+        }
+
+        voutUVFault = true;
+    }
+}
+
 void PowerSupply::analyzeTemperatureFault()
 {
     if (statusWord & phosphor::pmbus::status_word::TEMPERATURE_FAULT_WARN)
@@ -375,22 +394,7 @@ void PowerSupply::analyze()
 
                 analyzeIoutOCFault();
 
-                if ((statusWord & status_word::VOUT_FAULT) &&
-                    !(statusWord & status_word::VOUT_OV_FAULT))
-                {
-                    if (!voutUVFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format(
-                                "VOUT_UV_FAULT fault: STATUS_WORD = {:#04x}, "
-                                "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                "STATUS_VOUT = {:#02x}",
-                                statusWord, statusMFR, statusVout)
-                                .c_str());
-                    }
-
-                    voutUVFault = true;
-                }
+                analyzeVoutUVFault();
 
                 if (statusWord & status_word::FAN_FAULT)
                 {
