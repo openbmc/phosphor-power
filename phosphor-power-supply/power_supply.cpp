@@ -189,6 +189,22 @@ void PowerSupply::updatePresenceGPIO()
     }
 }
 
+void PowerSupply::analyzeCMLFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::CML_FAULT)
+    {
+        if (!cmlFault)
+        {
+            log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_CML = {:#02x}",
+                                        statusWord, statusCML)
+                                .c_str());
+        }
+
+        cmlFault = true;
+    }
+}
+
 void PowerSupply::analyzeTemperatureFault()
 {
     if (statusWord & phosphor::pmbus::status_word::TEMPERATURE_FAULT_WARN)
@@ -298,19 +314,8 @@ void PowerSupply::analyze()
                 statusFans12 = pmbusIntf->read(STATUS_FANS_1_2, Type::Debug);
                 statusTemperature =
                     pmbusIntf->read(STATUS_TEMPERATURE, Type::Debug);
-                if (statusWord & status_word::CML_FAULT)
-                {
-                    if (!cmlFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("CML fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_CML = {:#02x}",
-                                        statusWord, statusCML)
-                                .c_str());
-                    }
 
-                    cmlFault = true;
-                }
+                analyzeCMLFault();
 
                 if (statusWord & status_word::INPUT_FAULT_WARN)
                 {
