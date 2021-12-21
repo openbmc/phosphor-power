@@ -469,6 +469,11 @@ class PowerSupply
     size_t readFail = 0;
 
     /**
+     * @breif Examine STATUS_WORD for CML (communication, memory, logic fault).
+     */
+    void analyzeCMLFault();
+
+    /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
     void analyzeTemperatureFault();
