@@ -469,6 +469,11 @@ class PowerSupply
     size_t readFail = 0;
 
     /**
+     * @brief Examine STATUS_WORD for pgood or unit off faults.
+     */
+    void analyzePgoodFault();
+
+    /**
      * @brief Determine possible manufacturer-specific faults from bits in
      * STATUS_MFR.
      *
