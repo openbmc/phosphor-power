@@ -491,6 +491,11 @@ class PowerSupply
     size_t readFail = 0;
 
     /**
+     * @brief Examine STATUS_WORD for temperature fault.
+     */
+    void analyzeTemperatureFault();
+
+    /**
      * @brief Examine STATUS_WORD for pgood or unit off faults.
      */
     void analyzePgoodFault();
