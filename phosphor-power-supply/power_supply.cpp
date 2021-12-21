@@ -210,6 +210,23 @@ void PowerSupply::determineMFRFault()
         }
     }
 }
+void PowerSupply::analyzeMFRFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::MFR_SPECIFIC_FAULT)
+    {
+        if (!mfrFault)
+        {
+            log<level::ERR>(fmt::format("MFR fault: "
+                                        "STATUS_WORD = {:#04x} "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
+        }
+
+        mfrFault = true;
+        determineMFRFault();
+    }
+}
 
 void PowerSupply::analyze()
 {
@@ -369,21 +386,7 @@ void PowerSupply::analyze()
                     pgoodFault = 0;
                 }
 
-                if (statusWord & status_word::MFR_SPECIFIC_FAULT)
-                {
-                    if (!mfrFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("MFR fault: "
-                                        "STATUS_WORD = {:#04x} "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
-                                        statusWord, statusMFR)
-                                .c_str());
-                    }
-
-                    mfrFault = true;
-                    determineMFRFault();
-                }
+                analyzeMFRFault();
 
                 if (statusWord & status_word::VIN_UV_FAULT)
                 {

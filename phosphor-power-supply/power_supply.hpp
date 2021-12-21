@@ -478,6 +478,8 @@ class PowerSupply
      */
     void determineMFRFault();
 
+    void analyzeMFRFault();
+
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
