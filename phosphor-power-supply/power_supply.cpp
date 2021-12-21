@@ -402,25 +402,32 @@ void PowerSupply::analyze()
             }
             else
             {
-                cmlFault = false;
-                inputFault = false;
-                mfrFault = false;
-                vinUVFault = false;
-                voutOVFault = false;
-                ioutOCFault = false;
-                voutUVFault = false;
-                fanFault = false;
-                tempFault = false;
+                // if INPUT/VIN_UV fault was on, it cleared, trace it.
+                if (inputFault)
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "INPUT fault cleared: STATUS_WORD = {:#04x}",
+                            statusWord)
+                            .c_str());
+                }
+
+                if (vinUVFault)
+                {
+                    log<level::INFO>(
+                        fmt::format("VIN_UV cleared: STATUS_WORD = {:#04x}",
+                                    statusWord)
+                            .c_str());
+                }
+
                 if (pgoodFault > 0)
                 {
                     log<level::INFO>(fmt::format("pgoodFault cleared path: {}",
                                                  inventoryPath)
                                          .c_str());
-                    pgoodFault = 0;
                 }
-                psKillFault = false;
-                ps12VcsFault = false;
-                psCS12VFault = false;
+
+                clearFaultFlags();
             }
         }
         catch (const ReadFailure& e)
@@ -466,20 +473,7 @@ void PowerSupply::clearFaults()
     // I do not care what the return value is.
     if (present)
     {
-        inputFault = false;
-        mfrFault = false;
-        statusMFR = 0;
-        vinUVFault = false;
-        cmlFault = false;
-        voutOVFault = false;
-        ioutOCFault = false;
-        voutUVFault = false;
-        fanFault = false;
-        tempFault = false;
-        pgoodFault = 0;
-        psKillFault = false;
-        ps12VcsFault = false;
-        psCS12VFault = false;
+        clearFaultFlags();
         readFail = 0;
 
         try
