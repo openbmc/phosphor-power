@@ -477,6 +477,8 @@ class PowerSupply
 
     void analyzeVoutOVFault();
 
+    void analyzeIoutOCFault();
+
     /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
