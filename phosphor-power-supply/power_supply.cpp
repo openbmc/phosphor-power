@@ -189,6 +189,28 @@ void PowerSupply::updatePresenceGPIO()
     }
 }
 
+void PowerSupply::analyzePgoodFault()
+{
+    if ((statusWord & phosphor::pmbus::status_word::POWER_GOOD_NEGATED) ||
+        (statusWord & phosphor::pmbus::status_word::UNIT_IS_OFF))
+    {
+        if (pgoodFault < DEGLITCH_LIMIT)
+        {
+            log<level::ERR>(fmt::format("PGOOD fault: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        statusWord, statusMFR)
+                                .c_str());
+
+            pgoodFault++;
+        }
+    }
+    else
+    {
+        pgoodFault = 0;
+    }
+}
+
 void PowerSupply::determineMFRFault()
 {
     if (bindPath.string().find("ibm-cffps") != std::string::npos)
@@ -367,25 +389,7 @@ void PowerSupply::analyze()
                     tempFault = true;
                 }
 
-                if ((statusWord & status_word::POWER_GOOD_NEGATED) ||
-                    (statusWord & status_word::UNIT_IS_OFF))
-                {
-                    if (pgoodFault < DEGLITCH_LIMIT)
-                    {
-                        log<level::ERR>(
-                            fmt::format("PGOOD fault: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
-                                        statusWord, statusMFR)
-                                .c_str());
-
-                        pgoodFault++;
-                    }
-                }
-                else
-                {
-                    pgoodFault = 0;
-                }
+                analyzePgoodFault();
 
                 analyzeMFRFault();
 
