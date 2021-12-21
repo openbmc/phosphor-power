@@ -473,6 +473,8 @@ class PowerSupply
      */
     void analyzeCMLFault();
 
+    void analyzeInputFault();
+
     /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
