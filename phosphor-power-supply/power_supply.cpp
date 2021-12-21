@@ -189,6 +189,25 @@ void PowerSupply::updatePresenceGPIO()
     }
 }
 
+void PowerSupply::analyzeTemperatureFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::TEMPERATURE_FAULT_WARN)
+    {
+        if (!tempFault)
+        {
+            log<level::ERR>(fmt::format("TEMPERATURE fault/warning: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_TEMPERATURE = {:#02x}",
+                                        statusWord, statusMFR,
+                                        statusTemperature)
+                                .c_str());
+        }
+
+        tempFault = true;
+    }
+}
+
 void PowerSupply::analyzePgoodFault()
 {
     if ((statusWord & phosphor::pmbus::status_word::POWER_GOOD_NEGATED) ||
@@ -371,22 +390,7 @@ void PowerSupply::analyze()
                     fanFault = true;
                 }
 
-                if (statusWord & status_word::TEMPERATURE_FAULT_WARN)
-                {
-                    if (!tempFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("TEMPERATURE fault/warning: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_TEMPERATURE = {:#02x}",
-                                        statusWord, statusMFR,
-                                        statusTemperature)
-                                .c_str());
-                    }
-
-                    tempFault = true;
-                }
+                analyzeTemperatureFault();
 
                 analyzePgoodFault();
 
