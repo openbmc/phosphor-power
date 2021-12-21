@@ -496,6 +496,14 @@ class PowerSupply
     void analyzeCMLFault();
 
     /**
+     * @brief Examine STATUS_WORD for INPUT bit on.
+     *
+     * "An input voltage, input current, or input power fault or warning has
+     * occurred."
+     */
+    void analyzeInputFault();
+
+    /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
     void analyzeTemperatureFault();
