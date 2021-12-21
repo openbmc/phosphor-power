@@ -104,6 +104,28 @@ class PowerSupply
     void onOffConfig(uint8_t data);
 
     /**
+     * Clears all the member variables that indicate if a fault bit was seen as
+     * on in the STATUS_WORD or STATUS_MFR_SPECIFIC response.
+     */
+    void clearFaultFlags()
+    {
+        inputFault = false;
+        mfrFault = false;
+        statusMFR = 0;
+        vinUVFault = false;
+        cmlFault = false;
+        voutOVFault = false;
+        ioutOCFault = false;
+        voutUVFault = false;
+        fanFault = false;
+        tempFault = false;
+        pgoodFault = 0;
+        psKillFault = false;
+        ps12VcsFault = false;
+        psCS12VFault = false;
+    }
+
+    /**
      * Write PMBus CLEAR_FAULTS
      *
      * This function will be called in various situations in order to clear
