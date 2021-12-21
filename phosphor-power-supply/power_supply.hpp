@@ -109,20 +109,20 @@ class PowerSupply
      */
     void clearFaultFlags()
     {
-        inputFault = false;
-        mfrFault = false;
+        inputFault = 0;
+        mfrFault = 0;
         statusMFR = 0;
-        vinUVFault = false;
-        cmlFault = false;
-        voutOVFault = false;
-        ioutOCFault = false;
-        voutUVFault = false;
-        fanFault = false;
-        tempFault = false;
+        vinUVFault = 0;
+        cmlFault = 0;
+        voutOVFault = 0;
+        ioutOCFault = 0;
+        voutUVFault = 0;
+        fanFault = 0;
+        tempFault = 0;
         pgoodFault = 0;
-        psKillFault = false;
-        ps12VcsFault = false;
-        psCS12VFault = false;
+        psKillFault = 0;
+        ps12VcsFault = 0;
+        psCS12VFault = 0;
     }
 
     /**
@@ -229,9 +229,13 @@ class PowerSupply
      */
     bool isFaulted() const
     {
-        return (hasCommFault() || vinUVFault || inputFault || voutOVFault ||
-                ioutOCFault || voutUVFault || fanFault || tempFault ||
-                (pgoodFault >= DEGLITCH_LIMIT) || mfrFault);
+        return (hasCommFault() || (vinUVFault >= DEGLITCH_LIMIT) ||
+                (inputFault >= DEGLITCH_LIMIT) ||
+                (voutOVFault >= DEGLITCH_LIMIT) ||
+                (ioutOCFault >= DEGLITCH_LIMIT) ||
+                (voutUVFault >= DEGLITCH_LIMIT) ||
+                (fanFault >= DEGLITCH_LIMIT) || (tempFault >= DEGLITCH_LIMIT) ||
+                (pgoodFault >= DEGLITCH_LIMIT) || (mfrFault >= DEGLITCH_LIMIT));
     }
 
     /**
@@ -255,7 +259,7 @@ class PowerSupply
      */
     bool hasInputFault() const
     {
-        return inputFault;
+        return (inputFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -263,7 +267,7 @@ class PowerSupply
      */
     bool hasMFRFault() const
     {
-        return mfrFault;
+        return (mfrFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -271,7 +275,7 @@ class PowerSupply
      */
     bool hasVINUVFault() const
     {
-        return vinUVFault;
+        return (vinUVFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -279,7 +283,7 @@ class PowerSupply
      */
     bool hasVoutOVFault() const
     {
-        return voutOVFault;
+        return (voutOVFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -287,7 +291,7 @@ class PowerSupply
      */
     bool hasIoutOCFault() const
     {
-        return ioutOCFault;
+        return (ioutOCFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -295,7 +299,7 @@ class PowerSupply
      */
     bool hasVoutUVFault() const
     {
-        return voutUVFault;
+        return (voutUVFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -303,7 +307,7 @@ class PowerSupply
      */
     bool hasFanFault() const
     {
-        return fanFault;
+        return (fanFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -311,7 +315,7 @@ class PowerSupply
      */
     bool hasTempFault() const
     {
-        return tempFault;
+        return (tempFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -328,7 +332,7 @@ class PowerSupply
      */
     bool hasPSKillFault() const
     {
-        return psKillFault;
+        return (psKillFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -336,7 +340,7 @@ class PowerSupply
      */
     bool hasPS12VcsFault() const
     {
-        return ps12VcsFault;
+        return (ps12VcsFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -344,7 +348,7 @@ class PowerSupply
      */
     bool hasPSCS12VFault() const
     {
-        return psCS12VFault;
+        return (psCS12VFault >= DEGLITCH_LIMIT);
     }
 
     /**
@@ -391,7 +395,7 @@ class PowerSupply
      */
     bool hasCommFault() const
     {
-        return ((readFail >= LOG_LIMIT) || (cmlFault));
+        return ((readFail >= LOG_LIMIT) || (cmlFault >= DEGLITCH_LIMIT));
     }
 
     /**
@@ -439,33 +443,59 @@ class PowerSupply
     /** @brief True if an error for a fault has already been logged. */
     bool faultLogged = false;
 
-    /** @brief True if bit 1 of STATUS_WORD low byte is on. */
-    bool cmlFault = false;
+    /** @brief Incremented if bit 1 of STATUS_WORD low byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t cmlFault = 0;
 
-    /** @brief True if bit 5 of STATUS_WORD high byte is on. */
-    bool inputFault = false;
+    /** @brief Incremented if bit 5 of STATUS_WORD high byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t inputFault = 0;
 
-    /** @brief True if bit 4 of STATUS_WORD high byte is on. */
-    bool mfrFault = false;
+    /** @brief Incremented if bit 4 of STATUS_WORD high byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t mfrFault = 0;
 
-    /** @brief True if bit 3 of STATUS_WORD low byte is on. */
-    bool vinUVFault = false;
+    /** @brief Incremented if bit 3 of STATUS_WORD low byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t vinUVFault = 0;
 
-    /** @brief True if bit 5 of STATUS_WORD low byte is on. */
-    bool voutOVFault = false;
+    /** @brief Incremented if bit 5 of STATUS_WORD low byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t voutOVFault = 0;
 
-    /** @brief True if bit 4 of STATUS_WORD low byte is on. */
-    bool ioutOCFault = false;
+    /** @brief Incremented if bit 4 of STATUS_WORD low byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t ioutOCFault = 0;
 
-    /** @brief True if bit 7 of STATUS_WORD high byte is on and bit 5 (VOUT_OV)
-     * of low byte is off. */
-    bool voutUVFault = false;
+    /** @brief Incremented if bit 7 of STATUS_WORD high byte is on and bit 5
+     * (VOUT_OV) of low byte is off.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t voutUVFault = 0;
 
-    /** @brief True if FANS fault/warn bit on in STATUS_WORD. */
-    bool fanFault = false;
+    /** @brief Incremented if FANS fault/warn bit on in STATUS_WORD.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
+    size_t fanFault = 0;
 
-    /** @brief True if bit 2 of STATUS_WORD low byte is on. */
-    bool tempFault = false;
+    /** @brief Incremented if bit 2 of STATUS_WORD low byte is on.
+     *
+     * Considered faulted if reaches DEGLITCH_LIMIT. */
+    size_t tempFault = 0;
 
     /**
      * @brief Incremented if bit 11 or 6 of STATUS_WORD is on. PGOOD# is
@@ -478,17 +508,17 @@ class PowerSupply
     /**
      * @brief Power Supply Kill fault.
      */
-    bool psKillFault = false;
+    size_t psKillFault = 0;
 
     /**
      * @brief Power Supply 12Vcs fault (standby power).
      */
-    bool ps12VcsFault = false;
+    size_t ps12VcsFault = 0;
 
     /**
      * @brief Power Supply Current-Share fault in 12V domain.
      */
-    bool psCS12VFault = false;
+    size_t psCS12VFault = 0;
 
     /** @brief Count of the number of read failures. */
     size_t readFail = 0;
