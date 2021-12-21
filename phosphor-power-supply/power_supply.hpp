@@ -504,6 +504,14 @@ class PowerSupply
     void analyzeInputFault();
 
     /**
+     * @brief Examine STATUS_WORD for VOUT being set.
+     *
+     * If VOUT is on, "An output voltage fault or warning has occurred.", and
+     * VOUT_OV_FAULT is on, there is an output over-voltage fault.
+     */
+    void analyzeVoutOVFault();
+
+    /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
     void analyzeTemperatureFault();
