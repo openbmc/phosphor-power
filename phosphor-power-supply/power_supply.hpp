@@ -481,6 +481,8 @@ class PowerSupply
 
     void analyzeVoutUVFault();
 
+    void analyzeFanFault();
+
     /**
      * @brief Examine STATUS_WORD for temperature fault.
      */

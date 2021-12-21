@@ -276,6 +276,24 @@ void PowerSupply::analyzeVoutUVFault()
     }
 }
 
+void PowerSupply::analyzeFanFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::FAN_FAULT)
+    {
+        if (!fanFault)
+        {
+            log<level::ERR>(fmt::format("FANS fault/warning: "
+                                        "STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_FANS_1_2 = {:#02x}",
+                                        statusWord, statusMFR, statusFans12)
+                                .c_str());
+        }
+
+        fanFault = true;
+    }
+}
+
 void PowerSupply::analyzeTemperatureFault()
 {
     if (statusWord & phosphor::pmbus::status_word::TEMPERATURE_FAULT_WARN)
@@ -395,21 +413,7 @@ void PowerSupply::analyze()
 
                 analyzeVoutUVFault();
 
-                if (statusWord & status_word::FAN_FAULT)
-                {
-                    if (!fanFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("FANS fault/warning: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_FANS_1_2 = {:#02x}",
-                                        statusWord, statusMFR, statusFans12)
-                                .c_str());
-                    }
-
-                    fanFault = true;
-                }
+                analyzeFanFault();
 
                 analyzeTemperatureFault();
 
