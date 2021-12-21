@@ -240,6 +240,23 @@ void PowerSupply::analyzeVoutOVFault()
     }
 }
 
+void PowerSupply::analyzeIoutOCFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::IOUT_OC_FAULT)
+    {
+        if (!ioutOCFault)
+        {
+            log<level::ERR>(fmt::format("IOUT fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_IOUT = {:#02x}",
+                                        statusWord, statusMFR, statusIout)
+                                .c_str());
+        }
+
+        ioutOCFault = true;
+    }
+}
+
 void PowerSupply::analyzeTemperatureFault()
 {
     if (statusWord & phosphor::pmbus::status_word::TEMPERATURE_FAULT_WARN)
@@ -356,20 +373,7 @@ void PowerSupply::analyze()
 
                 analyzeVoutOVFault();
 
-                if (statusWord & status_word::IOUT_OC_FAULT)
-                {
-                    if (!ioutOCFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("IOUT fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_IOUT = {:#02x}",
-                                        statusWord, statusMFR, statusIout)
-                                .c_str());
-                    }
-
-                    ioutOCFault = true;
-                }
+                analyzeIoutOCFault();
 
                 if ((statusWord & status_word::VOUT_FAULT) &&
                     !(statusWord & status_word::VOUT_OV_FAULT))

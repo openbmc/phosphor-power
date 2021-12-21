@@ -511,6 +511,14 @@ class PowerSupply
      */
     void analyzeVoutOVFault();
 
+    /*
+     * @brief Examine STATUS_WORD value read for IOUT_OC_FAULT.
+     *
+     * "An output overcurrent fault has occurred." If it is on, and fault not
+     * set, trace STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_IOUT values.
+     */
+    void analyzeIoutOCFault();
+
     /**
      * @brief Examine STATUS_WORD for temperature fault.
      */
