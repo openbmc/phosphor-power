@@ -505,6 +505,8 @@ class PowerSupply
 
     void analyzeMFRFault();
 
+    void analyzeVinUVFault();
+
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
