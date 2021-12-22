@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "86c6888c_ee9a391d",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-22T14:43:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88df638a_9b79ecd8",
+      "range": {
+        "startLine": 67,
+        "startChar": 29,
+        "endLine": 67,
+        "endChar": 46
+      },
+      "revId": "d8f34eba3352e5d7826174f0515679b5b611e396",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a13386a_0e954a6a",
         "filename": "phosphor-power-sequencer/src/power_interface.hpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "d8f34eba3352e5d7826174f0515679b5b611e396",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0f0bb77_789cde92",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2021-12-22T14:43:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a13386a_0e954a6a",
+      "range": {
+        "startLine": 90,
+        "startChar": 37,
+        "endLine": 90,
+        "endChar": 54
+      },
+      "revId": "d8f34eba3352e5d7826174f0515679b5b611e396",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": false
     }
   ]
 }
