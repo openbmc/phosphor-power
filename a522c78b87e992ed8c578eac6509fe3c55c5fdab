@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93c8eadc_357282a5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2021-12-22T15:35:57Z",
+      "side": 1,
+      "message": "does readFail get cleared every power up, and when a new psu is plugged in, as well?",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
