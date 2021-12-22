@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0483cd01_48121e79",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2021-12-22T16:33:42Z",
+      "side": 1,
+      "message": "nit: I dont think you need to initialize this to \"\". just a ; after the variable name should do the same thing.",
+      "revId": "c179d3b48521846ab7569150e455eb117ea65ca6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
+      "unresolved": true
+    }
+  ]
+}
