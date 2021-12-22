@@ -568,6 +568,11 @@ class PowerSupply
     void analyzeMFRFault();
 
     /**
+     * @brief Analyzes the STATUS_WORD for a VIN_UV_FAULT indicator.
+     */
+    void analyzeVinUVFault();
+
+    /**
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
     std::string inventoryPath;

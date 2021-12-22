@@ -375,6 +375,23 @@ void PowerSupply::analyzeMFRFault()
     }
 }
 
+void PowerSupply::analyzeVinUVFault()
+{
+    if (statusWord & phosphor::pmbus::status_word::VIN_UV_FAULT)
+    {
+        if (!vinUVFault)
+        {
+            log<level::ERR>(fmt::format("VIN_UV fault: STATUS_WORD = {:#04x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
+                                        "STATUS_INPUT = {:#02x}",
+                                        statusWord, statusMFR, statusInput)
+                                .c_str());
+        }
+
+        vinUVFault = true;
+    }
+}
+
 void PowerSupply::analyze()
 {
     using namespace phosphor::pmbus;
@@ -422,20 +439,7 @@ void PowerSupply::analyze()
 
                 analyzeMFRFault();
 
-                if (statusWord & status_word::VIN_UV_FAULT)
-                {
-                    if (!vinUVFault)
-                    {
-                        log<level::ERR>(
-                            fmt::format("VIN_UV fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_INPUT = {:#02x}",
-                                        statusWord, statusMFR, statusInput)
-                                .c_str());
-                    }
-
-                    vinUVFault = true;
-                }
+                analyzeVinUVFault();
             }
             else
             {
