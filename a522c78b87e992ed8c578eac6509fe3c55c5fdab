@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51e18da0_96318ab4",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T23:30:29Z",
+      "side": 1,
+      "message": "Should I change something here?",
+      "parentUuid": "d21ebf8f_855b9694",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f83bc2cd_94f8126c",
         "filename": "pmbus.hpp",
         "patchSetId": 3
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "Oops, only changed the one Jim pointed out. Missed this.\n\nhttps://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/49775/2..3/pmbus.hpp#b169\nChanged that from false to true, something Jim pointed out.",
       "parentUuid": "f83bc2cd_94f8126c",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f5d7f59_788da16c",
+        "filename": "pmbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T23:30:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92ffa6d9_9db09c8d",
       "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
