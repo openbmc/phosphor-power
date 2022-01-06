@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea368c9c_735d7d84",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-06T21:41:36Z",
+      "side": 1,
+      "message": "Preferable to not hide the \"sd_bus_error* error\" parameter.",
+      "range": {
+        "startLine": 259,
+        "startChar": 24,
+        "endLine": 259,
+        "endChar": 29
+      },
+      "revId": "290de739f4b5b218a57deef14d4d0547ea11b3a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
