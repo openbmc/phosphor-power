@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "caf49098_65232f7d",
         "filename": "/COMMIT_MSG",
@@ -20,10 +21,10 @@
         "endChar": 51
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "bee2e60a_a6dda371",
         "filename": "/COMMIT_MSG",
@@ -44,10 +45,10 @@
         "endChar": 51
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "49955b8d_0c8bce97",
         "filename": "/COMMIT_MSG",
@@ -68,10 +69,10 @@
         "endChar": 51
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "27198bfb_0952cec5",
         "filename": "/COMMIT_MSG",
@@ -91,10 +92,10 @@
         "endChar": 26
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "75f9a255_27aa5012",
         "filename": "/COMMIT_MSG",
@@ -115,10 +116,10 @@
         "endChar": 26
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "b3030b3d_4a0f0769",
         "filename": "/COMMIT_MSG",
@@ -139,10 +140,10 @@
         "endChar": 26
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "59a336b7_d64a7bb5",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -156,10 +157,10 @@
       "side": 1,
       "message": "If I am understanding this correctly, this will lead to the following behavior:\n* One or more fault bits are set in statusWord\n* The code prior to this will set data members for those fault bits, like inputFault and mfrFault \n* If VIN_UV_FAULT has transitioned to off, all those bits will be cleared\n\nIs this the desired behavior?  Do we want to lose all the other error state?",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "4250aa48_8d0ac182",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -174,10 +175,10 @@
       "message": "This is changing. I will only trace the fact that vinUVFault was true (it got set in the past), but for some reason it is no longer on. This would be unexpected, as there are only specific conditions that should result in that fault clearing, one of those being that a CLEAR_FAULTS command was sent.\n\nIt might be possible that someone manually enabled single-bit clearing and sent a command to clear specific bits via i2cset. Manually tinkering could lead to \"weird system behavior\".\n\nThe clearFaults() call in this path will be removed, as pointed out by Derek.",
       "parentUuid": "59a336b7_d64a7bb5",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "cd5034c9_b700786c",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -192,10 +193,10 @@
       "message": "Done",
       "parentUuid": "4250aa48_8d0ac182",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "277e67ac_408172e1",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -209,10 +210,10 @@
       "side": 1,
       "message": "probably good to add a journal entry if the vin_uv fault clears on it\u0027s own (without us sending the clear_fault cmd or a enable) like we did on fsp systems... that is a ps fw bug and could lead to weird system behavior",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "33e9aca7_34f95426",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -227,10 +228,10 @@
       "message": "Ack",
       "parentUuid": "277e67ac_408172e1",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "57542082_ce3e467d",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -250,10 +251,10 @@
         "endChar": 74
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c7c6b4c5_c39fd569",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -274,10 +275,10 @@
         "endChar": 74
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "c33400d2_f1c7f4d3",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -298,10 +299,10 @@
         "endChar": 74
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8a7b5157_89848156",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -315,10 +316,10 @@
       "side": 1,
       "message": "It is a little clunky having the list twice: here and in analyze().  Whenever you add a new flag, you have to add a duplicate assignment in two places.\n\nIf you add any more flags for other error types, it might make sense to refactor this list into a clearFaultFlags() method that both analyze() and clearFaults() call.",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d31e2711_12b09747",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -333,10 +334,10 @@
       "message": "👍\nI think I have some more added in another patchset/commit. Interesting idea...may add/change later.",
       "parentUuid": "8a7b5157_89848156",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "625d2a1d_74aee414",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -351,10 +352,10 @@
       "message": "https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/49892",
       "parentUuid": "d31e2711_12b09747",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "b9c2210a_a01e6221",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -368,10 +369,10 @@
       "side": 1,
       "message": "There are quite a few tests in here that result in some verbose output if a test fails, making it quite difficult to weed through and find the reason for the failing test. 😒\n\nI will be working on trying to reduce that verbosity.",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "f0af2982_6b7a9051",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -386,10 +387,10 @@
       "message": "Put this on top of gtest update for warnings commit. 😊",
       "parentUuid": "b9c2210a_a01e6221",
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "df860b76_648f58ac",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -409,8 +410,31 @@
         "endChar": 52
       },
       "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "696e001d_9781af83",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:38:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df860b76_648f58ac",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 831,
+        "endChar": 52
+      },
+      "revId": "a0a41e2d0fdce998a4bb558f19276dab01e354cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

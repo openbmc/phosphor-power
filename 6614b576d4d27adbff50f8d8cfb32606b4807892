@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "e778aed6_9c11f4b2",
         "filename": "/COMMIT_MSG",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Nit: This line is too long and wraps funny.",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "0e34c13a_3667ffc3",
         "filename": "/COMMIT_MSG",
@@ -32,10 +33,10 @@
       "message": "Ack",
       "parentUuid": "e778aed6_9c11f4b2",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "dd3e6f5e_c2a94a2b",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -55,10 +56,10 @@
         "endChar": 43
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "0f68545d_3af280ae",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -79,10 +80,10 @@
         "endChar": 43
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d94b5996_de0313bc",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -96,10 +97,10 @@
       "side": 1,
       "message": "It is unfortunate that we have basically a copy/paste of these lines below in the else clause.  In general, this method is getting really long (\u003e250 lines) and is a candidate for refactoring.  You don\u0027t have to do it in this commit, but it would be good to find some common code or else just maybe break some parts of this into separate sub-methods.  It gets hard to test and read when it gets so long.",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e9d043bd_6a00558e",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -114,10 +115,10 @@
       "message": "I agree this is getting kind of long.",
       "parentUuid": "d94b5996_de0313bc",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "5d1dc49a_a669a9b7",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -132,10 +133,28 @@
       "message": "Any changes here would be in a future commit.",
       "parentUuid": "e9d043bd_6a00558e",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "471bbfbf_351c800b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:38:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d1dc49a_a669a9b7",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "b50bf872_9dcf75ee",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -149,10 +168,10 @@
       "side": 1,
       "message": "Do we need hysteresis here?\n\nFor example, if a PSU has an input voltage that is oscillating between (VIN_VOLTAGE_MIN-1) and (VIN_VOLTAGE_M+1), are we going to fill the journal and error log with repeated errors and recoveries?",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "cbddc1ee_c0484e4d",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -167,10 +186,28 @@
       "message": "I would not expect that. I have not seen that. However, I suppose it might possibly happen. I am not so certain that extra logic here is warranted.",
       "parentUuid": "b50bf872_9dcf75ee",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d17b8775_1110677f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:38:19Z",
+      "side": 1,
+      "message": "Apparently no objection to not adding the extra logic. Crossing fingers, hopefully do not see this after the fact, but if we do, we can add something to avoid flooding the journal and error log. 😊",
+      "parentUuid": "cbddc1ee_c0484e4d",
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "8e242092_cf3e31a1",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -184,10 +221,10 @@
       "side": 1,
       "message": "Should these lines be deleted?",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8d3cf592_59e7b43d",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -202,10 +239,10 @@
       "message": "Well, the FIXME line could definitely go.\n\nThere might be some utility to keeping that DEBUG journal entry around.",
       "parentUuid": "8e242092_cf3e31a1",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "34da1da8_f1b1efed",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -220,10 +257,10 @@
       "message": "Done",
       "parentUuid": "8d3cf592_59e7b43d",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d0a2bc5e_f37623dc",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -237,10 +274,10 @@
       "side": 1,
       "message": "Since these lines were inserted in many places, should this be added to setPMBusExpectations instead?",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "96ff7cfc_fd6fd665",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -255,10 +292,10 @@
       "message": "I was not sure if I should do that, as there are some possible cases where that is not desired.",
       "parentUuid": "d0a2bc5e_f37623dc",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "dbd55754_4955b005",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -273,10 +310,10 @@
       "message": "No changes planned. Let me know if I should change something to address this.",
       "parentUuid": "96ff7cfc_fd6fd665",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "7a9d3444_e7a330df",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -296,10 +333,10 @@
         "endChar": 44
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "3175a6a9_c68fc193",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -320,10 +357,10 @@
         "endChar": 44
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8c5ce2c0_a47e01c3",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -343,10 +380,10 @@
         "endChar": 49
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "02fb487c_f648ad0b",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -367,10 +404,10 @@
         "endChar": 49
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "76030ce7_515df1b7",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -391,10 +428,10 @@
         "endChar": 49
       },
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "274bbc2c_c65ad597",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -408,10 +445,10 @@
       "side": 1,
       "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()?",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "383869cf_251ba10c",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -426,10 +463,10 @@
       "message": "Yes.",
       "parentUuid": "274bbc2c_c65ad597",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "0a49934d_72e384bb",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -444,10 +481,10 @@
       "message": "Done",
       "parentUuid": "383869cf_251ba10c",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "c4e56b6a_c492be49",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -461,10 +498,10 @@
       "side": 1,
       "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8333aa45_3a16bac9",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -479,10 +516,10 @@
       "message": "Yes",
       "parentUuid": "c4e56b6a_c492be49",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "d1d0e80b_b009c730",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -497,10 +534,10 @@
       "message": "Done",
       "parentUuid": "8333aa45_3a16bac9",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "646b4792_2687013f",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -514,10 +551,10 @@
       "side": 1,
       "message": "Is this code supposed to be replaced with a call to setMissingToPresentExpects()",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "fa896d80_b1cc1245",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -532,10 +569,10 @@
       "message": "Yes",
       "parentUuid": "646b4792_2687013f",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "db4b36d9_74f4e848",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
@@ -550,8 +587,7 @@
       "message": "Done",
       "parentUuid": "fa896d80_b1cc1245",
       "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
