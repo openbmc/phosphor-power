@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d744a8_020cd809",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T23:19:35Z",
+      "side": 1,
+      "message": "Yes.\n\n1. cleared every powerup:\nhttps://github.com/openbmc/phosphor-power/blob/e3f7ad238a5ffaa87e19839ce15c12c3e8df9c9e/phosphor-power-supply/psu_manager.cpp#L349\nPSUManager::powerStateChanged(...) power state is 1 (on), call clearFaults().\n\n2. new psu is plugged in\nhttps://github.com/openbmc/phosphor-power/blob/e3f7ad238a5ffaa87e19839ce15c12c3e8df9c9e/phosphor-power-supply/power_supply.cpp#L177\npresentOld !\u003d present:\nclearFaults() called if present is true (new psu is plugged in)",
+      "parentUuid": "93c8eadc_357282a5",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d49be2c8_69603568",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d21ebf8f_855b9694",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T23:19:35Z",
+      "side": 1,
+      "message": "Yes, and we were doing this all along, basically...\n\nFred Freck actually asked about this while investigating an issue on an Everest system. That underlying ReadFailure ends up creating a BD571008 PEL.",
+      "parentUuid": "d49be2c8_69603568",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f83bc2cd_94f8126c",
         "filename": "pmbus.hpp",
         "patchSetId": 3
@@ -48,6 +84,24 @@
       "writtenOn": "2022-01-06T21:16:04Z",
       "side": 1,
       "message": "In the commit message, I thought you stated the default was for error tracing to be enabled.  Also, that is the default value in the parent class.\n\nI think it is confusing the modify default parameter values between levels of a class hierarchy.  Callers often don\u0027t know the exact type of an object if they have a pointer to the parent class.",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92ffa6d9_9db09c8d",
+        "filename": "pmbus.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T23:19:35Z",
+      "side": 1,
+      "message": "Oops, only changed the one Jim pointed out. Missed this.\n\nhttps://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/49775/2..3/pmbus.hpp#b169\nChanged that from false to true, something Jim pointed out.",
+      "parentUuid": "f83bc2cd_94f8126c",
       "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
