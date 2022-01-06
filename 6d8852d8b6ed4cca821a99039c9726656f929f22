@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "26d98012_f670714d",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "do we need to check the input_fault_warning bit here too?",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "60d0b187_9cc9d92c",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -32,10 +33,10 @@
       "message": "Supposedly INPUT_FAULT_WARN can come on for any of these:\n7 VIN OV Fault\n6 VIN OV Warning\n5 VIN UV Warning\n4 VIN UV Fault\n3 Unit Off For Low Input Voltage\n2 IIN OC Fault\n1 IIN OC Warning\n0 PIN OP Warning\nAre we thinking we want to trace for INPUT_FAULT_WARN magically going off as well?",
       "parentUuid": "26d98012_f670714d",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "1fd198cc_877bdb39",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -50,10 +51,10 @@
       "message": "Well we\u0027ll log an AC loss error if input_fault bit is on (as we would for vin_uv), so it would seem to follow if the input_fault bit goes off we should do the same things that we do for vin_uv going off.  I.e., if we treat those bits the same for the error happening, shouldn\u0027t we treat them the same for the error clearing?\n\nOn FSP systems we wouldn\u0027t even look at vin_uv, all latched AC detection was based on the input_fault bit.  We told the ps guys we\u0027d look at vin_uv now on bmc as well, which is fine, but that doesn\u0027t mean we can ignore the input_fault bit.",
       "parentUuid": "60d0b187_9cc9d92c",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "77bf3ee0_aa33c6b1",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -68,10 +69,10 @@
       "message": "Okay, I will add a similar check/trace/clear for the inputFault.",
       "parentUuid": "1fd198cc_877bdb39",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "17e05c6e_717d61e2",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -86,10 +87,10 @@
       "message": "Done",
       "parentUuid": "77bf3ee0_aa33c6b1",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "e03e1a95_4997791b",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -103,10 +104,10 @@
       "side": 1,
       "message": "you don\u0027t need to do vinUVFault \u003d false here?",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d9f64752_0cb12f30",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -121,10 +122,10 @@
       "message": "Hrm... I was thinking we wanted to avoid that, but the change was to not do the clearFaults() call. In the case where everything goes back to good, I am clearing vinUVFault (setting it to false).\n\nMakes sense to do the vinUVFault \u003d false here if I do it in the other case?",
       "parentUuid": "e03e1a95_4997791b",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "88d86056_3e4da1ef",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -139,10 +140,10 @@
       "message": "Done",
       "parentUuid": "d9f64752_0cb12f30",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": false
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "27e95756_f59955f1",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -156,10 +157,10 @@
       "side": 1,
       "message": "how do we know in these 2 cases if it cleared without us sending the clear_fault (or reading the 0x7C)?  the lack of the \"READ_VIN back in range: inputVoltageOld \u003d {} inputVoltage \u003d {}\" entry?",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "61753a76_68ea0f38",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -174,10 +175,10 @@
       "message": "I was thinking yes, but are you thinking of maybe a case of:\n1. present, VIN_UV\n2. missing\n3. present, clearFaults(), VIN good.\n?",
       "parentUuid": "27e95756_f59955f1",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "8b0b2dce_ad7a0942",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -192,10 +193,10 @@
       "message": "No I\u0027m not thinking of a missing scenario, just the bits clearing either with or without us sending the clear faults.  I think the lack of the entry is fine.",
       "parentUuid": "61753a76_68ea0f38",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "d4cd09fe_6ee85e68",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -210,10 +211,10 @@
       "message": "Yes, the lack of seeing that \"READ_VIN back in range\" trace, aside from something like a power off/on, would be an indicator that we did not attempt to clear the faults. The PSUManager will call clearFaults() on the power state changing from off to on.\n\nOther possibilities: \n0) Already pointed out missing/present scenario.\n1) The power supply decided to clear it on its own, \n2) Something with phosphor-hwmon possibly cleared it.\n3) Someone manually cleared it (using say i2cset)",
       "parentUuid": "8b0b2dce_ad7a0942",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "02163ad0_027ac30b",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -227,10 +228,10 @@
       "side": 1,
       "message": "are we guaranteed to do the next set of poll cmds after doing the clear faults here, and before we come into this routine the next second?",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "dda163e0_7dcac32c",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -245,10 +246,10 @@
       "message": "If we are in this routine, analyze(), and the power supply is present, we would attempt to read the STATUS_WORD.\n\nIf we are in this routine, analyze(), and the power supply is missing, we will not do any of the commands.\n\nAm I not following the question?",
       "parentUuid": "02163ad0_027ac30b",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "04e23aba_01a3a26f",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -263,10 +264,10 @@
       "message": "No you are not following the question.  Nothing to do with any ps missing.  We want to guarantee 1 and only 1 reading of the status registers between each time we go through this analyze() function.\n\nFor instance, in this path, we want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. analyze() called, we see the faults cleared correctly etc.\n\nWe DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n4. analyze() called, we see the faults not cleared because there was no \"poll\" cmds sent between the analyze() calls.\n\nand we DON\u0027T want the sequence to be:\n1. \"poll\" cmds sent.\n2. analyze() -\u003e clear faults cmd sent.\n3. next \"poll\" cmds sent.\n4. next \"poll\" cmds sent.\n5. analyze() called, but there were 2 sets of \"poll\" cmds sent in between.",
       "parentUuid": "dda163e0_7dcac32c",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "a4d3d5d1_f82e4c4c",
         "filename": "phosphor-power-supply/power_supply.cpp",
@@ -281,8 +282,25 @@
       "message": "I believe the answer is yes, unless there is a read failure while attempting to read STATUS_WORD, then this will get skipped as we will go to the catch block.\n\nIf there are not read failures, then the normal sequence should be:\n1. Read STATUS_WORD\n2. Read READ_VIN (inputVoltage updated)\n\nIf there are no read failures, there is a fault, that we clear, that should be:\n1. Read STATUS_WORD, fault on.\n2. Read STATUS_*\n3. Set fault variable(s)\n4. Read READ_VIN (update inputVoltage, possibly goes low)\n5. Read STATUS_WORD, fault still on.\n6. Read STATUS_*\n7. Read READ_VIN (update invputVoltage, out of range to in range)\n8. Clear faults.\n9. Read STATUS_WORD, good.\n...",
       "parentUuid": "04e23aba_01a3a26f",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d424f80b_d17fb57d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-01-06T19:19:38Z",
+      "side": 1,
+      "message": "I think there are windows when we would end up NOT sending the clear faults cmd (eg, if AC came back after we read STATUS_WORD, but before we read STATUS_INPUT. we wouldn\u0027t read STATUS_INPUT on FSP systems, as that will cause the ps to clear faults as well, however reading this was added to bmc code), but I think that is ok.  As long as we know that AC has came back so power is again being provided by the ps and the latched fault status is cleared, we should be ok.  And of course as long as analyze() is called once and only once in between each set of \"poll\" cmds.",
+      "parentUuid": "a4d3d5d1_f82e4c4c",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
