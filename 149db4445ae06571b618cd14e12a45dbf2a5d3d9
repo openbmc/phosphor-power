@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea90eea5_117f1db1",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-01-06T19:57:57Z",
+      "side": 1,
+      "message": "Needs doxygen",
+      "revId": "149db4445ae06571b618cd14e12a45dbf2a5d3d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
