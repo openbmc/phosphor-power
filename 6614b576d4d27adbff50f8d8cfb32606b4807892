@@ -83,6 +83,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce536c8_66b236d4",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:41:10Z",
+      "side": 1,
+      "message": "Having unresolved comments makes this a bit confusing if it merges.\nSince the other methods to clear the faults are not used by the monitor, I am assuming that calling this \"odd behavior\" is acceptable.",
+      "parentUuid": "0f68545d_3af280ae",
+      "range": {
+        "startLine": 404,
+        "startChar": 30,
+        "endLine": 404,
+        "endChar": 43
+      },
+      "revId": "6614b576d4d27adbff50f8d8cfb32606b4807892",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d94b5996_de0313bc",

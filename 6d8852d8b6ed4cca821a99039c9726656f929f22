@@ -214,6 +214,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e8b4113_e01f96f5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4cd09fe_6ee85e68",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02163ad0_027ac30b",
@@ -299,6 +317,24 @@
       "side": 1,
       "message": "I think there are windows when we would end up NOT sending the clear faults cmd (eg, if AC came back after we read STATUS_WORD, but before we read STATUS_INPUT. we wouldn\u0027t read STATUS_INPUT on FSP systems, as that will cause the ps to clear faults as well, however reading this was added to bmc code), but I think that is ok.  As long as we know that AC has came back so power is again being provided by the ps and the latched fault status is cleared, we should be ok.  And of course as long as analyze() is called once and only once in between each set of \"poll\" cmds.",
       "parentUuid": "a4d3d5d1_f82e4c4c",
+      "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6485c9c_c2fe3e69",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-06T22:41:10Z",
+      "side": 1,
+      "message": "Okay, think we are all good here then.",
+      "parentUuid": "d424f80b_d17fb57d",
       "revId": "6d8852d8b6ed4cca821a99039c9726656f929f22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
