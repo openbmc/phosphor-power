@@ -16,6 +16,24 @@
       "message": "Missing doxygen.",
       "revId": "5d51f61cc2605020d7a0d0fc83d09929c63c0451",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b78ddafd_4cd5eb5a",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-07T01:05:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef44c58d_3b284835",
+      "revId": "5d51f61cc2605020d7a0d0fc83d09929c63c0451",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
