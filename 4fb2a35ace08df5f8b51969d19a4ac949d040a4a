@@ -16,6 +16,24 @@
       "message": "nit: I would move this line to right before 266 just to group common statements together.",
       "revId": "4fb2a35ace08df5f8b51969d19a4ac949d040a4a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f712ecf6_a2e4919d",
+        "filename": "phosphor-power-sequencer/src/power_interface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-10T19:39:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "611e6dbd_3cfe3d07",
+      "revId": "4fb2a35ace08df5f8b51969d19a4ac949d040a4a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
