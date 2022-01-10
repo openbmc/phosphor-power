@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9eb1108_ec432b95",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-10T23:49:39Z",
+      "side": 1,
+      "message": "We didn\u0027t want to immediately log an error indicating to replace the power supply, and we did not want to continually log the error that the PMBus read function creates.\n\nhttps://github.com/openbmc/phosphor-power/commit/f65c406096e3e68fde6b0171283e5a0f51c9753d\n\nSo, making it a bool would change that. The PSUManager uses the hasCommFault() to know if the PEL should be created to call out the power supply: https://github.com/openbmc/phosphor-power/blob/f087f4750c1e50e4db50c99d904d7c05f64fe4c8/phosphor-power-supply/psu_manager.cpp#L463",
+      "parentUuid": "7ebbe878_2ae48dc9",
+      "revId": "a522c78b87e992ed8c578eac6509fe3c55c5fdab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f83bc2cd_94f8126c",
         "filename": "pmbus.hpp",
         "patchSetId": 3
