@@ -199,6 +199,9 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
         }
         log<level::DEBUG>(fmt::format("Found rails: {}", rails).c_str());
 
+        // List of line offsets for libgpiod
+        std::vector<unsigned int> offsets;
+
         // Parse pin information from config file
         auto pinsIterator = rootElement.find("pins");
         if (pinsIterator != rootElement.end())
@@ -212,12 +215,13 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                     lineIterator != pinElement.end())
                 {
                     std::string name = (*nameIterator).get<std::string>();
-                    int line = (*lineIterator).get<int>();
+                    unsigned int line = (*lineIterator).get<unsigned int>();
 
                     Pin pin;
                     pin.name = name;
                     pin.line = line;
                     pins.emplace_back(std::move(pin));
+                    offsets.emplace_back(line);
                 }
                 else
                 {
@@ -246,6 +250,14 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                                     std::string(e.what()))
                             .c_str());
     }
+}
+
+void UCD90320Monitor::setUpGpio(const std::vector<unsigned int>& offsets)
+{
+    gpiod::chip chip{"ucd90320", gpiod::chip::OPEN_BY_LABEL};
+    lines = chip.get_lines(offsets);
+    lines.request(
+        {"phosphor-power-control", gpiod::line_request::DIRECTION_INPUT, 0});
 }
 
 } // namespace phosphor::power::sequencer
