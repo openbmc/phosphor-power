@@ -3,6 +3,7 @@
 #include "pmbus.hpp"
 #include "power_sequencer_monitor.hpp"
 
+#include <gpiod.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/bus/match.hpp>
 
@@ -15,7 +16,7 @@ namespace phosphor::power::sequencer
 struct Pin
 {
     std::string name;
-    int line;
+    unsigned int line;
 };
 
 /**
@@ -40,7 +41,7 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @param[in] i2cAddress The I2C address of the power sequencer device
      */
     UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
-                    const std::uint16_t i2cAddress);
+                    std::uint16_t i2cAddress);
 
     /**
      * Callback function to handle interfacesAdded D-Bus signals
@@ -49,6 +50,11 @@ class UCD90320Monitor : public PowerSequencerMonitor
     void interfacesAddedHandler(sdbusplus::message::message& msg);
 
   private:
+    /**
+     * Set of GPIO lines to monitor in this UCD chip.
+     */
+    gpiod::line_bulk lines;
+
     /**
      * The D-Bus bus object
      */
@@ -96,6 +102,12 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @param[in] pathName the path name
      */
     void parseConfigFile(const std::filesystem::path& pathName);
+
+    /**
+     * Set up GPIOs
+     * @param[in] offsets the list of pin offsets
+     */
+    void setUpGpio(const std::vector<unsigned int>& offsets);
 };
 
 } // namespace phosphor::power::sequencer
