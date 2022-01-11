@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33fe75a1_f55d4839",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-01-11T23:00:32Z",
+      "side": 1,
+      "message": "I don\u0027t see where this variable is used, other than where you insert values into it on line 224. I think this (and 224) can be removed without any impact to functionality.",
+      "revId": "0b5bfbc22c443cc62bf0409e23b6b2ef8b9f4d60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
