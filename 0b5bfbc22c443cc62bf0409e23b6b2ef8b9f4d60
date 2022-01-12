@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "519968f3_ca38565f",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-12T17:20:11Z",
+      "side": 1,
+      "message": "Oops, I missed including a line intended for this patch set.  Added below.",
+      "parentUuid": "33fe75a1_f55d4839",
+      "revId": "0b5bfbc22c443cc62bf0409e23b6b2ef8b9f4d60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43861e71_26ab1e3f",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-01-11T23:45:16Z",
       "side": 1,
       "message": "I am assuming something in libgpiod bindings and such makes this usage of unsigned it make sense.\n\nOtherwise: https://github.com/openbmc/docs/blob/master/cpp-style-and-conventions.md#misc-guidelines",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "0b5bfbc22c443cc62bf0409e23b6b2ef8b9f4d60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f9f8e4_45283420",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-12T17:20:11Z",
+      "side": 1,
+      "message": "Correct, will be set into libgpiod as an unsigned int, making that the best type to use here.",
+      "parentUuid": "43861e71_26ab1e3f",
       "range": {
         "startLine": 19,
         "startChar": 4,
