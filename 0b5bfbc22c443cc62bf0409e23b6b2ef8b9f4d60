@@ -81,6 +81,30 @@
       },
       "revId": "0b5bfbc22c443cc62bf0409e23b6b2ef8b9f4d60",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "517ca692_35c04ca6",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-12T21:39:28Z",
+      "side": 1,
+      "message": "Okay, I think I saw something with an offset return of unsigned int...must be related.",
+      "parentUuid": "18f9f8e4_45283420",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "0b5bfbc22c443cc62bf0409e23b6b2ef8b9f4d60",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
