@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c77ac67_5ec855e8",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-01-19T22:38:36Z",
+      "side": 1,
+      "message": "I think on some of these you could do\nEXPECT_EQ(psu2.isFaulted(), x \u003e\u003d DEGLITCH_LIMIT);\n\nand save a few lines of code",
+      "revId": "a8b691ca7459da958e5e895481591299b61aaa86",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
