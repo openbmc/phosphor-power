@@ -720,8 +720,10 @@ bool PSUManager::validateModelName(
 {
     // Check that all PSUs have the same model name. Initialize the model
     // variable with the first PSU name found, then use it as a base to compare
-    // against the rest of the PSUs.
+    // against the rest of the PSUs and get its inventory path to use as callout
+    // if needed.
     model.clear();
+    std::string modelInventoryPath{};
     for (const auto& psu : psus)
     {
         auto psuModel = psu->getModelName();
@@ -732,13 +734,38 @@ bool PSUManager::validateModelName(
         if (model.empty())
         {
             model = psuModel;
+            modelInventoryPath = psu->getInventoryPath();
             continue;
         }
         if (psuModel != model)
         {
-            additionalData["EXPECTED_MODEL"] = model;
-            additionalData["ACTUAL_MODEL"] = psuModel;
-            additionalData["CALLOUT_INVENTORY_PATH"] = psu->getInventoryPath();
+            if (supportedConfigs.find(model) != supportedConfigs.end())
+            {
+                // The base model is supported, callout the mismatched PSU. The
+                // mismatched PSU may or may not be supported.
+                additionalData["EXPECTED_MODEL"] = model;
+                additionalData["ACTUAL_MODEL"] = psuModel;
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+            }
+            else if (supportedConfigs.find(psuModel) != supportedConfigs.end())
+            {
+                // The base model is not supported, but the mismatched PSU is,
+                // callout the base PSU.
+                additionalData["EXPECTED_MODEL"] = psuModel;
+                additionalData["ACTUAL_MODEL"] = model;
+                additionalData["CALLOUT_INVENTORY_PATH"] = modelInventoryPath;
+            }
+            else
+            {
+                // The base model and the mismatched PSU are not supported or
+                // could not be found in the supported configuration, callout
+                // the mismatched PSU.
+                additionalData["EXPECTED_MODEL"] = model;
+                additionalData["ACTUAL_MODEL"] = psuModel;
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+            }
             model.clear();
             return false;
         }
