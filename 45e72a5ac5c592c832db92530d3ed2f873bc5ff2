@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8268c4d_c953ac42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-20T23:47:12Z",
+      "side": 1,
+      "message": "Not that I think we planned on working with...",
+      "parentUuid": "b6f1ed78_8c3444bc",
+      "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "846281fe_efdcc50d",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-20T17:27:24Z",
       "side": 1,
       "message": "For consistency, should these three have the same comments as the rest, about how they are incremented and considered faulted if they reach DEGLITCH_LIMIT?",
+      "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735df1a8_afb44e4f",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-20T23:47:12Z",
+      "side": 1,
+      "message": "Oh, I suppose that would be consistent.",
+      "parentUuid": "846281fe_efdcc50d",
       "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -60,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40a0d9db_01e144d9",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-20T23:47:12Z",
+      "side": 1,
+      "message": "Yeah, deglitch or de-glitch.",
+      "parentUuid": "4bebaec4_8774b020",
+      "range": {
+        "startLine": 342,
+        "startChar": 35,
+        "endLine": 342,
+        "endChar": 44
+      },
+      "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9bbb790_c0ef11e8",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 3
@@ -71,6 +131,24 @@
       "writtenOn": "2022-01-20T17:27:24Z",
       "side": 1,
       "message": "Did you want to change this to the more compact statement like you did the others?",
+      "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "140fe358_cd4e56f4",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-01-20T23:47:12Z",
+      "side": 1,
+      "message": "Wow! I missed one after all that vim magic...",
+      "parentUuid": "c9bbb790_c0ef11e8",
       "revId": "45e72a5ac5c592c832db92530d3ed2f873bc5ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
