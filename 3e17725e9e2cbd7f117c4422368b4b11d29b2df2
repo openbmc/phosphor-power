@@ -52,6 +52,24 @@
       "parentUuid": "caacb70d_e2ab84ca",
       "revId": "3e17725e9e2cbd7f117c4422368b4b11d29b2df2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae370e3_61724c88",
+        "filename": "phosphor-power-sequencer/src/power_sequencer_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-24T22:32:20Z",
+      "side": 1,
+      "message": "No worries.",
+      "parentUuid": "e08c96bb_2a4c030b",
+      "revId": "3e17725e9e2cbd7f117c4422368b4b11d29b2df2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
