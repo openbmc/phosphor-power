@@ -20,8 +20,6 @@
 #include "ucd90320_monitor.hpp"
 
 #include <fmt/format.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -44,12 +42,13 @@ const std::string namePropertyName = "Name";
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
     PowerObject{bus, POWER_OBJ_PATH, true},
-    bus{bus}, match{bus,
-                    sdbusplus::bus::match::rules::interfacesAdded() +
-                        sdbusplus::bus::match::rules::sender(
-                            "xyz.openbmc_project.EntityManager"),
-                    std::bind(&PowerControl::interfacesAddedHandler, this,
-                              std::placeholders::_1)},
+    bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
+    match{bus,
+          sdbusplus::bus::match::rules::interfacesAdded() +
+              sdbusplus::bus::match::rules::sender(
+                  "xyz.openbmc_project.EntityManager"),
+          std::bind(&PowerControl::interfacesAddedHandler, this,
+                    std::placeholders::_1)},
     timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
 {
     // Obtain dbus service name
@@ -157,32 +156,18 @@ void PowerControl::pollPgood()
             log<level::ERR>("ERROR PowerControl: Pgood poll timeout");
             inStateTransition = false;
 
-            try
+            if (state)
             {
-                auto method = bus.new_method_call(
-                    "xyz.openbmc_project.Logging",
-                    "/xyz/openbmc_project/logging",
-                    "xyz.openbmc_project.Logging.Create", "Create");
-
-                std::map<std::string, std::string> additionalData;
-                // Add PID to AdditionalData
-                additionalData.emplace("_PID", std::to_string(getpid()));
-
-                method.append(
-                    state ? "xyz.openbmc_project.Power.Error.PowerOnTimeout"
-                          : "xyz.openbmc_project.Power.Error.PowerOffTimeout",
-                    sdbusplus::xyz::openbmc_project::Logging::server::Entry::
-                        Level::Critical,
-                    additionalData);
-                bus.call_noreply(method);
+                // Time out powering on
+                device->onFailure(true, powerSupplyError);
             }
-            catch (const std::exception& e)
+            else
             {
-                log<level::ERR>(
-                    fmt::format(
-                        "Unable to log timeout error, state: {}, error {}",
-                        state, e.what())
-                        .c_str());
+                // Time out powering off
+                std::map<std::string, std::string> additionalData{};
+                device->logError(
+                    "xyz.openbmc_project.Power.Error.PowerOffTimeout",
+                    additionalData);
             }
 
             return;
@@ -212,6 +197,7 @@ void PowerControl::pollPgood()
     else if (!inStateTransition && (pgoodState == 0))
     {
         // Not in power off state, not changing state, and power good is off
+        device->onFailure(false, powerSupplyError);
         // Power good has failed, call for chassis hard power off
         log<level::ERR>("Chassis pgood failure");
 
