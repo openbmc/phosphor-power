@@ -56,11 +56,6 @@ class UCD90320Monitor : public PowerSequencerMonitor
     gpiod::line_bulk lines;
 
     /**
-     * The D-Bus bus object
-     */
-    sdbusplus::bus::bus& bus;
-
-    /**
      * The match to Entity Manager interfaces added.
      */
     sdbusplus::bus::match_t match;

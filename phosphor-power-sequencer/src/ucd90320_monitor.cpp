@@ -42,13 +42,13 @@ const std::string compatibleNamesProperty = "Names";
 
 UCD90320Monitor::UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
                                  std::uint16_t i2cAddress) :
-    PowerSequencerMonitor(),
-    bus{bus}, match{bus,
-                    sdbusplus::bus::match::rules::interfacesAdded() +
-                        sdbusplus::bus::match::rules::sender(
-                            "xyz.openbmc_project.EntityManager"),
-                    std::bind(&UCD90320Monitor::interfacesAddedHandler, this,
-                              std::placeholders::_1)},
+    PowerSequencerMonitor(bus),
+    match{bus,
+          sdbusplus::bus::match::rules::interfacesAdded() +
+              sdbusplus::bus::match::rules::sender(
+                  "xyz.openbmc_project.EntityManager"),
+          std::bind(&UCD90320Monitor::interfacesAddedHandler, this,
+                    std::placeholders::_1)},
     pmbusInterface{
         fmt::format("/sys/bus/i2c/devices/{}-{:04x}", i2cBus, i2cAddress)
             .c_str(),

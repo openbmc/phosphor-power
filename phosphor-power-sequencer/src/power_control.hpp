@@ -75,8 +75,7 @@ class PowerControl : public PowerObject
     /**
      * The power sequencer device to monitor.
      */
-    std::unique_ptr<PowerSequencerMonitor> device{
-        std::make_unique<PowerSequencerMonitor>()};
+    std::unique_ptr<PowerSequencerMonitor> device;
 
     /**
      * Indicates if a specific power sequencer device has already been found.
