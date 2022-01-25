@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "459f2667_64d3b7b4",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-25T21:46:03Z",
+      "side": 1,
+      "message": "No, the UCD specific object is created when the device information (i2c bus and address in this case) is available from entity manager.  To cover the case where it never shows up, the base class will generate a generic power good error.",
+      "parentUuid": "66f7bfcd_1b25436d",
+      "range": {
+        "startLine": 45,
+        "startChar": 38,
+        "endLine": 45,
+        "endChar": 59
+      },
+      "revId": "3e17725e9e2cbd7f117c4422368b4b11d29b2df2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68477eb2_d5f5e80d",
         "filename": "phosphor-power-sequencer/src/power_sequencer_monitor.hpp",
         "patchSetId": 1
@@ -37,6 +61,24 @@
       "writtenOn": "2022-01-25T19:49:04Z",
       "side": 1,
       "message": "nit: cppcheck likes to complain if constructors that take 1 argument aren\u0027t marked \u0027explicit\u0027.",
+      "revId": "3e17725e9e2cbd7f117c4422368b4b11d29b2df2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85cc23f7_7dec410a",
+        "filename": "phosphor-power-sequencer/src/power_sequencer_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-25T21:46:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68477eb2_d5f5e80d",
       "revId": "3e17725e9e2cbd7f117c4422368b4b11d29b2df2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
