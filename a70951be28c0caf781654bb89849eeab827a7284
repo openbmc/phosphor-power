@@ -33,6 +33,24 @@
       "message": "If this parameter is optional, should it have a default value of \"\"?  Or I guess the doxygen could specify that is what should be passed when it is not applicable.",
       "revId": "a70951be28c0caf781654bb89849eeab827a7284",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1846a70_60601976",
+        "filename": "phosphor-power-sequencer/src/power_sequencer_monitor.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-26T22:10:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e38d3d5_bbcf2bbe",
+      "revId": "a70951be28c0caf781654bb89849eeab827a7284",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
