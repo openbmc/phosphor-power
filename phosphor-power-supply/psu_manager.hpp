@@ -186,6 +186,9 @@ class PSUManager
     /** @brief True if the power is on. */
     bool powerOn = false;
 
+    /** @brief True if an error for a brownout has already been logged. */
+    bool brownoutLogged = false;
+
     /** @brief Used as part of subscribing to power on state changes*/
     std::string powerService;
 
