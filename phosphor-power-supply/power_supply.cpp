@@ -803,6 +803,9 @@ void PowerSupply::updateInventory()
         ipzvpdVINIProps.emplace(
             "DR", std::vector<uint8_t>(description.begin(), description.end()));
 
+        // Populate the VINI Resource Type (RT) keyword
+        ipzvpdVINIProps.emplace("RT", std::vector<uint8_t>{'V', 'I', 'N', 'I'});
+
         // Update the Resource Identifier (RI) keyword
         // 2 byte FRC: 0x0003
         // 2 byte RID: 0x1000, 0x1001...
@@ -817,6 +820,9 @@ void PowerSupply::updateInventory()
         fl.resize(FL_KW_SIZE, ' ');
         ipzvpdDINFProps.emplace("FL",
                                 std::vector<uint8_t>(fl.begin(), fl.end()));
+
+        // Populate the DINF Resource Type (RT) keyword
+        ipzvpdDINFProps.emplace("RT", std::vector<uint8_t>{'D', 'I', 'N', 'F'});
 
         interfaces.emplace(ASSET_IFACE, std::move(assetProps));
         interfaces.emplace(VERSION_IFACE, std::move(versionProps));
