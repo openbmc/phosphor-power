@@ -1,0 +1,143 @@
+{
+    "rails": [
+        "12V",
+        "3V3IO",
+        "RAIL3",
+        "RAIL4",
+        "RAIL5",
+        "CP03_AVDD",
+        "CP12_AVDD",
+        "CP0_VDD0",
+        "CP0_VDD1",
+        "CP1_VDD0",
+        "CP1_VDD1",
+        "CP2_VDD0",
+        "CP2_VDD1",
+        "CP3_VDD0",
+        "CP3_VDD1",
+        "CP0_VCS0",
+        "CP0_VCS1",
+        "CP1_VCS0",
+        "CP1_VCS1",
+        "CP2_VCS0",
+        "CP2_VCS1",
+        "CP3_VCS0",
+        "CP3_VCS1"
+    ],
+
+    "pins": [
+        {
+            "name": "PV_HP_C01_PG",
+            "line": 7
+        },
+        {
+            "name": "PV_HP_C02_PG",
+            "line": 8
+        },
+        {
+            "name": "PV_HP_C03_PG",
+            "line": 9
+        },
+        {
+            "name": "PV_HP_C04_PG",
+            "line": 10
+        },
+        {
+            "name": "PV_HP_C05_PG",
+            "line": 11
+        },
+        {
+            "name": "PV_HP_C06_PG",
+            "line": 12
+        },
+        {
+            "name": "PV_HP_C07_PG",
+            "line": 13
+        },
+        {
+            "name": "PV_HP_C08_PG",
+            "line": 14
+        },
+        {
+            "name": "PV_HP_C09_PG",
+            "line": 15
+        },
+        {
+            "name": "PV_HP_C10_PG",
+            "line": 16
+        },
+        {
+            "name": "PV_HP_C11_PG",
+            "line": 17
+        },
+        {
+            "name": "CP0_VPCIE",
+            "line": 59
+        },
+        {
+            "name": "CP1_VPCIE",
+            "line": 60
+        },
+        {
+            "name": "CP2_VPCIE",
+            "line": 61
+        },
+        {
+            "name": "CP3_VPCIE",
+            "line": 62
+        },
+        {
+            "name": "5.0V USB front",
+            "line": 67
+        },
+        {
+            "name": "CP0_VDN",
+            "line": 72
+        },
+        {
+            "name": "CP1_VDN",
+            "line": 73
+        },
+        {
+            "name": "CP2_VDN",
+            "line": 74
+        },
+        {
+            "name": "CP3_VDN",
+            "line": 75
+        },
+        {
+            "name": "CP0_VIO",
+            "line": 76
+        },
+        {
+            "name": "CP1_VIO",
+            "line": 77
+        },
+        {
+            "name": "CP2_VIO",
+            "line": 78
+        },
+        {
+            "name": "CP3_VIO",
+            "line": 79
+        },
+        {
+            "name": "PS0_PGOOD",
+            "line": 80
+        },
+        {
+            "name": "PS1_PGOOD",
+            "line": 81
+        },
+        {
+            "name": "PS2_PGOOD",
+            "line": 82
+        },
+        {
+            "name": "PS3_PGOOD",
+            "line": 83
+        }
+    ]
+}
+
