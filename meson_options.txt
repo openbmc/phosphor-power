@@ -60,7 +60,7 @@ option(
     description: 'Enable support for power sequencer control'
 )
 option(
-    'sequencer-monitor-ng', type: 'boolean',
+    'power-control', type: 'boolean',
     description: 'Enable support for power sequencer control utilizing JSON configuration and supporting multiple systems in a single build image'
 )
 option(
