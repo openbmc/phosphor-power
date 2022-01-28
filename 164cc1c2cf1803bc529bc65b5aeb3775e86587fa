@@ -16,6 +16,24 @@
       "message": "Consider putting some sort of assert here that lines.size() \u003d\u003d pins.size(), assuming pins has already been created. On line 76 you\u0027re de-referencing an index that depends on this condition being true. If somehow the condition was ever false, it would be much easier to fix when an assert fails, vs an array index segfault or silent memory corruption.",
       "revId": "164cc1c2cf1803bc529bc65b5aeb3775e86587fa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f1eb0c2_d32cff2b",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-01-28T22:44:43Z",
+      "side": 1,
+      "message": "Good point. I think the parallel vectors is a weakness of my approach, but decided that letting libgpiod batch process the GPIOs was worth my discomfort. I added a guard to line 76 above to address your concern. My thinking being that it will be better to issue some sort of pgood error even if the vectors get funky, than have the application fail.",
+      "parentUuid": "92e3352b_e2e48573",
+      "revId": "164cc1c2cf1803bc529bc65b5aeb3775e86587fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
