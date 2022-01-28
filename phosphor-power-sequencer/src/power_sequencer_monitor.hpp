@@ -41,7 +41,7 @@ class PowerSequencerMonitor
      * known to be in an error state.  A log will be created.
      * @param[in] timeout if the failure state was determined by timing out
      * @param[in] powerSupplyError The power supply error to log. A default
-     * std:string, i.e. empty string ("") is passed when there is no power
+     * std:string, i.e. empty string (""), is passed when there is no power
      * supply error to log.
      */
     virtual void onFailure(bool timeout, const std::string& powerSupplyError);
