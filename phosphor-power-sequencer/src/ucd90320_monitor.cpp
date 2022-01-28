@@ -24,6 +24,7 @@
 #include <nlohmann/json.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <fstream>
 #include <map>
@@ -33,12 +34,15 @@ namespace phosphor::power::sequencer
 {
 
 using json = nlohmann::json;
+using namespace pmbus;
 using namespace phosphor::logging;
 using namespace phosphor::power;
 
 const std::string compatibleInterface =
     "xyz.openbmc_project.Configuration.IBMCompatibleSystem";
 const std::string compatibleNamesProperty = "Names";
+
+namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 UCD90320Monitor::UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
                                  std::uint16_t i2cAddress) :
@@ -58,6 +62,103 @@ UCD90320Monitor::UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
     // Use the compatible system types information, if already available, to
     // load the configuration file
     findCompatibleSystemTypes();
+}
+
+bool UCD90320Monitor::checkPGOODFaults(
+    std::map<std::string, std::string>& additionalData)
+{
+    // Check only the GPIs configured on this system.
+    std::vector<int> values = lines.get_values();
+
+    bool errorCreated = false;
+    for (size_t pin = 0; pin < pins.size(); ++pin)
+    {
+        if (pin < values.size() && !values[pin])
+        {
+            try
+            {
+                additionalData.emplace(
+                    "STATUS_WORD", fmt::format("{:#04x}", readStatusWord()));
+                additionalData.emplace("MFR_STATUS",
+                                       fmt::format("{:#04x}", readMFRStatus()));
+            }
+            catch (device_error::ReadFailure& e)
+            {
+                log<level::ERR>("ReadFailure when collecting metadata");
+            }
+            additionalData.emplace("INPUT_NUM",
+                                   fmt::format("{}", pins[pin].line));
+            additionalData.emplace("INPUT_NAME", pins[pin].name);
+            additionalData.emplace("INPUT_STATUS",
+                                   fmt::format("{}", values[pin]));
+
+            logError("xyz.openbmc_project.Power.Error.PowerSequencerPGOODFault",
+                     additionalData);
+
+            errorCreated = true;
+            break;
+        }
+    }
+    return errorCreated;
+}
+
+bool UCD90320Monitor::checkVOUTFaults(
+    std::map<std::string, std::string>& additionalData)
+{
+    // The status_word register has a summary bit to tell us
+    // if each page even needs to be checked
+    auto statusWord = readStatusWord();
+    if (!(statusWord & status_word::VOUT_FAULT))
+    {
+        return false;
+    }
+
+    constexpr size_t numberPages = 24;
+    bool errorCreated = false;
+    for (size_t page = 0; page < numberPages; page++)
+    {
+        auto statusVout = pmbusInterface.insertPageNum(STATUS_VOUT, page);
+        uint8_t vout = pmbusInterface.read(statusVout, Type::Debug);
+
+        // If any bits are on log them, though some are just
+        // warnings so they won't cause errors
+        if (vout)
+        {
+            log<level::INFO>("A voltage rail has bits on in STATUS_VOUT",
+                             entry("STATUS_VOUT=0x%X", vout),
+                             entry("PAGE=%d", page));
+        }
+
+        // Log errors if any non-warning bits on
+        if (vout & ~status_vout::WARNING_MASK)
+        {
+            auto railName = rails[page];
+
+            additionalData.emplace("STATUS_WORD",
+                                   fmt::format("{:#04x}", statusWord));
+            additionalData.emplace("STATUS_VOUT", fmt::format("{:#02x}", vout));
+            try
+            {
+                additionalData.emplace("MFR_STATUS",
+                                       fmt::format("{:#04x}", readMFRStatus()));
+            }
+            catch (device_error::ReadFailure& e)
+            {
+                log<level::ERR>("ReadFailure when collecting MFR_STATUS");
+            }
+            additionalData.emplace("RAIL", fmt::format("{}", page));
+            additionalData.emplace("RAIL_NAME", railName);
+
+            logError(
+                "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault",
+                additionalData);
+
+            errorCreated = true;
+            break;
+        }
+    }
+
+    return errorCreated;
 }
 
 void UCD90320Monitor::findCompatibleSystemTypes()
@@ -251,6 +352,60 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                                     std::string(e.what()))
                             .c_str());
     }
+}
+
+void UCD90320Monitor::onFailure(bool timeout,
+                                const std::string& powerSupplyError)
+{
+    std::map<std::string, std::string> additionalData{};
+    if (!powerSupplyError.empty())
+    {
+        logError(powerSupplyError, additionalData);
+        return;
+    }
+
+    try
+    {
+        bool voutError = checkVOUTFaults(additionalData);
+        bool pgoodError = checkPGOODFaults(additionalData);
+
+        // Not a voltage or PGOOD fault, but we know something
+        // failed so still create an error log.
+        if (!voutError && !pgoodError)
+        {
+            // Default to generic pgood error
+            logError("xyz.openbmc_project.Power.Error.Shutdown",
+                     additionalData);
+        }
+    }
+    catch (device_error::ReadFailure& e)
+    {
+        log<level::ERR>("ReadFailure when collecting metadata");
+
+        if (timeout)
+        {
+            // Default to timeout error
+            logError("xyz.openbmc_project.Power.Error.PowerOnTimeout",
+                     additionalData);
+        }
+        else
+        {
+            // Default to generic pgood error
+            logError("xyz.openbmc_project.Power.Error.Shutdown",
+                     additionalData);
+        }
+    }
+}
+
+uint16_t UCD90320Monitor::readStatusWord()
+{
+    return pmbusInterface.read(STATUS_WORD, Type::Debug);
+}
+
+uint32_t UCD90320Monitor::readMFRStatus()
+{
+    const std::string mfrStatus = "mfr_status";
+    return pmbusInterface.read(mfrStatus, Type::HwmonDeviceDebug);
 }
 
 void UCD90320Monitor::setUpGpio(const std::vector<unsigned int>& offsets)

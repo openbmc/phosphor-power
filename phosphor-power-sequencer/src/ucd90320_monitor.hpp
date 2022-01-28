@@ -49,6 +49,9 @@ class UCD90320Monitor : public PowerSequencerMonitor
      */
     void interfacesAddedHandler(sdbusplus::message::message& msg);
 
+    /** @copydoc PowerSequencerMonitor::onFailure() */
+    void onFailure(bool timeout, const std::string& powerSupplyError) override;
+
   private:
     /**
      * Set of GPIO lines to monitor in this UCD chip.
@@ -76,6 +79,20 @@ class UCD90320Monitor : public PowerSequencerMonitor
     std::vector<std::string> rails;
 
     /**
+     * Checks for PGOOD faults on the device.
+     * @param[in] additionalData AdditionalData property of the error log entry
+     * @return bool true if an error log was created
+     */
+    bool checkPGOODFaults(std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Checks for VOUT faults on the device.
+     * @param[in] additionalData AdditionalData property of the error log entry
+     * @return bool true if an error log was created
+     */
+    bool checkVOUTFaults(std::map<std::string, std::string>& additionalData);
+
+    /**
      * Finds the list of compatible system types using D-Bus methods.
      * This list is used to find the correct JSON configuration file for the
      * current system.
@@ -97,6 +114,18 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @param[in] pathName the path name
      */
     void parseConfigFile(const std::filesystem::path& pathName);
+
+    /**
+     * Reads the mfr_status register
+     * @return uint32_t the register contents
+     */
+    uint32_t readMFRStatus();
+
+    /**
+     * Reads the status_word register
+     * @return uint16_t the register contents
+     */
+    uint16_t readStatusWord();
 
     /**
      * Set up GPIOs
