@@ -1,0 +1,168 @@
+{
+    "rails": [
+       "12.0V",
+       "5.0V_USB",
+       "5.0V_DASD",
+       "3.3VA",
+       "3.3VB",
+       "1.5V",
+       "1.1V",
+       "VDDA_DCM0",
+       "VDDB_DCM0",
+       "VDDA_DCM1",
+       "VDDB_DCM1",
+       "12.0VCS",
+       "3.3VCS",
+       "1.1V_Current",
+       "5.0V_USB_Current",
+       "5.0V_DASD_Current",
+       "12.0VN",
+       "12.0VP",
+       "12.0VQ",
+       "12.0VR",
+       "ThermalDiode1",
+       "ThermalDiode2",
+       "ThermalDiode3",
+       "ThermalDiode4"
+    ],
+
+    "pins": [
+        {
+            "name": "PCIE_SLOT0",
+            "line": 44
+        },
+        {
+            "name": "PCIE_SLOT1",
+            "line": 45
+        },
+        {
+            "name": "PCIE_SLOT2",
+            "line": 46
+        },
+        {
+            "name": "PCIE_SLOT3",
+            "line": 47
+        },
+        {
+            "name": "PCIE_SLOT4",
+            "line": 48
+        },
+        {
+            "name": "PCIE_SLOT7",
+            "line": 49
+        },
+        {
+            "name": "PCIE_SLOT8",
+            "line": 50
+        },
+        {
+            "name": "PCIE_SLOT9",
+            "line": 51
+        },
+        {
+            "name": "PCIE_SLOT10",
+            "line": 52
+        },
+        {
+            "name": "PCIE_SLOT11",
+            "line": 53
+        },
+        {
+            "name": "SOFTWARE_PGOOD",
+            "line": 55
+        },
+        {
+            "name": "PGOOD_12A",
+            "line": 56
+        },
+        {
+            "name": "PGOOD_12B",
+            "line": 57
+        },
+        {
+            "name": "PGOOD_12C",
+            "line": 58
+        },
+        {
+            "name": "PGOOD_12D",
+            "line": 59
+        },
+        {
+            "name": "PGOOD_12L",
+            "line": 60
+        },
+        {
+            "name": "PGOOD_12M",
+            "line": 61
+        },
+        {
+            "name": "PGOOD_12N",
+            "line": 62
+        },
+        {
+            "name": "PGOOD_12P",
+            "line": 63
+        },
+        {
+            "name": "PGOOD_12PCIE",
+            "line": 64
+        },
+        {
+            "name": "PGOOD_12Q",
+            "line": 65
+        },
+        {
+            "name": "PGOOD_12R",
+            "line": 66
+        },
+        {
+            "name": "PGOOD_VDN_DCM0",
+            "line": 72
+        },
+        {
+            "name": "PGOOD_VDN_DCM1",
+            "line": 73
+        },
+        {
+            "name": "PGOOD_VCS_DCM0",
+            "line": 74
+        },
+        {
+            "name": "PGOOD_VCS_DCM1",
+            "line": 75
+        },
+        {
+            "name": "PGOOD_VIO_DCM0",
+            "line": 76
+        },
+        {
+            "name": "PGOOD_VIO_DCM1",
+            "line": 77
+        },
+        {
+            "name": "PGOOD_VPCIE_DCM0",
+            "line": 78
+        },
+        {
+            "name": "PGOOD_VPCIE_DCM1",
+            "line": 79
+        },
+        {
+            "name": "PGOOD_PSU1",
+            "line": 80
+        },
+        {
+            "name": "PGOOD_PSU2",
+            "line": 81
+        },
+        {
+            "name": "PGOOD_PSU3",
+            "line": 82
+        },
+        {
+            "name": "PGOOD_PSU4",
+            "line": 83
+        }
+    ]
+}
+
