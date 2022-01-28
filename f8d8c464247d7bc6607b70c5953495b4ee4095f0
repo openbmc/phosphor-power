@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa40c4b7_a10fba67",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-01-28T14:27:43Z",
+      "side": 1,
+      "message": "The value being emplaced here needs to be the value of the RT keyword, which I\u0027m pretty sure varies by PS position and has a type value encoded in the upper bytes.",
+      "revId": "f8d8c464247d7bc6607b70c5953495b4ee4095f0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
