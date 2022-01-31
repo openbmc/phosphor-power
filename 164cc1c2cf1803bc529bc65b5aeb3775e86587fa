@@ -34,6 +34,24 @@
       "parentUuid": "92e3352b_e2e48573",
       "revId": "164cc1c2cf1803bc529bc65b5aeb3775e86587fa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf94a121_6ac01f87",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-01-31T21:20:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f1eb0c2_d32cff2b",
+      "revId": "164cc1c2cf1803bc529bc65b5aeb3775e86587fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
