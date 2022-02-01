@@ -33,6 +33,42 @@
       "message": "As Brandon mentioned, is the format of this file documented?  Seems like config_file.md file would be helpful.  A validation tool would be good too.",
       "revId": "c055bcb1b1804f8b127ebdc4be54abb70fa175d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f77d42_6258f24d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:38:21Z",
+      "side": 1,
+      "message": "Good points. I think how much we want to invest here depends on whether the data stays here or moves to Entity Manager. Some doc in case I get \"beer trucked\" seems very reasonable.",
+      "parentUuid": "74325f76_964ac7c3",
+      "revId": "c055bcb1b1804f8b127ebdc4be54abb70fa175d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b0e6958_97301633",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:38:21Z",
+      "side": 1,
+      "message": "\u003e Some side conversations to line up line numbers to verify I know what I am looking at.\n\u003e \nOne useful link: http://www.ti.com/lit/pdf/SLVUAW9\nRelevant table 11, starting on page 25.\nSome of the reference material is not mine to share.\n\n\u003e I also forget if we documented this JSON file format somewhere.\n\u003e \nSee answer below where Shawn seconds your motion.",
+      "parentUuid": "772fd863_b8628764",
+      "revId": "c055bcb1b1804f8b127ebdc4be54abb70fa175d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
