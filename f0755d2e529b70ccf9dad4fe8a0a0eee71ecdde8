@@ -34,6 +34,24 @@
       "parentUuid": "ceb4cc27_eac17696",
       "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3d2cc9_bd1fdfe9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-02-01T21:28:03Z",
+      "side": 1,
+      "message": "Where does the existing/old app use that name?\n\nThe existing/old app has the following names I think:\n* Option: sequencer-monitor\n* Directory: power-sequencer\n* Executable: pseq-monitor\n* Service files: pseq-monitor.service, pseq-monitor-pgood.service\n\nIt is OK if you don\u0027t change it.  I just think it is simpler to understand the repo if the build option, directory, executable, and service file have similar names.  If you need to have it be different to make it easier to replace the old \u0027skeleton\u0027 code I understand.",
+      "parentUuid": "87483de6_130110b6",
+      "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
