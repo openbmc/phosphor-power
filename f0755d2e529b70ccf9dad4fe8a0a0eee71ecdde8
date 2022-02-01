@@ -16,6 +16,24 @@
       "message": "Should the sub-directory be renamed to phosphor-power-control to match the naming of the executable, service file, and meson option?",
       "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87483de6_130110b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:59:02Z",
+      "side": 1,
+      "message": "I still like \"phosphor-power-sequencer\", I expect future device adds to be more sequencer monitoring related than control related. I used \"phosphor-power-control\" in some places in the meson and bit bake files because the existing power sequencing app had already laid claim to \"phosphor-power-sequencer\".",
+      "parentUuid": "ceb4cc27_eac17696",
+      "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
