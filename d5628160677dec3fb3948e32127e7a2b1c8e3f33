@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64e68bb5_9ad7ac49",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-02-01T22:36:43Z",
+      "side": 1,
+      "message": "Thats a good question, but historically we\u0027ve used the vin_uv for ac loss detection, so I think that is suffice.  Brandon added looking at the INPUT bit to bmc to log the ac loss src as well, I\u0027m not sure in what cases that would be on but the vin_uv off.  \n\nIf we start seeing that these new ps tend to set that INPUT bit as the indication, we can add the check at that point.",
+      "parentUuid": "d8365e2d_0116aa90",
+      "revId": "d5628160677dec3fb3948e32127e7a2b1c8e3f33",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1044861_6a44796b",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
