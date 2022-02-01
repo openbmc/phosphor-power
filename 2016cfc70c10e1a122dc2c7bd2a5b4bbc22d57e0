@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf75f08f_1c717610",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:24:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "77d9588d_db68d706",
+      "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cc59143_1469aaa5",
@@ -59,6 +77,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ee521c8_80a24123",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:24:04Z",
+      "side": 1,
+      "message": "Good point.  If I expand the usage of pages, I\u0027ll expand the scope of this constant.",
+      "parentUuid": "1cc59143_1469aaa5",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61979ac1_f64a18aa",
@@ -72,6 +114,30 @@
       "writtenOn": "2022-02-01T19:46:07Z",
       "side": 1,
       "message": "Is there a reason you are including the return type in the @return lines for the new methods?  Seems like you could skip it and not have to keep it in sync with the code.\n\nNot a problem, just asking.",
+      "range": {
+        "startLine": 91,
+        "startChar": 15,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a40157a_4882601a",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T20:24:04Z",
+      "side": 1,
+      "message": "Oh, no good reason, bad copy and paste probably. Will cleanup for next commit.",
+      "parentUuid": "61979ac1_f64a18aa",
       "range": {
         "startLine": 91,
         "startChar": 15,
