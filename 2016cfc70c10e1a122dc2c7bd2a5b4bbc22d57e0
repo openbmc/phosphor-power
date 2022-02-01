@@ -16,6 +16,24 @@
       "message": "would it be useful to put all the pins that are off, or the whole pins vector, into the AdditionalData for the sake of FFDC?",
       "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77d9588d_db68d706",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T15:35:48Z",
+      "side": 1,
+      "message": "That would be useful, look for it in a future commit.",
+      "parentUuid": "9b1323bb_07a6bc27",
+      "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
