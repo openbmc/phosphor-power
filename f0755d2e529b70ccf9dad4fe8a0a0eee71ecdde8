@@ -52,6 +52,24 @@
       "parentUuid": "87483de6_130110b6",
       "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a34e363c_052475ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-01T21:37:54Z",
+      "side": 1,
+      "message": "\u003e Where does the existing/old app use that name?\n\u003e \nIn the bit bake, e.g. meta-ibm/recipes-phosphor/chassis/obmc-op-control-power_%.bbappend and meta-phosphor/recipes-phosphor/power/phosphor-power_git.bb",
+      "parentUuid": "6f3d2cc9_bd1fdfe9",
+      "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
