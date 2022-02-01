@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceb4cc27_eac17696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-02-01T20:30:24Z",
+      "side": 1,
+      "message": "Should the sub-directory be renamed to phosphor-power-control to match the naming of the executable, service file, and meson option?",
+      "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
