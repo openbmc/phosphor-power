@@ -38,6 +38,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8365e2d_0116aa90",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-02-01T22:04:00Z",
+      "side": 1,
+      "message": "Should it be checking for hasInputFault() too?  I don\u0027t know this subject very well, just asking.",
+      "revId": "d5628160677dec3fb3948e32127e7a2b1c8e3f33",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a1044861_6a44796b",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
