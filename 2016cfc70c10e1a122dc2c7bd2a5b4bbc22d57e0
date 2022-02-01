@@ -34,6 +34,29 @@
       "parentUuid": "9b1323bb_07a6bc27",
       "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc59143_1469aaa5",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-01T17:38:02Z",
+      "side": 1,
+      "message": "Not so sure it matters a whole lot, right now, but isn\u0027t the number of pages a function of the UCD90320, not just the VOUT faults? This could be some kind of class variable, but this is the only place you are using it right now, so ...",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "2016cfc70c10e1a122dc2c7bd2a5b4bbc22d57e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
