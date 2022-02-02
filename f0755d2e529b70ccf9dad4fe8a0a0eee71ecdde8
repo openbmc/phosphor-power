@@ -70,6 +70,24 @@
       "parentUuid": "6f3d2cc9_bd1fdfe9",
       "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c180b0a_f8ffd7c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-02-02T18:19:26Z",
+      "side": 1,
+      "message": "Oh, because of the ${PN}-sequencer.  I get it.  That\u0027s too bad as it is confusing.",
+      "parentUuid": "a34e363c_052475ac",
+      "revId": "f0755d2e529b70ccf9dad4fe8a0a0eee71ecdde8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
