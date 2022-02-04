@@ -71,6 +71,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a729de4_16d1075a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-04T19:08:36Z",
+      "side": 1,
+      "message": "PMBus Spec Part II.\nFigure 33. Summary Of The Status Registers\nSTATUS_INPUT:\n7 VIN OV Fault\n6 VIN OV Warning\n5 VIN UV Warning \u003c- badness coming?\n4 VIN UV Fault \u003c- things went bad, brownout?\n3 Unit Off For Low Input Voltage \u003c- Definitely not good.\n2 IIN OC Fault\n1 IIN OC Warning\n0 PIN OP Warning",
+      "parentUuid": "64e68bb5_9ad7ac49",
+      "revId": "d5628160677dec3fb3948e32127e7a2b1c8e3f33",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1044861_6a44796b",
