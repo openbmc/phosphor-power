@@ -140,6 +140,7 @@ class PSUManager
      */
     void clearFaults()
     {
+        setPowerSupplyError("");
         for (auto& psu : psus)
         {
             psu->clearFaults();
@@ -166,6 +167,13 @@ class PSUManager
     std::unique_ptr<
         sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
         validationTimer;
+
+    /**
+     * Let power control/sequencer application know of PSU error(s).
+     *
+     * @param[in] psuErrorString - string for power supply error
+     */
+    void setPowerSupplyError(const std::string& psuErrorString);
 
     /**
      * Create an error

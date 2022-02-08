@@ -377,6 +377,31 @@ void PSUManager::presenceChanged(sdbusplus::message::message& msg)
     }
 }
 
+void PSUManager::setPowerSupplyError(const std::string& psuErrorString)
+{
+    using namespace sdbusplus::xyz::openbmc_project;
+    constexpr auto service = "org.openbmc.control.Power";
+    constexpr auto objPath = "/org/openbmc/control/power0";
+    constexpr auto interface = "org.openbmc.control.Power";
+    constexpr auto method = "setPowerSupplyError";
+
+    try
+    {
+        // Call D-Bus method to inform pseq of PSU error
+        auto methodMsg =
+            bus.new_method_call(service, objPath, interface, method);
+        methodMsg.append(psuErrorString);
+        auto callReply = bus.call(methodMsg);
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format("Failed calling setPowerSupplyError due to error {}",
+                        e.what())
+                .c_str());
+    }
+}
+
 void PSUManager::createError(const std::string& faultName,
                              std::map<std::string, std::string>& additionalData)
 {
@@ -405,6 +430,7 @@ void PSUManager::createError(const std::string& faultName,
         method.append(faultName, level, additionalData);
 
         auto reply = bus.call(method);
+        setPowerSupplyError(faultName);
     }
     catch (const std::exception& e)
     {
