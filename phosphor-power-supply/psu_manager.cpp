@@ -426,18 +426,41 @@ void PSUManager::analyze()
     if (powerOn)
     {
         std::map<std::string, std::string> additionalData;
-        auto hasVINUVFaultCount = decltype(psus.size())(0);
+
+        auto notPresentCount = decltype(psus.size())(
+            std::count_if(psus.begin(), psus.end(),
+                          [](const auto& psu) { return !psu->isPresent(); }));
+
+        auto hasVINUVFaultCount = decltype(psus.size())(
+            std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
+                return psu->hasVINUVFault();
+            }));
+
+        // The PSU D-Bus objects may not be available yet, so ignore if all
+        // PSUs are not present or the number of PSUs is still 0.
+        if ((psus.size() == (notPresentCount + hasVINUVFaultCount)) &&
+            (psus.size() != notPresentCount) && (psus.size() != 0))
+        {
+            // Brownout: All PSUs report an AC failure: At least one PSU reports
+            // AC loss VIN fault and the rest either report AC loss VIN fault as
+            // well or are not present.
+            if (!brownoutLogged)
+            {
+                createError(
+                    "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                    additionalData);
+                brownoutLogged = true;
+            }
+        }
+        else
+        {
+            // Brownout condition is not present or has been cleared
+            brownoutLogged = false;
+        }
 
         for (auto& psu : psus)
         {
             additionalData.clear();
-
-            // Check for brownout condition: PSU reports AC loss VIN fault or is
-            // not present.
-            if (!psu->isPresent() || psu->hasVINUVFault())
-            {
-                hasVINUVFaultCount++;
-            }
 
             if (!psu->isFaultLogged() && !psu->isPresent())
             {
@@ -620,23 +643,6 @@ void PSUManager::analyze()
                     psu->setFaultLogged();
                 }
             }
-        }
-
-        if (hasVINUVFaultCount == psus.size())
-        {
-            // Brownout: All PSUs report AC loss VIN fault or are not present
-            if (!brownoutLogged)
-            {
-                createError(
-                    "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
-                    additionalData);
-                brownoutLogged = true;
-            }
-        }
-        else
-        {
-            // Brownout condition is not present or has been cleared
-            brownoutLogged = false;
         }
     }
 }
