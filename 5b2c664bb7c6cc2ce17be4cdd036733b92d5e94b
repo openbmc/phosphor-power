@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc63e74_1db70509",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-11T18:27:08Z",
+      "side": 1,
+      "message": "No, the power control / sequencer app will assume the provided power supply error supersedes the pgood error. The power supply app needs to make a determination on the consequences of the power supply error.\n\nTo do the reverse would require the sequencer app to be a pseudo power supply analyzer, require changes to the sequence when new power supply errors are created, etc.",
+      "range": {
+        "startLine": 12,
+        "startChar": 39,
+        "endLine": 13,
+        "endChar": 71
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
