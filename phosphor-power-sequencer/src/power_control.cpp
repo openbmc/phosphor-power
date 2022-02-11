@@ -186,6 +186,8 @@ void PowerControl::pollPgood()
         else
         {
             emitPowerGoodSignal();
+            // Clear any power supply error on the transition to power on
+            powerSupplyError.clear();
         }
         emitPropertyChangedSignal("pgood");
     }
