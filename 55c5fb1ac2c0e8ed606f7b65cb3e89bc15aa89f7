@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7536b3a_f17c61df",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-14T22:06:51Z",
+      "side": 1,
+      "message": "I didn\u0027t add expect calls for Available for every possible fault, but I probably could if desired.",
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
