@@ -186,6 +186,7 @@ void PowerSupply::updatePresenceGPIO()
         std::string prettyName = invpath.substr(lastSlashPos + 1);
         setPresence(bus, invpath, present, prettyName);
         updateInventory();
+        checkAvailability();
     }
 }
 
@@ -563,6 +564,8 @@ void PowerSupply::analyze()
                         .c_str());
                 clearFaults();
             }
+
+            checkAvailability();
         }
         catch (const ReadFailure& e)
         {
@@ -616,6 +619,7 @@ void PowerSupply::clearFaults()
     if (present)
     {
         clearFaultFlags();
+        checkAvailability();
         readFail = 0;
 
         try
@@ -662,6 +666,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
             // Clear out the now outdated inventory properties
             updateInventory();
         }
+        checkAvailability();
     }
 }
 
@@ -690,6 +695,7 @@ void PowerSupply::inventoryAdded(sdbusplus::message::message& msg)
                                      .c_str());
 
                 updateInventory();
+                checkAvailability();
             }
         }
     }
@@ -902,6 +908,19 @@ void PowerSupply::getInputVoltage(double& actualInputVoltage,
             log<level::ERR>(
                 fmt::format("READ_VIN read error: {}", e.what()).c_str());
         }
+    }
+}
+
+void PowerSupply::checkAvailability()
+{
+    bool origAvailability = available;
+    available = present && !hasInputFault() && !hasVINUVFault() &&
+                !hasPSKillFault() && !hasIoutOCFault();
+
+    if (origAvailability != available)
+    {
+        auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+        phosphor::power::psu::setAvailable(bus, invpath, available);
     }
 }
 

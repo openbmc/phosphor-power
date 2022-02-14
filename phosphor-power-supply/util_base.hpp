@@ -24,6 +24,9 @@ class UtilBase
     virtual void setPresence(sdbusplus::bus::bus& bus,
                              const std::string& invpath, bool present,
                              const std::string& name) const = 0;
+
+    virtual void setAvailable(sdbusplus::bus::bus& bus,
+            const std::string& invpath, bool available) const = 0;
 };
 
 const UtilBase& getUtils();
@@ -37,6 +40,12 @@ inline void setPresence(sdbusplus::bus::bus& bus, const std::string& invpath,
                         bool present, const std::string& name)
 {
     return getUtils().setPresence(bus, invpath, present, name);
+}
+
+inline void setAvailable(sdbusplus::bus::bus& bus, const std::string& invpath,
+                        bool available)
+{
+    return getUtils().setAvailable(bus, invpath, available);
 }
 
 class GPIOInterfaceBase
