@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7bbe122c_76b059d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-14T22:27:50Z",
+      "side": 1,
+      "message": "I need to think more about presence being included in here.  The redfish code already checks for presence when setting the State so it can get set to Absent.\n\nWhen a PS is missing:\na) on startup\n  - There will be an error log with a FRU callout that would set Functional to false, and hence Health to Critical (and State to Absent)\nb) at runtime\n - The AC cable would have to be removed first, leading to an input fault which would set available to false and Redfish Health would be Critical and State \u003d UnavailableOffline (with upcoming bmcweb change)",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7536b3a_f17c61df",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
