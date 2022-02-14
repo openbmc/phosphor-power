@@ -13,6 +13,8 @@ constexpr auto PSU_INVENTORY_IFACE =
 constexpr auto OPERATIONAL_STATE_IFACE =
     "xyz.openbmc_project.State.Decorator.OperationalStatus";
 constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
+constexpr auto AVAILABILITY_IFACE =
+    "xyz.openbmc_project.State.Decorator.Availability";
 #ifdef IBM_VPD
 constexpr auto DINF_IFACE = "com.ibm.ipzvpd.DINF";
 constexpr auto VINI_IFACE = "com.ibm.ipzvpd.VINI";
@@ -23,6 +25,7 @@ constexpr auto MESSAGE_PROP = "Message";
 constexpr auto RESOLVED_PROP = "Resolved";
 constexpr auto PRESENT_PROP = "Present";
 constexpr auto FUNCTIONAL_PROP = "Functional";
+constexpr auto AVAILABLE_PROP = "Available";
 
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
