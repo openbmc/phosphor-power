@@ -407,6 +407,20 @@ class PowerSupply
      */
     void getInputVoltage(double& actualInputVoltage, int& inputVoltage) const;
 
+    /**
+     * @brief Check if the PS is considered to be available or not
+     *
+     * It is unavailable if any of:
+     * - not present
+     * - input fault active
+     * - Vin UV fault active
+     * - PS KILL fault active
+     * - Iout OC fault active
+     *
+     * On changes, the Available property is updated in the inventory.
+     */
+    void checkAvailability();
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
@@ -660,6 +674,13 @@ class PowerSupply
 
     /* @brief The string to pass in for binding the device driver. */
     std::string bindDevice;
+
+    /**
+     * @brief The result of the most recent availability check
+     *
+     * Saved on the object so changes can be detected.
+     */
+    bool available = false;
 
     /**
      * @brief Binds or unbinds the power supply device driver
