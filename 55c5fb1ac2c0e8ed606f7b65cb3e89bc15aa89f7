@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea4ab538_20ad547e",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-02-14T23:37:44Z",
+      "side": 1,
+      "message": "hmmm I wonder about CML\u0026comm fails.  looks like we do CALLOUT_DEVICE_PATH for callout for those errors, so that should result in PEL code setting the operational functional status to false for the psu, right?",
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7536b3a_f17c61df",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
