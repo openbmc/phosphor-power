@@ -15,6 +15,14 @@
 namespace phosphor::power::psu
 {
 
+using Property = std::string;
+using Value = std::variant<bool, std::string>;
+using PropertyMap = std::map<Property, Value>;
+using Interface = std::string;
+using InterfaceMap = std::map<Interface, PropertyMap>;
+using Object = sdbusplus::message::object_path;
+using ObjectMap = std::map<Object, InterfaceMap>;
+
 class Util : public UtilBase
 {
   public:
@@ -35,18 +43,11 @@ class Util : public UtilBase
     {
         using InternalFailure =
             sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure;
-        using Property = std::string;
-        using Value = std::variant<bool, std::string>;
-        // Association between property and its value
-        using PropertyMap = std::map<Property, Value>;
         PropertyMap invProp;
 
         invProp.emplace("Present", present);
         invProp.emplace("PrettyName", name);
 
-        using Interface = std::string;
-        // Association between interface and the D-Bus property map
-        using InterfaceMap = std::map<Interface, PropertyMap>;
         InterfaceMap invIntf;
         invIntf.emplace("xyz.openbmc_project.Inventory.Item",
                         std::move(invProp));
@@ -55,9 +56,6 @@ class Util : public UtilBase
 
         invIntf.emplace(extraIface, PropertyMap());
 
-        using Object = sdbusplus::message::object_path;
-        // Association between object and the interface map
-        using ObjectMap = std::map<Object, InterfaceMap>;
         ObjectMap invObj;
         invObj.emplace(std::move(invpath), std::move(invIntf));
 
@@ -87,6 +85,42 @@ class Util : public UtilBase
                     e.what())
                     .c_str());
             elog<InternalFailure>();
+        }
+    }
+
+    void setAvailable(sdbusplus::bus::bus& bus, const std::string& invpath,
+                      bool available) const override
+    {
+        PropertyMap invProp;
+        InterfaceMap invIntf;
+        ObjectMap invObj;
+
+        invProp.emplace(AVAILABLE_PROP, available);
+        invIntf.emplace(AVAILABILITY_IFACE, std::move(invProp));
+
+        invObj.emplace(std::move(invpath), std::move(invIntf));
+
+        try
+        {
+
+            auto invService = phosphor::power::util::getService(
+                INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
+
+            auto invMsg =
+                bus.new_method_call(invService.c_str(), INVENTORY_OBJ_PATH,
+                                    INVENTORY_MGR_IFACE, "Notify");
+            invMsg.append(std::move(invObj));
+            auto invMgrResponseMsg = bus.call(invMsg);
+        }
+        catch (const sdbusplus::exception::exception& e)
+        {
+            using namespace phosphor::logging;
+            log<level::ERR>(
+                fmt::format("Error in inventory manager call to update "
+                            "availability interface: {}",
+                            e.what())
+                    .c_str());
+            throw;
         }
     }
 };
