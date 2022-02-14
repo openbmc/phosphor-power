@@ -703,6 +703,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
     try
     {
         // Assume GPIO presence, not inventory presence?
+        EXPECT_CALL(mockedUtil, setAvailable(_, _, _)).Times(0);
         PowerSupply psu{bus, PSUInventoryPath, 4, 0x69, PSUGPIOLineName};
 
         MockedGPIOInterface* mockPresenceGPIO =
@@ -721,6 +722,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
     try
     {
         // Assume GPIO presence, not inventory presence?
+        EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
         PowerSupply psu{bus, PSUInventoryPath, 5, 0x6a, PSUGPIOLineName};
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
@@ -804,6 +806,10 @@ TEST_F(PowerSupplyTests, ClearFaults)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("0"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.isPresent(), true);
         // Cannot have VOUT_OV_FAULT and VOUT_UV_FAULT.
@@ -828,6 +834,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
         .Times(1)
         .WillOnce(Return(207000));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.clearFaults();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
@@ -870,6 +877,10 @@ TEST_F(PowerSupplyTests, ClearFaults)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("0"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
     }
 
@@ -902,6 +913,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
         .Times(1)
         .WillOnce(Return("206000"));
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(0));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
@@ -1001,6 +1013,7 @@ TEST_F(PowerSupplyTests, IsPresent)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("123456"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
 }
@@ -1049,6 +1062,10 @@ TEST_F(PowerSupplyTests, IsFaulted)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("125790"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.isFaulted(), x >= DEGLITCH_LIMIT);
     }
@@ -1085,6 +1102,10 @@ TEST_F(PowerSupplyTests, HasInputFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("201200"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.hasInputFault(), x >= DEGLITCH_LIMIT);
     }
@@ -1095,6 +1116,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("201300"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasInputFault(), false);
 }
@@ -1183,6 +1205,10 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("19876"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.hasVINUVFault(), x >= DEGLITCH_LIMIT);
     }
@@ -1196,6 +1222,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         .WillOnce(Return("201300"));
     // Went from below minimum to within range, expect CLEAR_FAULTS.
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(3));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
 }
@@ -1275,6 +1302,10 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("203200"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.hasIoutOCFault(), x >= DEGLITCH_LIMIT);
     }
@@ -1284,6 +1315,7 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("203300"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasIoutOCFault(), false);
 }
@@ -1336,6 +1368,9 @@ TEST_F(PowerSupplyTests, HasFanFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true)).Times(1);
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, false)).Times(0);
+
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x6d, PSUGPIOLineName};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
@@ -1381,6 +1416,9 @@ TEST_F(PowerSupplyTests, HasFanFault)
 TEST_F(PowerSupplyTests, HasTempFault)
 {
     auto bus = sdbusplus::bus::new_default();
+
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true)).Times(1);
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, false)).Times(0);
 
     PowerSupply psu{bus, PSUInventoryPath, 3, 0x6a, PSUGPIOLineName};
     MockedGPIOInterface* mockPresenceGPIO =
@@ -1560,6 +1598,10 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("208200"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.hasPSKillFault(), x >= DEGLITCH_LIMIT);
     }
@@ -1571,6 +1613,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208300"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasPSKillFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
@@ -1585,6 +1628,10 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("208400"));
+        if (x == DEGLITCH_LIMIT)
+        {
+            EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
+        }
         psu.analyze();
         EXPECT_EQ(psu.hasPSKillFault(), x >= DEGLITCH_LIMIT);
     }
@@ -1596,6 +1643,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208500"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasPSKillFault(), false);
 }

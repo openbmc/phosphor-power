@@ -51,6 +51,10 @@ class MockedUtil : public UtilBase
                 (sdbusplus::bus::bus & bus, const std::string& invpath,
                  bool present, const std::string& name),
                 (const, override));
+    MOCK_METHOD(void, setAvailable,
+                (sdbusplus::bus::bus & bus, const std::string& invpath,
+                 bool available),
+                (const, override));
 };
 
 class MockedGPIOInterface : public GPIOInterfaceBase
