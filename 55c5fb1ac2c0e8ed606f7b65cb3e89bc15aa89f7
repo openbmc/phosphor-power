@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c1d8521_414d7815",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-02-15T17:23:29Z",
+      "side": 1,
+      "message": "It\u0027s possible for them to plug in more, but I\u0027m not too worried about the gui being perfect if they do extra plugs/unplugs.  As long as we don\u0027t say missing ones are \"critical\" when they correctly have only ever had 2 of the 4 plugged in, good enough.  If they have to reboot the bmc after doing the extra add/remove to get the gui looking good again, so be it.",
+      "parentUuid": "b5c69106_1a4bdccd",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea4ab538_20ad547e",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
