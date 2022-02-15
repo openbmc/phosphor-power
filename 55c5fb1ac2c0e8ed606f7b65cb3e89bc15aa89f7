@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5c69106_1a4bdccd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-15T14:32:37Z",
+      "side": 1,
+      "message": "Thanks.\n\nFor the configs that only require 2 PSUs as opposed to 4, is it possible someone would actually plug in more?  The available check only runs if something was present in the first place, but what if:\n* User plugs in 3 PSs even though they only need 2\n* User notices that and removes one\n* Its presence and available state change to false\n* No PSU missing error is logged because there\u0027s an valid config check first which passes\n* Because not available, status of the 3rd PS shows Critical in the web ui?",
+      "parentUuid": "dcc35fd1_1734b78b",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea4ab538_20ad547e",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
@@ -61,6 +85,24 @@
       "writtenOn": "2022-02-14T23:37:44Z",
       "side": 1,
       "message": "hmmm I wonder about CML\u0026comm fails.  looks like we do CALLOUT_DEVICE_PATH for callout for those errors, so that should result in PEL code setting the operational functional status to false for the psu, right?",
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0a075b1_2cd0586b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-15T14:32:37Z",
+      "side": 1,
+      "message": "yep, that\u0027s right.",
+      "parentUuid": "ea4ab538_20ad547e",
       "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
