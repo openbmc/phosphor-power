@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f9b4752_592e6d1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-15T17:35:26Z",
+      "side": 1,
+      "message": "Makes sense.\nAnother situation I thought of.  The PSU polling is still happening with power off, so the available property would also be accurate then.  If someone were to look at Redfish/the web UI then, it could show Critical/UnavailableOffline.  Is that a problem do you think?",
+      "parentUuid": "6c1d8521_414d7815",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea4ab538_20ad547e",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
