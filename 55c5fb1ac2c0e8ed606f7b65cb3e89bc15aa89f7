@@ -218,6 +218,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d6d43e01_6ffdb1f0",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-16T21:22:42Z",
+      "side": 1,
+      "message": "If any of these faults lead to PGOOD not being good, or the unit being OFF, then are we really just interested in hasPgoodFault()? None of these checks down in the PowerSupply class care or check the main system power state, that is up in PSUManager.",
+      "range": {
+        "startLine": 917,
+        "startChar": 27,
+        "endLine": 918,
+        "endChar": 55
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea4ab538_20ad547e",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
