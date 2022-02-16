@@ -194,6 +194,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21f9d2a9_1d717e42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-16T21:15:45Z",
+      "side": 1,
+      "message": "Not logging errors if the power is not on. The PSUManager only checks if it should log errors if powerOn is true: https://github.com/openbmc/phosphor-power/blob/e4c3a299cefd56c3bfebdb7f2cb36f88b91f4981/phosphor-power-supply/psu_manager.cpp#L426",
+      "parentUuid": "37901115_3eead222",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea4ab538_20ad547e",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
@@ -223,6 +247,24 @@
       "side": 1,
       "message": "yep, that\u0027s right.",
       "parentUuid": "ea4ab538_20ad547e",
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d15c449_14df9fed",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-16T21:15:45Z",
+      "side": 1,
+      "message": "The power supplies, at least the IBM power supplies, can/do shutdown if a 12V over-voltage condition is detected. Should that be included?\n\nIf I am reading things correctly, a 12V under-voltage can also lead to a shutdown, after a delay.",
+      "parentUuid": "a0a075b1_2cd0586b",
       "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
