@@ -45,6 +45,54 @@
       },
       "revId": "4f39748bbb8d647d4933c37126efeeda0a0b62ec",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "947598f0_f20cfa85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-16T23:42:51Z",
+      "side": 1,
+      "message": "Right, I have yet to find a system with those pins indicating \"good\". I\u0027ll try to find out what these pins are supposed to represent, for now they are only causing misdiagnosis of another pgood fail.",
+      "parentUuid": "761932b8_3f9b413b",
+      "range": {
+        "startLine": 10,
+        "startChar": 32,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "4f39748bbb8d647d4933c37126efeeda0a0b62ec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef390cbc_3cc1b200",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-02-16T23:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57355ee0_c7511447",
+      "range": {
+        "startLine": 11,
+        "startChar": 49,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "4f39748bbb8d647d4933c37126efeeda0a0b62ec",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
