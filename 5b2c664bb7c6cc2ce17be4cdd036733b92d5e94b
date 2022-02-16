@@ -189,6 +189,30 @@
       },
       "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "818c094f_ea892fa1",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-16T23:03:05Z",
+      "side": 1,
+      "message": "I could make this DEBUG, that would sort of be a quick fix.\n\nLooking to see if the interface exists first might be better, but I am not so sure I have had to check for an interface existence before, so not sure what that looks like just yet.\n\nIf it does not exist, should it? How do I know it should exist?\n\nIf it does not exist, and it should, is that an error or a debug trace?\n\nIf the interface exists, and the method call fails, that would be an error... I think.",
+      "parentUuid": "80ad2b56_ef083079",
+      "range": {
+        "startLine": 398,
+        "startChar": 12,
+        "endLine": 398,
+        "endChar": 22
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
