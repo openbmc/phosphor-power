@@ -28,50 +28,6 @@
 
     "pins": [
         {
-            "name": "PCIE_SLOT0",
-            "line": 44
-        },
-        {
-            "name": "PCIE_SLOT1",
-            "line": 45
-        },
-        {
-            "name": "PCIE_SLOT2",
-            "line": 46
-        },
-        {
-            "name": "PCIE_SLOT3",
-            "line": 47
-        },
-        {
-            "name": "PCIE_SLOT4",
-            "line": 48
-        },
-        {
-            "name": "PCIE_SLOT7",
-            "line": 49
-        },
-        {
-            "name": "PCIE_SLOT8",
-            "line": 50
-        },
-        {
-            "name": "PCIE_SLOT9",
-            "line": 51
-        },
-        {
-            "name": "PCIE_SLOT10",
-            "line": 52
-        },
-        {
-            "name": "PCIE_SLOT11",
-            "line": 53
-        },
-        {
-            "name": "SOFTWARE_PGOOD",
-            "line": 55
-        },
-        {
             "name": "PGOOD_12A",
             "line": 56
         },
@@ -146,23 +102,6 @@
         {
             "name": "PGOOD_VPCIE_DCM1",
             "line": 79
-        },
-        {
-            "name": "PGOOD_PSU1",
-            "line": 80
-        },
-        {
-            "name": "PGOOD_PSU2",
-            "line": 81
-        },
-        {
-            "name": "PGOOD_PSU3",
-            "line": 82
-        },
-        {
-            "name": "PGOOD_PSU4",
-            "line": 83
         }
     ]
 }
-
