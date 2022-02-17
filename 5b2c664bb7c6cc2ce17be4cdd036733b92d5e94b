@@ -213,6 +213,30 @@
       },
       "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "817ddb6d_ad7b471e",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-17T14:13:51Z",
+      "side": 1,
+      "message": "if it doesn\u0027t exist, then it doesn\u0027t need to know about your error.\n\nIf you want to hardcode the path, then you can just use GetObject, so you can just use getService() and check for an empty service/fail.  If you don\u0027t want to hardcode the path, you can use GetSubTree to give you the path and service.",
+      "parentUuid": "818c094f_ea892fa1",
+      "range": {
+        "startLine": 398,
+        "startChar": 12,
+        "endLine": 398,
+        "endChar": 22
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
