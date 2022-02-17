@@ -263,6 +263,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a97cab9_dcc5a3d7",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T18:58:52Z",
+      "side": 1,
+      "message": "Actually, since the PowerSupply does not care about the main power state, having a hasPgoodFault() check here would potentially set Available to false when the power is off, since the power supply would indicate that POWER_GOOD# is inactive and the unit is off. That doesn\u0027t mean it is not available, that means it is off because we want it off! 😊\n\nLeaving the calls/checks as they are seems better to me.",
+      "parentUuid": "d6d43e01_6ffdb1f0",
+      "range": {
+        "startLine": 917,
+        "startChar": 27,
+        "endLine": 918,
+        "endChar": 55
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea4ab538_20ad547e",
@@ -330,6 +354,24 @@
       "side": 1,
       "message": "So do we need to  add  the OV fault?",
       "parentUuid": "7d15c449_14df9fed",
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bad86d12_484862f4",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T18:58:52Z",
+      "side": 1,
+      "message": "So, if there is an OV fault, and were are using the PEL extension for logging the errors, the Functional will get set to false. The same goes for UV. This happens due to calling out the power supply itself, instead of a symbolic FRU or a procedure.\n\n\"The Available D-Bus property is then able to be used in Redfish\n responses for the heath and state properties in the power supply\n schema.\"\n\nThe Functional value is alsu osued to determine the Health for Redfish.\n\nI am okay with leaving out an OV and UV check.",
+      "parentUuid": "213218c1_572efb7d",
       "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
