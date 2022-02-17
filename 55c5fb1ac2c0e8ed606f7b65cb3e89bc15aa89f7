@@ -307,6 +307,29 @@
       "message": "I didn\u0027t add expect calls for Available for every possible fault, but I probably could if desired.",
       "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581f3d57_73276c51",
+        "filename": "phosphor-power-supply/util_base.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-17T16:44:12Z",
+      "side": 1,
+      "message": "not necessary",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 11
+      },
+      "revId": "55c5fb1ac2c0e8ed606f7b65cb3e89bc15aa89f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
