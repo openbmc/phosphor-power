@@ -367,6 +367,24 @@
       "parentUuid": "fa5f1665_6e97d427",
       "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "491dab6e_8bba5833",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T22:39:21Z",
+      "side": 1,
+      "message": "Side chat on this. The clearFaults() for the power supply will be cleared when a power supply is replaced. That is separate from this call in PSUManager, where it will clear the faults for all the power supplies when the power changes from off to on.\n\nThere is potentially more than one power supply logging an error. Chances are, you cannot replace a power supply causing a pgood fault prior to the power sequencer shutting the power off.",
+      "parentUuid": "4e266f4c_c3f76f47",
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
