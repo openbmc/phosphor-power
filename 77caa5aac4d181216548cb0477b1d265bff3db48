@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6dea7dc_f0798cea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-17T20:49:59Z",
+      "side": 1,
+      "message": "Though if we wanted the State to be UnavailableOffline for some other faults we could also add them in.",
+      "revId": "77caa5aac4d181216548cb0477b1d265bff3db48",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
