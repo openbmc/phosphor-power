@@ -76,6 +76,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db15a3e5_6ae7ad55",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-17T20:48:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0959a91_7d6e7b3c",
+      "range": {
+        "startLine": 1065,
+        "startChar": 0,
+        "endLine": 1066,
+        "endChar": 56
+      },
+      "revId": "a0b38f531f1345b93e816cce00dc125f1f20257b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c353a70d_451d9417",
@@ -113,6 +137,30 @@
       "side": 1,
       "message": "I didn\u0027t modify the testcase for every type of fault since it didn\u0027t seem necessary, though I guess I could",
       "parentUuid": "c353a70d_451d9417",
+      "range": {
+        "startLine": 1413,
+        "startChar": 0,
+        "endLine": 1415,
+        "endChar": 69
+      },
+      "revId": "a0b38f531f1345b93e816cce00dc125f1f20257b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "388f1a77_0c72c8b3",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-17T20:48:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d53f074_6a2f0eb5",
       "range": {
         "startLine": 1413,
         "startChar": 0,
