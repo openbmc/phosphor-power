@@ -167,6 +167,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0f06a2e_9e00797c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T23:06:48Z",
+      "side": 1,
+      "message": "I said \"null string\" not nullptr. 😊\n0x22 0x00 0x22",
+      "parentUuid": "fbd65f34_0b12d092",
+      "range": {
+        "startLine": 15,
+        "startChar": 37,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85fa8f37_2966543a",
@@ -358,6 +382,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05fca6e7_fcd44a64",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T23:06:48Z",
+      "side": 1,
+      "message": "Journal spam? Maybe...doubtful... hopefully cleaned up if that is the case, in a subsequent commit.",
+      "parentUuid": "783c4776_a119e297",
+      "range": {
+        "startLine": 398,
+        "startChar": 12,
+        "endLine": 398,
+        "endChar": 22
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa5f1665_6e97d427",
@@ -407,6 +455,24 @@
       "side": 1,
       "message": "Side chat on this. The clearFaults() for the power supply will be cleared when a power supply is replaced. That is separate from this call in PSUManager, where it will clear the faults for all the power supplies when the power changes from off to on.\n\nThere is potentially more than one power supply logging an error. Chances are, you cannot replace a power supply causing a pgood fault prior to the power sequencer shutting the power off.",
       "parentUuid": "4e266f4c_c3f76f47",
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "483cca33_b0a9f2cd",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T23:06:48Z",
+      "side": 1,
+      "message": "Considering this resolved, based on prior comment.",
+      "parentUuid": "491dab6e_8bba5833",
       "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
