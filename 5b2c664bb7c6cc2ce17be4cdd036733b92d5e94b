@@ -336,6 +336,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "783c4776_a119e297",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T22:51:25Z",
+      "side": 1,
+      "message": "So, in a side chat with Shawn, it became more obvious that there isn\u0027t really a direct dependency on the power sequencer app being there, the service file has both the power supply monitor and the power sequencer wanted by multi-user.target, but most (all?) of the time the power supply monitor starts after, as it has a mapper wait for inventory.\n\nThat mapper wait for inventory is possibly not the greatest, as that now prevents someone from using the power supply monitor with entity-manager for inventory. :-/\n\nI think I will change this journal trace to INFO for now, and look into checking for the interface existence in a follow-up commit.",
+      "parentUuid": "eda068f7_90141c03",
+      "range": {
+        "startLine": 398,
+        "startChar": 12,
+        "endLine": 398,
+        "endChar": 22
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa5f1665_6e97d427",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
