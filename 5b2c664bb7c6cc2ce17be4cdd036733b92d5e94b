@@ -312,6 +312,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eda068f7_90141c03",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T21:42:26Z",
+      "side": 1,
+      "message": "Okay, so, if the power supply monitor is not depending on the power sequencer app, then the interface will not exist, so we will not try to set that property, and all is good.\n\nIf the power supply monitor is the one depending on the power sequencer app (e.g. IBM), we will check for the interface existence, it better be there, as that is what is setting up what we are looking for in our powerState match in PSUManager. The interface exists, we try to set it, if it fails, now we have a problem/error.\n\nI will try to code up checking for the interface to exist.",
+      "parentUuid": "ff419cff_39d94434",
+      "range": {
+        "startLine": 398,
+        "startChar": 12,
+        "endLine": 398,
+        "endChar": 22
+      },
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa5f1665_6e97d427",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
@@ -323,6 +347,24 @@
       "writtenOn": "2022-02-17T19:13:43Z",
       "side": 1,
       "message": "What is the desired behavior in the following scenario?\n* PSU logs an error\n* setPowerSupplyError() is called to notify the sequencer app\n* PSU is removed or replaced\n\nShould setPowerSupplyError() get called with \"\" since the PSU that had logged an error is no longer present?  If so, I don\u0027t think the code currently does that?\n\nAlso, if a PSU had an error and it goes away, should setPowerSupplyError() get called with \"\"?  e.g. a PSU wasn\u0027t working, but now it is, so is it still the source of a pgood problem?\n\nI\u0027m not sure what the requirement is with either of these.  Just asking the question.",
+      "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e266f4c_c3f76f47",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T21:42:26Z",
+      "side": 1,
+      "message": "I would think the desired behavior for this is that the error is logged, then when the PSU is removed, leave the error property set. Otherwise, I could see there being some confusion with certain errors and an attempt to fix it:\n* Power supply IOUT OC fault. Power supply shuts down.\n* setPowerSupplyError() called. I think I have seen PSU OC faults associated with pgood faults in the past, perhaps not always.\n* Power supply is removed. (No additional fault to log, fixing the first fault)\n* New/fixed power supply inserted, configured, clearFaults() called (you are here).\n\nEither no pgood fault happened, and the fault was not used, or inserting the new supply cleared the setPowerSupplyError() as there is currently no fault to log (yet).\n\nIf there was no fault, and the power supply is removed, could that cause a pgood fault? I am not so sure, but setPowerSupplyError() would indicate that the last fault was a power supply missing. Insert new supply, clear that error.",
+      "parentUuid": "fa5f1665_6e97d427",
       "revId": "5b2c664bb7c6cc2ce17be4cdd036733b92d5e94b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
