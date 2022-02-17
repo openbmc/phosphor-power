@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f64a04_738154ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-02-17T19:00:34Z",
+      "side": 1,
+      "message": "Oh! Yeah, that might be good to point out in the commit message. Something like what I said here: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/51199/comment/ea4ab538_20ad547e/ (minus the typo).",
+      "parentUuid": "4844f056_309c3d6d",
+      "revId": "a0b38f531f1345b93e816cce00dc125f1f20257b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0959a91_7d6e7b3c",
