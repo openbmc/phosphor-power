@@ -123,6 +123,97 @@ class Util : public UtilBase
             throw;
         }
     }
+
+    void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+                                   const std::string& invpath,
+                                   bool addRollup) const override
+    {
+        using AssociationTuple =
+            std::tuple<std::string, std::string, std::string>;
+        using AssociationsProperty = std::vector<AssociationTuple>;
+        try
+        {
+            auto chassisPath = getChassis(bus, invpath);
+
+            auto service = phosphor::power::util::getService(
+                invpath, ASSOC_DEF_IFACE, bus);
+
+            AssociationsProperty associations;
+            phosphor::power::util::getProperty<AssociationsProperty>(
+                ASSOC_DEF_IFACE, ASSOC_PROP, invpath, service, bus,
+                associations);
+
+            AssociationTuple critAssociation{"health_rollup", "critical",
+                                             chassisPath};
+
+            auto assocIt = std::find(associations.begin(), associations.end(),
+                                     critAssociation);
+            if (addRollup)
+            {
+                if (assocIt != associations.end())
+                {
+                    // It's already there
+                    return;
+                }
+
+                associations.push_back(critAssociation);
+            }
+            else
+            {
+                if (assocIt == associations.end())
+                {
+                    // It's already been removed.
+                    return;
+                }
+
+                // If the object still isn't functional, then don't clear
+                // the association.
+                bool functional = false;
+                phosphor::power::util::getProperty<bool>(
+                    OPERATIONAL_STATE_IFACE, FUNCTIONAL_PROP, invpath, service,
+                    bus, functional);
+
+                if (!functional)
+                {
+                    return;
+                }
+
+                associations.erase(assocIt);
+            }
+
+            phosphor::power::util::setProperty(ASSOC_DEF_IFACE, ASSOC_PROP,
+                                               invpath, service, bus,
+                                               associations);
+        }
+        catch (const sdbusplus::exception::exception& e)
+        {
+            using namespace phosphor::logging;
+            log<level::INFO>(fmt::format("Error trying to handle health rollup "
+                                         "associations for {}: {}",
+                                         invpath, e.what())
+                                 .c_str());
+        }
+    }
+
+    std::string getChassis(sdbusplus::bus::bus& bus,
+                           const std::string& invpath) const
+    {
+        // Use the 'chassis' association to find the parent chassis.
+        auto assocPath = invpath + "/chassis";
+        std::vector<std::string> endpoints;
+
+        phosphor::power::util::getProperty<decltype(endpoints)>(
+            ASSOCIATION_IFACE, ENDPOINTS_PROP, assocPath,
+            "xyz.openbmc_project.ObjectMapper", bus, endpoints);
+
+        if (endpoints.empty())
+        {
+            throw std::runtime_error(
+                fmt::format("Missing chassis association for {}", invpath));
+        }
+
+        return endpoints[0];
+    }
 };
 
 std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio);

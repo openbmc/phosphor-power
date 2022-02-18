@@ -168,6 +168,16 @@ void PowerSupply::updatePresenceGPIO()
         log<level::DEBUG>(
             fmt::format("presentOld: {} present: {}", presentOld, present)
                 .c_str());
+
+        auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+        auto const lastSlashPos = invpath.find_last_of('/');
+        std::string prettyName = invpath.substr(lastSlashPos + 1);
+        setPresence(bus, invpath, present, prettyName);
+        updateInventory();
+
+        // Need Functional to already be correct before calling this
+        checkAvailability();
+
         if (present)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
@@ -180,13 +190,6 @@ void PowerSupply::updatePresenceGPIO()
         {
             bindOrUnbindDriver(present);
         }
-
-        auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
-        auto const lastSlashPos = invpath.find_last_of('/');
-        std::string prettyName = invpath.substr(lastSlashPos + 1);
-        setPresence(bus, invpath, present, prettyName);
-        updateInventory();
-        checkAvailability();
     }
 }
 
@@ -921,6 +924,11 @@ void PowerSupply::checkAvailability()
     {
         auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
         phosphor::power::psu::setAvailable(bus, invpath, available);
+
+        // Check if the health rollup needs to change based on the
+        // new availability value.
+        phosphor::power::psu::handleChassisHealthRollup(bus, inventoryPath,
+                                                        !available);
     }
 }
 

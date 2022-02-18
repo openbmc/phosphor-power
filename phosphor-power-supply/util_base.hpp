@@ -28,6 +28,10 @@ class UtilBase
     virtual void setAvailable(sdbusplus::bus::bus& bus,
                               const std::string& invpath,
                               bool available) const = 0;
+
+    virtual void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+                                           const std::string& invpath,
+                                           bool addRollup) const = 0;
 };
 
 const UtilBase& getUtils();
@@ -47,6 +51,12 @@ inline void setAvailable(sdbusplus::bus::bus& bus, const std::string& invpath,
                          bool available)
 {
     getUtils().setAvailable(bus, invpath, available);
+}
+
+inline void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+                               const std::string& invpath, bool addRollup)
+{
+    getUtils().handleChassisHealthRollup(bus, invpath, addRollup);
 }
 
 class GPIOInterfaceBase
