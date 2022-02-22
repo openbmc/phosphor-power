@@ -22,6 +22,30 @@
       },
       "revId": "ca1e9ea1f91ca98792b698ffd9c61d13697488e6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09ffb459_fcc39037",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-02-22T20:38:41Z",
+      "side": 1,
+      "message": "The actual function to modify the associations only runs when the available property changes, which means that the first call to checkAvailability() must have the Functional property already correct in the inventory, which happens above in updateInventory().\n\nWith how it was, checkAvailability would first run inside the clearFaults() call on line 187 before updateInventory was called, so Functional was still false so the association wouldn\u0027t get removed.",
+      "parentUuid": "b92a1506_7f9faf89",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 28
+      },
+      "revId": "ca1e9ea1f91ca98792b698ffd9c61d13697488e6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
