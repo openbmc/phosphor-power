@@ -45,6 +45,8 @@ void PowerSequencerMonitor::logError(
 
         // Add PID to AdditionalData
         additionalData.emplace("_PID", std::to_string(getpid()));
+        // Set as system terminating
+        additionalData.emplace("SEVERITY_DETAIL", "SYSTEM_TERM");
 
         method.append(message,
                       sdbusplus::xyz::openbmc_project::Logging::server::Entry::
