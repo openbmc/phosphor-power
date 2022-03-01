@@ -83,7 +83,12 @@ class PowerControl : public PowerObject
     bool deviceFound{false};
 
     /**
-     * Indicates if a state transistion is taking place
+     * Indicates if a failure has already been found. Cleared at power on.
+     */
+    bool failureFound{false};
+
+    /**
+     * Indicates if a state transition is taking place
      */
     bool inStateTransition{false};
 
@@ -125,7 +130,7 @@ class PowerControl : public PowerObject
     gpiod::line powerControlLine;
 
     /**
-     * Power supply error
+     * Power supply error.  Cleared at power on.
      */
     std::string powerSupplyError;
 
