@@ -170,6 +170,7 @@ void PowerControl::pollPgood()
                     additionalData);
             }
 
+            failureFound = true;
             return;
         }
     }
@@ -186,8 +187,9 @@ void PowerControl::pollPgood()
         else
         {
             emitPowerGoodSignal();
-            // Clear any power supply error on the transition to power on
+            // Clear any errors on the transition to power on
             powerSupplyError.clear();
+            failureFound = false;
         }
         emitPropertyChangedSignal("pgood");
     }
@@ -196,10 +198,11 @@ void PowerControl::pollPgood()
         // Power good matches requested state
         inStateTransition = false;
     }
-    else if (!inStateTransition && (pgoodState == 0))
+    else if (!inStateTransition && (pgoodState == 0) && !failureFound)
     {
         // Not in power off state, not changing state, and power good is off
         device->onFailure(false, powerSupplyError);
+        failureFound = true;
         // Power good has failed, call for chassis hard power off
         log<level::ERR>("Chassis pgood failure");
 
