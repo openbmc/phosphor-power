@@ -79,20 +79,6 @@ class UCD90320Monitor : public PowerSequencerMonitor
     std::vector<std::string> rails;
 
     /**
-     * Checks for PGOOD faults on the device.
-     * @param[in] additionalData AdditionalData property of the error log entry
-     * @return bool true if an error log was created
-     */
-    bool checkPGOODFaults(std::map<std::string, std::string>& additionalData);
-
-    /**
-     * Checks for VOUT faults on the device.
-     * @param[in] additionalData AdditionalData property of the error log entry
-     * @return bool true if an error log was created
-     */
-    bool checkVOUTFaults(std::map<std::string, std::string>& additionalData);
-
-    /**
      * Finds the list of compatible system types using D-Bus methods.
      * This list is used to find the correct JSON configuration file for the
      * current system.
@@ -117,13 +103,13 @@ class UCD90320Monitor : public PowerSequencerMonitor
 
     /**
      * Reads the mfr_status register
-     * @return uint32_t the register contents
+     * @return the register contents
      */
     uint32_t readMFRStatus();
 
     /**
      * Reads the status_word register
-     * @return uint16_t the register contents
+     * @return the register contents
      */
     uint16_t readStatusWord();
 
