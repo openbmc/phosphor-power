@@ -33,6 +33,24 @@
       "message": "This method is getting pretty long, so if you end up needing to add more lines it might be time to refactor into some sub-methods.",
       "revId": "f3f31b1a427aa92e2cd3fea753ae9c0f97284c32",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4cf4877_15f5e73e",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-03-01T20:23:34Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "74e1ca0c_59ce3511",
+      "revId": "f3f31b1a427aa92e2cd3fea753ae9c0f97284c32",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
