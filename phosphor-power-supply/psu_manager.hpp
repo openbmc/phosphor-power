@@ -312,6 +312,18 @@ class PSUManager
     void setPowerConfigGPIO();
 
     /**
+     * @brief Indicate that the system is in a brownout condition by creating an
+     * error log and setting the PowerSystemInputs status property to Fault.
+     */
+    void setBrownout();
+
+    /**
+     * @brief Indicate that the system is no longer in a brownout condition by
+     * setting the PowerSystemInputs status property to Good.
+     */
+    void clearBrownout();
+
+    /**
      * @brief Map of supported PSU configurations that include the model name
      * and their properties.
      */
