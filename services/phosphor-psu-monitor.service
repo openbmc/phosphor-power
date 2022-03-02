@@ -2,6 +2,7 @@
 Description=Phosphor Power Supply Monitor
 Wants=mapper-wait@-xyz-openbmc_project-inventory-system.service
 After=mapper-wait@-xyz-openbmc_project-inventory-system.service
+Before=xyz.openbmc_project.State.Chassis.service
 
 [Service]
 Restart=on-failure
