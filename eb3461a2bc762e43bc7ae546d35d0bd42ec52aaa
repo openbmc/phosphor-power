@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d52059d_581eaee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2022-03-02T20:13:43Z",
+      "side": 1,
+      "message": "Hmm, so from that design doc, the goal was that this phosphor-power-supply app would host a generic interface that represents the power to the chassis. The phosphor-chassis-manager would use mapper to look for these interface(s) and subscribe to event changes and use that to feed into it\u0027s logic on what to set the chassis power status to. Basically the same thing we did for UPS\u0027s. The problem with this code directly interacting with the phosphor-state-chassis-manager property is that it can get us out of synch if say, there is also a UPS event going on. That\u0027s why we need phosphor-state-chassis-manager to be the only one that can set the property.",
+      "revId": "eb3461a2bc762e43bc7ae546d35d0bd42ec52aaa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
