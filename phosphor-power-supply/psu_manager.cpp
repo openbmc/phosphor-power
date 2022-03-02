@@ -361,7 +361,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         {
             powerOn = false;
             runValidateConfig = true;
-            brownoutLogged = false;
+            clearBrownout();
         }
     }
 }
@@ -478,18 +478,16 @@ void PSUManager::analyze()
             // Brownout: All PSUs report an AC failure: At least one PSU reports
             // AC loss VIN fault and the rest either report AC loss VIN fault as
             // well or are not present.
-            if (!brownoutLogged)
-            {
-                createError(
-                    "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
-                    additionalData);
-                brownoutLogged = true;
-            }
+            additionalData["NOT_PRESENT_COUNT"] =
+                std::to_string(notPresentCount);
+            additionalData["VIN_FAULT_COUNT"] =
+                std::to_string(hasVINUVFaultCount);
+            setBrownout(additionalData);
         }
         else
         {
             // Brownout condition is not present or has been cleared
-            brownoutLogged = false;
+            clearBrownout();
         }
 
         for (auto& psu : psus)
@@ -865,6 +863,28 @@ void PSUManager::setPowerConfigGPIO()
         auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
         powerConfigGPIO->write(powerConfigValue, flags);
     }
+}
+
+void PSUManager::setBrownout(std::map<std::string, std::string>& additionalData)
+{
+    if (brownoutLogged)
+    {
+        // Brownout condition already set, only need to create error log once.
+        return;
+    }
+
+    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
+                                 server::PowerSystemInputs::Status::Fault);
+    createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                additionalData);
+    brownoutLogged = true;
+}
+
+void PSUManager::clearBrownout()
+{
+    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
+                                 server::PowerSystemInputs::Status::Good);
+    brownoutLogged = false;
 }
 
 } // namespace phosphor::power::manager
