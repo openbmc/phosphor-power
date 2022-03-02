@@ -23,6 +23,10 @@ constexpr auto presLineName = "NamedPresenceGpio";
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 
+constexpr auto chassisInterface = "xyz.openbmc_project.State.Chassis";
+constexpr auto chassisPath = "/xyz/openbmc_project/state/chassis0";
+constexpr auto currentPowerStatusProp = "CurrentPowerStatus";
+
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus)
 {
@@ -353,7 +357,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         {
             powerOn = false;
             runValidateConfig = true;
-            brownoutLogged = false;
+            clearBrownout();
         }
     }
 }
@@ -470,18 +474,12 @@ void PSUManager::analyze()
             // Brownout: All PSUs report an AC failure: At least one PSU reports
             // AC loss VIN fault and the rest either report AC loss VIN fault as
             // well or are not present.
-            if (!brownoutLogged)
-            {
-                createError(
-                    "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
-                    additionalData);
-                brownoutLogged = true;
-            }
+            setBrownout();
         }
         else
         {
             // Brownout condition is not present or has been cleared
-            brownoutLogged = false;
+            clearBrownout();
         }
 
         for (auto& psu : psus)
@@ -856,6 +854,57 @@ void PSUManager::setPowerConfigGPIO()
             (config->second.powerConfigFullLoad == true ? 0 : 1);
         auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
         powerConfigGPIO->write(powerConfigValue, flags);
+    }
+}
+
+void PSUManager::setBrownout()
+{
+    if (brownoutLogged)
+    {
+        // Brownout condition already set
+        return;
+    }
+
+    std::map<std::string, std::string> additionalData;
+    createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                additionalData);
+    brownoutLogged = true;
+
+    try
+    {
+        constexpr auto status =
+            "xyz.openbmc_project.State.Chassis.PowerStatus.BrownOut";
+        auto service = util::getService(chassisPath, chassisInterface, bus);
+        util::setProperty(chassisInterface, currentPowerStatusProp, chassisPath,
+                          service, bus, status);
+    }
+    catch (const std::exception& e)
+    {
+        // Current power status may not be implemented
+    }
+}
+
+void PSUManager::clearBrownout()
+{
+    if (!brownoutLogged)
+    {
+        // Brownout condition already cleared
+        return;
+    }
+
+    brownoutLogged = false;
+
+    try
+    {
+        constexpr auto status =
+            "xyz.openbmc_project.State.Chassis.PowerStatus.Good";
+        auto service = util::getService(chassisPath, chassisInterface, bus);
+        util::setProperty(chassisInterface, currentPowerStatusProp, chassisPath,
+                          service, bus, status);
+    }
+    catch (const std::exception& e)
+    {
+        // Current power status may not be implemented
     }
 }
 
