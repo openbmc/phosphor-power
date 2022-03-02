@@ -363,7 +363,6 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         {
             powerOn = false;
             runValidateConfig = true;
-            brownoutLogged = false;
         }
     }
 }
@@ -459,41 +458,36 @@ void PSUManager::analyze()
         psu->analyze();
     }
 
+    std::map<std::string, std::string> additionalData;
+
+    auto notPresentCount = decltype(psus.size())(
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return !psu->isPresent(); }));
+
+    auto hasVINUVFaultCount = decltype(psus.size())(
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->hasVINUVFault(); }));
+
+    // The PSU D-Bus objects may not be available yet, so ignore if all
+    // PSUs are not present or the number of PSUs is still 0.
+    if ((psus.size() == (notPresentCount + hasVINUVFaultCount)) &&
+        (psus.size() != notPresentCount) && (psus.size() != 0))
+    {
+        // Brownout: All PSUs report an AC failure: At least one PSU reports
+        // AC loss VIN fault and the rest either report AC loss VIN fault as
+        // well or are not present.
+        additionalData["NOT_PRESENT_COUNT"] = std::to_string(notPresentCount);
+        additionalData["VIN_FAULT_COUNT"] = std::to_string(hasVINUVFaultCount);
+        setBrownout(additionalData);
+    }
+    else
+    {
+        // Brownout condition is not present or has been cleared
+        clearBrownout();
+    }
+
     if (powerOn)
     {
-        std::map<std::string, std::string> additionalData;
-
-        auto notPresentCount = decltype(psus.size())(
-            std::count_if(psus.begin(), psus.end(),
-                          [](const auto& psu) { return !psu->isPresent(); }));
-
-        auto hasVINUVFaultCount = decltype(psus.size())(
-            std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
-                return psu->hasVINUVFault();
-            }));
-
-        // The PSU D-Bus objects may not be available yet, so ignore if all
-        // PSUs are not present or the number of PSUs is still 0.
-        if ((psus.size() == (notPresentCount + hasVINUVFaultCount)) &&
-            (psus.size() != notPresentCount) && (psus.size() != 0))
-        {
-            // Brownout: All PSUs report an AC failure: At least one PSU reports
-            // AC loss VIN fault and the rest either report AC loss VIN fault as
-            // well or are not present.
-            if (!brownoutLogged)
-            {
-                createError(
-                    "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
-                    additionalData);
-                brownoutLogged = true;
-            }
-        }
-        else
-        {
-            // Brownout condition is not present or has been cleared
-            brownoutLogged = false;
-        }
-
         for (auto& psu : psus)
         {
             additionalData.clear();
@@ -867,6 +861,29 @@ void PSUManager::setPowerConfigGPIO()
         auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
         powerConfigGPIO->write(powerConfigValue, flags);
     }
+}
+
+void PSUManager::setBrownout(std::map<std::string, std::string>& additionalData)
+{
+    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
+                                 server::PowerSystemInputs::Status::Fault);
+    if (!brownoutLogged)
+    {
+        if (powerOn)
+        {
+            createError(
+                "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                additionalData);
+            brownoutLogged = true;
+        }
+    }
+}
+
+void PSUManager::clearBrownout()
+{
+    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
+                                 server::PowerSystemInputs::Status::Good);
+    brownoutLogged = false;
 }
 
 } // namespace phosphor::power::manager
