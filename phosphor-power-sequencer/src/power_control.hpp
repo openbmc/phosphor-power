@@ -98,6 +98,16 @@ class PowerControl : public PowerObject
     sdbusplus::bus::match_t match;
 
     /**
+     * Minimum time from cold start to power on constant
+     */
+    static constexpr std::chrono::seconds minimumColdStartTime{15};
+
+    /**
+     * Minimum time from power off to power on constant
+     */
+    static constexpr std::chrono::seconds minimumPowerOffTime{25};
+
+    /**
      * Power good
      */
     int pgood{0};
@@ -110,8 +120,7 @@ class PowerControl : public PowerObject
     /**
      * Power good timeout constant
      */
-    static constexpr std::chrono::seconds pgoodTimeout{
-        std::chrono::seconds(10)};
+    static constexpr std::chrono::seconds pgoodTimeout{10};
 
     /**
      * Point in time at which power good timeout will take place
@@ -121,13 +130,17 @@ class PowerControl : public PowerObject
     /**
      * Poll interval constant
      */
-    static constexpr std::chrono::milliseconds pollInterval{
-        std::chrono::milliseconds(3000)};
+    static constexpr std::chrono::milliseconds pollInterval{3000};
 
     /**
      * GPIO line object for power-on / power-off control
      */
     gpiod::line powerControlLine;
+
+    /**
+     * Point in time at which minumum power off time will have passed
+     */
+    std::chrono::time_point<std::chrono::steady_clock> powerOnAllowedTime;
 
     /**
      * Power supply error.  Cleared at power on.
