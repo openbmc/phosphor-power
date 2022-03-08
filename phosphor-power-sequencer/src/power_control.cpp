@@ -49,6 +49,7 @@ PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                   "xyz.openbmc_project.EntityManager"),
           std::bind(&PowerControl::interfacesAddedHandler, this,
                     std::placeholders::_1)},
+    powerOnAllowedTime{std::chrono::steady_clock::now() + minimumColdStartTime},
     timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
 {
     // Obtain dbus service name
@@ -243,12 +244,24 @@ void PowerControl::setState(int s)
         // other BMC applications time to complete power off processing
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
+    else
+    {
+        // If minimum power off time has not passed, wait
+        std::this_thread::sleep_until(powerOnAllowedTime);
+    }
 
     log<level::INFO>(fmt::format("setState: {}", s).c_str());
     powerControlLine.request(
         {"phosphor-power-control", gpiod::line_request::DIRECTION_OUTPUT, 0});
     powerControlLine.set_value(s);
     powerControlLine.release();
+
+    if (s == 0)
+    {
+        // Set a minimum amount of time to wait before next power on
+        powerOnAllowedTime =
+            std::chrono::steady_clock::now() + minimumPowerOffTime;
+    }
 
     pgoodTimeoutTime = std::chrono::steady_clock::now() + timeout;
     inStateTransition = true;
