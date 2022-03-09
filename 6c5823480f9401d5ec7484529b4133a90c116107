@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6cb55c_bc116576",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-03-09T00:03:14Z",
+      "side": 1,
+      "message": "you dont need to write std::chrono::seconds twice, you can just put 15 in the braces.",
+      "revId": "6c5823480f9401d5ec7484529b4133a90c116107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9eb9c3d_7fc5e9d2",
+        "filename": "phosphor-power-sequencer/src/power_control.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-03-09T00:03:14Z",
+      "side": 1,
+      "message": "see previous comment",
+      "revId": "6c5823480f9401d5ec7484529b4133a90c116107",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
