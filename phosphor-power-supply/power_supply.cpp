@@ -568,6 +568,14 @@ void PowerSupply::analyze()
                 clearFaults();
             }
 
+            if ((vinUVFault) && (inputVoltage != in_input::VIN_VOLTAGE_0))
+            {
+                // Do we have a VIN_UV fault latched that can now be cleared due
+                // to voltage back in range? Attempt to clear all faults,
+                // re-check faults on next call.
+                clearFaults();
+            }
+
             checkAvailability();
         }
         catch (const ReadFailure& e)

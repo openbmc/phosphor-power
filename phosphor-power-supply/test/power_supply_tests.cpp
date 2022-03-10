@@ -1055,13 +1055,20 @@ TEST_F(PowerSupplyTests, IsFaulted)
     expectations.statusFans12Value = 0xFF;
     // STATUS_TEMPERATURE with fault bits on.
     expectations.statusTempValue = 0xFF;
+    // vinUVFault on with good voltage will do READ_VIN via in1_input in an
+    // attempt to call CLEAR_FAULTS
+    // EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
+    //    .Times(3)
+    //    .WillOnce(Return(3))
+    //    .WillOnce(Return(4))
+    //    .WillOnce(Return(5));
     for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
     {
         setPMBusExpectations(mockPMBus, expectations);
-        // Also get another read of READ_VIN.
+        // Also get another read of READ_VIN, faulted, so not in 100-volt range
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
-            .WillOnce(Return("125790"));
+            .WillOnce(Return("19000"));
         if (x == DEGLITCH_LIMIT)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
