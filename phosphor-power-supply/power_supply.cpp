@@ -602,6 +602,25 @@ void PowerSupply::analyze()
                         .c_str());
                 clearFaults();
             }
+            else if (vinUVFault && (inputVoltage != in_input::VIN_VOLTAGE_0))
+            {
+                log<level::INFO>(
+                    fmt::format("CLEAR_FAULTS: vinUVFault {} inputVoltage {}",
+                                vinUVFault, inputVoltage)
+                        .c_str());
+                // Do we have a VIN_UV fault latched that can now be cleared
+                // due to voltage back in range? Attempt to clear all
+                // faults, re-check faults on next call.
+                clearFaults();
+            }
+            else if (inputVoltageOld != inputVoltage)
+            {
+                log<level::INFO>(
+                    fmt::format(
+                        "READ_VIN change: inputVoltageOld = {} inputVoltage = {}",
+                        inputVoltageOld, inputVoltage)
+                        .c_str());
+            }
 
             checkAvailability();
         }
