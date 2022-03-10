@@ -199,11 +199,13 @@ void PowerSupply::analyzeCMLFault()
     {
         if (cmlFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#06x}, "
-                                        "STATUS_CML = {:#04x}",
-                                        statusWord, statusCML)
-                                .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#06x}, "
+                                            "STATUS_CML = {:#02x}",
+                                            statusWord, statusCML)
+                                    .c_str());
+            }
             cmlFault++;
         }
     }
@@ -219,12 +221,15 @@ void PowerSupply::analyzeInputFault()
     {
         if (inputFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("INPUT fault: STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                        "STATUS_INPUT = {:#04x}",
-                                        statusWord, statusMFR, statusInput)
-                                .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(
+                    fmt::format("INPUT fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_INPUT = {:#04x}",
+                                statusWord, statusMFR, statusInput)
+                        .c_str());
+            }
             inputFault++;
         }
     }
@@ -250,12 +255,15 @@ void PowerSupply::analyzeVoutOVFault()
     {
         if (voutOVFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(
-                fmt::format("VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
-                            "STATUS_MFR_SPECIFIC = {:#04x}, "
-                            "STATUS_VOUT = {:#04x}",
-                            statusWord, statusMFR, statusVout)
-                    .c_str());
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(
+                    fmt::format("VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_VOUT = {:#02x}",
+                                statusWord, statusMFR, statusVout)
+                        .c_str());
+            }
 
             voutOVFault++;
         }
@@ -272,11 +280,15 @@ void PowerSupply::analyzeIoutOCFault()
     {
         if (ioutOCFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("IOUT fault: STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                        "STATUS_IOUT = {:#04x}",
-                                        statusWord, statusMFR, statusIout)
-                                .c_str());
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(
+                    fmt::format("IOUT fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_IOUT = {:#04x}",
+                                statusWord, statusMFR, statusIout)
+                        .c_str());
+            }
 
             ioutOCFault++;
         }
@@ -294,13 +306,15 @@ void PowerSupply::analyzeVoutUVFault()
     {
         if (voutUVFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(
-                fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
-                            "STATUS_MFR_SPECIFIC = {:#04x}, "
-                            "STATUS_VOUT = {:#04x}",
-                            statusWord, statusMFR, statusVout)
-                    .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(
+                    fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_VOUT = {:#04x}",
+                                statusWord, statusMFR, statusVout)
+                        .c_str());
+            }
             voutUVFault++;
         }
     }
@@ -316,13 +330,15 @@ void PowerSupply::analyzeFanFault()
     {
         if (fanFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("FANS fault/warning: "
-                                        "STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                        "STATUS_FANS_1_2 = {:#04x}",
-                                        statusWord, statusMFR, statusFans12)
-                                .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(fmt::format("FANS fault/warning: "
+                                            "STATUS_WORD = {:#06x}, "
+                                            "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                            "STATUS_FANS_1_2 = {:#04x}",
+                                            statusWord, statusMFR, statusFans12)
+                                    .c_str());
+            }
             fanFault++;
         }
     }
@@ -338,14 +354,16 @@ void PowerSupply::analyzeTemperatureFault()
     {
         if (tempFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("TEMPERATURE fault/warning: "
-                                        "STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                        "STATUS_TEMPERATURE = {:#04x}",
-                                        statusWord, statusMFR,
-                                        statusTemperature)
-                                .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(fmt::format("TEMPERATURE fault/warning: "
+                                            "STATUS_WORD = {:#06x}, "
+                                            "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                            "STATUS_TEMPERATURE = {:#04x}",
+                                            statusWord, statusMFR,
+                                            statusTemperature)
+                                    .c_str());
+            }
             tempFault++;
         }
     }
@@ -362,12 +380,14 @@ void PowerSupply::analyzePgoodFault()
     {
         if (pgoodFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("PGOOD fault: "
-                                        "STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}",
-                                        statusWord, statusMFR)
-                                .c_str());
-
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(fmt::format("PGOOD fault: "
+                                            "STATUS_WORD = {:#06x}, "
+                                            "STATUS_MFR_SPECIFIC = {:#04x}",
+                                            statusWord, statusMFR)
+                                    .c_str());
+            }
             pgoodFault++;
         }
     }
@@ -426,11 +446,14 @@ void PowerSupply::analyzeMFRFault()
     {
         if (mfrFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("MFR fault: "
-                                        "STATUS_WORD = {:#06x} "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}",
-                                        statusWord, statusMFR)
-                                .c_str());
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(fmt::format("MFR fault: "
+                                            "STATUS_WORD = {:#06x} "
+                                            "STATUS_MFR_SPECIFIC = {:#04x}",
+                                            statusWord, statusMFR)
+                                    .c_str());
+            }
             mfrFault++;
         }
 
@@ -448,11 +471,15 @@ void PowerSupply::analyzeVinUVFault()
     {
         if (vinUVFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("VIN_UV fault: STATUS_WORD = {:#06x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                        "STATUS_INPUT = {:#04x}",
-                                        statusWord, statusMFR, statusInput)
-                                .c_str());
+            if (statusWord != statusWordOld)
+            {
+                log<level::ERR>(
+                    fmt::format("VIN_UV fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_INPUT = {:#04x}",
+                                statusWord, statusMFR, statusInput)
+                        .c_str());
+            }
             vinUVFault++;
         }
     }
@@ -483,6 +510,7 @@ void PowerSupply::analyze()
     {
         try
         {
+            statusWordOld = statusWord;
             statusWord = pmbusIntf->read(STATUS_WORD, Type::Debug,
                                          (readFail < LOG_LIMIT));
             // Read worked, reset the fail count.
@@ -522,6 +550,13 @@ void PowerSupply::analyze()
             }
             else
             {
+                if (statusWord != statusWordOld)
+                {
+                    log<level::INFO>(fmt::format("STATUS_WORD = {:#06x} {}",
+                                                 statusWord, inventoryPath)
+                                         .c_str());
+                }
+
                 // if INPUT/VIN_UV fault was on, it cleared, trace it.
                 if (inputFault)
                 {

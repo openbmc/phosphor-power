@@ -431,6 +431,9 @@ class PowerSupply
     /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
 
+    /** @brief Will be set to the last read value of STATUS_WORD. */
+    uint64_t statusWordOld = 0;
+
     /** @brief Will be updated to the latest/lastvalue read from STATUS_INPUT.*/
     uint64_t statusInput = 0;
 
