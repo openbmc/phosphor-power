@@ -54,11 +54,6 @@ class UCD90320Monitor : public PowerSequencerMonitor
 
   private:
     /**
-     * Set of GPIO lines to monitor in this UCD chip.
-     */
-    gpiod::line_bulk lines;
-
-    /**
      * The match to Entity Manager interfaces added.
      */
     sdbusplus::bus::match_t match;
@@ -96,6 +91,28 @@ class UCD90320Monitor : public PowerSequencerMonitor
     void findConfigFile(const std::vector<std::string>& compatibleSystemTypes);
 
     /**
+     * Analyzes the device pins for errors when the device is known to be in an
+     * error state.
+     * @param[in] message Message property of the error log entry
+     * @param[in] additionalData AdditionalData property of the error log entry
+     */
+    void onFailureCheckPins(std::string& message,
+                            std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Analyzes the device rails for errors when the device is known to be in an
+     * error state.
+     * @param[in] message Message property of the error log entry
+     * @param[in] additionalData AdditionalData property of the error log entry
+     * @param[in] powerSupplyError The power supply error to log. A default
+     * std:string, i.e. empty string (""), is passed when there is no power
+     * supply error to log.
+     */
+    void onFailureCheckRails(std::string& message,
+                             std::map<std::string, std::string>& additionalData,
+                             const std::string& powerSupplyError);
+
+    /**
      * Parse the JSON configuration file.
      * @param[in] pathName the path name
      */
@@ -112,12 +129,6 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @return the register contents
      */
     uint16_t readStatusWord();
-
-    /**
-     * Set up GPIOs
-     * @param[in] offsets the list of pin offsets
-     */
-    void setUpGpio(const std::vector<unsigned int>& offsets);
 };
 
 } // namespace phosphor::power::sequencer
