@@ -199,8 +199,8 @@ void PowerSupply::analyzeCMLFault()
     {
         if (cmlFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_CML = {:#02x}",
+            log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#06x}, "
+                                        "STATUS_CML = {:#04x}",
                                         statusWord, statusCML)
                                 .c_str());
 
@@ -219,9 +219,9 @@ void PowerSupply::analyzeInputFault()
     {
         if (inputFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("INPUT fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_INPUT = {:#02x}",
+            log<level::ERR>(fmt::format("INPUT fault: STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                        "STATUS_INPUT = {:#04x}",
                                         statusWord, statusMFR, statusInput)
                                 .c_str());
 
@@ -235,9 +235,9 @@ void PowerSupply::analyzeInputFault()
         !(statusWord & phosphor::pmbus::status_word::INPUT_FAULT_WARN))
     {
         log<level::INFO>(
-            fmt::format("INPUT fault cleared: STATUS_WORD = {:#04x}, "
-                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                        "STATUS_INPUT = {:#02x}",
+            fmt::format("INPUT fault cleared: STATUS_WORD = {:#06x}, "
+                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                        "STATUS_INPUT = {:#04x}",
                         statusWord, statusMFR, statusInput)
                 .c_str());
         inputFault = 0;
@@ -251,9 +251,9 @@ void PowerSupply::analyzeVoutOVFault()
         if (voutOVFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(
-                fmt::format("VOUT_OV_FAULT fault: STATUS_WORD = {:#04x}, "
-                            "STATUS_MFR_SPECIFIC = {:#02x}, "
-                            "STATUS_VOUT = {:#02x}",
+                fmt::format("VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
+                            "STATUS_MFR_SPECIFIC = {:#04x}, "
+                            "STATUS_VOUT = {:#04x}",
                             statusWord, statusMFR, statusVout)
                     .c_str());
 
@@ -272,9 +272,9 @@ void PowerSupply::analyzeIoutOCFault()
     {
         if (ioutOCFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("IOUT fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_IOUT = {:#02x}",
+            log<level::ERR>(fmt::format("IOUT fault: STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                        "STATUS_IOUT = {:#04x}",
                                         statusWord, statusMFR, statusIout)
                                 .c_str());
 
@@ -295,9 +295,9 @@ void PowerSupply::analyzeVoutUVFault()
         if (voutUVFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(
-                fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#04x}, "
-                            "STATUS_MFR_SPECIFIC = {:#02x}, "
-                            "STATUS_VOUT = {:#02x}",
+                fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
+                            "STATUS_MFR_SPECIFIC = {:#04x}, "
+                            "STATUS_VOUT = {:#04x}",
                             statusWord, statusMFR, statusVout)
                     .c_str());
 
@@ -317,9 +317,9 @@ void PowerSupply::analyzeFanFault()
         if (fanFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(fmt::format("FANS fault/warning: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_FANS_1_2 = {:#02x}",
+                                        "STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                        "STATUS_FANS_1_2 = {:#04x}",
                                         statusWord, statusMFR, statusFans12)
                                 .c_str());
 
@@ -339,9 +339,9 @@ void PowerSupply::analyzeTemperatureFault()
         if (tempFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(fmt::format("TEMPERATURE fault/warning: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_TEMPERATURE = {:#02x}",
+                                        "STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                        "STATUS_TEMPERATURE = {:#04x}",
                                         statusWord, statusMFR,
                                         statusTemperature)
                                 .c_str());
@@ -363,8 +363,8 @@ void PowerSupply::analyzePgoodFault()
         if (pgoodFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(fmt::format("PGOOD fault: "
-                                        "STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        "STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}",
                                         statusWord, statusMFR)
                                 .c_str());
 
@@ -427,8 +427,8 @@ void PowerSupply::analyzeMFRFault()
         if (mfrFault < DEGLITCH_LIMIT)
         {
             log<level::ERR>(fmt::format("MFR fault: "
-                                        "STATUS_WORD = {:#04x} "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}",
+                                        "STATUS_WORD = {:#06x} "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}",
                                         statusWord, statusMFR)
                                 .c_str());
             mfrFault++;
@@ -448,9 +448,9 @@ void PowerSupply::analyzeVinUVFault()
     {
         if (vinUVFault < DEGLITCH_LIMIT)
         {
-            log<level::ERR>(fmt::format("VIN_UV fault: STATUS_WORD = {:#04x}, "
-                                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                                        "STATUS_INPUT = {:#02x}",
+            log<level::ERR>(fmt::format("VIN_UV fault: STATUS_WORD = {:#06x}, "
+                                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                        "STATUS_INPUT = {:#04x}",
                                         statusWord, statusMFR, statusInput)
                                 .c_str());
             vinUVFault++;
@@ -461,9 +461,9 @@ void PowerSupply::analyzeVinUVFault()
         !(statusWord & phosphor::pmbus::status_word::VIN_UV_FAULT))
     {
         log<level::INFO>(
-            fmt::format("VIN_UV fault cleared: STATUS_WORD = {:#04x}, "
-                        "STATUS_MFR_SPECIFIC = {:#02x}, "
-                        "STATUS_INPUT = {:#02x}",
+            fmt::format("VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
+                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                        "STATUS_INPUT = {:#04x}",
                         statusWord, statusMFR, statusInput)
                 .c_str());
         vinUVFault = 0;
@@ -527,7 +527,7 @@ void PowerSupply::analyze()
                 {
                     log<level::INFO>(
                         fmt::format(
-                            "INPUT fault cleared: STATUS_WORD = {:#04x}",
+                            "INPUT fault cleared: STATUS_WORD = {:#06x}",
                             statusWord)
                             .c_str());
                 }
@@ -535,7 +535,7 @@ void PowerSupply::analyze()
                 if (vinUVFault)
                 {
                     log<level::INFO>(
-                        fmt::format("VIN_UV cleared: STATUS_WORD = {:#04x}",
+                        fmt::format("VIN_UV cleared: STATUS_WORD = {:#06x}",
                                     statusWord)
                             .c_str());
                 }
