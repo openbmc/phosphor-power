@@ -683,6 +683,10 @@ void PowerSupply::clearFaults()
         {
             static_cast<void>(
                 pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
+
+            std::vector<uint8_t> dontCare{1};
+            pmbusIntf->writeBinary(phosphor::pmbus::CLEAR_FAULTS, dontCare,
+                                   phosphor::pmbus::Type::HwmonDeviceDebug);
         }
         catch (const ReadFailure& e)
         {
