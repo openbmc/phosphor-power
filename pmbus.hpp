@@ -126,6 +126,7 @@ constexpr auto OT_FAULT = 0x80;
 } // namespace status_temperature
 
 constexpr auto ON_OFF_CONFIG = "on_off_config";
+constexpr auto CLEAR_FAULTS = "clear_faults";
 
 // From PMBus Specification Part II Revsion 1.2:
 // The ON_OFF_CONFIG command configures the combination of CONTROL pin input
