@@ -1058,10 +1058,10 @@ TEST_F(PowerSupplyTests, IsFaulted)
     for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
     {
         setPMBusExpectations(mockPMBus, expectations);
-        // Also get another read of READ_VIN.
+        // Also get another read of READ_VIN, faulted, so not in 100-volt range
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
-            .WillOnce(Return("125790"));
+            .WillOnce(Return("19000"));
         if (x == DEGLITCH_LIMIT)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));

@@ -459,6 +459,8 @@ class PowerSupply
 
     /** @brief Will be updated with latest converted value read from READ_VIN */
     int inputVoltage = phosphor::pmbus::in_input::VIN_VOLTAGE_0;
+    /** */
+    double actualInputVoltage = 0;
 
     /** @brief True if an error for a fault has already been logged. */
     bool faultLogged = false;
