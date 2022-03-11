@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc6c1a6_29f27f94",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-11T15:29:25Z",
+      "side": 1,
+      "message": "Nit: No reason to put a simple boolean var in parentheses here.",
+      "range": {
+        "startLine": 571,
+        "startChar": 16,
+        "endLine": 571,
+        "endChar": 28
+      },
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677d018a_6a01c576",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-11T15:29:25Z",
+      "side": 1,
+      "message": "It looks like you added this to test the new behavior, but it is commented out?\n\nI would think the new behavior would impact at least one of the automated tests.",
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
