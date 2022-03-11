@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95c300d_a4f8b21f",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-03-11T19:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8967c38_dc282e81",
+      "range": {
+        "startLine": 313,
+        "startChar": 23,
+        "endLine": 313,
+        "endChar": 26
+      },
+      "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d252477_2ca31163",
@@ -41,6 +65,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0796b7c_341a3dd0",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-03-11T19:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d252477_2ca31163",
+      "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a1732f0_9eea3077",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-03-11T17:18:31Z",
       "side": 1,
       "message": "Nit: Since these parameters are \u0026 vs. a const \u0026, I assume they are either output or input/output parameters?\n\nI\u0027m not a big fan of the [in] [out] stuff as I think it is implied by the data types (\u0026, const \u0026, copy).  But if you want to use them, maybe this needs to be updated?  Same comment on additionalData and the same two params for onFailureCheckRails().",
+      "range": {
+        "startLine": 96,
+        "startChar": 13,
+        "endLine": 96,
+        "endChar": 17
+      },
+      "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93df5227_11711469",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-03-11T19:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a1732f0_9eea3077",
       "range": {
         "startLine": 96,
         "startChar": 13,
