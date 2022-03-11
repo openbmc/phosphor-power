@@ -50,6 +50,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e2c8bf2_090b2914",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-03-11T15:55:47Z",
+      "side": 1,
+      "message": "looks like we used to do this when AC came back:\n1. check 110v/220v to ensure correct AC level.  \nWill this happen here? I don\u0027t believe so, which is fine as they are only supposed to change the input utility when the system is powered off, I just want to know the behavior so we can address defects appropriately.\n\n2. send clear_faults cmd.\nI assume that is in the clearFaults() call?\n\n3. re-send the pon cmd.\nNot needed here, as hw gpio is already on.\n\n4. clear code cached fault status.\nI assume that is in the clearFaults() call?\n\n5. trace the AC return.\nI think it would be worth adding that, if it\u0027s not in place already (I thought you had added a trace earlier when read_vin goes 0-\u003enon-zero?",
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "677d018a_6a01c576",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
