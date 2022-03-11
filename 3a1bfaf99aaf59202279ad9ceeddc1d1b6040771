@@ -22,6 +22,46 @@
       },
       "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d252477_2ca31163",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-11T17:18:31Z",
+      "side": 1,
+      "message": "Brandon recently pushed up a commit where he had to add 2 to the size of these format expressions to account for the \u00270x\u0027.  Is that true here too?\n\nhttps://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/51876/1/phosphor-power-supply/power_supply.cpp",
+      "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a1732f0_9eea3077",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-11T17:18:31Z",
+      "side": 1,
+      "message": "Nit: Since these parameters are \u0026 vs. a const \u0026, I assume they are either output or input/output parameters?\n\nI\u0027m not a big fan of the [in] [out] stuff as I think it is implied by the data types (\u0026, const \u0026, copy).  But if you want to use them, maybe this needs to be updated?  Same comment on additionalData and the same two params for onFailureCheckRails().",
+      "range": {
+        "startLine": 96,
+        "startChar": 13,
+        "endLine": 96,
+        "endChar": 17
+      },
+      "revId": "3a1bfaf99aaf59202279ad9ceeddc1d1b6040771",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
