@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "102139f0_3485bd93",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-11T15:41:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6dc6c1a6_29f27f94",
+      "range": {
+        "startLine": 571,
+        "startChar": 16,
+        "endLine": 571,
+        "endChar": 28
+      },
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "677d018a_6a01c576",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2022-03-11T15:29:25Z",
       "side": 1,
       "message": "It looks like you added this to test the new behavior, but it is commented out?\n\nI would think the new behavior would impact at least one of the automated tests.",
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ea70171_abdabed6",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-11T15:41:51Z",
+      "side": 1,
+      "message": "I misunderstood what I was doing at first. The 3 reads I need are the one below, but it needs to be below the 20V cutoff to keep the faults.\n\nI need to remove this commented out line.",
+      "parentUuid": "677d018a_6a01c576",
       "revId": "42a83a958d554b81dbf343908e952906b68afedc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
