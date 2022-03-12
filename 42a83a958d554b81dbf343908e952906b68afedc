@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd99939c_7de8919f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-12T00:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "102139f0_3485bd93",
+      "range": {
+        "startLine": 571,
+        "startChar": 16,
+        "endLine": 571,
+        "endChar": 28
+      },
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e2c8bf2_090b2914",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "1. No, I was going to say that check is in the configuration check, but not so sure that will run just due to the voltage bouncing around from 220 to 0 to 110/220.\n\n2. Ideally the CLEAR_FAULTS would go out with that in1_input read down in clearFaults() call, but that is not reliable. Subsequent commit depends on kernel patch http://patchwork.ozlabs.org/project/openbmc/patch/20220311181014.3448936-1-bjwyman@gmail.com/.\n\n3. Correct, not trying to send a/another power supply power on command, as the ON_OFF_CONFIG is configured for GPIO only.\n\n4. Correct, clearFaults() will clear all the fault status variables.\n\n5. I had a trace of the 0 to non-zero, but looks like I lost that. I think I did something wrong there, and was seeing lots of tracing for the voltage it was at, every second. I think I can put something back in for that.",
       "parentUuid": "5e2c8bf2_090b2914",
+      "revId": "42a83a958d554b81dbf343908e952906b68afedc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d276e3_9251e790",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-12T00:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb0844a8_7db7b8b0",
       "revId": "42a83a958d554b81dbf343908e952906b68afedc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
