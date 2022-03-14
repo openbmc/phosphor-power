@@ -16,6 +16,24 @@
       "message": "Is this, and above, comparing the actual voltage (eg 108v), or a range?  It would be nice to see the actual voltage the PS is returning in the journal, however we don\u0027t want to trace every time it changes from say 108v to 107v etc.",
       "revId": "5189ba2a57119be74d2c38e48859d1bd72fc0f5a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec6e3ed2_d8307e8d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-14T18:30:27Z",
+      "side": 1,
+      "message": "It is not the actual voltage, that would be the actualInputVoltage that is a double. I would have to look into tracing that in some intelligent way if we do not want the converted value that gives the 0V, 110V, or 220V range that is calculated in the getInputVoltage() function.",
+      "parentUuid": "b0f087e9_b0db36f3",
+      "revId": "5189ba2a57119be74d2c38e48859d1bd72fc0f5a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
