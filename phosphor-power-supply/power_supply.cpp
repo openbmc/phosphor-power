@@ -814,7 +814,7 @@ void PowerSupply::updateInventory()
             header =
                 pmbusIntf->readString(SERIAL_HEADER, Type::HwmonDeviceDebug);
             sn = pmbusIntf->readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
-            assetProps.emplace(SN_PROP, sn);
+            assetProps.emplace(SN_PROP, header + sn);
         }
         catch (const ReadFailure& e)
         {
