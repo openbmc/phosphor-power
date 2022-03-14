@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f087e9_b0db36f3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-03-14T15:09:09Z",
+      "side": 1,
+      "message": "Is this, and above, comparing the actual voltage (eg 108v), or a range?  It would be nice to see the actual voltage the PS is returning in the journal, however we don\u0027t want to trace every time it changes from say 108v to 107v etc.",
+      "revId": "5189ba2a57119be74d2c38e48859d1bd72fc0f5a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
