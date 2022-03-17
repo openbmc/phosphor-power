@@ -56,20 +56,12 @@
             "line": 62
         },
         {
-            "name": "PGOOD_12P",
-            "line": 63
-        },
-        {
             "name": "PGOOD_12PCIE",
             "line": 64
         },
         {
             "name": "PGOOD_12Q",
             "line": 65
-        },
-        {
-            "name": "PGOOD_12R",
-            "line": 66
         },
         {
             "name": "PGOOD_VDN_DCM0",
