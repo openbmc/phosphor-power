@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69de2c82_576c0d13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-17T23:26:50Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "884ff9ad_33191605",
+      "range": {
+        "startLine": 14,
+        "startChar": 60,
+        "endLine": 14,
+        "endChar": 67
+      },
+      "revId": "0666fbd62ae86f88728eaaea9311c454693169f9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e452e2ef_008b29d6",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-03-17T22:12:52Z",
       "side": 1,
       "message": "Nit: Missing doxygen and blank line in between members I think.",
+      "revId": "0666fbd62ae86f88728eaaea9311c454693169f9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae67fe9_e5dc5127",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-17T23:26:50Z",
+      "side": 1,
+      "message": "Well, then... I apparently should have proofread this better.",
+      "parentUuid": "e452e2ef_008b29d6",
       "revId": "0666fbd62ae86f88728eaaea9311c454693169f9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
