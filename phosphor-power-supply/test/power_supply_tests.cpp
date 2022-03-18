@@ -103,14 +103,15 @@ void setMissingToPresentExpects(MockedPMBus& pmbus, const MockedUtil& util)
     EXPECT_CALL(pmbus, writeBinary(ON_OFF_CONFIG, _, _));
     // Presence change from missing to present will trigger in1_input read
     // in an attempt to get CLEAR_FAULTS called.
-    // The voltage defaults to 0, the first call to analyze should update the
-    // voltage to the current reading, triggering another clearing of faults
-    // due to below minimum to within range voltage.
     // This READ_VIN for CLEAR_FAULTS does not check the returned value.
-    EXPECT_CALL(pmbus, read(READ_VIN, _, _))
+    EXPECT_CALL(pmbus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    // The call for clearing faults includes clearing VIN_UV fault.
+    // The voltage defaults to 0, the first call to analyze should update the
+    // voltage to the current reading, triggering clearing VIN_UV fault(s)
+    // due to below minimum to within range voltage.
+    EXPECT_CALL(pmbus, read("in1_lcrit_alarm", _, _))
         .Times(2)
-        .WillOnce(Return(1))
-        .WillOnce(Return(2));
+        .WillRepeatedly(Return(1));
     // Missing/present call will update Presence in inventory.
     EXPECT_CALL(util, setPresence(_, _, true, _));
 }
@@ -283,7 +284,8 @@ TEST_F(PowerSupplyTests, Analyze)
         // Update expectations for STATUS_WORD input fault/warn
         // STATUS_INPUT fault bits ... on.
         expectations.statusWordValue = (status_word::INPUT_FAULT_WARN);
-        expectations.statusInputValue = 0x38;
+        // IIN_OC fault.
+        expectations.statusInputValue = 0x04;
 
         for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
         {
@@ -312,6 +314,9 @@ TEST_F(PowerSupplyTests, Analyze)
     }
 
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     psu2.clearFaults();
 
     // STATUS_WORD INPUT/UV fault.
@@ -329,7 +334,7 @@ TEST_F(PowerSupplyTests, Analyze)
         expectations.statusWordValue =
             (status_word::INPUT_FAULT_WARN | status_word::VIN_UV_FAULT);
         // STATUS_INPUT fault bits ... on.
-        expectations.statusInputValue = 0x38;
+        expectations.statusInputValue = 0x18;
         for (auto x = 1; x <= DEGLITCH_LIMIT; x++)
         {
             setPMBusExpectations(mockPMBus, expectations);
@@ -363,10 +368,10 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("209000"));
-        // The call for CLEAR_FAULTS command
-        EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
+        // The call to clear VIN_UV/Off fault(s)
+        EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
             .Times(1)
-            .WillOnce(Return(3));
+            .WillOnce(Return(1));
         psu2.analyze();
         // Should remain present, no longer be faulted, no input fault, no
         // VIN_UV fault. Nothing else should change.
@@ -377,6 +382,9 @@ TEST_F(PowerSupplyTests, Analyze)
     }
 
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     psu2.clearFaults();
 
     // STATUS_WORD MFR fault.
@@ -419,7 +427,11 @@ TEST_F(PowerSupplyTests, Analyze)
     }
 
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     psu2.clearFaults();
+
     // Temperature fault.
     {
         // First STATUS_WORD with no bits set, then with temperature fault.
@@ -459,7 +471,11 @@ TEST_F(PowerSupplyTests, Analyze)
     }
 
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     psu2.clearFaults();
+
     // CML fault
     {
         // First STATUS_WORD wit no bits set, then with CML fault.
@@ -499,7 +515,11 @@ TEST_F(PowerSupplyTests, Analyze)
     }
 
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(1));
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     psu2.clearFaults();
+
     // VOUT_OV_FAULT fault
     {
         // First STATUS_WORD with no bits set, then with VOUT/VOUT_OV fault.
@@ -834,6 +854,10 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockPMBus, read(READ_VIN, _, _))
         .Times(1)
         .WillOnce(Return(207000));
+    // Clearing VIN_UV fault via in1_lcrit_alarm
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.clearFaults();
     EXPECT_EQ(psu.isPresent(), true);
@@ -912,7 +936,35 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("206000"));
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(0));
+    // VIN_UV cleared via in1_lcrit_alarm when voltage back in range.
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
+    psu.analyze();
+    // We only cleared the VIN_UV and OFF faults.
+    EXPECT_EQ(psu.isPresent(), true);
+    EXPECT_EQ(psu.isFaulted(), true);
+    EXPECT_EQ(psu.hasInputFault(), false);
+    EXPECT_EQ(psu.hasMFRFault(), true);
+    EXPECT_EQ(psu.hasVINUVFault(), false);
+    EXPECT_EQ(psu.hasCommFault(), true);
+    EXPECT_EQ(psu.hasVoutOVFault(), true);
+    EXPECT_EQ(psu.hasIoutOCFault(), true);
+    EXPECT_EQ(psu.hasVoutUVFault(), false);
+    EXPECT_EQ(psu.hasFanFault(), true);
+    EXPECT_EQ(psu.hasTempFault(), true);
+    EXPECT_EQ(psu.hasPgoodFault(), true);
+    EXPECT_EQ(psu.hasPSKillFault(), true);
+    EXPECT_EQ(psu.hasPS12VcsFault(), true);
+    EXPECT_EQ(psu.hasPSCS12VFault(), true);
+
+    // All faults cleared
+    expectations = {0};
+    setPMBusExpectations(mockPMBus, expectations);
+    // READ_VIN back in range.
+    EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
+        .Times(1)
+        .WillOnce(Return("206000"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.isPresent(), true);
@@ -1220,8 +1272,10 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("201300"));
-    // Went from below minimum to within range, expect CLEAR_FAULTS.
-    EXPECT_CALL(mockPMBus, read(READ_VIN, _, _)).Times(1).WillOnce(Return(3));
+    // Went from below minimum to within range, expect clearVinUVFault().
+    EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
+        .Times(1)
+        .WillOnce(Return(1));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
     EXPECT_EQ(psu.hasVINUVFault(), false);
