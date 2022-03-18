@@ -609,7 +609,7 @@ void PowerSupply::analyze()
                         "actualInputVoltage = {}",
                         shortName, actualInputVoltageOld, actualInputVoltage)
                         .c_str());
-                clearFaults();
+                clearVinUVFault();
             }
             else if (vinUVFault && (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
@@ -619,9 +619,9 @@ void PowerSupply::analyze()
                         shortName, vinUVFault, actualInputVoltage)
                         .c_str());
                 // Do we have a VIN_UV fault latched that can now be cleared
-                // due to voltage back in range? Attempt to clear all
-                // faults, re-check faults on next call.
-                clearFaults();
+                // due to voltage back in range? Attempt to clear the fault(s),
+                // re-check faults on next call.
+                clearVinUVFault();
             }
             else if (std::abs(actualInputVoltageOld - actualInputVoltage) > 1.0)
             {
@@ -672,6 +672,19 @@ void PowerSupply::onOffConfig(uint8_t data)
     }
 }
 
+void PowerSupply::clearVinUVFault()
+{
+    // Read in1_lcrit_alarm to clear bits 3 and 4 of STATUS_INPUT.
+    // The fault bits in STAUTS_INPUT roll-up to STATUS_WORD. Clearing those
+    // bits in STATUS_INPUT should result in the corresponding STATUS_WORD bits
+    // also clearing.
+    //
+    // Do not care about return value. Should be 1 if active, 0 if not.
+    static_cast<void>(
+        pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+    vinUVFault = 0;
+}
+
 void PowerSupply::clearFaults()
 {
     log<level::DEBUG>(
@@ -691,6 +704,7 @@ void PowerSupply::clearFaults()
 
         try
         {
+            clearVinUVFault();
             static_cast<void>(
                 pmbusIntf->read("in1_input", phosphor::pmbus::Type::Hwmon));
         }

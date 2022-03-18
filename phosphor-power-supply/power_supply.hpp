@@ -126,6 +126,22 @@ class PowerSupply
     }
 
     /**
+     * @brief Function to specifically clear VIN_UV/OFF fault(s).
+     *
+     * The PMBus HWMON device driver has various alarm "files" to read out of
+     * sysfs. Reading those files will indicate if various alarms are active or
+     * not, and then specifically clear those faults that go with that alarm.
+     *
+     * The VIN_UV fault, indicated in STATUS_INPUT, goes with in1_lcrit_alarm.
+     * When a VIN_UV fault occurs, the "Unit Off For Insufficient Input Voltage"
+     * may also be active. Reading in1_lcrit_alarm should clear both fault bits,
+     * resulting in the corresponding fault bits in STATUS_WORD also clearing.
+     *
+     * See: https://www.kernel.org/doc/html/latest/hwmon/pmbus.html
+     */
+    void clearVinUVFault();
+
+    /**
      * Write PMBus CLEAR_FAULTS
      *
      * This function will be called in various situations in order to clear
