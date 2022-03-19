@@ -129,6 +129,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c753578_3d6ef3a3",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:29:22Z",
+      "side": 1,
+      "message": "Maybe something like:\n\nGiven a full inventory path, returns the last node of the path as the \"short name\"",
+      "parentUuid": "2be32f39_5c7cd7db",
+      "range": {
+        "startLine": 663,
+        "startChar": 43,
+        "endLine": 663,
+        "endChar": 49
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1e2fcf6_c9338f19",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
