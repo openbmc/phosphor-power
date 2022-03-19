@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5257a2_40a5c0dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "Good enhancement.  Some minor comments.",
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d92601_595b8332",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "Delete commented out lines?",
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09396887_04146418",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "Don\u0027t need to pass data members as parameters to methods.",
+      "range": {
+        "startLine": 178,
+        "startChar": 43,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c48fea_900d3d13",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "Nit: I know not part of this commit, but should be \"supply\u0027s\" right?  e.g. possessive not plural",
+      "range": {
+        "startLine": 366,
+        "startChar": 33,
+        "endLine": 366,
+        "endChar": 42
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f96a288a_bba5a931",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "This sentence is kind of confusing and can probably just be deleted.",
+      "range": {
+        "startLine": 657,
+        "startChar": 22,
+        "endLine": 658,
+        "endChar": 57
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be32f39_5c7cd7db",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "returns?  Create kind of sounds like creating an object (e.g. unique_ptr) that the caller takes ownership of.\n\nAlso, need to add @param and @return in doxygen",
+      "range": {
+        "startLine": 663,
+        "startChar": 43,
+        "endLine": 663,
+        "endChar": 49
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e2fcf6_c9338f19",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "Nit: invPath (camel case)?",
+      "range": {
+        "startLine": 665,
+        "startChar": 49,
+        "endLine": 665,
+        "endChar": 56
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c51b5fa_c970333b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-19T20:27:04Z",
+      "side": 1,
+      "message": "What if invPath doesn\u0027t contain a slash?  I think find_last_of() returns npos.  Not sure if passing npos+1 to substr() is supported.  Might want to set shortName to invPath if lastSlashPos \u003d\u003d npos or (lastSlashPos+1) \u003d\u003d size() (e.g. nothing after the slash).",
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
