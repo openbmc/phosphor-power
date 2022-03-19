@@ -375,6 +375,14 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the short name (last part of inventoryPath).
+     */
+    const std::string& getShortName() const
+    {
+        return shortName;
+    }
+
+    /**
      * @brief Returns the firmware revision version read from the power supply
      */
     const std::string& getFWVersion() const
@@ -641,6 +649,24 @@ class PowerSupply
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
     std::string inventoryPath;
+
+    /**
+     * @brief Store the short name to avoid string processing.
+     *
+     * The short name will be something like powersupply1, the last part of the
+     * inventoryPath. Sometimes, tracing or otherwise using the complete
+     * inventoryPath will be overkill, mainly in tracing.
+     */
+    std::string shortName;
+
+    /**
+     * @brief Given a full inventory path, create shortName
+     */
+    std::string findShortName(const std::string& invpath)
+    {
+        auto const lastSlashPos = invpath.find_last_of('/');
+        return invpath.substr(lastSlashPos + 1);
+    }
 
     /**
      * @brief The libgpiod object for monitoring PSU presence
