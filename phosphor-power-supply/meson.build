@@ -13,6 +13,7 @@ phosphor_psu_monitor = executable(
         sdeventplus,
         fmt,
         libgpiodcxx,
+        phosphor_dbus_interfaces,
     ],
     include_directories: '..',
     install: true,
