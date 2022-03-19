@@ -363,7 +363,7 @@ class PowerSupply
     }
 
     /**
-     * @brief Returns this power supplies inventory path.
+     * @brief Returns this power supply's inventory path.
      *
      * This can be used for error call outs.
      * Example:
@@ -372,6 +372,14 @@ class PowerSupply
     const std::string& getInventoryPath() const
     {
         return inventoryPath;
+    }
+
+    /**
+     * @brief Returns the short name (last part of inventoryPath).
+     */
+    const std::string& getShortName() const
+    {
+        return shortName;
     }
 
     /**
@@ -641,6 +649,24 @@ class PowerSupply
      * @brief D-Bus path to use for this power supply's inventory status.
      **/
     std::string inventoryPath;
+
+    /**
+     * @brief Store the short name to avoid string processing.
+     *
+     * The short name will be something like powersupply1, the last part of the
+     * inventoryPath.
+     */
+    std::string shortName;
+
+    /**
+     * @brief Given a full inventory path, returns the last node of the path as
+     * the "short name"
+     */
+    std::string findShortName(const std::string& invPath)
+    {
+        auto const lastSlashPos = invPath.find_last_of('/');
+        return invPath.substr(lastSlashPos + 1);
+    }
 
     /**
      * @brief The libgpiod object for monitoring PSU presence

@@ -39,7 +39,10 @@ PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
         throw std::invalid_argument{"Invalid empty gpioLineName"};
     }
 
-    log<level::DEBUG>(fmt::format("gpioLineName: {}", gpioLineName).c_str());
+    shortName = findShortName(inventoryPath);
+
+    log<level::DEBUG>(
+        fmt::format("{} gpioLineName: {}", shortName, gpioLineName).c_str());
     presenceGPIO = createGPIO(gpioLineName);
 
     std::ostringstream ss;
@@ -165,14 +168,12 @@ void PowerSupply::updatePresenceGPIO()
 
     if (presentOld != present)
     {
-        log<level::DEBUG>(
-            fmt::format("presentOld: {} present: {}", presentOld, present)
-                .c_str());
+        log<level::DEBUG>(fmt::format("{} presentOld: {} present: {}",
+                                      shortName, presentOld, present)
+                              .c_str());
 
         auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
-        auto const lastSlashPos = invpath.find_last_of('/');
-        std::string prettyName = invpath.substr(lastSlashPos + 1);
-        setPresence(bus, invpath, present, prettyName);
+        setPresence(bus, invpath, present, shortName);
         updateInventory();
 
         // Need Functional to already be correct before calling this
@@ -201,10 +202,11 @@ void PowerSupply::analyzeCMLFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("CML fault: STATUS_WORD = {:#06x}, "
-                                            "STATUS_CML = {:#02x}",
-                                            statusWord, statusCML)
-                                    .c_str());
+                log<level::ERR>(
+                    fmt::format("{} CML fault: STATUS_WORD = {:#06x}, "
+                                "STATUS_CML = {:#02x}",
+                                shortName, statusWord, statusCML)
+                        .c_str());
             }
             cmlFault++;
         }
@@ -224,10 +226,10 @@ void PowerSupply::analyzeInputFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("INPUT fault: STATUS_WORD = {:#06x}, "
+                    fmt::format("{} INPUT fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_INPUT = {:#04x}",
-                                statusWord, statusMFR, statusInput)
+                                shortName, statusWord, statusMFR, statusInput)
                         .c_str());
             }
             inputFault++;
@@ -240,10 +242,10 @@ void PowerSupply::analyzeInputFault()
         !(statusWord & phosphor::pmbus::status_word::INPUT_FAULT_WARN))
     {
         log<level::INFO>(
-            fmt::format("INPUT fault cleared: STATUS_WORD = {:#06x}, "
+            fmt::format("{} INPUT fault cleared: STATUS_WORD = {:#06x}, "
                         "STATUS_MFR_SPECIFIC = {:#04x}, "
                         "STATUS_INPUT = {:#04x}",
-                        statusWord, statusMFR, statusInput)
+                        shortName, statusWord, statusMFR, statusInput)
                 .c_str());
         inputFault = 0;
     }
@@ -258,10 +260,11 @@ void PowerSupply::analyzeVoutOVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
-                                "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                "STATUS_VOUT = {:#02x}",
-                                statusWord, statusMFR, statusVout)
+                    fmt::format(
+                        "{} VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
+                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                        "STATUS_VOUT = {:#02x}",
+                        shortName, statusWord, statusMFR, statusVout)
                         .c_str());
             }
 
@@ -283,10 +286,10 @@ void PowerSupply::analyzeIoutOCFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("IOUT fault: STATUS_WORD = {:#06x}, "
+                    fmt::format("{} IOUT fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_IOUT = {:#04x}",
-                                statusWord, statusMFR, statusIout)
+                                shortName, statusWord, statusMFR, statusIout)
                         .c_str());
             }
 
@@ -309,10 +312,11 @@ void PowerSupply::analyzeVoutUVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
-                                "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                "STATUS_VOUT = {:#04x}",
-                                statusWord, statusMFR, statusVout)
+                    fmt::format(
+                        "{} VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
+                        "STATUS_MFR_SPECIFIC = {:#04x}, "
+                        "STATUS_VOUT = {:#04x}",
+                        shortName, statusWord, statusMFR, statusVout)
                         .c_str());
             }
             voutUVFault++;
@@ -332,11 +336,12 @@ void PowerSupply::analyzeFanFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("FANS fault/warning: "
+                log<level::ERR>(fmt::format("{} FANS fault/warning: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}, "
                                             "STATUS_FANS_1_2 = {:#04x}",
-                                            statusWord, statusMFR, statusFans12)
+                                            shortName, statusWord, statusMFR,
+                                            statusFans12)
                                     .c_str());
             }
             fanFault++;
@@ -356,11 +361,11 @@ void PowerSupply::analyzeTemperatureFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("TEMPERATURE fault/warning: "
+                log<level::ERR>(fmt::format("{} TEMPERATURE fault/warning: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}, "
                                             "STATUS_TEMPERATURE = {:#04x}",
-                                            statusWord, statusMFR,
+                                            shortName, statusWord, statusMFR,
                                             statusTemperature)
                                     .c_str());
             }
@@ -382,10 +387,10 @@ void PowerSupply::analyzePgoodFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("PGOOD fault: "
+                log<level::ERR>(fmt::format("{} PGOOD fault: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}",
-                                            statusWord, statusMFR)
+                                            shortName, statusWord, statusMFR)
                                     .c_str());
             }
             pgoodFault++;
@@ -448,10 +453,10 @@ void PowerSupply::analyzeMFRFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("MFR fault: "
+                log<level::ERR>(fmt::format("{} MFR fault: "
                                             "STATUS_WORD = {:#06x} "
                                             "STATUS_MFR_SPECIFIC = {:#04x}",
-                                            statusWord, statusMFR)
+                                            shortName, statusWord, statusMFR)
                                     .c_str());
             }
             mfrFault++;
@@ -474,10 +479,10 @@ void PowerSupply::analyzeVinUVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("VIN_UV fault: STATUS_WORD = {:#06x}, "
+                    fmt::format("{} VIN_UV fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_INPUT = {:#04x}",
-                                statusWord, statusMFR, statusInput)
+                                shortName, statusWord, statusMFR, statusInput)
                         .c_str());
             }
             vinUVFault++;
@@ -488,10 +493,10 @@ void PowerSupply::analyzeVinUVFault()
         !(statusWord & phosphor::pmbus::status_word::VIN_UV_FAULT))
     {
         log<level::INFO>(
-            fmt::format("VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
+            fmt::format("{} VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
                         "STATUS_MFR_SPECIFIC = {:#04x}, "
                         "STATUS_INPUT = {:#04x}",
-                        statusWord, statusMFR, statusInput)
+                        shortName, statusWord, statusMFR, statusInput)
                 .c_str());
         vinUVFault = 0;
     }
@@ -552,8 +557,8 @@ void PowerSupply::analyze()
             {
                 if (statusWord != statusWordOld)
                 {
-                    log<level::INFO>(fmt::format("STATUS_WORD = {:#06x} {}",
-                                                 statusWord, inventoryPath)
+                    log<level::INFO>(fmt::format("{} STATUS_WORD = {:#06x}",
+                                                 shortName, statusWord)
                                          .c_str());
                 }
 
@@ -562,24 +567,24 @@ void PowerSupply::analyze()
                 {
                     log<level::INFO>(
                         fmt::format(
-                            "INPUT fault cleared: STATUS_WORD = {:#06x}",
-                            statusWord)
+                            "{} INPUT fault cleared: STATUS_WORD = {:#06x}",
+                            shortName, statusWord)
                             .c_str());
                 }
 
                 if (vinUVFault)
                 {
                     log<level::INFO>(
-                        fmt::format("VIN_UV cleared: STATUS_WORD = {:#06x}",
-                                    statusWord)
+                        fmt::format("{} VIN_UV cleared: STATUS_WORD = {:#06x}",
+                                    shortName, statusWord)
                             .c_str());
                 }
 
                 if (pgoodFault > 0)
                 {
-                    log<level::INFO>(fmt::format("pgoodFault cleared path: {}",
-                                                 inventoryPath)
-                                         .c_str());
+                    log<level::INFO>(
+                        fmt::format("{} pgoodFault cleared", shortName)
+                            .c_str());
                 }
 
                 clearFaultFlags();
@@ -597,8 +602,8 @@ void PowerSupply::analyze()
             {
                 log<level::INFO>(
                     fmt::format(
-                        "READ_VIN back in range: inputVoltageOld = {} inputVoltage = {}",
-                        inputVoltageOld, inputVoltage)
+                        "{} READ_VIN back in range: inputVoltageOld = {} inputVoltage = {}",
+                        shortName, inputVoltageOld, inputVoltage)
                         .c_str());
                 clearFaults();
             }
@@ -944,7 +949,8 @@ void PowerSupply::getInputVoltage(double& actualInputVoltage,
         catch (const std::exception& e)
         {
             log<level::ERR>(
-                fmt::format("READ_VIN read error: {}", e.what()).c_str());
+                fmt::format("{} READ_VIN read error: {}", shortName, e.what())
+                    .c_str());
         }
     }
 }
