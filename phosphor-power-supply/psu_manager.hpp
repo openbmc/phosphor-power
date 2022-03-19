@@ -6,8 +6,10 @@
 
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/State/Decorator/PowerSystemInputs/server.hpp>
 
 struct sys_properties
 {
@@ -22,6 +24,11 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
+using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
+    Decorator::server::PowerSystemInputs;
+using PowerSystemInputsObject =
+    sdbusplus::server::object_t<PowerSystemInputsInterface>;
+
 // Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
 constexpr auto validationTimeout = std::chrono::seconds(10);
@@ -32,7 +39,7 @@ constexpr auto validationTimeout = std::chrono::seconds(10);
  * This class will create an object used to manage and monitor a list of power
  * supply devices.
  */
-class PSUManager
+class PSUManager : public PowerSystemInputsObject
 {
   public:
     PSUManager() = delete;
