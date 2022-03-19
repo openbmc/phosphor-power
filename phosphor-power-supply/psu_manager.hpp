@@ -6,8 +6,10 @@
 
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/State/Decorator/PowerSystemInputs/server.hpp>
 
 struct sys_properties
 {
@@ -21,6 +23,11 @@ using namespace phosphor::logging;
 
 namespace phosphor::power::manager
 {
+
+using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
+    Decorator::server::PowerSystemInputs;
+using PSUManagerObject =
+    sdbusplus::server::object_t<PowerSystemInputsInterface>;
 
 // Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
@@ -319,6 +326,11 @@ class PSUManager
      * @brief The libgpiod object for setting the power supply config
      */
     std::unique_ptr<GPIOInterfaceBase> powerConfigGPIO = nullptr;
+
+    /**
+     * sdbusplus object_t class that implements D-Bus interfaces
+     */
+    std::unique_ptr<PSUManagerObject> dbusObject{};
 };
 
 } // namespace phosphor::power::manager

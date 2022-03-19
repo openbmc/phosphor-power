@@ -12,6 +12,9 @@ using namespace phosphor::logging;
 
 namespace phosphor::power::manager
 {
+constexpr auto managerBusName = "xyz.openbmc_project.Power.PSUMonitor";
+constexpr auto managerObjPath =
+    "/xyz/openbmc_project/power/power_supplies/chassis0/psus";
 
 constexpr auto IBMCFFPSInterface =
     "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
@@ -38,6 +41,12 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
                   std::placeholders::_1));
     getPSUConfiguration();
     getSystemProperties();
+
+    dbusObject = std::make_unique<PSUManagerObject>(bus, managerObjPath);
+
+    // Request the bus name before the analyze() function, which is the one that
+    // determines the brownout condition and sets the status d-bus property.
+    bus.request_name(managerBusName);
 
     using namespace sdeventplus;
     auto interval = std::chrono::milliseconds(1000);
