@@ -6,8 +6,11 @@
 
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <sdbusplus/server/manager.hpp>
+#include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/State/Decorator/PowerSystemInputs/server.hpp>
 
 struct sys_properties
 {
@@ -22,9 +25,26 @@ using namespace phosphor::logging;
 namespace phosphor::power::manager
 {
 
+using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
+    Decorator::server::PowerSystemInputs;
+using PowerSystemInputsObject =
+    sdbusplus::server::object_t<PowerSystemInputsInterface>;
+
 // Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
 constexpr auto validationTimeout = std::chrono::seconds(10);
+
+/**
+ * @class PowerSystemInputs
+ * @brief A concrete implementation for the PowerSystemInputs interface.
+ */
+class PowerSystemInputs : public PowerSystemInputsObject
+{
+  public:
+    PowerSystemInputs(sdbusplus::bus::bus& bus, const std::string& path) :
+        PowerSystemInputsObject(bus, path.c_str())
+    {}
+};
 
 /**
  * @class PSUManager
@@ -319,6 +339,16 @@ class PSUManager
      * @brief The libgpiod object for setting the power supply config
      */
     std::unique_ptr<GPIOInterfaceBase> powerConfigGPIO = nullptr;
+
+    /**
+     * @brief PowerSystemInputs object
+     */
+    PowerSystemInputs powerSystemInputs;
+
+    /**
+     * @brief Implement the org.freedesktop.DBus.ObjectManager interface
+     */
+    sdbusplus::server::manager_t objectManager;
 };
 
 } // namespace phosphor::power::manager
