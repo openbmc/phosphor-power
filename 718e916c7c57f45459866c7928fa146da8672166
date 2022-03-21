@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a31d5a_62e09da6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-21T20:28:50Z",
+      "side": 1,
+      "message": "Depends on P-D-I change: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-dbus-interfaces/+/51712",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
