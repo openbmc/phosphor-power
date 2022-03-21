@@ -33,6 +33,24 @@
       "message": "Offline comment from Shawn is to remove \"manager\" from the path because this interface does not currently have any operations on the manager, like initialization, it just depicts the state of the power supplies on the chassis.",
       "revId": "718e916c7c57f45459866c7928fa146da8672166",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717eb294_9d6bdce6",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-21T21:07:38Z",
+      "side": 1,
+      "message": "After further offline discussion, the path that makes the most sense:\n/xyz/openbmc_project/power/power_supplies/chassis0/psus",
+      "parentUuid": "6f1770bb_766e3131",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
