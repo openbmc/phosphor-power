@@ -22,6 +22,47 @@
       },
       "revId": "69e536d9d17f3619e65639ca7e8e3ea82cdd0a57",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffbb0ee5_864e5210",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-21T18:33:03Z",
+      "side": 1,
+      "message": "Oaky.",
+      "parentUuid": "1d399f44_98fdd51b",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "69e536d9d17f3619e65639ca7e8e3ea82cdd0a57",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71af17d1_21f298a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-21T18:33:03Z",
+      "side": 1,
+      "message": "Of course I failed to consider gtest and busted it:\n\t[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 19 tests from 1 test suite ran. (18033 ms total)\n\t[  PASSED  ] 1 test.\n\t[  FAILED  ] 18 tests, listed below:\n\t[  FAILED  ] PowerSupplyTests.Analyze\n\t[  FAILED  ] PowerSupplyTests.OnOffConfig\n\t[  FAILED  ] PowerSupplyTests.ClearFaults\n\t[  FAILED  ] PowerSupplyTests.UpdateInventory\n\t[  FAILED  ] PowerSupplyTests.IsPresent\n\t[  FAILED  ] PowerSupplyTests.IsFaulted\n\t[  FAILED  ] PowerSupplyTests.HasInputFault\n\t[  FAILED  ] PowerSupplyTests.HasMFRFault\n\t[  FAILED  ] PowerSupplyTests.HasVINUVFault\n\t[  FAILED  ] PowerSupplyTests.HasVoutOVFault\n\t[  FAILED  ] PowerSupplyTests.HasIoutOCFault\n\t[  FAILED  ] PowerSupplyTests.HasVoutUVFault\n\t[  FAILED  ] PowerSupplyTests.HasFanFault\n\t[  FAILED  ] PowerSupplyTests.HasTempFault\n\t[  FAILED  ] PowerSupplyTests.HasPgoodFault\n\t[  FAILED  ] PowerSupplyTests.HasPSKillFault\n\t[  FAILED  ] PowerSupplyTests.HasPS12VcsFault\n\t[  FAILED  ] PowerSupplyTests.HasPSCS12VFault\n\n\t18 FAILED TESTS",
+      "revId": "69e536d9d17f3619e65639ca7e8e3ea82cdd0a57",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
