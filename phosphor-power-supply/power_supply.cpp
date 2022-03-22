@@ -94,6 +94,7 @@ void PowerSupply::bindOrUnbindDriver(bool present)
 
     if (present)
     {
+        std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
         log<level::INFO>(
             fmt::format("Binding device driver. path: {} device: {}",
                         path.string(), bindDevice)
@@ -182,7 +183,6 @@ void PowerSupply::updatePresenceGPIO()
 
         if (present)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
             bindOrUnbindDriver(present);
             pmbusIntf->findHwmonDir();
             onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
