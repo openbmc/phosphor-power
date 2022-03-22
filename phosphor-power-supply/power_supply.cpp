@@ -175,22 +175,26 @@ void PowerSupply::updatePresenceGPIO()
                               .c_str());
 
         auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+
+        bindOrUnbindDriver(present);
+        if (present)
+        {
+            // If the power supply was present, then missing, and present again,
+            // the hwmon path may have changed. We will need the correct/updated
+            // path before any reads or writes are attempted.
+            pmbusIntf->findHwmonDir();
+        }
+
         setPresence(bus, invpath, present, shortName);
         updateInventory();
 
-        // Need Functional to already be correct before calling this
+        // Need Functional to already be correct before calling this.
         checkAvailability();
 
         if (present)
         {
-            bindOrUnbindDriver(present);
-            pmbusIntf->findHwmonDir();
             onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
             clearFaults();
-        }
-        else
-        {
-            bindOrUnbindDriver(present);
         }
     }
 }
