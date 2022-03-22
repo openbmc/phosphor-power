@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e21f4ab_d77e7859",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T21:02:51Z",
+      "side": 1,
+      "message": "Should this be PSUMonitor or PowerSupplies, since there are other Power apps that also do monitoring?\n\nThe regulators app claims the bus name\n  xyz.openbmc_project.Power.Regulators",
+      "range": {
+        "startLine": 18,
+        "startChar": 30,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eddcb978_32bb035a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T21:02:51Z",
+      "side": 1,
+      "message": "Need to change to\n/xyz/openbmc_project/power/powersupplies/chassis0/psus\n?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 64
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c3a31d5a_62e09da6",
@@ -43,6 +89,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00e4272d_7991535a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T21:02:51Z",
+      "side": 1,
+      "message": "Should this be PSUMonitor or PowerSupplies, since there are other Power apps that also do monitoring?\n\nThe regulators app claims the bus name\n  xyz.openbmc_project.Power.Regulators",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f1770bb_766e3131",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -78,6 +147,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3196e7c9_92d33446",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T21:02:51Z",
+      "side": 1,
+      "message": "Are you doing this in a separate commit?",
+      "parentUuid": "717eb294_9d6bdce6",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e05cc3d5_4833d60d",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -106,6 +193,24 @@
       "writtenOn": "2022-03-22T18:29:17Z",
       "side": 1,
       "message": "it might be more appropriate to just make this a private member on the Manager class since it\u0027s such a small part of the class\u0027s functionality?",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4681d5_5cac1c39",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T21:02:51Z",
+      "side": 1,
+      "message": "I agree.  For an example of a class that contains a D-Bus server object, see phosphor-regulators/src/dbus_sensor.hpp",
+      "parentUuid": "c85abce1_0e9e84b6",
       "revId": "718e916c7c57f45459866c7928fa146da8672166",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
