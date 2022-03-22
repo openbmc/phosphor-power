@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3387d34d_3ad9d310",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-22T19:52:08Z",
+      "side": 1,
+      "message": "Yes, if the issue exists in multiple places it could be fixed in a separate commit.\n\nThere are a few issues with passing data members as parameters, such as:\n* Makes the code confusing.  What is the value of parameter shortName vs. data member shortName?  Why do both exist?\n* The parameter hides the data member in the method.\n\nThere are a few cases where it can make sense, but in general I think it is something to be avoided.",
+      "parentUuid": "729f984f_8d6a2a38",
+      "range": {
+        "startLine": 178,
+        "startChar": 43,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6c48fea_900d3d13",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
