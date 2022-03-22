@@ -168,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4edd5ca5_f9f366c4",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-03-22T20:39:34Z",
+      "side": 1,
+      "message": "https://github.com/openbmc/phosphor-power/issues/9",
+      "parentUuid": "3387d34d_3ad9d310",
+      "range": {
+        "startLine": 178,
+        "startChar": 43,
+        "endLine": 178,
+        "endChar": 52
+      },
+      "revId": "5a7705270c48fee6ee4d9fe356c119b61b205a9c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6c48fea_900d3d13",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 2
