@@ -33,6 +33,29 @@
       "message": "That p-d-i change merged, I think that missing caused the CI failure:\nFAILED: phosphor-power-supply/phosphor-psu-monitor.p/psu_manager.cpp.o \nc++ -Iphosphor-power-supply/phosphor-psu-monitor.p -Iphosphor-power-supply -I../phosphor-power-supply -I. -I.. -I/usr/local/include -fdiagnostics-color\u003dnever -D_FILE_OFFSET_BITS\u003d64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Wpedantic -Werror -std\u003dc++20 -g -DBOOST_ASIO_DISABLE_THREADS -DBOOST_ALL_NO_LIB -DBOOST_SYSTEM_NO_DEPRECATED -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_COROUTINES_NO_DEPRECATION_WARNING -MD -MQ phosphor-power-supply/phosphor-psu-monitor.p/psu_manager.cpp.o -MF phosphor-power-supply/phosphor-psu-monitor.p/psu_manager.cpp.o.d -o phosphor-power-supply/phosphor-psu-monitor.p/psu_manager.cpp.o -c ../phosphor-power-supply/psu_manager.cpp\nIn file included from ../phosphor-power-supply/psu_manager.cpp:1:\n../phosphor-power-supply/psu_manager.hpp:12:10: fatal error: xyz/openbmc_project/State/Decorator/PowerSystemInputs/server.hpp: No such file or directory\n   12 | #include \u003cxyz/openbmc_project/State/Decorator/PowerSystemInputs/server.hpp\u003e\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\ncompilation terminated.",
       "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab88aff_29be9286",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-03-22T18:39:50Z",
+      "side": 1,
+      "message": "it might be interesting to see notPresentCount and hasVINUVFaultCount in the additionaldata.",
+      "range": {
+        "startLine": 873,
+        "startChar": 38,
+        "endLine": 873,
+        "endChar": 54
+      },
+      "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
