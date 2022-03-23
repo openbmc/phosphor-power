@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf06053_8e4ed08a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:28:56Z",
+      "side": 1,
+      "message": "Yeah, the recipe finally got merged: https://gerrit.openbmc-project.xyz/c/openbmc/openbmc/+/52228",
+      "parentUuid": "b55d6f37_52d882e5",
+      "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ab88aff_29be9286",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-03-22T18:39:50Z",
       "side": 1,
       "message": "it might be interesting to see notPresentCount and hasVINUVFaultCount in the additionaldata.",
+      "range": {
+        "startLine": 873,
+        "startChar": 38,
+        "endLine": 873,
+        "endChar": 54
+      },
+      "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38305540_2cf24edc",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:28:56Z",
+      "side": 1,
+      "message": "Ack, let me make the change.",
+      "parentUuid": "5ab88aff_29be9286",
       "range": {
         "startLine": 873,
         "startChar": 38,
