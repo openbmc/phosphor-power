@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d6d568_8dd3defd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "Done. Yeah makes sense, changed to PSUMonitor.",
+      "parentUuid": "7e21f4ab_d77e7859",
+      "range": {
+        "startLine": 18,
+        "startChar": 30,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eddcb978_32bb035a",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-22T21:02:51Z",
       "side": 1,
       "message": "Need to change to\n/xyz/openbmc_project/power/powersupplies/chassis0/psus\n?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 64
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f9151d2_78364658",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "Done. Yep.",
+      "parentUuid": "eddcb978_32bb035a",
       "range": {
         "startLine": 19,
         "startChar": 4,
@@ -110,6 +158,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7cbaad6_855649d7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "Done. Makes sense, changed to PSUMonitor.",
+      "parentUuid": "00e4272d_7991535a",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f1770bb_766e3131",
@@ -163,6 +235,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb00ac7f_02856b44",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "Done. Updated.",
+      "parentUuid": "3196e7c9_92d33446",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e05cc3d5_4833d60d",
@@ -176,6 +266,24 @@
       "writtenOn": "2022-03-22T18:29:17Z",
       "side": 1,
       "message": "do you also need an object manager?",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e6d499_f8090f20",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "I think all the pieces are in place.",
+      "parentUuid": "e05cc3d5_4833d60d",
       "revId": "718e916c7c57f45459866c7928fa146da8672166",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -211,6 +319,24 @@
       "side": 1,
       "message": "I agree.  For an example of a class that contains a D-Bus server object, see phosphor-regulators/src/dbus_sensor.hpp",
       "parentUuid": "c85abce1_0e9e84b6",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "452cfd30_9dfc0d69",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T15:26:48Z",
+      "side": 1,
+      "message": "Done. Makes sense.",
+      "parentUuid": "6e4681d5_5cac1c39",
       "revId": "718e916c7c57f45459866c7928fa146da8672166",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
