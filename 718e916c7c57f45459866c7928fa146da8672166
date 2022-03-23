@@ -290,6 +290,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a80d4b22_97729f7a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-03-23T20:30:20Z",
+      "side": 1,
+      "message": "By that you mean it doesn\u0027t need an object manager interface?",
+      "parentUuid": "92e6d499_f8090f20",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c85abce1_0e9e84b6",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
