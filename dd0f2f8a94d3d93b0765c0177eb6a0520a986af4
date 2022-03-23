@@ -98,6 +98,30 @@
       },
       "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29f9832_00894c9c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T18:54:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38305540_2cf24edc",
+      "range": {
+        "startLine": 873,
+        "startChar": 38,
+        "endLine": 873,
+        "endChar": 54
+      },
+      "revId": "dd0f2f8a94d3d93b0765c0177eb6a0520a986af4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
