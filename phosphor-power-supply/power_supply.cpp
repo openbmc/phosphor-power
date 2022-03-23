@@ -885,7 +885,7 @@ void PowerSupply::updateInventory()
                                 std::vector<uint8_t>(pn.begin(), pn.end()));
         ipzvpdVINIProps.emplace("FN",
                                 std::vector<uint8_t>(fn.begin(), fn.end()));
-        std::string header_sn = header + sn + '\0';
+        std::string header_sn = header + sn;
         ipzvpdVINIProps.emplace(
             "SN", std::vector<uint8_t>(header_sn.begin(), header_sn.end()));
         std::string description = "IBM PS";
