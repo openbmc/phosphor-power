@@ -306,6 +306,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af66745_78518f4d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T21:48:35Z",
+      "side": 1,
+      "message": "Done. Ah not sure what i was thinking, yes added an object manager. Verified that a org.freedesktop.DBus.ObjectManager interface exists.\n\nroot@p10bmc:~# busctl --no-pager introspect xyz.openbmc_project.Power.PSUMonitor /xyz/openbmc_project/power/power_supplies/chassis0/psus\nNAME                                                  TYPE      SIGNATURE  RESULT/VALUE                             FLAGS\norg.freedesktop.DBus.Introspectable                   interface -          -                                        -\n.Introspect                                           method    -          s                                        -\norg.freedesktop.DBus.ObjectManager                    interface -          -                                        -\n.GetManagedObjects                                    method    -          a{oa{sa{sv}}}                            -\n.InterfacesAdded                                      signal    oa{sa{sv}} -                                        -\n.InterfacesRemoved                                    signal    oas        -                                        -",
+      "parentUuid": "a80d4b22_97729f7a",
+      "revId": "718e916c7c57f45459866c7928fa146da8672166",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c85abce1_0e9e84b6",

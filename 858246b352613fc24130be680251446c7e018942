@@ -16,6 +16,24 @@
       "message": "doesn\u0027t look like this needs to be a unique_ptr?  can just make it a normal object on the class and create it after bus(bus) above?",
       "revId": "858246b352613fc24130be680251446c7e018942",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30de7b14_ed16cbf3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-23T21:48:35Z",
+      "side": 1,
+      "message": "Done. Makes sense.",
+      "parentUuid": "306d7750_5365ebd3",
+      "revId": "858246b352613fc24130be680251446c7e018942",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
