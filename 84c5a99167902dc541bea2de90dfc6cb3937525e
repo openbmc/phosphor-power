@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75f1637a_3afdc5b9",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T16:18:11Z",
+      "side": 1,
+      "message": "What happens if the brownout starts while the chassis is powered on and then continues?\n\n* Chassis on\n* Brownout detected\n* Chassis powers down\n* Chassis is now off, so brownout property is cleared by the code above (but it is still happening)\n\nDoes chassis state manager notice the interface states the brownout is over and do an auto-power-restart?\n\nI think PSUManager::analyze() runs when the chassis is powered off, but the brownout stuff is within an \"if (powerOn)\" branch.  So it won\u0027t set the property back to brownout status I think.  Even if it did, would there be a race condition there?\n\nSorry, I might be in the weeds here.  Just trying to understand.",
+      "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
