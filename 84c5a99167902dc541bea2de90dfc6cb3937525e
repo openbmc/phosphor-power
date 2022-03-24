@@ -88,6 +88,24 @@
       "parentUuid": "e78d171a_2b08d6b1",
       "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a52f14_ce934a52",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-24T18:30:29Z",
+      "side": 1,
+      "message": "The conversation above makes sense. Will remove this clearBrownout() from the power off path. Then change the following logic in PSUManager::analyze() from:\n\nPSUManager::analyze() \n{\n    PowerSupply::analyze()\n    if (powerOn)\n    {\n        if Brownout: setBrownout()\n        else: clearBrownout()\n\n        analyze faults\n    }\n}\n\nto:\n\nPSUManager::analyze() \n{\n    PowerSupply::analyze()\n    if Brownout: if powerOn: setBrownout()\n    else: clearBrownout()\n\n    if (powerOn)\n    {\n        analyze faults\n    }\n}",
+      "parentUuid": "70e843a5_553daecd",
+      "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
