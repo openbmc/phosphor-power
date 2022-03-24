@@ -106,6 +106,24 @@
       "parentUuid": "70e843a5_553daecd",
       "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3e1c28c_be3391aa",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T18:56:03Z",
+      "side": 1,
+      "message": "If a brownout is occurring, and the power is off, we\u0027d still want to update the D-Bus interface right?  Based on Derek\u0027s comment, maybe we wouldn\u0027t log the error though if power is off (not sure on this part).\n\nIf so maybe it is\n  if Brownout: setBrownout()\n  else: clearBrownout()\n\nand in setBrownout, it always sets the interface property but only logs an error if the power is on?",
+      "parentUuid": "32a52f14_ce934a52",
+      "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
