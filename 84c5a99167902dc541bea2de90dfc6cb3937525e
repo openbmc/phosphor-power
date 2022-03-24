@@ -34,6 +34,24 @@
       "parentUuid": "75f1637a_3afdc5b9",
       "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "223ce409_729fb9de",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T16:42:26Z",
+      "side": 1,
+      "message": "Yes, I wasn\u0027t sure why we\u0027d unconditionally clear the brownout property when the chassis power changes to off.\n\nAlso, I think the analyze() function runs when chassis power is off.  However, it looks like (I think) the code that sets or clears the brownout property is within a branch that only runs if chassis power is on.\n\nI realize it is probably tricky, in that while the chassis is off maybe there are some errors we don\u0027t want to log.  Maybe they are replacing PSUs and certain conditions that are bad when the chassis is powered on are OK when it is powered off.\n\nHowever, I\u0027d think (?) we\u0027d want to maintain the brownout property.  Otherwise how does chassis state manager know when a brownout stops or starts while the chassis is off.\n\nSorry if I am just not up to speed on the design.  I haven\u0027t followed this as closely as others.",
+      "parentUuid": "b0799fe3_8d7f690d",
+      "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
