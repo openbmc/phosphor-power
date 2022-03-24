@@ -30,7 +30,8 @@ constexpr auto supportedConfIntf =
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus), powerSystemInputs(bus, powerSystemsInputsObjPath),
-    objectManager(bus, objectManagerObjPath)
+    objectManager(bus, objectManagerObjPath),
+    historyManager(bus, "/org/open_power/sensors")
 {
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
@@ -180,12 +181,14 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             return;
         }
 
+        constexpr auto driver = "ibm-cffps";
         log<level::DEBUG>(
-            fmt::format("make PowerSupply bus: {} addr: {} presline: {}",
-                        *i2cbus, *i2caddr, presline)
+            fmt::format(
+                "make PowerSupply bus: {} addr: {} driver: {} presline: {}",
+                *i2cbus, *i2caddr, driver, presline)
                 .c_str());
         auto psu = std::make_unique<PowerSupply>(bus, invpath, *i2cbus,
-                                                 *i2caddr, presline);
+                                                 *i2caddr, driver, presline);
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes

@@ -1,6 +1,7 @@
 test('phosphor-power-supply-tests',
      executable('phosphor-power-supply-tests',
                 'power_supply_tests.cpp',
+                '../record_manager.cpp',
                 'mock.cpp',
                 dependencies: [
                     gmock,
