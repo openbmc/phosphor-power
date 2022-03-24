@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f469e41_db467426",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T16:00:23Z",
+      "side": 1,
+      "message": "Would it make sense to define separate object paths for \"mounting\" the ObjectManager interface vs. the PowerSystemInputs interface?\n\nIt seems like PowerSystemInputs needs to be on a \"leaf\" node:\n  /xyz/openbmc_project/power/power_supplies/chassis0/psus\n\nHowever, ObjectManager is normally mounted on the \"root\" of the object tree being provided by the application:\n  /xyz/openbmc_project/power/power_supplies\n\nThat way you can get all the objects managed by this app in one call to GetManagedObjects.  It seems like that would be handy if in the future we add psu0, psu1, and chassis1 to the tree.\n\nIf that is true, maybe we need something like:\n  objectManagerObjPath \u003d \"/xyz/openbmc_project/power/power_supplies\";\n  powerSystemsInputsObjPath \u003d \"/xyz/openbmc_project/power/power_supplies/chassis0/psus\";",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca51cfe_23d66da3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T16:00:23Z",
+      "side": 1,
+      "message": "When is the chassis state manager going to read this property to decide whether to auto-power-restart?\n\nIf it is waiting for the bus name to be requested, then it will read the property value right now before you\u0027ve had a chance to set it.\n\nIf it is waiting for InterfacesAdded, I think that will be emitted before this line.  It gets emitted when the object path is created, which will happen on line 30 when the powerSystemInputs object is created.  Note that since the bus name hasn\u0027t been claimed yet at that point, the InterfacesAdded signal will be emitted from the initial numeric bus name vs. the string managerBusName.\n\nIf it is waiting for PropertiesChanged from this managerBusName, then there are two possibilities:\n* When analyze runs, it changes the property.  Then a PropertiesChanged signal will be sent.\n* When analyze runs, the property stays the same.  Then no PropertiesChanged signal will be sent.\n\nNot saying you have a problem.  Just asking how it works.",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd92b6f4_ce359ef3",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-24T16:00:23Z",
+      "side": 1,
+      "message": "Should add the following since you are using manager?\n  #include \u003csdbusplus/server/manager.hpp\u003e",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
