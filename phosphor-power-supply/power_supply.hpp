@@ -1,6 +1,9 @@
 #pragma once
 
+#include "average.hpp"
+#include "maximum.hpp"
 #include "pmbus.hpp"
+#include "record_manager.hpp"
 #include "types.hpp"
 #include "util.hpp"
 #include "utility.hpp"
@@ -55,12 +58,13 @@ class PowerSupply
      * @param[in] invpath - String for inventory path to use
      * @param[in] i2cbus - The bus number this power supply is on
      * @param[in] i2caddr - The 16-bit I2C address of the power supply
+     * @param[in] driver - i2c driver name for power supply
      * @param[in] gpioLineName - The gpio-line-name to read for presence. See
      * https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
      */
     PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
                 std::uint8_t i2cbus, const std::uint16_t i2caddr,
-                const std::string& gpioLineName);
+                const std::string& driver, const std::string& gpioLineName);
 
     phosphor::pmbus::PMBusBase& getPMBus()
     {
@@ -448,6 +452,16 @@ class PowerSupply
      */
     void checkAvailability();
 
+    /**
+     * @brief Setup for INPUT_HISTORY command.
+     */
+    void setupInputHistory();
+
+    bool getInputHistory() const
+    {
+        return inputHistory;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
@@ -794,6 +808,49 @@ class PowerSupply
      * @param[in]  msg - Data associated with Present add signal
      **/
     void inventoryAdded(sdbusplus::message::message& msg);
+
+    /**
+     * @brief Reads the most recent input history record from the power supply
+     * and updates the average and maximum properties in D-Bus if there is a new
+     * reading available.
+     *
+     * This will still run every time analyze() is called so code can post new
+     * data as soon as possible and the timestamp will more accurately reflect
+     * the correct time.
+     *
+     * D-Bus is only updated if there is a change and the oldest record will be
+     * pruned if the property already contains the max number of records.
+     */
+    void updateHistory();
+
+    /**
+     * @brief Set to true if INPUT_HISTORY command supported.
+     *
+     * Not all power supplies will support the INPUT_HISTORY command. The IBM
+     * Common Form Factor power supplies do support this command.
+     */
+    bool inputHistory{false};
+
+    /**
+     * @brief Class that manages the input power history records.
+     **/
+    std::unique_ptr<history::RecordManager> recordManager;
+
+    /**
+     * @brief The D-Bus object for the average input power history
+     **/
+    std::unique_ptr<history::Average> average;
+
+    /**
+     * @brief The D-Bus object for the maximum input power history
+     **/
+    std::unique_ptr<history::Maximum> maximum;
+
+    /**
+     * @brief The base D-Bus object path to use for the average and maximum
+     * objects.
+     **/
+    std::string historyObjectPath;
 };
 
 } // namespace phosphor::power::psu

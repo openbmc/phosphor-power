@@ -364,6 +364,11 @@ class PSUManager
      * @brief Implement the org.freedesktop.DBus.ObjectManager interface
      */
     sdbusplus::server::manager_t objectManager;
+
+    /**
+     * @brief Object manager for PSU INPUT_HISTORY
+     */
+    sdbusplus::server::manager_t historyManager;
 };
 
 } // namespace phosphor::power::manager
