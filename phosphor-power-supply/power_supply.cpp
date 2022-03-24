@@ -26,9 +26,10 @@ using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
                          std::uint8_t i2cbus, std::uint16_t i2caddr,
+                         const std::string& driver,
                          const std::string& gpioLineName) :
     bus(bus),
-    inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/ibm-cffps")
+    inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/" + driver)
 {
     if (inventoryPath.empty())
     {
@@ -85,6 +86,8 @@ PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
         updatePresence();
         updateInventory();
     }
+
+    setupInputHistory();
 }
 
 void PowerSupply::bindOrUnbindDriver(bool present)
@@ -635,6 +638,11 @@ void PowerSupply::analyze()
             }
 
             checkAvailability();
+
+            if (inputHistory)
+            {
+                updateHistory();
+            }
         }
         catch (const ReadFailure& e)
         {
@@ -951,6 +959,75 @@ void PowerSupply::updateInventory()
                     .c_str());
         }
 #endif
+    }
+}
+
+void PowerSupply::setupInputHistory()
+{
+    if (bindPath.string().find("ibm-cffps") != std::string::npos)
+    {
+        // Do not enable input history for power supplies that are missing?
+        if (present)
+        {
+            inputHistory = true;
+            log<level::INFO>(
+                fmt::format("{} INPUT_HISTORY enabled", shortName).c_str());
+
+            std::string name{fmt::format("{}_input_power", shortName)};
+
+            historyObjectPath =
+                std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
+
+            recordManager = std::make_unique<history::RecordManager>(120);
+
+            auto avgPath = historyObjectPath + '/' + history::Average::name;
+            auto maxPath = historyObjectPath + '/' + history::Maximum::name;
+
+            // Systemd object manager - up in PSUManager.
+            // Separate instance for history items.
+            average = std::make_unique<history::Average>(bus, avgPath);
+            maximum = std::make_unique<history::Maximum>(bus, maxPath);
+
+            log<level::INFO>(fmt::format("{} historyObjectPath: {}", shortName,
+                                         historyObjectPath)
+                                 .c_str());
+            log<level::INFO>(
+                fmt::format("{} avgPath: {}", shortName, avgPath).c_str());
+            log<level::INFO>(
+                fmt::format("{} maxPath: {}", shortName, maxPath).c_str());
+        }
+    }
+    else
+    {
+        inputHistory = false;
+    }
+}
+
+void PowerSupply::updateHistory()
+{
+    if (!recordManager)
+    {
+        // Not enabled
+        return;
+    }
+
+    if (!present)
+    {
+        // Cannot read when not present
+        return;
+    }
+
+    // Read just the most recent average/max record
+    auto data =
+        pmbusIntf->readBinary(INPUT_HISTORY, pmbus::Type::HwmonDeviceDebug,
+                              history::RecordManager::RAW_RECORD_SIZE);
+
+    // Update D-Bus only if something changed (a new record ID, or cleared out)
+    auto changed = recordManager->add(data);
+    if (changed)
+    {
+        average->values(std::move(recordManager->getAverageRecords()));
+        maximum->values(std::move(recordManager->getMaximumRecords()));
     }
 }
 

@@ -168,6 +168,8 @@ class PMBusBase
     virtual uint64_t read(const std::string& name, Type type,
                           bool errTrace = true) = 0;
     virtual std::string readString(const std::string& name, Type type) = 0;
+    virtual std::vector<uint8_t> readBinary(const std::string& name, Type type,
+                                            size_t length) = 0;
     virtual void writeBinary(const std::string& name, std::vector<uint8_t> data,
                              Type type) = 0;
     virtual void findHwmonDir() = 0;
