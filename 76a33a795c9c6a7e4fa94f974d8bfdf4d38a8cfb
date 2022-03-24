@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afada9a_b97acc45",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-24T19:21:38Z",
+      "side": 1,
+      "message": "Done. Yeah that makes sense.",
+      "parentUuid": "6f469e41_db467426",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ca51cfe_23d66da3",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bf5b521_1c67f155",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-24T19:21:38Z",
+      "side": 1,
+      "message": "Good point. Andrew just asked to add a dependency to the psu monitor service to start before the chassis state manager. The chassis manager will then subscribe to properties changed and read the current value (default to Good). Once the analyze() function runs, if it changes the property, the chassis manager would get the notification. I added the dependency in the commit on top of this one that creates the set/clear brownout functions.\nIf the chassis manager was subscribing to InterfacesAdded too, we may need to change to request_name before the PSUMonitor class is created in the main file.",
+      "parentUuid": "8ca51cfe_23d66da3",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd92b6f4_ce359ef3",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 5
@@ -48,6 +84,24 @@
       "writtenOn": "2022-03-24T16:00:23Z",
       "side": 1,
       "message": "Should add the following since you are using manager?\n  #include \u003csdbusplus/server/manager.hpp\u003e",
+      "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c556976_216ae1f2",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-24T19:21:38Z",
+      "side": 1,
+      "message": "Done. Yeah we should.",
+      "parentUuid": "dd92b6f4_ce359ef3",
       "revId": "76a33a795c9c6a7e4fa94f974d8bfdf4d38a8cfb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
