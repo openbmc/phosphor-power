@@ -24,6 +24,9 @@ class MockedPMBus : public PMBusBase
                 (override));
     MOCK_METHOD(std::string, readString, (const std::string& name, Type type),
                 (override));
+    MOCK_METHOD(std::vector<uint8_t>, readBinary,
+                (const std::string& name, Type type, size_t length),
+                (override));
     MOCK_METHOD(void, writeBinary,
                 (const std::string& name, std::vector<uint8_t> data, Type type),
                 (override));
