@@ -52,6 +52,24 @@
       "parentUuid": "b0799fe3_8d7f690d",
       "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e78d171a_2b08d6b1",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-03-24T18:15:40Z",
+      "side": 1,
+      "message": "You are correct.  We don\u0027t want to log AC loss errors at standby, but we do want to maintain/provide accurate status at all times (Brandon has confirmed we do monitor the psu at standby).  \n\nBrandon shouldn\u0027t this clearBrownout() be done when we see the psu input voltage come back into range (in analyze())?",
+      "parentUuid": "223ce409_729fb9de",
+      "revId": "84c5a99167902dc541bea2de90dfc6cb3937525e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
