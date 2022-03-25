@@ -22,6 +22,30 @@
       },
       "revId": "d97aa516d69ca8a0d3880af4b1d775e62a6dd5dd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39560244_7e0a7500",
+        "filename": "phosphor-regulators/config_files/ibm_rainier.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-25T13:17:49Z",
+      "side": 1,
+      "message": "OK I\u0027ll let Ruby know.  Thanks!",
+      "parentUuid": "167caf67_7ec717e6",
+      "range": {
+        "startLine": 513,
+        "startChar": 83,
+        "endLine": 513,
+        "endChar": 87
+      },
+      "revId": "d97aa516d69ca8a0d3880af4b1d775e62a6dd5dd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
