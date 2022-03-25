@@ -33,6 +33,23 @@
       "message": "I think there may still be a brief window for a race condition, but I\u0027m not sure.  Would be interested in Andrew\u0027s and Brandon\u0027s thoughts.\n\nIf there is a window, it could probably be addressed in a separate commit.\n\nRight now I think this is the sequence and the small window, but I might be misunderstanding something:\nStep 1. systemd starts this application\n  * Executable is loaded and starts running\nStep 2. systemd starts the chassis state manager application\n\nStep ?? (1.5?, 2.5?)\n  * PSUManager::PSUManager() creates the D-Bus object that implements PowerSystemInputs.  \n  * The initial/default state of the Status property is Good.\n  * The bus name is claimed.\n  * PSUManager::PSUManager() finishes\n  * We are back in main() and enter the event loop\n  * One second later analyze() is run and looks for a brownout\n\nI don\u0027t think we know how many of the Step ?? bullets are performed before Step 2 happens.\n\nYou can add two more lines to the service file to cause systemd to wait until you claim the bus name before considering your app started.  That would take you through the first 3 bullets of Step ??.  But the rest could potentially still happen after chassis state manager has started?                                                                                                                                              ",
       "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6a02666_5bd900c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-25T18:42:23Z",
+      "side": 1,
+      "message": "What could make this more complex is that we don\u0027t necessarily get all the power supply information when this application starts, right?  Is there uncertainty whether EntityManager will have published all the PSU information at the time the PSU app starts?  If so, we may need to wait for both EM events and subsequent polls to really know if we have a brownout?\n\nOne option would be to set Status to a value like Unknown until we have determined whether a brownout is happening.  There doesn\u0027t seem to be an Unknown value right now; only Good or Fault.  Would it be safer to set to Fault until we know the actual status?  I\u0027m not sure if that would have other unintended consequences.",
+      "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
