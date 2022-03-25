@@ -50,6 +50,24 @@
       "message": "What could make this more complex is that we don\u0027t necessarily get all the power supply information when this application starts, right?  Is there uncertainty whether EntityManager will have published all the PSU information at the time the PSU app starts?  If so, we may need to wait for both EM events and subsequent polls to really know if we have a brownout?\n\nOne option would be to set Status to a value like Unknown until we have determined whether a brownout is happening.  There doesn\u0027t seem to be an Unknown value right now; only Good or Fault.  Would it be safer to set to Fault until we know the actual status?  I\u0027m not sure if that would have other unintended consequences.",
       "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "399a1d64_b0e6cdd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-03-25T19:38:38Z",
+      "side": 1,
+      "message": "Good catch, perhaps we need to add a delay for the ps info to show up in EM like we did for checking for valid ps configuration?\n\nI\u0027m ok if this is done as a separate commit as well... I\u0027ll +1 this as I think a brownout that doesn\u0027t result in the BMC resetting will be handled fine... the problematic scenario is the BMC coming out of reset during/into a brownout, which is less likely.",
+      "parentUuid": "d6a02666_5bd900c1",
+      "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
