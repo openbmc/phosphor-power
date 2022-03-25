@@ -16,6 +16,23 @@
       "message": "Andrew asked for the dependency in the review comment for the state manager changes: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-state-manager/+/52283",
       "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c24747d8_96d1a2ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-03-25T18:35:07Z",
+      "side": 1,
+      "message": "I think there may still be a brief window for a race condition, but I\u0027m not sure.  Would be interested in Andrew\u0027s and Brandon\u0027s thoughts.\n\nIf there is a window, it could probably be addressed in a separate commit.\n\nRight now I think this is the sequence and the small window, but I might be misunderstanding something:\nStep 1. systemd starts this application\n  * Executable is loaded and starts running\nStep 2. systemd starts the chassis state manager application\n\nStep ?? (1.5?, 2.5?)\n  * PSUManager::PSUManager() creates the D-Bus object that implements PowerSystemInputs.  \n  * The initial/default state of the Status property is Good.\n  * The bus name is claimed.\n  * PSUManager::PSUManager() finishes\n  * We are back in main() and enter the event loop\n  * One second later analyze() is run and looks for a brownout\n\nI don\u0027t think we know how many of the Step ?? bullets are performed before Step 2 happens.\n\nYou can add two more lines to the service file to cause systemd to wait until you claim the bus name before considering your app started.  That would take you through the first 3 bullets of Step ??.  But the rest could potentially still happen after chassis state manager has started?                                                                                                                                              ",
+      "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
