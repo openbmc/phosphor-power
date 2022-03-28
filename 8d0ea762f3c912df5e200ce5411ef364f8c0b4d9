@@ -68,6 +68,24 @@
       "parentUuid": "d6a02666_5bd900c1",
       "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26b20934_85486589",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2022-03-28T18:42:12Z",
+      "side": 1,
+      "message": "Talking with Andrew, we discussed that it\u0027s better to not delay the power on in order to wait for all the EM information to be available in d-bus. This may cause the power on to be stopped due to the system not having enough power (handled by a separate phosphor-power logic), and eventually the property would be set to Fault (brownout) and the autorestart would stop. This means there\u0027s a risk of \"thrashing\" the system (interrupting the power ons) but theoretically it\u0027s limited to once, maybe twice, until the property is set. We can discuss further and address any concerns in a follow-up commit.",
+      "parentUuid": "399a1d64_b0e6cdd1",
+      "revId": "8d0ea762f3c912df5e200ce5411ef364f8c0b4d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
