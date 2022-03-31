@@ -284,18 +284,18 @@ TEST_F(DeviceTests, ClearErrorHistory)
                   std::move(phaseFaultDetection),
                   std::move(rails)};
 
-    // Create lambda that sets MockServices expectations.  The lambda allows us
-    // to set the same expectations twice without duplicate code.
+    // Create lambda that sets MockServices expectations.  The lambda allows
+    // us to set expectations multiple times without duplicate code.
     auto setExpectations = [](MockServices& services) {
         // Set Journal service expectations:
-        // - 3 error messages for D-Bus errors
-        // - 3 error messages for inability to monitor sensors
+        // - 6 error messages for D-Bus errors
+        // - 6 error messages for inability to monitor sensors
         // - 2 error messages for the N phase fault
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logError(std::vector<std::string>{"DBus Error"}))
-            .Times(3);
+            .Times(6);
         EXPECT_CALL(journal, logError("Unable to monitor sensors for rail vdd"))
-            .Times(3);
+            .Times(6);
         EXPECT_CALL(
             journal,
             logError("n phase fault detected in regulator reg2: count=1"))
@@ -313,19 +313,19 @@ TEST_F(DeviceTests, ClearErrorHistory)
         EXPECT_CALL(errorLogging, logPhaseFault).Times(1);
 
         // Set Sensors service expections:
-        // - startRail() and endRail() called 5 times
+        // - startRail() and endRail() called 10 times
         MockSensors& sensors = services.getMockSensors();
-        EXPECT_CALL(sensors, startRail).Times(5);
-        EXPECT_CALL(sensors, endRail).Times(5);
+        EXPECT_CALL(sensors, startRail).Times(10);
+        EXPECT_CALL(sensors, endRail).Times(10);
     };
 
-    // Monitor sensors and detect phase faults 5 times.  Verify errors logged.
+    // Monitor sensors and detect phase faults 10 times.  Verify errors logged.
     {
         // Create mock services.  Set expectations via lambda.
         MockServices services{};
         setExpectations(services);
 
-        for (int i = 1; i <= 5; ++i)
+        for (int i = 1; i <= 10; ++i)
         {
             device.monitorSensors(services, *system, *chassis);
             device.detectPhaseFaults(services, *system, *chassis);
@@ -335,14 +335,14 @@ TEST_F(DeviceTests, ClearErrorHistory)
     // Clear error history
     device.clearErrorHistory();
 
-    // Monitor sensors and detect phase faults 5 more times.  Verify errors
+    // Monitor sensors and detect phase faults 10 more times.  Verify errors
     // logged again.
     {
         // Create mock services.  Set expectations via lambda.
         MockServices services{};
         setExpectations(services);
 
-        for (int i = 1; i <= 5; ++i)
+        for (int i = 1; i <= 10; ++i)
         {
             device.monitorSensors(services, *system, *chassis);
             device.detectPhaseFaults(services, *system, *chassis);

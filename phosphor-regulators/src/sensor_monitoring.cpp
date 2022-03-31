@@ -31,6 +31,15 @@
 namespace phosphor::power::regulators
 {
 
+/**
+ * Maximum number of consecutive errors before an error log entry is created.
+ * This provides "de-glitching" to ignore transient hardware problems.
+ *
+ * Also the maximum number of consecutive errors that will be logged to the
+ * journal.
+ */
+constexpr unsigned short maxErrorCount{6};
+
 void SensorMonitoring::execute(Services& services, System& system,
                                Chassis& chassis, Device& device, Rail& rail)
 {
@@ -40,7 +49,6 @@ void SensorMonitoring::execute(Services& services, System& system,
                       chassis.getInventoryPath());
 
     // Read all sensors defined for this rail
-    bool errorOccurred{false};
     try
     {
         // Create ActionEnvironment
@@ -49,27 +57,32 @@ void SensorMonitoring::execute(Services& services, System& system,
 
         // Execute the actions
         action_utils::execute(actions, environment);
+
+        // Reset consecutive error count since sensors were read successfully
+        errorCount = 0;
     }
     catch (const std::exception& e)
     {
-        // Set flag to notify sensors service that an error occurred
-        errorOccurred = true;
-
-        // Log error messages in journal for the first 3 errors
-        if (++errorCount <= 3)
+        // If we haven't hit the maximum consecutive error count yet
+        if (errorCount < maxErrorCount)
         {
+            // Log error messages in journal
             services.getJournal().logError(exception_utils::getMessages(e));
             services.getJournal().logError(
                 "Unable to monitor sensors for rail " + rail.getID());
-        }
 
-        // Create error log entry if this type hasn't already been logged
-        error_logging_utils::logError(std::current_exception(),
-                                      Entry::Level::Warning, services,
-                                      errorHistory);
+            // Increment error count.  If now at max, create error log entry.
+            if (++errorCount >= maxErrorCount)
+            {
+                error_logging_utils::logError(std::current_exception(),
+                                              Entry::Level::Warning, services,
+                                              errorHistory);
+            }
+        }
     }
 
     // Notify sensors service that monitoring has ended for this rail
+    bool errorOccurred = (errorCount > 0);
     sensors.endRail(errorOccurred);
 }
 

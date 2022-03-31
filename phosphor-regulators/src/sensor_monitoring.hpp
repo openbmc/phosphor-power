@@ -117,9 +117,9 @@ class SensorMonitoring
     ErrorHistory errorHistory{};
 
     /**
-     * Number of errors that have occurred.
+     * Number of consecutive errors that have occurred.
      */
-    unsigned int errorCount{0};
+    unsigned short errorCount{0};
 };
 
 } // namespace phosphor::power::regulators

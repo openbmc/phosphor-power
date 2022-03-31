@@ -166,40 +166,51 @@ TEST(SystemTests, ClearErrorHistory)
     chassisVec.emplace_back(std::move(chassis));
     System system{std::move(rules), std::move(chassisVec)};
 
-    // Create mock services
-    MockServices services{};
+    // Create lambda that sets MockServices expectations.  The lambda allows
+    // us to set expectations multiple times without duplicate code.
+    auto setExpectations = [](MockServices& services) {
+        // Expect Sensors service to be called 10 times
+        MockSensors& sensors = services.getMockSensors();
+        EXPECT_CALL(sensors, startRail).Times(10);
+        EXPECT_CALL(sensors, setValue).Times(0);
+        EXPECT_CALL(sensors, endRail).Times(10);
 
-    // Expect Sensors service to be called 5+5=10 times
-    MockSensors& sensors = services.getMockSensors();
-    EXPECT_CALL(sensors, startRail).Times(10);
-    EXPECT_CALL(sensors, setValue).Times(0);
-    EXPECT_CALL(sensors, endRail).Times(10);
+        // Expect Journal service to be called 6 times to log error messages
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
+            .Times(6);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(6);
 
-    // Expect Journal service to be called 3+3=6 times to log error messages
-    MockJournal& journal = services.getMockJournal();
-    EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
-        .Times(6);
-    EXPECT_CALL(journal, logError(A<const std::string&>())).Times(6);
+        // Expect ErrorLogging service to be called once to log a DBus error
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logDBusError).Times(1);
+    };
 
-    // Expect ErrorLogging service to be called 1+1=2 times to log a DBus error
-    MockErrorLogging& errorLogging = services.getMockErrorLogging();
-    EXPECT_CALL(errorLogging, logDBusError).Times(2);
-
-    // Monitor sensors 5 times.  Should fail every time, write to journal 3
-    // times, and log one error.
-    for (int i = 1; i <= 5; ++i)
+    // Monitor sensors 10 times.  Verify errors logged.
     {
-        system.monitorSensors(services);
+        // Create mock services.  Set expectations via lambda.
+        MockServices services{};
+        setExpectations(services);
+
+        for (int i = 1; i <= 10; ++i)
+        {
+            system.monitorSensors(services);
+        }
     }
 
     // Clear error history
     system.clearErrorHistory();
 
-    // Monitor sensors 5 times again.  Should fail every time, write to journal
-    // 3 times, and log one error.
-    for (int i = 1; i <= 5; ++i)
+    // Monitor sensors 10 more times.  Verify errors logged again.
     {
-        system.monitorSensors(services);
+        // Create mock services.  Set expectations via lambda.
+        MockServices services{};
+        setExpectations(services);
+
+        for (int i = 1; i <= 10; ++i)
+        {
+            system.monitorSensors(services);
+        }
     }
 }
 

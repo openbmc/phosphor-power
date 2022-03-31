@@ -152,31 +152,32 @@ TEST(SensorMonitoringTests, ClearErrorHistory)
         .WillRepeatedly(Throw(
             i2c::I2CException{"Failed to read word data", "/dev/i2c-1", 0x70}));
 
-    // Perform sensor monitoring 10 times to set error history data members
-    {
-        // Create mock services
-        MockServices services{};
-
-        // Set Sensors service expectations.  SensorMonitoring will be executed
-        // 10 times.
+    // Create lambda that sets MockServices expectations.  The lambda allows us
+    // to set expectations multiple times without duplicate code.
+    auto setExpectations = [](MockServices& services) {
+        // Expect Sensors service to be called 10 times
         MockSensors& sensors = services.getMockSensors();
         EXPECT_CALL(sensors, startRail).Times(10);
         EXPECT_CALL(sensors, setValue).Times(0);
         EXPECT_CALL(sensors, endRail(true)).Times(10);
 
-        // Set Journal service expectations.  SensorMonitoring should log error
-        // messages 3 times and then stop.
+        // Expect Journal service to be called 6 times to log error messages
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
-            .Times(3);
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(3);
+            .Times(6);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(6);
 
-        // Set ErrorLogging service expectations.  SensorMonitoring should log
-        // an error only once.
+        // Expect ErrorLogging service to be called once to log an I2C error
         MockErrorLogging& errorLogging = services.getMockErrorLogging();
         EXPECT_CALL(errorLogging, logI2CError).Times(1);
+    };
 
-        // Execute SensorMonitoring 10 times
+    // Call execute() 10 times to set error history data members
+    {
+        // Create mock services.  Set expectations via lambda.
+        MockServices services{};
+        setExpectations(services);
+
         for (int i = 1; i <= 10; ++i)
         {
             monitoring->execute(services, *system, *chassis, *device, *rail);
@@ -186,32 +187,16 @@ TEST(SensorMonitoringTests, ClearErrorHistory)
     // Clear error history
     monitoring->clearErrorHistory();
 
-    // Perform sensor monitoring one more time.  Should log errors again.
+    // Call execute() 10 more times.  Should log errors again.
     {
-        // Create mock services
+        // Create mock services.  Set expectations via lambda.
         MockServices services{};
+        setExpectations(services);
 
-        // Set Sensors service expectations.  SensorMonitoring will be executed
-        // 1 time.
-        MockSensors& sensors = services.getMockSensors();
-        EXPECT_CALL(sensors, startRail).Times(1);
-        EXPECT_CALL(sensors, setValue).Times(0);
-        EXPECT_CALL(sensors, endRail(true)).Times(1);
-
-        // Set Journal service expectations.  SensorMonitoring should log error
-        // messages 1 time.
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
-            .Times(1);
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(1);
-
-        // Set ErrorLogging server expectations.  SensorMonitoring should log an
-        // error.
-        MockErrorLogging& errorLogging = services.getMockErrorLogging();
-        EXPECT_CALL(errorLogging, logI2CError).Times(1);
-
-        // Execute SensorMonitoring
-        monitoring->execute(services, *system, *chassis, *device, *rail);
+        for (int i = 1; i <= 10; ++i)
+        {
+            monitoring->execute(services, *system, *chassis, *device, *rail);
+        }
     }
 }
 
@@ -279,53 +264,84 @@ TEST(SensorMonitoringTests, Execute)
         auto [system, chassis, device, i2cInterface, rail] =
             createParentObjects(std::unique_ptr<SensorMonitoring>{monitoring});
 
-        // Set I2CInterface expectations.  Should read register 0x8C 4 times.
-        EXPECT_CALL(*i2cInterface, isOpen)
-            .Times(4)
-            .WillRepeatedly(Return(true));
+        // Set I2CInterface expectations
+        EXPECT_CALL(*i2cInterface, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(*i2cInterface, read(TypedEq<uint8_t>(0x8C), A<uint16_t&>()))
-            .Times(4)
             .WillRepeatedly(Throw(i2c::I2CException{"Failed to read word data",
                                                     "/dev/i2c-1", 0x70}));
 
-        // Create mock services
-        MockServices services{};
+        // Create lambda that sets MockServices expectations.  The lambda allows
+        // us to set expectations multiple times without duplicate code.
+        auto setExpectations = [](MockServices& services, int executeCount,
+                                  int journalCount, int errorLogCount) {
+            // Set Sensors service expectations
+            MockSensors& sensors = services.getMockSensors();
+            EXPECT_CALL(
+                sensors,
+                startRail("vdd",
+                          "/xyz/openbmc_project/inventory/system/chassis/"
+                          "motherboard/reg2",
+                          "/xyz/openbmc_project/inventory/system/chassis"))
+                .Times(executeCount);
+            EXPECT_CALL(sensors, setValue).Times(0);
+            EXPECT_CALL(sensors, endRail(true)).Times(executeCount);
 
-        // Set Sensors service expectations.  SensorMonitoring will be executed
-        // 4 times, and all should fail.
-        MockSensors& sensors = services.getMockSensors();
-        EXPECT_CALL(sensors,
-                    startRail("vdd",
-                              "/xyz/openbmc_project/inventory/system/chassis/"
-                              "motherboard/reg2",
-                              "/xyz/openbmc_project/inventory/system/chassis"))
-            .Times(4);
-        EXPECT_CALL(sensors, setValue).Times(0);
-        EXPECT_CALL(sensors, endRail(true)).Times(4);
+            // Set Journal service expectations
+            MockJournal& journal = services.getMockJournal();
+            std::vector<std::string> expectedErrMessagesException{
+                "I2CException: Failed to read word data: bus /dev/i2c-1, addr 0x70",
+                "ActionError: pmbus_read_sensor: { type: iout, command: 0x8C, "
+                "format: linear_11 }"};
+            EXPECT_CALL(journal, logError(expectedErrMessagesException))
+                .Times(journalCount);
+            EXPECT_CALL(journal,
+                        logError("Unable to monitor sensors for rail vdd"))
+                .Times(journalCount);
 
-        // Set Journal service expectations.  SensorMonitoring should log error
-        // messages 3 times and then stop.
-        MockJournal& journal = services.getMockJournal();
-        std::vector<std::string> expectedErrMessagesException{
-            "I2CException: Failed to read word data: bus /dev/i2c-1, addr 0x70",
-            "ActionError: pmbus_read_sensor: { type: iout, command: 0x8C, "
-            "format: linear_11 }"};
-        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(3);
-        EXPECT_CALL(journal, logError("Unable to monitor sensors for rail vdd"))
-            .Times(3);
+            // Set ErrorLogging service expectations
+            MockErrorLogging& errorLogging = services.getMockErrorLogging();
+            EXPECT_CALL(errorLogging,
+                        logI2CError(Entry::Level::Warning, Ref(journal),
+                                    "/dev/i2c-1", 0x70, 0))
+                .Times(errorLogCount);
+        };
 
-        // Set ErrorLogging service expectations.  SensorMonitoring should log
-        // an error only once.
-        MockErrorLogging& errorLogging = services.getMockErrorLogging();
-        EXPECT_CALL(errorLogging,
-                    logI2CError(Entry::Level::Warning, Ref(journal),
-                                "/dev/i2c-1", 0x70, 0))
-            .Times(1);
-
-        // Execute SensorMonitoring 4 times
-        for (int i = 1; i <= 4; ++i)
+        // Call execute() 5 times.  Should log 5 journal messages and create 0
+        // error logs.
         {
+            // Create mock services.  Set expectations via lambda.
+            MockServices services{};
+            setExpectations(services, 5, 5, 0);
+
+            for (int i = 1; i <= 5; ++i)
+            {
+                monitoring->execute(services, *system, *chassis, *device,
+                                    *rail);
+            }
+        }
+
+        // Call execute() 1 more time.  Should log 1 journal message and create
+        // 1 error log.
+        {
+            // Create mock services.  Set expectations via lambda.
+            MockServices services{};
+            setExpectations(services, 1, 1, 1);
+
             monitoring->execute(services, *system, *chassis, *device, *rail);
+        }
+
+        // Call execute() 5 more times.  Should log 0 journal messages and
+        // create 0 error logs.
+        {
+            // Create mock services.  Set expectations via lambda.
+            MockServices services{};
+            setExpectations(services, 5, 0, 0);
+
+            for (int i = 1; i <= 5; ++i)
+            {
+                monitoring->execute(services, *system, *chassis, *device,
+                                    *rail);
+            }
         }
     }
 }
