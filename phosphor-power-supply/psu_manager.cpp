@@ -679,7 +679,7 @@ void PSUManager::analyze()
 
 void PSUManager::validateConfig()
 {
-    if (!runValidateConfig || supportedConfigs.empty())
+    if (!runValidateConfig || supportedConfigs.empty() || psus.empty())
     {
         return;
     }
