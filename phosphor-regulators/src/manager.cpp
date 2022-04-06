@@ -72,10 +72,9 @@ const fs::path standardConfigFileDir{"/usr/share/phosphor-regulators"};
 const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
-    ManagerObject{bus, managerObjPath, true}, bus{bus}, eventLoop{event},
-    services{bus}, phaseFaultTimer{event,
-                                   std::bind(&Manager::phaseFaultTimerExpired,
-                                             this)},
+    ManagerObject{bus, managerObjPath, ManagerObject::action::defer_emit},
+    bus{bus}, eventLoop{event}, services{bus},
+    phaseFaultTimer{event, std::bind(&Manager::phaseFaultTimerExpired, this)},
     sensorTimer{event, std::bind(&Manager::sensorTimerExpired, this)}
 {
     // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
