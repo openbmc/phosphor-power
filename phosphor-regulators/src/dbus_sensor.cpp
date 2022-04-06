@@ -85,9 +85,8 @@ DBusSensor::DBusSensor(sdbusplus::bus::bus& bus, const std::string& name,
 
     // Create the sdbusplus object that implements the D-Bus sensor interfaces.
     // Skip emitting D-Bus signals until the object has been fully created.
-    bool skipSignal{true};
-    dbusObject =
-        std::make_unique<DBusSensorObject>(bus, objectPath.c_str(), skipSignal);
+    dbusObject = std::make_unique<DBusSensorObject>(
+        bus, objectPath.c_str(), DBusSensorObject::action::defer_emit);
 
     // Set properties of the Value interface
     dbusObject->value(value, skipSignal);
