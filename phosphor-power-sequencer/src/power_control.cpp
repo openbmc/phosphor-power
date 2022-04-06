@@ -42,7 +42,7 @@ const std::string namePropertyName = "Name";
 
 PowerControl::PowerControl(sdbusplus::bus::bus& bus,
                            const sdeventplus::Event& event) :
-    PowerObject{bus, POWER_OBJ_PATH, true},
+    PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
     bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
     match{bus,
           sdbusplus::bus::match::rules::interfacesAdded() +
