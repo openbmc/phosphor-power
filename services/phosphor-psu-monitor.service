@@ -1,7 +1,7 @@
 [Unit]
 Description=Phosphor Power Supply Monitor
-Wants=mapper-wait@-xyz-openbmc_project-inventory-system.service
-After=mapper-wait@-xyz-openbmc_project-inventory-system.service
+Wants=mapper-wait@-xyz-openbmc_project-inventory.service
+After=mapper-wait@-xyz-openbmc_project-inventory.service
 Before=xyz.openbmc_project.State.Chassis.service
 
 [Service]
