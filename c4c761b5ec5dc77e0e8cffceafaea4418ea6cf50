@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43458bca_ad32bd64",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-04-13T15:48:35Z",
+      "side": 1,
+      "message": "How sure are you that rails.size() \u003d\u003d 24? Perhaps add an assert near line 365.",
+      "revId": "c4c761b5ec5dc77e0e8cffceafaea4418ea6cf50",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
