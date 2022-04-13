@@ -16,6 +16,24 @@
       "message": "How sure are you that rails.size() \u003d\u003d 24? Perhaps add an assert near line 365.",
       "revId": "c4c761b5ec5dc77e0e8cffceafaea4418ea6cf50",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc400d9f_62daec1a",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-04-13T21:42:22Z",
+      "side": 1,
+      "message": "Good question. To fail here we\u0027d need to be pgood failing on an unconfigured rail, which seems like more of a \"should not happen\" than a \"could not happen\". I don\u0027t need to add non-existent additional data, so I\u0027ll add a guard to not exceed the array size.",
+      "parentUuid": "43458bca_ad32bd64",
+      "revId": "c4c761b5ec5dc77e0e8cffceafaea4418ea6cf50",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
