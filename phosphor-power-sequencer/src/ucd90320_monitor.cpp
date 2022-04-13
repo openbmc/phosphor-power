@@ -366,33 +366,39 @@ void UCD90320Monitor::onFailureCheckRails(
         for (size_t page = 0; page < numberPages; page++)
         {
             auto statusVout = pmbusInterface.insertPageNum(STATUS_VOUT, page);
-            uint8_t vout = pmbusInterface.read(statusVout, Type::Debug);
-
-            // If any bits are on log them, though some are just warnings so
-            // they won't cause errors
-            if (vout)
+            if (pmbusInterface.exists(statusVout, Type::Debug))
             {
-                log<level::INFO>(
-                    fmt::format("STATUS_VOUT, page: {}, value: {:#04x}", page,
-                                vout)
-                        .c_str());
-            }
+                uint8_t vout = pmbusInterface.read(statusVout, Type::Debug);
 
-            // Log errors if any non-warning bits on
-            if (vout & ~status_vout::WARNING_MASK)
-            {
-                additionalData.emplace("STATUS_VOUT",
-                                       fmt::format("{:#04x}", vout));
-                additionalData.emplace("PAGE", fmt::format("{}", page));
-                additionalData.emplace("RAIL_NAME", rails[page]);
+                // If any bits are on log them, though some are just warnings so
+                // they won't cause errors
+                if (vout)
+                {
+                    log<level::INFO>(
+                        fmt::format("STATUS_VOUT, page: {}, value: {:#04x}",
+                                    page, vout)
+                            .c_str());
+                }
 
-                // Use power supply error if set and 12v rail has failed, else
-                // use voltage error
-                message =
-                    ((page == 0) && !powerSupplyError.empty())
-                        ? powerSupplyError
-                        : "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
-                return;
+                // Log errors if any non-warning bits on
+                if (vout & ~status_vout::WARNING_MASK)
+                {
+                    additionalData.emplace("STATUS_VOUT",
+                                           fmt::format("{:#04x}", vout));
+                    additionalData.emplace("PAGE", fmt::format("{}", page));
+                    if (page < rails.size())
+                    {
+                        additionalData.emplace("RAIL_NAME", rails[page]);
+                    }
+
+                    // Use power supply error if set and 12v rail has failed,
+                    // else use voltage error
+                    message =
+                        ((page == 0) && !powerSupplyError.empty())
+                            ? powerSupplyError
+                            : "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
+                    return;
+                }
             }
         }
     }
