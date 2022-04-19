@@ -69,6 +69,8 @@ class MockedGPIOInterface : public GPIOInterfaceBase
   public:
     MOCK_METHOD(int, read, (), (override));
     MOCK_METHOD(void, write, (int value, std::bitset<32> flags), (override));
+    MOCK_METHOD(void, toggleLowHigh, (const std::chrono::milliseconds& delay),
+                (override));
     MOCK_METHOD(std::string, getName, (), (const, override));
 };
 

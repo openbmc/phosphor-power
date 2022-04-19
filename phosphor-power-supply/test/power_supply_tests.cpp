@@ -1968,3 +1968,31 @@ TEST_F(PowerSupplyTests, UpdateHistory)
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
 }
+
+TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
+{
+    auto bus = sdbusplus::bus::new_default();
+    PowerSupply psu{bus,  PSUInventoryPath, 8,
+                    0x6f, "ibm-cffps",      PSUGPIOLineName};
+    EXPECT_EQ(psu.hasInputHistory(), false);
+    EXPECT_EQ(psu.isSyncHistoryRequired(), false);
+    MockedGPIOInterface* mockPresenceGPIO =
+        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+    // Always return 1 to indicate present.
+    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+    setMissingToPresentExpects(mockPMBus, mockedUtil);
+    PMBusExpectations expectations;
+    setPMBusExpectations(mockPMBus, expectations);
+    EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
+        .Times(1)
+        .WillRepeatedly(Return("205000"));
+    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
+    psu.analyze();
+    // The ibm-cffps power supply should support input history
+    EXPECT_EQ(psu.hasInputHistory(), true);
+    // Missing -> Present requires history sync
+    EXPECT_EQ(psu.isSyncHistoryRequired(), true);
+    psu.clearSyncHistoryRequired();
+    EXPECT_EQ(psu.isSyncHistoryRequired(), false);
+}
