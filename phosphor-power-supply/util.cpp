@@ -106,6 +106,13 @@ void GPIOInterface::write(int value, std::bitset<32> flags)
     }
 }
 
+void GPIOInterface::toggleLowHigh()
+{
+    auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
+    write(0, flags);
+    write(1, flags);
+}
+
 std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio)
 {
     return GPIOInterface::createGPIO(namedGpio);
