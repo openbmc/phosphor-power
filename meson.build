@@ -86,6 +86,8 @@ conf.set_quoted(
 conf.set_quoted(
     'INPUT_HISTORY_SENSOR_ROOT', get_option('input-history-sensor-root'))
 conf.set_quoted(
+    'INPUT_HISTORY_SYNC_GPIO', get_option('input-history-sync-gpio'))
+conf.set_quoted(
     'PSU_JSON_PATH', '/usr/share/phosphor-power/psu.json')
 conf.set(
     'SEQUENCER', sequencer_class)

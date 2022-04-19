@@ -106,6 +106,14 @@ void GPIOInterface::write(int value, std::bitset<32> flags)
     }
 }
 
+void GPIOInterface::toggleLowHigh(std::chrono::milliseconds& delay)
+{
+    auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
+    write(0, flags);
+    std::this_thread::sleep_for(delay);
+    write(1, flags);
+}
+
 std::unique_ptr<GPIOInterfaceBase> createGPIO(const std::string& namedGpio)
 {
     return GPIOInterface::createGPIO(namedGpio);

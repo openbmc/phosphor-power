@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "psu_manager.hpp"
 
 #include "utility.hpp"
@@ -27,6 +29,8 @@ constexpr auto presLineName = "NamedPresenceGpio";
 
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
+
+constexpr auto INPUT_HISTORY_SYNC_DELAY = 1100;
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus), powerSystemInputs(bus, powerSystemsInputsObjPath),
@@ -454,8 +458,38 @@ void PSUManager::createError(const std::string& faultName,
     }
 }
 
+void PSUManager::syncHistory()
+{
+    log<level::INFO>("Synchronize INPUT_HISTORY");
+
+    if (!syncHistoryGPIO)
+    {
+        syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
+    }
+    if (syncHistoryGPIO)
+    {
+        std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
+        syncHistoryGPIO->toggleLowHigh(delay);
+        for (auto& psu : psus)
+        {
+            psu->clearSyncHistoryRequired();
+        }
+    }
+
+    log<level::INFO>("Synchronize INPUT_HISTORY completed");
+}
+
 void PSUManager::analyze()
 {
+    auto syncHistoryRequired =
+        std::any_of(psus.begin(), psus.end(), [](const auto& psu) {
+            return psu->isSyncHistoryRequired();
+        });
+    if (syncHistoryRequired)
+    {
+        syncHistory();
+    }
+
     for (auto& psu : psus)
     {
         psu->analyze();

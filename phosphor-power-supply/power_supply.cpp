@@ -204,6 +204,10 @@ void PowerSupply::updatePresenceGPIO()
         {
             onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
             clearFaults();
+            // Indicate that the input history data and timestamps between all
+            // the power supplies that are present in the system need to be
+            // synchronized.
+            syncHistoryRequired = true;
         }
     }
 }
@@ -1001,6 +1005,7 @@ void PowerSupply::setupInputHistory()
                 log<level::DEBUG>(
                     fmt::format("{} avgPath: {}", shortName, avgPath).c_str());
             }
+
             if (!maximum)
             {
                 auto maxPath = historyObjectPath + '/' + history::Maximum::name;

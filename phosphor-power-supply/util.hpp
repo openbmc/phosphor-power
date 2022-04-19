@@ -11,6 +11,7 @@
 #include <phosphor-logging/log.hpp>
 
 #include <bitset>
+#include <chrono>
 
 namespace phosphor::power::psu
 {
@@ -258,6 +259,15 @@ class GPIOInterface : public GPIOInterfaceBase
      * @param[in] flags - Additional line request flags as defined in gpiod.hpp.
      */
     void write(int value, std::bitset<32> flags) override;
+
+    /**
+     * @brief Attempts to toggle (write) a GPIO low then high.
+     *
+     * Relies on write, so throws exception if line not found, etc.
+     *
+     * @param[in] delay - Milliseconds to delay betwen low/high toggle.
+     */
+    void toggleLowHigh(std::chrono::milliseconds& delay) override;
 
     /**
      * @brief Returns the name of the GPIO, if not empty.

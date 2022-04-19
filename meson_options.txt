@@ -9,6 +9,11 @@ option(
     description: 'The D-Bus power sensors namespace root.',
 )
 option(
+    'input-history-sync-gpio', type: 'string',
+    value: 'power-ffs-sync-history',
+    description: 'The GPIO line name for syncing input history data.',
+)
+option(
     'tests', type: 'feature', description: 'Build tests.',
 )
 option(
