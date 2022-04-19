@@ -453,6 +453,20 @@ class PowerSupply
     void checkAvailability();
 
     /**
+     * @brief Toggles the GPIO to sync power supply input history readings
+     *
+     * This GPIO is connected to all supplies.  This will clear the
+     * previous readings out of the supplies and restart them both at the
+     * same time zero and at record ID 0.  The supplies will return 0
+     * bytes of data for the input history command right after this until
+     * a new entry shows up.
+     *
+     * This will cause the code to delete all previous history data and
+     * start fresh.
+     */
+    void syncHistory();
+
+    /**
      * @brief Setup for INPUT_HISTORY command.
      */
     void setupInputHistory();
@@ -851,6 +865,11 @@ class PowerSupply
      * objects.
      **/
     std::string historyObjectPath;
+
+    /**
+     * @brief GPIO to toggle to 'sync' power supply input history.
+     */
+    std::unique_ptr<GPIOInterfaceBase> syncHistoryGPIO = nullptr;
 };
 
 } // namespace phosphor::power::psu
