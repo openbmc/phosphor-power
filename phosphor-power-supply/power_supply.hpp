@@ -480,6 +480,16 @@ class PowerSupply
         }
     }
 
+    bool isSyncHistoryRequired() const
+    {
+        return syncHistoryRequired;
+    }
+
+    void clearSyncHistoryRequired()
+    {
+        syncHistoryRequired = false;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
@@ -848,6 +858,8 @@ class PowerSupply
      * Common Form Factor power supplies do support this command.
      */
     bool inputHistorySupported{false};
+
+    bool syncHistoryRequired{false};
 
     /**
      * @brief Class that manages the input power history records.

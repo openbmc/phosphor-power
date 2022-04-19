@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "psu_manager.hpp"
 
 #include "utility.hpp"
@@ -454,8 +456,33 @@ void PSUManager::createError(const std::string& faultName,
     }
 }
 
+void PSUManager::syncHistory()
+{
+    if (!syncHistoryGPIO)
+    {
+        syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
+    }
+    if (syncHistoryGPIO)
+    {
+        syncHistoryGPIO->toggleLowHigh();
+        for (auto& psu : psus)
+        {
+            psu->clearSyncHistoryRequired();
+        }
+    }
+}
+
 void PSUManager::analyze()
 {
+    auto syncHistoryRequired =
+        std::any_of(psus.begin(), psus.end(), [](const auto& psu) {
+            return psu->isSyncHistoryRequired();
+        });
+    if (syncHistoryRequired)
+    {
+        syncHistory();
+    }
+
     for (auto& psu : psus)
     {
         psu->analyze();
