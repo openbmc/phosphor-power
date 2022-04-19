@@ -5,6 +5,7 @@
 #include <sdbusplus/bus/match.hpp>
 
 #include <bitset>
+#include <chrono>
 
 namespace phosphor::power::psu
 {
@@ -67,6 +68,7 @@ class GPIOInterfaceBase
 
     virtual int read() = 0;
     virtual void write(int value, std::bitset<32> flags) = 0;
+    virtual void toggleLowHigh(const std::chrono::milliseconds& delay) = 0;
     virtual std::string getName() const = 0;
 };
 

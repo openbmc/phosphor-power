@@ -488,6 +488,16 @@ class PowerSupply
         }
     }
 
+    bool isSyncHistoryRequired() const
+    {
+        return syncHistoryRequired;
+    }
+
+    void clearSyncHistoryRequired()
+    {
+        syncHistoryRequired = false;
+    }
+
   private:
     /** @brief systemd bus member */
     sdbusplus::bus::bus& bus;
@@ -856,6 +866,15 @@ class PowerSupply
      * Common Form Factor power supplies do support this command.
      */
     bool inputHistorySupported{false};
+
+    /**
+     * @brief Set to true when INPUT_HISTORY sync is required.
+     *
+     * A power supply will need to synchronize its INPUT_HISTORY data with the
+     * other power supplies installed in the system when it goes from missing to
+     * present.
+     */
+    bool syncHistoryRequired{false};
 
     /**
      * @brief Class that manages the input power history records.
