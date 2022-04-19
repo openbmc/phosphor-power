@@ -189,6 +189,9 @@ void PowerSupply::updatePresenceGPIO()
         }
 
         setPresence(bus, invpath, present, shortName);
+        // Sync up the input history data and timestamps between all the power
+        // supplies that are present in the system.
+        syncHistory();
         updateInventory();
 
         // Need Functional to already be correct before calling this.
@@ -962,6 +965,19 @@ void PowerSupply::updateInventory()
     }
 }
 
+void PowerSupply::syncHistory()
+{
+    if (syncHistoryGPIO)
+    {
+        syncHistoryGPIO->toggleLowHigh();
+    }
+    else
+    {
+        log<level::INFO>(
+            fmt::format("{} syncHistoryGPIO not setup", shortName).c_str());
+    }
+}
+
 void PowerSupply::setupInputHistory()
 {
     if (bindPath.string().find("ibm-cffps") != std::string::npos)
@@ -977,6 +993,8 @@ void PowerSupply::setupInputHistory()
 
             historyObjectPath =
                 std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
+
+            syncHistoryGPIO = createGPIO("power-ffs-sync-history");
 
             recordManager = std::make_unique<history::RecordManager>(120);
 
@@ -1026,6 +1044,7 @@ void PowerSupply::updateHistory()
     auto changed = recordManager->add(data);
     if (changed)
     {
+        // Systemd object manager - up in PSUManager.
         average->values(std::move(recordManager->getAverageRecords()));
         maximum->values(std::move(recordManager->getMaximumRecords()));
     }

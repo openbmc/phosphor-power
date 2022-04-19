@@ -67,6 +67,7 @@ class GPIOInterfaceBase
 
     virtual int read() = 0;
     virtual void write(int value, std::bitset<32> flags) = 0;
+    virtual void toggleLowHigh() = 0;
     virtual std::string getName() const = 0;
 };
 

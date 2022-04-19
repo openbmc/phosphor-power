@@ -260,6 +260,13 @@ class GPIOInterface : public GPIOInterfaceBase
     void write(int value, std::bitset<32> flags) override;
 
     /**
+     * @brief Attempts to toggle (write) a GPIO low then high.
+     *
+     * Relies on write, so throws exceptoin if line not found, etc.
+     */
+    void toggleLowHigh() override;
+
+    /**
      * @brief Returns the name of the GPIO, if not empty.
      */
     std::string getName() const override;
