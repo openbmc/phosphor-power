@@ -1,5 +1,7 @@
 [Unit]
 Description=Phosphor Power Regulators Enable Monitoring
+Requires=phosphor-regulators.service
+After=phosphor-regulators.service
 Wants=obmc-power-on@0.target
 After=obmc-power-on@0.target
 Conflicts=obmc-chassis-poweroff@0.target
