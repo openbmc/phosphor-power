@@ -319,6 +319,11 @@ class PSUManager
                            std::map<std::string, std::string>& additionalData);
 
     /**
+     * @brief Synchronize the power supply input history (if supported).
+     */
+    void syncHistory();
+
+    /**
      * @brief Set the power-config-full-load GPIO depending on the EM full load
      *        property value.
      */
