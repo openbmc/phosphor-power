@@ -1,5 +1,8 @@
 [Unit]
 Description=Phosphor Power Regulators Config
+Requires=phosphor-regulators.service
+Wants=mapper-wait@-xyz-openbmc_project-power-regulators-manager.service
+After=mapper-wait@-xyz-openbmc_project-power-regulators-manager.service
 Wants=obmc-power-start-pre@0.target
 Before=obmc-power-start-pre@0.target
 Before=op-power-start@0.service
