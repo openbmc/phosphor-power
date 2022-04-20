@@ -1,5 +1,7 @@
 [Unit]
 Description=Phosphor Power Regulators Config
+Requires=phosphor-regulators.service
+After=phosphor-regulators.service
 Wants=obmc-power-start-pre@0.target
 Before=obmc-power-start-pre@0.target
 Before=op-power-start@0.service
