@@ -4,6 +4,8 @@ Wants=obmc-mapper.target
 After=obmc-mapper.target
 
 [Service]
+Type=dbus
+BusName=xyz.openbmc_project.Power.Regulators
 Restart=on-failure
 ExecStart=/usr/bin/phosphor-regulators
 
