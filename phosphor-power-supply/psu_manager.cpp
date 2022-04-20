@@ -364,6 +364,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
             powerOn = true;
             validationTimer->restartOnce(validationTimeout);
             clearFaults();
+            syncHistory();
             setPowerConfigGPIO();
         }
         else
