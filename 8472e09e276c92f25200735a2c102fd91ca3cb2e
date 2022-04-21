@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c4ea062_84e38632",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-21T15:08:39Z",
+      "side": 1,
+      "message": "Hi,\n\nThanks for submitting this change.\n\nIt would be good to update the following regulators service files as well:\n* phosphor-regulators-monitor-enable.service\n* phosphor-regulators-monitor-disable.service\n\nThey also call a D-Bus method on the regulators app to start/stop regulator monitoring.  So they have the same dependency.\n\nDo you mind adding that to your commit?\n\nAlso, rather than have all three dependent services copy/paste the same mapper-wait lines, I think the recommended approach would be to add the following to the phosphor-regulators.service instead:\n  Type\u003ddbus\n  BusName\u003dxyz.openbmc_project.Power.Regulators\n\nI believe this causes systemd to not consider the phosphor-regulators application started until it claims that bus name.\n\nWould that accomplish what you are looking for?  If so, the mapper-wait lines could be removed from the dependent services.  That would remove a dependency on the mapper to provide synchronization.",
+      "revId": "8472e09e276c92f25200735a2c102fd91ca3cb2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
