@@ -52,6 +52,24 @@
       "parentUuid": "4afb3e36_b1c9b873",
       "revId": "8472e09e276c92f25200735a2c102fd91ca3cb2e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84a7bb6_dc58076e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000733
+      },
+      "writtenOn": "2022-04-21T20:53:10Z",
+      "side": 1,
+      "message": "\u003e My understanding is that these should happen synchronously, and thus there isn\u0027t a race condition.  I\u0027m not a D-Bus expert so if you are aware of a possible issue let me know.\n\nAh, got it -- I had thought those happened in the opposite order for some reason, thanks for the correction.  I\u0027m far from a dbus expert myself, but that certainly sounds like it should be OK.\n\n\u003e I think if we want to make this service file change, we should remove that parameter and let it default to emitting the signal.  I believe someone else wrote that code, and I don\u0027t see a reason we need to defer the signal.\n\nAlright, I\u0027ll test it out with all of the above changes incorporated and post an updated version of the patch -- thanks for the pointer there.",
+      "parentUuid": "47d83c07_63d9258d",
+      "revId": "8472e09e276c92f25200735a2c102fd91ca3cb2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
