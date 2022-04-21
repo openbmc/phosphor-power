@@ -34,6 +34,24 @@
       "parentUuid": "2c4ea062_84e38632",
       "revId": "8472e09e276c92f25200735a2c102fd91ca3cb2e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47d83c07_63d9258d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-21T19:34:08Z",
+      "side": 1,
+      "message": "The D-Bus object, which is of type ManagerObject, is created in the initialization list of the Manager constructor:\n\nhttps://github.com/openbmc/phosphor-power/blob/master/phosphor-regulators/src/manager.cpp#L75\n\nThe D-Bus service name is claimed later in that constructor:\n\nhttps://github.com/openbmc/phosphor-power/blob/master/phosphor-regulators/src/manager.cpp#L101\n\nMy understanding is that these should happen synchronously, and thus there isn\u0027t a race condition.  I\u0027m not a D-Bus expert so if you are aware of a possible issue let me know.\n\nHowever, in looking at the call to the ManagerObject constructor (which creates the D-Bus object), I see that it is specifying the third parameter to defer emitting an ObjectAdded/InterfacesAdded signal.  I think if we want to make this service file change, we should remove that parameter and let it default to emitting the signal.  I believe someone else wrote that code, and I don\u0027t see a reason we need to defer the signal.\n\nSo if you could also change\n  ManagerObject{bus, managerObjPath, ManagerObject::action::defer_emit},\nto\n  ManagerObject{bus, managerObjPath},\n\nI think we\u0027d be in good shape.  Let me know if that doesn\u0027t work for you.",
+      "parentUuid": "4afb3e36_b1c9b873",
+      "revId": "8472e09e276c92f25200735a2c102fd91ca3cb2e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
