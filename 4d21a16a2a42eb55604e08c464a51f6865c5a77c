@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b8444cb_d21f7906",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1001048
+      },
+      "writtenOn": "2022-04-22T17:14:58Z",
+      "side": 1,
+      "message": "Can you add some comments in code to explain about 120..?",
+      "range": {
+        "startLine": 981,
+        "startChar": 69,
+        "endLine": 981,
+        "endChar": 72
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98e51d0d_3c4c3e9f",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
