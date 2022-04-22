@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d4503e_8400d6a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T00:16:31Z",
+      "side": 1,
+      "message": "Makes me wonder if phosphor-psu-monitor.service should be claiming that PSUMonitor bus name.\nhttps://github.com/openbmc/phosphor-power/blob/master/services/phosphor-psu-monitor.service\n",
+      "revId": "194b94ee32127d0947f56638b75971bb5c82703e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
