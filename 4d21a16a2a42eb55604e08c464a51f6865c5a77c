@@ -294,6 +294,30 @@
       },
       "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46285991_88187d0d",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T21:12:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f880035a_adce61e3",
+      "range": {
+        "startLine": 827,
+        "startChar": 40,
+        "endLine": 827,
+        "endChar": 41
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
