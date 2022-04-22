@@ -16,6 +16,24 @@
       "message": "Makes me wonder if phosphor-psu-monitor.service should be claiming that PSUMonitor bus name.\nhttps://github.com/openbmc/phosphor-power/blob/master/services/phosphor-psu-monitor.service\n",
       "revId": "194b94ee32127d0947f56638b75971bb5c82703e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2030977b_d2513c6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-22T14:36:39Z",
+      "side": 1,
+      "message": "I am not an expert, but I think it is mainly needed if another service is dependent on yours and shouldn\u0027t start until yours has claimed the bus name.\n\nIf there are no dependencies like that, you could probably omit it for now.  One less place where the bus name is hard-coded.",
+      "parentUuid": "23d4503e_8400d6a5",
+      "revId": "194b94ee32127d0947f56638b75971bb5c82703e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
