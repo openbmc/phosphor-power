@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7bcac17_c3716b57",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-04-22T16:51:29Z",
+      "side": 1,
+      "message": "if a PS is plugged sometime after startup does this get run?",
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f45b9dc_7632de8d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-04-22T16:51:29Z",
+      "side": 1,
+      "message": "could be a constant?",
+      "range": {
+        "startLine": 981,
+        "startChar": 69,
+        "endLine": 981,
+        "endChar": 72
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98e51d0d_3c4c3e9f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-04-22T16:51:29Z",
+      "side": 1,
+      "message": "these 3 could all be DEBUG I imagine.  could always add a dbus dump of your service to bmc dumps if you needed to see dbus details",
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c34fc11_73ae5c6d",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-04-22T16:51:29Z",
+      "side": 1,
+      "message": "RY",
+      "range": {
+        "startLine": 827,
+        "startChar": 40,
+        "endLine": 827,
+        "endChar": 41
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
