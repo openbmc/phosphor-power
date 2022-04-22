@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "496edd2e_f8d7a230",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T21:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23678a84_2d758933",
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f45b9dc_7632de8d",
@@ -130,6 +148,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d7fd8e9_2232415d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T21:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa9b503_bd5e004c",
+      "range": {
+        "startLine": 981,
+        "startChar": 69,
+        "endLine": 981,
+        "endChar": 72
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f47b486_b7eddcc3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T21:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "027fc577_538e3487",
+      "range": {
+        "startLine": 981,
+        "startChar": 69,
+        "endLine": 981,
+        "endChar": 72
+      },
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98e51d0d_3c4c3e9f",
@@ -161,6 +227,24 @@
       "side": 1,
       "message": "Oh! Right, I intended to change these to DEBUG before pushing, but obviously missed doing that change.\n\nD-Bus dump of service... must be some plugin or something.",
       "parentUuid": "98e51d0d_3c4c3e9f",
+      "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce86886_46d60fe1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-22T21:12:05Z",
+      "side": 1,
+      "message": "Calling when missing/present, may have been present before, ended up with these extra checks, and moved things around a bit.\n\nINFO -\u003e DEBUG.",
+      "parentUuid": "8ccc8ee0_78a82de6",
       "revId": "4d21a16a2a42eb55604e08c464a51f6865c5a77c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
