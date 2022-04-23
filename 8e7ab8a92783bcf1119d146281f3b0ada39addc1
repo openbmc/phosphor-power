@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a867de0_028ef51b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Nit: Why the question mark?  Are you not sure this is what should be done?",
+      "range": {
+        "startLine": 975,
+        "startChar": 67,
+        "endLine": 975,
+        "endChar": 75
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82dcad29_07617d52",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "If a PSU is re-inserted, should the prior history be cleared?  I\u0027m not sure what the requirement is here.  If the PSU inserted is different than the one removed, does that matter?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7aa96b1_8c9d9502",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "I don\u0027t understand these comments.  Are you referring to the D-Bus ObjectManager interface (not systemd)?  These lines aren\u0027t doing anything with that.",
+      "range": {
+        "startLine": 997,
+        "startChar": 13,
+        "endLine": 998,
+        "endChar": 51
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d31ec1_b21cc881",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "If I am understanding this correctly, each time something has changed (every 30 seconds?) we are going to create two new vectors of 120 items and then copy them into D-Bus.  It is too bad we cannot just add the individual new value vs. copying in the 119 items that didn\u0027t change.",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c67a92b_24842c79",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Is this a standard PMBus command?  I don\u0027t see it in the PMBus Spec.\n\nIf it is unique to the IBM PSU driver, maybe this needs more explanation?",
+      "range": {
+        "startLine": 456,
+        "startChar": 24,
+        "endLine": 456,
+        "endChar": 38
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42e277c7_46e6d011",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Missing doxygen.\n\nAlso, from the name getInputHistory() is sounds like it would return the list of max/avg values.  Is this method returning whether the driver supports input history?  If so, maybe something like isInputHistorySupported() or hasInputHistory()?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd31760d_22ab4ee1",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Seems like from the name that is would be the input history itself vs. whether input history is supported.  Maybe something like isInputHistorySupported or hasInputHistory?",
+      "range": {
+        "startLine": 832,
+        "startChar": 9,
+        "endLine": 832,
+        "endChar": 21
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15eef1eb_6877de05",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Should this be coming from a meson build option?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa64bc57_86de9bd3",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Maybe update this comment to say it is the ObjectManager for the PowerSystemInputs object or the /xyz/openbmc_project/power/power_supplies root D-Bus path?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb291ae_7823ca55",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Nit: Some unnecessary extra spaces here and on several subsequent lines?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07b77105_61e18c9b",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T22:32:18Z",
+      "side": 1,
+      "message": "Seems like this is unfinished?",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
