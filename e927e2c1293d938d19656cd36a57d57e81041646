@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3f14c4_c2dd758e",
+        "filename": "meson_options.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "Just out of curiosity, what is \u0027ffs\u0027 short for?",
+      "range": {
+        "startLine": 13,
+        "startChar": 18,
+        "endLine": 13,
+        "endChar": 21
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e862e7_97defc5c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "Do you want to sync all the remaining PSUs when one is removed?  Or is this only supposed to happen when a PSU is added?",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c39689c_88be0327",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "Should this be using INPUT_HISTORY_SYNC_GPIO?  If not, what is the purpose of that meson option?\n\nAlso, is the assumption that all systems have this GPIO?  If not, how is that handled?  Is the meson option set to \"\", and then the lines above are not executed?",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf66d60_c36d6069",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "I\u0027m not sure what this comment means.  The *D-Bus* ObjectManager is located in the PSUManager, but the lines below are not doing anything related to that I think.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 8,
+        "endLine": 1072,
+        "endChar": 53
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e03a05ce_4b800f32",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "If this method effects all power supplies, should it be on the PSUManager class?",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35588fdc_9697e804",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-23T23:08:45Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 265,
+        "startChar": 34,
+        "endLine": 265,
+        "endChar": 44
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
