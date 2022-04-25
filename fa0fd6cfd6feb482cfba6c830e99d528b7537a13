@@ -16,6 +16,24 @@
       "message": "I\u0027m confused.  I thought there is a single GPIO for the whole system that is defined via a meson option.  And I thought that GPIO synchronized all PSUs.\n\nIf the above is true, why do we call this once per PSU?",
       "revId": "fa0fd6cfd6feb482cfba6c830e99d528b7537a13",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05368656_51d4b68c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:36:37Z",
+      "side": 1,
+      "message": "Yeah, should have thought this out a bit better. Side-effect of trying to re-use what we did for Witherspoon, and not attempting to refactor this into a single line for the whole system.",
+      "parentUuid": "b0a12f79_8e42d485",
+      "revId": "fa0fd6cfd6feb482cfba6c830e99d528b7537a13",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
