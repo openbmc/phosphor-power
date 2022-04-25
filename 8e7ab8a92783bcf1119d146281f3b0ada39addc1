@@ -401,6 +401,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "367703d2_48eef964",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T17:34:24Z",
+      "side": 1,
+      "message": "I fix it, clang-format puts it back. Some odd clang-format setting? I think our clang-format for this repo is synchronized with the latest updates over in the docs repository, so not sure if there is something to change to make this less odd in the resulting format.",
+      "parentUuid": "039db43b_e135056c",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07b77105_61e18c9b",
         "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
         "patchSetId": 3
