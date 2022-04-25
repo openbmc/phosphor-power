@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87a5d217_8c7b6ae9",
+        "filename": "meson_options.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "Fans Full Speed: https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md#power-ffs-sync-history",
+      "parentUuid": "7d3f14c4_c2dd758e",
+      "range": {
+        "startLine": 13,
+        "startChar": 18,
+        "endLine": 13,
+        "endChar": 21
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75e862e7_97defc5c",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -43,6 +67,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5721441_903730ac",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "The GPIO is OR\u0027ed, it affects all the power supplies.\n\nWe only want to sync when one is added, as it will start out with no records, and the timing may not be in sync with the 30 second timer in the other power supplies.",
+      "parentUuid": "75e862e7_97defc5c",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c39689c_88be0327",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -54,6 +96,24 @@
       "writtenOn": "2022-04-23T23:08:45Z",
       "side": 1,
       "message": "Should this be using INPUT_HISTORY_SYNC_GPIO?  If not, what is the purpose of that meson option?\n\nAlso, is the assumption that all systems have this GPIO?  If not, how is that handled?  Is the meson option set to \"\", and then the lines above are not executed?",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f505ad04_f0a062f5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "Yes, it should be using that INPUT_HISTORY_SYNC_GPIO from the meson option.\n\nI was going with the assumption that it is only really supported if inputHistory (inputHistorySupported?) is true, which so far is only going to be set if the device driver is ibm-cffps.",
+      "parentUuid": "9c39689c_88be0327",
       "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -83,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccd52373_73022abe",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "Another reminder line that this is related to the object manager up in PSUManager.\n\nThis fills in the D-Bus properties on the interface:\nsdbusplus::org::open_power::Sensor::Aggregation::History::server::Average;",
+      "parentUuid": "faf66d60_c36d6069",
+      "range": {
+        "startLine": 1072,
+        "startChar": 8,
+        "endLine": 1072,
+        "endChar": 53
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e03a05ce_4b800f32",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
@@ -100,6 +184,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "334033a2_58bcb7ea",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "Possibly.",
+      "parentUuid": "e03a05ce_4b800f32",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35588fdc_9697e804",
         "filename": "phosphor-power-supply/util.hpp",
         "patchSetId": 3
@@ -111,6 +213,30 @@
       "writtenOn": "2022-04-23T23:08:45Z",
       "side": 1,
       "message": "Nit: spelling",
+      "range": {
+        "startLine": 265,
+        "startChar": 34,
+        "endLine": 265,
+        "endChar": 44
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68fa3ec0_bbccab42",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-25T16:32:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "35588fdc_9697e804",
       "range": {
         "startLine": 265,
         "startChar": 34,
