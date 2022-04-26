@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75db7853_e24e02b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:16:29Z",
+      "side": 1,
+      "message": "I tried hard to not mess this up and push a patchset with seemingly no changes, but then I had to rebase the change anyway. :-P\n",
+      "revId": "00d45a5b72eb2739fde38b02ca34d20259e8a86a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
