@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a9f6cda_c364def8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Using meson options value as requested in power_supply.cpp review.",
+      "range": {
+        "startLine": 463,
+        "startChar": 37,
+        "endLine": 463,
+        "endChar": 60
+      },
+      "revId": "570fa37832516589aa8f1f214da9b4837a7a39af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

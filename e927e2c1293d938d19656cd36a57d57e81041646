@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2314c238_d288d1e9",
+        "filename": "meson_options.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87a5d217_8c7b6ae9",
+      "range": {
+        "startLine": 13,
+        "startChar": 18,
+        "endLine": 13,
+        "endChar": 21
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75e862e7_97defc5c",
@@ -119,6 +143,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b863367_73bac27d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Replaced with syncHistoryRequired \u003d true, moved down inside the present check.",
+      "parentUuid": "e70f2c02_6fe59037",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c39689c_88be0327",
@@ -150,6 +192,24 @@
       "side": 1,
       "message": "Yes, it should be using that INPUT_HISTORY_SYNC_GPIO from the meson option.\n\nI was going with the assumption that it is only really supported if inputHistory (inputHistorySupported?) is true, which so far is only going to be set if the device driver is ibm-cffps.",
       "parentUuid": "9c39689c_88be0327",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9ce023_462e2edb",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Refactored into psu_manager.",
+      "parentUuid": "f505ad04_f0a062f5",
       "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -201,6 +261,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa762496_80ce1b52",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccd52373_73022abe",
+      "range": {
+        "startLine": 1072,
+        "startChar": 8,
+        "endLine": 1072,
+        "endChar": 53
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e03a05ce_4b800f32",
@@ -232,6 +316,24 @@
       "side": 1,
       "message": "Possibly.",
       "parentUuid": "e03a05ce_4b800f32",
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4bf11b6_713ddaa3",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Perhaps I refactored this badly, but syncHistory() is no longer here. Replaced with indicator that sync is needed, and a helper to clear that it is needed.",
+      "parentUuid": "334033a2_58bcb7ea",
       "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -273,6 +375,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "35588fdc_9697e804",
+      "range": {
+        "startLine": 265,
+        "startChar": 34,
+        "endLine": 265,
+        "endChar": 44
+      },
+      "revId": "e927e2c1293d938d19656cd36a57d57e81041646",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51f431d0_506bed5f",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68fa3ec0_bbccab42",
       "range": {
         "startLine": 265,
         "startChar": 34,
