@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "dd7ce89b_ee838710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:33:57Z",
+      "side": 1,
+      "message": "See prior commit for CI failure:\n[  FAILED  ] PowerSupplyTests.UpdateHistory (1001 ms)\n",
+      "revId": "570fa37832516589aa8f1f214da9b4837a7a39af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7a9f6cda_c364def8",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 4
