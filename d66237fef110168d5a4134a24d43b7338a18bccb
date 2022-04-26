@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dadcc3e_1d145547",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Grr...not done, where did my doxygen comments go? I must have re-re-factored that out. :-(",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 466,
+        "endChar": 32
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "769cafd9_f111d0ce",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Bad, I pushed this up with FIXME still present. Ideally I verify that I have records that will go to D-Bus that match what I expect them to be.",
+      "range": {
+        "startLine": 1945,
+        "startChar": 4,
+        "endLine": 1945,
+        "endChar": 64
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8974ac1b_d34e4f50",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "I thought I knew what I was doing here, but somehow as I add a second and third record, I only end up with one record. Strange.",
+      "range": {
+        "startLine": 1949,
+        "startChar": 0,
+        "endLine": 1955,
+        "endChar": 64
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

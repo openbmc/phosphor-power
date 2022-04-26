@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ab98c30_a2edf78f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1741ce1b_8d3f7118",
+      "range": {
+        "startLine": 975,
+        "startChar": 67,
+        "endLine": 975,
+        "endChar": 75
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82dcad29_07617d52",
@@ -120,6 +144,30 @@
       "side": 1,
       "message": "I had started out thinking I was going to create a D-Bus ObjectManager interface for each power supply, but only one was needed, and it is up in the PSUManager class/object. I probably should just remove this comment that served as a reminder to myself.",
       "parentUuid": "b7aa96b1_8c9d9502",
+      "range": {
+        "startLine": 997,
+        "startChar": 13,
+        "endLine": 998,
+        "endChar": 51
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddfdfa16_6e2d83d9",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2efd59df_25a5dc14",
       "range": {
         "startLine": 997,
         "startChar": 13,
@@ -212,6 +260,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9b22b52_81706bd4",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9609844_871d12a5",
+      "range": {
+        "startLine": 456,
+        "startChar": 24,
+        "endLine": 456,
+        "endChar": 38
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42e277c7_46e6d011",
@@ -243,6 +315,24 @@
       "side": 1,
       "message": "Poorly named, no doxygen to explain what it means.\n\nYes, it is a method for returning whether the power supply (driver) supports the input history command(s).",
       "parentUuid": "42e277c7_46e6d011",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "855afe05_5ad48004",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3311c504_001254db",
       "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -284,6 +374,30 @@
       "side": 1,
       "message": "inputHistorySupported ?\n\nI was thinking hasInputHistory() to return if this is true or not.",
       "parentUuid": "fd31760d_22ab4ee1",
+      "range": {
+        "startLine": 832,
+        "startChar": 9,
+        "endLine": 832,
+        "endChar": 21
+      },
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c51574_aade48bd",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2331557d_808a16bf",
       "range": {
         "startLine": 832,
         "startChar": 9,
@@ -364,6 +478,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b821e21_8f7269c0",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d522cc13_512f0440",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bb291ae_7823ca55",
@@ -417,6 +549,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0363e1fc_9a63b518",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "Calling this done, clang-format is \"fixing\" this to this format.",
+      "parentUuid": "367703d2_48eef964",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07b77105_61e18c9b",
@@ -448,6 +598,24 @@
       "side": 1,
       "message": "Oh, yeah... I think I needed to work some mocked SDBusPlus object to do a test here.",
       "parentUuid": "07b77105_61e18c9b",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5435d72_5eafe534",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-26T00:24:45Z",
+      "side": 1,
+      "message": "This still needs some work, but I was confused as to how I was getting the wrong results. I should try to clarify what is going wrong with Spinler.",
+      "parentUuid": "25604ce6_48d82419",
       "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
