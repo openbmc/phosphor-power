@@ -16,6 +16,29 @@
       "message": "Prior commit causing CI failure:\n[  FAILED  ] PowerSupplyTests.UpdateHistory (1001 ms)\n\n",
       "revId": "c095ba9a71e697a7cff21cf9119be2839a0a9123",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e6b21c0_2aeed79b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-27T01:00:13Z",
+      "side": 1,
+      "message": "This would appear to not actually be working on real hardware, I do not see the records reset, I just see the average and maximum values start going up.\n\nI do not have a delay between the low/high toggle in the previous commit. Is that coming back to get me?",
+      "range": {
+        "startLine": 365,
+        "startChar": 12,
+        "endLine": 365,
+        "endChar": 26
+      },
+      "revId": "c095ba9a71e697a7cff21cf9119be2839a0a9123",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
