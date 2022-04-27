@@ -722,6 +722,16 @@ void PSUManager::validateConfig()
         return;
     }
 
+    for (const auto& psu : psus)
+    {
+        if ((psu->hasInputFault() || psu->hasVINUVFault()))
+        {
+            // Do not try to validate if input voltage fault present.
+            validationTimer->restartOnce(validationTimeout);
+            return;
+        }
+    }
+
     std::map<std::string, std::string> additionalData;
     auto supported = hasRequiredPSUs(additionalData);
     if (supported)
