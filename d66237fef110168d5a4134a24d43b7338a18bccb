@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f04fff7_70a58b37",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-27T23:38:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dadcc3e_1d145547",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 466,
+        "endChar": 32
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "769cafd9_f111d0ce",
@@ -64,6 +88,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82d82cd_633d78ef",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-27T23:38:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "769cafd9_f111d0ce",
+      "range": {
+        "startLine": 1945,
+        "startChar": 4,
+        "endLine": 1945,
+        "endChar": 64
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8974ac1b_d34e4f50",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-04-26T00:24:45Z",
       "side": 1,
       "message": "I thought I knew what I was doing here, but somehow as I add a second and third record, I only end up with one record. Strange.",
+      "range": {
+        "startLine": 1949,
+        "startChar": 0,
+        "endLine": 1955,
+        "endChar": 64
+      },
+      "revId": "d66237fef110168d5a4134a24d43b7338a18bccb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "315d96b2_2e11df56",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1955,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-27T23:38:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8974ac1b_d34e4f50",
       "range": {
         "startLine": 1949,
         "startChar": 0,
