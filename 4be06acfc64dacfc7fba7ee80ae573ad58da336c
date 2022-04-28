@@ -105,6 +105,24 @@
       "parentUuid": "9073cb2d_5baac17c",
       "revId": "4be06acfc64dacfc7fba7ee80ae573ad58da336c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8374899a_5098a725",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-04-28T18:32:01Z",
+      "side": 1,
+      "message": "\u003e One question would be, if the VIN FAULT is resolved, should the validation be run? Just thinking of a scenario where psu has a VIN FAULT at power on (does the system stay powered on?), the validation is skipped, then the VIN FAULT is resolved, and the system may have an invalid configuration but would not be known until the system is reIPLd.\n\nThanks for the comments, yep that is exactly my concern as well.  If AC returns only after the timer expires, sounds like we wouldn\u0027t tell the customer they have an invalid config at any point.  \n\nOptimally, when AC returned, we would do the validation then.  Can we, once the timer expires, try to do the validation then (assuming we haven\u0027t already validated it), and if AC is still gone, kick the timer off again or something like that (or any other options)?\n\nThis is a double-failure scenario so if it\u0027s too complex so be it, but if it\u0027s an easy fix, that would be the desired behavior (eventually telling them invalid config if it is the case).",
+      "parentUuid": "5aeb3343_3c174519",
+      "revId": "4be06acfc64dacfc7fba7ee80ae573ad58da336c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
