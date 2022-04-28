@@ -215,6 +215,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d1db256_9ca6432e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-04-28T17:02:37Z",
+      "side": 1,
+      "message": "the dbus property is an array, and I don\u0027t think sdbusplus has any APIs to modify a property piecemeal.",
+      "parentUuid": "ee12e934_b0030061",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c67a92b_24842c79",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 3
