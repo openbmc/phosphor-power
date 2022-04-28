@@ -65,6 +65,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc3b906_edbab6b0",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-28T17:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c27210e_d77a8730",
+      "range": {
+        "startLine": 475,
+        "startChar": 14,
+        "endLine": 475,
+        "endChar": 71
+      },
+      "revId": "42fb9c7ce821bacf78a995bcbf5fe3b61d5a1318",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd6ad2bb_6dc6db19",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Sure.",
       "parentUuid": "dd6ad2bb_6dc6db19",
+      "range": {
+        "startLine": 477,
+        "startChar": 11,
+        "endLine": 477,
+        "endChar": 24
+      },
+      "revId": "42fb9c7ce821bacf78a995bcbf5fe3b61d5a1318",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c976f4_d16c38e5",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-28T17:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab6e60d3_d15b10c6",
       "range": {
         "startLine": 477,
         "startChar": 11,
