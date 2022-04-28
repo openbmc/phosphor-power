@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3079a1fa_833d126c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "Nit: indicate",
+      "range": {
+        "startLine": 16,
+        "startChar": 41,
+        "endLine": 16,
+        "endChar": 51
+      },
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a93ff2_6ef78609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "Looks good.  Some minor comments.",
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1583e730_067d0376",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "Missing doxygen",
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30414aea_8505aedc",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "This refactor worked really well IMO and makes more sense now.",
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f90c010_7e17691d",
+        "filename": "phosphor-power-supply/test/mock.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "Should be const?  Otherwise implies this is an output or input/output parameter.",
+      "range": {
+        "startLine": 72,
+        "startChar": 38,
+        "endLine": 72,
+        "endChar": 63
+      },
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8c1046_51249abc",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-04-28T15:09:56Z",
+      "side": 1,
+      "message": "As noted in another file, should be const?",
+      "range": {
+        "startLine": 270,
+        "startChar": 23,
+        "endLine": 270,
+        "endChar": 34
+      },
+      "revId": "7d1ea650e6eedc18547560713b9d3cdcad77c4a2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
