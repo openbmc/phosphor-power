@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d7a2c4_94e529c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-28T16:53:25Z",
+      "side": 1,
+      "message": "Ah! Yeah, nice to point out why I am doing this.\n\nTrying to:\n1) Avoid logging additional errors.\n2) Avoid logging additional error that calls out power supply and turns on LED.",
+      "parentUuid": "c2acb6dd_7dfcf55a",
+      "revId": "4be06acfc64dacfc7fba7ee80ae573ad58da336c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b025baf2_bd675da4",
