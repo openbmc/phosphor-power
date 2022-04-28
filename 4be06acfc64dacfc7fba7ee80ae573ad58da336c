@@ -123,6 +123,24 @@
       "parentUuid": "5aeb3343_3c174519",
       "revId": "4be06acfc64dacfc7fba7ee80ae573ad58da336c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6da89824_f8322d59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-28T18:37:40Z",
+      "side": 1,
+      "message": "I think I tested restoring the power while powered on, but with the ePDU, there is no way (that I know of) to restore power with the wrong voltage, so hard to verify that one. I can perhaps test that in a simulator session.",
+      "parentUuid": "8374899a_5098a725",
+      "revId": "4be06acfc64dacfc7fba7ee80ae573ad58da336c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
