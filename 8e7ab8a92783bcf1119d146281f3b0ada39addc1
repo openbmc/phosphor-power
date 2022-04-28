@@ -231,6 +231,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4207563f_38e1ba62",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-04-28T17:18:32Z",
+      "side": 1,
+      "message": "😞\nSo, not easily possible to be more efficient, but with enough sdbusplus hacking, and more changes here, we could MAYBE get there. \n\nNot something I would plan on doing as part of this commit.",
+      "parentUuid": "7d1db256_9ca6432e",
+      "revId": "8e7ab8a92783bcf1119d146281f3b0ada39addc1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c67a92b_24842c79",
