@@ -1,0 +1,9 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+1: Derek Howard <derekh@us.ibm.com>
+Code-Review+1: Manish Baing <manish.baing@intel.com>
+Code-Review+2: Shawn McCarney <shawnmm@us.ibm.com>
+Submitted-by: Brandon J. Wyman <bjwyman@gmail.com>
+Submitted-at: Fri, 29 Apr 2022 17:22:39 +0000
+Reviewed-on: https://gerrit.openbmc-project.xyz/c/openbmc/phosphor-power/+/53171
+Project: openbmc/phosphor-power
+Branch: refs/heads/master
