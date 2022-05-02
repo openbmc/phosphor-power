@@ -362,7 +362,7 @@ void UCD90320Monitor::onFailureCheckRails(
     // needs to be checked
     if (statusWord & status_word::VOUT_FAULT)
     {
-        constexpr size_t numberPages = 24;
+        constexpr size_t numberPages = 32;
         for (size_t page = 0; page < numberPages; page++)
         {
             auto statusVout = pmbusInterface.insertPageNum(STATUS_VOUT, page);

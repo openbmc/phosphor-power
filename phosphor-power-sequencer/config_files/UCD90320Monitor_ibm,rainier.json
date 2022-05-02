@@ -23,7 +23,15 @@
        "ThermalDiode1",
        "ThermalDiode2",
        "ThermalDiode3",
-       "ThermalDiode4"
+       "ThermalDiode4",
+       "VDN_DCM0",
+       "VDN_DCM1",
+       "VCS_DCM0",
+       "VCS_DCM1",
+       "VIO_DCM0",
+       "VIO_DCM1",
+       "VPCIE_DCM0",
+       "VPCIE_DCM1"
     ],
 
     "pins": [

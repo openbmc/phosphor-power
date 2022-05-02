@@ -23,7 +23,15 @@
         "CP0_VDN",
         "CP1_VDN",
         "CP2_VDN",
-        "CP3_VDN"
+        "CP3_VDN",
+        "CP0_VIO",
+        "CP1_VIO",
+        "CP2_VIO",
+        "CP3_VIO",
+        "CP0_VPCIE",
+        "CP1_VPCIE",
+        "CP2_VPCIE",
+        "CP3_VPCIE"
     ],
 
     "pins": [
