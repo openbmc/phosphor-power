@@ -127,6 +127,7 @@ class PowerSupply
         psKillFault = 0;
         ps12VcsFault = 0;
         psCS12VFault = 0;
+        faultLogged = false;
     }
 
     /**
