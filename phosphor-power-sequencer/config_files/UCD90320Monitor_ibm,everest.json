@@ -2,11 +2,6 @@
     "rails": [
         "12.0V",
         "3V3IO",
-        "RAIL3",
-        "RAIL4",
-        "RAIL5",
-        "CP03_AVDD",
-        "CP12_AVDD",
         "CP0_VDD0",
         "CP0_VDD1",
         "CP1_VDD0",
@@ -22,7 +17,13 @@
         "CP2_VCS0",
         "CP2_VCS1",
         "CP3_VCS0",
-        "CP3_VCS1"
+        "CP3_VCS1",
+        "CP03_AVDD",
+        "CP12_AVDD",
+        "CP0_VDN",
+        "CP1_VDN",
+        "CP2_VDN",
+        "CP3_VDN"
     ],
 
     "pins": [
