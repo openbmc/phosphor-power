@@ -6,11 +6,12 @@ Wants=obmc-power-start-pre@0.target
 Before=obmc-power-start-pre@0.target
 Before=op-power-start@0.service
 Conflicts=obmc-chassis-poweroff@0.target
-# No need to run again if BMC reboots at runtime
+# Should not run again if BMC reboots while host is running
 ConditionPathExists=!/run/openbmc/chassis@0-on
 
 [Service]
 Type=oneshot
+RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl config
 
 [Install]

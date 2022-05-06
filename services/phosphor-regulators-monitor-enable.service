@@ -7,6 +7,7 @@ After=obmc-power-on@0.target
 Conflicts=obmc-chassis-poweroff@0.target
 
 [Service]
+Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl monitor --enable
 

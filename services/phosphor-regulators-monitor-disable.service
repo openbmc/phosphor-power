@@ -2,9 +2,9 @@
 Description=Phosphor Power Regulators Disable Monitoring
 Requires=phosphor-regulators.service
 After=phosphor-regulators.service
-Wants=obmc-host-stop-pre@0.target
-Before=obmc-host-stop-pre@0.target
-Conflicts=phosphor-regulators-monitor-enable.service
+Wants=obmc-power-stop-pre@0.target
+Before=obmc-power-stop-pre@0.target
+Conflicts=obmc-chassis-poweron@0.target
 
 [Service]
 Type=oneshot
@@ -12,4 +12,4 @@ RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl monitor --disable
 
 [Install]
-WantedBy=obmc-host-stop@0.target
+WantedBy=obmc-chassis-poweroff@0.target
