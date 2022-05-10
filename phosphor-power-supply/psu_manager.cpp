@@ -30,7 +30,7 @@ constexpr auto presLineName = "NamedPresenceGpio";
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 
-constexpr auto INPUT_HISTORY_SYNC_DELAY = 1100;
+constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
 PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     bus(bus), powerSystemInputs(bus, powerSystemsInputsObjPath),
