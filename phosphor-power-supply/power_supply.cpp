@@ -638,7 +638,8 @@ void PowerSupply::analyze()
                 // re-check faults on next call.
                 clearVinUVFault();
             }
-            else if (std::abs(actualInputVoltageOld - actualInputVoltage) > 1.0)
+            else if (std::abs(actualInputVoltageOld - actualInputVoltage) >
+                     10.0)
             {
                 log<level::INFO>(
                     fmt::format(
@@ -972,51 +973,98 @@ void PowerSupply::updateInventory()
     }
 }
 
+auto PowerSupply::getMaxPowerOut() const
+{
+    using namespace phosphor::pmbus;
+
+    auto maxPowerOut = 0;
+
+    if (present)
+    {
+        try
+        {
+            // Read max_power_out, should be direct format
+            auto maxPowerOutStr =
+                pmbusIntf->readString(MFR_POUT_MAX, Type::HwmonDeviceDebug);
+            log<level::INFO>(fmt::format("{} MFR_POUT_MAX read {}", shortName,
+                                         maxPowerOutStr)
+                                 .c_str());
+            maxPowerOut = std::stod(maxPowerOutStr);
+        }
+        catch (const std::exception& e)
+        {
+            log<level::ERR>(fmt::format("{} MFR_POUT_MAX read error: {}",
+                                        shortName, e.what())
+                                .c_str());
+        }
+    }
+
+    return maxPowerOut;
+}
+
 void PowerSupply::setupInputHistory()
 {
     if (bindPath.string().find("ibm-cffps") != std::string::npos)
     {
-        // Do not enable input history for power supplies that are missing
-        if (present)
+        auto maxPowerOut = getMaxPowerOut();
+
+        if (maxPowerOut != phosphor::pmbus::IBM_CFFPS_1400W)
         {
-            inputHistorySupported = true;
+            // Do not enable input history for power supplies that are missing
+            if (present)
+            {
+                inputHistorySupported = true;
+                log<level::INFO>(
+                    fmt::format("{} INPUT_HISTORY enabled", shortName).c_str());
+
+                std::string name{fmt::format("{}_input_power", shortName)};
+
+                historyObjectPath =
+                    std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
+
+                // If the power supply was present, we created the
+                // recordManager. If it then went missing, the recordManager is
+                // still there. If it then is reinserted, we should be able to
+                // use the recordManager that was allocated when it was
+                // initially present.
+                if (!recordManager)
+                {
+                    recordManager = std::make_unique<history::RecordManager>(
+                        INPUT_HISTORY_MAX_RECORDS);
+                }
+
+                if (!average)
+                {
+                    auto avgPath =
+                        historyObjectPath + '/' + history::Average::name;
+                    average = std::make_unique<history::Average>(bus, avgPath);
+                    log<level::DEBUG>(
+                        fmt::format("{} avgPath: {}", shortName, avgPath)
+                            .c_str());
+                }
+
+                if (!maximum)
+                {
+                    auto maxPath =
+                        historyObjectPath + '/' + history::Maximum::name;
+                    maximum = std::make_unique<history::Maximum>(bus, maxPath);
+                    log<level::DEBUG>(
+                        fmt::format("{} maxPath: {}", shortName, maxPath)
+                            .c_str());
+                }
+
+                log<level::DEBUG>(fmt::format("{} historyObjectPath: {}",
+                                              shortName, historyObjectPath)
+                                      .c_str());
+            }
+        }
+        else
+        {
             log<level::INFO>(
-                fmt::format("{} INPUT_HISTORY enabled", shortName).c_str());
-
-            std::string name{fmt::format("{}_input_power", shortName)};
-
-            historyObjectPath =
-                std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
-
-            // If the power supply was present, we created the recordManager.
-            // If it then went missing, the recordManager is still there.
-            // If it then is reinserted, we should be able to use the
-            // recordManager that was allocated when it was initially present.
-            if (!recordManager)
-            {
-                recordManager = std::make_unique<history::RecordManager>(
-                    INPUT_HISTORY_MAX_RECORDS);
-            }
-
-            if (!average)
-            {
-                auto avgPath = historyObjectPath + '/' + history::Average::name;
-                average = std::make_unique<history::Average>(bus, avgPath);
-                log<level::DEBUG>(
-                    fmt::format("{} avgPath: {}", shortName, avgPath).c_str());
-            }
-
-            if (!maximum)
-            {
-                auto maxPath = historyObjectPath + '/' + history::Maximum::name;
-                maximum = std::make_unique<history::Maximum>(bus, maxPath);
-                log<level::DEBUG>(
-                    fmt::format("{} maxPath: {}", shortName, maxPath).c_str());
-            }
-
-            log<level::DEBUG>(fmt::format("{} historyObjectPath: {}", shortName,
-                                          historyObjectPath)
-                                  .c_str());
+                fmt::format("{} INPUT_HISTORY DISABLED. max_power_out: {}",
+                            shortName, maxPowerOut)
+                    .c_str());
+            inputHistorySupported = false;
         }
     }
     else
@@ -1044,7 +1092,8 @@ void PowerSupply::updateHistory()
         pmbusIntf->readBinary(INPUT_HISTORY, pmbus::Type::HwmonDeviceDebug,
                               history::RecordManager::RAW_RECORD_SIZE);
 
-    // Update D-Bus only if something changed (a new record ID, or cleared out)
+    // Update D-Bus only if something changed (a new record ID, or cleared
+    // out)
     auto changed = recordManager->add(data);
     if (changed)
     {

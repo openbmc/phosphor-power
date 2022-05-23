@@ -857,6 +857,16 @@ class PowerSupply
     void inventoryAdded(sdbusplus::message::message& msg);
 
     /**
+     * @brief Reads the pmbus MFR_POUT_MAX value.
+     *
+     * "The MFR_POUT_MAX command sets or retrieves the maximum rated output
+     * power, in watts, that the unit is rated to supply."
+     *
+     * @return max_power_out value converted from string.
+     */
+    auto getMaxPowerOut() const;
+
+    /**
      * @brief Reads the most recent input history record from the power supply
      * and updates the average and maximum properties in D-Bus if there is a new
      * reading available.
