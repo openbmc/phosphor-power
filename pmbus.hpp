@@ -14,6 +14,11 @@ namespace fs = std::filesystem;
 // The file name Linux uses to capture the READ_VIN from pmbus.
 constexpr auto READ_VIN = "in1_input";
 
+// The file name Linux uses to capture the MFR_POUT_MAX from pmbus.
+constexpr auto MFR_POUT_MAX = "max_power_out";
+// The max_power_out value expected to be read for 1400W IBM CFFPS type.
+constexpr auto IBM_CFFPS_1400W = 30725;
+
 namespace in_input
 {
 // VIN thresholds in Volts
