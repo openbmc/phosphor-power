@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cb771f5_2755b774",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-05-25T05:37:00Z",
+      "side": 1,
+      "message": "Should perhaps clarify it causes problems when INPUT_HISTORY read vs. all PMBus reads.",
+      "revId": "24ac79e83f911f15b71d85e184e76562f61ef0c8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c011082_05469928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-05-25T05:37:00Z",
+      "side": 1,
+      "message": "Looks good.  Some minor comments.",
+      "revId": "24ac79e83f911f15b71d85e184e76562f61ef0c8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de197cc_297fb0a8",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-05-25T05:37:00Z",
+      "side": 1,
+      "message": "Need to remove the @param lines and add a @return line",
+      "revId": "24ac79e83f911f15b71d85e184e76562f61ef0c8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
