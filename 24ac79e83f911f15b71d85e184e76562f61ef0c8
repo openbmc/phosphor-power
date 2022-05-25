@@ -35,6 +35,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "529ca8fe_c307b6a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-05-25T15:15:27Z",
+      "side": 1,
+      "message": "Looks good, I\u0027ll re-review after you address Shawns comments.",
+      "revId": "24ac79e83f911f15b71d85e184e76562f61ef0c8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7de197cc_297fb0a8",
