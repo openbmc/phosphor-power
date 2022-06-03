@@ -16,6 +16,24 @@
       "message": "just confirming you no longer want to return here?",
       "revId": "3a9c9147b3a3e120c286a58187acfa52b435cf55",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d295cb19_84dbfbd0",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-03T17:07:23Z",
+      "side": 1,
+      "message": "That\u0027s correct. The intent of this change is to continue to set the message / RAIL_NAME (which determines the call outs in the PEL) on the fist fail found, but now continue through the full set of rails to capture all the rails with VOUT fails.",
+      "parentUuid": "d66ab5c5_8b3a2419",
+      "revId": "3a9c9147b3a3e120c286a58187acfa52b435cf55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
