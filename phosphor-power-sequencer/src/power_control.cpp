@@ -155,7 +155,9 @@ void PowerControl::pollPgood()
         const auto now = std::chrono::steady_clock::now();
         if (now > pgoodTimeoutTime)
         {
-            log<level::ERR>("ERROR PowerControl: Pgood poll timeout");
+            log<level::ERR>(
+                fmt::format("Power state transition timeout, state: {}", state)
+                    .c_str());
             inStateTransition = false;
 
             if (state)
@@ -203,11 +205,11 @@ void PowerControl::pollPgood()
     else if (!inStateTransition && (pgoodState == 0) && !failureFound)
     {
         // Not in power off state, not changing state, and power good is off
+        log<level::ERR>("Chassis pgood failure");
         device->onFailure(false, powerSupplyError);
         failureFound = true;
-        // Power good has failed, call for chassis hard power off
-        log<level::ERR>("Chassis pgood failure");
 
+        // Power good has failed, call for chassis hard power off
         auto method =
             bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
                                 util::SYSTEMD_INTERFACE, "StartUnit");

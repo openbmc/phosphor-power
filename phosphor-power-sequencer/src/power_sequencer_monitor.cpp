@@ -33,6 +33,25 @@ PowerSequencerMonitor::PowerSequencerMonitor(sdbusplus::bus::bus& bus) :
     bus(bus)
 {}
 
+void PowerSequencerMonitor::createBmcDump()
+{
+    try
+    {
+        auto method = bus.new_method_call(
+            "xyz.openbmc_project.Dump.Manager", "/xyz/openbmc_project/dump/bmc",
+            "xyz.openbmc_project.Dump.Create", "CreateDump");
+        method.append(
+            std::vector<
+                std::pair<std::string, std::variant<std::string, uint64_t>>>());
+        bus.call_noreply(method);
+    }
+    catch (const sdbusplus::exception::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format("Unable to create dump, error {}", e.what()).c_str());
+    }
+}
+
 void PowerSequencerMonitor::logError(
     const std::string& message,
     std::map<std::string, std::string>& additionalData)
@@ -82,6 +101,7 @@ void PowerSequencerMonitor::onFailure(bool timeout,
     {
         // Default to generic pgood error
         logError("xyz.openbmc_project.Power.Error.Shutdown", additionalData);
+        createBmcDump();
     }
 }
 

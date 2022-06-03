@@ -122,7 +122,7 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * Reads the mfr_status register
      * @return the register contents
      */
-    uint32_t readMFRStatus();
+    uint64_t readMFRStatus();
 
     /**
      * Reads the status_word register

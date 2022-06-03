@@ -37,8 +37,8 @@ class PowerControl : public PowerObject
 
     /**
      * Creates a controller object for power on and off.
-     * @param[in] bus D-Bus bus object
-     * @param[in] event event object
+     * @param bus D-Bus bus object
+     * @param event event object
      */
     PowerControl(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
 
@@ -133,7 +133,7 @@ class PowerControl : public PowerObject
     static constexpr std::chrono::milliseconds pollInterval{3000};
 
     /**
-     * GPIO line object for power-on / power-off control
+     * GPIO line object for power on / power off control
      */
     gpiod::line powerControlLine;
 
@@ -164,7 +164,7 @@ class PowerControl : public PowerObject
 
     /**
      * Get the device properties
-     * @param[in] properties A map of property names and values
+     * @param properties A map of property names and values
      */
     void getDeviceProperties(util::DbusPropertyMap& properties);
 

@@ -34,7 +34,7 @@ namespace phosphor::power::sequencer
 {
 
 PowerInterface::PowerInterface(sdbusplus::bus::bus& bus, const char* path) :
-    _serverInterface(bus, path, POWER_IFACE, _vtable, this)
+    serverInterface(bus, path, POWER_IFACE, vtable, this)
 {}
 
 int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
@@ -286,23 +286,23 @@ int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
 void PowerInterface::emitPowerGoodSignal()
 {
     log<level::INFO>("emitPowerGoodSignal");
-    _serverInterface.new_signal("PowerGood").signal_send();
+    serverInterface.new_signal("PowerGood").signal_send();
 }
 
 void PowerInterface::emitPowerLostSignal()
 {
     log<level::INFO>("emitPowerLostSignal");
-    _serverInterface.new_signal("PowerLost").signal_send();
+    serverInterface.new_signal("PowerLost").signal_send();
 }
 
 void PowerInterface::emitPropertyChangedSignal(const char* property)
 {
     log<level::INFO>(
         fmt::format("emitPropertyChangedSignal: {}", property).c_str());
-    _serverInterface.property_changed(property);
+    serverInterface.property_changed(property);
 }
 
-const sdbusplus::vtable::vtable_t PowerInterface::_vtable[] = {
+const sdbusplus::vtable::vtable_t PowerInterface::vtable[] = {
     sdbusplus::vtable::start(),
     // Method setPowerState takes an int parameter and returns void
     sdbusplus::vtable::method("setPowerState", "i", "", callbackSetPowerState),
