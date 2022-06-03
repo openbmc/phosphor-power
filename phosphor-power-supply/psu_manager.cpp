@@ -331,6 +331,8 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
             getPSUProperties(itIntf->second);
         }
 
+        updateMissingPSUs();
+
         // Call to validate the psu configuration if the power is on and both
         // the IBMCFFPSConnector and SupportedConfiguration interfaces have been
         // processed
@@ -715,6 +717,77 @@ void PSUManager::analyze()
     }
 }
 
+void PSUManager::updateMissingPSUs()
+{
+    if (supportedConfigs.empty() || psus.empty())
+    {
+        return;
+    }
+
+    // Power supplies default to missing. If the power supply is present,
+    // the PowerSupply object will update the inventory Present property to
+    // true. If we have less than the required number of power supplies, and
+    // this power supply is missing, update the inventory Present property
+    // to false to indicate required power supply is missing. Avoid
+    // indicating power supply missing if not required.
+
+    auto presentCount =
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->isPresent(); });
+
+    for (const auto& config : supportedConfigs)
+    {
+        for (const auto& psu : psus)
+        {
+            auto psuModel = psu->getModelName();
+            auto psuShortName = psu->getShortName();
+            auto psuInventoryPath = psu->getInventoryPath();
+            auto relativeInvPath =
+                psuInventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+            auto psuPresent = psu->isPresent();
+            auto presProperty = false;
+            auto propReadFail = false;
+
+            try
+            {
+                presProperty = getPresence(bus, psuInventoryPath);
+                propReadFail = false;
+            }
+            catch (const sdbusplus::exception::exception& e)
+            {
+                propReadFail = true;
+                // Relying on property change or interface added to retry.
+                // Log an informational trace to the journal.
+                log<level::INFO>(
+                    fmt::format("D-Bus property {} access failure exception",
+                                psuInventoryPath)
+                        .c_str());
+            }
+
+            if (psuModel.empty())
+            {
+                if (!propReadFail && (presProperty != psuPresent))
+                {
+                    // We already have this property, and it is not false
+                    // set Present to false
+                    setPresence(bus, relativeInvPath, psuPresent, psuShortName);
+                }
+                continue;
+            }
+
+            if (config.first != psuModel)
+            {
+                continue;
+            }
+
+            if ((presentCount < config.second.powerSupplyCount) && !psuPresent)
+            {
+                setPresence(bus, relativeInvPath, psuPresent, psuShortName);
+            }
+        }
+    }
+}
+
 void PSUManager::validateConfig()
 {
     if (!runValidateConfig || supportedConfigs.empty() || psus.empty())
@@ -772,6 +845,7 @@ bool PSUManager::hasRequiredPSUs(
         {
             continue;
         }
+
         if (presentCount != config.second.powerSupplyCount)
         {
             tmpAdditionalData.clear();

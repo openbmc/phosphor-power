@@ -126,6 +126,7 @@ class PSUManager
 
         onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
         clearFaults();
+        updateMissingPSUs();
         updateInventory();
         setPowerConfigGPIO();
     }
@@ -280,6 +281,11 @@ class PSUManager
      * @param[in] properties - A map of property names and values
      */
     void populateSysProperties(const util::DbusPropertyMap& properties);
+
+    /**
+     * @brief Update inventory for missing required power supplies
+     */
+    void updateMissingPSUs();
 
     /**
      * @brief Perform power supply configuration validation.
