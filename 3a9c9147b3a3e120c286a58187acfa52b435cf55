@@ -3,6 +3,63 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "309887e9_e5f80529",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-03T17:59:37Z",
+      "side": 1,
+      "message": "In the base class, I noticed it does not create a BMC dump if this is a powerSupplyError.  Do we need to add the same check here?",
+      "revId": "3a9c9147b3a3e120c286a58187acfa52b435cf55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d0cb66f_726fc7a7",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-03T17:59:37Z",
+      "side": 1,
+      "message": "Is your intent to catch this specific exception type and allow others to continue to an outer catch?\n\nWhile you can throw any data type in C++, the root of the built-in exception tree is std::exception.  So that is what people usually catch if they want to catch any exception from an underlying library call.",
+      "range": {
+        "startLine": 315,
+        "startChar": 22,
+        "endLine": 315,
+        "endChar": 34
+      },
+      "revId": "3a9c9147b3a3e120c286a58187acfa52b435cf55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5077e5_66a2314c",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-03T17:59:37Z",
+      "side": 1,
+      "message": "Might help to document what is special about 84 and why it must be handled differently.  It seems like you are printing all 84 but are providing better labels?",
+      "revId": "3a9c9147b3a3e120c286a58187acfa52b435cf55",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d66ab5c5_8b3a2419",
         "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
         "patchSetId": 1
