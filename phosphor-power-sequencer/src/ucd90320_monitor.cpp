@@ -28,6 +28,7 @@
 
 #include <fstream>
 #include <map>
+#include <span>
 #include <string>
 
 namespace phosphor::power::sequencer
@@ -241,7 +242,7 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                     .c_str());
         }
         log<level::DEBUG>(
-            fmt::format("Found number of pins: {}", rails.size()).c_str());
+            fmt::format("Found number of pins: {}", pins.size()).c_str());
     }
     catch (const std::exception& e)
     {
@@ -261,13 +262,7 @@ void UCD90320Monitor::onFailure(bool timeout,
     try
     {
         onFailureCheckRails(message, additionalData, powerSupplyError);
-        log<level::INFO>(
-            fmt::format("After onFailureCheckRails, message: {}", message)
-                .c_str());
         onFailureCheckPins(message, additionalData);
-        log<level::INFO>(
-            fmt::format("After onFailureCheckPins, message: {}", message)
-                .c_str());
     }
     catch (device_error::ReadFailure& e)
     {
@@ -285,6 +280,10 @@ void UCD90320Monitor::onFailure(bool timeout,
                           : "xyz.openbmc_project.Power.Error.Shutdown";
     }
     logError(message, additionalData);
+    if (!timeout)
+    {
+        createBmcDump();
+    }
 }
 
 void UCD90320Monitor::onFailureCheckPins(
@@ -301,18 +300,65 @@ void UCD90320Monitor::onFailureCheckPins(
     // Workaround libgpiod bulk line maximum by getting values from individual
     // lines
     std::vector<int> values;
-    for (unsigned int offset = 0; offset < numberLines; ++offset)
+    try
     {
-        gpiod::line line = chip.get_line(offset);
-        line.request({"phosphor-power-control",
-                      gpiod::line_request::DIRECTION_INPUT, 0});
-        values.push_back(line.get_value());
-        line.release();
+        for (unsigned int offset = 0; offset < numberLines; ++offset)
+        {
+            gpiod::line line = chip.get_line(offset);
+            line.request({"phosphor-power-control",
+                          gpiod::line_request::DIRECTION_INPUT, 0});
+            values.push_back(line.get_value());
+            line.release();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format("Error reading device GPIOs, error {}", e.what())
+                .c_str());
+        additionalData.emplace("GPIO_ERROR", e.what());
     }
 
-    // Add GPIO values to additional data
-    log<level::INFO>(fmt::format("GPIO values: {}", values).c_str());
-    additionalData.emplace("GPIO_VALUES", fmt::format("{}", values));
+    // Add GPIO values to additional data, device has 84 GPIO pins so that value
+    // is expected
+    if (numberLines == 84)
+    {
+        log<level::INFO>(fmt::format("MAR01-24 GPIO values: {}",
+                                     std::span{values}.subspan(0, 24))
+                             .c_str());
+        additionalData.emplace(
+            "MAR01_24_GPIO_VALUES",
+            fmt::format("{}", std::span{values}.subspan(0, 24)));
+        log<level::INFO>(fmt::format("EN1-32 GPIO values: {}",
+                                     std::span{values}.subspan(24, 32))
+                             .c_str());
+        additionalData.emplace(
+            "EN1_32_GPIO_VALUES",
+            fmt::format("{}", std::span{values}.subspan(24, 32)));
+        log<level::INFO>(fmt::format("LGP01-16 GPIO values: {}",
+                                     std::span{values}.subspan(56, 16))
+                             .c_str());
+        additionalData.emplace(
+            "LGP01_16_GPIO_VALUES",
+            fmt::format("{}", std::span{values}.subspan(56, 16)));
+        log<level::INFO>(fmt::format("DMON1-8 GPIO values: {}",
+                                     std::span{values}.subspan(72, 8))
+                             .c_str());
+        additionalData.emplace(
+            "DMON1_8_GPIO_VALUES",
+            fmt::format("{}", std::span{values}.subspan(72, 8)));
+        log<level::INFO>(fmt::format("GPIO1-4 GPIO values: {}",
+                                     std::span{values}.subspan(80, 4))
+                             .c_str());
+        additionalData.emplace(
+            "GPIO1_4_GPIO_VALUES",
+            fmt::format("{}", std::span{values}.subspan(80, 4)));
+    }
+    else
+    {
+        log<level::INFO>(fmt::format("GPIO values: {}", values).c_str());
+        additionalData.emplace("GPIO_VALUES", fmt::format("{}", values));
+    }
 
     // Only check GPIOs if no rail fail was found
     if (message.empty())
@@ -328,8 +374,6 @@ void UCD90320Monitor::onFailureCheckPins(
                     additionalData.emplace("INPUT_NUM",
                                            fmt::format("{}", line));
                     additionalData.emplace("INPUT_NAME", pins[pin].name);
-                    additionalData.emplace("INPUT_STATUS",
-                                           fmt::format("{}", value));
                     message =
                         "xyz.openbmc_project.Power.Error.PowerSequencerPGOODFault";
                     return;
@@ -348,7 +392,7 @@ void UCD90320Monitor::onFailureCheckRails(
     try
     {
         additionalData.emplace("MFR_STATUS",
-                               fmt::format("{:#010x}", readMFRStatus()));
+                               fmt::format("{:#014x}", readMFRStatus()));
     }
     catch (device_error::ReadFailure& e)
     {
@@ -370,34 +414,38 @@ void UCD90320Monitor::onFailureCheckRails(
             {
                 uint8_t vout = pmbusInterface.read(statusVout, Type::Debug);
 
-                // If any bits are on log them, though some are just warnings so
-                // they won't cause errors
                 if (vout)
                 {
+                    // If any bits are on log them, though some are just
+                    // warnings so they won't cause errors
                     log<level::INFO>(
-                        fmt::format("STATUS_VOUT, page: {}, value: {:#04x}",
-                                    page, vout)
+                        fmt::format("{}, value: {:#04x}", statusVout, vout)
                             .c_str());
-                }
 
-                // Log errors if any non-warning bits on
-                if (vout & ~status_vout::WARNING_MASK)
-                {
-                    additionalData.emplace("STATUS_VOUT",
-                                           fmt::format("{:#04x}", vout));
-                    additionalData.emplace("PAGE", fmt::format("{}", page));
-                    if (page < rails.size())
+                    // Log errors if any non-warning bits on
+                    if (vout & ~status_vout::WARNING_MASK)
                     {
-                        additionalData.emplace("RAIL_NAME", rails[page]);
-                    }
+                        additionalData.emplace(
+                            fmt::format("STATUS{}_VOUT", page),
+                            fmt::format("{:#04x}", vout));
 
-                    // Use power supply error if set and 12v rail has failed,
-                    // else use voltage error
-                    message =
-                        ((page == 0) && !powerSupplyError.empty())
-                            ? powerSupplyError
-                            : "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
-                    return;
+                        // Base the callouts on the first vout failure found
+                        if (message.empty())
+                        {
+                            if (page < rails.size())
+                            {
+                                additionalData.emplace("RAIL_NAME",
+                                                       rails[page]);
+                            }
+
+                            // Use power supply error if set and 12v rail has
+                            // failed, else use voltage error
+                            message =
+                                ((page == 0) && !powerSupplyError.empty())
+                                    ? powerSupplyError
+                                    : "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
+                        }
+                    }
                 }
             }
         }
@@ -409,7 +457,7 @@ uint16_t UCD90320Monitor::readStatusWord()
     return pmbusInterface.read(STATUS_WORD, Type::Debug);
 }
 
-uint32_t UCD90320Monitor::readMFRStatus()
+uint64_t UCD90320Monitor::readMFRStatus()
 {
     const std::string mfrStatus = "mfr_status";
     return pmbusInterface.read(mfrStatus, Type::HwmonDeviceDebug);

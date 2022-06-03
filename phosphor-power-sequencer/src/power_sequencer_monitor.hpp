@@ -24,14 +24,14 @@ class PowerSequencerMonitor
 
     /**
      * Create a base device object for power sequence monitoring.
-     * @param[in] bus D-Bus bus object
+     * @param bus D-Bus bus object
      */
     explicit PowerSequencerMonitor(sdbusplus::bus::bus& bus);
 
     /**
      * Logs an error using the D-Bus Create method.
-     * @param[in] message Message property of the error log entry
-     * @param[in] additionalData AdditionalData property of the error log entry
+     * @param message Message property of the error log entry
+     * @param additionalData AdditionalData property of the error log entry
      */
     void logError(const std::string& message,
                   std::map<std::string, std::string>& additionalData);
@@ -39,8 +39,8 @@ class PowerSequencerMonitor
     /**
      * Analyzes the device for errors when the device is
      * known to be in an error state.  A log will be created.
-     * @param[in] timeout if the failure state was determined by timing out
-     * @param[in] powerSupplyError The power supply error to log. A default
+     * @param timeout if the failure state was determined by timing out
+     * @param powerSupplyError The power supply error to log. A default
      * std:string, i.e. empty string (""), is passed when there is no power
      * supply error to log.
      */
@@ -51,6 +51,11 @@ class PowerSequencerMonitor
      * The D-Bus bus object
      */
     sdbusplus::bus::bus& bus;
+
+    /*
+     * Create a BMC Dump
+     */
+    void createBmcDump();
 };
 
 } // namespace phosphor::power::sequencer

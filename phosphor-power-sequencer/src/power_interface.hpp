@@ -26,9 +26,9 @@ class PowerInterface
     virtual ~PowerInterface() = default;
 
     /**
-     * @brief Constructor to put object onto bus at a dbus path.
-     * @param[in] bus D-Bus bus object
-     * @param[in] path D-Bus object path
+     * Constructor to put object onto bus at a dbus path.
+     * @param bus D-Bus bus object
+     * @param path D-Bus object path
      */
     PowerInterface(sdbusplus::bus::bus& bus, const char* path);
 
@@ -44,7 +44,7 @@ class PowerInterface
 
     /**
      * Emit the property changed signal
-     * @param[in] property the property that changed
+     * @param property the property that changed
      */
     void emitPropertyChangedSignal(const char* property);
 
@@ -68,22 +68,20 @@ class PowerInterface
 
     /**
      * Sets the power good timeout
-     * @param[in] timeout power good timeout
+     * @param timeout power good timeout
      */
     virtual void setPgoodTimeout(int timeout) = 0;
 
     /**
      * Initiates a chassis power state change
-     * @param[in] state power state. Request power on with a value of 1. Request
+     * @param state power state. Request power on with a value of 1. Request
      * power off with a value of 0. Other values will be rejected.
      */
     virtual void setState(int state) = 0;
 
     /**
-     * Sets the power supply error. The error should be of great enough severity
-     * that a power good failure may occur and will be issued in preference to
-     * the power good error.
-     * @param[in] error power supply error. The value should be a message
+     * Sets the power supply error.
+     * @param error power supply error. The value should be a message
      * argument for a phosphor-logging Create call, e.g.
      * "xyz.openbmc_project.Power.PowerSupply.Error.PSKillFault"
      */
@@ -93,14 +91,14 @@ class PowerInterface
     /**
      * Holder for the instance of this interface to be on dbus
      */
-    sdbusplus::server::interface::interface _serverInterface;
+    sdbusplus::server::interface::interface serverInterface;
 
     /**
      * Systemd vtable structure that contains all the
      * methods, signals, and properties of this interface with their
      * respective systemd attributes
      */
-    static const sdbusplus::vtable::vtable_t _vtable[];
+    static const sdbusplus::vtable::vtable_t vtable[];
 
     /**
      * Systemd bus callback for getting the pgood property
