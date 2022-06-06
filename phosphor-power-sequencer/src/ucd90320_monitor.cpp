@@ -26,6 +26,7 @@
 #include <sdbusplus/bus.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
+#include <chrono>
 #include <fstream>
 #include <map>
 #include <span>
@@ -256,6 +257,10 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
 void UCD90320Monitor::onFailure(bool timeout,
                                 const std::string& powerSupplyError)
 {
+    // Wait for five seconds before reading device data. This is to allow the
+    // power supplies and other hardware time to conmplete failure processing.
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+
     std::string message;
     std::map<std::string, std::string> additionalData{};
 
@@ -449,6 +454,12 @@ void UCD90320Monitor::onFailureCheckRails(
                 }
             }
         }
+    }
+    // If no vout failure found, but power supply error is set, use power supply
+    // error
+    if (message.empty())
+    {
+        message = powerSupplyError;
     }
 }
 
