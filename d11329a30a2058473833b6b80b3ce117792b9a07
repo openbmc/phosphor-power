@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9eee1600_42e3bec5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-08T16:09:48Z",
+      "side": 1,
+      "message": "This would be the model read over PMBus. The model will not be read over PMBus if the power supply is not present. If the model is not present, there is a local variable that starts out empty, and will be filled in with the first power supply that has a model value collected.",
+      "parentUuid": "3c7dd05d_58d20589",
+      "range": {
+        "startLine": 24,
+        "startChar": 30,
+        "endLine": 24,
+        "endChar": 35
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f92509b7_09fe0dd5",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af1a9186_b35fcf7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-08T16:09:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f92509b7_09fe0dd5",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 12
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "541ea3d8_49acd766",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -60,6 +108,30 @@
       "writtenOn": "2022-06-08T15:44:34Z",
       "side": 1,
       "message": "Why does it log an error here?  For Rainier 1S4U on line 60 it seems like a similar test but no error is expected.",
+      "range": {
+        "startLine": 129,
+        "startChar": 26,
+        "endLine": 129,
+        "endChar": 34
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f540c11_6dc9123d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-08T16:09:48Z",
+      "side": 1,
+      "message": "It is a bit complex. All the power supply types for Rainier 2S2U are limited to a maximum count of two. You cannot physically install more than two. However, the board is common, so there are presence lines that default to missing.\n\nExample:\nCount to be redundant is 2.\npsu1 present.\npsu0 missing.\npsu2 missing (cannot be present)\npsu3 missing (cannot be present).\nAre there less than 2 installed, and psuX missing? \n  Yes - call out psu0.\n  Yes - call out psu2 (not possible!?)\n  Yes - Call out psu3 (not possible!?)\nSomething with hasRequiredPSUs(), or some other check needs to be run to cover this scenario.",
+      "parentUuid": "541ea3d8_49acd766",
       "range": {
         "startLine": 129,
         "startChar": 26,
