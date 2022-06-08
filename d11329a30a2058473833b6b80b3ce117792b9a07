@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c7dd05d_58d20589",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-08T15:44:34Z",
+      "side": 1,
+      "message": "Is this not saved (serialized) by Inventory Manager in the same way as Presence?",
+      "range": {
+        "startLine": 24,
+        "startChar": 30,
+        "endLine": 24,
+        "endChar": 35
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f92509b7_09fe0dd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-08T15:44:34Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 12
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "541ea3d8_49acd766",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-08T15:44:34Z",
+      "side": 1,
+      "message": "Why does it log an error here?  For Rainier 1S4U on line 60 it seems like a similar test but no error is expected.",
+      "range": {
+        "startLine": 129,
+        "startChar": 26,
+        "endLine": 129,
+        "endChar": 34
+      },
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23f5ce02_1b4ab787",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-08T15:44:34Z",
+      "side": 1,
+      "message": "I noticed that validateConfig()/hasRequiredPSUs() checks the voltage to see if that matches the config.  Is that needed here too?\n\nNot try to make a complex function even more complex.  I just don\u0027t have a firm grasp on what config variations are possible.",
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d657e68c_c89a51f8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-06-08T15:44:34Z",
+      "side": 1,
+      "message": "If the required number of PSUs is not present, then all PSUs defined in EntityManager that are not present will be marked missing here?  Is that what you want?\n\nIt seems reasonable, but I assume it might be more complex than that.  Otherwise why not just have each PowerSupply object always publish its presence (true or false) every time and avoid all this complexity?",
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
