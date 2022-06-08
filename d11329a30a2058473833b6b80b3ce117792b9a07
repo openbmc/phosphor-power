@@ -161,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d31d9708_b47c3b18",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-08T17:44:24Z",
+      "side": 1,
+      "message": "No, we do not want to skip power supplies with no input voltage. All we care about here is if it is missing or present, and what D-Bus indicates.\n\nI did state this in the commit message:\nDo not skip over power supplies that have no input voltage.",
+      "parentUuid": "23f5ce02_1b4ab787",
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d657e68c_c89a51f8",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 1
@@ -172,6 +190,24 @@
       "writtenOn": "2022-06-08T15:44:34Z",
       "side": 1,
       "message": "If the required number of PSUs is not present, then all PSUs defined in EntityManager that are not present will be marked missing here?  Is that what you want?\n\nIt seems reasonable, but I assume it might be more complex than that.  Otherwise why not just have each PowerSupply object always publish its presence (true or false) every time and avoid all this complexity?",
+      "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b578000_844288b3",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-08T17:44:24Z",
+      "side": 1,
+      "message": "This is updating the Present property on D-Bus, not whether the power supply object indicates it is present or missing.",
+      "parentUuid": "d657e68c_c89a51f8",
       "revId": "d11329a30a2058473833b6b80b3ce117792b9a07",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
