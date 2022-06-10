@@ -85,6 +85,62 @@ PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
     initialize();
 }
 
+void PSUManager::initialize()
+{
+    try
+    {
+        // pgood is the latest read of the chassis pgood
+        int pgood = 0;
+        util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
+                               powerService, bus, pgood);
+
+        // state is the latest requested power on / off transition
+        auto method = bus.new_method_call(POWER_IFACE, POWER_OBJ_PATH,
+                                          POWER_IFACE, "getPowerState");
+        auto reply = bus.call(method);
+        int state = 0;
+        reply.read(state);
+
+        if (state)
+        {
+            // Monitor PSUs anytime state is on
+            powerOn = true;
+            // In the power fault window if pgood is off
+            powerFaultOccurring = !pgood;
+            validationTimer->restartOnce(validationTimeout);
+        }
+        else
+        {
+            // Power is off
+            powerOn = false;
+            powerFaultOccurring = false;
+            runValidateConfig = true;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        log<level::INFO>(
+            fmt::format(
+                "Failed to get power state, assuming it is off, error {}",
+                e.what())
+                .c_str());
+        powerOn = false;
+        powerFaultOccurring = false;
+        runValidateConfig = true;
+    }
+
+    onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
+    clearFaults();
+    updateMissingPSUs();
+    updateInventory();
+    setPowerConfigGPIO();
+
+    log<level::INFO>(
+        fmt::format("initialize: power on: {}, power fault occurring: {}",
+                    powerOn, powerFaultOccurring)
+            .c_str());
+}
+
 void PSUManager::getPSUConfiguration()
 {
     using namespace phosphor::power::util;
@@ -351,21 +407,20 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
 
 void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
 {
-    int32_t state = 0;
     std::string msgSensor;
-    std::map<std::string, std::variant<int32_t>> msgData;
+    std::map<std::string, std::variant<int>> msgData;
     msg.read(msgSensor, msgData);
 
-    // Check if it was the Present property that changed.
+    // Check if it was the state property that changed.
     auto valPropMap = msgData.find("state");
     if (valPropMap != msgData.end())
     {
-        state = std::get<int32_t>(valPropMap->second);
-
-        // Power is on when state=1. Clear faults.
+        int state = std::get<int>(valPropMap->second);
         if (state)
         {
+            // Power on requested
             powerOn = true;
+            powerFaultOccurring = false;
             validationTimer->restartOnce(validationTimeout);
             clearFaults();
             syncHistory();
@@ -373,10 +428,33 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         }
         else
         {
+            // Power off requested
             powerOn = false;
+            powerFaultOccurring = false;
             runValidateConfig = true;
         }
     }
+
+    // Check if it was the pgood property that changed.
+    valPropMap = msgData.find("pgood");
+    if (valPropMap != msgData.end())
+    {
+        int pgood = std::get<int>(valPropMap->second);
+        if (!pgood)
+        {
+            // Chassis power good has turned off
+            if (powerOn)
+            {
+                // pgood is off but state is on, in power fault window
+                powerFaultOccurring = true;
+            }
+        }
+    }
+    log<level::INFO>(
+        fmt::format(
+            "powerStateChanged: power on: {}, power fault occurring: {}",
+            powerOn, powerFaultOccurring)
+            .c_str());
 }
 
 void PSUManager::presenceChanged(sdbusplus::message::message& msg)
@@ -650,7 +728,8 @@ void PSUManager::analyze()
                 }
                 // A fan fault should have priority over a temperature fault,
                 // since a failed fan may lead to a temperature problem.
-                else if (psu->hasFanFault())
+                // Only process if not in power fault window.
+                else if (psu->hasFanFault() && !powerFaultOccurring)
                 {
                     // Include STATUS_TEMPERATURE and STATUS_FANS_1_2
                     additionalData["STATUS_TEMPERATURE"] =
@@ -702,7 +781,8 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
-                else if (psu->hasPgoodFault())
+                // Only process if not in power fault window.
+                else if (psu->hasPgoodFault() && !powerFaultOccurring)
                 {
                     /* POWER_GOOD# is not low, or OFF is on */
                     additionalData["CALLOUT_INVENTORY_PATH"] =

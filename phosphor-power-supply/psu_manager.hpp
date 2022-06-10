@@ -95,41 +95,7 @@ class PSUManager
      *
      * Get current BMC state, ...
      */
-    void initialize()
-    {
-        // When state = 1, system is powered on
-        int32_t state = 0;
-
-        try
-        {
-            // Use getProperty utility function to get power state.
-            util::getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH,
-                                       powerService, bus, state);
-
-            if (state)
-            {
-                powerOn = true;
-                validationTimer->restartOnce(validationTimeout);
-            }
-            else
-            {
-                powerOn = false;
-                runValidateConfig = true;
-            }
-        }
-        catch (const std::exception& e)
-        {
-            log<level::INFO>("Failed to get power state. Assuming it is off.");
-            powerOn = false;
-            runValidateConfig = true;
-        }
-
-        onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
-        clearFaults();
-        updateMissingPSUs();
-        updateInventory();
-        setPowerConfigGPIO();
-    }
+    void initialize();
 
     /**
      * Starts the timer to start monitoring the list of devices.
@@ -214,6 +180,10 @@ class PSUManager
 
     /** @brief True if the power is on. */
     bool powerOn = false;
+
+    /** @brief True if power control is in the window between chassis pgood loss
+     * and power off. */
+    bool powerFaultOccurring = false;
 
     /** @brief True if an error for a brownout has already been logged. */
     bool brownoutLogged = false;
