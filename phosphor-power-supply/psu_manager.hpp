@@ -4,6 +4,8 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <fmt/format.h>
+
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/server/manager.hpp>
@@ -97,30 +99,57 @@ class PSUManager
      */
     void initialize()
     {
-        // When state = 1, system is powered on
-        int32_t state = 0;
-
         try
         {
-            // Use getProperty utility function to get power state.
-            util::getProperty<int32_t>(POWER_IFACE, "state", POWER_OBJ_PATH,
-                                       powerService, bus, state);
+            // pgood is the latest read of the chassis pgood
+            int pgood = 0;
+            util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
+                                   powerService, bus, pgood);
+            log<level::INFO>(
+                fmt::format("initialize: power oood: {}", pgood).c_str());
 
-            if (state)
+            // state is the latest requested power on / off transition
+            auto method = bus.new_method_call(POWER_IFACE, POWER_OBJ_PATH,
+                                              POWER_IFACE, "getPowerState");
+            auto reply = bus.call(method);
+            int state = 0;
+            reply.read(state);
+            log<level::INFO>(
+                fmt::format("initialize: power state: {}", state).c_str());
+
+            if (pgood && state)
             {
+                // Power is on and not in power transition
                 powerOn = true;
+                powerFaultOccurring = false;
                 validationTimer->restartOnce(validationTimeout);
             }
             else
             {
-                powerOn = false;
+                if (!pgood && state)
+                {
+                    // In power failure window
+                    powerOn = true;
+                    powerFaultOccurring = true;
+                }
+                else
+                {
+                    // Power is off
+                    powerOn = false;
+                    powerFaultOccurring = false;
+                }
                 runValidateConfig = true;
             }
         }
         catch (const std::exception& e)
         {
-            log<level::INFO>("Failed to get power state. Assuming it is off.");
+            log<level::INFO>(
+                fmt::format(
+                    "Failed to get power state, assuming it is off, error {}",
+                    e.what())
+                    .c_str());
             powerOn = false;
+            powerFaultOccurring = false;
             runValidateConfig = true;
         }
 
@@ -129,6 +158,11 @@ class PSUManager
         updateMissingPSUs();
         updateInventory();
         setPowerConfigGPIO();
+
+        log<level::INFO>(
+            fmt::format("initialize: powerOn: {}, powerFaultOccurring: {}",
+                        powerOn, powerFaultOccurring)
+                .c_str());
     }
 
     /**
@@ -214,6 +248,10 @@ class PSUManager
 
     /** @brief True if the power is on. */
     bool powerOn = false;
+
+    /** @brief True if power control is in the window between chassis pgood loss
+     * and power off. */
+    bool powerFaultOccurring = false;
 
     /** @brief True if an error for a brownout has already been logged. */
     bool brownoutLogged = false;

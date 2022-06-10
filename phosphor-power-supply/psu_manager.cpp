@@ -4,7 +4,6 @@
 
 #include "utility.hpp"
 
-#include <fmt/format.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -349,21 +348,39 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
 
 void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
 {
-    int32_t state = 0;
+    log<level::INFO>("In powerStateChanged");
     std::string msgSensor;
-    std::map<std::string, std::variant<int32_t>> msgData;
+    std::map<std::string, std::variant<int>> msgData;
     msg.read(msgSensor, msgData);
 
-    // Check if it was the Present property that changed.
+    // Check if it was the state property that changed.
     auto valPropMap = msgData.find("state");
     if (valPropMap != msgData.end())
     {
-        state = std::get<int32_t>(valPropMap->second);
-
-        // Power is on when state=1. Clear faults.
-        if (state)
+        int state = std::get<int>(valPropMap->second);
+        log<level::INFO>(
+            fmt::format("powerStateChanged state: {}", state).c_str());
+        if (!state)
         {
+            // Power off requested
+            powerOn = false;
+            powerFaultOccurring = false;
+            runValidateConfig = true;
+        }
+    }
+
+    // Check if it was the pgood property that changed.
+    valPropMap = msgData.find("pgood");
+    if (valPropMap != msgData.end())
+    {
+        int pgood = std::get<int>(valPropMap->second);
+        log<level::INFO>(
+            fmt::format("powerStateChanged pgood: {}", pgood).c_str());
+        if (pgood)
+        {
+            // Chassis power good has turned on
             powerOn = true;
+            powerFaultOccurring = false;
             validationTimer->restartOnce(validationTimeout);
             clearFaults();
             syncHistory();
@@ -371,10 +388,18 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
         }
         else
         {
-            powerOn = false;
-            runValidateConfig = true;
+            // Chassis power good has turned off
+            if (powerOn)
+            {
+                // pgood is off but state is on, in power fault window
+                powerFaultOccurring = true;
+            }
         }
     }
+    log<level::INFO>(
+        fmt::format("powerStateChanged: powerOn: {}, powerFaultOccurring: {}",
+                    powerOn, powerFaultOccurring)
+            .c_str());
 }
 
 void PSUManager::presenceChanged(sdbusplus::message::message& msg)
@@ -648,7 +673,8 @@ void PSUManager::analyze()
                 }
                 // A fan fault should have priority over a temperature fault,
                 // since a failed fan may lead to a temperature problem.
-                else if (psu->hasFanFault())
+                // Only process if not in power fault window.
+                else if (psu->hasFanFault() && !powerFaultOccurring)
                 {
                     // Include STATUS_TEMPERATURE and STATUS_FANS_1_2
                     additionalData["STATUS_TEMPERATURE"] =
@@ -700,7 +726,8 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
-                else if (psu->hasPgoodFault())
+                // Only process if not in power fault window.
+                else if (psu->hasPgoodFault() && !powerFaultOccurring)
                 {
                     /* POWER_GOOD# is not low, or OFF is on */
                     additionalData["CALLOUT_INVENTORY_PATH"] =
