@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4a8ee1_84569327",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-06-10T19:02:22Z",
+      "side": 1,
+      "message": "could also probably combine all traces into 1 at the bottom of the function here too.",
+      "range": {
+        "startLine": 351,
+        "startChar": 3,
+        "endLine": 351,
+        "endChar": 45
+      },
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2272abfc_3f27bb72",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-06-10T19:02:22Z",
+      "side": 1,
+      "message": "Could put the pgood and state values in one trace to save space.\n\nOr, combine all 3 traces into the one at the end of  the function.",
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
