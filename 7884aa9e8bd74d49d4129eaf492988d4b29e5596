@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15581c69_e453b5a0",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-06-10T19:41:45Z",
+      "side": 1,
+      "message": "I think the amount of logic in this function should warrant moving it to a .cpp file. Too much logic in headers makes debugging harder and reduces compile times.",
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2272abfc_3f27bb72",
         "filename": "phosphor-power-supply/psu_manager.hpp",
         "patchSetId": 1
