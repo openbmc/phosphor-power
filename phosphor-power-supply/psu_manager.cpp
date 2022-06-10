@@ -8,7 +8,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <algorithm>
 #include <regex>
+#include <set>
 
 using namespace phosphor::logging;
 
@@ -536,7 +538,7 @@ void PSUManager::analyze()
             {
                 std::map<std::string, std::string> requiredPSUsData;
                 auto requiredPSUsPresent = hasRequiredPSUs(requiredPSUsData);
-                if (!requiredPSUsPresent)
+                if (!requiredPSUsPresent && isRequiredPSU(*psu))
                 {
                     additionalData.merge(requiredPSUsData);
                     // Create error for power supply missing.
@@ -896,6 +898,118 @@ bool PSUManager::hasRequiredPSUs(
     }
 
     additionalData.insert(tmpAdditionalData.begin(), tmpAdditionalData.end());
+    return false;
+}
+
+unsigned int PSUManager::getRequiredPSUCount()
+{
+    unsigned int requiredCount{0};
+
+    // Verify we have the supported configuration and PSU information
+    if (!supportedConfigs.empty() && !psus.empty())
+    {
+        // Find PSU models.  They should all be the same.
+        std::set<std::string> models{};
+        std::for_each(psus.begin(), psus.end(), [&models](const auto& psu) {
+            if (!psu->getModelName().empty())
+            {
+                models.insert(psu->getModelName());
+            }
+        });
+
+        // If exactly one model was found, find corresponding configuration
+        if (models.size() == 1)
+        {
+            const std::string& model = *(models.begin());
+            auto it = supportedConfigs.find(model);
+            if (it != supportedConfigs.end())
+            {
+                requiredCount = it->second.powerSupplyCount;
+            }
+        }
+    }
+
+    return requiredCount;
+}
+
+bool PSUManager::isRequiredPSU(const PowerSupply& psu)
+{
+    // Get required number of PSUs; if not found, we don't know if PSU required
+    unsigned int requiredCount = getRequiredPSUCount();
+    if (requiredCount == 0)
+    {
+        return false;
+    }
+
+    // If total PSU count <= the required count, all PSUs are required
+    if (psus.size() <= requiredCount)
+    {
+        return true;
+    }
+
+    // We don't currently get information from EntityManager about which PSUs
+    // are required, so we have to do some guesswork.  First check if this PSU
+    // is present.  If so, assume it is required.
+    if (psu.isPresent())
+    {
+        return true;
+    }
+
+    // This PSU is not present.  Count the number of other PSUs that are
+    // present.  If enough other PSUs are present, assume the specified PSU is
+    // not required.
+    unsigned int psuCount =
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->isPresent(); });
+    if (psuCount >= requiredCount)
+    {
+        return false;
+    }
+
+    // Check if this PSU was previously present.  If so, assume it is required.
+    // We know it was previously present if it has a non-empty model name.
+    if (!psu.getModelName().empty())
+    {
+        return true;
+    }
+
+    // This PSU was never present.  Count the number of other PSUs that were
+    // previously present.  If including those PSUs is enough, assume the
+    // specified PSU is not required.
+    psuCount += std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
+        return (!psu->isPresent() && !psu->getModelName().empty());
+    });
+    if (psuCount >= requiredCount)
+    {
+        return false;
+    }
+
+    // We still haven't found enough PSUs.  Sort the inventory paths of PSUs
+    // that were never present.  PSU inventory paths typically end with the PSU
+    // number (0, 1, 2, ...).  Assume that lower-numbered PSUs are required.
+    std::vector<std::string> sortedPaths;
+    std::for_each(psus.begin(), psus.end(), [&sortedPaths](const auto& psu) {
+        if (!psu->isPresent() && psu->getModelName().empty())
+        {
+            sortedPaths.push_back(psu->getInventoryPath());
+        }
+    });
+    std::sort(sortedPaths.begin(), sortedPaths.end());
+
+    // Check if specified PSU is close enough to start of list to be required
+    for (const auto& path : sortedPaths)
+    {
+        if (path == psu.getInventoryPath())
+        {
+            return true;
+        }
+        if (++psuCount >= requiredCount)
+        {
+            break;
+        }
+    }
+
+    // PSU was not close to start of sorted list; assume not required
     return false;
 }
 

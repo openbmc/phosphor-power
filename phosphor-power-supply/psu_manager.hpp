@@ -314,6 +314,22 @@ class PSUManager
     bool hasRequiredPSUs(std::map<std::string, std::string>& additionalData);
 
     /**
+     * @brief Returns the number of PSUs that are required to be present.
+     *
+     * @return required number of PSUs, or 0 if the number could not be
+     *         determined.
+     */
+    unsigned int getRequiredPSUCount();
+
+    /**
+     * @brief Returns whether the specified PSU is required to be present.
+     *
+     * @param[in] psu - Power supply to check
+     * @return true if PSU is required, false otherwise.
+     */
+    bool isRequiredPSU(const PowerSupply& psu);
+
+    /**
      * @brief Helper function to validate that all PSUs have the same model name
      *
      * @param[out] model - The model name. Empty if there is a mismatch.
