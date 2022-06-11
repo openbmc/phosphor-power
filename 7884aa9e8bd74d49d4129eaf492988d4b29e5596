@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af5a6563_97e52bea",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-11T17:48:25Z",
+      "side": 1,
+      "message": "OK, cut down to one trace.",
+      "parentUuid": "7b4a8ee1_84569327",
+      "range": {
+        "startLine": 351,
+        "startChar": 3,
+        "endLine": 351,
+        "endChar": 45
+      },
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15581c69_e453b5a0",
@@ -59,6 +83,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb2fa1ca_d25596fd",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-11T17:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdb97bc0_6ee4b096",
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2272abfc_3f27bb72",
@@ -72,6 +114,24 @@
       "writtenOn": "2022-06-10T19:02:22Z",
       "side": 1,
       "message": "Could put the pgood and state values in one trace to save space.\n\nOr, combine all 3 traces into the one at the end of  the function.",
+      "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0de59bc5_9f07d78f",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-11T17:48:25Z",
+      "side": 1,
+      "message": "OK, cut down to one trace.",
+      "parentUuid": "2272abfc_3f27bb72",
       "revId": "7884aa9e8bd74d49d4129eaf492988d4b29e5596",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
