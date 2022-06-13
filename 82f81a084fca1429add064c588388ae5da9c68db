@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdb4a5cf_9520ff72",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-13T15:01:05Z",
+      "side": 1,
+      "message": "For historic reason I do not know, the \"state\" getProperty call returns the \"pgood\" property. This is how to actually get the state value.",
+      "parentUuid": "26612943_16a8526e",
+      "revId": "82f81a084fca1429add064c588388ae5da9c68db",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dcf4e47_954f0fa6",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-13T13:20:50Z",
       "side": 1,
       "message": "On master, updateMissingPSUs() is called here.  Maybe you need to rebase on the latest in master?",
+      "revId": "82f81a084fca1429add064c588388ae5da9c68db",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a1fa04_b2f69dcf",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-13T15:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dcf4e47_954f0fa6",
       "revId": "82f81a084fca1429add064c588388ae5da9c68db",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -48,6 +84,24 @@
       "writtenOn": "2022-06-13T13:20:50Z",
       "side": 1,
       "message": "If state is true, nothing is done.  I realize that the new pgood logic on 434-457 does most of what was done here before.  But if \"state\" changes to \"true\", that event gets ignored.  Is that an issue?",
+      "revId": "82f81a084fca1429add064c588388ae5da9c68db",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ec27b2_4b2b8516",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-06-13T15:01:05Z",
+      "side": 1,
+      "message": "Not an issue, desired behavior. On power on, PSU monitoring will begin when the pgood comes on.",
+      "parentUuid": "c8c98d6e_4daf21e5",
       "revId": "82f81a084fca1429add064c588388ae5da9c68db",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
