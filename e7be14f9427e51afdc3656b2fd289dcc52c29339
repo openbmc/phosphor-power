@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4882a04_1f6fc2ac",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-14T16:02:08Z",
+      "side": 1,
+      "message": "Am I missing something? Why is POWER_IFACE in here twice?\n\ntypes.hpp:constexpr auto POWER_IFACE \u003d \"org.openbmc.control.Power\";\n\nhttps://grok.openbmc.org/xref/openbmc/sdbusplus/include/sdbusplus/bus.hpp?r\u003d66492215#214\n\n/** @brief Create a method_call message.\n *\n *  @param[in] service - The service to call.\n *  @param[in] objpath - The object\u0027s path for the call.\n *  @param[in] interf - The object\u0027s interface to call.\n *  @param[in] method - The object\u0027s method to call.\n *\n *  @return A newly constructed message.\n */",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 72
+      },
+      "revId": "e7be14f9427e51afdc3656b2fd289dcc52c29339",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
