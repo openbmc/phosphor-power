@@ -45,6 +45,30 @@
       },
       "revId": "e7be14f9427e51afdc3656b2fd289dcc52c29339",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76397dca_576ff5e8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-14T16:17:20Z",
+      "side": 1,
+      "message": "Never mind, I get it now. Brain rusty after vacation. This is indicating it is still needed, but basically it will not do the configuration checks until the timer is on and such.\n\nhttps://github.com/openbmc/phosphor-power/commit/8f16fb5e81ec4d92cc94175d6fe0c6ec8a39f589\n\nChange-Id: Ib8dd23465bfd36b510197a88d41fc8419862f33b\n\nhttps://gerrit.openbmc.org/c/openbmc/phosphor-power/+/41741",
+      "parentUuid": "2c773c4f_d23ad052",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 135,
+        "endChar": 33
+      },
+      "revId": "e7be14f9427e51afdc3656b2fd289dcc52c29339",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
