@@ -16,6 +16,24 @@
       "message": "Looks like me previous comment said DRAFT, so maybe didn\u0027t get saved?  Anyway looks good to me now thanks.",
       "revId": "aca86d059b92947cd5e430a5d4d1f1fee2ff5b89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95dfc44_e3d33ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2022-06-14T23:12:14Z",
+      "side": 1,
+      "message": "You need to go to the top and check if REPLY button has an indicator next to it.",
+      "parentUuid": "7f7d8caa_f423aea1",
+      "revId": "aca86d059b92947cd5e430a5d4d1f1fee2ff5b89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
