@@ -401,7 +401,7 @@ void PowerSupply::analyzePgoodFault()
     if ((statusWord & phosphor::pmbus::status_word::POWER_GOOD_NEGATED) ||
         (statusWord & phosphor::pmbus::status_word::UNIT_IS_OFF))
     {
-        if (pgoodFault < DEGLITCH_LIMIT)
+        if (pgoodFault < PGOOD_DEGLITCH_LIMIT)
         {
             if (statusWord != statusWordOld)
             {
