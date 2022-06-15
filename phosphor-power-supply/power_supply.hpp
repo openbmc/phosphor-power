@@ -39,6 +39,7 @@ static constexpr auto FL_KW_SIZE = 20;
 
 constexpr auto LOG_LIMIT = 3;
 constexpr auto DEGLITCH_LIMIT = 3;
+constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
 
 /**
  * @class PowerSupply
@@ -256,7 +257,8 @@ class PowerSupply
                 (ioutOCFault >= DEGLITCH_LIMIT) ||
                 (voutUVFault >= DEGLITCH_LIMIT) ||
                 (fanFault >= DEGLITCH_LIMIT) || (tempFault >= DEGLITCH_LIMIT) ||
-                (pgoodFault >= DEGLITCH_LIMIT) || (mfrFault >= DEGLITCH_LIMIT));
+                (pgoodFault >= PGOOD_DEGLITCH_LIMIT) ||
+                (mfrFault >= DEGLITCH_LIMIT));
     }
 
     /**
@@ -345,7 +347,7 @@ class PowerSupply
      */
     bool hasPgoodFault() const
     {
-        return (pgoodFault >= DEGLITCH_LIMIT);
+        return (pgoodFault >= PGOOD_DEGLITCH_LIMIT);
     }
 
     /**
