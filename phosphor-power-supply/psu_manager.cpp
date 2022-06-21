@@ -132,7 +132,6 @@ void PSUManager::initialize()
     onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
     clearFaults();
     updateMissingPSUs();
-    updateInventory();
     setPowerConfigGPIO();
 
     log<level::INFO>(
