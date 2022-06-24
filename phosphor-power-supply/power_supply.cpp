@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdint> // uint8_t...
 #include <fstream>
+#include <regex>
 #include <thread> // sleep_for()
 
 namespace phosphor::power::psu
@@ -808,6 +809,8 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
                                const std::size_t& vpdSize)
 {
     std::string vpdValue;
+    const std::regex illegalVPDRegex =
+        std::regex("[^[:alnum:]]", std::regex::basic);
 
     try
     {
@@ -830,6 +833,10 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
                              .c_str());
         vpdValue.resize(vpdSize, ' ');
     }
+
+    // Replace any illegal values with space(s).
+    std::regex_replace(vpdValue.begin(), vpdValue.begin(), vpdValue.end(),
+                       illegalVPDRegex, " ");
 
     return vpdValue;
 }
