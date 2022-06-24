@@ -871,7 +871,11 @@ class PowerSupply
      */
     auto getMaxPowerOut() const;
 
-    /* @brief Reads a VPD value from PMBus and corrects for size.
+    /* @brief Reads a VPD value from PMBus, correct size, and contents.
+     *
+     * If the VPD data read is not the passed in size, resize and fill with
+     * spaces. If the data contains a non-alphanumeric value, replace any of
+     * those values with spaces.
      *
      * @param[in] vpdName - The name of the sysfs "file" to read data from.
      * @param[in] type - The HWMON file type to read from.
