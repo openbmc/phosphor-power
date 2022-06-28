@@ -35,6 +35,11 @@ constexpr auto VERSION_PROP = "Version";
 
 // ipzVPD Keyword sizes
 static constexpr auto FL_KW_SIZE = 20;
+static constexpr auto FN_KW_SIZE = 7;
+static constexpr auto PN_KW_SIZE = 7;
+// For IBM power supplies, the SN is 6-byte header + 6-byte serial.
+static constexpr auto SN_KW_SIZE = 12;
+static constexpr auto CC_KW_SIZE = 4;
 #endif
 
 constexpr auto LOG_LIMIT = 3;
@@ -867,6 +872,18 @@ class PowerSupply
      * @return max_power_out value converted from string.
      */
     auto getMaxPowerOut() const;
+
+    /* @brief Reads a VPD value from PMBus and corrects for size.
+     *
+     * @param[in] vpdName - The name of the sysfs "file" to read data from.
+     * @param[in] type - The HWMON file type to read from.
+     * @param[in] vpdSize - The expacted size of the data for this VPD/property
+     *
+     * @return A string containing the VPD data read, resized if necessary
+     */
+    auto readVPDValue(const std::string& vpdName,
+                      const phosphor::pmbus::Type& type,
+                      const std::size_t& vpdSize);
 
     /**
      * @brief Reads the most recent input history record from the power supply

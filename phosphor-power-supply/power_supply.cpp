@@ -803,16 +803,57 @@ void PowerSupply::inventoryAdded(sdbusplus::message_t& msg)
     }
 }
 
+auto PowerSupply::readVPDValue(const std::string& vpdName,
+                               const phosphor::pmbus::Type& type,
+                               const std::size_t& vpdSize)
+{
+    std::string vpdValue;
+
+    try
+    {
+        vpdValue = pmbusIntf->readString(vpdName, type);
+    }
+    catch (const ReadFailure& e)
+    {
+        // Ignore the read failure, let pmbus code indicate failure,
+        // path...
+        // TODO - ibm918
+        // https://github.com/openbmc/docs/blob/master/designs/vpd-collection.md
+        // The BMC must log errors if any of the VPD cannot be properly
+        // parsed or fails ECC checks.
+    }
+
+    if (vpdValue.size() != vpdSize)
+    {
+        log<level::INFO>(fmt::format("{} {} resize needed. size: {}", shortName,
+                                     vpdName, vpdValue.size())
+                             .c_str());
+        vpdValue.resize(vpdSize, ' ');
+    }
+
+    return vpdValue;
+}
+
 void PowerSupply::updateInventory()
 {
     using namespace phosphor::pmbus;
 
 #if IBM_VPD
-    std::string ccin;
     std::string pn;
     std::string fn;
     std::string header;
     std::string sn;
+    // The IBM power supply splits the full serial number into two parts.
+    // Each part is 6 bytes long, which should match up with SN_KW_SIZE.
+    const auto HEADER_SIZE = 6;
+    const auto SERIAL_SIZE = 6;
+    // The IBM PSU firmware version size is a bit complicated. It was originally
+    // 1-byte, per command. It was later expanded to 2-bytes per command, then
+    // up to 8-bytes per command. The device driver only reads up to 2 bytes per
+    // command, but combines all three of the 2-byte reads, or all 4 of the
+    // 1-byte reads into one string. So, the maximum size expected is 6 bytes.
+    const auto VERSION_SIZE = 6;
+
     using PropertyMap =
         std::map<std::string,
                  std::variant<std::string, std::vector<uint8_t>, bool>>;
@@ -835,71 +876,26 @@ void PowerSupply::updateInventory()
         // TODO: non-IBM inventory updates?
 
 #if IBM_VPD
-        try
-        {
-            ccin = pmbusIntf->readString(CCIN, Type::HwmonDeviceDebug);
-            assetProps.emplace(MODEL_PROP, ccin);
-            modelName = ccin;
-        }
-        catch (const ReadFailure& e)
-        {
-            // Ignore the read failure, let pmbus code indicate failure,
-            // path...
-            // TODO - ibm918
-            // https://github.com/openbmc/docs/blob/master/designs/vpd-collection.md
-            // The BMC must log errors if any of the VPD cannot be properly
-            // parsed or fails ECC checks.
-        }
+        modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
+        assetProps.emplace(MODEL_PROP, modelName);
 
-        try
-        {
-            pn = pmbusIntf->readString(PART_NUMBER, Type::HwmonDeviceDebug);
-            assetProps.emplace(PN_PROP, pn);
-        }
-        catch (const ReadFailure& e)
-        {
-            // Ignore the read failure, let pmbus code indicate failure,
-            // path...
-        }
+        pn = readVPDValue(PART_NUMBER, Type::HwmonDeviceDebug, PN_KW_SIZE);
+        assetProps.emplace(PN_PROP, pn);
 
-        try
-        {
-            fn = pmbusIntf->readString(FRU_NUMBER, Type::HwmonDeviceDebug);
-            assetProps.emplace(SPARE_PN_PROP, fn);
-        }
-        catch (const ReadFailure& e)
-        {
-            // Ignore the read failure, let pmbus code indicate failure,
-            // path...
-        }
+        fn = readVPDValue(FRU_NUMBER, Type::HwmonDeviceDebug, FN_KW_SIZE);
+        assetProps.emplace(SPARE_PN_PROP, fn);
 
-        try
-        {
-            header =
-                pmbusIntf->readString(SERIAL_HEADER, Type::HwmonDeviceDebug);
-            sn = pmbusIntf->readString(SERIAL_NUMBER, Type::HwmonDeviceDebug);
-            assetProps.emplace(SN_PROP, header + sn);
-        }
-        catch (const ReadFailure& e)
-        {
-            // Ignore the read failure, let pmbus code indicate failure,
-            // path...
-        }
+        header =
+            readVPDValue(SERIAL_HEADER, Type::HwmonDeviceDebug, HEADER_SIZE);
+        sn = readVPDValue(SERIAL_NUMBER, Type::HwmonDeviceDebug, SERIAL_SIZE);
+        assetProps.emplace(SN_PROP, header + sn);
 
-        try
-        {
-            fwVersion =
-                pmbusIntf->readString(FW_VERSION, Type::HwmonDeviceDebug);
-            versionProps.emplace(VERSION_PROP, fwVersion);
-        }
-        catch (const ReadFailure& e)
-        {
-            // Ignore the read failure, let pmbus code indicate failure,
-            // path...
-        }
+        fwVersion =
+            readVPDValue(FW_VERSION, Type::HwmonDeviceDebug, VERSION_SIZE);
+        versionProps.emplace(VERSION_PROP, fwVersion);
 
-        ipzvpdVINIProps.emplace("CC",
-                                std::vector<uint8_t>(ccin.begin(), ccin.end()));
+        ipzvpdVINIProps.emplace(
+            "CC", std::vector<uint8_t>(modelName.begin(), modelName.end()));
         ipzvpdVINIProps.emplace("PN",
                                 std::vector<uint8_t>(pn.begin(), pn.end()));
         ipzvpdVINIProps.emplace("FN",
