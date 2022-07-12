@@ -585,8 +585,9 @@ void PSUManager::analyze()
                       [](const auto& psu) { return !psu->isPresent(); }));
 
     auto hasVINUVFaultCount = decltype(psus.size())(
-        std::count_if(psus.begin(), psus.end(),
-                      [](const auto& psu) { return psu->hasVINUVFault(); }));
+        std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
+            return (psu->isPresent() && psu->hasVINUVFault());
+        }));
 
     // The PSU D-Bus objects may not be available yet, so ignore if all
     // PSUs are not present or the number of PSUs is still 0.
