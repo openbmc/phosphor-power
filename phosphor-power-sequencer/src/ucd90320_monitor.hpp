@@ -17,6 +17,13 @@ struct Pin
 {
     std::string name;
     unsigned int line;
+    std::string presence;
+};
+
+struct Rail
+{
+    std::string name;
+    std::string presence;
 };
 
 /**
@@ -69,9 +76,9 @@ class UCD90320Monitor : public PowerSequencerMonitor
     pmbus::PMBus pmbusInterface;
 
     /**
-     * List of rail names
+     * List of rails
      */
-    std::vector<std::string> rails;
+    std::vector<Rail> rails;
 
     /**
      * Finds the list of compatible system types using D-Bus methods.
@@ -89,6 +96,17 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @param compatibleSystemTypes List of compatible system types
      */
     void findConfigFile(const std::vector<std::string>& compatibleSystemTypes);
+
+    /**
+     * Returns whether the hardware with the specified inventory path is
+     * present.
+     * If an error occurs while obtaining the presence value, presence is
+     * assumed to be false. An empty string path indicates no presence check is
+     * needed.
+     * @param inventoryPath D-Bus inventory path of the hardware
+     * @return true if hardware is present, false otherwise
+     */
+    bool isPresent(const std::string& inventoryPath);
 
     /**
      * Analyzes the device pins for errors when the device is known to be in an

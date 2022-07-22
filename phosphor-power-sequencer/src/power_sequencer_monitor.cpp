@@ -45,10 +45,10 @@ void PowerSequencerMonitor::createBmcDump()
                 std::pair<std::string, std::variant<std::string, uint64_t>>>());
         bus.call_noreply(method);
     }
-    catch (const sdbusplus::exception::exception& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("Unable to create dump, error {}", e.what()).c_str());
+            fmt::format("Unable to create dump, error: {}", e.what()).c_str());
     }
 }
 
@@ -76,7 +76,7 @@ void PowerSequencerMonitor::logError(
     catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("Unable to log error, message: {}, error {}", message,
+            fmt::format("Unable to log error, message: {}, error: {}", message,
                         e.what())
                 .c_str());
     }
