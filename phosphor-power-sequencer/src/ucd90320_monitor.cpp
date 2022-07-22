@@ -16,6 +16,7 @@
 
 #include "ucd90320_monitor.hpp"
 
+#include "types.hpp"
 #include "utility.hpp"
 
 #include <fmt/format.h>
@@ -179,6 +180,35 @@ void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message::message& msg)
     }
 }
 
+bool UCD90320Monitor::isPresent(const std::string& inventoryPath)
+{
+    // Empty path indicates no presence check is needed
+    if (inventoryPath.empty())
+    {
+        return true;
+    }
+
+    // Get presence from D-Bus interface/property
+    try
+    {
+        bool present{true};
+        util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
+                          INVENTORY_MGR_IFACE, bus, present);
+        log<level::INFO>(
+            fmt::format("Presence, path: {}, value: {}", inventoryPath, present)
+                .c_str());
+        return present;
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(
+            fmt::format("Error getting presence property, path: {}, error: {}",
+                        inventoryPath, e.what())
+                .c_str());
+        return false;
+    }
+}
+
 void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
 {
     try
@@ -192,8 +222,35 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
         {
             for (const auto& railElement : *railsIterator)
             {
-                std::string rail = railElement.get<std::string>();
-                rails.emplace_back(std::move(rail));
+                auto nameIterator = railElement.find("name");
+
+                // Presence element is optional
+                auto presenceIterator = railElement.find("presence");
+
+                if (nameIterator != railElement.end())
+                {
+                    std::string name = (*nameIterator).get<std::string>();
+
+                    Rail rail;
+                    rail.name = name;
+
+                    if (presenceIterator != railElement.end())
+                    {
+                        std::string presence =
+                            (*presenceIterator).get<std::string>();
+                        rail.presence = presence;
+                    }
+
+                    rails.emplace_back(std::move(rail));
+                }
+                else
+                {
+                    log<level::ERR>(
+                        fmt::format(
+                            "No name found within rail in configuration file: {}",
+                            pathName.string())
+                            .c_str());
+                }
             }
         }
         else
@@ -203,7 +260,8 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                             pathName.string())
                     .c_str());
         }
-        log<level::DEBUG>(fmt::format("Found rails: {}", rails).c_str());
+        log<level::DEBUG>(
+            fmt::format("Found number of rails: {}", rails.size()).c_str());
 
         // Parse pin information from config file
         auto pinsIterator = rootElement.find("pins");
@@ -214,6 +272,9 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                 auto nameIterator = pinElement.find("name");
                 auto lineIterator = pinElement.find("line");
 
+                // Presence element is optional
+                auto presenceIterator = pinElement.find("presence");
+
                 if (nameIterator != pinElement.end() &&
                     lineIterator != pinElement.end())
                 {
@@ -223,6 +284,14 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
                     Pin pin;
                     pin.name = name;
                     pin.line = line;
+
+                    if (presenceIterator != pinElement.end())
+                    {
+                        std::string presence =
+                            (*presenceIterator).get<std::string>();
+                        pin.presence = presence;
+                    }
+
                     pins.emplace_back(std::move(pin));
                 }
                 else
@@ -247,10 +316,9 @@ void UCD90320Monitor::parseConfigFile(const std::filesystem::path& pathName)
     }
     catch (const std::exception& e)
     {
-        // Log error message in journal
-        log<level::ERR>(std::string("Exception parsing configuration file: " +
-                                    std::string(e.what()))
-                            .c_str());
+        log<level::ERR>(
+            fmt::format("Error parsing configuration file, error: {}", e.what())
+                .c_str());
     }
 }
 
@@ -269,12 +337,12 @@ void UCD90320Monitor::onFailure(bool timeout,
         onFailureCheckRails(message, additionalData, powerSupplyError);
         onFailureCheckPins(message, additionalData);
     }
-    catch (device_error::ReadFailure& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("ReadFailure when collecting metadata, error {}",
-                        e.what())
+            fmt::format("Error when collecting metadata, error: {}", e.what())
                 .c_str());
+        additionalData.emplace("ERROR", e.what());
     }
 
     if (message.empty())
@@ -319,14 +387,14 @@ void UCD90320Monitor::onFailureCheckPins(
     catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("Error reading device GPIOs, error {}", e.what())
+            fmt::format("Error reading device GPIOs, error: {}", e.what())
                 .c_str());
         additionalData.emplace("GPIO_ERROR", e.what());
     }
 
     // Add GPIO values to additional data, device has 84 GPIO pins so that value
     // is expected
-    if (numberLines == 84)
+    if (numberLines == 84 && values.size() >= 84)
     {
         log<level::INFO>(fmt::format("MAR01-24 GPIO values: {}",
                                      std::span{values}.subspan(0, 24))
@@ -374,7 +442,8 @@ void UCD90320Monitor::onFailureCheckPins(
             if (line < values.size())
             {
                 int value = values[line];
-                if (value == 0)
+
+                if ((value == 0) && isPresent(pins[pin].presence))
                 {
                     additionalData.emplace("INPUT_NUM",
                                            fmt::format("{}", line));
@@ -399,12 +468,12 @@ void UCD90320Monitor::onFailureCheckRails(
         additionalData.emplace("MFR_STATUS",
                                fmt::format("{:#014x}", readMFRStatus()));
     }
-    catch (device_error::ReadFailure& e)
+    catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("ReadFailure when collecting MFR_STATUS, error {}",
-                        e.what())
+            fmt::format("Error when collecting MFR_STATUS, error: {}", e.what())
                 .c_str());
+        additionalData.emplace("ERROR", e.what());
     }
 
     // The status_word register has a summary bit to tell us if each page even
@@ -434,14 +503,13 @@ void UCD90320Monitor::onFailureCheckRails(
                             fmt::format("STATUS{}_VOUT", page),
                             fmt::format("{:#04x}", vout));
 
-                        // Base the callouts on the first vout failure found
-                        if (message.empty())
+                        // Base the callouts on the first present vout failure
+                        // found
+                        if (message.empty() && (page < rails.size()) &&
+                            isPresent(rails[page].presence))
                         {
-                            if (page < rails.size())
-                            {
-                                additionalData.emplace("RAIL_NAME",
-                                                       rails[page]);
-                            }
+                            additionalData.emplace("RAIL_NAME",
+                                                   rails[page].name);
 
                             // Use power supply error if set and 12v rail has
                             // failed, else use voltage error

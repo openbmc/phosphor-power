@@ -84,7 +84,7 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
                 name = std::get_if<std::string>(&properties[namePropertyName]);
             }
         }
-        catch (std::exception& e)
+        catch (const std::exception&)
         {}
     }
 
@@ -305,7 +305,7 @@ void PowerControl::setUpDevice()
             getDeviceProperties(properties);
         }
     }
-    catch (const std::exception& e)
+    catch (const std::exception&)
     {
         // Interface or property not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
