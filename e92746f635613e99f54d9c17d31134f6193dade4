@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90b1b4fb_715af6a4",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1001082
+      },
+      "writtenOn": "2022-07-22T19:00:43Z",
+      "side": 1,
+      "message": "this is unused if the condition at line 278 is false. therefore should be moved somewhere inside that scope block.",
+      "revId": "e92746f635613e99f54d9c17d31134f6193dade4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
