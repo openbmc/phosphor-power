@@ -49,7 +49,7 @@ class MockServices : public Services
     virtual ~MockServices() = default;
 
     /** @copydoc Services::getBus() */
-    virtual sdbusplus::bus::bus& getBus() override
+    virtual sdbusplus::bus_t& getBus() override
     {
         return bus;
     }
@@ -150,7 +150,7 @@ class MockServices : public Services
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus bus{sdbusplus::bus::new_default()};
+    sdbusplus::bus_t bus{sdbusplus::bus::new_default()};
 
     /**
      * Mock implementation of the ErrorLogging interface.

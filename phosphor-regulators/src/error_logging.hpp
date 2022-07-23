@@ -166,7 +166,7 @@ class DBusErrorLogging : public ErrorLogging
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusErrorLogging(sdbusplus::bus::bus& bus) : bus{bus}
+    explicit DBusErrorLogging(sdbusplus::bus_t& bus) : bus{bus}
     {}
 
     /** @copydoc ErrorLogging::logConfigFileError() */
@@ -264,7 +264,7 @@ class DBusErrorLogging : public ErrorLogging
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 };
 
 } // namespace phosphor::power::regulators

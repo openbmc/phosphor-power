@@ -51,7 +51,7 @@ using namespace phosphor::logging;
 
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
-MihawkCPLD::MihawkCPLD(size_t instance, sdbusplus::bus::bus& bus) :
+MihawkCPLD::MihawkCPLD(size_t instance, sdbusplus::bus_t& bus) :
     Device(DEVICE_NAME, instance), bus(bus)
 {}
 

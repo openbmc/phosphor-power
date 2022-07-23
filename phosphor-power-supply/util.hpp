@@ -27,7 +27,7 @@ using ObjectMap = std::map<Object, InterfaceMap>;
 class Util : public UtilBase
 {
   public:
-    bool getPresence(sdbusplus::bus::bus& bus,
+    bool getPresence(sdbusplus::bus_t& bus,
                      const std::string& invpath) const override
     {
         bool present = false;
@@ -39,7 +39,7 @@ class Util : public UtilBase
         return present;
     }
 
-    void setPresence(sdbusplus::bus::bus& bus, const std::string& invpath,
+    void setPresence(sdbusplus::bus_t& bus, const std::string& invpath,
                      bool present, const std::string& name) const override
     {
         using InternalFailure =
@@ -89,7 +89,7 @@ class Util : public UtilBase
         }
     }
 
-    void setAvailable(sdbusplus::bus::bus& bus, const std::string& invpath,
+    void setAvailable(sdbusplus::bus_t& bus, const std::string& invpath,
                       bool available) const override
     {
         PropertyMap invProp;
@@ -113,7 +113,7 @@ class Util : public UtilBase
             invMsg.append(std::move(invObj));
             auto invMgrResponseMsg = bus.call(invMsg);
         }
-        catch (const sdbusplus::exception::exception& e)
+        catch (const sdbusplus::exception_t& e)
         {
             using namespace phosphor::logging;
             log<level::ERR>(
@@ -125,7 +125,7 @@ class Util : public UtilBase
         }
     }
 
-    void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+    void handleChassisHealthRollup(sdbusplus::bus_t& bus,
                                    const std::string& invpath,
                                    bool addRollup) const override
     {
@@ -186,7 +186,7 @@ class Util : public UtilBase
                                                invpath, service, bus,
                                                associations);
         }
-        catch (const sdbusplus::exception::exception& e)
+        catch (const sdbusplus::exception_t& e)
         {
             using namespace phosphor::logging;
             log<level::INFO>(fmt::format("Error trying to handle health rollup "
@@ -196,7 +196,7 @@ class Util : public UtilBase
         }
     }
 
-    std::string getChassis(sdbusplus::bus::bus& bus,
+    std::string getChassis(sdbusplus::bus_t& bus,
                            const std::string& invpath) const
     {
         // Use the 'chassis' association to find the parent chassis.

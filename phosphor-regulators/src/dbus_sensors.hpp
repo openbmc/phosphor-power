@@ -50,7 +50,7 @@ class DBusSensors : public Sensors
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusSensors(sdbusplus::bus::bus& bus) :
+    explicit DBusSensors(sdbusplus::bus_t& bus) :
         bus{bus}, manager{bus, sensorsObjectPath}
     {}
 
@@ -81,7 +81,7 @@ class DBusSensors : public Sensors
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * D-Bus object manager.

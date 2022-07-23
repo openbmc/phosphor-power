@@ -37,7 +37,7 @@ class MihawkCPLD : public Device
      * @param[in] instance - the device instance number
      * @param[in] bus - D-Bus bus object
      */
-    MihawkCPLD(size_t instance, sdbusplus::bus::bus& bus);
+    MihawkCPLD(size_t instance, sdbusplus::bus_t& bus);
 
     /**
      * Analyzes the device for errors when the device is
@@ -107,7 +107,7 @@ class MihawkCPLD : public Device
     /**
      * The D-Bus bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Open CPLD_register via i2c.

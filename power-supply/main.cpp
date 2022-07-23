@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
         psuDevice->enableHistory(basePath, numRecords, syncGPIOPath, gpioNum);
 
         // Systemd object manager
-        sdbusplus::server::manager::manager objManager{bus, basePath.c_str()};
+        sdbusplus::server::manager_t objManager{bus, basePath.c_str()};
 
         std::string busName =
             std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' + name;

@@ -50,7 +50,7 @@ using namespace phosphor::logging;
 namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace power_error = sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
-UCD90160::UCD90160(size_t instance, sdbusplus::bus::bus& bus) :
+UCD90160::UCD90160(size_t instance, sdbusplus::bus_t& bus) :
     Device(DEVICE_NAME, instance),
     interface(std::get<ucd90160::pathField>(deviceMap.find(instance)->second),
               DRIVER_NAME, instance),

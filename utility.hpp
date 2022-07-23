@@ -44,7 +44,7 @@ using DbusPropertyMap = std::map<DbusProperty, DbusVariant>;
  * @return The service name
  */
 std::string getService(const std::string& path, const std::string& interface,
-                       sdbusplus::bus::bus& bus, bool logError = true);
+                       sdbusplus::bus_t& bus, bool logError = true);
 
 /**
  * @brief Read a D-Bus property
@@ -59,7 +59,7 @@ std::string getService(const std::string& path, const std::string& interface,
 template <typename T>
 void getProperty(const std::string& interface, const std::string& propertyName,
                  const std::string& path, const std::string& service,
-                 sdbusplus::bus::bus& bus, T& value)
+                 sdbusplus::bus_t& bus, T& value)
 {
     std::variant<T> property;
 
@@ -87,7 +87,7 @@ void getProperty(const std::string& interface, const std::string& propertyName,
 template <typename T>
 void setProperty(const std::string& interface, const std::string& propertyName,
                  const std::string& path, const std::string& service,
-                 sdbusplus::bus::bus& bus, T& value)
+                 sdbusplus::bus_t& bus, T& value)
 {
     std::variant<T> propertyValue(value);
 
@@ -109,8 +109,7 @@ void setProperty(const std::string& interface, const std::string& propertyName,
  *
  * @return DbusPropertyMap - Map of property names and values
  */
-DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
-                                 const std::string& path,
+DbusPropertyMap getAllProperties(sdbusplus::bus_t& bus, const std::string& path,
                                  const std::string& interface,
                                  const std::string& service = std::string());
 
@@ -128,7 +127,7 @@ DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
  * @return DbusSubtree - Map of object paths to a map of service names to their
  *                       interfaces.
  */
-DbusSubtree getSubTree(sdbusplus::bus::bus& bus, const std::string& path,
+DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
                        const std::string& interface, int32_t depth);
 
 /**
@@ -138,7 +137,7 @@ DbusSubtree getSubTree(sdbusplus::bus::bus& bus, const std::string& path,
  * @param[in] bus - D-Bus object
  */
 template <typename T>
-void powerOff(sdbusplus::bus::bus& bus)
+void powerOff(sdbusplus::bus_t& bus)
 {
     phosphor::logging::report<T>();
 
@@ -179,7 +178,7 @@ phosphor::pmbus::Type getPMBusAccessType(const nlohmann::json& json);
  * @return true if power is on, otherwise false;
  *         defaultState if it fails to get the power state.
  */
-bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState = false);
+bool isPoweredOn(sdbusplus::bus_t& bus, bool defaultState = false);
 
 /**
  * Get all PSU inventory paths from D-Bus
@@ -188,7 +187,7 @@ bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState = false);
  *
  * @return The list of PSU inventory paths
  */
-std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus);
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus);
 
 } // namespace util
 } // namespace power

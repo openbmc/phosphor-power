@@ -48,18 +48,18 @@ class MockedUtil : public UtilBase
     virtual ~MockedUtil() = default;
 
     MOCK_METHOD(bool, getPresence,
-                (sdbusplus::bus::bus & bus, const std::string& invpath),
+                (sdbusplus::bus_t & bus, const std::string& invpath),
                 (const, override));
     MOCK_METHOD(void, setPresence,
-                (sdbusplus::bus::bus & bus, const std::string& invpath,
+                (sdbusplus::bus_t & bus, const std::string& invpath,
                  bool present, const std::string& name),
                 (const, override));
     MOCK_METHOD(void, setAvailable,
-                (sdbusplus::bus::bus & bus, const std::string& invpath,
+                (sdbusplus::bus_t & bus, const std::string& invpath,
                  bool available),
                 (const, override));
     MOCK_METHOD(void, handleChassisHealthRollup,
-                (sdbusplus::bus::bus & bus, const std::string& invpath,
+                (sdbusplus::bus_t & bus, const std::string& invpath,
                  bool addRollup),
                 (const, override));
 };

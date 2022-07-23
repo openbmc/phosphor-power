@@ -49,7 +49,7 @@ class RuntimeMonitor : public DeviceMonitor
      * @param[in] i - poll interval
      */
     RuntimeMonitor(std::unique_ptr<phosphor::power::Device>&& d,
-                   sdbusplus::bus::bus& b, const sdeventplus::Event& e,
+                   sdbusplus::bus_t& b, const sdeventplus::Event& e,
                    std::chrono::milliseconds& i) :
         DeviceMonitor(std::move(d), e, i),
         bus(b), match(bus, getMatchString(),
@@ -75,7 +75,7 @@ class RuntimeMonitor : public DeviceMonitor
      *
      * @param[in] msg - D-Bus message for callback
      */
-    void onPowerLost(sdbusplus::message::message& msg);
+    void onPowerLost(sdbusplus::message_t& msg);
 
     /**
      * Returns the match string for the PowerLost signal
@@ -94,7 +94,7 @@ class RuntimeMonitor : public DeviceMonitor
     /**
      * The D-Bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Match object for PowerLost signals

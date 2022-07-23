@@ -11,7 +11,7 @@ namespace history
 {
 
 template <typename T>
-using ServerObject = typename sdbusplus::server::object::object<T>;
+using ServerObject = typename sdbusplus::server::object_t<T>;
 
 using AverageInterface =
     sdbusplus::org::open_power::Sensor::Aggregation::History::server::Average;
@@ -42,7 +42,7 @@ class Average : public ServerObject<AverageInterface>
      * @param[in] bus - D-Bus object
      * @param[in] objectPath - the D-Bus object path
      */
-    Average(sdbusplus::bus::bus& bus, const std::string& objectPath) :
+    Average(sdbusplus::bus_t& bus, const std::string& objectPath) :
         ServerObject<AverageInterface>(bus, objectPath.c_str())
     {
         unit(Average::Unit::Watts);
