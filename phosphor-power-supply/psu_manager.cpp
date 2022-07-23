@@ -34,7 +34,7 @@ constexpr auto supportedConfIntf =
 
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
-PSUManager::PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e) :
+PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     bus(bus), powerSystemInputs(bus, powerSystemsInputsObjPath),
     objectManager(bus, objectManagerObjPath),
     historyManager(bus, "/org/open_power/sensors")
@@ -365,7 +365,7 @@ void PSUManager::getSystemProperties()
     }
 }
 
-void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
+void PSUManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
 {
     try
     {
@@ -405,7 +405,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message::message& msg)
     }
 }
 
-void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
+void PSUManager::powerStateChanged(sdbusplus::message_t& msg)
 {
     std::string msgSensor;
     std::map<std::string, std::variant<int>> msgData;
@@ -457,7 +457,7 @@ void PSUManager::powerStateChanged(sdbusplus::message::message& msg)
             .c_str());
 }
 
-void PSUManager::presenceChanged(sdbusplus::message::message& msg)
+void PSUManager::presenceChanged(sdbusplus::message_t& msg)
 {
     std::string msgSensor;
     std::map<std::string, std::variant<uint32_t, bool>> msgData;
@@ -836,7 +836,7 @@ void PSUManager::updateMissingPSUs()
                 presProperty = getPresence(bus, psuInventoryPath);
                 propReadFail = false;
             }
-            catch (const sdbusplus::exception::exception& e)
+            catch (const sdbusplus::exception_t& e)
             {
                 propReadFail = true;
                 // Relying on property change or interface added to retry.

@@ -71,7 +71,7 @@ const fs::path standardConfigFileDir{"/usr/share/phosphor-regulators"};
  */
 const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
-Manager::Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event) :
+Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
     ManagerObject{bus, managerObjPath}, bus{bus}, eventLoop{event},
     services{bus}, phaseFaultTimer{event,
                                    std::bind(&Manager::phaseFaultTimerExpired,
@@ -138,7 +138,7 @@ void Manager::configure()
     }
 }
 
-void Manager::interfacesAddedHandler(sdbusplus::message::message& msg)
+void Manager::interfacesAddedHandler(sdbusplus::message_t& msg)
 {
     // Verify message is valid
     if (!msg)

@@ -52,7 +52,7 @@ class Services
      *
      * @return D-Bus bus
      */
-    virtual sdbusplus::bus::bus& getBus() = 0;
+    virtual sdbusplus::bus_t& getBus() = 0;
 
     /**
      * Returns the error logging interface.
@@ -111,13 +111,13 @@ class BMCServices : public Services
      *
      * @param bus D-Bus bus object
      */
-    explicit BMCServices(sdbusplus::bus::bus& bus) :
+    explicit BMCServices(sdbusplus::bus_t& bus) :
         bus{bus}, errorLogging{bus},
         presenceService{bus}, sensors{bus}, vpd{bus}
     {}
 
     /** @copydoc Services::getBus() */
-    virtual sdbusplus::bus::bus& getBus() override
+    virtual sdbusplus::bus_t& getBus() override
     {
         return bus;
     }
@@ -156,7 +156,7 @@ class BMCServices : public Services
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Implementation of the ErrorLogging interface using D-Bus method calls.

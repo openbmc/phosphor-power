@@ -95,7 +95,7 @@ class Updater
 
   private:
     /** @brief The sdbusplus DBus bus connection */
-    sdbusplus::bus::bus bus;
+    sdbusplus::bus_t bus;
 
     /** @brief The PSU inventory path */
     std::string psuInventoryPath;

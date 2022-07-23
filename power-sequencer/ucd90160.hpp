@@ -43,7 +43,7 @@ class UCD90160 : public Device
      * @param[in] instance - the device instance number
      * @param[in] bus - D-Bus bus object
      */
-    UCD90160(size_t instance, sdbusplus::bus::bus& bus);
+    UCD90160(size_t instance, sdbusplus::bus_t& bus);
 
     /**
      * Analyzes the device for errors when the device is
@@ -301,7 +301,7 @@ class UCD90160 : public Device
     /**
      * The D-Bus bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Map of device instance to the instance specific data

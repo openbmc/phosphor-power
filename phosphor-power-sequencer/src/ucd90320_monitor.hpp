@@ -47,14 +47,14 @@ class UCD90320Monitor : public PowerSequencerMonitor
      * @param i2cBus The bus number of the power sequencer device
      * @param i2cAddress The I2C address of the power sequencer device
      */
-    UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
+    UCD90320Monitor(sdbusplus::bus_t& bus, std::uint8_t i2cBus,
                     std::uint16_t i2cAddress);
 
     /**
      * Callback function to handle interfacesAdded D-Bus signals
      * @param msg Expanded sdbusplus message data
      */
-    void interfacesAddedHandler(sdbusplus::message::message& msg);
+    void interfacesAddedHandler(sdbusplus::message_t& msg);
 
     /** @copydoc PowerSequencerMonitor::onFailure() */
     void onFailure(bool timeout, const std::string& powerSupplyError) override;

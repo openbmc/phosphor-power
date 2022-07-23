@@ -50,9 +50,8 @@ ColdRedundancy::ColdRedundancy(
 {
     post(io,
          [this, &io, &objectServer, &systemBus]() { createPSU(systemBus); });
-    std::function<void(sdbusplus::message::message&)> eventHandler =
-        [this, &io, &objectServer,
-         &systemBus](sdbusplus::message::message& message) {
+    std::function<void(sdbusplus::message_t&)> eventHandler =
+        [this, &io, &objectServer, &systemBus](sdbusplus::message_t& message) {
             if (message.is_method_error())
             {
                 std::cerr << "callback method error\n";
@@ -73,8 +72,8 @@ ColdRedundancy::ColdRedundancy(
             });
         };
 
-    std::function<void(sdbusplus::message::message&)> eventCollect =
-        [&](sdbusplus::message::message& message) {
+    std::function<void(sdbusplus::message_t&)> eventCollect =
+        [&](sdbusplus::message_t& message) {
             std::string objectName;
             boost::container::flat_map<std::string, std::variant<bool>> values;
             std::string path = message.get_path();
@@ -99,7 +98,7 @@ ColdRedundancy::ColdRedundancy(
             {
                 message.read(objectName, values);
             }
-            catch (const sdbusplus::exception::exception& e)
+            catch (const sdbusplus::exception_t& e)
             {
                 std::cerr << "Failed to read message from PSU Event\n";
                 return;
@@ -137,8 +136,8 @@ ColdRedundancy::ColdRedundancy(
     using namespace sdbusplus::bus::match::rules;
     for (const char* type : psuInterfaceTypes)
     {
-        auto match = std::make_unique<sdbusplus::bus::match::match>(
-            static_cast<sdbusplus::bus::bus&>(*systemBus),
+        auto match = std::make_unique<sdbusplus::bus::match_t>(
+            static_cast<sdbusplus::bus_t&>(*systemBus),
             type::signal() + member("PropertiesChanged") +
                 path_namespace(inventoryPath) + arg0namespace(type),
             eventHandler);
@@ -147,8 +146,8 @@ ColdRedundancy::ColdRedundancy(
 
     for (const char* eventType : psuEventInterface)
     {
-        auto eventMatch = std::make_unique<sdbusplus::bus::match::match>(
-            static_cast<sdbusplus::bus::bus&>(*systemBus),
+        auto eventMatch = std::make_unique<sdbusplus::bus::match_t>(
+            static_cast<sdbusplus::bus_t&>(*systemBus),
             type::signal() + member("PropertiesChanged") +
                 path_namespace(eventPath) + arg0namespace(eventType),
             eventCollect);

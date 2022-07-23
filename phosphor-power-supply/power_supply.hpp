@@ -63,7 +63,7 @@ class PowerSupply
      * @param[in] gpioLineName - The gpio-line-name to read for presence. See
      * https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
      */
-    PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+    PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                 std::uint8_t i2cbus, const std::uint16_t i2caddr,
                 const std::string& driver, const std::string& gpioLineName);
 
@@ -513,7 +513,7 @@ class PowerSupply
 
   private:
     /** @brief systemd bus member */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
     uint64_t statusWord = 0;
@@ -844,7 +844,7 @@ class PowerSupply
      *
      * @param[in]  msg - Data associated with Present change signal
      **/
-    void inventoryChanged(sdbusplus::message::message& msg);
+    void inventoryChanged(sdbusplus::message_t& msg);
 
     /**
      * @brief Callback for inventory property added.
@@ -856,7 +856,7 @@ class PowerSupply
      *
      * @param[in]  msg - Data associated with Present add signal
      **/
-    void inventoryAdded(sdbusplus::message::message& msg);
+    void inventoryAdded(sdbusplus::message_t& msg);
 
     /**
      * @brief Reads the pmbus MFR_POUT_MAX value.

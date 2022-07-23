@@ -36,7 +36,7 @@ namespace phosphor::power::regulators
 
 using Timer = sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>;
 
-using ManagerObject = sdbusplus::server::object::object<
+using ManagerObject = sdbusplus::server::object_t<
     phosphor::power::regulators::interface::ManagerInterface>;
 
 class Manager : public ManagerObject
@@ -56,7 +56,7 @@ class Manager : public ManagerObject
      * @param bus the D-Bus bus
      * @param event the sdevent event
      */
-    Manager(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
+    Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event);
 
     /**
      * Implements the D-Bus "configure" method.
@@ -73,7 +73,7 @@ class Manager : public ManagerObject
      *
      * @param msg Expanded sdbusplus message data
      */
-    void interfacesAddedHandler(sdbusplus::message::message& msg);
+    void interfacesAddedHandler(sdbusplus::message_t& msg);
 
     /**
      * Implements the D-Bus "monitor" method.
@@ -203,7 +203,7 @@ class Manager : public ManagerObject
     /**
      * The D-Bus bus
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Event to loop on
@@ -228,7 +228,7 @@ class Manager : public ManagerObject
     /**
      * List of D-Bus signal matches
      */
-    std::vector<std::unique_ptr<sdbusplus::bus::match::match>> signals{};
+    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> signals{};
 
     /**
      * Indicates whether regulator monitoring is enabled.

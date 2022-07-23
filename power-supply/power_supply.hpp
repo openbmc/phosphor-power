@@ -52,7 +52,7 @@ class PowerSupply : public Device
      */
     PowerSupply(const std::string& name, size_t inst,
                 const std::string& objpath, const std::string& invpath,
-                sdbusplus::bus::bus& bus, const sdeventplus::Event& e,
+                sdbusplus::bus_t& bus, const sdeventplus::Event& e,
                 std::chrono::seconds& t, std::chrono::seconds& p);
 
     /**
@@ -115,7 +115,7 @@ class PowerSupply : public Device
     std::string inventoryPath;
 
     /** @brief Connection for sdbusplus bus */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /** @brief True if the power supply is present. */
     bool present = false;
@@ -287,7 +287,7 @@ class PowerSupply : public Device
      * @param[in]  msg - Data associated with Present change signal
      *
      */
-    void inventoryChanged(sdbusplus::message::message& msg);
+    void inventoryChanged(sdbusplus::message_t& msg);
 
     /**
      * Updates the presence status by querying D-Bus
@@ -313,7 +313,7 @@ class PowerSupply : public Device
      *
      * @param[in] msg - Data associated with the power state signal
      */
-    void powerStateChanged(sdbusplus::message::message& msg);
+    void powerStateChanged(sdbusplus::message_t& msg);
 
     /**
      * @brief Wrapper for PMBus::read() and adding metadata

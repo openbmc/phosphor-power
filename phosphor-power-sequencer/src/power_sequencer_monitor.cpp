@@ -29,8 +29,7 @@ namespace phosphor::power::sequencer
 
 using namespace phosphor::logging;
 
-PowerSequencerMonitor::PowerSequencerMonitor(sdbusplus::bus::bus& bus) :
-    bus(bus)
+PowerSequencerMonitor::PowerSequencerMonitor(sdbusplus::bus_t& bus) : bus(bus)
 {}
 
 void PowerSequencerMonitor::createBmcDump()

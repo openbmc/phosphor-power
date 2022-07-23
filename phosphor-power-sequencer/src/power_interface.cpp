@@ -33,7 +33,7 @@ using namespace phosphor::logging;
 namespace phosphor::power::sequencer
 {
 
-PowerInterface::PowerInterface(sdbusplus::bus::bus& bus, const char* path) :
+PowerInterface::PowerInterface(sdbusplus::bus_t& bus, const char* path) :
     serverInterface(bus, path, POWER_IFACE, vtable, this)
 {}
 
@@ -52,7 +52,7 @@ int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
             log<level::INFO>(
                 fmt::format("callbackGetPgood: {}", pgood).c_str());
 
-            sdbusplus::message::message(msg).append(pgood);
+            sdbusplus::message_t(msg).append(pgood);
         }
         catch (const sdbusplus::exception_t& e)
         {
@@ -85,7 +85,7 @@ int PowerInterface::callbackGetPgoodTimeout(sd_bus* /*bus*/,
             log<level::INFO>(
                 fmt::format("callbackGetPgoodTimeout: {}", timeout).c_str());
 
-            sdbusplus::message::message(msg).append(timeout);
+            sdbusplus::message_t(msg).append(timeout);
         }
         catch (const sdbusplus::exception_t& e)
         {
@@ -117,7 +117,7 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
             log<level::INFO>(
                 fmt::format("callbackGetPowerState: {}", pgood).c_str());
 
-            auto reply = sdbusplus::message::message(msg).new_method_return();
+            auto reply = sdbusplus::message_t(msg).new_method_return();
             reply.append(pgood);
             reply.method_return();
         }
@@ -147,7 +147,7 @@ int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
     {
         try
         {
-            auto m = sdbusplus::message::message(msg);
+            auto m = sdbusplus::message_t(msg);
 
             int timeout{};
             m.read(timeout);
@@ -188,7 +188,7 @@ int PowerInterface::callbackGetState(sd_bus* /*bus*/, const char* /*path*/,
             log<level::INFO>(
                 fmt::format("callbackGetState: {}", state).c_str());
 
-            sdbusplus::message::message(msg).append(state);
+            sdbusplus::message_t(msg).append(state);
         }
         catch (const sdbusplus::exception_t& e)
         {
@@ -212,7 +212,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
     {
         try
         {
-            auto m = sdbusplus::message::message(msg);
+            auto m = sdbusplus::message_t(msg);
 
             int state{};
             m.read(state);
@@ -254,7 +254,7 @@ int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
     {
         try
         {
-            auto m = sdbusplus::message::message(msg);
+            auto m = sdbusplus::message_t(msg);
 
             std::string psError{};
             m.read(psError);

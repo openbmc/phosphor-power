@@ -30,7 +30,7 @@ class PowerInterface
      * @param bus D-Bus bus object
      * @param path D-Bus object path
      */
-    PowerInterface(sdbusplus::bus::bus& bus, const char* path);
+    PowerInterface(sdbusplus::bus_t& bus, const char* path);
 
     /**
      * Emit the power good signal

@@ -19,42 +19,40 @@ class UtilBase
   public:
     virtual ~UtilBase() = default;
 
-    virtual bool getPresence(sdbusplus::bus::bus& bus,
+    virtual bool getPresence(sdbusplus::bus_t& bus,
                              const std::string& invpath) const = 0;
 
-    virtual void setPresence(sdbusplus::bus::bus& bus,
-                             const std::string& invpath, bool present,
-                             const std::string& name) const = 0;
+    virtual void setPresence(sdbusplus::bus_t& bus, const std::string& invpath,
+                             bool present, const std::string& name) const = 0;
 
-    virtual void setAvailable(sdbusplus::bus::bus& bus,
-                              const std::string& invpath,
+    virtual void setAvailable(sdbusplus::bus_t& bus, const std::string& invpath,
                               bool available) const = 0;
 
-    virtual void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+    virtual void handleChassisHealthRollup(sdbusplus::bus_t& bus,
                                            const std::string& invpath,
                                            bool addRollup) const = 0;
 };
 
 const UtilBase& getUtils();
 
-inline bool getPresence(sdbusplus::bus::bus& bus, const std::string& invpath)
+inline bool getPresence(sdbusplus::bus_t& bus, const std::string& invpath)
 {
     return getUtils().getPresence(bus, invpath);
 }
 
-inline void setPresence(sdbusplus::bus::bus& bus, const std::string& invpath,
+inline void setPresence(sdbusplus::bus_t& bus, const std::string& invpath,
                         bool present, const std::string& name)
 {
     return getUtils().setPresence(bus, invpath, present, name);
 }
 
-inline void setAvailable(sdbusplus::bus::bus& bus, const std::string& invpath,
+inline void setAvailable(sdbusplus::bus_t& bus, const std::string& invpath,
                          bool available)
 {
     getUtils().setAvailable(bus, invpath, available);
 }
 
-inline void handleChassisHealthRollup(sdbusplus::bus::bus& bus,
+inline void handleChassisHealthRollup(sdbusplus::bus_t& bus,
                                       const std::string& invpath,
                                       bool addRollup)
 {

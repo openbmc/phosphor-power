@@ -26,7 +26,7 @@ class PowerSequencerMonitor
      * Create a base device object for power sequence monitoring.
      * @param bus D-Bus bus object
      */
-    explicit PowerSequencerMonitor(sdbusplus::bus::bus& bus);
+    explicit PowerSequencerMonitor(sdbusplus::bus_t& bus);
 
     /**
      * Logs an error using the D-Bus Create method.
@@ -50,7 +50,7 @@ class PowerSequencerMonitor
     /**
      * The D-Bus bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /*
      * Create a BMC Dump
