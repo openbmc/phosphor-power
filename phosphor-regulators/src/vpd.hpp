@@ -88,7 +88,7 @@ class DBusVPD : public VPD
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusVPD(sdbusplus::bus::bus& bus) : bus{bus}
+    explicit DBusVPD(sdbusplus::bus_t& bus) : bus{bus}
     {}
 
     /** @copydoc VPD::clearCache() */
@@ -136,7 +136,7 @@ class DBusVPD : public VPD
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Cached VPD keyword values.

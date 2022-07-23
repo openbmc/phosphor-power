@@ -33,7 +33,7 @@ namespace regulators
 namespace interface
 {
 
-ManagerInterface::ManagerInterface(sdbusplus::bus::bus& bus, const char* path) :
+ManagerInterface::ManagerInterface(sdbusplus::bus_t& bus, const char* path) :
     _serverInterface(bus, path, interface, _vtable, this)
 {}
 
@@ -44,7 +44,7 @@ int ManagerInterface::callbackConfigure(sd_bus_message* msg, void* context,
     {
         try
         {
-            auto m = sdbusplus::message::message(msg);
+            auto m = sdbusplus::message_t(msg);
 
             auto mgrObj = static_cast<ManagerInterface*>(context);
             mgrObj->configure();
@@ -77,7 +77,7 @@ int ManagerInterface::callbackMonitor(sd_bus_message* msg, void* context,
         try
         {
             bool enable{};
-            auto m = sdbusplus::message::message(msg);
+            auto m = sdbusplus::message_t(msg);
 
             m.read(enable);
 

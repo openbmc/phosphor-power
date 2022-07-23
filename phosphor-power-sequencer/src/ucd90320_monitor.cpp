@@ -46,7 +46,7 @@ const std::string compatibleNamesProperty = "Names";
 
 namespace device_error = sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
-UCD90320Monitor::UCD90320Monitor(sdbusplus::bus::bus& bus, std::uint8_t i2cBus,
+UCD90320Monitor::UCD90320Monitor(sdbusplus::bus_t& bus, std::uint8_t i2cBus,
                                  std::uint16_t i2cAddress) :
     PowerSequencerMonitor(bus),
     match{bus,
@@ -131,7 +131,7 @@ void UCD90320Monitor::findConfigFile(
     }
 }
 
-void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message::message& msg)
+void UCD90320Monitor::interfacesAddedHandler(sdbusplus::message_t& msg)
 {
     // Only continue if message is valid and rails / pins have not already been
     // found

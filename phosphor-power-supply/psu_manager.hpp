@@ -41,7 +41,7 @@ constexpr auto validationTimeout = std::chrono::seconds(10);
 class PowerSystemInputs : public PowerSystemInputsObject
 {
   public:
-    PowerSystemInputs(sdbusplus::bus::bus& bus, const std::string& path) :
+    PowerSystemInputs(sdbusplus::bus_t& bus, const std::string& path) :
         PowerSystemInputsObject(bus, path.c_str())
     {}
 };
@@ -68,7 +68,7 @@ class PSUManager
      * @param[in] bus - D-Bus bus object
      * @param[in] e - event object
      */
-    PSUManager(sdbusplus::bus::bus& bus, const sdeventplus::Event& e);
+    PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e);
 
     /**
      * Get PSU properties from D-Bus, use that to build a power supply
@@ -138,7 +138,7 @@ class PSUManager
     /**
      * The D-Bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * The timer that runs to periodically check the power supplies.
@@ -207,7 +207,7 @@ class PSUManager
      *
      * @param[in] msg - Data associated with the power state signal
      */
-    void powerStateChanged(sdbusplus::message::message& msg);
+    void powerStateChanged(sdbusplus::message_t& msg);
 
     /**
      * @brief Callback for inventory property changes
@@ -216,7 +216,7 @@ class PSUManager
      *
      * @param[in]  msg - Data associated with the Present change signal
      **/
-    void presenceChanged(sdbusplus::message::message& msg);
+    void presenceChanged(sdbusplus::message_t& msg);
 
     /**
      * @brief Callback for entity-manager interface added
@@ -226,7 +226,7 @@ class PSUManager
      *
      * @param[in] msg - Data associated with the interfaces added signal
      */
-    void entityManagerIfaceAdded(sdbusplus::message::message& msg);
+    void entityManagerIfaceAdded(sdbusplus::message_t& msg);
 
     /**
      * @brief Adds properties to the inventory.

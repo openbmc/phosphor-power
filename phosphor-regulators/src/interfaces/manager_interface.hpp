@@ -41,7 +41,7 @@ class ManagerInterface
      * @param[in] bus - Bus to attach to.
      * @param[in] path - Path to attach at.
      */
-    ManagerInterface(sdbusplus::bus::bus& bus, const char* path);
+    ManagerInterface(sdbusplus::bus_t& bus, const char* path);
 
     /**
      * @brief Implementation for the configure method

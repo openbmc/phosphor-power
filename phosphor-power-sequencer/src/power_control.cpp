@@ -40,7 +40,7 @@ const std::string addressPropertyName = "Address";
 const std::string busPropertyName = "Bus";
 const std::string namePropertyName = "Name";
 
-PowerControl::PowerControl(sdbusplus::bus::bus& bus,
+PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
     PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
     bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
@@ -116,7 +116,7 @@ int PowerControl::getState() const
     return state;
 }
 
-void PowerControl::interfacesAddedHandler(sdbusplus::message::message& msg)
+void PowerControl::interfacesAddedHandler(sdbusplus::message_t& msg)
 {
     // Only continue if message is valid and device has not already been found
     if (!msg || deviceFound)

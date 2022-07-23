@@ -35,7 +35,7 @@ void getPSUEvent(const std::shared_ptr<sdbusplus::asio::connection>& conn,
     phosphor::power::util::getProperty<bool>(
         "xyz.openbmc_project.State.Decorator.OperationalStatus", "functional",
         pathStr, "xyz.openbmc_project.PSUSensor",
-        static_cast<sdbusplus::bus::bus&>(*conn), result);
+        static_cast<sdbusplus::bus_t&>(*conn), result);
 
     if (!result)
     {

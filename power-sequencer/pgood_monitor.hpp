@@ -43,7 +43,7 @@ class PGOODMonitor : public DeviceMonitor
      * @param[in] t - time to allow PGOOD to come up
      */
     PGOODMonitor(std::unique_ptr<phosphor::power::Device>&& d,
-                 sdbusplus::bus::bus& b, const sdeventplus::Event& e,
+                 sdbusplus::bus_t& b, const sdeventplus::Event& e,
                  std::chrono::milliseconds& t) :
         DeviceMonitor(std::move(d), e, t),
         bus(b)
@@ -97,7 +97,7 @@ class PGOODMonitor : public DeviceMonitor
     /**
      * The D-Bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * The match object for the properties changed signal

@@ -66,7 +66,7 @@ constexpr double voltageMaxValue = 15.0;
 constexpr double voltageHysteresis = 0.001;
 constexpr const char* voltageNamespace = "voltage";
 
-DBusSensor::DBusSensor(sdbusplus::bus::bus& bus, const std::string& name,
+DBusSensor::DBusSensor(sdbusplus::bus_t& bus, const std::string& name,
                        SensorType type, double value, const std::string& rail,
                        const std::string& deviceInventoryPath,
                        const std::string& chassisInventoryPath) :

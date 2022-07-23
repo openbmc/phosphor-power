@@ -30,7 +30,7 @@ constexpr auto INPUT_HISTORY_MAX_RECORDS = 120;
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
-PowerSupply::PowerSupply(sdbusplus::bus::bus& bus, const std::string& invpath,
+PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                          std::uint8_t i2cbus, std::uint16_t i2caddr,
                          const std::string& driver,
                          const std::string& gpioLineName) :
@@ -143,7 +143,7 @@ void PowerSupply::updatePresence()
     {
         present = getPresence(bus, inventoryPath);
     }
-    catch (const sdbusplus::exception::exception& e)
+    catch (const sdbusplus::exception_t& e)
     {
         // Relying on property change or interface added to retry.
         // Log an informational trace to the journal.
@@ -739,7 +739,7 @@ void PowerSupply::clearFaults()
     }
 }
 
-void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
+void PowerSupply::inventoryChanged(sdbusplus::message_t& msg)
 {
     std::string msgSensor;
     std::map<std::string, std::variant<uint32_t, bool>> msgData;
@@ -772,7 +772,7 @@ void PowerSupply::inventoryChanged(sdbusplus::message::message& msg)
     }
 }
 
-void PowerSupply::inventoryAdded(sdbusplus::message::message& msg)
+void PowerSupply::inventoryAdded(sdbusplus::message_t& msg)
 {
     sdbusplus::message::object_path path;
     msg.read(path);

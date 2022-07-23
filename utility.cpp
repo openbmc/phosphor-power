@@ -34,7 +34,7 @@ using namespace phosphor::logging;
 using json = nlohmann::json;
 
 std::string getService(const std::string& path, const std::string& interface,
-                       sdbusplus::bus::bus& bus, bool logError)
+                       sdbusplus::bus_t& bus, bool logError)
 {
     auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
                                       MAPPER_INTERFACE, "GetObject");
@@ -63,8 +63,7 @@ std::string getService(const std::string& path, const std::string& interface,
     return response.begin()->first;
 }
 
-DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
-                                 const std::string& path,
+DbusPropertyMap getAllProperties(sdbusplus::bus_t& bus, const std::string& path,
                                  const std::string& interface,
                                  const std::string& service)
 {
@@ -88,7 +87,7 @@ DbusPropertyMap getAllProperties(sdbusplus::bus::bus& bus,
     return properties;
 }
 
-DbusSubtree getSubTree(sdbusplus::bus::bus& bus, const std::string& path,
+DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
                        const std::string& interface, int32_t depth)
 {
     auto mapperCall = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
@@ -157,7 +156,7 @@ phosphor::pmbus::Type getPMBusAccessType(const json& json)
     return type;
 }
 
-bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState)
+bool isPoweredOn(sdbusplus::bus_t& bus, bool defaultState)
 {
     int32_t state = defaultState;
 
@@ -175,7 +174,7 @@ bool isPoweredOn(sdbusplus::bus::bus& bus, bool defaultState)
     return state != 0;
 }
 
-std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus::bus& bus)
+std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus)
 {
     std::vector<std::string> paths;
     auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,

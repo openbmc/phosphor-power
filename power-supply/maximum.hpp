@@ -11,7 +11,7 @@ namespace history
 {
 
 template <typename T>
-using ServerObject = typename sdbusplus::server::object::object<T>;
+using ServerObject = typename sdbusplus::server::object_t<T>;
 
 using MaximumInterface =
     sdbusplus::org::open_power::Sensor::Aggregation::History::server::Maximum;
@@ -42,7 +42,7 @@ class Maximum : public ServerObject<MaximumInterface>
      * @param[in] bus - D-Bus object
      * @param[in] objectPath - the D-Bus object path
      */
-    Maximum(sdbusplus::bus::bus& bus, const std::string& objectPath) :
+    Maximum(sdbusplus::bus_t& bus, const std::string& objectPath) :
         ServerObject<MaximumInterface>(bus, objectPath.c_str())
     {
         unit(Maximum::Unit::Watts);

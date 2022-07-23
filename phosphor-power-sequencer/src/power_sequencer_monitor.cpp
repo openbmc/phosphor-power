@@ -29,8 +29,7 @@ namespace phosphor::power::sequencer
 
 using namespace phosphor::logging;
 
-PowerSequencerMonitor::PowerSequencerMonitor(sdbusplus::bus::bus& bus) :
-    bus(bus)
+PowerSequencerMonitor::PowerSequencerMonitor(sdbusplus::bus_t& bus) : bus(bus)
 {}
 
 void PowerSequencerMonitor::createBmcDump()
@@ -45,7 +44,7 @@ void PowerSequencerMonitor::createBmcDump()
                 std::pair<std::string, std::variant<std::string, uint64_t>>>());
         bus.call_noreply(method);
     }
-    catch (const sdbusplus::exception::exception& e)
+    catch (const sdbusplus::exception_t& e)
     {
         log<level::ERR>(
             fmt::format("Unable to create dump, error {}", e.what()).c_str());

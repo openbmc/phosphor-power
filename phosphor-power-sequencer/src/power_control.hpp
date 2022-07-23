@@ -18,7 +18,7 @@
 namespace phosphor::power::sequencer
 {
 
-using PowerObject = sdbusplus::server::object::object<PowerInterface>;
+using PowerObject = sdbusplus::server::object_t<PowerInterface>;
 
 /**
  * @class PowerControl
@@ -40,7 +40,7 @@ class PowerControl : public PowerObject
      * @param bus D-Bus bus object
      * @param event event object
      */
-    PowerControl(sdbusplus::bus::bus& bus, const sdeventplus::Event& event);
+    PowerControl(sdbusplus::bus_t& bus, const sdeventplus::Event& event);
 
     /** @copydoc PowerInterface::getPgood() */
     int getPgood() const override;
@@ -55,7 +55,7 @@ class PowerControl : public PowerObject
      * Callback function to handle interfacesAdded D-Bus signals
      * @param msg Expanded sdbusplus message data
      */
-    void interfacesAddedHandler(sdbusplus::message::message& msg);
+    void interfacesAddedHandler(sdbusplus::message_t& msg);
 
     /** @copydoc PowerInterface::setPgoodTimeout() */
     void setPgoodTimeout(int timeout) override;
@@ -70,7 +70,7 @@ class PowerControl : public PowerObject
     /**
      * The D-Bus bus object
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * The power sequencer device to monitor.

@@ -83,7 +83,7 @@ class DBusPresenceService : public PresenceService
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusPresenceService(sdbusplus::bus::bus& bus) : bus{bus}
+    explicit DBusPresenceService(sdbusplus::bus_t& bus) : bus{bus}
     {}
 
     /** @copydoc PresenceService::clearCache() */
@@ -102,12 +102,12 @@ class DBusPresenceService : public PresenceService
      *
      * @return true if exception type is expected, false otherwise
      */
-    bool isExpectedException(const sdbusplus::exception::exception& e);
+    bool isExpectedException(const sdbusplus::exception_t& e);
 
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Cached presence data.

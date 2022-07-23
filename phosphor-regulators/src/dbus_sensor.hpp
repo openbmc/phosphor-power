@@ -120,7 +120,7 @@ class DBusSensor
      * @param chassisInventoryPath D-Bus inventory path of the chassis that
      *                             contains the voltage regulator device
      */
-    explicit DBusSensor(sdbusplus::bus::bus& bus, const std::string& name,
+    explicit DBusSensor(sdbusplus::bus_t& bus, const std::string& name,
                         SensorType type, double value, const std::string& rail,
                         const std::string& deviceInventoryPath,
                         const std::string& chassisInventoryPath);
@@ -314,7 +314,7 @@ class DBusSensor
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus::bus& bus;
+    sdbusplus::bus_t& bus;
 
     /**
      * Sensor name.
