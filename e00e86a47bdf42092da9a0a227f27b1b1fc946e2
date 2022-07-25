@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53adb48b_35400ec3",
+        "filename": "phosphor-power-sequencer/config_files/UCD90320Monitor_ibm,everest.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-07-25T14:29:54Z",
+      "side": 1,
+      "message": "There are lots of VRMs and thus rails that are optional depending on whether the machine has 1, 2, 3, or 4 processors.  I think 2 is the minimum in the field, but the hardware team said there might be some 1 processor systems in the lab.\n\nIs the updated rail lsit supposed to handle all VRMs that can be potentially absent?  Or only those that have a certain hardware issue?  In other words, are most of the optional VRMs handled properly without additions to this file?",
+      "revId": "e00e86a47bdf42092da9a0a227f27b1b1fc946e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cdda56f_9727ebee",
+        "filename": "phosphor-power-sequencer/src/ucd90320_monitor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-07-25T14:29:54Z",
+      "side": 1,
+      "message": "When writing the regulators code to check for presence, I found that sometimes an exception was thrown when the hardware was not present.  Sometimes that object path for missing hardware did not exist.  Sometimes the path existed, but it didn\u0027t implement the interface with the Present property.\n\nSince you are assuming the hardware is missing for any exception, you are covered here.  Just wanted to make that point that if you see these error messages in the journal, it might not be an error situation.  It is probably unclear whether an inventory application should publish inventory paths for hardware that is not present.  So our applications probably cannot assume a certain behavior.\n\nhttps://github.com/openbmc/phosphor-power/blob/master/phosphor-regulators/src/presence_service.cpp#L47",
+      "revId": "e00e86a47bdf42092da9a0a227f27b1b1fc946e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
