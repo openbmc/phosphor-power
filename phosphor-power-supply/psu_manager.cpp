@@ -377,6 +377,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
         if (itIntf != interfaces.cend())
         {
             populateSysProperties(itIntf->second);
+            updateMissingPSUs();
         }
 
         itIntf = interfaces.find(IBMCFFPSInterface);
@@ -386,9 +387,8 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
                 fmt::format("InterfacesAdded for: {}", IBMCFFPSInterface)
                     .c_str());
             getPSUProperties(itIntf->second);
+            updateMissingPSUs();
         }
-
-        updateMissingPSUs();
 
         // Call to validate the psu configuration if the power is on and both
         // the IBMCFFPSConnector and SupportedConfiguration interfaces have been
