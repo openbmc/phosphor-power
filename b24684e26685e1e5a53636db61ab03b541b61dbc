@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a2910a1_89446714",
+        "filename": "phosphor-power-sequencer/config_files/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-07T22:40:10Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand this.  Which chip?  The ASPEED?  And which label?  I didn\u0027t see a match between the line names in the JSON file and any labels in the device tree.\n\nSorry if I\u0027m missing something obvious.  I\u0027m just trying to understand how someone creates a new JSON config file correctly.",
+      "range": {
+        "startLine": 20,
+        "startChar": 21,
+        "endLine": 20,
+        "endChar": 59
+      },
+      "revId": "b24684e26685e1e5a53636db61ab03b541b61dbc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
