@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c6627f_25350473",
+        "filename": "phosphor-power-sequencer/config_files/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-07T21:29:20Z",
+      "side": 1,
+      "message": "Did you mean mnemonic here?  pneumonic means related to lungs.",
+      "range": {
+        "startLine": 16,
+        "startChar": 68,
+        "endLine": 16,
+        "endChar": 77
+      },
+      "revId": "cd2f719c8385a28139c3d72bc8c868217f9795f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a2c795a_edcef526",
+        "filename": "phosphor-power-sequencer/config_files/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-07T21:29:20Z",
+      "side": 1,
+      "message": "The message registry is part of the openpower-pels extension to the phosphor-logging repo, so non-POWER users won\u0027t have this.  You could preface the sentence with \"If the BMC system utilizes the openpower-pels extension, then it will be used ...\"",
+      "range": {
+        "startLine": 17,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 9
+      },
+      "revId": "cd2f719c8385a28139c3d72bc8c868217f9795f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1df88685_11061ae7",
+        "filename": "phosphor-power-sequencer/config_files/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-07T21:29:20Z",
+      "side": 1,
+      "message": "I\u0027m not very familiar with the Linux GPIO interface.  Are the line numbers unique across the whole system, or are they tied to a specific GPIO device in the device tree?  If it is the latter, do we need to specify how that device is found in the device tree, such as it has to have a certain name?",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "cd2f719c8385a28139c3d72bc8c868217f9795f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93c5abe1_34e79f53",
+        "filename": "phosphor-power-sequencer/config_files/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-07T21:29:20Z",
+      "side": 1,
+      "message": "Nit: present",
+      "range": {
+        "startLine": 21,
+        "startChar": 3,
+        "endLine": 21,
+        "endChar": 12
+      },
+      "revId": "cd2f719c8385a28139c3d72bc8c868217f9795f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
