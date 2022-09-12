@@ -62,7 +62,7 @@ enum class PhaseFaultType : unsigned char
  */
 inline ErrorType toErrorType(PhaseFaultType type)
 {
-    ErrorType errorType;
+    ErrorType errorType{ErrorType::phaseFaultN};
     switch (type)
     {
         case PhaseFaultType::n:
