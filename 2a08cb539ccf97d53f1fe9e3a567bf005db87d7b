@@ -16,6 +16,24 @@
       "message": "Looks good to me.  CI failed, and the link to the results doesn\u0027t work for some reason.\n\nI removed the test result and set Ok-To-Test to hopefully re-run CI.",
       "revId": "2a08cb539ccf97d53f1fe9e3a567bf005db87d7b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62db0a64_54f9fbff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-09-12T14:45:14Z",
+      "side": 1,
+      "message": "Ya, static analysis failure in regulators. Which is weird because the regulator code has not changed and a markup file in pseq is not causing it. Maybe CI picked up a newer static analyzer?\n```\n[5/145] Compiling C++ object phosphor-regulators/src/libphosphor-regulators.a.p/phase_fault_detection.cpp.o\nFAILED: phosphor-regulators/src/libphosphor-regulators.a.p/phase_fault_detection.cpp.o \n/usr/share/clang/scan-build-14/bin/../libexec/c++-analyzer -Iphosphor-regulators/src/libphosphor-regulators.a.p -Iphosphor-regulators/src -I../../../phosphor-regulators/src -I. -I../../.. -I../../../phosphor-regulators/src/actions -Itools/i2c -I../../../tools/i2c -fdiagnostics-color\u003dalways -D_FILE_OFFSET_BITS\u003d64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Wpedantic -Werror -std\u003dc++20 -O2 -g -fPIC -MD -MQ phosphor-regulators/src/libphosphor-regulators.a.p/phase_fault_detection.cpp.o -MF phosphor-regulators/src/libphosphor-regulators.a.p/phase_fault_detection.cpp.o.d -o phosphor-regulators/src/libphosphor-regulators.a.p/phase_fault_detection.cpp.o -c ../../../phosphor-regulators/src/phase_fault_detection.cpp\nIn file included from ../../../phosphor-regulators/src/error_history.hpp:18,\n                 from ../../../phosphor-regulators/src/phase_fault.hpp:18,\n                 from ../../../phosphor-regulators/src/actions/action_environment.hpp:19,\n                 from ../../../phosphor-regulators/src/actions/action.hpp:18,\n                 from ../../../phosphor-regulators/src/phase_fault_detection.hpp:18,\n                 from ../../../phosphor-regulators/src/phase_fault_detection.cpp:17:\nIn static member function ‘static constexpr std::_Base_bitset\u003c1\u003e::_WordT std::_Base_bitset\u003c1\u003e::_S_maskbit(std::size_t)’,\n    inlined from ‘constexpr bool std::bitset\u003c_Nb\u003e::_Unchecked_test(std::size_t) const [with long unsigned int _Nb \u003d 8]’ at /usr/include/c++/12/bitset:1066:61,\n    inlined from ‘constexpr bool std::bitset\u003c_Nb\u003e::operator[](std::size_t) const [with long unsigned int _Nb \u003d 8]’ at /usr/include/c++/12/bitset:1168:31,\n    inlined from ‘bool phosphor::power::regulators::ErrorHistory::wasLogged(phosphor::power::regulators::ErrorType) const’ at ../../../phosphor-regulators/src/error_history.hpp:94:51,\n    inlined from ‘void phosphor::power::regulators::PhaseFaultDetection::checkForPhaseFault(phosphor::power::regulators::PhaseFaultType, phosphor::power::regulators::Services\u0026, phosphor::power::regulators::Device\u0026, phosphor::power::regulators::ActionEnvironment\u0026)’ at ../../../phosphor-regulators/src/phase_fault_detection.cpp:95:32:\n/usr/include/c++/12/bitset:407:41: error: ‘errorType’ may be used uninitialized [-Werror\u003dmaybe-uninitialized]\n  407 |       { return (static_cast\u003c_WordT\u003e(1)) \u003c\u003c _S_whichbit(__pos); }\n      |                ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~\n../../../phosphor-regulators/src/phase_fault.hpp: In member function ‘void phosphor::power::regulators::PhaseFaultDetection::checkForPhaseFault(phosphor::power::regulators::PhaseFaultType, phosphor::power::regulators::Services\u0026, phosphor::power::regulators::Device\u0026, phosphor::power::regulators::ActionEnvironment\u0026)’:\n../../../phosphor-regulators/src/phase_fault.hpp:65:15: note: ‘errorType’ was declared here\n   65 |     ErrorType errorType;\n      |               ^~~~~~~~~\ncc1plus: all warnings being treated as errors\n```",
+      "parentUuid": "3d26341e_3c190d3d",
+      "revId": "2a08cb539ccf97d53f1fe9e3a567bf005db87d7b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
