@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd6d6020_4fc1c7ed",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-09-28T18:25:48Z",
+      "side": 1,
+      "message": "I think it would also be helpful to have a quick overview of what application it is and what it currently does.\n\nAlso a nice detail would be to say how to just have an application that hosts that control.power interface without any power sequencer monitoring, because I\u0027ve had people ask how to do that.",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
