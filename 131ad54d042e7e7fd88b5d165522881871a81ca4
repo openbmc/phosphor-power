@@ -16,6 +16,104 @@
       "message": "I think it would also be helpful to have a quick overview of what application it is and what it currently does.\n\nAlso a nice detail would be to say how to just have an application that hosts that control.power interface without any power sequencer monitoring, because I\u0027ve had people ask how to do that.",
       "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be199dcb_0ad18513",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-30T14:17:28Z",
+      "side": 1,
+      "message": "I agree this would be great info.  Would it make more sense in the parent directory (phosphor-power-sequencer/) ?",
+      "parentUuid": "dd6d6020_4fc1c7ed",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ab3e353_80f68389",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-30T14:17:28Z",
+      "side": 1,
+      "message": "Grammar Nit: no comma in between two nouns (control \u0026 monitoring)",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34ac9474_859a6f46",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-30T14:17:28Z",
+      "side": 1,
+      "message": "If multiple UCD device types are supported in the future, is the design that PowerControl would look for multiple device-type-specific interfaces from EM and see which one exists?",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad68f9c4_3c1849be",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-30T14:17:28Z",
+      "side": 1,
+      "message": "Nit: Want a backtick here?",
+      "range": {
+        "startLine": 27,
+        "startChar": 17,
+        "endLine": 27,
+        "endChar": 18
+      },
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8c93f77_4e711831",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-09-30T14:17:28Z",
+      "side": 1,
+      "message": "The above paragraph is an excellent description of these state transitions.",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
