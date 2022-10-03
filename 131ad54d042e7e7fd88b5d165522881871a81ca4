@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0b57db9_cdd4836f",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-03T19:48:30Z",
+      "side": 1,
+      "message": "\u003e I think it would also be helpful to have a quick overview of what application it is and what it currently does.\n\u003e I agree this would be great info.  Would it make more sense in the parent directory (phosphor-power-sequencer/) ?\n\nI put up https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/57618 for review including this. I\u0027ll take your comments on if you like it better there or here.\n\n\u003e Also a nice detail would be to say how to just have an application that hosts that control.power interface without any power sequencer monitoring, because I\u0027ve had people ask how to do that.\nAdded a sentence below mentioning that omitting EM config will get you to a device generic implementation,",
+      "parentUuid": "be199dcb_0ad18513",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ab3e353_80f68389",
         "filename": "phosphor-power-sequencer/src/README.md",
         "patchSetId": 2
@@ -49,6 +67,30 @@
       "writtenOn": "2022-09-30T14:17:28Z",
       "side": 1,
       "message": "Grammar Nit: no comma in between two nouns (control \u0026 monitoring)",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f8b65e5_d0e0cc91",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-03T19:48:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ab3e353_80f68389",
       "range": {
         "startLine": 10,
         "startChar": 41,
@@ -78,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91247db3_75762045",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-03T19:48:30Z",
+      "side": 1,
+      "message": "That sounds like the probable implementation.",
+      "parentUuid": "34ac9474_859a6f46",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad68f9c4_3c1849be",
         "filename": "phosphor-power-sequencer/src/README.md",
         "patchSetId": 2
@@ -89,6 +149,30 @@
       "writtenOn": "2022-09-30T14:17:28Z",
       "side": 1,
       "message": "Nit: Want a backtick here?",
+      "range": {
+        "startLine": 27,
+        "startChar": 17,
+        "endLine": 27,
+        "endChar": 18
+      },
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a21e29_4da1c558",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-03T19:48:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad68f9c4_3c1849be",
       "range": {
         "startLine": 27,
         "startChar": 17,
@@ -112,6 +196,24 @@
       "writtenOn": "2022-09-30T14:17:28Z",
       "side": 1,
       "message": "The above paragraph is an excellent description of these state transitions.",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "085b25eb_b9e99b49",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-03T19:48:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d8c93f77_4e711831",
       "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
