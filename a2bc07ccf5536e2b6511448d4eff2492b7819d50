@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edd971de_9f86c352",
+        "filename": "phosphor-power-sequencer/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-10-04T22:17:46Z",
+      "side": 1,
+      "message": "This sentence is a little confusing.  I\u0027m not sure if it is saying \"applications ... that support JSON-driven configuration\" or \"devices that support JSON-driven configuration\".\n\nI\u0027d suggest splitting it into multiple simpler sentences.",
+      "revId": "a2bc07ccf5536e2b6511448d4eff2492b7819d50",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
