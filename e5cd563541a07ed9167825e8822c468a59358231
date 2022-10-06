@@ -16,6 +16,24 @@
       "message": "Looks good to me.  \nAssuming updates for other sequencers (eg 90160) or multiple sequencers in one chassis would be done when that code support added, thanks.",
       "revId": "e5cd563541a07ed9167825e8822c468a59358231",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d542edaa_c9f08553",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-06T17:58:08Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "f229011d_a9bafbc1",
+      "revId": "e5cd563541a07ed9167825e8822c468a59358231",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
