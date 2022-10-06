@@ -34,6 +34,24 @@
       "parentUuid": "338df59d_2931d963",
       "revId": "c604f33e124d4ca553e7502b8bcca4aabedbe6cf",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d04664_2b706cf1",
+        "filename": "phosphor-power-sequencer/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-10-06T18:31:02Z",
+      "side": 1,
+      "message": "You mention a generic base class implementation, but don\u0027t mention what that actually means.  Maybe you could say that it won\u0027t do anything or touch any hardware, or something along those lines so it\u0027s obvious to the people that just want the power control interface.",
+      "parentUuid": "4cef2274_e9c802ac",
+      "revId": "c604f33e124d4ca553e7502b8bcca4aabedbe6cf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
