@@ -154,6 +154,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7cd2fb0_98ca4c0f",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-10-07T20:42:46Z",
+      "side": 1,
+      "message": "Marking Resolved",
+      "parentUuid": "91247db3_75762045",
+      "revId": "131ad54d042e7e7fd88b5d165522881871a81ca4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad68f9c4_3c1849be",
