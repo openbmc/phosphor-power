@@ -859,7 +859,9 @@ void PowerSupply::updateInventory()
     // up to 8-bytes per command. The device driver only reads up to 2 bytes per
     // command, but combines all three of the 2-byte reads, or all 4 of the
     // 1-byte reads into one string. So, the maximum size expected is 6 bytes.
-    const auto VERSION_SIZE = 6;
+    // However, it is formatted by the driver as a hex string with two ASCII
+    // characters per byte.  So the maximum ASCII string size is 12.
+    const auto VERSION_SIZE = 12;
 
     using PropertyMap =
         std::map<std::string,
