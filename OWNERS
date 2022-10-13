@@ -36,18 +36,18 @@ owners:
 - spinler@us.ibm.com
 
 reviewers:
-- bjwyman@gmail.com
 - liuxiwei@inspur.com
+- wrightj@linux.ibm.com
 
 matchers:
 
 openbmc:
-- name: B.J. Wyman
-  email: bjwyman@gmail.com
-  discord: bjwyman
 - name: George Liu
   email: liuxiwei@inspur.com
   discord: George Liu
+- name: Jim Wright
+  email: wrightj@linux.ibm.com
+  discord: wrightj
 - name: Matt Spinler
   email: spinler@us.ibm.com
   discord: mspinler
