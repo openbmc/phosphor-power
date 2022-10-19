@@ -928,7 +928,9 @@ bool PSUManager::hasRequiredPSUs(
             continue;
         }
 
-        if (presentCount != config.second.powerSupplyCount)
+        // Number of power supplies present should equal or exceed the expected
+        // count
+        if (presentCount < config.second.powerSupplyCount)
         {
             tmpAdditionalData.clear();
             tmpAdditionalData["EXPECTED_COUNT"] =
