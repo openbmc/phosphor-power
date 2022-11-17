@@ -95,7 +95,7 @@ void PSUManager::initialize()
                                powerService, bus, pgood);
 
         // state is the latest requested power on / off transition
-        auto method = bus.new_method_call(POWER_IFACE, POWER_OBJ_PATH,
+        auto method = bus.new_method_call(powerService.c_str(), POWER_OBJ_PATH,
                                           POWER_IFACE, "getPowerState");
         auto reply = bus.call(method);
         int state = 0;
@@ -478,16 +478,13 @@ void PSUManager::presenceChanged(sdbusplus::message_t& msg)
 void PSUManager::setPowerSupplyError(const std::string& psuErrorString)
 {
     using namespace sdbusplus::xyz::openbmc_project;
-    constexpr auto service = "org.openbmc.control.Power";
-    constexpr auto objPath = "/org/openbmc/control/power0";
-    constexpr auto interface = "org.openbmc.control.Power";
     constexpr auto method = "setPowerSupplyError";
 
     try
     {
         // Call D-Bus method to inform pseq of PSU error
-        auto methodMsg =
-            bus.new_method_call(service, objPath, interface, method);
+        auto methodMsg = bus.new_method_call(
+            powerService.c_str(), POWER_OBJ_PATH, POWER_IFACE, method);
         methodMsg.append(psuErrorString);
         auto callReply = bus.call(methodMsg);
     }
