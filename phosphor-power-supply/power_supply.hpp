@@ -426,7 +426,8 @@ class PowerSupply
         return modelName;
     }
 
-    /** @brief Returns true if the number of failed reads exceeds limit
+    /**
+     * @brief Returns true if the number of failed reads exceeds limit
      * TODO: or CML bit on.
      */
     bool hasCommFault() const
@@ -517,100 +518,134 @@ class PowerSupply
     }
 
   private:
-    /** @brief systemd bus member */
+    /**
+     * @brief systemd bus member
+     */
     sdbusplus::bus_t& bus;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_WORD.*/
+    /**
+     * @brief Will be updated to the latest/lastvalue read from STATUS_WORD.
+     */
     uint64_t statusWord = 0;
 
-    /** @brief Will be set to the last read value of STATUS_WORD. */
+    /**
+     * @brief Will be set to the last read value of STATUS_WORD.
+     */
     uint64_t statusWordOld = 0;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_INPUT.*/
+    /**
+     * @brief Will be updated to the latest/lastvalue read from STATUS_INPUT.
+     */
     uint64_t statusInput = 0;
 
-    /** @brief Will be updated to the latest/lastvalue read from STATUS_MFR.*/
+    /**
+     * @brief Will be updated to the latest/lastvalue read from STATUS_MFR.
+     */
     uint64_t statusMFR = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_CML.*/
+    /**
+     * @brief Will be updated to the latest/last value read from STATUS_CML.
+     */
     uint64_t statusCML = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_VOUT.*/
+    /**
+     * @brief Will be updated to the latest/last value read from STATUS_VOUT.
+     */
     uint64_t statusVout = 0;
 
-    /** @brief Will be updated to the latest/last value read from STATUS_IOUT.*/
+    /**
+     * @brief Will be updated to the latest/last value read from STATUS_IOUT.
+     */
     uint64_t statusIout = 0;
 
-    /** @brief Will be updated to the latest/last value read from
-     * STATUS_FANS_1_2. */
+    /**
+     * @brief Will be updated to the latest/last value read from
+     * STATUS_FANS_1_2.
+     */
     uint64_t statusFans12 = 0;
 
-    /** @brief Will be updated to the latest/last value read from
-     * STATUS_TEMPERATURE.*/
+    /**
+     * @brief Will be updated to the latest/last value read from
+     * STATUS_TEMPERATURE.
+     */
     uint64_t statusTemperature = 0;
 
-    /** @brief Will be updated with latest converted value read from READ_VIN */
+    /**
+     * @brief Will be updated with latest converted value read from READ_VIN
+     */
     int inputVoltage = phosphor::pmbus::in_input::VIN_VOLTAGE_0;
 
-    /** @brief Will be updated with the actual voltage last read from READ_VIN
+    /**
+     * @brief Will be updated with the actual voltage last read from READ_VIN
      */
     double actualInputVoltage = 0;
 
-    /** @brief True if an error for a fault has already been logged. */
+    /**
+     * @brief True if an error for a fault has already been logged.
+     */
     bool faultLogged = false;
 
-    /** @brief Incremented if bit 1 of STATUS_WORD low byte is on.
-     *
+    /**
+     * @brief Incremented if bit 1 of STATUS_WORD low byte is on.
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t cmlFault = 0;
 
-    /** @brief Incremented if bit 5 of STATUS_WORD high byte is on.
+    /**
+     * @brief Incremented if bit 5 of STATUS_WORD high byte is on.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t inputFault = 0;
 
-    /** @brief Incremented if bit 4 of STATUS_WORD high byte is on.
+    /**
+     * @brief Incremented if bit 4 of STATUS_WORD high byte is on.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t mfrFault = 0;
 
-    /** @brief Incremented if bit 3 of STATUS_WORD low byte is on.
+    /**
+     * @brief Incremented if bit 3 of STATUS_WORD low byte is on.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t vinUVFault = 0;
 
-    /** @brief Incremented if bit 5 of STATUS_WORD low byte is on.
+    /**
+     * @brief Incremented if bit 5 of STATUS_WORD low byte is on.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t voutOVFault = 0;
 
-    /** @brief Incremented if bit 4 of STATUS_WORD low byte is on.
+    /**
+     * @brief Incremented if bit 4 of STATUS_WORD low byte is on.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t ioutOCFault = 0;
 
-    /** @brief Incremented if bit 7 of STATUS_WORD high byte is on and bit 5
+    /**
+     * @brief Incremented if bit 7 of STATUS_WORD high byte is on and bit 5
      * (VOUT_OV) of low byte is off.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t voutUVFault = 0;
 
-    /** @brief Incremented if FANS fault/warn bit on in STATUS_WORD.
+    /**
+     * @brief Incremented if FANS fault/warn bit on in STATUS_WORD.
      *
      * Considered faulted if reaches DEGLITCH_LIMIT.
      */
     size_t fanFault = 0;
 
-    /** @brief Incremented if bit 2 of STATUS_WORD low byte is on.
+    /**
+     * @brief Incremented if bit 2 of STATUS_WORD low byte is on.
      *
-     * Considered faulted if reaches DEGLITCH_LIMIT. */
+     * Considered faulted if reaches DEGLITCH_LIMIT.
+     */
     size_t tempFault = 0;
 
     /**
@@ -648,7 +683,9 @@ class PowerSupply
      */
     size_t psCS12VFault = 0;
 
-    /** @brief Count of the number of read failures. */
+    /**
+     * @brief Count of the number of read failures.
+     */
     size_t readFail = 0;
 
     /**
@@ -672,7 +709,7 @@ class PowerSupply
      */
     void analyzeVoutOVFault();
 
-    /*
+    /**
      * @brief Examine STATUS_WORD value read for IOUT_OC_FAULT.
      *
      * "An output overcurrent fault has occurred." If it is on, and fault not
@@ -770,18 +807,24 @@ class PowerSupply
      */
     std::unique_ptr<GPIOInterfaceBase> presenceGPIO = nullptr;
 
-    /** @brief True if the power supply is present. */
+    /**
+     * @brief True if the power supply is present.
+     */
     bool present = false;
 
-    /** @brief Power supply model name. */
+    /**
+     * @brief Power supply model name.
+     */
     std::string modelName;
 
-    /** @brief D-Bus match variable used to subscribe to Present property
+    /**
+     * @brief D-Bus match variable used to subscribe to Present property
      * changes.
      **/
     std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
 
-    /** @brief D-Bus match variable used to subscribe for Present property
+    /**
+     * @brief D-Bus match variable used to subscribe for Present property
      * interface added.
      */
     std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
@@ -793,7 +836,9 @@ class PowerSupply
      */
     std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf = nullptr;
 
-    /** @brief Stored copy of the firmware version/revision string */
+    /**
+     * @brief Stored copy of the firmware version/revision string
+     */
     std::string fwVersion;
 
     /**
@@ -801,7 +846,9 @@ class PowerSupply
      */
     const std::filesystem::path bindPath;
 
-    /* @brief The string to pass in for binding the device driver. */
+    /**
+     * @brief The string to pass in for binding the device driver.
+     */
     std::string bindDevice;
 
     /**
@@ -873,7 +920,8 @@ class PowerSupply
      */
     auto getMaxPowerOut() const;
 
-    /* @brief Reads a VPD value from PMBus, correct size, and contents.
+    /**
+     * @brief Reads a VPD value from PMBus, correct size, and contents.
      *
      * If the VPD data read is not the passed in size, resize and fill with
      * spaces. If the data contains a non-alphanumeric value, replace any of
