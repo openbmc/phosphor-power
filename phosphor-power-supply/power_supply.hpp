@@ -672,7 +672,7 @@ class PowerSupply
      */
     void analyzeVoutOVFault();
 
-    /*
+    /**
      * @brief Examine STATUS_WORD value read for IOUT_OC_FAULT.
      *
      * "An output overcurrent fault has occurred." If it is on, and fault not
@@ -801,7 +801,7 @@ class PowerSupply
      */
     const std::filesystem::path bindPath;
 
-    /* @brief The string to pass in for binding the device driver. */
+    /** @brief The string to pass in for binding the device driver. */
     std::string bindDevice;
 
     /**
@@ -873,7 +873,8 @@ class PowerSupply
      */
     auto getMaxPowerOut() const;
 
-    /* @brief Reads a VPD value from PMBus, correct size, and contents.
+    /**
+     * @brief Reads a VPD value from PMBus, correct size, and contents.
      *
      * If the VPD data read is not the passed in size, resize and fill with
      * spaces. If the data contains a non-alphanumeric value, replace any of
