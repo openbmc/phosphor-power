@@ -506,6 +506,8 @@ void PowerSupply::analyzeVinUVFault()
             }
             vinUVFault++;
         }
+        // Remember that this PSU has seen an AC fault
+        acFault = AC_FAULT_LIMIT;
     }
 
     if (vinUVFault &&
@@ -518,6 +520,11 @@ void PowerSupply::analyzeVinUVFault()
                         shortName, statusWord, statusMFR, statusInput)
                 .c_str());
         vinUVFault = 0;
+        // No AC fail, decriment counter
+        if (acFault)
+        {
+            --acFault;
+        }
     }
 }
 
@@ -607,6 +614,11 @@ void PowerSupply::analyze()
                 }
 
                 clearFaultFlags();
+                // No AC fail, decriment counter
+                if (acFault)
+                {
+                    --acFault;
+                }
             }
 
             // Save off old inputVoltage value.
@@ -635,8 +647,8 @@ void PowerSupply::analyze()
                         shortName, vinUVFault, actualInputVoltage)
                         .c_str());
                 // Do we have a VIN_UV fault latched that can now be cleared
-                // due to voltage back in range? Attempt to clear the fault(s),
-                // re-check faults on next call.
+                // due to voltage back in range? Attempt to clear the
+                // fault(s), re-check faults on next call.
                 clearVinUVFault();
             }
             else if (std::abs(actualInputVoltageOld - actualInputVoltage) >
