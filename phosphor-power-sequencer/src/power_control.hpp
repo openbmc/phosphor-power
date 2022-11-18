@@ -14,6 +14,7 @@
 #include <sdeventplus/utility/timer.hpp>
 
 #include <chrono>
+#include <string>
 
 namespace phosphor::power::sequencer
 {
@@ -43,7 +44,7 @@ class PowerControl : public PowerObject
     PowerControl(sdbusplus::bus_t& bus, const sdeventplus::Event& event);
 
     /** @copydoc PowerInterface::getPgood() */
-    int getPgood() const override;
+    int getPgood() override;
 
     /** @copydoc PowerInterface::getPgoodTimeout() */
     int getPgoodTimeout() const override;
