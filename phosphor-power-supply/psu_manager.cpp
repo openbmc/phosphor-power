@@ -603,7 +603,9 @@ void PSUManager::analyze()
         clearBrownout();
     }
 
-    if (powerOn)
+    // Only perform individual PSU analysis if power is on and a brownout has
+    // not already been logged
+    if (powerOn && !brownoutLogged)
     {
         for (auto& psu : psus)
         {
