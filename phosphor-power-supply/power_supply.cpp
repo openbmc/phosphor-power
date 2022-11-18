@@ -521,7 +521,7 @@ void PowerSupply::analyzeVinUVFault()
     }
 }
 
-void PowerSupply::analyze()
+void PowerSupply::analyze(bool powerOn)
 {
     using namespace phosphor::pmbus;
 
@@ -612,6 +612,7 @@ void PowerSupply::analyze()
             // Save off old inputVoltage value.
             // Get latest inputVoltage.
             // If voltage went from below minimum, and now is not, clear faults.
+            // Do not clear voltage fault if chassis pgood has been lost
             // Note: getInputVoltage() has its own try/catch.
             int inputVoltageOld = inputVoltage;
             double actualInputVoltageOld = actualInputVoltage;
@@ -619,25 +620,34 @@ void PowerSupply::analyze()
             if ((inputVoltageOld == in_input::VIN_VOLTAGE_0) &&
                 (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
-                log<level::INFO>(
-                    fmt::format(
-                        "{} READ_VIN back in range: actualInputVoltageOld = {} "
-                        "actualInputVoltage = {}",
-                        shortName, actualInputVoltageOld, actualInputVoltage)
-                        .c_str());
-                clearVinUVFault();
+                // Only clear if not in pgood fail
+                if (checkChassisPgood(powerOn))
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "{} READ_VIN back in range: actualInputVoltageOld = {} "
+                            "actualInputVoltage = {}",
+                            shortName, actualInputVoltageOld,
+                            actualInputVoltage)
+                            .c_str());
+                    clearVinUVFault();
+                }
             }
             else if (vinUVFault && (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
-                log<level::INFO>(
-                    fmt::format(
-                        "{} CLEAR_FAULTS: vinUVFault {} actualInputVoltage {}",
-                        shortName, vinUVFault, actualInputVoltage)
-                        .c_str());
-                // Do we have a VIN_UV fault latched that can now be cleared
-                // due to voltage back in range? Attempt to clear the fault(s),
-                // re-check faults on next call.
-                clearVinUVFault();
+                // Only clear if not in pgood fail
+                if (checkChassisPgood(powerOn))
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "{} CLEAR_FAULTS: vinUVFault {} actualInputVoltage {}",
+                            shortName, vinUVFault, actualInputVoltage)
+                            .c_str());
+                    // Do we have a VIN_UV fault latched that can now be cleared
+                    // due to voltage back in range? Attempt to clear the
+                    // fault(s), re-check faults on next call.
+                    clearVinUVFault();
+                }
             }
             else if (std::abs(actualInputVoltageOld - actualInputVoltage) >
                      10.0)
@@ -668,6 +678,24 @@ void PowerSupply::analyze()
             }
         }
     }
+}
+
+bool PowerSupply::checkChassisPgood(bool powerOn)
+{
+    // If the power is not on, chassis is not in active pgood fail
+    if (!powerOn)
+    {
+        return true;
+    }
+
+    // Get a refreshed chassis pgood from power control service
+    int chassisPgood = 0;
+    util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH, POWER_IFACE,
+                           bus, chassisPgood);
+    log<level::INFO>(
+        fmt::format("checkChassisPgood, chassis pgood: {}", chassisPgood)
+            .c_str());
+    return chassisPgood;
 }
 
 void PowerSupply::onOffConfig(uint8_t data)

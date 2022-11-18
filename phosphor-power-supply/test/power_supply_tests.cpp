@@ -224,7 +224,7 @@ TEST_F(PowerSupplyTests, Analyze)
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(0));
 
-        psu.analyze();
+        psu.analyze(false);
         // By default, nothing should change.
         EXPECT_EQ(psu.isPresent(), false);
         EXPECT_EQ(psu.isFaulted(), false);
@@ -273,7 +273,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("206000"));
-        psu2.analyze();
+        psu2.analyze(false);
         EXPECT_EQ(psu2.isPresent(), true);
         EXPECT_EQ(psu2.isFaulted(), false);
         EXPECT_EQ(psu2.hasInputFault(), false);
@@ -302,7 +302,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("207000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             // Should not be faulted until it reaches the deglitch limit.
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
@@ -336,7 +336,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("208000"));
-        psu2.analyze();
+        psu2.analyze(false);
         EXPECT_EQ(psu2.isFaulted(), false);
         EXPECT_EQ(psu2.hasInputFault(), false);
         // Now set fault bits in STATUS_WORD
@@ -351,7 +351,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("19123"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             // Only faulted if hit deglitch limit
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
@@ -381,7 +381,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
             .Times(1)
             .WillOnce(Return(1));
-        psu2.analyze();
+        psu2.analyze(false);
         // Should remain present, no longer be faulted, no input fault, no
         // VIN_UV fault. Nothing else should change.
         EXPECT_EQ(psu2.isPresent(), true);
@@ -404,7 +404,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("210000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // Now STATUS_WORD with MFR fault bit on.
         expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
         // STATUS_MFR bits on.
@@ -416,7 +416,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("211000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -449,7 +449,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("212000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // STATUS_WORD with temperature fault bit on.
         expectations.statusWordValue = (status_word::TEMPERATURE_FAULT_WARN);
         // STATUS_TEMPERATURE with fault bit(s) on.
@@ -460,7 +460,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("213000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -493,7 +493,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("214000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // STATUS_WORD with CML fault bit on.
         expectations.statusWordValue = (status_word::CML_FAULT);
         // Turn on STATUS_CML fault bit(s)
@@ -504,7 +504,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("215000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasCommFault(), x >= DEGLITCH_LIMIT);
@@ -537,7 +537,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("216000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // STATUS_WORD with VOUT/VOUT_OV fault.
         expectations.statusWordValue =
             ((status_word::VOUT_FAULT) | (status_word::VOUT_OV_FAULT));
@@ -550,7 +550,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("217000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -577,7 +577,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("218000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // STATUS_WORD with IOUT_OC fault.
         expectations.statusWordValue = status_word::IOUT_OC_FAULT;
         // Turn on STATUS_IOUT fault bit(s)
@@ -588,7 +588,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("219000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -615,7 +615,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("220000"));
-        psu2.analyze();
+        psu2.analyze(false);
         // Change STATUS_WORD to indicate VOUT fault.
         expectations.statusWordValue = (status_word::VOUT_FAULT);
         // Turn on STATUS_VOUT fault bit(s)
@@ -626,7 +626,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("221000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -653,7 +653,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("222000"));
-        psu2.analyze();
+        psu2.analyze(false);
         expectations.statusWordValue = (status_word::FAN_FAULT);
         // STATUS_FANS_1_2 with fan 1 warning & fault bits on.
         expectations.statusFans12Value = 0xA0;
@@ -664,7 +664,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("223000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasFanFault(), x >= DEGLITCH_LIMIT);
@@ -691,7 +691,7 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("123000"));
-        psu2.analyze();
+        psu2.analyze(false);
         EXPECT_EQ(psu2.isFaulted(), false);
         // POWER_GOOD# inactive, and OFF bit on.
         expectations.statusWordValue =
@@ -704,7 +704,7 @@ TEST_F(PowerSupplyTests, Analyze)
             EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
                 .Times(1)
                 .WillOnce(Return("124000"));
-            psu2.analyze();
+            psu2.analyze(false);
             EXPECT_EQ(psu2.isPresent(), true);
             EXPECT_EQ(psu2.isFaulted(), x >= PGOOD_DEGLITCH_LIMIT);
             EXPECT_EQ(psu2.hasInputFault(), false);
@@ -775,7 +775,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("205000"));
-        psu.analyze();
+        psu.analyze(false);
         // I definitely should be writting ON_OFF_CONFIG if I call the function
         EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, ElementsAre(0x15),
                                            Type::HwmonDeviceDebug))
@@ -810,7 +810,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207000"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
     EXPECT_EQ(psu.hasInputFault(), false);
@@ -854,7 +854,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.isPresent(), true);
         // Cannot have VOUT_OV_FAULT and VOUT_UV_FAULT.
         // Rely on HasVoutUVFault() to verify this sets and clears.
@@ -930,7 +930,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
     }
 
     EXPECT_EQ(psu.isPresent(), true);
@@ -966,7 +966,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     EXPECT_CALL(mockPMBus, read("in1_lcrit_alarm", _, _))
         .Times(1)
         .WillOnce(Return(1));
-    psu.analyze();
+    psu.analyze(false);
     // We only cleared the VIN_UV and OFF faults.
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), true);
@@ -993,7 +993,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
         .Times(1)
         .WillOnce(Return("206000"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.isPresent(), true);
     EXPECT_EQ(psu.isFaulted(), false);
     EXPECT_EQ(psu.hasInputFault(), false);
@@ -1055,7 +1055,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("123456"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_CALL(mockPMBus, readString(_, _)).WillRepeatedly(Return(""));
         psu.updateInventory();
 
@@ -1108,7 +1108,7 @@ TEST_F(PowerSupplyTests, IsPresent)
         .Times(1)
         .WillOnce(Return("123456"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.isPresent(), true);
 }
 
@@ -1138,7 +1138,7 @@ TEST_F(PowerSupplyTests, IsFaulted)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("124680"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.isFaulted(), false);
     // STATUS_WORD with fault bits on.
     expectations.statusWordValue = 0xFFFF;
@@ -1167,7 +1167,7 @@ TEST_F(PowerSupplyTests, IsFaulted)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.isFaulted(), x >= DEGLITCH_LIMIT);
     }
 }
@@ -1197,7 +1197,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("201100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputFault(), false);
     // STATUS_WORD with input fault/warn on.
     expectations.statusWordValue = (status_word::INPUT_FAULT_WARN);
@@ -1214,7 +1214,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasInputFault(), x >= DEGLITCH_LIMIT);
     }
     // STATUS_WORD with no bits on.
@@ -1225,7 +1225,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
         .Times(1)
         .WillOnce(Return("201300"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputFault(), false);
 }
 
@@ -1255,7 +1255,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("202100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasMFRFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1267,7 +1267,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("202200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasMFRFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no bits on in STATUS_WORD
@@ -1276,7 +1276,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("202300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasMFRFault(), false);
 }
 
@@ -1313,7 +1313,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("201100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
     // Turn fault on.
     expectations.statusWordValue = (status_word::VIN_UV_FAULT);
@@ -1331,7 +1331,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasVINUVFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1347,7 +1347,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
         .Times(1)
         .WillOnce(Return(1));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVINUVFault(), false);
 }
 
@@ -1377,7 +1377,7 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("202100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
     // Turn fault on.
     expectations.statusWordValue = (status_word::VOUT_OV_FAULT);
@@ -1389,7 +1389,7 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("202200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasVoutOVFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1398,7 +1398,7 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("202300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVoutOVFault(), false);
 }
 
@@ -1428,7 +1428,7 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("203100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasIoutOCFault(), false);
     // Turn fault on.
     expectations.statusWordValue = status_word::IOUT_OC_FAULT;
@@ -1444,7 +1444,7 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasIoutOCFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1454,7 +1454,7 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
         .Times(1)
         .WillOnce(Return("203300"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasIoutOCFault(), false);
 }
 
@@ -1484,7 +1484,7 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("204100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVoutUVFault(), false);
     // Turn fault on.
     expectations.statusWordValue = (status_word::VOUT_FAULT);
@@ -1496,7 +1496,7 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("204200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasVoutUVFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1505,7 +1505,7 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("204300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasVoutUVFault(), false);
 }
 
@@ -1538,7 +1538,7 @@ TEST_F(PowerSupplyTests, HasFanFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("205100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasFanFault(), false);
     // Turn fault on.
     expectations.statusWordValue = (status_word::FAN_FAULT);
@@ -1551,7 +1551,7 @@ TEST_F(PowerSupplyTests, HasFanFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("205200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasFanFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1561,7 +1561,7 @@ TEST_F(PowerSupplyTests, HasFanFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("205300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasFanFault(), false);
 }
 
@@ -1594,7 +1594,7 @@ TEST_F(PowerSupplyTests, HasTempFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("206100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasTempFault(), false);
     // Turn fault on.
     expectations.statusWordValue = (status_word::TEMPERATURE_FAULT_WARN);
@@ -1607,7 +1607,7 @@ TEST_F(PowerSupplyTests, HasTempFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("206200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasTempFault(), x >= DEGLITCH_LIMIT);
     }
     // Back to no fault bits on in STATUS_WORD
@@ -1617,7 +1617,7 @@ TEST_F(PowerSupplyTests, HasTempFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("206300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasTempFault(), false);
 }
 
@@ -1647,7 +1647,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     // Setup another expectation of no faults.
     setPMBusExpectations(mockPMBus, expectations);
@@ -1655,7 +1655,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207200"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     // Setup another expectation of no faults.
     setPMBusExpectations(mockPMBus, expectations);
@@ -1663,7 +1663,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     // Turn PGOOD# off (fault on).
     expectations.statusWordValue = (status_word::POWER_GOOD_NEGATED);
@@ -1672,35 +1672,35 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207400"));
-    psu.analyze();
+    psu.analyze(false);
     // Expect false until reaches PGOOD_DEGLITCH_LIMIT @ 1
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207500"));
-    psu.analyze();
+    psu.analyze(false);
     // Expect false until reaches PGOOD_DEGLITCH_LIMIT @ 2
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207600"));
-    psu.analyze();
+    psu.analyze(false);
     // Expect false until reaches PGOOD_DEGLITCH_LIMIT @ 3
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207700"));
-    psu.analyze();
+    psu.analyze(false);
     // Expect false until reaches PGOOD_DEGLITCH_LIMIT @ 4
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207800"));
-    psu.analyze();
+    psu.analyze(false);
     // Expect true. PGOOD_DEGLITCH_LIMIT @ 5
     EXPECT_EQ(psu.hasPgoodFault(), true);
     // Back to no fault bits on in STATUS_WORD
@@ -1710,7 +1710,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("207700"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 
     // Turn OFF bit on
@@ -1720,31 +1720,31 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208200"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208400"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208500"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), true);
     // Back to no fault bits on in STATUS_WORD
     expectations.statusWordValue = 0;
@@ -1753,7 +1753,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208000"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPgoodFault(), false);
 }
 
@@ -1782,7 +1782,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("208100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSKillFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1801,7 +1801,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPSKillFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1813,7 +1813,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         .Times(1)
         .WillOnce(Return("208300"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSKillFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1831,7 +1831,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         {
             EXPECT_CALL(mockedUtil, setAvailable(_, _, false));
         }
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPSKillFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1843,7 +1843,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
         .Times(1)
         .WillOnce(Return("208500"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSKillFault(), false);
 }
 
@@ -1871,7 +1871,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPS12VcsFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1884,7 +1884,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("209200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPS12VcsFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1894,7 +1894,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPS12VcsFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1907,7 +1907,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("209400"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPS12VcsFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1917,7 +1917,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209500"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPS12VcsFault(), false);
 }
 
@@ -1944,7 +1944,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209100"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSCS12VFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1957,7 +1957,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("209200"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPSCS12VFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1967,7 +1967,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209300"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSCS12VFault(), false);
     // Next return STATUS_WORD with MFR fault bit on.
     expectations.statusWordValue = (status_word::MFR_SPECIFIC_FAULT);
@@ -1980,7 +1980,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("209400"));
-        psu.analyze();
+        psu.analyze(false);
         EXPECT_EQ(psu.hasPSCS12VFault(), x >= DEGLITCH_LIMIT);
     }
 
@@ -1990,7 +1990,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
         .Times(1)
         .WillOnce(Return("209500"));
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasPSCS12VFault(), false);
 }
 
@@ -2024,7 +2024,7 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
             .WillRepeatedly(Return("2000"));
         // Call to analyze() and above expectations to get missing/present and
         // good status.
-        psu.analyze();
+        psu.analyze(false);
         psu.setupInputHistory();
         EXPECT_EQ(psu.hasInputHistory(), true);
     }
@@ -2055,7 +2055,7 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
             .WillOnce(Return("206000"));
         // Call to analyze() and above expectations to get missing/present and
         // good status.
-        psu.analyze();
+        psu.analyze(false);
         psu.setupInputHistory();
         // After updating to present, and retrying setup, expect ibm-cffps with
         // 1400W to still not support INPUT_HISTORY.
@@ -2081,7 +2081,7 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
             .WillOnce(Return("206000"));
         // Call to analyze() and above expectations to get missing/present and
         // good status.
-        psu.analyze();
+        psu.analyze(false);
         psu.setupInputHistory();
         // After updating to present, and retrying setup, expect inspur-ipsps to
         // still not support INPUT_HISTORY.
@@ -2139,7 +2139,7 @@ TEST_F(PowerSupplyTests, UpdateHistory)
         .WillOnce(Return(emptyHistory));
     // Calling analyze will update the presence, which will setup the input
     // history if the power supply went from missing to present.
-    psu.analyze();
+    psu.analyze(false);
     // The ibm-cffps power supply should support input history
     EXPECT_EQ(psu.hasInputHistory(), true);
     // Usually should have empty buffer right after missing to present.
@@ -2147,27 +2147,27 @@ TEST_F(PowerSupplyTests, UpdateHistory)
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
     // Second run through...
     setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 1);
     // Third run through
     setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 2);
     // Fourth run through. Up to 3 records now?
     setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 3);
     // Out of sequencer, reset, insert new one.
     setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 1);
     // Empty one after last one good. Reset/clear.
     setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
+    psu.analyze(false);
     EXPECT_EQ(psu.hasInputHistory(), true);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
 }
@@ -2197,7 +2197,7 @@ TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
         .Times(1)
         .WillRepeatedly(Return("205000"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    psu.analyze();
+    psu.analyze(false);
     // The ibm-cffps power supply should support input history
     EXPECT_EQ(psu.hasInputHistory(), true);
     // Missing -> Present requires history sync
