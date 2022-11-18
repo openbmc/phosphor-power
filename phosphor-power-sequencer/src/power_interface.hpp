@@ -52,7 +52,7 @@ class PowerInterface
      * Returns the power good of the chassis
      * @return power good
      */
-    virtual int getPgood() const = 0;
+    virtual int getPgood() = 0;
 
     /**
      * Returns the power good timeout
