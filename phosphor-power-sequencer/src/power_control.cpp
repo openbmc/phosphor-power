@@ -28,7 +28,6 @@
 #include <xyz/openbmc_project/Common/error.hpp>
 
 #include <exception>
-#include <string>
 
 using namespace phosphor::logging;
 
@@ -101,8 +100,9 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
     }
 }
 
-int PowerControl::getPgood() const
+int PowerControl::getPgood()
 {
+    pollPgood();
     return pgood;
 }
 
