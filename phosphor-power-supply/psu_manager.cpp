@@ -571,7 +571,7 @@ void PSUManager::analyze()
 
     for (auto& psu : psus)
     {
-        psu->analyze();
+        psu->analyze(powerOn);
     }
 
     std::map<std::string, std::string> additionalData;

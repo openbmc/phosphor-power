@@ -100,8 +100,9 @@ class PowerSupply
      * Various PMBus status bits will be checked for fault conditions.
      * If a certain fault bits are on, the appropriate error will be
      * committed.
+     * @param powerOn true if the power is on, false otherwise
      */
-    void analyze();
+    void analyze(bool powerOn);
 
     /**
      * Write PMBus ON_OFF_CONFIG
@@ -769,6 +770,13 @@ class PowerSupply
      * @brief Analyzes the STATUS_WORD for a VIN_UV_FAULT indicator.
      */
     void analyzeVinUVFault();
+
+    /**
+     * Check chassis pgo0d
+     * @param powerOn true if the power is on, false otherwise
+     * @return true if chassis is power good, false if pgood has failed
+     */
+    bool checkChassisPgood(bool powerOn);
 
     /**
      * @brief D-Bus path to use for this power supply's inventory status.
