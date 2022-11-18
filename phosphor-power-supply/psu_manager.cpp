@@ -558,6 +558,49 @@ void PSUManager::syncHistory()
     log<level::INFO>("Synchronize INPUT_HISTORY completed");
 }
 
+bool PSUManager::isBrownout(std::map<std::string, std::string>& additionalData)
+{
+    size_t presentCount = 0;
+    size_t notPresentCount = 0;
+    size_t acFailedCount = 0;
+    size_t pgoodFailedCount = 0;
+    for (const auto& psu : psus)
+    {
+        if (psu->isPresent())
+        {
+            ++presentCount;
+            if (psu->hasACFault())
+            {
+                ++acFailedCount;
+            }
+            else if (psu->hasPgoodFault())
+            {
+                ++pgoodFailedCount;
+            }
+        }
+        else
+        {
+            ++notPresentCount;
+        }
+    }
+
+    // In brownout if at least one PS has seen an AC fail and all present PSUs
+    // have an AC or pgood failure. Note an AC fail is only set if at least one
+    // PSU is present.
+    bool isBrownout =
+        acFailedCount && (presentCount == (acFailedCount + pgoodFailedCount));
+    if (isBrownout)
+    {
+        additionalData.emplace("NOT_PRESENT_COUNT",
+                               std::to_string(notPresentCount));
+        additionalData.emplace("VIN_FAULT_COUNT",
+                               std::to_string(acFailedCount));
+        additionalData.emplace("PGOOD_FAULT_COUNT",
+                               std::to_string(pgoodFailedCount));
+    }
+    return isBrownout;
+}
+
 void PSUManager::analyze()
 {
     auto syncHistoryRequired =
@@ -576,25 +619,10 @@ void PSUManager::analyze()
 
     std::map<std::string, std::string> additionalData;
 
-    auto notPresentCount = decltype(psus.size())(
-        std::count_if(psus.begin(), psus.end(),
-                      [](const auto& psu) { return !psu->isPresent(); }));
-
-    auto hasVINUVFaultCount = decltype(psus.size())(
-        std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
-            return (psu->isPresent() && psu->hasVINUVFault());
-        }));
-
-    // The PSU D-Bus objects may not be available yet, so ignore if all
-    // PSUs are not present or the number of PSUs is still 0.
-    if ((psus.size() == (notPresentCount + hasVINUVFaultCount)) &&
-        (psus.size() != notPresentCount) && (psus.size() != 0))
+    // Only issue brownout failure if chassis pgood has failed and PSUs indicate
+    // AC failure
+    if (powerFaultOccurring && isBrownout(additionalData))
     {
-        // Brownout: All PSUs report an AC failure: At least one PSU reports
-        // AC loss VIN fault and the rest either report AC loss VIN fault as
-        // well or are not present.
-        additionalData["NOT_PRESENT_COUNT"] = std::to_string(notPresentCount);
-        additionalData["VIN_FAULT_COUNT"] = std::to_string(hasVINUVFaultCount);
         setBrownout(additionalData);
     }
     else

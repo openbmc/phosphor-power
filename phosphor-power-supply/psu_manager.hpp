@@ -317,6 +317,13 @@ class PSUManager
     void setPowerConfigGPIO();
 
     /**
+     * @brief Determine if system is in brownout failure
+     * @param additionalData AdditionalData property of the error log entry
+     * @return true if system is in brownout failure, false otherwise.
+     */
+    bool isBrownout(std::map<std::string, std::string>& additionalData);
+
+    /**
      * @brief Indicate that the system is in a brownout condition by creating an
      * error log and setting the PowerSystemInputs status property to Fault.
      *
