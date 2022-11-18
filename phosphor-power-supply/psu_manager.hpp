@@ -317,6 +317,12 @@ class PSUManager
     void setPowerConfigGPIO();
 
     /**
+     * @brief Determine if system is in brownout failure
+     * @return true if system is in brownout failure, false otherwise.
+     */
+    bool isBrownout();
+
+    /**
      * @brief Indicate that the system is in a brownout condition by creating an
      * error log and setting the PowerSystemInputs status property to Fault.
      *

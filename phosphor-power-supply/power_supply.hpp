@@ -45,6 +45,7 @@ static constexpr auto CC_KW_SIZE = 4;
 constexpr auto LOG_LIMIT = 3;
 constexpr auto DEGLITCH_LIMIT = 3;
 constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
+constexpr auto AC_FAULT_LIMIT = 6;
 
 /**
  * @class PowerSupply
@@ -380,6 +381,15 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns true if an AC fault has occurred in the window of
+     * interest.
+     */
+    bool hasACFault() const
+    {
+        return acFault != 0;
+    }
+
+    /**
      * @brief Returns the device path
      *
      * This can be used for error call outs.
@@ -683,6 +693,13 @@ class PowerSupply
      * DEGLITCH_LIMIT.
      */
     size_t psCS12VFault = 0;
+
+    /**
+     * @brief Set to AC_FAULT_LIMIT when AC fault is detected, decrimented when
+     * AC fault has cleared. Effectively forming a timer since last AC failure.
+     * Zero indicates being outside the window of concern.
+     */
+    size_t acFault = 0;
 
     /**
      * @brief Count of the number of read failures.

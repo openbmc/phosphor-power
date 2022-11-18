@@ -558,6 +558,33 @@ void PSUManager::syncHistory()
     log<level::INFO>("Synchronize INPUT_HISTORY completed");
 }
 
+bool PSUManager::isBrownout()
+{
+    size_t presentCount = 0;
+    size_t failedCount = 0;
+    bool acFailFound = false;
+    for (const auto& psu : psus)
+    {
+        if (psu->isPresent())
+        {
+            ++presentCount;
+            if (psu->hasACFault())
+            {
+                acFailFound = true;
+                ++failedCount;
+            }
+            else if (psu->hasPgoodFault())
+            {
+                ++failedCount;
+            }
+        }
+    }
+    // In brownout if at least one PS has seen an AC fail and all present PSs
+    // have an AC or pgood failure. Note acFailFound is only set if at least one
+    // PS is present.
+    return acFailFound && (presentCount == failedCount);
+}
+
 void PSUManager::analyze()
 {
     auto syncHistoryRequired =
@@ -576,25 +603,10 @@ void PSUManager::analyze()
 
     std::map<std::string, std::string> additionalData;
 
-    auto notPresentCount = decltype(psus.size())(
-        std::count_if(psus.begin(), psus.end(),
-                      [](const auto& psu) { return !psu->isPresent(); }));
-
-    auto hasVINUVFaultCount = decltype(psus.size())(
-        std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
-            return (psu->isPresent() && psu->hasVINUVFault());
-        }));
-
-    // The PSU D-Bus objects may not be available yet, so ignore if all
-    // PSUs are not present or the number of PSUs is still 0.
-    if ((psus.size() == (notPresentCount + hasVINUVFaultCount)) &&
-        (psus.size() != notPresentCount) && (psus.size() != 0))
+    // Only issue brownout failure if chassis pgood has failed and PSUs indicate
+    // AC failure
+    if (powerFaultOccurring && isBrownout())
     {
-        // Brownout: All PSUs report an AC failure: At least one PSU reports
-        // AC loss VIN fault and the rest either report AC loss VIN fault as
-        // well or are not present.
-        additionalData["NOT_PRESENT_COUNT"] = std::to_string(notPresentCount);
-        additionalData["VIN_FAULT_COUNT"] = std::to_string(hasVINUVFaultCount);
         setBrownout(additionalData);
     }
     else
