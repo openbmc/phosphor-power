@@ -50,6 +50,7 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
                   "xyz.openbmc_project.EntityManager"),
           std::bind(&PowerControl::interfacesAddedHandler, this,
                     std::placeholders::_1)},
+    pgoodWaitTimer{event, std::bind(&PowerControl::onFailureCallback, this)},
     powerOnAllowedTime{std::chrono::steady_clock::now() + minimumColdStartTime},
     timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
 {
@@ -147,6 +148,26 @@ void PowerControl::interfacesAddedHandler(sdbusplus::message_t& msg)
     }
 }
 
+void PowerControl::onFailureCallback()
+{
+    log<level::INFO>("After onFailure wait");
+
+    onFailure(false);
+
+    // Power good has failed, call for chassis hard power off
+    auto method = bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                      util::SYSTEMD_INTERFACE, "StartUnit");
+    method.append(util::POWEROFF_TARGET);
+    method.append("replace");
+    bus.call_noreply(method);
+}
+
+void PowerControl::onFailure(bool timeout)
+{
+    // Call device on failure
+    device->onFailure(timeout, powerSupplyError);
+}
+
 void PowerControl::pollPgood()
 {
     if (inStateTransition)
@@ -163,7 +184,7 @@ void PowerControl::pollPgood()
             if (state)
             {
                 // Time out powering on
-                device->onFailure(true, powerSupplyError);
+                onFailure(true);
             }
             else
             {
@@ -206,16 +227,8 @@ void PowerControl::pollPgood()
     {
         // Not in power off state, not changing state, and power good is off
         log<level::ERR>("Chassis pgood failure");
-        device->onFailure(false, powerSupplyError);
+        pgoodWaitTimer.restartOnce(std::chrono::seconds(7));
         failureFound = true;
-
-        // Power good has failed, call for chassis hard power off
-        auto method =
-            bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
-                                util::SYSTEMD_INTERFACE, "StartUnit");
-        method.append(util::POWEROFF_TARGET);
-        method.append("replace");
-        bus.call_noreply(method);
     }
 }
 

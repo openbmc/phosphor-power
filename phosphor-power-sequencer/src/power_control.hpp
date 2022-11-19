@@ -128,6 +128,12 @@ class PowerControl : public PowerObject
     std::chrono::time_point<std::chrono::steady_clock> pgoodTimeoutTime;
 
     /**
+     * Timer to wait after pgood failure. This is to allow the power supplies
+     * and other hardware time to complete failure processing.
+     */
+    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> pgoodWaitTimer;
+
+    /**
      * Poll interval constant
      */
     static constexpr std::chrono::milliseconds pollInterval{3000};
@@ -167,6 +173,17 @@ class PowerControl : public PowerObject
      * @param properties A map of property names and values
      */
     void getDeviceProperties(util::DbusPropertyMap& properties);
+
+    /**
+     * Callback to begin failure processing after observing pgood failure wait
+     */
+    void onFailureCallback();
+
+    /**
+     * Begin pgood failute processing
+     * @param timeout if the failure state was determined by timing out
+     */
+    void onFailure(bool timeout);
 
     /**
      * Polling method for monitoring the system power good
