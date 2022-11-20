@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9efe90_86638540",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-20T20:57:57Z",
+      "side": 1,
+      "message": "Alternatively, we could use this flag below and suppress individual errors more precisely.",
+      "range": {
+        "startLine": 608,
+        "startChar": 20,
+        "endLine": 608,
+        "endChar": 34
+      },
+      "revId": "39794ee28bfd287fe79d6e2dab1d8a2388ff73a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
