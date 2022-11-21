@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8f485d_aeea2490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-21T17:11:38Z",
+      "side": 1,
+      "message": "Functionally I think this looks good, we\u0027ll see how it fits into the big picture with the later changes.\n\nJust some questions on the design, and some comment requests to help make it easier to understand (and 1 typo).  Thanks!",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4be2a8f2_b34b522d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-21T17:11:38Z",
+      "side": 1,
+      "message": "I\u0027m a little confused by this.  Looks like the \u0027powerOn\u0027 is the system state.  If the system is powered off, then pgood is off, yet we\u0027re returning chassispgood \u003d true.  The comment that is there is stating \"not in active pgood fail\", so it appears this is not really returning the pgood state, but the \"pgood state if we think the system is supposed to be on\", right?\n\nI think it would help if the first comment clarified \"If the system power is not on,...\", then maybe describing the output a little more, something like\n\n// This will return the pgood state when the system is supposed to be on, and will be used to check for pgood fails when system is on:\n// when system is supposed to be off, this returns true\n// when system is supposed to be on and pgood is in fact on, this returns true\n// when system is supposed to be on and the pgood is actually off, this returns false\n\nThoughts?",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f12d38b_7dc949ff",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-21T17:11:38Z",
+      "side": 1,
+      "message": "can you perhaps clarify \"system power is on\" so it\u0027s clear it\u0027s not the psus power state?",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50792c57_c43af08d",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-21T17:11:38Z",
+      "side": 1,
+      "message": "can you perhaps clarify \"system power is on\" so it\u0027s clear it\u0027s not the psus power state?\n\nalso typo \"pgo0d\"",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9251e79b_c55f940b",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-21T17:11:38Z",
+      "side": 1,
+      "message": "maybe clarify \"true if chassis has power good or is not in a powered on state, false if pgood has failed\"?",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
