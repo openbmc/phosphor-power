@@ -16,6 +16,24 @@
       "message": "Can we be consistent with line 800?",
       "revId": "71e264a161222aad5d85e7ebe2f2f4e48b43be70",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "617a5257_2a4a3cb9",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-22T01:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5284d47a_0ce27104",
+      "revId": "71e264a161222aad5d85e7ebe2f2f4e48b43be70",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
