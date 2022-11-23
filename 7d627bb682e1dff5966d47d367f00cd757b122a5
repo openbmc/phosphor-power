@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d77360f7_63d72b23",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-23T23:21:01Z",
+      "side": 1,
+      "message": "Good points, I was trying not to make the use of the method a double negative, but then I got lost in my own terminology. Method removed.",
+      "parentUuid": "4be2a8f2_b34b522d",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f12d38b_7dc949ff",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-11-21T17:11:38Z",
       "side": 1,
       "message": "can you perhaps clarify \"system power is on\" so it\u0027s clear it\u0027s not the psus power state?",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2899679f_08e48e59",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-23T23:21:01Z",
+      "side": 1,
+      "message": "Good idea, parameter was removed.",
+      "parentUuid": "3f12d38b_7dc949ff",
       "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -69,6 +105,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b528752b_bd450285",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-23T23:21:01Z",
+      "side": 1,
+      "message": "Good idea, method was removed.",
+      "parentUuid": "50792c57_c43af08d",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9251e79b_c55f940b",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-11-21T17:11:38Z",
       "side": 1,
       "message": "maybe clarify \"true if chassis has power good or is not in a powered on state, false if pgood has failed\"?",
+      "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a2dc85_2e04ce3a",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-23T23:21:01Z",
+      "side": 1,
+      "message": "Good idea, method was removed.",
+      "parentUuid": "9251e79b_c55f940b",
       "revId": "7d627bb682e1dff5966d47d367f00cd757b122a5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
