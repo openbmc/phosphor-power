@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f55e1e3_53c24a0c",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T18:05:03Z",
+      "side": 1,
+      "message": "Prior to this change, this would have waited 7 seconds too.  Do we need the wait in this scenario?",
+      "revId": "1b6395386e84add00264d3903b5e49456cd708f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38b3156d_babaa75b",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 4
