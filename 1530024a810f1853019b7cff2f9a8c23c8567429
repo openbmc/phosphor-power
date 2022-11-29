@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f55720b0_fe8f8763",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-11-29T14:51:00Z",
+      "side": 1,
+      "message": "I\u0027m OK with this change if you like how it looks better, but https://doxygen.nl/manual/docblocks.html shows what was already there as valid doxygen.",
+      "revId": "1530024a810f1853019b7cff2f9a8c23c8567429",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
