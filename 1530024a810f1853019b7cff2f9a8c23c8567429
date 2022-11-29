@@ -16,6 +16,24 @@
       "message": "I\u0027m OK with this change if you like how it looks better, but https://doxygen.nl/manual/docblocks.html shows what was already there as valid doxygen.",
       "revId": "1530024a810f1853019b7cff2f9a8c23c8567429",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f7b91da_605fdb0e",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-29T15:42:03Z",
+      "side": 1,
+      "message": "Ya, I\u0027m neutral on the reformatting. Whatever you, George, and the other reviews like best is fine with me.",
+      "parentUuid": "f55720b0_fe8f8763",
+      "revId": "1530024a810f1853019b7cff2f9a8c23c8567429",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
