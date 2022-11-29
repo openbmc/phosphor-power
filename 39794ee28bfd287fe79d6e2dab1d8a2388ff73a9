@@ -70,6 +70,30 @@
       },
       "revId": "39794ee28bfd287fe79d6e2dab1d8a2388ff73a9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71dd1640_25db9baf",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-11-29T18:41:01Z",
+      "side": 1,
+      "message": "Good question, I think it\u0027s ok.  Typically errors for missing psu\u0027s would be logged well before any brownout, like on the initial power on.  \nWorst case, if a psu happened to go missing at the same time as a brownout, I think we\u0027d log the brownout error during the loss of AC, and during the next boot after AC came back we\u0027d log the psu missing errors.",
+      "parentUuid": "4fa85e85_dff9a7e7",
+      "range": {
+        "startLine": 608,
+        "startChar": 20,
+        "endLine": 608,
+        "endChar": 34
+      },
+      "revId": "39794ee28bfd287fe79d6e2dab1d8a2388ff73a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
