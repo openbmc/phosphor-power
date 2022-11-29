@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b3156d_babaa75b",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2022-11-29T14:47:49Z",
+      "side": 1,
+      "message": "now that this isn\u0027t a blocking call, I imagine pollPgood() will get called several more times before the 7 second timer expires.  All the checks are in place so this function is basically a no-op until then?",
+      "revId": "1b6395386e84add00264d3903b5e49456cd708f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
