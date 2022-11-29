@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0d6873d_a83156a8",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-29T20:22:57Z",
+      "side": 1,
+      "message": "True, but I think this is an improvement. My thinking being:\n- We\u0027ve already waited 10 seconds for the power on to timeout.\n- We\u0027re not coming down from power on, we never powered on. So no one benefits from the extra time.\nDefinitely discussable / changeable.",
+      "parentUuid": "7f55e1e3_53c24a0c",
+      "revId": "1b6395386e84add00264d3903b5e49456cd708f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38b3156d_babaa75b",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 4
