@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9fef65a8_9b81e551",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T21:02:19Z",
+      "side": 1,
+      "message": "That\u0027s fine with me.  I just wanted to bring it up in case that hadn\u0027t been considered.",
+      "parentUuid": "d0d6873d_a83156a8",
+      "revId": "1b6395386e84add00264d3903b5e49456cd708f7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38b3156d_babaa75b",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 4
