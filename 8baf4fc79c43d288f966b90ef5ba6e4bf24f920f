@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d9c5076_b8d34900",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "This is an excellent description of a complex issue/fix.",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0bd332_9d644b64",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "Should acFault be set to 0 here since a new PSU was plugged in?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50999edd_22bf6024",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 6
@@ -37,6 +71,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "521ddfd0_cd816710",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "It is unfortunate this has to be in two places.  I wish the analyze*() methods were called all the time vs. only when statusWord was non-zero.  I think it would simplify some stuff.  However, that is the existing design and not related to this commit.",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "078afcec_b6fe73df",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "Do we need to set acFault to 0 here since a new PSU was plugged?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ef9460_096b6d6a",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "I wonder why this code path doesn\u0027t have to clear fault faults?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "009ffb8d_4aad5a93",
         "filename": "phosphor-power-supply/power_supply.hpp",
         "patchSetId": 6
@@ -48,6 +133,46 @@
       "writtenOn": "2022-11-29T20:58:01Z",
       "side": 1,
       "message": "since we have to check if every present psu either is reporting an ac loss (based on acFault, not DEGLITCH_LIMIT) OR a pgood fail (based on PGOOD_FAIL_LIMIT in hasPgoodFault()) in case the psu just reports the pgood fail during a brownout, we have to make sure AC_FAULT_LIMIT is greater than PGOOD_DEGLITCH_LIMIT, as you have above.\nCan you please add a comment so if in the future we adjust PGOOD_DEGLITCH_LIMIT for whatever reason, we don\u0027t inadvertently break PLD/APR if we don\u0027t bump up AC_FAULT_LIMIT accordingly?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4baf8160_27e9a1a7",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "Grammar Nit: Need a verb for this sentence.  s/forming/forms/",
+      "range": {
+        "startLine": 699,
+        "startChar": 41,
+        "endLine": 699,
+        "endChar": 49
+      },
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "738c3461_81bc3d0d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "The pseq code waits for a period of time for the pgood to be true right?\n\nIf the PSU app is started (or re-started) during that wait, would it incorrectly set powerFaultOccurring to true here?",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -117,6 +242,24 @@
       "writtenOn": "2022-11-29T22:09:21Z",
       "side": 1,
       "message": "Right now it\u0027s an empty set for the brownout error, so no extra name-value pairs will be put in the user data section. I could add anything we think could be useful.",
+      "parentUuid": "92f75efd_9cc0786f",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3159465_2b43292f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T22:19:39Z",
+      "side": 1,
+      "message": "The default map ctor used on line 604 will result in an empty map with no keys/values.  So it shouldn\u0027t cause any problems.\n\nHowever Jim, do you think we want a count of the following for debug?\n* number of PSUs with an AC fault\n* number of PSUs with a PGOOD fault\n* number of PSUs that are not present\n\nIf so, isBrownout() could be enhanced to take additionalData as input and set the keys/values appropriately.",
       "parentUuid": "92f75efd_9cc0786f",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
