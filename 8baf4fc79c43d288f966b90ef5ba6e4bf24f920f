@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1fd52cfd_f878c162",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-29T22:09:21Z",
+      "side": 1,
+      "message": "Correct, up to 3 seconds for the pgood fail to be recognized and powerFaultOccurring to be set.\n\npowerOn will be on the whole time. It will not be false until the power state change is requested.",
+      "parentUuid": "549613d2_df862d93",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92f75efd_9cc0786f",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 6
@@ -82,6 +100,24 @@
       "writtenOn": "2022-11-29T20:58:01Z",
       "side": 1,
       "message": "since the present/vin checking was moved to the isBrownout() function, what is \"additional data\" being used for now?  does the lib just default it to an empty string?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f976260_2b8d6138",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-29T22:09:21Z",
+      "side": 1,
+      "message": "Right now it\u0027s an empty set for the brownout error, so no extra name-value pairs will be put in the user data section. I could add anything we think could be useful.",
+      "parentUuid": "92f75efd_9cc0786f",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
