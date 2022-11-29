@@ -34,6 +34,24 @@
       "parentUuid": "f55720b0_fe8f8763",
       "revId": "1530024a810f1853019b7cff2f9a8c23c8567429",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d1c1b65_55021475",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-11-29T18:16:54Z",
+      "side": 1,
+      "message": "I agree with Matt.  I think it looks better this way, but it was not wrong before.  \n\nThe most important thing is probably to be consistent within the application.  It seems like some doxygen blocks have no @brief, some have on the same line as the opening /**, and some have it on the next line.  Might be due to multiple people working on the app.",
+      "parentUuid": "0f7b91da_605fdb0e",
+      "revId": "1530024a810f1853019b7cff2f9a8c23c8567429",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
