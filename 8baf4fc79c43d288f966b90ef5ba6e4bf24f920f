@@ -52,6 +52,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6596dcc5_07194a7b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50999edd_22bf6024",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae2d8269_ccba1828",
@@ -82,6 +100,24 @@
       "writtenOn": "2022-11-29T22:19:39Z",
       "side": 1,
       "message": "It is unfortunate this has to be in two places.  I wish the analyze*() methods were called all the time vs. only when statusWord was non-zero.  I think it would simplify some stuff.  However, that is the existing design and not related to this commit.",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd87a91_9f75e053",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae2d8269_ccba1828",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -173,6 +209,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d67ec1_057944bb",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "009ffb8d_4aad5a93",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4baf8160_27e9a1a7",
@@ -186,6 +240,30 @@
       "writtenOn": "2022-11-29T22:19:39Z",
       "side": 1,
       "message": "Grammar Nit: Need a verb for this sentence.  s/forming/forms/",
+      "range": {
+        "startLine": 699,
+        "startChar": 41,
+        "endLine": 699,
+        "endChar": 49
+      },
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65ed712c_b59df53e",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4baf8160_27e9a1a7",
       "range": {
         "startLine": 699,
         "startChar": 41,
@@ -315,6 +393,24 @@
       "side": 1,
       "message": "The default map ctor used on line 604 will result in an empty map with no keys/values.  So it shouldn\u0027t cause any problems.\n\nHowever Jim, do you think we want a count of the following for debug?\n* number of PSUs with an AC fault\n* number of PSUs with a PGOOD fault\n* number of PSUs that are not present\n\nIf so, isBrownout() could be enhanced to take additionalData as input and set the keys/values appropriately.",
       "parentUuid": "92f75efd_9cc0786f",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f14087_e6e2139a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:42:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3159465_2b43292f",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
