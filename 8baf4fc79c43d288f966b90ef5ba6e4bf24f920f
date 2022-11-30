@@ -105,6 +105,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "417bfba4_03bbb144",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:28:59Z",
+      "side": 1,
+      "message": "I was thinking no, because the PSU has to be unplugged from AC to added to the system, it will start in AC fault which should expire naturally.",
+      "parentUuid": "078afcec_b6fe73df",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3ef9460_096b6d6a",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 6
@@ -116,6 +134,24 @@
       "writtenOn": "2022-11-29T22:19:39Z",
       "side": 1,
       "message": "I wonder why this code path doesn\u0027t have to clear fault faults?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384bf70c_b16ba3f8",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:28:59Z",
+      "side": 1,
+      "message": "It\u0027s only called from the constructor, so no poll to set faults yet.",
+      "parentUuid": "f3ef9460_096b6d6a",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -173,6 +209,24 @@
       "writtenOn": "2022-11-29T22:19:39Z",
       "side": 1,
       "message": "The pseq code waits for a period of time for the pgood to be true right?\n\nIf the PSU app is started (or re-started) during that wait, would it incorrectly set powerFaultOccurring to true here?",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1233580d_e90db564",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-11-30T23:28:59Z",
+      "side": 1,
+      "message": "That\u0027s correct, there\u0027s a window in the power on transition where the state is set but the pgood has not yet come on.\n\nThe power supply application should not be starting or restarting during a power on. That would be a problem by itself.\n\nWe could default powerFaultOccurring to false here. That would be more of a tradeoff than a fix.\n\nI\u0027d recommend not trying to figure out that the PSEQ is in a power on transition due to the complexity involved and it being a moving target.\n\nWe use powerFaultOccurring as part of the criteria to allow a brownout error to be issued and as part of the criteria to suppress fan and pgood PSU errors from being issued, so the consequence of it being temporarily wrong are not critically severe.",
+      "parentUuid": "738c3461_81bc3d0d",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
