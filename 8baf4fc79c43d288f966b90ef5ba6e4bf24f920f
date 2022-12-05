@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36e71e2e_0cfdbff5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-05T20:10:22Z",
+      "side": 1,
+      "message": "I was thinking no, because the PSU has to be unplugged from AC to added to the system, it will start in AC fault which should expire naturally.",
+      "parentUuid": "da0bd332_9d644b64",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50999edd_22bf6024",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 6
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "ae2d8269_ccba1828",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "132b5765_26ad81c1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-05T20:10:22Z",
+      "side": 1,
+      "message": "Agreed, opportunities for improvement remain.",
+      "parentUuid": "521ddfd0_cd816710",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
