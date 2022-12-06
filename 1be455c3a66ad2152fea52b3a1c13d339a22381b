@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f4ad79_20110eae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2022-12-06T19:12:35Z",
+      "side": 1,
+      "message": "I realize that these test cases should use regular expression or partial string matching so that they are less dependent on the jsonschema error message format.  I don\u0027t have time to work on that now, but I\u0027ll keep it in mind for the future.",
+      "revId": "1be455c3a66ad2152fea52b3a1c13d339a22381b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
