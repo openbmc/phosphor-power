@@ -467,8 +467,9 @@ TEST(ValidateRegulatorsConfigTest, Action)
         json configFile = validConfigFile;
         configFile["rules"][0]["actions"][1]["comments"][0] =
             "Check if bit 3 is on";
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'and' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'comments': ['Check if bit 3 is on']} is not valid under any of the given schemas");
     }
     // Invalid: Multiple action types specified (such as both 'compare_presence'
     // and 'pmbus_write_vout_command')
@@ -753,8 +754,9 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     {
         json configFile = compareVpdFile;
         configFile["rules"][0]["actions"][1]["compare_vpd"].erase("value");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'value' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'fru': 'system/chassis/motherboard/regulator2', 'keyword': 'CCIN'} is not valid under any of the given schemas");
     }
 
     // Invalid: property FRU wrong type.
@@ -984,8 +986,9 @@ TEST(ValidateRegulatorsConfigTest, Configuration)
         json configFile = configurationFile;
         configFile["chassis"][0]["devices"][0]["configuration"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'comments': ['Set rail to 1.25V using standard rule'], 'volts': 1.25} is not valid under any of the given schemas");
     }
     // Invalid: test configuration with property volts wrong type.
     {
@@ -1068,8 +1071,9 @@ TEST(ValidateRegulatorsConfigTest, Device)
     {
         json configFile = validConfigFile;
         configFile["chassis"][0]["devices"][0].erase("is_regulator");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'is_regulator' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'comments': ['IR35221 regulator producing the Vdd rail'], 'fru': 'system/chassis/motherboard/regulator1', 'i2c_interface': {'address': '0x70', 'bus': 1}, 'id': 'vdd_regulator', 'rails': [{'comments': ['Vdd rail'], 'configuration': {'rule_id': 'set_voltage_rule', 'volts': 1.03}, 'id': 'vdd', 'sensor_monitoring': {'rule_id': 'read_sensors_rule'}}]} should not be valid under {'anyOf': [{'required': ['phase_fault_detection']}, {'required': ['rails']}]}");
     }
     // Invalid: test devices with no fru.
     {
@@ -2412,7 +2416,7 @@ TEST(ValidateRegulatorsConfigTest, PhaseFaultDetection)
         configFile["chassis"][0]["devices"][0]["phase_fault_detection"].erase(
             "rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'rule_id' is a required property");
+                            "{} is not valid under any of the given schemas");
     }
 
     // Invalid: comments has wrong data type
@@ -2719,8 +2723,9 @@ TEST(ValidateRegulatorsConfigTest, PresenceDetection)
         json configFile = presenceDetectionFile;
         configFile["chassis"][0]["devices"][0]["presence_detection"].erase(
             "rule_id");
-        EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'rule_id' is a required property");
+        EXPECT_JSON_INVALID(
+            configFile, "Validation failed.",
+            "{'comments': ['Regulator is only present if CPU3 is present']} is not valid under any of the given schemas");
     }
     // Invalid: test presence_detection with property comments wrong type.
     {
@@ -2999,7 +3004,7 @@ TEST(ValidateRegulatorsConfigTest, SensorMonitoring)
         configFile["chassis"][0]["devices"][0]["rails"][0]["sensor_monitoring"]
             .erase("rule_id");
         EXPECT_JSON_INVALID(configFile, "Validation failed.",
-                            "'rule_id' is a required property");
+                            "{} is not valid under any of the given schemas");
     }
     // Invalid: test rails sensor_monitoring with property comments wrong type.
     {
