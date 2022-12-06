@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75722d1b_f7b0af07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:12:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3d9c5076_b8d34900",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da0bd332_9d644b64",
@@ -193,6 +211,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa5190a_5bf21142",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:12:11Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "417bfba4_03bbb144",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3ef9460_096b6d6a",
@@ -345,6 +381,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9761997f_2fc753fe",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:12:11Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "1233580d_e90db564",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "549613d2_df862d93",
@@ -376,6 +430,24 @@
       "side": 1,
       "message": "Correct, up to 3 seconds for the pgood fail to be recognized and powerFaultOccurring to be set.\n\npowerOn will be on the whole time. It will not be false until the power state change is requested.",
       "parentUuid": "549613d2_df862d93",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b84fbca1_748a111b",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:12:11Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "1fd52cfd_f878c162",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
