@@ -71,6 +71,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d2d9c2_8d177cd6",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:13:44Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "36e71e2e_0cfdbff5",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50999edd_22bf6024",
@@ -176,6 +194,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0167c75a_e5852ed4",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:13:44Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "132b5765_26ad81c1",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "078afcec_b6fe73df",
@@ -260,6 +296,24 @@
       "side": 1,
       "message": "It\u0027s only called from the constructor, so no poll to set faults yet.",
       "parentUuid": "f3ef9460_096b6d6a",
+      "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3490b0e9_83f5e084",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-06T16:13:44Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "384bf70c_b16ba3f8",
       "revId": "8baf4fc79c43d288f966b90ef5ba6e4bf24f920f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
