@@ -510,16 +510,18 @@ void PowerSupply::analyzeVinUVFault()
         acFault = AC_FAULT_LIMIT;
     }
 
-    if (vinUVFault &&
-        !(statusWord & phosphor::pmbus::status_word::VIN_UV_FAULT))
+    if (!(statusWord & phosphor::pmbus::status_word::VIN_UV_FAULT))
     {
-        log<level::INFO>(
-            fmt::format("{} VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
-                        "STATUS_MFR_SPECIFIC = {:#04x}, "
-                        "STATUS_INPUT = {:#04x}",
-                        shortName, statusWord, statusMFR, statusInput)
-                .c_str());
-        vinUVFault = 0;
+        if (vinUVFault)
+        {
+            log<level::INFO>(
+                fmt::format("{} VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
+                            "STATUS_MFR_SPECIFIC = {:#04x}, "
+                            "STATUS_INPUT = {:#04x}",
+                            shortName, statusWord, statusMFR, statusInput)
+                    .c_str());
+            vinUVFault = 0;
+        }
         // No AC fail, decrement counter
         if (acFault)
         {
