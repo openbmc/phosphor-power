@@ -178,6 +178,12 @@ class PSUManager
      */
     void analyze();
 
+    /**
+     * Analyze the set of the power supplies for a brownout failure. Log error
+     * when necessary, clear brownout condition when window has passed.
+     */
+    void analyzeBrownout();
+
     /** @brief True if the power is on. */
     bool powerOn = false;
 
@@ -315,28 +321,6 @@ class PSUManager
      *        property value.
      */
     void setPowerConfigGPIO();
-
-    /**
-     * @brief Determine if system is in brownout failure
-     * @param additionalData AdditionalData property of the error log entry
-     * @return true if system is in brownout failure, false otherwise.
-     */
-    bool isBrownout(std::map<std::string, std::string>& additionalData);
-
-    /**
-     * @brief Indicate that the system is in a brownout condition by creating an
-     * error log and setting the PowerSystemInputs status property to Fault.
-     *
-     * @param[in] additionalData - Contains debug information on the number of
-     *            PSUs in fault state or not present.
-     */
-    void setBrownout(std::map<std::string, std::string>& additionalData);
-
-    /**
-     * @brief Indicate that the system is no longer in a brownout condition by
-     * setting the PowerSystemInputs status property to Good.
-     */
-    void clearBrownout();
 
     /**
      * @brief Map of supported PSU configurations that include the model name
