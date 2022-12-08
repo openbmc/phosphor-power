@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <xyz/openbmc_project/State/Chassis/server.hpp>
+
 #include <algorithm>
 #include <regex>
 #include <set>
@@ -558,49 +560,6 @@ void PSUManager::syncHistory()
     log<level::INFO>("Synchronize INPUT_HISTORY completed");
 }
 
-bool PSUManager::isBrownout(std::map<std::string, std::string>& additionalData)
-{
-    size_t presentCount = 0;
-    size_t notPresentCount = 0;
-    size_t acFailedCount = 0;
-    size_t pgoodFailedCount = 0;
-    for (const auto& psu : psus)
-    {
-        if (psu->isPresent())
-        {
-            ++presentCount;
-            if (psu->hasACFault())
-            {
-                ++acFailedCount;
-            }
-            else if (psu->hasPgoodFault())
-            {
-                ++pgoodFailedCount;
-            }
-        }
-        else
-        {
-            ++notPresentCount;
-        }
-    }
-
-    // In brownout if at least one PS has seen an AC fail and all present PSUs
-    // have an AC or pgood failure. Note an AC fail is only set if at least one
-    // PSU is present.
-    bool isBrownout =
-        acFailedCount && (presentCount == (acFailedCount + pgoodFailedCount));
-    if (isBrownout)
-    {
-        additionalData.emplace("NOT_PRESENT_COUNT",
-                               std::to_string(notPresentCount));
-        additionalData.emplace("VIN_FAULT_COUNT",
-                               std::to_string(acFailedCount));
-        additionalData.emplace("PGOOD_FAULT_COUNT",
-                               std::to_string(pgoodFailedCount));
-    }
-    return isBrownout;
-}
-
 void PSUManager::analyze()
 {
     auto syncHistoryRequired =
@@ -617,19 +576,7 @@ void PSUManager::analyze()
         psu->analyze();
     }
 
-    std::map<std::string, std::string> additionalData;
-
-    // Only issue brownout failure if chassis pgood has failed and PSUs indicate
-    // AC failure
-    if (powerFaultOccurring && isBrownout(additionalData))
-    {
-        setBrownout(additionalData);
-    }
-    else
-    {
-        // Brownout condition is not present or has been cleared
-        clearBrownout();
-    }
+    analyzeBrownout();
 
     // Only perform individual PSU analysis if power is on and a brownout has
     // not already been logged
@@ -637,7 +584,7 @@ void PSUManager::analyze()
     {
         for (auto& psu : psus)
         {
-            additionalData.clear();
+            std::map<std::string, std::string> additionalData;
 
             if (!psu->isFaultLogged() && !psu->isPresent())
             {
@@ -821,6 +768,110 @@ void PSUManager::analyze()
 
                     psu->setFaultLogged();
                 }
+            }
+        }
+    }
+}
+
+void PSUManager::analyzeBrownout()
+{
+    // Count number of power supplies failing
+    size_t presentCount = 0;
+    size_t notPresentCount = 0;
+    size_t acFailedCount = 0;
+    size_t pgoodFailedCount = 0;
+    for (const auto& psu : psus)
+    {
+        if (psu->isPresent())
+        {
+            ++presentCount;
+            if (psu->hasACFault())
+            {
+                ++acFailedCount;
+            }
+            else if (psu->hasPgoodFault())
+            {
+                ++pgoodFailedCount;
+            }
+        }
+        else
+        {
+            ++notPresentCount;
+        }
+    }
+
+    // Only issue brownout failure if chassis pgood has failed, it has not
+    // lready been logged, at least one PSU has seen an AC fail, and all present
+    // PSUs have an AC or pgood failure. Note an AC fail is only set if at east
+    // one PSU is present.
+    if (powerFaultOccurring && !brownoutLogged && acFailedCount &&
+        (presentCount == (acFailedCount + pgoodFailedCount)))
+    {
+        // Indicate that the system is in a brownout condition by creating an
+        // error log and setting the PowerSystemInputs status property to Fault.
+        powerSystemInputs.status(
+            sdbusplus::xyz::openbmc_project::State::Decorator::server::
+                PowerSystemInputs::Status::Fault);
+
+        std::map<std::string, std::string> additionalData;
+        additionalData.emplace("NOT_PRESENT_COUNT",
+                               std::to_string(notPresentCount));
+        additionalData.emplace("VIN_FAULT_COUNT",
+                               std::to_string(acFailedCount));
+        additionalData.emplace("PGOOD_FAULT_COUNT",
+                               std::to_string(pgoodFailedCount));
+        log<level::INFO>(
+            fmt::format(
+                "Brownout detected, not present count: {}, AC fault count {}, pgood fault count: {}",
+                notPresentCount, acFailedCount, pgoodFailedCount)
+                .c_str());
+
+        createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                    additionalData);
+        brownoutLogged = true;
+    }
+    else
+    {
+        // If a brownout was previously logged but at least one PSU is not
+        // currently in AC fault, determine if the brownout condition can be
+        // cleared
+        if (brownoutLogged && (acFailedCount < presentCount))
+        {
+            // Chassis only recognizes the PowerSystemInputs change when it is
+            // off
+            try
+            {
+                using PowerState = sdbusplus::xyz::openbmc_project::State::
+                    server::Chassis::PowerState;
+                PowerState currentPowerState;
+                util::getProperty<PowerState>(
+                    "xyz.openbmc_project.State.Chassis", "CurrentPowerState",
+                    "/xyz/openbmc_project/state/chassis0",
+                    "xyz.openbmc_project.State.Chassis", bus,
+                    currentPowerState);
+
+                if (currentPowerState == PowerState::Off)
+                {
+                    // Indicate that the system is no longer in a brownout
+                    // condition by setting the PowerSystemInputs status
+                    // property to Good.
+                    log<level::INFO>(
+                        fmt::format(
+                            "Brownout cleared, not present count: {}, AC fault count {}, pgood fault count: {}",
+                            notPresentCount, acFailedCount, pgoodFailedCount)
+                            .c_str());
+                    powerSystemInputs.status(
+                        sdbusplus::xyz::openbmc_project::State::Decorator::
+                            server::PowerSystemInputs::Status::Good);
+                    brownoutLogged = false;
+                }
+            }
+            catch (const std::exception& e)
+            {
+                log<level::ERR>(
+                    fmt::format("Error trying to clear brownout, error: {}",
+                                e.what())
+                        .c_str());
             }
         }
     }
@@ -1206,29 +1257,6 @@ void PSUManager::setPowerConfigGPIO()
         auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
         powerConfigGPIO->write(powerConfigValue, flags);
     }
-}
-
-void PSUManager::setBrownout(std::map<std::string, std::string>& additionalData)
-{
-    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
-                                 server::PowerSystemInputs::Status::Fault);
-    if (!brownoutLogged)
-    {
-        if (powerOn)
-        {
-            createError(
-                "xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
-                additionalData);
-            brownoutLogged = true;
-        }
-    }
-}
-
-void PSUManager::clearBrownout()
-{
-    powerSystemInputs.status(sdbusplus::xyz::openbmc_project::State::Decorator::
-                                 server::PowerSystemInputs::Status::Good);
-    brownoutLogged = false;
 }
 
 } // namespace phosphor::power::manager
