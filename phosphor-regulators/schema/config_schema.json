@@ -4,412 +4,377 @@
     "$id": "https://github.com/openbmc/phosphor-power/tree/master/phosphor-regulators/schema/config_schema.json",
     "description": "This schema describes the JSON format for the phosphor-regulators configuration file.",
     "type": "object",
-    "properties":
-    {
-        "comments": {"$ref": "#/definitions/comments" },
-        "rules": {"$ref": "#/definitions/rules" },
-        "chassis": {"$ref": "#/definitions/chassis" }
+    "properties": {
+        "comments": { "$ref": "#/definitions/comments" },
+        "rules": { "$ref": "#/definitions/rules" },
+        "chassis": { "$ref": "#/definitions/chassis" }
     },
     "required": ["chassis"],
     "additionalProperties": false,
-    "definitions":
-    {
-        "rule":
-        {
+    "definitions": {
+        "rule": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "id": {"$ref": "#/definitions/id" },
-                "actions": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "id": { "$ref": "#/definitions/id" },
+                "actions": { "$ref": "#/definitions/actions" }
             },
             "required": ["id", "actions"],
             "additionalProperties": false
         },
 
-        "rules":
-        {
+        "rules": {
             "type": "array",
-            "items": {"$ref": "#/definitions/rule" },
+            "items": { "$ref": "#/definitions/rule" },
             "minItems": 1
         },
 
-        "comments":
-        {
+        "comments": {
             "type": "array",
-            "items": {"type": "string" },
+            "items": { "type": "string" },
             "minItems": 1
         },
 
-        "id":
-        {
+        "id": {
             "type": "string",
             "pattern": "^[A-Za-z0-9_]+$"
         },
 
-        "action":
-        {
+        "action": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "and": {"$ref": "#/definitions/actions" },
-                "compare_presence": {"$ref": "#/definitions/compare_presence" },
-                "compare_vpd": {"$ref": "#/definitions/compare_vpd" },
-                "i2c_capture_bytes": {"$ref": "#/definitions/i2c_capture_bytes" },
-                "i2c_compare_bit": {"$ref": "#/definitions/i2c_bit" },
-                "i2c_compare_byte": {"$ref": "#/definitions/i2c_byte" },
-                "i2c_compare_bytes": {"$ref": "#/definitions/i2c_bytes" },
-                "i2c_write_bit": {"$ref": "#/definitions/i2c_bit" },
-                "i2c_write_byte": {"$ref": "#/definitions/i2c_byte" },
-                "i2c_write_bytes": {"$ref": "#/definitions/i2c_bytes" },
-                "if": {"$ref": "#/definitions/if" },
-                "log_phase_fault": {"$ref": "#/definitions/log_phase_fault" },
-                "not": {"$ref": "#/definitions/action" },
-                "or": {"$ref": "#/definitions/actions" },
-                "pmbus_read_sensor": {"$ref": "#/definitions/pmbus_read_sensor" },
-                "pmbus_write_vout_command": {"$ref": "#/definitions/pmbus_write_vout_command" },
-                "run_rule": {"$ref": "#/definitions/id" },
-                "set_device": {"$ref": "#/definitions/id" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "and": { "$ref": "#/definitions/actions" },
+                "compare_presence": {
+                    "$ref": "#/definitions/compare_presence"
+                },
+                "compare_vpd": { "$ref": "#/definitions/compare_vpd" },
+                "i2c_capture_bytes": {
+                    "$ref": "#/definitions/i2c_capture_bytes"
+                },
+                "i2c_compare_bit": { "$ref": "#/definitions/i2c_bit" },
+                "i2c_compare_byte": { "$ref": "#/definitions/i2c_byte" },
+                "i2c_compare_bytes": { "$ref": "#/definitions/i2c_bytes" },
+                "i2c_write_bit": { "$ref": "#/definitions/i2c_bit" },
+                "i2c_write_byte": { "$ref": "#/definitions/i2c_byte" },
+                "i2c_write_bytes": { "$ref": "#/definitions/i2c_bytes" },
+                "if": { "$ref": "#/definitions/if" },
+                "log_phase_fault": { "$ref": "#/definitions/log_phase_fault" },
+                "not": { "$ref": "#/definitions/action" },
+                "or": { "$ref": "#/definitions/actions" },
+                "pmbus_read_sensor": {
+                    "$ref": "#/definitions/pmbus_read_sensor"
+                },
+                "pmbus_write_vout_command": {
+                    "$ref": "#/definitions/pmbus_write_vout_command"
+                },
+                "run_rule": { "$ref": "#/definitions/id" },
+                "set_device": { "$ref": "#/definitions/id" }
             },
             "additionalProperties": false,
             "oneOf": [
-                {"required": ["and"]},
-                {"required": ["compare_presence"]},
-                {"required": ["compare_vpd"]},
-                {"required": ["i2c_capture_bytes"]},
-                {"required": ["i2c_compare_bit"]},
-                {"required": ["i2c_compare_byte"]},
-                {"required": ["i2c_compare_bytes"]},
-                {"required": ["i2c_write_bit"]},
-                {"required": ["i2c_write_byte"]},
-                {"required": ["i2c_write_bytes"]},
-                {"required": ["if"]},
-                {"required": ["log_phase_fault"]},
-                {"required": ["not"]},
-                {"required": ["or"]},
-                {"required": ["pmbus_write_vout_command"]},
-                {"required": ["pmbus_read_sensor"]},
-                {"required": ["run_rule"]},
-                {"required": ["set_device"]}
+                { "required": ["and"] },
+                { "required": ["compare_presence"] },
+                { "required": ["compare_vpd"] },
+                { "required": ["i2c_capture_bytes"] },
+                { "required": ["i2c_compare_bit"] },
+                { "required": ["i2c_compare_byte"] },
+                { "required": ["i2c_compare_bytes"] },
+                { "required": ["i2c_write_bit"] },
+                { "required": ["i2c_write_byte"] },
+                { "required": ["i2c_write_bytes"] },
+                { "required": ["if"] },
+                { "required": ["log_phase_fault"] },
+                { "required": ["not"] },
+                { "required": ["or"] },
+                { "required": ["pmbus_write_vout_command"] },
+                { "required": ["pmbus_read_sensor"] },
+                { "required": ["run_rule"] },
+                { "required": ["set_device"] }
             ]
         },
 
-        "actions":
-        {
+        "actions": {
             "type": "array",
-            "items": {"$ref": "#/definitions/action" },
+            "items": { "$ref": "#/definitions/action" },
             "minItems": 1
         },
 
-        "compare_presence":
-        {
+        "compare_presence": {
             "type": "object",
-            "properties":
-            {
-                "fru": {"$ref": "#/definitions/inventory_path" },
-                "value": {"$ref": "#/definitions/boolean_value" }
+            "properties": {
+                "fru": { "$ref": "#/definitions/inventory_path" },
+                "value": { "$ref": "#/definitions/boolean_value" }
             },
             "required": ["fru", "value"],
             "additionalProperties": false
         },
 
-        "inventory_path":
-        {
+        "inventory_path": {
             "type": "string",
             "minLength": 1
         },
 
-        "boolean_value":
-        {
+        "boolean_value": {
             "type": "boolean"
         },
 
-        "compare_vpd":
-        {
+        "compare_vpd": {
             "type": "object",
-            "properties":
-            {
-                "fru": {"$ref": "#/definitions/inventory_path" },
-                "keyword": {"$ref": "#/definitions/keyword" },
-                "value": {"$ref": "#/definitions/string_value" },
-                "byte_values": {"$ref": "#/definitions/byte_values_min0" }
+            "properties": {
+                "fru": { "$ref": "#/definitions/inventory_path" },
+                "keyword": { "$ref": "#/definitions/keyword" },
+                "value": { "$ref": "#/definitions/string_value" },
+                "byte_values": { "$ref": "#/definitions/byte_values_min0" }
             },
             "required": ["fru", "keyword"],
             "oneOf": [
-                {"required": ["value"]},
-                {"required": ["byte_values"]}
+                { "required": ["value"] },
+                { "required": ["byte_values"] }
             ],
             "additionalProperties": false
         },
 
-        "keyword":
-        {
+        "keyword": {
             "type": "string",
             "enum": ["CCIN", "Manufacturer", "Model", "PartNumber", "HW"]
         },
 
-        "string_value":
-        {
+        "string_value": {
             "type": "string"
         },
 
-        "i2c_capture_bytes":
-        {
+        "i2c_capture_bytes": {
             "type": "object",
-            "properties":
-            {
-                "register": {"$ref": "#/definitions/register" },
-                "count": {"$ref": "#/definitions/byte_count" }
+            "properties": {
+                "register": { "$ref": "#/definitions/register" },
+                "count": { "$ref": "#/definitions/byte_count" }
             },
             "required": ["register", "count"],
             "additionalProperties": false
         },
 
-        "i2c_bit":
-        {
+        "i2c_bit": {
             "type": "object",
-            "properties":
-            {
-                "register": {"$ref": "#/definitions/register" },
-                "position": {"$ref": "#/definitions/position" },
-                "value": {"$ref": "#/definitions/bit_value" }
+            "properties": {
+                "register": { "$ref": "#/definitions/register" },
+                "position": { "$ref": "#/definitions/position" },
+                "value": { "$ref": "#/definitions/bit_value" }
             },
-            "required": ["register", "position","value"],
+            "required": ["register", "position", "value"],
             "additionalProperties": false
         },
 
-        "register":
-        {
+        "register": {
             "type": "string",
             "pattern": "^0x[0-9A-Fa-f]{2}$"
         },
 
-        "position":
-        {
+        "position": {
             "type": "integer",
             "minimum": 0,
             "maximum": 7
         },
 
-        "bit_value":
-        {
+        "bit_value": {
             "type": "integer",
             "minimum": 0,
             "maximum": 1
         },
 
-        "i2c_byte":
-        {
+        "i2c_byte": {
             "type": "object",
-            "properties":
-            {
-                "register": {"$ref": "#/definitions/register" },
-                "value": {"$ref": "#/definitions/byte_value" },
-                "mask": {"$ref": "#/definitions/byte_mask" }
+            "properties": {
+                "register": { "$ref": "#/definitions/register" },
+                "value": { "$ref": "#/definitions/byte_value" },
+                "mask": { "$ref": "#/definitions/byte_mask" }
             },
             "required": ["register", "value"],
             "additionalProperties": false
         },
 
-        "byte_value":
-        {
+        "byte_value": {
             "type": "string",
             "pattern": "^0x[0-9A-Fa-f]{2}$"
         },
 
-        "byte_mask":
-        {
+        "byte_mask": {
             "type": "string",
             "pattern": "^0x[0-9A-Fa-f]{2}$"
         },
 
-        "byte_count":
-        {
+        "byte_count": {
             "type": "integer",
             "minimum": 1
         },
 
-        "i2c_bytes":
-        {
+        "i2c_bytes": {
             "type": "object",
-            "properties":
-            {
-                "register": {"$ref": "#/definitions/register" },
-                "values": {"$ref": "#/definitions/byte_values" },
-                "masks": {"$ref": "#/definitions/byte_masks" }
+            "properties": {
+                "register": { "$ref": "#/definitions/register" },
+                "values": { "$ref": "#/definitions/byte_values" },
+                "masks": { "$ref": "#/definitions/byte_masks" }
             },
             "required": ["register", "values"],
             "additionalProperties": false
         },
 
-        "byte_values":
-        {
+        "byte_values": {
             "type": "array",
-            "items": {"$ref": "#/definitions/byte_value" },
+            "items": { "$ref": "#/definitions/byte_value" },
             "minItems": 1
         },
 
-        "byte_values_min0":
-        {
+        "byte_values_min0": {
             "type": "array",
-            "items": {"$ref": "#/definitions/byte_value" },
+            "items": { "$ref": "#/definitions/byte_value" },
             "minItems": 0
         },
 
-        "byte_masks":
-        {
+        "byte_masks": {
             "type": "array",
-            "items": {"$ref": "#/definitions/byte_mask" },
+            "items": { "$ref": "#/definitions/byte_mask" },
             "minItems": 1
         },
 
-        "if":
-        {
+        "if": {
             "type": "object",
-            "properties":
-            {
-                "condition": {"$ref": "#/definitions/action" },
-                "then": {"$ref": "#/definitions/actions" },
-                "else": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "condition": { "$ref": "#/definitions/action" },
+                "then": { "$ref": "#/definitions/actions" },
+                "else": { "$ref": "#/definitions/actions" }
             },
             "required": ["condition", "then"],
             "additionalProperties": false
         },
 
-        "log_phase_fault":
-        {
+        "log_phase_fault": {
             "type": "object",
-            "properties":
-            {
-                "type": {"$ref": "#/definitions/phase_fault_type" }
+            "properties": {
+                "type": { "$ref": "#/definitions/phase_fault_type" }
             },
             "required": ["type"],
             "additionalProperties": false
         },
 
-        "phase_fault_type":
-        {
+        "phase_fault_type": {
             "type": "string",
             "enum": ["n+1", "n"]
         },
 
-        "pmbus_write_vout_command":
-        {
+        "pmbus_write_vout_command": {
             "type": "object",
-            "properties":
-            {
-                "volts": {"$ref": "#/definitions/volts" },
-                "format": {"$ref": "#/definitions/write_vout_format" },
-                "exponent": {"$ref": "#/definitions/exponent" },
-                "is_verified": {"$ref": "#/definitions/is_verified" }
+            "properties": {
+                "volts": { "$ref": "#/definitions/volts" },
+                "format": { "$ref": "#/definitions/write_vout_format" },
+                "exponent": { "$ref": "#/definitions/exponent" },
+                "is_verified": { "$ref": "#/definitions/is_verified" }
             },
             "required": ["format"],
             "additionalProperties": false
         },
 
-        "volts":
-        {
+        "volts": {
             "type": "number"
         },
 
-        "write_vout_format":
-        {
+        "write_vout_format": {
             "type": "string",
             "enum": ["linear"]
         },
 
-        "exponent":
-        {
+        "exponent": {
             "type": "integer"
         },
 
-        "is_verified":
-        {
+        "is_verified": {
             "type": "boolean"
         },
 
-        "pmbus_read_sensor":
-        {
+        "pmbus_read_sensor": {
             "type": "object",
-            "properties":
-            {
-                "type": {"$ref": "#/definitions/pmbus_read_sensor_type" },
-                "command": {"$ref": "#/definitions/pmbus_read_sensor_command" },
-                "format": {"$ref": "#/definitions/read_sensor_format" },
-                "exponent": {"$ref": "#/definitions/exponent" }
+            "properties": {
+                "type": { "$ref": "#/definitions/pmbus_read_sensor_type" },
+                "command": {
+                    "$ref": "#/definitions/pmbus_read_sensor_command"
+                },
+                "format": { "$ref": "#/definitions/read_sensor_format" },
+                "exponent": { "$ref": "#/definitions/exponent" }
             },
             "required": ["type", "command", "format"],
             "additionalProperties": false
         },
 
-        "pmbus_read_sensor_type":
-        {
+        "pmbus_read_sensor_type": {
             "type": "string",
-            "enum": ["iout", "iout_peak", "iout_valley", "pout", "temperature", "temperature_peak", "vout", "vout_peak", "vout_valley"]
+            "enum": [
+                "iout",
+                "iout_peak",
+                "iout_valley",
+                "pout",
+                "temperature",
+                "temperature_peak",
+                "vout",
+                "vout_peak",
+                "vout_valley"
+            ]
         },
 
-        "pmbus_read_sensor_command":
-        {
+        "pmbus_read_sensor_command": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]{2}$"
         },
 
-        "read_sensor_format":
-        {
+        "read_sensor_format": {
             "type": "string",
             "enum": ["linear_11", "linear_16"]
         },
 
-        "chassis_object":
-        {
+        "chassis_object": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "number": {"$ref": "#/definitions/number" },
-                "inventory_path": {"$ref": "#/definitions/inventory_path" },
-                "devices": {"$ref": "#/definitions/devices" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "number": { "$ref": "#/definitions/number" },
+                "inventory_path": { "$ref": "#/definitions/inventory_path" },
+                "devices": { "$ref": "#/definitions/devices" }
             },
             "required": ["number", "inventory_path"],
             "additionalProperties": false
         },
 
-        "chassis":
-        {
+        "chassis": {
             "type": "array",
-            "items": {"$ref": "#/definitions/chassis_object" },
+            "items": { "$ref": "#/definitions/chassis_object" },
             "minItems": 1
         },
 
-        "number":
-        {
+        "number": {
             "type": "integer",
             "minimum": 1
         },
 
-        "device":
-        {
+        "device": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "id": {"$ref": "#/definitions/id" },
-                "is_regulator": {"$ref": "#/definitions/is_regulator" },
-                "fru": {"$ref": "#/definitions/inventory_path" },
-                "i2c_interface": {"$ref": "#/definitions/i2c_interface" },
-                "presence_detection": {"$ref": "#/definitions/presence_detection" },
-                "configuration": {"$ref": "#/definitions/configuration" },
-                "phase_fault_detection": {"$ref": "#/definitions/phase_fault_detection" },
-                "rails": {"$ref": "#/definitions/rails" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "id": { "$ref": "#/definitions/id" },
+                "is_regulator": { "$ref": "#/definitions/is_regulator" },
+                "fru": { "$ref": "#/definitions/inventory_path" },
+                "i2c_interface": { "$ref": "#/definitions/i2c_interface" },
+                "presence_detection": {
+                    "$ref": "#/definitions/presence_detection"
+                },
+                "configuration": { "$ref": "#/definitions/configuration" },
+                "phase_fault_detection": {
+                    "$ref": "#/definitions/phase_fault_detection"
+                },
+                "rails": { "$ref": "#/definitions/rails" }
             },
             "required": ["id", "is_regulator", "fru", "i2c_interface"],
-            "if":
-            {
+            "if": {
                 "properties": { "is_regulator": { "const": false } }
             },
-            "then":
-            {
+            "then": {
                 "not": {
                     "anyOf": [
                         { "required": ["phase_fault_detection"] },
@@ -420,127 +385,100 @@
             "additionalProperties": false
         },
 
-        "devices":
-        {
+        "devices": {
             "type": "array",
-            "items": {"$ref": "#/definitions/device" },
+            "items": { "$ref": "#/definitions/device" },
             "minItems": 1
         },
 
-        "is_regulator":
-        {
+        "is_regulator": {
             "type": "boolean"
         },
 
-        "i2c_interface":
-        {
+        "i2c_interface": {
             "type": "object",
-            "properties":
-            {
-                "bus": {"$ref": "#/definitions/bus" },
-                "address": {"$ref": "#/definitions/address" }
+            "properties": {
+                "bus": { "$ref": "#/definitions/bus" },
+                "address": { "$ref": "#/definitions/address" }
             },
             "required": ["bus", "address"],
             "additionalProperties": false
         },
 
-        "bus":
-        {
+        "bus": {
             "type": "integer",
             "minimum": 0
         },
 
-        "address":
-        {
+        "address": {
             "type": "string",
             "pattern": "^0x[0-9A-Fa-f]{2}$"
         },
 
-        "presence_detection":
-        {
+        "presence_detection": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "rule_id": {"$ref": "#/definitions/id" },
-                "actions": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "rule_id": { "$ref": "#/definitions/id" },
+                "actions": { "$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
-            "oneOf": [
-                {"required": ["rule_id"]},
-                {"required": ["actions"]}
-            ]
+            "oneOf": [{ "required": ["rule_id"] }, { "required": ["actions"] }]
         },
 
-        "configuration":
-        {
+        "configuration": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "volts": {"$ref": "#/definitions/volts" },
-                "rule_id": {"$ref": "#/definitions/id" },
-                "actions": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "volts": { "$ref": "#/definitions/volts" },
+                "rule_id": { "$ref": "#/definitions/id" },
+                "actions": { "$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
-            "oneOf": [
-                {"required": ["rule_id"]},
-                {"required": ["actions"]}
-            ]
+            "oneOf": [{ "required": ["rule_id"] }, { "required": ["actions"] }]
         },
 
-        "phase_fault_detection":
-        {
+        "phase_fault_detection": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "device_id": {"$ref": "#/definitions/id" },
-                "rule_id": {"$ref": "#/definitions/id" },
-                "actions": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "device_id": { "$ref": "#/definitions/id" },
+                "rule_id": { "$ref": "#/definitions/id" },
+                "actions": { "$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
-            "oneOf": [
-                {"required": ["rule_id"]},
-                {"required": ["actions"]}
-            ]
+            "oneOf": [{ "required": ["rule_id"] }, { "required": ["actions"] }]
         },
 
-        "rail":
-        {
+        "rail": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "id": {"$ref": "#/definitions/id" },
-                "configuration": {"$ref": "#/definitions/configuration" },
-                "sensor_monitoring": {"$ref": "#/definitions/sensor_monitoring" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "id": { "$ref": "#/definitions/id" },
+                "configuration": { "$ref": "#/definitions/configuration" },
+                "sensor_monitoring": {
+                    "$ref": "#/definitions/sensor_monitoring"
+                }
             },
             "required": ["id"],
             "additionalProperties": false
         },
 
-        "rails":
-        {
+        "rails": {
             "type": "array",
-            "items": {"$ref": "#/definitions/rail" },
+            "items": { "$ref": "#/definitions/rail" },
             "minItems": 1
         },
 
-        "sensor_monitoring":
-        {
+        "sensor_monitoring": {
             "type": "object",
-            "properties":
-            {
-                "comments": {"$ref": "#/definitions/comments" },
-                "rule_id": {"$ref": "#/definitions/id" },
-                "actions": {"$ref": "#/definitions/actions" }
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "rule_id": { "$ref": "#/definitions/id" },
+                "actions": { "$ref": "#/definitions/actions" }
             },
             "additionalProperties": false,
-            "oneOf": [
-                {"required": ["rule_id"]},
-                {"required": ["actions"]}
-            ]
+            "oneOf": [{ "required": ["rule_id"] }, { "required": ["actions"] }]
         }
     }
 }

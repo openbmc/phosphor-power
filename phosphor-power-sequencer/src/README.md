@@ -27,9 +27,9 @@ Defines the `org.openbmc.control.Power` D-Bus interface.
 
 The `state` property is set to initiate a power on or power off sequence. The
 power good `pgood` property reflects the power state of the chassis. At power on
-time the `pgood` will lag the 'state` as the power sequencer performs its
-processing. The same lag will occur on a requested power off. Loss of `pgood`
-without a `state` change request indicates a pgood failure.
+time the `pgood` will lag the
+'state`as the power sequencer performs its processing. The same lag will occur on a requested power off. Loss of`pgood`without a`state`
+change request indicates a pgood failure.
 
 ### PowerSequencerMonitor
 
