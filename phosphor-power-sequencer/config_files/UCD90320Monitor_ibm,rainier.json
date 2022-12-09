@@ -1,101 +1,37 @@
 {
     "rails": [
-        {
-            "name": "12.0V"
-        },
-        {
-            "name": "5.0V_USB"
-        },
-        {
-            "name": "5.0V_DASD"
-        },
-        {
-            "name": "3.3VA"
-        },
-        {
-            "name": "3.3VB"
-        },
-        {
-            "name": "1.5V"
-        },
-        {
-            "name": "1.1V"
-        },
-        {
-            "name": "VDDA_DCM0"
-        },
-        {
-            "name": "VDDB_DCM0"
-        },
-        {
-            "name": "VDDA_DCM1"
-        },
-        {
-            "name": "VDDB_DCM1"
-        },
-        {
-            "name": "12.0VCS"
-        },
-        {
-            "name": "3.3VCS"
-        },
-        {
-            "name": "1.1V_Current"
-        },
-        {
-            "name": "5.0V_USB_Current"
-        },
-        {
-            "name": "5.0V_DASD_Current"
-        },
-        {
-            "name": "12.0VN"
-        },
-        {
-            "name": "12.0VP"
-        },
-        {
-            "name": "12.0VQ"
-        },
-        {
-            "name": "12.0VR"
-        },
-        {
-            "name": "ThermalDiode1"
-        },
-        {
-            "name": "ThermalDiode2"
-        },
-        {
-            "name": "ThermalDiode3"
-        },
-        {
-            "name": "ThermalDiode4"
-        },
-        {
-            "name": "VDN_DCM0"
-        },
-        {
-            "name": "VDN_DCM1"
-        },
-        {
-            "name": "VCS_DCM0"
-        },
-        {
-            "name": "VCS_DCM1"
-        },
-        {
-            "name": "VIO_DCM0"
-        },
-        {
-            "name": "VIO_DCM1"
-        },
-        {
-            "name": "VPCIE_DCM0"
-        },
-        {
-            "name": "VPCIE_DCM1"
-        }
+        { "name": "12.0V" },
+        { "name": "5.0V_USB" },
+        { "name": "5.0V_DASD" },
+        { "name": "3.3VA" },
+        { "name": "3.3VB" },
+        { "name": "1.5V" },
+        { "name": "1.1V" },
+        { "name": "VDDA_DCM0" },
+        { "name": "VDDB_DCM0" },
+        { "name": "VDDA_DCM1" },
+        { "name": "VDDB_DCM1" },
+        { "name": "12.0VCS" },
+        { "name": "3.3VCS" },
+        { "name": "1.1V_Current" },
+        { "name": "5.0V_USB_Current" },
+        { "name": "5.0V_DASD_Current" },
+        { "name": "12.0VN" },
+        { "name": "12.0VP" },
+        { "name": "12.0VQ" },
+        { "name": "12.0VR" },
+        { "name": "ThermalDiode1" },
+        { "name": "ThermalDiode2" },
+        { "name": "ThermalDiode3" },
+        { "name": "ThermalDiode4" },
+        { "name": "VDN_DCM0" },
+        { "name": "VDN_DCM1" },
+        { "name": "VCS_DCM0" },
+        { "name": "VCS_DCM1" },
+        { "name": "VIO_DCM0" },
+        { "name": "VIO_DCM1" },
+        { "name": "VPCIE_DCM0" },
+        { "name": "VPCIE_DCM1" }
     ],
 
     "pins": [
