@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da5528f5_f8789ad7",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000523
+      },
+      "writtenOn": "2022-12-09T23:12:03Z",
+      "side": 0,
+      "message": "It took a moment to realize this was a move then edit. In the future it might be worth creating a move commit and then stack the edit commit.",
+      "revId": "0a2b76bc3031c324879c698865d1490f5b6d8b99",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

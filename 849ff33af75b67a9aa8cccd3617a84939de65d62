@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29a81c2_3b679808",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000523
+      },
+      "writtenOn": "2022-12-09T23:12:03Z",
+      "side": 1,
+      "message": "It might be helpful to add a Tested line, so that others would know how test changes like this in the future.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "33a03552_5574023a",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-12-09T15:36:54Z",
       "side": 1,
       "message": "Looks good, I think we handle the multitude of failing scenarios correctly.\n\nDocumenting some of the failing scenarios in case we run into problems in the future:\n\n1. Short brownout (\u003c ~10s, eg this defect): should APR correctly when AC returns.\n\n2. Long brownout (\u003e ~10s): we\u0027ll see at least 1 of the PSU report AC good and APR.  If half of PSU (eg 2 of 4) report AC good, we\u0027ll correctly APR, since customers typically would have half of psu on 1 utility, and other half on other utility.  Only weird scenario would be we\u0027d thrash if only 1 of 4 psu had AC good, but that would be unlikely since customers wouldn\u0027t cable system like that, is an unlikely type of PLD, and only would happen if 1 psu couldn\u0027t hold system up.\n\n3. 1+ psu report no acFail or pgoodFail, others do - we\u0027ll correctly stay up until the chassis pgood fails. As long as 1 psu is reporting AC\u0026pgood are fine, we\u0027ll correctly NOT log this as a brownout.  It would be a psu bug if this was the case; too hard to code around all potential psu fw bugs.\n\n4. If none of the present psu report AC loss (just pgood fails) when PLD happened, we\u0027d shut off with pgood fail (eg 11002620) instead of AC loss (110000AC). This would be psu fw bugs, and we can\u0027t correctly guess it was due to AC loss, since it may be a legitimate short or other pgood fail.  As long as 1 of the psu reports loss of AC, we\u0027ll shut down with 00AC and APR.\n\n5. Blackout, whether short or long, we\u0027ll correctly APR.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3802124_0257f7d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000523
+      },
+      "writtenOn": "2022-12-09T23:12:03Z",
+      "side": 1,
+      "message": "I added in a few style nits that could make this easier for review.",
       "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -37,6 +71,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c03c5724_a2352a73",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000523
+      },
+      "writtenOn": "2022-12-09T23:12:03Z",
+      "side": 1,
+      "message": "Nit: vinUFault is an int, and we usually want explicit comparisons for integer types in conditionals.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5a979d5_836c3ece",
         "filename": "phosphor-power-supply/psu_manager.cpp",
         "patchSetId": 2
@@ -48,6 +99,23 @@
       "writtenOn": "2022-12-09T15:36:54Z",
       "side": 1,
       "message": "looks like Andrew confirmed that the above is correct for \"xyz.openbmc_project.State.Chassis.PowerState.Off\"",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a0a97b8_28d354d8",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000523
+      },
+      "writtenOn": "2022-12-09T23:12:03Z",
+      "side": 1,
+      "message": "Since you\u0027re making an edit here, it would be worth adding the @brief and other Doxygen annotations.",
       "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
