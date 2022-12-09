@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a03552_5574023a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-12-09T15:36:54Z",
+      "side": 1,
+      "message": "Looks good, I think we handle the multitude of failing scenarios correctly.\n\nDocumenting some of the failing scenarios in case we run into problems in the future:\n\n1. Short brownout (\u003c ~10s, eg this defect): should APR correctly when AC returns.\n\n2. Long brownout (\u003e ~10s): we\u0027ll see at least 1 of the PSU report AC good and APR.  If half of PSU (eg 2 of 4) report AC good, we\u0027ll correctly APR, since customers typically would have half of psu on 1 utility, and other half on other utility.  Only weird scenario would be we\u0027d thrash if only 1 of 4 psu had AC good, but that would be unlikely since customers wouldn\u0027t cable system like that, is an unlikely type of PLD, and only would happen if 1 psu couldn\u0027t hold system up.\n\n3. 1+ psu report no acFail or pgoodFail, others do - we\u0027ll correctly stay up until the chassis pgood fails. As long as 1 psu is reporting AC\u0026pgood are fine, we\u0027ll correctly NOT log this as a brownout.  It would be a psu bug if this was the case; too hard to code around all potential psu fw bugs.\n\n4. If none of the present psu report AC loss (just pgood fails) when PLD happened, we\u0027d shut off with pgood fail (eg 11002620) instead of AC loss (110000AC). This would be psu fw bugs, and we can\u0027t correctly guess it was due to AC loss, since it may be a legitimate short or other pgood fail.  As long as 1 of the psu reports loss of AC, we\u0027ll shut down with 00AC and APR.\n\n5. Blackout, whether short or long, we\u0027ll correctly APR.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "053afe11_9df41d92",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-12-09T15:36:54Z",
+      "side": 1,
+      "message": "ah i see, we\u0027d never decrement acFault down to 0 without this change, good catch!\ncould just use an \u0027else\u0027 here if making any other changes...",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a979d5_836c3ece",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2022-12-09T15:36:54Z",
+      "side": 1,
+      "message": "looks like Andrew confirmed that the above is correct for \"xyz.openbmc_project.State.Chassis.PowerState.Off\"",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
