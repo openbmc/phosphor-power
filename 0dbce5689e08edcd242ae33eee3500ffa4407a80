@@ -16,6 +16,24 @@
       "message": "The script did a strange thing here due to the mismatched apostrophes.",
       "revId": "0dbce5689e08edcd242ae33eee3500ffa4407a80",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d154a2_d24b1e61",
+        "filename": "phosphor-power-sequencer/src/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-12T18:26:07Z",
+      "side": 1,
+      "message": "Will fix.",
+      "parentUuid": "732cd91b_ac0bba8b",
+      "revId": "0dbce5689e08edcd242ae33eee3500ffa4407a80",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
