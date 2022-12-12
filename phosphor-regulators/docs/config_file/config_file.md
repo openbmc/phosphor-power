@@ -1,16 +1,19 @@
 # config_file
 
 ## Description
+
 The root (outer-most) object in a phosphor-regulators configuration file.
 
 ## Properties
-| Name | Required | Type | Description |
-| :--- | :------: | :--- | :---------- |
-| comments | no | array of strings | One or more comment lines describing this file. |
-| rules | no | array of [rules](rule.md) | One or more rules shared by regulators in this file. |
-| chassis | yes | array of [chassis](chassis.md) | One or more chassis in the system. |
+
+| Name     | Required | Type                           | Description                                          |
+| :------- | :------: | :----------------------------- | :--------------------------------------------------- |
+| comments |    no    | array of strings               | One or more comment lines describing this file.      |
+| rules    |    no    | array of [rules](rule.md)      | One or more rules shared by regulators in this file. |
+| chassis  |   yes    | array of [chassis](chassis.md) | One or more chassis in the system.                   |
 
 ## Example
+
 ```
 {
   "comments": [ "Config file for a FooBar one-chassis system" ],

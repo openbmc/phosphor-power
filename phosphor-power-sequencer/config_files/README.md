@@ -11,6 +11,7 @@ The expected filename format is `UCD90320Monitor_<systemType>.json`, where
 configuration file.
 
 Example file name:
+
 ```
 UCD90320Monitor_mysystem.json
 ```
@@ -18,11 +19,12 @@ UCD90320Monitor_mysystem.json
 ## File Format
 
 The configuration consists of an array of `rails` and an array of `pins`. Both
-`rails` and `pins` use a `name` element. The name element should be mnemonic
-and unique. If the BMC system utilizes the openpower-pels extension, then it
-will be used as an index into the `phosphor-logging` Message Registry.
+`rails` and `pins` use a `name` element. The name element should be mnemonic and
+unique. If the BMC system utilizes the openpower-pels extension, then it will be
+used as an index into the `phosphor-logging` Message Registry.
 
 Example 'rails' array with 'name' elements:
+
 ```
 "rails": [
     { "name": "12.0V" },
@@ -30,10 +32,11 @@ Example 'rails' array with 'name' elements:
 ]
 ```
 
-The `pins` array also uses a `line` element which is the GPIO line number
-of the pgood pin in the power sequencer device.
+The `pins` array also uses a `line` element which is the GPIO line number of the
+pgood pin in the power sequencer device.
 
 Example 'pins' array with 'name' and 'line' elements:
+
 ```
 "pins": [
     {
@@ -54,6 +57,7 @@ to be present, which could mean the necessary parts are always present in the
 system or that a not present part would not cause a pgood failure.
 
 Example 'rails' array element including 'presence' element:
+
 ```
 {
     "name": "VCS1",
@@ -62,6 +66,7 @@ Example 'rails' array element including 'presence' element:
 ```
 
 Example 'pins' array element including 'presence' element:
+
 ```
 {
     "name": "VPCIE",

@@ -1,7 +1,7 @@
 - name: PowerSupplyInputFault
-  description: The power supply has indicated an input or under voltage
-               condition. Check the power supply cabling and/or input power
-               source.
+  description:
+      The power supply has indicated an input or under voltage condition. Check
+      the power supply cabling and/or input power source.
 
 - name: PowerSupplyShouldBeOn
   description: The power supply indicated that it is not on when it should be.

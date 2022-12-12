@@ -1,107 +1,107 @@
 {
-  "comments": [ "Config file for a FooBar one-chassis system" ],
+    "comments": ["Config file for a FooBar one-chassis system"],
 
-  "rules": [
-    {
-      "comments": [ "Sets output voltage for a PMBus regulator rail" ],
-      "id": "set_voltage_rule",
-      "actions": [
+    "rules": [
         {
-          "pmbus_write_vout_command": {
-            "format": "linear"
-          }
-        }
-      ]
-    },
-
-    {
-      "comments": [ "Reads sensors from a PMBus regulator rail" ],
-      "id": "read_sensors_rule",
-      "actions": [
-        {
-          "comments": [ "Read output voltage from READ_VOUT." ],
-          "pmbus_read_sensor": {
-            "type": "vout",
-            "command": "0x8B",
-            "format": "linear_16"
-          }
+            "comments": ["Sets output voltage for a PMBus regulator rail"],
+            "id": "set_voltage_rule",
+            "actions": [
+                {
+                    "pmbus_write_vout_command": {
+                        "format": "linear"
+                    }
+                }
+            ]
         },
 
         {
-          "comments": [ "Read output current from READ_IOUT." ],
-          "pmbus_read_sensor": {
-            "type": "iout",
-            "command": "0x8C",
-            "format": "linear_11"
-          }
-        },
+            "comments": ["Reads sensors from a PMBus regulator rail"],
+            "id": "read_sensors_rule",
+            "actions": [
+                {
+                    "comments": ["Read output voltage from READ_VOUT."],
+                    "pmbus_read_sensor": {
+                        "type": "vout",
+                        "command": "0x8B",
+                        "format": "linear_16"
+                    }
+                },
 
-        {
-          "comments": [ "Read temperature from READ_TEMPERATURE_1." ],
-          "pmbus_read_sensor": {
-            "type": "temperature",
-            "command": "0x8D",
-            "format": "linear_11"
-          }
+                {
+                    "comments": ["Read output current from READ_IOUT."],
+                    "pmbus_read_sensor": {
+                        "type": "iout",
+                        "command": "0x8C",
+                        "format": "linear_11"
+                    }
+                },
+
+                {
+                    "comments": ["Read temperature from READ_TEMPERATURE_1."],
+                    "pmbus_read_sensor": {
+                        "type": "temperature",
+                        "command": "0x8D",
+                        "format": "linear_11"
+                    }
+                }
+            ]
         }
-      ]
-    }
-  ],
+    ],
 
-  "chassis": [
-    {
-      "comments": [ "Chassis number 1 containing CPUs and memory" ],
-      "number": 1,
-      "inventory_path": "system/chassis",
-      "devices": [
+    "chassis": [
         {
-          "comments": [ "IR35221 regulator producing the Vdd rail" ],
-          "id": "vdd_regulator",
-          "is_regulator": true,
-          "fru": "system/chassis/motherboard/regulator1",
-          "i2c_interface": {
-            "bus": 1,
-            "address": "0x70"
-          },
-          "rails": [
-            {
-              "comments": [ "Vdd rail" ],
-              "id": "vdd",
-              "configuration": {
-                "volts": 1.03,
-                "rule_id": "set_voltage_rule"
-              },
-              "sensor_monitoring": {
-                "rule_id": "read_sensors_rule"
-              }
-            }
-          ]
-        },
+            "comments": ["Chassis number 1 containing CPUs and memory"],
+            "number": 1,
+            "inventory_path": "system/chassis",
+            "devices": [
+                {
+                    "comments": ["IR35221 regulator producing the Vdd rail"],
+                    "id": "vdd_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/regulator1",
+                    "i2c_interface": {
+                        "bus": 1,
+                        "address": "0x70"
+                    },
+                    "rails": [
+                        {
+                            "comments": ["Vdd rail"],
+                            "id": "vdd",
+                            "configuration": {
+                                "volts": 1.03,
+                                "rule_id": "set_voltage_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_rule"
+                            }
+                        }
+                    ]
+                },
 
-        {
-          "comments": [ "IR35221 regulator producing the Vio rail" ],
-          "id": "vio_regulator",
-          "is_regulator": true,
-          "fru": "system/chassis/motherboard/regulator2",
-          "i2c_interface": {
-            "bus": 1,
-            "address": "0x71"
-          },
-          "rails": [
-            {
-              "comments": [ "Vio rail" ],
-              "id": "vio",
-              "configuration": {
-                "volts": 1.1,
-                "rule_id": "set_voltage_rule"
-              },
-              "sensor_monitoring": {
-                "rule_id": "read_sensors_rule"
-              }
-            }
-          ]
+                {
+                    "comments": ["IR35221 regulator producing the Vio rail"],
+                    "id": "vio_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/regulator2",
+                    "i2c_interface": {
+                        "bus": 1,
+                        "address": "0x71"
+                    },
+                    "rails": [
+                        {
+                            "comments": ["Vio rail"],
+                            "id": "vio",
+                            "configuration": {
+                                "volts": 1.1,
+                                "rule_id": "set_voltage_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_rule"
+                            }
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

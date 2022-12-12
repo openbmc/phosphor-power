@@ -1,16 +1,20 @@
 # not
 
 ## Description
+
 Negates the return value of the specified action.
 
 ## Property Value
+
 [Action](action.md) to execute.
 
 ## Return Value
-Returns true if the action returned false.  Returns false if the action
-returned true.
+
+Returns true if the action returned false. Returns false if the action returned
+true.
 
 ## Example
+
 ```
 {
   "comments": [ "Check if register 0xA0 is not equal to 0xFF" ],

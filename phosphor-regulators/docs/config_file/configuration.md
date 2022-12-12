@@ -1,34 +1,39 @@
 # configuration
 
 ## Description
+
 Configuration changes that should be applied to a device or regulator rail.
 These changes usually override hardware default settings.
 
 The most common configuration change is setting the output voltage for a
-regulator rail.  Other examples include modifying pgood thresholds and
+regulator rail. Other examples include modifying pgood thresholds and
 overcurrent settings.
 
 The configuration changes are applied during the boot before regulators are
 enabled.
 
-The configuration changes are applied by executing one or more actions.  The
+The configuration changes are applied by executing one or more actions. The
 actions can be specified in two ways:
-* Use the "rule_id" property to specify a standard rule to run.
-* Use the "actions" property to specify an array of actions that are unique to
+
+- Use the "rule_id" property to specify a standard rule to run.
+- Use the "actions" property to specify an array of actions that are unique to
   this device.
 
 ## Properties
-| Name | Required | Type | Description |
-| :--- | :------: | :--- | :---------- |
-| comments | no | array of strings | One or more comment lines describing the configuration changes. |
-| volts | no | number | Output voltage expressed as a decimal number.  Applied using the [pmbus_write_vout_command](pmbus_write_vout_command.md) action. |
-| rule_id | see [notes](#notes) | string | Unique ID of the [rule](rule.md) to execute. |
-| actions | see [notes](#notes) | array of [actions](action.md) | One or more actions to execute. |
+
+| Name     |      Required       | Type                          | Description                                                                                                                     |
+| :------- | :-----------------: | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
+| comments |         no          | array of strings              | One or more comment lines describing the configuration changes.                                                                 |
+| volts    |         no          | number                        | Output voltage expressed as a decimal number. Applied using the [pmbus_write_vout_command](pmbus_write_vout_command.md) action. |
+| rule_id  | see [notes](#notes) | string                        | Unique ID of the [rule](rule.md) to execute.                                                                                    |
+| actions  | see [notes](#notes) | array of [actions](action.md) | One or more actions to execute.                                                                                                 |
 
 ### Notes
-* You must specify either "rule_id" or "actions".
+
+- You must specify either "rule_id" or "actions".
 
 ## Examples
+
 ```
 {
   "comments": [ "Set rail to 1.25V using standard rule" ],
