@@ -8,7 +8,7 @@ on and off control, and power sequencer device configuration and monitoring.
 ### PowerControl
 
 Implements GPIO control of power on / off and monitoring of the chassis power
-good. The GPIOs are defined in the device tree and are named
+good (pgood). The GPIOs are defined in the device tree and are named
 `power-chassis-control` and `power-chassis-good` respectively. The chassis pgood
 is monitored on a three second poll. Enforces a minimum power off time of 15
 seconds from cold start and 25 seconds from power off.
@@ -27,9 +27,9 @@ Defines the `org.openbmc.control.Power` D-Bus interface.
 
 The `state` property is set to initiate a power on or power off sequence. The
 power good `pgood` property reflects the power state of the chassis. At power on
-time the `pgood` will lag the
-'state`as the power sequencer performs its processing. The same lag will occur on a requested power off. Loss of`pgood`without a`state`
-change request indicates a pgood failure.
+time the `pgood` will lag the `state` as the power sequencer performs its
+processing. The same lag will occur on a requested power off. Loss of `pgood`
+without a `state` change request indicates a pgood failure.
 
 ### PowerSequencerMonitor
 
