@@ -1,6 +1,6 @@
 ## Overview
 
-The `UCD90320Monitor' class determines its device configuration from a JSON
+The `UCD90320Monitor` class determines its device configuration from a JSON
 configuration file. The configuration file describes the power sequencer rails
 and power good (pgood) pins defined in the system.
 
@@ -23,7 +23,7 @@ The configuration consists of an array of `rails` and an array of `pins`. Both
 unique. If the BMC system utilizes the openpower-pels extension, then it will be
 used as an index into the `phosphor-logging` Message Registry.
 
-Example 'rails' array with 'name' elements:
+Example `rails` array with `name` elements:
 
 ```
 "rails": [
@@ -32,10 +32,10 @@ Example 'rails' array with 'name' elements:
 ]
 ```
 
-The `pins` array also uses a `line` element which is the GPIO line number of the
-pgood pin in the power sequencer device.
+The `pins` array also uses a `line` element which is the GPIO line number
+of the pgood pin in the power sequencer device.
 
-Example 'pins' array with 'name' and 'line' elements:
+Example `pins` array with `name` and `line` elements:
 
 ```
 "pins": [
@@ -56,7 +56,7 @@ or pin to be used in failure isolation. By default, a rail or pin is considered
 to be present, which could mean the necessary parts are always present in the
 system or that a not present part would not cause a pgood failure.
 
-Example 'rails' array element including 'presence' element:
+Example `rails` array element including `presence` element:
 
 ```
 {
@@ -65,7 +65,7 @@ Example 'rails' array element including 'presence' element:
 }
 ```
 
-Example 'pins' array element including 'presence' element:
+Example `pins` array element including `presence` element:
 
 ```
 {
