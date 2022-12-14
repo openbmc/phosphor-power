@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cd3d5c79_230da427",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-14T02:47:25Z",
+      "side": 1,
+      "message": "Done, sorry for the vagueness I don\u0027t have the PLD tester or perform the testing.",
+      "parentUuid": "c29a81c2_3b679808",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "33a03552_5574023a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f16d5e89_8a3d9bcf",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-14T02:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "053afe11_9df41d92",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c03c5724_a2352a73",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-12-09T23:12:03Z",
       "side": 1,
       "message": "Nit: vinUFault is an int, and we usually want explicit comparisons for integer types in conditionals.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e485ba_1e8fe516",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-14T02:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c03c5724_a2352a73",
       "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -116,6 +170,24 @@
       "writtenOn": "2022-12-09T23:12:03Z",
       "side": 1,
       "message": "Since you\u0027re making an edit here, it would be worth adding the @brief and other Doxygen annotations.",
+      "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe25045_5bf27e94",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-14T02:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a0a97b8_28d354d8",
       "revId": "849ff33af75b67a9aa8cccd3617a84939de65d62",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
