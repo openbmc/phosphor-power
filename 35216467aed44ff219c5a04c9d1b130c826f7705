@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18780004_2d633d43",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-16T20:13:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "bd275b44_d3b3bca1",
+      "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1932963_18e35d4c",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "Correct, powerFaultOccurring is true only when powerOn is true, so it was a redundant check.",
       "parentUuid": "c07f8c50_cc11587e",
+      "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17170009_465dfc95",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-16T20:13:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "3886577a_0ee2eb8f",
       "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -142,6 +178,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3120bdad_832ec145",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-16T20:13:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "1684e4fc_e140bc48",
+      "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88e2370c_964f27d6",
@@ -191,6 +245,24 @@
       "side": 1,
       "message": "I not catching on to what the missing case is. The default is Good. If someone can break our interface out from underneath us, we shouldn\u0027t be using YAML. I don\u0027t see that as different in principle from any other dependency making a breaking change.",
       "parentUuid": "8931d4a5_0480cb5c",
+      "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce682c4_d35f5761",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1000387
+      },
+      "writtenOn": "2022-12-16T20:13:05Z",
+      "side": 1,
+      "message": "Marking resolved.",
+      "parentUuid": "d940d383_bb384163",
       "revId": "35216467aed44ff219c5a04c9d1b130c826f7705",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
