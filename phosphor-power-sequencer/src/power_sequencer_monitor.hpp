@@ -52,7 +52,7 @@ class PowerSequencerMonitor
      */
     sdbusplus::bus_t& bus;
 
-    /*
+    /**
      * Create a BMC Dump
      */
     void createBmcDump();

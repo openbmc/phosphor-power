@@ -22,7 +22,6 @@
 #include <phosphor-logging/log.hpp>
 
 #include <exception>
-#include <map>
 
 namespace phosphor::power::sequencer
 {
