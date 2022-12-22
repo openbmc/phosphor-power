@@ -22,7 +22,6 @@
 #include <phosphor-logging/log.hpp>
 
 #include <exception>
-#include <map>
 
 namespace phosphor::power::sequencer
 {
@@ -93,13 +92,12 @@ void PowerSequencerMonitor::onFailure(bool timeout,
     else if (timeout)
     {
         // Default to timeout error
-        logError("xyz.openbmc_project.Power.Error.PowerOnTimeout",
-                 additionalData);
+        logError(powerOnTimeoutError, additionalData);
     }
     else
     {
         // Default to generic pgood error
-        logError("xyz.openbmc_project.Power.Error.Shutdown", additionalData);
+        logError(shutdownError, additionalData);
     }
     if (!timeout)
     {

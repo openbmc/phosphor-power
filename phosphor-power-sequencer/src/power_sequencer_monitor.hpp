@@ -8,6 +8,10 @@
 namespace phosphor::power::sequencer
 {
 
+constexpr auto powerOnTimeoutError =
+    "xyz.openbmc_project.Power.Error.PowerOnTimeout";
+constexpr auto shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
+
 /**
  * @class PowerSequencerMonitor
  * Define a base class for monitoring a power sequencer device.
@@ -52,7 +56,7 @@ class PowerSequencerMonitor
      */
     sdbusplus::bus_t& bus;
 
-    /*
+    /**
      * Create a BMC Dump
      */
     void createBmcDump();
