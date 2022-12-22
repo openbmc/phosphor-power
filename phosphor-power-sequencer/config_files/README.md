@@ -1,13 +1,14 @@
 ## Overview
 
-The `UCD90320Monitor` class determines its device configuration from a JSON
-configuration file. The configuration file describes the power sequencer rails
-and power good (pgood) pins defined in the system.
+The `UCD90xMonitor` class and its subclasses determine the device configuration
+from a JSON configuration file. The configuration file describes the power
+sequencer rails and power good (pgood) pins defined in the system.
 
 ## File Name
 
-The expected filename format is `UCD90320Monitor_<systemType>.json`, where
-`<systemType>` is a `Compatible System` name from a `Chassis` Entity Manager
+The expected filename format is `<device>Monitor_<systemType>.json`, where
+`<device>` is the specific power sequencer device type (UCD90320 or UCD90160),
+and `<systemType>` is a `Compatible System` name from a `Chassis` Entity Manager
 configuration file.
 
 Example file name:

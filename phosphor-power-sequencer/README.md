@@ -6,7 +6,7 @@ support JSON-driven configuration.
 
 The currently implemented application is named `phosphor-power-control` and
 supports GPIO based power control and power sequencer monitoring with specific
-support for the UCD90320 device available.
+support for the UCD90320 and UCD90160 devices available.
 
 ## JSON Configuration Files
 
