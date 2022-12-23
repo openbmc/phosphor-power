@@ -14,6 +14,7 @@
 #include <sdeventplus/utility/timer.hpp>
 
 #include <chrono>
+#include <string>
 
 namespace phosphor::power::sequencer
 {
