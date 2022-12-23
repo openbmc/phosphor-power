@@ -15,6 +15,7 @@
 
 #include <chrono>
 #include <string>
+#include <unordered_map>
 
 namespace phosphor::power::sequencer
 {
@@ -74,14 +75,12 @@ class PowerControl : public PowerObject
     sdbusplus::bus_t& bus;
 
     /**
-     * The power sequencer device to monitor.
+     * The generic default power sequencer device to use in the cases where a
+     * specific device is not configured, entity manager has not yet delivered
+     * the configuration, or an error preventing configuration of the specific
+     * device has occurred.
      */
-    std::unique_ptr<PowerSequencerMonitor> device;
-
-    /**
-     * Indicates if a specific power sequencer device has already been found.
-     */
-    bool deviceFound{false};
+    std::unique_ptr<PowerSequencerMonitor> defaultDevice;
 
     /**
      * Indicates if a failure has already been found. Cleared at power on.
@@ -158,6 +157,13 @@ class PowerControl : public PowerObject
      * Power state
      */
     int state{0};
+
+    /**
+     * The list of specific power sequencer devices to monitor hashed by i2c
+     * device and address to prevent duplication.
+     */
+    std::unordered_map<std::string, std::unique_ptr<PowerSequencerMonitor>>
+        specificDevices;
 
     /**
      * Power good timeout
