@@ -14,6 +14,7 @@
 #include <sdeventplus/utility/timer.hpp>
 
 #include <chrono>
+#include <string>
 
 namespace phosphor::power::sequencer
 {
@@ -172,7 +173,7 @@ class PowerControl : public PowerObject
      * Get the device properties
      * @param properties A map of property names and values
      */
-    void getDeviceProperties(util::DbusPropertyMap& properties);
+    void getDeviceProperties(const util::DbusPropertyMap& properties);
 
     /**
      * Callback to begin failure processing after observing pgood failure wait

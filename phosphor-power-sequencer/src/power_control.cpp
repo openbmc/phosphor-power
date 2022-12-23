@@ -17,10 +17,12 @@
 #include "power_control.hpp"
 
 #include "types.hpp"
+#include "ucd90160_monitor.hpp"
 #include "ucd90320_monitor.hpp"
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
@@ -28,17 +30,20 @@
 #include <xyz/openbmc_project/Common/error.hpp>
 
 #include <exception>
-#include <string>
+#include <vector>
 
 using namespace phosphor::logging;
 
 namespace phosphor::power::sequencer
 {
 
-const std::string interfaceName = "xyz.openbmc_project.Configuration.UCD90320";
+const std::vector<std::string>
+    interfaceNames({"xyz.openbmc_project.Configuration.UCD90160",
+                    "xyz.openbmc_project.Configuration.UCD90320"});
 const std::string addressPropertyName = "Address";
 const std::string busPropertyName = "Bus";
 const std::string namePropertyName = "Name";
+const std::string typePropertyName = "Type";
 
 PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
@@ -61,43 +66,58 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
     setUpGpio();
 }
 
-void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
+void PowerControl::getDeviceProperties(const util::DbusPropertyMap& properties)
 {
-    uint64_t* i2cBus = nullptr;
-    uint64_t* i2cAddress = nullptr;
-    std::string* name = nullptr;
+    uint64_t i2cBus{0};
+    uint64_t i2cAddress{0};
+    std::string name;
+    std::string type;
 
-    for (const auto& property : properties)
+    for (const auto& [property, value] : properties)
     {
         try
         {
-            if (property.first == busPropertyName)
+            if (property == busPropertyName)
             {
-                i2cBus = std::get_if<uint64_t>(&properties[busPropertyName]);
+                i2cBus = std::get<uint64_t>(value);
             }
-            else if (property.first == addressPropertyName)
+            else if (property == addressPropertyName)
             {
-                i2cAddress =
-                    std::get_if<uint64_t>(&properties[addressPropertyName]);
+                i2cAddress = std::get<uint64_t>(value);
             }
-            else if (property.first == namePropertyName)
+            else if (property == namePropertyName)
             {
-                name = std::get_if<std::string>(&properties[namePropertyName]);
+                name = std::get<std::string>(value);
+            }
+            else if (property == typePropertyName)
+            {
+                type = std::get<std::string>(value);
             }
         }
-        catch (const std::exception&)
-        {}
+        catch (const std::exception& e)
+        {
+            log<level::INFO>(
+                fmt::format("Error getting device properties, error: {}",
+                            e.what())
+                    .c_str());
+        }
     }
 
-    if (i2cBus && i2cAddress && name && !name->empty())
+    log<level::INFO>(
+        fmt::format(
+            "Found power sequencer device properties, name: {}, type: {}, bus: {} addr: {:#02x} ",
+            name, type, i2cBus, i2cAddress)
+            .c_str());
+
+    // Create device object
+    if (type == "UCD90320")
     {
-        log<level::DEBUG>(
-            fmt::format(
-                "Found power sequencer device properties, name: {}, bus: {} addr: {:#02x} ",
-                *name, *i2cBus, *i2cAddress)
-                .c_str());
-        // Create device object
-        device = std::make_unique<UCD90320Monitor>(bus, *i2cBus, *i2cAddress);
+        device = std::make_unique<UCD90320Monitor>(bus, i2cBus, i2cAddress);
+        deviceFound = true;
+    }
+    else if (type == "UCD90160")
+    {
+        device = std::make_unique<UCD90160Monitor>(bus, i2cBus, i2cAddress);
         deviceFound = true;
     }
 }
@@ -117,10 +137,10 @@ int PowerControl::getState() const
     return state;
 }
 
-void PowerControl::interfacesAddedHandler(sdbusplus::message_t& msg)
+void PowerControl::interfacesAddedHandler(sdbusplus::message_t& message)
 {
     // Only continue if message is valid and device has not already been found
-    if (!msg || deviceFound)
+    if (!message || deviceFound)
     {
         return;
     }
@@ -128,23 +148,42 @@ void PowerControl::interfacesAddedHandler(sdbusplus::message_t& msg)
     try
     {
         // Read the dbus message
-        sdbusplus::message::object_path objPath;
+        sdbusplus::message::object_path path;
         std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
-        msg.read(objPath, interfaces);
+        message.read(path, interfaces);
 
-        // Find the device interface, if present
-        auto itIntf = interfaces.find(interfaceName);
-        if (itIntf != interfaces.cend())
+        for (const auto& [interface, properties] : interfaces)
         {
-            log<level::INFO>(
-                fmt::format("InterfacesAdded for: {}", interfaceName).c_str());
-            getDeviceProperties(itIntf->second);
+            log<level::DEBUG>(
+                fmt::format(
+                    "Interfaces added handler found path: {}, interface: {}",
+                    path.str, interface)
+                    .c_str());
+
+            // Find the device interface, if present
+            for (const auto& interfaceName : interfaceNames)
+            {
+                if (interface == interfaceName)
+                {
+                    log<level::INFO>(
+                        fmt::format(
+                            "Interfaces added handler matched interface name: {}",
+                            interfaceName)
+                            .c_str());
+                    getDeviceProperties(properties);
+                }
+            }
         }
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
         // Error trying to read interfacesAdded message.
+        log<level::INFO>(
+            fmt::format(
+                "Error trying to read interfacesAdded message, error: {}",
+                e.what())
+                .c_str());
     }
 }
 
@@ -299,29 +338,42 @@ void PowerControl::setUpDevice()
 {
     try
     {
-        auto objects = util::getSubTree(bus, "/", interfaceName, 0);
+        // Check if device information is already available
+        auto objects = util::getSubTree(bus, "/", interfaceNames, 0);
 
         // Search for matching interface in returned objects
         for (const auto& [path, services] : objects)
         {
-            auto service = services.begin()->first;
-
-            if (path.empty() || service.empty())
+            log<level::DEBUG>(
+                fmt::format("Found path: {}, services: {}", path, services)
+                    .c_str());
+            for (const auto& [service, interfaces] : services)
             {
-                continue;
+                log<level::DEBUG>(
+                    fmt::format("Found service: {}, interfaces: {}", service,
+                                interfaces)
+                        .c_str());
+                for (const auto& interface : interfaces)
+                {
+                    log<level::DEBUG>(
+                        fmt::format("Found interface: {}", interface).c_str());
+                    // Get the properties for the device interface
+                    auto properties =
+                        util::getAllProperties(bus, path, interface, service);
+
+                    getDeviceProperties(properties);
+                }
             }
-
-            // Get the properties for the device interface
-            auto properties = util::getAllProperties(bus, path, interfaceName,
-                                                     service);
-
-            getDeviceProperties(properties);
         }
     }
-    catch (const std::exception&)
+    catch (const std::exception& e)
     {
-        // Interface or property not found. Let the Interfaces Added callback
-        // process the information once the interfaces are added to D-Bus.
+        // Interface or property not found. Let the Interfaces Added
+        // callback process the information once the interfaces are added to
+        // D-Bus.
+        log<level::DEBUG>(
+            fmt::format("Error setting up device, error: {}", e.what())
+                .c_str());
     }
 }
 
