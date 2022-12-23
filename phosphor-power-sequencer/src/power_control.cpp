@@ -48,7 +48,7 @@ const std::string typePropertyName = "Type";
 PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
     PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
-    bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
+    bus{bus}, defaultDevice{std::make_unique<PowerSequencerMonitor>(bus)},
     match{bus,
           sdbusplus::bus::match::rules::interfacesAdded() +
               sdbusplus::bus::match::rules::sender(
@@ -109,14 +109,29 @@ void PowerControl::getDeviceProperties(util::DbusPropertyMap& properties)
             name, type, i2cBus, i2cAddress)
             .c_str());
 
-    // Create device object
-    if (type == "UCD90320")
+    // Create key for this device
+    std::string key;
+    fmt::format("{}::{}", i2cBus, i2cAddress);
+
+    // Check if device has aready been added
+    if (!specificDevices.contains(key))
     {
-        device = std::make_unique<UCD90320Monitor>(bus, i2cBus, i2cAddress);
-    }
-    else if (type == "UCD90160")
-    {
-        device = std::make_unique<UCD90160Monitor>(bus, i2cBus, i2cAddress);
+        // Create device object
+        if (type == "UCD90320")
+        {
+            specificDevices.emplace(key, std::make_unique<UCD90320Monitor>(
+                                             bus, i2cBus, i2cAddress));
+        }
+        else if (type == "UCD90160")
+        {
+            specificDevices.emplace(key, std::make_unique<UCD90160Monitor>(
+                                             bus, i2cBus, i2cAddress));
+        }
+        else
+        {
+            specificDevices.emplace(
+                key, std::make_unique<PowerSequencerMonitor>(bus));
+        }
     }
 }
 
@@ -137,9 +152,10 @@ int PowerControl::getState() const
 
 void PowerControl::interfacesAddedHandler(sdbusplus::message_t& message)
 {
-    // Only continue if message is valid and device has not already been found
-    if (!message || deviceFound)
+    // Only continue if message is valid
+    if (!message)
     {
+        log<level::INFO>("Interfaces added handler received null message");
         return;
     }
 
@@ -202,7 +218,17 @@ void PowerControl::onFailureCallback()
 void PowerControl::onFailure(bool timeout)
 {
     // Call device on failure
-    device->onFailure(timeout, powerSupplyError);
+    if (specificDevices.empty())
+    {
+        defaultDevice->onFailure(timeout, powerSupplyError);
+    }
+    else
+    {
+        for (const auto& device : specificDevices)
+        {
+            device.second->onFailure(timeout, powerSupplyError);
+        }
+    }
 }
 
 void PowerControl::pollPgood()
@@ -227,7 +253,7 @@ void PowerControl::pollPgood()
             {
                 // Time out powering off
                 std::map<std::string, std::string> additionalData{};
-                device->logError(
+                defaultDevice->logError(
                     "xyz.openbmc_project.Power.Error.PowerOffTimeout",
                     additionalData);
             }
