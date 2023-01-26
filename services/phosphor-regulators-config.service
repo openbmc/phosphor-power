@@ -4,7 +4,7 @@ Requires=phosphor-regulators.service
 After=phosphor-regulators.service
 Wants=obmc-power-start-pre@0.target
 Before=obmc-power-start-pre@0.target
-Before=op-power-start@0.service
+Before=obmc-power-start@0.service
 Conflicts=obmc-chassis-poweroff@0.target
 # Should not run again if BMC reboots while host is running
 ConditionPathExists=!/run/openbmc/chassis@0-on

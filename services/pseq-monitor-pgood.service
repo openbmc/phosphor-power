@@ -1,7 +1,7 @@
 [Unit]
 Description=Power Sequencer Power-on Monitor
-Wants=op-power-start@0.service
-After=op-power-start@0.service
+Wants=obmc-power-start@0.service
+After=obmc-power-start@0.service
 Conflicts=obmc-power-stop-pre@0.target
 After=obmc-power-stop-pre@0.target
 ConditionPathExists=!/run/openbmc/chassis@0-on
