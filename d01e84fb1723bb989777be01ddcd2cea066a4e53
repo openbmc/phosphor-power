@@ -46,6 +46,30 @@
       },
       "revId": "d01e84fb1723bb989777be01ddcd2cea066a4e53",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e98fe89_5c0885f3",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-02-27T17:22:52Z",
+      "side": 1,
+      "message": "I think you can make a function that always returns true and just pass it into all the constructors in the testcase file.",
+      "parentUuid": "b6c9cdf9_4659fe97",
+      "range": {
+        "startLine": 78,
+        "startChar": 48,
+        "endLine": 78,
+        "endChar": 58
+      },
+      "revId": "d01e84fb1723bb989777be01ddcd2cea066a4e53",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
