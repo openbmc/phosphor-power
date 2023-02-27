@@ -34,10 +34,12 @@ using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                          std::uint8_t i2cbus, std::uint16_t i2caddr,
                          const std::string& driver,
-                         const std::string& gpioLineName) :
+                         const std::string& gpioLineName,
+                         std::function<bool()>&& callback) :
     bus(bus),
     inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/" + driver)
 {
+    isPowerOn = std::move(callback);
     if (inventoryPath.empty())
     {
         throw std::invalid_argument{"Invalid empty inventoryPath"};
@@ -1164,8 +1166,9 @@ void PowerSupply::getInputVoltage(double& actualInputVoltage,
 void PowerSupply::checkAvailability()
 {
     bool origAvailability = available;
-    available = present && !hasInputFault() && !hasVINUVFault() &&
-                !hasPSKillFault() && !hasIoutOCFault();
+    bool faulted = isPowerOn() &&
+                   (hasVINUVFault() || hasPSKillFault() || hasIoutOCFault());
+    available = present && !hasInputFault() && !faulted;
 
     if (origAvailability != available)
     {

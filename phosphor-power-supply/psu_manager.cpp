@@ -250,8 +250,11 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
                 "make PowerSupply bus: {} addr: {} driver: {} presline: {}",
                 *i2cbus, *i2caddr, driver, presline)
                 .c_str());
-        auto psu = std::make_unique<PowerSupply>(bus, invpath, *i2cbus,
-                                                 *i2caddr, driver, presline);
+        auto psu = std::make_unique<PowerSupply>(
+            bus, invpath, *i2cbus, *i2caddr, driver, presline,
+            std::bind(
+                std::mem_fn(&phosphor::power::manager::PSUManager::isPowerOn),
+                this));
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes
