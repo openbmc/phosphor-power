@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5cd19c6_dba0c9bb",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-02-27T14:52:54Z",
+      "side": 1,
+      "message": "You could probably just have this be a required parameter, then you wouldn\u0027t need the null checks for it in the other file.\n\nOther than that, it looks good to me.",
+      "range": {
+        "startLine": 78,
+        "startChar": 48,
+        "endLine": 78,
+        "endChar": 58
+      },
+      "revId": "d01e84fb1723bb989777be01ddcd2cea066a4e53",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
