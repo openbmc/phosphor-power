@@ -22,6 +22,7 @@ using ::testing::StrEq;
 
 static auto PSUInventoryPath = "/xyz/bmc/inv/sys/chassis/board/powersupply0";
 static auto PSUGPIOLineName = "presence-ps0";
+static auto isPowerOn = []() { return true; };
 
 struct PMBusExpectations
 {
@@ -134,7 +135,7 @@ TEST_F(PowerSupplyTests, Constructor)
     try
     {
         auto psu = std::make_unique<PowerSupply>(bus, "", 3, 0x68, "ibm-cffps",
-                                                 PSUGPIOLineName);
+                                                 PSUGPIOLineName, isPowerOn);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -152,7 +153,7 @@ TEST_F(PowerSupplyTests, Constructor)
     try
     {
         auto psu = std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, 0x68,
-                                                 "ibm-cffps", "");
+                                                 "ibm-cffps", "", isPowerOn);
         ADD_FAILURE()
             << "Should not have reached this line. Invalid gpioLineName.";
     }
@@ -170,7 +171,8 @@ TEST_F(PowerSupplyTests, Constructor)
     try
     {
         auto psu = std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, 0x68,
-                                                 "ibm-cffps", PSUGPIOLineName);
+                                                 "ibm-cffps", PSUGPIOLineName,
+                                                 isPowerOn);
 
         EXPECT_EQ(psu->isPresent(), false);
         EXPECT_EQ(psu->isFaulted(), false);
@@ -218,8 +220,8 @@ TEST_F(PowerSupplyTests, Analyze)
         // If I default to reading the GPIO, I will NOT expect a call to
         // getPresence().
 
-        PowerSupply psu{bus,  PSUInventoryPath, 4,
-                        0x69, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 4,        0x69,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         EXPECT_CALL(*mockPresenceGPIO, read()).Times(1).WillOnce(Return(0));
@@ -243,8 +245,8 @@ TEST_F(PowerSupplyTests, Analyze)
         EXPECT_EQ(psu.hasPSCS12VFault(), false);
     }
 
-    PowerSupply psu2{bus,  PSUInventoryPath, 5,
-                     0x6a, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu2{bus,         PSUInventoryPath, 5,        0x6a,
+                     "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     // In order to get the various faults tested, the power supply needs to
     // be present in order to read from the PMBus device(s).
     MockedGPIOInterface* mockPresenceGPIO2 =
@@ -733,8 +735,8 @@ TEST_F(PowerSupplyTests, OnOffConfig)
     {
         // Assume GPIO presence, not inventory presence?
         EXPECT_CALL(mockedUtil, setAvailable(_, _, _)).Times(0);
-        PowerSupply psu{bus,  PSUInventoryPath, 4,
-                        0x69, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 4,        0x69,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
 
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
@@ -753,8 +755,8 @@ TEST_F(PowerSupplyTests, OnOffConfig)
     {
         // Assume GPIO presence, not inventory presence?
         EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-        PowerSupply psu{bus,  PSUInventoryPath, 5,
-                        0x6a, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 5,        0x6a,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         // There will potentially be multiple calls, we want it to continue
@@ -789,8 +791,8 @@ TEST_F(PowerSupplyTests, OnOffConfig)
 TEST_F(PowerSupplyTests, ClearFaults)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 13,
-                    0x68, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 13,       0x68,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1019,8 +1021,8 @@ TEST_F(PowerSupplyTests, UpdateInventory)
 
     try
     {
-        PowerSupply psu{bus,  PSUInventoryPath, 3,
-                        0x68, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
         // If it is not present, I should not be trying to read a string
         EXPECT_CALL(mockPMBus, readString(_, _)).Times(0);
@@ -1033,8 +1035,8 @@ TEST_F(PowerSupplyTests, UpdateInventory)
 
     try
     {
-        PowerSupply psu{bus,  PSUInventoryPath, 13,
-                        0x69, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 13,       0x69,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         // GPIO read return 1 to indicate present.
@@ -1081,8 +1083,8 @@ TEST_F(PowerSupplyTests, IsPresent)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x68, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     EXPECT_EQ(psu.isPresent(), false);
@@ -1116,8 +1118,8 @@ TEST_F(PowerSupplyTests, IsFaulted)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 11,
-                    0x6f, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 11,       0x6f,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1176,8 +1178,8 @@ TEST_F(PowerSupplyTests, HasInputFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x68, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1233,8 +1235,8 @@ TEST_F(PowerSupplyTests, HasMFRFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x68, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1284,8 +1286,8 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x68, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1355,8 +1357,8 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x69, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x69,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1406,8 +1408,8 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x6d, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x6d,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1462,8 +1464,8 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x6a, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x6a,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1516,8 +1518,8 @@ TEST_F(PowerSupplyTests, HasFanFault)
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true)).Times(1);
     EXPECT_CALL(mockedUtil, setAvailable(_, _, false)).Times(0);
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x6d, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x6d,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1572,8 +1574,8 @@ TEST_F(PowerSupplyTests, HasTempFault)
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true)).Times(1);
     EXPECT_CALL(mockedUtil, setAvailable(_, _, false)).Times(0);
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x6a, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x6a,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1625,8 +1627,8 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
 {
     auto bus = sdbusplus::bus::new_default();
 
-    PowerSupply psu{bus,  PSUInventoryPath, 3,
-                    0x6b, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 3,        0x6b,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1760,8 +1762,8 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
 TEST_F(PowerSupplyTests, HasPSKillFault)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 4,
-                    0x6d, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 4,        0x6d,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1850,8 +1852,8 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
 TEST_F(PowerSupplyTests, HasPS12VcsFault)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 5,
-                    0x6e, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 5,        0x6e,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1924,8 +1926,8 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
 TEST_F(PowerSupplyTests, HasPSCS12VFault)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 6,
-                    0x6f, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 6,        0x6f,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
     // Always return 1 to indicate present.
@@ -1998,8 +2000,8 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
 {
     auto bus = sdbusplus::bus::new_default();
     {
-        PowerSupply psu{bus,  PSUInventoryPath, 6,
-                        0x6f, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 6,        0x6f,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         // Defaults to not present due to constructor and mock ordering.
         psu.setupInputHistory();
         EXPECT_EQ(psu.hasInputHistory(), false);
@@ -2030,8 +2032,8 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
     }
     {
         // Workaround - Disable INPUT_HISTORY collection if 1400W
-        PowerSupply psu{bus,  PSUInventoryPath, 3,
-                        0x68, "ibm-cffps",      PSUGPIOLineName};
+        PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
         // Defaults to not present due to constructor and mock ordering.
         psu.setupInputHistory();
         EXPECT_EQ(psu.hasInputHistory(), false);
@@ -2062,8 +2064,9 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
         EXPECT_EQ(psu.hasInputHistory(), false);
     }
     {
-        PowerSupply psu{bus,  PSUInventoryPath, 11,
-                        0x58, "inspur-ipsps",   PSUGPIOLineName};
+        PowerSupply psu{bus,      PSUInventoryPath, 11,
+                        0x58,     "inspur-ipsps",   PSUGPIOLineName,
+                        isPowerOn};
         // Defaults to not present due to constructor and mock ordering.
         psu.setupInputHistory();
         EXPECT_EQ(psu.hasInputHistory(), false);
@@ -2092,8 +2095,8 @@ TEST_F(PowerSupplyTests, SetupInputHistory)
 TEST_F(PowerSupplyTests, UpdateHistory)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 7,
-                    0x6e, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 7,        0x6e,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     EXPECT_EQ(psu.hasInputHistory(), false);
     EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
     MockedGPIOInterface* mockPresenceGPIO =
@@ -2175,8 +2178,8 @@ TEST_F(PowerSupplyTests, UpdateHistory)
 TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
 {
     auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,  PSUInventoryPath, 8,
-                    0x6f, "ibm-cffps",      PSUGPIOLineName};
+    PowerSupply psu{bus,         PSUInventoryPath, 8,        0x6f,
+                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
     EXPECT_EQ(psu.hasInputHistory(), false);
     EXPECT_EQ(psu.isSyncHistoryRequired(), false);
     MockedGPIOInterface* mockPresenceGPIO =

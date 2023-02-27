@@ -70,10 +70,12 @@ class PowerSupply
      * @param[in] driver - i2c driver name for power supply
      * @param[in] gpioLineName - The gpio-line-name to read for presence. See
      * https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
+     * @param[in] callback - Get the power on status of the psu manager class
      */
     PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                 std::uint8_t i2cbus, const std::uint16_t i2caddr,
-                const std::string& driver, const std::string& gpioLineName);
+                const std::string& driver, const std::string& gpioLineName,
+                std::function<bool()>&& callback);
 
     phosphor::pmbus::PMBusBase& getPMBus()
     {
@@ -970,6 +972,14 @@ class PowerSupply
      * pruned if the property already contains the max number of records.
      */
     void updateHistory();
+
+    /**
+     * @brief Get the power on status of the psu manager class.
+     *
+     * This is a callback method used to get the power on status of the psu
+     * manager class.
+     */
+    std::function<bool()> isPowerOn;
 
     /**
      * @brief Set to true if INPUT_HISTORY command supported.
