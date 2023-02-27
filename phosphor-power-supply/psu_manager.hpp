@@ -134,6 +134,14 @@ class PSUManager
         }
     }
 
+    /**
+     * Get the status of Power on.
+     */
+    bool isPowerOn()
+    {
+        return powerOn;
+    }
+
   private:
     /**
      * The D-Bus object
