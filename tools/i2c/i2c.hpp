@@ -25,9 +25,9 @@ class I2CDevice : public I2CInterface
                        InitialState initialState = InitialState::OPEN,
                        int maxRetries = 0) :
         busId(busId),
-        devAddr(devAddr), maxRetries(maxRetries)
+        devAddr(devAddr), maxRetries(maxRetries),
+        busStr("/dev/i2c-" + std::to_string(busId))
     {
-        busStr = "/dev/i2c-" + std::to_string(busId);
         if (initialState == InitialState::OPEN)
         {
             open();
