@@ -210,8 +210,8 @@ bool Updater::isReadyToUpdate()
         // directly read the debugfs to get the status.
         try
         {
-            auto devPath = internal::getDevicePath(p);
-            PMBus pmbus(devPath);
+            auto path = internal::getDevicePath(p);
+            PMBus pmbus(path);
             uint16_t statusWord = pmbus.read(STATUS_WORD, Type::Debug);
             auto status0Vout = pmbus.insertPageNum(STATUS_VOUT, 0);
             uint8_t voutStatus = pmbus.read(status0Vout, Type::Debug);

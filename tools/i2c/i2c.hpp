@@ -21,13 +21,13 @@ class I2CDevice : public I2CInterface
      * @param[in] initialState - Initial state of the I2CDevice object
      * @param[in] maxRetries - Maximum number of times to retry an I2C operation
      */
-    explicit I2CDevice(uint8_t busId, uint8_t devAddr,
-                       InitialState initialState = InitialState::OPEN,
-                       int maxRetries = 0) :
+    I2CDevice(uint8_t busId, uint8_t devAddr,
+              InitialState initialState = InitialState::OPEN,
+              int maxRetries = 0) :
         busId(busId),
-        devAddr(devAddr), maxRetries(maxRetries)
+        devAddr(devAddr), maxRetries(maxRetries),
+        busStr("/dev/i2c-" + std::to_string(busId))
     {
-        busStr = "/dev/i2c-" + std::to_string(busId);
         if (initialState == InitialState::OPEN)
         {
             open();
