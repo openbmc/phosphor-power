@@ -46,7 +46,7 @@ fmt = dependency('fmt')
 libgpiodcxx = dependency('libgpiodcxx')
 
 systemd = dependency('systemd')
-servicedir = systemd.get_pkgconfig_variable('systemdsystemunitdir')
+servicedir = systemd.get_variable(pkgconfig : 'systemdsystemunitdir')
 
 services = [
     ['supply-monitor', 'power-supply-monitor@.service'],
