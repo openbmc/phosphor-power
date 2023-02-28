@@ -70,7 +70,8 @@ class RecordManager
      * @param[in] maxRec - the maximum number of history
      *                     records to keep at a time
      */
-    RecordManager(size_t maxRec) : RecordManager(maxRec, LAST_SEQUENCE_ID)
+    explicit RecordManager(size_t maxRec) :
+        RecordManager(maxRec, LAST_SEQUENCE_ID)
     {}
 
     /**
