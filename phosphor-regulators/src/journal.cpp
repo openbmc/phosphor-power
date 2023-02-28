@@ -43,7 +43,7 @@ class JournalCloser
     JournalCloser& operator=(const JournalCloser&) = delete;
     JournalCloser& operator=(JournalCloser&&) = delete;
 
-    JournalCloser(sd_journal* journal) : journal{journal}
+    explicit JournalCloser(sd_journal* journal) : journal{journal}
     {}
 
     ~JournalCloser()
@@ -87,10 +87,10 @@ std::vector<std::string>
     // Loop through matching entries from newest to oldest
     std::vector<std::string> messages;
     messages.reserve((max != 0) ? max : 10);
-    std::string syslogID, pid, message, timeStamp, line;
     SD_JOURNAL_FOREACH_BACKWARDS(journal)
     {
         // Get relevant journal entry fields
+        std::string syslogID, pid, message, timeStamp, line;
         timeStamp = getTimeStamp(journal);
         syslogID = getFieldValue(journal, "SYSLOG_IDENTIFIER");
         pid = getFieldValue(journal, "_PID");
