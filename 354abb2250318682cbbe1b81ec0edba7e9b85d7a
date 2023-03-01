@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae50060_1c434852",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-03-01T00:34:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f791863_ade4b977",
+      "revId": "354abb2250318682cbbe1b81ec0edba7e9b85d7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1248dd43_40a5e2d8",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-02-28T14:56:45Z",
       "side": 1,
       "message": "Moving the same thing twice is usually flagged as use after move, so the move probably isn\u0027t doing anything, probably because a static can\u0027t be moved?\nProbably best to just remove the std::move on these.",
+      "range": {
+        "startLine": 158,
+        "startChar": 49,
+        "endLine": 158,
+        "endChar": 69
+      },
+      "revId": "354abb2250318682cbbe1b81ec0edba7e9b85d7a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28145575_2b3b9c93",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-03-01T00:34:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1248dd43_40a5e2d8",
       "range": {
         "startLine": 158,
         "startChar": 49,
