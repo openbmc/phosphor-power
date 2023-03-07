@@ -22,6 +22,30 @@
       },
       "revId": "d3c265779404e966148f02016f6a2dcb691f7007",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "754094de_4a647b78",
+        "filename": "tools/i2c/i2c.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-03-07T01:51:04Z",
+      "side": 0,
+      "message": "\u003e Why did you remove explicit?\n\nThe explicit keyword is only valid for class constructors with one parameter. If the class constructor parameters are greater than or equal to two, no implicit conversion will occur, so the explicit keyword is invalid",
+      "parentUuid": "1e4ed8fd_819c747e",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "d3c265779404e966148f02016f6a2dcb691f7007",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
