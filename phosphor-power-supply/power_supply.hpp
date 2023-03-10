@@ -10,6 +10,7 @@
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <xyz/openbmc_project/Sensor/Value/server.hpp>
 
 #include <filesystem>
 #include <stdexcept>
@@ -48,6 +49,9 @@ constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
 // Number of polls to remember that an AC fault occured. Should remain greater
 // than PGOOD_DEGLITCH_LIMIT.
 constexpr auto AC_FAULT_LIMIT = 6;
+
+using SensorInterface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
+using SensorObject = sdbusplus::server::object_t<SensorInterface>;
 
 /**
  * @class PowerSupply
@@ -530,6 +534,13 @@ class PowerSupply
     {
         syncHistoryRequired = false;
     }
+
+    /**
+     * @brief Puts the input voltage rating on D-Bus.
+     *
+     * The rating is like 0, 110, 220.
+     */
+    void setInputVoltageRating();
 
   private:
     /**
@@ -1018,6 +1029,15 @@ class PowerSupply
      * objects.
      **/
     std::string historyObjectPath;
+
+    /**
+     * @brief The D-Bus object for the input voltage rating
+     *
+     * It is updated at startup and power on.  If a power supply is
+     * added or removed after that, it does not need to be updated
+     * again (though that could be done as a future improvement).
+     */
+    std::unique_ptr<SensorObject> inputVoltageRatingIface;
 };
 
 } // namespace phosphor::power::psu
