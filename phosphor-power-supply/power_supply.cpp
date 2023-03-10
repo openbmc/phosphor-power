@@ -96,6 +96,8 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
         updateInventory();
         setupInputHistory();
     }
+
+    setInputVoltageSnapshot();
 }
 
 void PowerSupply::bindOrUnbindDriver(bool present)
@@ -1178,6 +1180,38 @@ void PowerSupply::checkAvailability()
         // new availability value.
         phosphor::power::psu::handleChassisHealthRollup(bus, inventoryPath,
                                                         !available);
+    }
+}
+
+void PowerSupply::setInputVoltageSnapshot()
+{
+    if (!present)
+    {
+        return;
+    }
+
+    double inputVoltageValue{};
+    int inputVoltageRating{};
+    getInputVoltage(inputVoltageValue, inputVoltageRating);
+
+    if (!inputVoltageIface)
+    {
+        auto path = fmt::format(
+            "/xyz/openbmc_project/sensors/voltage/ps{}_input_voltage_snapshot",
+            shortName.back());
+
+        inputVoltageIface = std::make_unique<SensorObject>(
+            bus, path.c_str(), SensorObject::action::defer_emit);
+
+        // Leave other properties at their defaults
+        inputVoltageIface->unit(SensorInterface::Unit::Volts, true);
+        inputVoltageIface->value(inputVoltageValue, true);
+
+        inputVoltageIface->emit_object_added();
+    }
+    else
+    {
+        inputVoltageIface->value(inputVoltageValue);
     }
 }
 
