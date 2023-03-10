@@ -10,6 +10,7 @@
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <xyz/openbmc_project/Sensor/Value/server.hpp>
 
 #include <filesystem>
 #include <stdexcept>
@@ -48,6 +49,9 @@ constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
 // Number of polls to remember that an AC fault occured. Should remain greater
 // than PGOOD_DEGLITCH_LIMIT.
 constexpr auto AC_FAULT_LIMIT = 6;
+
+using SensorInterface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
+using SensorObject = sdbusplus::server::object_t<SensorInterface>;
 
 /**
  * @class PowerSupply
@@ -530,6 +534,12 @@ class PowerSupply
     {
         syncHistoryRequired = false;
     }
+
+    /**
+     * @brief Saves a snapshot of the power supply input voltage
+     *        on D-Bus for use by the PLDM daemon.
+     */
+    void setInputVoltageSnapshot();
 
   private:
     /**
@@ -1018,6 +1028,15 @@ class PowerSupply
      * objects.
      **/
     std::string historyObjectPath;
+
+    /**
+     * @brief The D-Bus object for the input voltage snapshot
+     *
+     * The snapshot is taken at startup and power on.  If a power supply is
+     * added or removed after that, it does not need to be updated
+     * (though that could be done as a future improvement).
+     */
+    std::unique_ptr<SensorObject> inputVoltageIface;
 };
 
 } // namespace phosphor::power::psu

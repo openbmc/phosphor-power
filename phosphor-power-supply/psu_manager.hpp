@@ -370,6 +370,15 @@ class PSUManager
     sdbusplus::server::manager_t historyManager;
 
     /**
+     * @brief Implement the ObjectManager for input voltage snapshots
+     *
+     * Implements the org.freedesktop.DBus.ObjectManager interface used to
+     * communicate updates to the input voltage snapshots on the
+     * /xyz/openbmc_project/sensors root D-Bus path.
+     */
+    sdbusplus::server::manager_t sensorsObjManager;
+
+    /**
      * @brief GPIO to toggle to 'sync' power supply input history.
      */
     std::unique_ptr<GPIOInterfaceBase> syncHistoryGPIO = nullptr;
@@ -387,6 +396,18 @@ class PSUManager
      * start fresh.
      */
     void syncHistory();
+
+    /**
+     * @brief Tells each PSU to set its power supply input
+     *        voltage snapshot D-Bus property.
+     */
+    inline void setInputVoltageSnapshot()
+    {
+        for (auto& psu : psus)
+        {
+            psu->setInputVoltageSnapshot();
+        }
+    }
 };
 
 } // namespace phosphor::power::manager
