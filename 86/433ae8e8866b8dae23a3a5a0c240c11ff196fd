@@ -1,0 +1,8 @@
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+1: Matt Spinler <spinler@us.ibm.com>
+Code-Review+2: Shawn McCarney <shawnmm@us.ibm.com>
+Submitted-by: George Liu <liuxiwei@inspur.com>
+Submitted-at: Tue, 14 Mar 2023 07:29:33 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/61230
+Project: openbmc/phosphor-power
+Branch: refs/heads/master
