@@ -21,10 +21,10 @@ namespace phosphor::power::psu
 #if IBM_VPD
 // PMBus device driver "file name" to read for CCIN value.
 constexpr auto CCIN = "ccin";
-constexpr auto PART_NUMBER = "part_number";
-constexpr auto FRU_NUMBER = "fru";
-constexpr auto SERIAL_HEADER = "header";
-constexpr auto SERIAL_NUMBER = "serial_number";
+constexpr auto PART_NUMBER = "mfr_revision";
+constexpr auto FRU_NUMBER = "mfr_model";
+constexpr auto SERIAL_HEADER = "mfr_location";
+constexpr auto SERIAL_NUMBER = "mfr_serial";
 constexpr auto FW_VERSION = "fw_version";
 
 // The D-Bus property name to update with the CCIN value.

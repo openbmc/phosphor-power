@@ -905,15 +905,14 @@ void PowerSupply::updateInventory()
         modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
         assetProps.emplace(MODEL_PROP, modelName);
 
-        pn = readVPDValue(PART_NUMBER, Type::HwmonDeviceDebug, PN_KW_SIZE);
+        pn = readVPDValue(PART_NUMBER, Type::Debug, PN_KW_SIZE);
         assetProps.emplace(PN_PROP, pn);
 
-        fn = readVPDValue(FRU_NUMBER, Type::HwmonDeviceDebug, FN_KW_SIZE);
+        fn = readVPDValue(FRU_NUMBER, Type::Debug, FN_KW_SIZE);
         assetProps.emplace(SPARE_PN_PROP, fn);
 
-        header =
-            readVPDValue(SERIAL_HEADER, Type::HwmonDeviceDebug, HEADER_SIZE);
-        sn = readVPDValue(SERIAL_NUMBER, Type::HwmonDeviceDebug, SERIAL_SIZE);
+        header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
+        sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
         assetProps.emplace(SN_PROP, header + sn);
 
         fwVersion =
