@@ -34,6 +34,23 @@
       "parentUuid": "74a26c7f_72d2f72d",
       "revId": "b40f04c2ce2b9fdfae183a37d54294344a79cd72",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9d9674_9454c845",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001633
+      },
+      "writtenOn": "2023-03-20T17:12:01Z",
+      "side": 1,
+      "message": "There is no fw_version.",
+      "revId": "b40f04c2ce2b9fdfae183a37d54294344a79cd72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
