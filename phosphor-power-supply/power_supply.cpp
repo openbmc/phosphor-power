@@ -1186,6 +1186,7 @@ void PowerSupply::setInputVoltageRating()
 {
     if (!present)
     {
+        inputVoltageRatingIface.reset();
         return;
     }
 
