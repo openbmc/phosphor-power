@@ -245,7 +245,8 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             return;
         }
 
-        constexpr auto driver = "ibm-cffps";
+        buildDriverName(*i2cbus, *i2caddr);
+        auto driver = getDriverName();
         log<level::DEBUG>(
             fmt::format(
                 "make PowerSupply bus: {} addr: {} driver: {} presline: {}",
@@ -1264,4 +1265,27 @@ void PSUManager::setPowerConfigGPIO()
     }
 }
 
+void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
+{
+    namespace fs = std::filesystem;
+    std::stringstream path;
+    path << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
+    std::string addrStr = path.str();
+    std::string busStr = std::to_string(i2cbus);
+    busStr.append("-");
+    busStr.append(addrStr);
+    std::string sysFsPath = "/sys/bus/i2c/devices/";
+
+    sysFsPath.append(busStr);
+    sysFsPath.append("/driver");
+    log<level::INFO>(fmt::format("sysFsPath {} ", sysFsPath).c_str());
+    if (fs::is_symlink(sysFsPath))
+    {
+        std::string strLink{fs::read_symlink(sysFsPath)};
+        log<level::INFO>(fmt::format("Link file name: {}", strLink).c_str());
+        driverName = strLink.substr(strLink.find_last_of("/\\") + 1);
+        log<level::INFO>(
+            fmt::format("buildDriverName dirverName: {}", driverName).c_str());
+    }
+}
 } // namespace phosphor::power::manager

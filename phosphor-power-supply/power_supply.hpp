@@ -50,6 +50,8 @@ constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
 // than PGOOD_DEGLITCH_LIMIT.
 constexpr auto AC_FAULT_LIMIT = 6;
 
+constexpr auto IBMCFFPS_DD_NAME = "ibm-cffps";
+
 using SensorInterface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
 using SensorObject = sdbusplus::server::object_t<SensorInterface>;
 
@@ -1038,6 +1040,11 @@ class PowerSupply
      * again (though that could be done as a future improvement).
      */
     std::unique_ptr<SensorObject> inputVoltageRatingIface;
+
+    /**
+     * @brief The device driver name
+     */
+    std::string driverName;
 };
 
 } // namespace phosphor::power::psu
