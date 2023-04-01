@@ -34,6 +34,9 @@ constexpr auto presLineName = "NamedPresenceGpio";
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
 
+const auto deviceDirPath = "/sys/bus/i2c/devices/";
+const auto driverDirName = "/driver";
+
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
 PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
@@ -245,14 +248,13 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             return;
         }
 
-        constexpr auto driver = "ibm-cffps";
+        buildDriverName(*i2cbus, *i2caddr);
         log<level::DEBUG>(
-            fmt::format(
-                "make PowerSupply bus: {} addr: {} driver: {} presline: {}",
-                *i2cbus, *i2caddr, driver, presline)
+            fmt::format("make PowerSupply bus: {} addr: {} presline: {}",
+                        *i2cbus, *i2caddr, presline)
                 .c_str());
         auto psu = std::make_unique<PowerSupply>(
-            bus, invpath, *i2cbus, *i2caddr, driver, presline,
+            bus, invpath, *i2cbus, *i2caddr, driverName, presline,
             std::bind(
                 std::mem_fn(&phosphor::power::manager::PSUManager::isPowerOn),
                 this));
@@ -1264,4 +1266,23 @@ void PSUManager::setPowerConfigGPIO()
     }
 }
 
+void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
+{
+    namespace fs = std::filesystem;
+    std::stringstream ss;
+    ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
+    std::string symLinkPath =
+        deviceDirPath + std::to_string(i2cbus) + "-" + ss.str() + driverDirName;
+    try
+    {
+        fs::path linkStrPath = fs::read_symlink(symLinkPath);
+        driverName = linkStrPath.filename();
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(fmt::format("Failed to find device driver {}, error {}",
+                                    symLinkPath, e.what())
+                            .c_str());
+    }
+}
 } // namespace phosphor::power::manager

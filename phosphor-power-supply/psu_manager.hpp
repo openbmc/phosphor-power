@@ -408,6 +408,19 @@ class PSUManager
             psu->setInputVoltageRating();
         }
     }
+
+    /**
+     * @brief Build the device driver name for the power supply.
+     *
+     * @param[in] i2cbus - i2c bus
+     * @param[in] i2caddr - i2c bus address
+     */
+    void buildDriverName(uint64_t i2cbus, uint64_t i2caddr);
+
+    /**
+     * @brief The device driver name for all power supplies.
+     */
+    std::string driverName;
 };
 
 } // namespace phosphor::power::manager
