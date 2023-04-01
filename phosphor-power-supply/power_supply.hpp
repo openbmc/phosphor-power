@@ -1038,6 +1038,11 @@ class PowerSupply
      * again (though that could be done as a future improvement).
      */
     std::unique_ptr<SensorObject> inputVoltageRatingIface;
+
+    /**
+     * @brief The device driver name
+     */
+    std::string driverName;
 };
 
 } // namespace phosphor::power::psu

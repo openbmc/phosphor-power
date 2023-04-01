@@ -38,7 +38,7 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                          std::function<bool()>&& callback) :
     bus(bus),
     inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/" + driver),
-    isPowerOn(std::move(callback))
+    isPowerOn(std::move(callback)), driverName{driver}
 {
     if (inventoryPath.empty())
     {
@@ -427,7 +427,7 @@ void PowerSupply::analyzePgoodFault()
 
 void PowerSupply::determineMFRFault()
 {
-    if (bindPath.string().find("ibm-cffps") != std::string::npos)
+    if (bindPath.string().find(driverName) != std::string::npos)
     {
         // IBM MFR_SPECIFIC[4] is PS_Kill fault
         if (statusMFR & 0x10)
@@ -1025,7 +1025,7 @@ auto PowerSupply::getMaxPowerOut() const
 
 void PowerSupply::setupInputHistory()
 {
-    if (bindPath.string().find("ibm-cffps") != std::string::npos)
+    if (bindPath.string().find(driverName) != std::string::npos)
     {
         auto maxPowerOut = getMaxPowerOut();
 
