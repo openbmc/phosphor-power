@@ -16,6 +16,24 @@
       "message": "Tested section?",
       "revId": "dc0d9ca6836462ae8cdcd6ef99bee69d7412eeeb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "234b6a17_59cd2779",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2023-04-03T15:57:46Z",
+      "side": 1,
+      "message": "A lack of a Tested section implies no testing. I tend to do that for trivial changes like this but if maintainer requires it, I will do it.",
+      "parentUuid": "ce788838_d6f68918",
+      "revId": "dc0d9ca6836462ae8cdcd6ef99bee69d7412eeeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
