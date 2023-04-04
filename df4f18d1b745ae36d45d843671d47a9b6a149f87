@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e96f077_a9163b82",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-04T21:56:03Z",
+      "side": 1,
+      "message": "You can probably remove the 3 traces in here now that everything is working, or change them to DEBUG.",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed00c9ef_ea73cb55",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-04T21:56:03Z",
+      "side": 1,
+      "message": "what is the \\// for?  The example at https://en.cppreference.com/w/cpp/string/basic_string/find_last_of shows finding the trailing slash with just a \u0027/\u0027.",
+      "range": {
+        "startLine": 1286,
+        "startChar": 57,
+        "endLine": 1286,
+        "endChar": 62
+      },
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b71f76_602d121b",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-04T21:56:03Z",
+      "side": 1,
+      "message": "Since driverName is only used internally, you don\u0027t need a get function.  It would also be consistent with how the other private members don\u0027t have them.\n\nFYI, if it was needed for some reason, the signature could then be like:\nconst std::string\u0026 getDriverName() const",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
