@@ -34,6 +34,24 @@
       "parentUuid": "ce788838_d6f68918",
       "revId": "dc0d9ca6836462ae8cdcd6ef99bee69d7412eeeb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a1a86e_7384e6b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-04-04T22:17:10Z",
+      "side": 1,
+      "message": "Have you tested the same exact change in a service file for a different app and confirmed it worked?  If so, I\u0027m fine with it.",
+      "parentUuid": "234b6a17_59cd2779",
+      "revId": "dc0d9ca6836462ae8cdcd6ef99bee69d7412eeeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
