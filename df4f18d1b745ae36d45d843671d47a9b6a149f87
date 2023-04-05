@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac3c046d_ff440443",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b6e358f_504019cd",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "affc5ade_88347edb",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-04-05T00:12:19Z",
       "side": 1,
       "message": "This variable name is kind of confusing.  It isn\u0027t a path; it is a stringstream using to build the address as a hex string.  So maybe \u0027addrStream\u0027?  Or sometimes people just name it \u0027ss\u0027 for stringstream, since it is kind of a temporary used to build a string (like in power_supply.cpp).",
+      "range": {
+        "startLine": 1271,
+        "startChar": 22,
+        "endLine": 1271,
+        "endChar": 26
+      },
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21d15217_5114752d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "affc5ade_88347edb",
       "range": {
         "startLine": 1271,
         "startChar": 22,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fe507bc_06770f7a",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8ebf4db_c3c627c5",
+      "range": {
+        "startLine": 1275,
+        "startChar": 4,
+        "endLine": 1275,
+        "endChar": 10
+      },
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e96f077_a9163b82",
@@ -81,6 +147,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d871f8fb_6fe5fd4f",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e96f077_a9163b82",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdd7f1af_377c96a7",
@@ -94,6 +178,24 @@
       "writtenOn": "2023-04-05T00:12:19Z",
       "side": 1,
       "message": "You need to handle the case where read_symlink fails.  The one argument function throws an exception if it fails.  The two argument function takes an error code which you can check.  Either way you need to determine how the application handles it.\n\nCatching the exception is probably simpler.\n\nAlso, the return value is a std::filesystem::path.  Since the purpose of this class is to make it easier to parse paths, we should use that vs. converting to a string and using the find_last_of().  find_last_of() has other error cases you have to cover, like \"\" or \"foo/bar/\", where the +1 is going to be invalid.\n\nSo I\u0027d recommend something like:\n\n```\ntry\n{\n  std::filesystem::driverPath \u003d fs::read_symlink(sysFsPath);\n  driverName \u003d driverPath.filename();\n}\ncatch\n{\n}\n```\n\nI\u0027m not sure what you want to do inside the catch.  Since driverName may have been set successfully during a previous call to this method, maybe do nothing?",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0112e64_10829a8c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdd7f1af_377c96a7",
       "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -121,6 +223,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f97246a_92be4c67",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Modified getting the filename using std::filesystem:;path",
+      "parentUuid": "ed00c9ef_ea73cb55",
+      "range": {
+        "startLine": 1286,
+        "startChar": 57,
+        "endLine": 1286,
+        "endChar": 62
+      },
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1ad7327_70be12d0",
@@ -134,6 +260,30 @@
       "writtenOn": "2023-04-05T00:12:19Z",
       "side": 1,
       "message": "Nit: If you keep this and convert to DEBUG, need to fix misspelling here.",
+      "range": {
+        "startLine": 1288,
+        "startChar": 41,
+        "endLine": 1288,
+        "endChar": 51
+      },
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d414fe6_db61de48",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ad7327_70be12d0",
       "range": {
         "startLine": 1288,
         "startChar": 41,
@@ -175,6 +325,24 @@
       "side": 1,
       "message": "I agree since this is a private method that just returns a private data member, it should be removed.",
       "parentUuid": "32b71f76_602d121b",
+      "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20aee63c_b74c3447",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-05T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0ca20ef_430c5855",
       "revId": "df4f18d1b745ae36d45d843671d47a9b6a149f87",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
