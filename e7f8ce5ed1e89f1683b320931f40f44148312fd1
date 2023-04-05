@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1b8821e7_fd12fbc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-04-05T21:24:56Z",
+      "side": 1,
+      "message": "Nit: Need to capitalize \u0027the\u0027",
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2791f2c1_83f53f37",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 4
