@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2791f2c1_83f53f37",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-05T21:21:44Z",
+      "side": 1,
+      "message": "nit:  the other members are using () instead of {}",
+      "range": {
+        "startLine": 41,
+        "startChar": 46,
+        "endLine": 41,
+        "endChar": 47
+      },
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83c50aa4_9f2b0cba",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-05T21:21:44Z",
+      "side": 1,
+      "message": "read_symlink already returns filesystem::path so you don\u0027t need the path var.\nin fact you could probably do it all on one line if you wanted with\ndriverName  \u003d fs::read_symlink(symLinkPath).filename();",
+      "range": {
+        "startLine": 1278,
+        "startChar": 7,
+        "endLine": 1278,
+        "endChar": 64
+      },
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
