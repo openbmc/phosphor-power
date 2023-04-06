@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a82e066_d25c3ed7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-06T13:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b8821e7_fd12fbc5",
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2791f2c1_83f53f37",
@@ -41,6 +59,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55d97902_33e9813f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-06T13:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2791f2c1_83f53f37",
+      "range": {
+        "startLine": 41,
+        "startChar": 46,
+        "endLine": 41,
+        "endChar": 47
+      },
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83c50aa4_9f2b0cba",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-04-05T21:21:44Z",
       "side": 1,
       "message": "read_symlink already returns filesystem::path so you don\u0027t need the path var.\nin fact you could probably do it all on one line if you wanted with\ndriverName  \u003d fs::read_symlink(symLinkPath).filename();",
+      "range": {
+        "startLine": 1278,
+        "startChar": 7,
+        "endLine": 1278,
+        "endChar": 64
+      },
+      "revId": "e7f8ce5ed1e89f1683b320931f40f44148312fd1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824ba1be_f5a857ca",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-04-06T13:14:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83c50aa4_9f2b0cba",
       "range": {
         "startLine": 1278,
         "startChar": 7,
