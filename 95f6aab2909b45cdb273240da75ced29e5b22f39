@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17327abd_41d90c10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-04-12T16:37:30Z",
+      "side": 1,
+      "message": "I tested this in bitbake and confirmed the service files were still installed in the correct directory.",
+      "revId": "95f6aab2909b45cdb273240da75ced29e5b22f39",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
