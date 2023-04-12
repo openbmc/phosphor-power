@@ -10,7 +10,7 @@ project(
     ],
     license: 'Apache-2.0',
     version: '1.0',
-    meson_version: '>=0.57.0',
+    meson_version: '>=0.58.0',
 )
 
 build_tests = get_option('tests')
@@ -46,7 +46,7 @@ fmt = dependency('fmt')
 libgpiodcxx = dependency('libgpiodcxx')
 
 systemd = dependency('systemd')
-servicedir = systemd.get_variable(pkgconfig : 'systemdsystemunitdir')
+servicedir = systemd.get_variable('systemdsystemunitdir')
 
 services = [
     ['supply-monitor', 'power-supply-monitor@.service'],
