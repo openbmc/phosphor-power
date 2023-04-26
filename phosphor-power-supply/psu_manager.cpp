@@ -977,7 +977,37 @@ void PSUManager::validateConfig()
     if (supported)
     {
         runValidateConfig = false;
-        return;
+        double actualVoltage;
+        int inputVoltage;
+        int previousInputVoltage = 0;
+        bool voltageMismatch = false;
+
+        for (const auto& psu : psus)
+        {
+            if (!psu->isPresent())
+            {
+                // Only present PSUs report a valid input voltage
+                continue;
+            }
+            psu->getInputVoltage(actualVoltage, inputVoltage);
+            if (previousInputVoltage && inputVoltage &&
+                (previousInputVoltage != inputVoltage))
+            {
+                additionalData["EXPECTED_VOLTAGE"] =
+                    std::to_string(previousInputVoltage);
+                additionalData["ACTUAL_VOLTAGE"] =
+                    std::to_string(actualVoltage);
+                voltageMismatch = true;
+            }
+            if (!previousInputVoltage && inputVoltage)
+            {
+                previousInputVoltage = inputVoltage;
+            }
+        }
+        if (!voltageMismatch)
+        {
+            return;
+        }
     }
 
     // Validation failed, create an error log.
