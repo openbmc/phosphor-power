@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ffb0dd_060f793c",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-27T14:10:03Z",
+      "side": 1,
+      "message": "I think you want this to be an int, right, since you\u0027re comparing it to inputVoltage?",
+      "range": {
+        "startLine": 982,
+        "startChar": 8,
+        "endLine": 982,
+        "endChar": 35
+      },
+      "revId": "a73c49c601d2474013d9a47a5f188d95f71ee968",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ed85a5_94b0d845",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-04-27T14:10:03Z",
+      "side": 1,
+      "message": "maybe also add ACTUAL_VOLTAGE?",
+      "revId": "a73c49c601d2474013d9a47a5f188d95f71ee968",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
