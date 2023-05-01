@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bddb489c_2f8ddbf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-01T23:08:48Z",
+      "side": 1,
+      "message": "Looks good.  Very minor comments.",
+      "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab5c633_9c3c750b",
+        "filename": "utility.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-01T23:08:48Z",
+      "side": 1,
+      "message": "Nit: Should this be std::vector\u003cDbusPath\u003e?",
+      "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d2216e_d383fd5b",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-01T23:08:48Z",
+      "side": 1,
+      "message": "Need to update to indicate it supports a vector of interfaces vs. a single interface",
+      "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
