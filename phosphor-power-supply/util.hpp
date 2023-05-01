@@ -199,21 +199,22 @@ class Util : public UtilBase
     std::string getChassis(sdbusplus::bus_t& bus,
                            const std::string& invpath) const
     {
-        // Use the 'chassis' association to find the parent chassis.
-        auto assocPath = invpath + "/chassis";
-        std::vector<std::string> endpoints;
+        sdbusplus::message::object_path assocPath = invpath + "/powering";
+        sdbusplus::message::object_path basePath{"/"};
+        std::vector<std::string> interfaces{CHASSIS_IFACE};
 
-        phosphor::power::util::getProperty<decltype(endpoints)>(
-            ASSOCIATION_IFACE, ENDPOINTS_PROP, assocPath,
-            "xyz.openbmc_project.ObjectMapper", bus, endpoints);
+        // Find the object path that implements the chassis interface
+        // and also shows up in the endpoints list of the powering assoc.
+        auto chassisPaths = phosphor::power::util::getAssociatedSubTreePaths(
+            bus, assocPath, basePath, interfaces, 0);
 
-        if (endpoints.empty())
+        if (chassisPaths.empty())
         {
-            throw std::runtime_error(
-                fmt::format("Missing chassis association for {}", invpath));
+            throw std::runtime_error(fmt::format(
+                "No association to a chassis found for {}", invpath));
         }
 
-        return endpoints[0];
+        return chassisPaths[0];
     }
 };
 

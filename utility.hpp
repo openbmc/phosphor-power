@@ -130,6 +130,27 @@ DbusPropertyMap getAllProperties(sdbusplus::bus_t& bus, const std::string& path,
 DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
                        const std::string& interface, int32_t depth);
 
+/** @brief GetAssociatedSubTreePaths wrapper from the object mapper.
+ *
+ * Helper function to find object paths that implement a certain
+ * interface and are also an association endpoint.
+ * See:
+ * https://github.com/openbmc/docs/blob/master/architecture/object-mapper.md
+ *
+ * @param[in] bus - The D-Bus object.
+ * @param[in] associationPath - The association it must be an endpoint of.
+ * @param[in] path - The root of the tree to search.
+ * @param[in] interface - Interface in the subtree to search for
+ * @param[in] depth - The number of path elements to descend.
+ *
+ * @return std::vector<DbusPath> - The object paths.
+ */
+std::vector<DbusPath> getAssociatedSubTreePaths(
+    sdbusplus::bus_t& bus,
+    const sdbusplus::message::object_path& associationPath,
+    const sdbusplus::message::object_path& path,
+    const std::vector<std::string>& interfaces, int32_t depth);
+
 /**
  * Logs an error and powers off the system.
  *
