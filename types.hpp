@@ -16,6 +16,7 @@ constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
 constexpr auto AVAILABILITY_IFACE =
     "xyz.openbmc_project.State.Decorator.Availability";
 constexpr auto ASSOC_DEF_IFACE = "xyz.openbmc_project.Association.Definitions";
+constexpr auto CHASSIS_IFACE = "xyz.openbmc_project.Inventory.Item.Chassis";
 #ifdef IBM_VPD
 constexpr auto DINF_IFACE = "com.ibm.ipzvpd.DINF";
 constexpr auto VINI_IFACE = "com.ibm.ipzvpd.VINI";

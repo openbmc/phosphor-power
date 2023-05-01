@@ -103,6 +103,27 @@ DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
     return response;
 }
 
+std::vector<DbusPath> getAssociatedSubTreePaths(
+    sdbusplus::bus_t& bus,
+    const sdbusplus::message::object_path& associationPath,
+    const sdbusplus::message::object_path& path,
+    const std::vector<std::string>& interfaces, int32_t depth)
+{
+    auto mapperCall =
+        bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH, MAPPER_INTERFACE,
+                            "GetAssociatedSubTreePaths");
+    mapperCall.append(associationPath);
+    mapperCall.append(path);
+    mapperCall.append(depth);
+    mapperCall.append(interfaces);
+
+    auto reply = bus.call(mapperCall);
+
+    std::vector<DbusPath> response;
+    reply.read(response);
+    return response;
+}
+
 json loadJSONFromFile(const char* path)
 {
     std::ifstream ifs(path);
