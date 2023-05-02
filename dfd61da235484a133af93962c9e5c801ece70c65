@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e83f21d_7a3a6214",
+        "filename": "utility.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-02T15:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab5c633_9c3c750b",
+      "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2d2216e_d383fd5b",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-01T23:08:48Z",
       "side": 1,
       "message": "Need to update to indicate it supports a vector of interfaces vs. a single interface",
+      "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f5ad057_27b1954f",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-02T15:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2d2216e_d383fd5b",
       "revId": "dfd61da235484a133af93962c9e5c801ece70c65",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
