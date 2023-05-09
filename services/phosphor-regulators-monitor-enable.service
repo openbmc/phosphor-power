@@ -12,4 +12,4 @@ RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl monitor --enable
 
 [Install]
-WantedBy=obmc-chassis-poweron@0.target
+#WantedBy=obmc-chassis-poweron@0.target
