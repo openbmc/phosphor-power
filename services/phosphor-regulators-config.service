@@ -15,4 +15,4 @@ RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl config
 
 [Install]
-RequiredBy=obmc-chassis-poweron@0.target
+#RequiredBy=obmc-chassis-poweron@0.target

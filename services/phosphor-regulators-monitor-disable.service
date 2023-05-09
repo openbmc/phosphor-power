@@ -12,4 +12,4 @@ RemainAfterExit=yes
 ExecStart=/usr/bin/regsctl monitor --disable
 
 [Install]
-WantedBy=obmc-chassis-poweroff@0.target
+#WantedBy=obmc-chassis-poweroff@0.target
