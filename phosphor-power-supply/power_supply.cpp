@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdint> // uint8_t...
 #include <fstream>
+#include <iostream>
 #include <regex>
 #include <thread> // sleep_for()
 
@@ -723,8 +724,16 @@ void PowerSupply::clearVinUVFault()
     // also clearing.
     //
     // Do not care about return value. Should be 1 if active, 0 if not.
-    static_cast<void>(
-        pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+    if (driverName != IBMCFFPS_DD_NAME)
+    {
+        static_cast<void>(
+            pmbusIntf->read("in1_alarm", phosphor::pmbus::Type::Hwmon));
+    }
+    else
+    {
+        static_cast<void>(
+            pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+    }
     vinUVFault = 0;
 }
 
@@ -906,18 +915,29 @@ void PowerSupply::updateInventory()
         // TODO: non-IBM inventory updates?
 
 #if IBM_VPD
-        modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
+        if (driverName != IBMCFFPS_DD_NAME)
+        {
+            getCustomizedVPD("CC", modelName);
+            getCustomizedVPD("PN", pn);
+            getCustomizedVPD("FN", fn);
+            getCustomizedVPD("SN", sn);
+            assetProps.emplace(SN_PROP, sn);
+
+        }
+        else
+        {
+            modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
+            pn = readVPDValue(PART_NUMBER, Type::Debug, PN_KW_SIZE);
+            fn = readVPDValue(FRU_NUMBER, Type::Debug, FN_KW_SIZE);
+
+            header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
+            sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
+            assetProps.emplace(SN_PROP, header + sn);
+        }
+
         assetProps.emplace(MODEL_PROP, modelName);
-
-        pn = readVPDValue(PART_NUMBER, Type::Debug, PN_KW_SIZE);
         assetProps.emplace(PN_PROP, pn);
-
-        fn = readVPDValue(FRU_NUMBER, Type::Debug, FN_KW_SIZE);
         assetProps.emplace(SPARE_PN_PROP, fn);
-
-        header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
-        sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
-        assetProps.emplace(SN_PROP, header + sn);
 
         fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
                                  VERSION_SIZE);
@@ -1224,4 +1244,22 @@ void PowerSupply::setInputVoltageRating()
     }
 }
 
+void PowerSupply::getCustomizedVPD(const std::string token, std::string& str)
+{
+    try
+    {
+        std::vector<uint8_t> value;
+        util::getProperty(VINI_IFACE, token, inventoryPath, INVENTORY_MGR_IFACE,
+                          bus, value);
+        for (uint8_t i = 0; i < value.size(); i++)
+        {
+            str += static_cast<char>(value.at(i));
+        }
+    }
+    catch (const sdbusplus::exception_t& e)
+    {
+        log<level::ERR>(
+            fmt::format("Failed getProperty error: {}", e.what()).c_str());
+    }
+}
 } // namespace phosphor::power::psu

@@ -1045,6 +1045,16 @@ class PowerSupply
      * @brief The device driver name
      */
     std::string driverName;
+
+    /**
+     * @brief Retrieve PSU customized VPD fields
+     *
+     * It extract PSU custumized VPD token and assign the associated
+     * string to vpdStr.
+     * @param[in] token - The VPD search token
+     * @param[out] vpdStr - The VPD string associated with the token.
+     */
+    void getCustomizedVPD(const std::string token, std::string& vpdStr);
 };
 
 } // namespace phosphor::power::psu
