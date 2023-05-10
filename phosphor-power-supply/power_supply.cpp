@@ -724,7 +724,7 @@ void PowerSupply::clearVinUVFault()
     //
     // Do not care about return value. Should be 1 if active, 0 if not.
     static_cast<void>(
-        pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+           pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
     vinUVFault = 0;
 }
 
@@ -906,18 +906,29 @@ void PowerSupply::updateInventory()
         // TODO: non-IBM inventory updates?
 
 #if IBM_VPD
-        modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
+        if (driverName != IBMCFFPS_DD_NAME)
+        {
+            getPsuVpdFromDbus("CC", modelName);
+            getPsuVpdFromDbus("PN", pn);
+            getPsuVpdFromDbus("FN", fn);
+            getPsuVpdFromDbus("SN", sn);
+            assetProps.emplace(SN_PROP, sn);
+
+        }
+        else
+        {
+            modelName = readVPDValue(CCIN, Type::HwmonDeviceDebug, CC_KW_SIZE);
+            pn = readVPDValue(PART_NUMBER, Type::Debug, PN_KW_SIZE);
+            fn = readVPDValue(FRU_NUMBER, Type::Debug, FN_KW_SIZE);
+
+            header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
+            sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
+            assetProps.emplace(SN_PROP, header + sn);
+        }
+
         assetProps.emplace(MODEL_PROP, modelName);
-
-        pn = readVPDValue(PART_NUMBER, Type::Debug, PN_KW_SIZE);
         assetProps.emplace(PN_PROP, pn);
-
-        fn = readVPDValue(FRU_NUMBER, Type::Debug, FN_KW_SIZE);
         assetProps.emplace(SPARE_PN_PROP, fn);
-
-        header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
-        sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
-        assetProps.emplace(SN_PROP, header + sn);
 
         fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
                                  VERSION_SIZE);
@@ -1224,4 +1235,23 @@ void PowerSupply::setInputVoltageRating()
     }
 }
 
+void PowerSupply::getPsuVpdFromDbus(const std::string& keyword, std::string& vpdStr)
+{
+    try
+    {
+        std::vector<uint8_t> value;
+        vpdStr.clear();
+        util::getProperty(VINI_IFACE, keyword, inventoryPath, INVENTORY_MGR_IFACE,
+                          bus, value);
+        for (char c:value)
+        {
+            vpdStr += static_cast<char>(c);
+        }
+    }
+    catch (const sdbusplus::exception_t& e)
+    {
+        log<level::ERR>(
+            fmt::format("Failed getProperty error: {}", e.what()).c_str());
+    }
+}
 } // namespace phosphor::power::psu

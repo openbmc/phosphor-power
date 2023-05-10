@@ -1045,6 +1045,16 @@ class PowerSupply
      * @brief The device driver name
      */
     std::string driverName;
+
+    /**
+     * @brief Retrieve PSU VPD keyword from D-Bus
+     *
+     * It retrieves PSU VPD keyword from D-Bus and assign the associated
+     * string to vpdStr.
+     * @param[in] keyword - The VPD search keyword
+     * @param[out] vpdStr - The VPD string associated with the keyword.
+     */
+    void getPsuVpdFromDbus(const std::string& keyword, std::string& vpdStr);
 };
 
 } // namespace phosphor::power::psu
