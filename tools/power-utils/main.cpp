@@ -25,7 +25,6 @@ using namespace phosphor::logging;
 
 int main(int argc, char** argv)
 {
-
     std::string psuPath;
     std::vector<std::string> versions;
     bool rawOutput = false;

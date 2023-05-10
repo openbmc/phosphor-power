@@ -132,7 +132,6 @@ TEST(I2CWriteByteActionTests, Execute)
     // Test where fails: Getting I2CInterface fails
     try
     {
-
         // Create IDMap, MockServices, and ActionEnvironment
         IDMap idMap{};
         MockServices services{};

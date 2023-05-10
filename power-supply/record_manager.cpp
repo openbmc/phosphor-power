@@ -62,8 +62,8 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
                 // If it just rolled over from 0xFF to 0x00, then no
                 // need to clear.  If we see a 0 seemingly out of nowhere,
                 // then it was a sync so clear the old records.
-                auto rolledOver =
-                    (previousID == lastSequenceID) && (id == FIRST_SEQUENCE_ID);
+                auto rolledOver = (previousID == lastSequenceID) &&
+                                  (id == FIRST_SEQUENCE_ID);
 
                 if (!rolledOver)
                 {

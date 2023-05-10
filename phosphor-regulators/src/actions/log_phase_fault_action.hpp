@@ -47,8 +47,7 @@ class LogPhaseFaultAction : public Action
      *
      * @param type phase fault type
      */
-    explicit LogPhaseFaultAction(PhaseFaultType type) : type{type}
-    {}
+    explicit LogPhaseFaultAction(PhaseFaultType type) : type{type} {}
 
     /**
      * Executes this action.

@@ -9,7 +9,7 @@
 
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
-#include <chrono> // sleep_for()
+#include <chrono>  // sleep_for()
 #include <cmath>
 #include <cstdint> // uint8_t...
 #include <fstream>
@@ -565,8 +565,8 @@ void PowerSupply::analyze()
                 statusVout = pmbusIntf->read(status0Vout, Type::Debug);
                 statusIout = pmbusIntf->read(STATUS_IOUT, Type::Debug);
                 statusFans12 = pmbusIntf->read(STATUS_FANS_1_2, Type::Debug);
-                statusTemperature =
-                    pmbusIntf->read(STATUS_TEMPERATURE, Type::Debug);
+                statusTemperature = pmbusIntf->read(STATUS_TEMPERATURE,
+                                                    Type::Debug);
 
                 analyzeCMLFault();
 
@@ -830,8 +830,8 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
                                const std::size_t& vpdSize)
 {
     std::string vpdValue;
-    const std::regex illegalVPDRegex =
-        std::regex("[^[:alnum:]]", std::regex::basic);
+    const std::regex illegalVPDRegex = std::regex("[^[:alnum:]]",
+                                                  std::regex::basic);
 
     try
     {
@@ -919,8 +919,8 @@ void PowerSupply::updateInventory()
         sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
         assetProps.emplace(SN_PROP, header + sn);
 
-        fwVersion =
-            readVPDValue(FW_VERSION, Type::HwmonDeviceDebug, VERSION_SIZE);
+        fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
+                                 VERSION_SIZE);
         versionProps.emplace(VERSION_PROP, fwVersion);
 
         ipzvpdVINIProps.emplace(
@@ -971,8 +971,8 @@ void PowerSupply::updateInventory()
 
         try
         {
-            auto service =
-                util::getService(INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
+            auto service = util::getService(INVENTORY_OBJ_PATH,
+                                            INVENTORY_MGR_IFACE, bus);
 
             if (service.empty())
             {
@@ -980,9 +980,9 @@ void PowerSupply::updateInventory()
                 return;
             }
 
-            auto method =
-                bus.new_method_call(service.c_str(), INVENTORY_OBJ_PATH,
-                                    INVENTORY_MGR_IFACE, "Notify");
+            auto method = bus.new_method_call(service.c_str(),
+                                              INVENTORY_OBJ_PATH,
+                                              INVENTORY_MGR_IFACE, "Notify");
 
             method.append(std::move(object));
 
@@ -1009,8 +1009,8 @@ auto PowerSupply::getMaxPowerOut() const
         try
         {
             // Read max_power_out, should be direct format
-            auto maxPowerOutStr =
-                pmbusIntf->readString(MFR_POUT_MAX, Type::HwmonDeviceDebug);
+            auto maxPowerOutStr = pmbusIntf->readString(MFR_POUT_MAX,
+                                                        Type::HwmonDeviceDebug);
             log<level::INFO>(fmt::format("{} MFR_POUT_MAX read {}", shortName,
                                          maxPowerOutStr)
                                  .c_str());
@@ -1044,8 +1044,8 @@ void PowerSupply::setupInputHistory()
 
                 std::string name{fmt::format("{}_input_power", shortName)};
 
-                historyObjectPath =
-                    std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
+                historyObjectPath = std::string{INPUT_HISTORY_SENSOR_ROOT} +
+                                    '/' + name;
 
                 // If the power supply was present, we created the
                 // recordManager. If it then went missing, the recordManager is
@@ -1060,8 +1060,8 @@ void PowerSupply::setupInputHistory()
 
                 if (!average)
                 {
-                    auto avgPath =
-                        historyObjectPath + '/' + history::Average::name;
+                    auto avgPath = historyObjectPath + '/' +
+                                   history::Average::name;
                     average = std::make_unique<history::Average>(bus, avgPath);
                     log<level::DEBUG>(
                         fmt::format("{} avgPath: {}", shortName, avgPath)
@@ -1070,8 +1070,8 @@ void PowerSupply::setupInputHistory()
 
                 if (!maximum)
                 {
-                    auto maxPath =
-                        historyObjectPath + '/' + history::Maximum::name;
+                    auto maxPath = historyObjectPath + '/' +
+                                   history::Maximum::name;
                     maximum = std::make_unique<history::Maximum>(bus, maxPath);
                     log<level::DEBUG>(
                         fmt::format("{} maxPath: {}", shortName, maxPath)
@@ -1113,9 +1113,9 @@ void PowerSupply::updateHistory()
     }
 
     // Read just the most recent average/max record
-    auto data =
-        pmbusIntf->readBinary(INPUT_HISTORY, pmbus::Type::HwmonDeviceDebug,
-                              history::RecordManager::RAW_RECORD_SIZE);
+    auto data = pmbusIntf->readBinary(INPUT_HISTORY,
+                                      pmbus::Type::HwmonDeviceDebug,
+                                      history::RecordManager::RAW_RECORD_SIZE);
 
     // Update D-Bus only if something changed (a new record ID, or cleared
     // out)

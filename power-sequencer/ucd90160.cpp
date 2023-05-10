@@ -328,7 +328,6 @@ fs::path UCD90160::findGPIODevice(const fs::path& path)
 
 bool UCD90160::doExtraAnalysis(const ucd90160::GPIConfig& config)
 {
-
     auto type = std::get<ucd90160::extraAnalysisField>(config);
     if (type == ucd90160::extraAnalysisType::none)
     {

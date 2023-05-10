@@ -30,8 +30,7 @@ class Device
      * @param name - the device name
      * @param inst - the device instance
      */
-    Device(const std::string& name, size_t inst) : name(name), instance(inst)
-    {}
+    Device(const std::string& name, size_t inst) : name(name), instance(inst) {}
 
     /**
      * Returns the instance number
@@ -59,8 +58,7 @@ class Device
      * the chip is in error state.  Override if functionality
      * is required
      */
-    virtual void onFailure()
-    {}
+    virtual void onFailure() {}
 
     /**
      * Pure virtual function to clear faults on the device

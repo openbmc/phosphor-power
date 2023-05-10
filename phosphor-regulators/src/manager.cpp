@@ -73,9 +73,8 @@ const fs::path testConfigFileDir{"/etc/phosphor-regulators"};
 
 Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
     ManagerObject{bus, managerObjPath}, bus{bus}, eventLoop{event},
-    services{bus}, phaseFaultTimer{event,
-                                   std::bind(&Manager::phaseFaultTimerExpired,
-                                             this)},
+    services{bus},
+    phaseFaultTimer{event, std::bind(&Manager::phaseFaultTimerExpired, this)},
     sensorTimer{event, std::bind(&Manager::sensorTimerExpired, this)}
 {
     // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
@@ -414,8 +413,8 @@ void Manager::loadConfigFile()
 
             // Store config file information in a new System object.  The old
             // System object, if any, is automatically deleted.
-            system =
-                std::make_unique<System>(std::move(rules), std::move(chassis));
+            system = std::make_unique<System>(std::move(rules),
+                                              std::move(chassis));
         }
     }
     catch (const std::exception& e)

@@ -15,7 +15,6 @@ namespace pmbus
 {
 class MockedPMBus : public PMBusBase
 {
-
   public:
     virtual ~MockedPMBus() = default;
 

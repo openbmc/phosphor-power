@@ -28,8 +28,7 @@ using Record = std::tuple<size_t, int64_t, int64_t, int64_t>;
 class InvalidRecordException : public std::runtime_error
 {
   public:
-    InvalidRecordException() : std::runtime_error("Invalid history record")
-    {}
+    InvalidRecordException() : std::runtime_error("Invalid history record") {}
 };
 
 /**

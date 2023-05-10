@@ -285,8 +285,8 @@ void PowerControl::setState(int s)
     if (s == 0)
     {
         // Set a minimum amount of time to wait before next power on
-        powerOnAllowedTime =
-            std::chrono::steady_clock::now() + minimumPowerOffTime;
+        powerOnAllowedTime = std::chrono::steady_clock::now() +
+                             minimumPowerOffTime;
     }
 
     pgoodTimeoutTime = std::chrono::steady_clock::now() + timeout;
@@ -312,8 +312,8 @@ void PowerControl::setUpDevice()
             }
 
             // Get the properties for the device interface
-            auto properties =
-                util::getAllProperties(bus, path, interfaceName, service);
+            auto properties = util::getAllProperties(bus, path, interfaceName,
+                                                     service);
 
             getDeviceProperties(properties);
         }

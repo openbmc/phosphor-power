@@ -51,8 +51,8 @@ bool I2CWriteBytesAction::execute(ActionEnvironment& environment)
             // Combine values to write with current values
             for (unsigned int i = 0; i < values.size(); ++i)
             {
-                valuesToWrite[i] =
-                    (values[i] & masks[i]) | (currentValues[i] & (~masks[i]));
+                valuesToWrite[i] = (values[i] & masks[i]) |
+                                   (currentValues[i] & (~masks[i]));
             }
         }
 

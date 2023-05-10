@@ -88,8 +88,7 @@ class DBusVPD : public VPD
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusVPD(sdbusplus::bus_t& bus) : bus{bus}
-    {}
+    explicit DBusVPD(sdbusplus::bus_t& bus) : bus{bus} {}
 
     /** @copydoc VPD::clearCache() */
     virtual void clearCache(void) override

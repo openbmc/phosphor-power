@@ -74,8 +74,8 @@ class DeviceTests : public ::testing::Test
         std::vector<std::unique_ptr<Rule>> rules{};
         std::vector<std::unique_ptr<Chassis>> chassisVec{};
         chassisVec.emplace_back(std::move(chassis));
-        this->system =
-            std::make_unique<System>(std::move(rules), std::move(chassisVec));
+        this->system = std::make_unique<System>(std::move(rules),
+                                                std::move(chassisVec));
     }
 
   protected:
@@ -456,8 +456,8 @@ TEST_F(DeviceTests, Configure)
             EXPECT_CALL(*action, execute).Times(0);
             std::vector<std::unique_ptr<Action>> actions{};
             actions.emplace_back(std::move(action));
-            configuration =
-                std::make_unique<Configuration>(volts, std::move(actions));
+            configuration = std::make_unique<Configuration>(volts,
+                                                            std::move(actions));
         }
 
         // Create Device
@@ -517,8 +517,8 @@ TEST_F(DeviceTests, Configure)
                 std::make_unique<Configuration>(volts, std::move(actions));
 
             // Create Rail
-            auto rail =
-                std::make_unique<Rail>("vdd0", std::move(configuration));
+            auto rail = std::make_unique<Rail>("vdd0",
+                                               std::move(configuration));
             rails.emplace_back(std::move(rail));
         }
 
@@ -534,8 +534,8 @@ TEST_F(DeviceTests, Configure)
                 std::make_unique<Configuration>(volts, std::move(actions));
 
             // Create Rail
-            auto rail =
-                std::make_unique<Rail>("vio0", std::move(configuration));
+            auto rail = std::make_unique<Rail>("vio0",
+                                               std::move(configuration));
             rails.emplace_back(std::move(rail));
         }
 

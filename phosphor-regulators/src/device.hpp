@@ -74,11 +74,11 @@ class Device
             std::vector<std::unique_ptr<Rail>>{}) :
         id{id},
         isRegulatorDevice{isRegulator}, fru{fru},
-        i2cInterface{std::move(i2cInterface)}, presenceDetection{std::move(
-                                                   presenceDetection)},
+        i2cInterface{std::move(i2cInterface)},
+        presenceDetection{std::move(presenceDetection)},
         configuration{std::move(configuration)},
-        phaseFaultDetection{std::move(phaseFaultDetection)}, rails{std::move(
-                                                                 rails)}
+        phaseFaultDetection{std::move(phaseFaultDetection)},
+        rails{std::move(rails)}
     {}
 
     /**

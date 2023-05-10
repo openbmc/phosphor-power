@@ -112,8 +112,8 @@ class BMCServices : public Services
      * @param bus D-Bus bus object
      */
     explicit BMCServices(sdbusplus::bus_t& bus) :
-        bus{bus}, errorLogging{bus},
-        presenceService{bus}, sensors{bus}, vpd{bus}
+        bus{bus}, errorLogging{bus}, presenceService{bus}, sensors{bus},
+        vpd{bus}
     {}
 
     /** @copydoc Services::getBus() */

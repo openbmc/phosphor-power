@@ -824,7 +824,7 @@ class PowerSupply
      */
     std::string findShortName(const std::string& invPath)
     {
-        auto const lastSlashPos = invPath.find_last_of('/');
+        const auto lastSlashPos = invPath.find_last_of('/');
 
         if ((lastSlashPos == std::string::npos) ||
             ((lastSlashPos + 1) == invPath.size()))

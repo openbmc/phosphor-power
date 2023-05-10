@@ -166,8 +166,7 @@ class DBusErrorLogging : public ErrorLogging
      *
      * @param bus D-Bus bus object
      */
-    explicit DBusErrorLogging(sdbusplus::bus_t& bus) : bus{bus}
-    {}
+    explicit DBusErrorLogging(sdbusplus::bus_t& bus) : bus{bus} {}
 
     /** @copydoc ErrorLogging::logConfigFileError() */
     virtual void logConfigFileError(Entry::Level severity,

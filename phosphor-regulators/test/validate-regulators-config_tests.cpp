@@ -3367,8 +3367,8 @@ TEST(ValidateRegulatorsConfigTest, CommandLineSyntax)
     }
     // Invalid: -s specified more than once
     {
-        command =
-            validateTool + "-s -s " + schemaFile + configuration + fileName;
+        command = validateTool + "-s -s " + schemaFile + configuration +
+                  fileName;
         expectCommandLineSyntax(outputMessageHelp, outputMessage, command, 2);
     }
     // Invalid: No file name specified after -c

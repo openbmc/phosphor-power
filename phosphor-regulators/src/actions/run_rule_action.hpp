@@ -47,8 +47,7 @@ class RunRuleAction : public Action
      *
      * @param ruleID rule ID
      */
-    explicit RunRuleAction(const std::string& ruleID) : ruleID{ruleID}
-    {}
+    explicit RunRuleAction(const std::string& ruleID) : ruleID{ruleID} {}
 
     /**
      * Executes this action.
