@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed749bfe_aaa5c87a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "678d8ce0_e239ebd5",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "deb65187_8c1c8f45",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e318950e_88e5ea50",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deb65187_8c1c8f45",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a881b29c_9c3204d3",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-05-11T13:55:02Z",
       "side": 1,
       "message": "maybe update this comment to what is being done now?",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eb25f25_801934f7",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Restored the original code as requested by Derek",
+      "parentUuid": "a881b29c_9c3204d3",
       "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -87,6 +141,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e89567_123ba11c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Restored original code",
+      "parentUuid": "9aa1a4c3_a5b524cf",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58d83b2d_156ac85e",
@@ -100,6 +172,24 @@
       "writtenOn": "2023-05-11T16:24:59Z",
       "side": 1,
       "message": "Remember to change token to a const std::string\u0026 here too and not just in the .hpp file.\n\nThe second arg is called \u0027vpdStr\u0027 in the .hpp file.  Should be consistent and have them match.",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56fb984_cf3afb79",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58d83b2d_156ac85e",
       "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -121,6 +211,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d72a180_de1302ad",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eef19281_7efeb409",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f01f3eb_732303dd",
@@ -138,6 +246,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b2f3fe_75c2db4f",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f01f3eb_732303dd",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "738cdccc_6cec3308",
@@ -151,6 +277,30 @@
       "writtenOn": "2023-05-11T13:55:02Z",
       "side": 1,
       "message": "nit: spelling",
+      "range": {
+        "startLine": 1052,
+        "startChar": 22,
+        "endLine": 1052,
+        "endChar": 33
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a7695ba_0eff3a60",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "738cdccc_6cec3308",
       "range": {
         "startLine": 1052,
         "startChar": 22,
@@ -197,6 +347,54 @@
       "writtenOn": "2023-05-11T16:24:59Z",
       "side": 1,
       "message": "Would it make more sense to call this \u0027keyword\u0027?  I think things like PN and SN were keywords.  If so, remember to change the doxygen too.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 44,
+        "endLine": 1057,
+        "endChar": 49
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfde6d2a_2f18d99a",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc02fe4b_1fbb4ef1",
+      "range": {
+        "startLine": 1057,
+        "startChar": 32,
+        "endLine": 1057,
+        "endChar": 42
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9972c5d0_94a80f0d",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-05-11T18:35:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "377a1848_6ce64f63",
       "range": {
         "startLine": 1057,
         "startChar": 44,
