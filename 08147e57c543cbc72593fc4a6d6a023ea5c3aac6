@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb65187_8c1c8f45",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "did you just add this for testing?  I think you can remove now",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a881b29c_9c3204d3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "maybe update this comment to what is being done now?",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dcd7301_9b725916",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "Can you mention this in the commit message?  Now it just mentions the VPD stuff.  Theoretically could also be a standalone commit but probably not worth the effort now.",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f01f3eb_732303dd",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "fyi you can also do:\n\nfor (char c : value)\n{\n   str +\u003d static_cast\u003cchar\u003e(c)\n}",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "738cdccc_6cec3308",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "nit: spelling",
+      "range": {
+        "startLine": 1052,
+        "startChar": 22,
+        "endLine": 1052,
+        "endChar": 33
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc02fe4b_1fbb4ef1",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T13:55:02Z",
+      "side": 1,
+      "message": "it\u0027s better to pass these by reference: const std::string\u0026 token",
+      "range": {
+        "startLine": 1057,
+        "startChar": 32,
+        "endLine": 1057,
+        "endChar": 42
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
