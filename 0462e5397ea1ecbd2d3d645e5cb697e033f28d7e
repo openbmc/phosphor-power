@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c8a4cb_07232cbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T21:08:38Z",
+      "side": 1,
+      "message": "i guess even another way to have done it would have been\nstd::string vpdStr{value.begin(), value.end()};",
+      "revId": "0462e5397ea1ecbd2d3d645e5cb697e033f28d7e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
