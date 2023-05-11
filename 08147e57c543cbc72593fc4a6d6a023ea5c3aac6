@@ -72,6 +72,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58d83b2d_156ac85e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-11T16:24:59Z",
+      "side": 1,
+      "message": "Remember to change token to a const std::string\u0026 here too and not just in the .hpp file.\n\nThe second arg is called \u0027vpdStr\u0027 in the .hpp file.  Should be consistent and have them match.",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef19281_7efeb409",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-11T16:24:59Z",
+      "side": 1,
+      "message": "Since str (or vpdStr) is an output and you are doing appends below, it would probably be best to clear it at the top of this method.\n\nOtherwise if someone called this method twice, passing in the same output variable, it would end up with the wrong value on the second call.",
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f01f3eb_732303dd",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -128,6 +162,29 @@
         "startChar": 32,
         "endLine": 1057,
         "endChar": 42
+      },
+      "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377a1848_6ce64f63",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-05-11T16:24:59Z",
+      "side": 1,
+      "message": "Would it make more sense to call this \u0027keyword\u0027?  I think things like PN and SN were keywords.  If so, remember to change the doxygen too.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 44,
+        "endLine": 1057,
+        "endChar": 49
       },
       "revId": "08147e57c543cbc72593fc4a6d6a023ea5c3aac6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
