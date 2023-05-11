@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa7d08b_485a7456",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-05-11T19:50:25Z",
+      "side": 1,
+      "message": "you don\u0027t need the static cast at all here, just vpdStr +\u003d c.",
+      "range": {
+        "startLine": 1248,
+        "startChar": 22,
+        "endLine": 1248,
+        "endChar": 33
+      },
+      "revId": "034fe922a2efed18078206afebf4d3f738643658",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
