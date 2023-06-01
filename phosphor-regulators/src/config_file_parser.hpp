@@ -87,6 +87,8 @@ namespace internal
  * @param element JSON element
  * @param property property name
  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdangling-reference"
 inline const nlohmann::json& getRequiredProperty(const nlohmann::json& element,
                                                  const std::string& property)
 {
@@ -97,6 +99,7 @@ inline const nlohmann::json& getRequiredProperty(const nlohmann::json& element,
     }
     return *it;
 }
+#pragma GCC diagnostic pop
 
 /**
  * Parses a JSON element containing an action.
