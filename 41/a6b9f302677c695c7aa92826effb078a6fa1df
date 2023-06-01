@@ -1,0 +1,8 @@
+Verified+1: Patrick Williams <patrick@stwcx.xyz>
+Code-Review+1: Matt Spinler <spinler@us.ibm.com>
+Code-Review+2: Shawn McCarney <shawnmm@us.ibm.com>
+Submitted-by: Patrick Williams <patrick@stwcx.xyz>
+Submitted-at: Thu, 01 Jun 2023 16:51:46 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/63869
+Project: openbmc/phosphor-power
+Branch: refs/heads/master
