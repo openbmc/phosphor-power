@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "553d8410_2e30688c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-06-01T17:47:41Z",
+      "side": 1,
+      "message": "what about a googletest wrap?\nI get:\n\nRun-time dependency GMock found: NO (tried pkgconfig and system)\n\nmeson.build:35:0: ERROR: Dependency \"gmock\" not found, tried pkgconfig and system",
+      "revId": "9f6f8317e10db9f2c33b361c12cad22d6ee6665c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
