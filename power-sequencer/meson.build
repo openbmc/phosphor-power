@@ -30,11 +30,12 @@ executable(
     'runtime_monitor.cpp',
     sequencer_src,
     dependencies: [
+        libi2c_dep,
+        nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
         sdeventplus,
-        libi2c_dep,
     ],
     include_directories: '..',
     install: true,

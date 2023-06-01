@@ -45,6 +45,12 @@ phosphor_regulators_library = static_library(
     'phosphor-regulators',
     phosphor_regulators_library_source_files,
     implicit_include_directories: false,
+    dependencies: [
+        nlohmann_json_dep,
+        phosphor_dbus_interfaces,
+        phosphor_logging,
+        sdbusplus,
+    ],
     include_directories: [
         phosphor_regulators_include_directories,
         libi2c_inc
@@ -58,10 +64,11 @@ phosphor_regulators = executable(
     'manager.cpp',
     dependencies: [
         libi2c_dep,
+        nlohmann_json_dep,
         phosphor_logging,
         sdbusplus,
         sdeventplus,
-        stdplus
+        stdplus,
     ],
     link_with: [
         phosphor_regulators_library,
@@ -76,7 +83,8 @@ regsctl = executable(
     'regsctl',
     'regsctl/main.cpp',
     dependencies: [
-        sdbusplus
+        cli11_dep,
+        sdbusplus,
     ],
     install: true
 )

@@ -13,6 +13,8 @@ project(
     meson_version: '>=0.58.0',
 )
 
+cxx = meson.get_compiler('cpp')
+
 build_tests = get_option('tests')
 
 if get_option('oe-sdk').enabled()
@@ -42,7 +44,26 @@ pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
 fmt = dependency('fmt')
-libgpiodcxx = dependency('libgpiodcxx')
+libgpiodcxx = dependency('libgpiodcxx',
+    default_options: ['bindings=cxx'])
+
+if cxx.has_header('nlohmann/json.hpp')
+    nlohmann_json_dep = declare_dependency()
+else
+    subproject('nlohmann', required: false)
+    nlohmann_json_dep = declare_dependency(
+        include_directories: [
+            'subprojects/nlohmann-json/single_include',
+            'subprojects/nlohmann-json/single_include/nlohmann',
+        ]
+    )
+endif
+
+if cxx.has_header('CLI/CLI.hpp')
+    cli11_dep = declare_dependency()
+else
+    cli11_dep = dependency('CLI11')
+endif
 
 systemd = dependency('systemd')
 servicedir = systemd.get_variable('systemdsystemunitdir')
@@ -112,6 +133,7 @@ libpower = static_library(
     'pmbus.cpp',
     'utility.cpp',
     dependencies: [
+        nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,

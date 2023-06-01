@@ -12,10 +12,11 @@ phosphor_power_sequencer = executable(
     'ucd90320_monitor.cpp',
     dependencies: [
         libgpiodcxx,
+        nlohmann_json_dep,
         phosphor_logging,
         sdbusplus,
         sdeventplus,
-        stdplus
+        stdplus,
     ],
     link_with: [
         libpower

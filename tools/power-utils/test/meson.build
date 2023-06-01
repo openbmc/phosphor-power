@@ -6,6 +6,7 @@ test(
         '../version.cpp',
         dependencies: [
             gtest,
+            nlohmann_json_dep,
             phosphor_logging,
         ],
         implicit_include_directories: false,
@@ -28,6 +29,7 @@ test(
         dependencies: [
             gtest,
             gmock,
+            nlohmann_json_dep,
             phosphor_logging,
         ],
         implicit_include_directories: false,

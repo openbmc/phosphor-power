@@ -4,12 +4,13 @@ cold_redundancy = executable(
     'cold_redundancy.cpp',
     'util.cpp',
     dependencies: [
+        boost,
+        nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
+        pthread,
         sdbusplus,
         systemd,
-        pthread,
-        boost,
     ],
     include_directories: [
         '.',

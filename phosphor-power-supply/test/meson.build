@@ -6,9 +6,11 @@ test('phosphor-power-supply-tests',
                 dependencies: [
                     gmock,
                     gtest,
+                    libgpiodcxx,
+                    nlohmann_json_dep,
+                    phosphor_logging,
                     sdbusplus,
                     sdeventplus,
-                    phosphor_logging,
                 ],
                 implicit_include_directories: false,
                 include_directories: [
