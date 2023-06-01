@@ -4,9 +4,11 @@ psutils = executable(
     'updater.cpp',
     'main.cpp',
     dependencies: [
+        cli11_dep,
+        libi2c_dep,
+        nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
-        libi2c_dep,
     ],
     include_directories: [libpower_inc, libi2c_inc],
     install: true,
