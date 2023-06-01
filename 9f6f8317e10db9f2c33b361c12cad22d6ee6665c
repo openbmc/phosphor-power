@@ -34,6 +34,24 @@
       "parentUuid": "553d8410_2e30688c",
       "revId": "9f6f8317e10db9f2c33b361c12cad22d6ee6665c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3089e43d_e8a0e753",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-06-01T18:22:04Z",
+      "side": 1,
+      "message": "I had installed \u0027gtest\u0027 and \u0027gmock\u0027 with dnf already.  Is it another package I should be installing?",
+      "parentUuid": "bb4eda02_2404d1df",
+      "revId": "9f6f8317e10db9f2c33b361c12cad22d6ee6665c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
