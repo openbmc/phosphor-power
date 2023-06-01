@@ -180,7 +180,7 @@ TEST_F(DeviceTests, AddToIDMap)
     Device device{"vdd_reg",
                   false,
                   deviceInvPath,
-                  std::move(createI2CInterface()),
+                  createI2CInterface(),
                   std::move(presenceDetection),
                   std::move(configuration),
                   std::move(phaseFaultDetection),
@@ -205,8 +205,7 @@ TEST_F(DeviceTests, ClearCache)
     // Test where Device does not contain a PresenceDetection object
     try
     {
-        Device device{"vdd_reg", false, deviceInvPath,
-                      std::move(createI2CInterface())};
+        Device device{"vdd_reg", false, deviceInvPath, createI2CInterface()};
         device.clearCache();
     }
     catch (...)
@@ -686,8 +685,7 @@ TEST_F(DeviceTests, GetConfiguration)
 {
     // Test where Configuration was not specified in constructor
     {
-        Device device{"vdd_reg", true, deviceInvPath,
-                      std::move(createI2CInterface())};
+        Device device{"vdd_reg", true, deviceInvPath, createI2CInterface()};
         EXPECT_EQ(device.getConfiguration(), nullptr);
     }
 
@@ -707,7 +705,7 @@ TEST_F(DeviceTests, GetConfiguration)
         Device device{"vdd_reg",
                       true,
                       deviceInvPath,
-                      std::move(createI2CInterface()),
+                      createI2CInterface(),
                       std::move(presenceDetection),
                       std::move(configuration)};
         EXPECT_NE(device.getConfiguration(), nullptr);
@@ -719,8 +717,7 @@ TEST_F(DeviceTests, GetConfiguration)
 
 TEST_F(DeviceTests, GetFRU)
 {
-    Device device{"vdd_reg", true, deviceInvPath,
-                  std::move(createI2CInterface())};
+    Device device{"vdd_reg", true, deviceInvPath, createI2CInterface()};
     EXPECT_EQ(device.getFRU(), deviceInvPath);
 }
 
@@ -734,8 +731,7 @@ TEST_F(DeviceTests, GetI2CInterface)
 
 TEST_F(DeviceTests, GetID)
 {
-    Device device{"vdd_reg", false, deviceInvPath,
-                  std::move(createI2CInterface())};
+    Device device{"vdd_reg", false, deviceInvPath, createI2CInterface()};
     EXPECT_EQ(device.getID(), "vdd_reg");
 }
 
@@ -743,8 +739,7 @@ TEST_F(DeviceTests, GetPhaseFaultDetection)
 {
     // Test where PhaseFaultDetection was not specified in constructor
     {
-        Device device{"vdd_reg", true, deviceInvPath,
-                      std::move(createI2CInterface())};
+        Device device{"vdd_reg", true, deviceInvPath, createI2CInterface()};
         EXPECT_EQ(device.getPhaseFaultDetection(), nullptr);
     }
 
@@ -762,7 +757,7 @@ TEST_F(DeviceTests, GetPhaseFaultDetection)
         Device device{"vdd_reg",
                       false,
                       deviceInvPath,
-                      std::move(createI2CInterface()),
+                      createI2CInterface(),
                       std::move(presenceDetection),
                       std::move(configuration),
                       std::move(phaseFaultDetection)};
@@ -775,8 +770,7 @@ TEST_F(DeviceTests, GetPresenceDetection)
 {
     // Test where PresenceDetection was not specified in constructor
     {
-        Device device{"vdd_reg", true, deviceInvPath,
-                      std::move(createI2CInterface())};
+        Device device{"vdd_reg", true, deviceInvPath, createI2CInterface()};
         EXPECT_EQ(device.getPresenceDetection(), nullptr);
     }
 
@@ -789,8 +783,7 @@ TEST_F(DeviceTests, GetPresenceDetection)
             std::make_unique<PresenceDetection>(std::move(actions));
 
         // Create Device
-        Device device{"vdd_reg", false, deviceInvPath,
-                      std::move(createI2CInterface()),
+        Device device{"vdd_reg", false, deviceInvPath, createI2CInterface(),
                       std::move(presenceDetection)};
         EXPECT_NE(device.getPresenceDetection(), nullptr);
         EXPECT_EQ(device.getPresenceDetection()->getActions().size(), 1);
@@ -801,8 +794,7 @@ TEST_F(DeviceTests, GetRails)
 {
     // Test where no rails were specified in constructor
     {
-        Device device{"vdd_reg", true, deviceInvPath,
-                      std::move(createI2CInterface())};
+        Device device{"vdd_reg", true, deviceInvPath, createI2CInterface()};
         EXPECT_EQ(device.getRails().size(), 0);
     }
 
@@ -821,7 +813,7 @@ TEST_F(DeviceTests, GetRails)
         Device device{"vdd_reg",
                       false,
                       deviceInvPath,
-                      std::move(createI2CInterface()),
+                      createI2CInterface(),
                       std::move(presenceDetection),
                       std::move(configuration),
                       std::move(phaseFaultDetection),
@@ -894,8 +886,7 @@ TEST_F(DeviceTests, IsPresent)
 
 TEST_F(DeviceTests, IsRegulator)
 {
-    Device device{"vdd_reg", false, deviceInvPath,
-                  std::move(createI2CInterface())};
+    Device device{"vdd_reg", false, deviceInvPath, createI2CInterface()};
     EXPECT_EQ(device.isRegulator(), false);
 }
 
