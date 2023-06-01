@@ -30,7 +30,6 @@ else
 endif
 
 
-cppfs = meson.get_compiler('cpp').find_library('stdc++fs')
 gmock = dependency('gmock', disabler: true, required: build_tests)
 gtest = dependency('gtest', main: true, disabler: true, required: build_tests)
 phosphor_dbus_interfaces = dependency('phosphor-dbus-interfaces')
@@ -113,7 +112,6 @@ libpower = static_library(
     'pmbus.cpp',
     'utility.cpp',
     dependencies: [
-        cppfs,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
