@@ -131,7 +131,7 @@ TEST(FileDescriptorTests, MoveAssignmentOperator)
         EXPECT_TRUE(isValid(fd));
 
         // Try to move object into itself
-        descriptor = std::move(descriptor);
+        descriptor = static_cast<FileDescriptor&&>(descriptor);
 
         // Verify object still contains file descriptor
         EXPECT_EQ(descriptor(), fd);

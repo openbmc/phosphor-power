@@ -112,7 +112,7 @@ TEST(TemporaryFileTests, MoveAssignmentOperator)
         fs::path path = file.getPath();
 
         // Try to move object into itself; should do nothing
-        file = std::move(file);
+        file = static_cast<TemporaryFile&&>(file);
 
         // Verify object still owns same temporary file and file exists
         EXPECT_EQ(file.getPath(), path);
