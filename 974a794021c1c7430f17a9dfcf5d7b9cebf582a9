@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f339cf_b9f012dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-06-01T03:23:19Z",
+      "side": 1,
+      "message": "Override CI results as the full stack resolves all issues.",
+      "revId": "974a794021c1c7430f17a9dfcf5d7b9cebf582a9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
