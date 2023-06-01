@@ -63,7 +63,10 @@ test('phosphor-regulators-tests',
                 dependencies: [
                     gmock,
                     gtest,
-                    sdbusplus
+                    nlohmann_json_dep,
+                    phosphor_dbus_interfaces,
+                    phosphor_logging,
+                    sdbusplus,
                 ],
                 link_args: dynamic_linker,
                 build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
