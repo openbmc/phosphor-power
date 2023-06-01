@@ -1132,8 +1132,8 @@ void PowerSupply::updateHistory()
     auto changed = recordManager->add(data);
     if (changed)
     {
-        average->values(std::move(recordManager->getAverageRecords()));
-        maximum->values(std::move(recordManager->getMaximumRecords()));
+        average->values(recordManager->getAverageRecords());
+        maximum->values(recordManager->getMaximumRecords());
     }
 }
 
