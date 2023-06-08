@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91b4ebbb_688ef98d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-08T20:07:37Z",
+      "side": 1,
+      "message": "Found a few small issues.  Jim no longer works on this team, so I will rebase this commit, fix these issues, and push up a revised commit.",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b641a6d_0a1c6e33",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-08T20:07:37Z",
+      "side": 1,
+      "message": "This log needs to occur after the check to see if it is end().  Otherwise if \"name\" was not found, this causes an assertion/core dump.",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cabe3219_f491f59d",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-08T20:07:37Z",
+      "side": 1,
+      "message": "This log needs to occur after the check to see if it is end(). Otherwise if \"name\" was not found, this causes an assertion/core dump.",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c52ad65_7c1c874a",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-08T20:07:37Z",
+      "side": 1,
+      "message": "This log needs to occur after the check to see if it is end(). Otherwise if \"line\" was not found, this causes an assertion/core dump.",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
