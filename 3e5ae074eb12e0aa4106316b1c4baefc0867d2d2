@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6738a6df_1a3611a5",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-22T00:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b641a6d_0a1c6e33",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cabe3219_f491f59d",
@@ -52,6 +70,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56e92934_d5b90b68",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-22T00:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cabe3219_f491f59d",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c52ad65_7c1c874a",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-06-08T20:07:37Z",
       "side": 1,
       "message": "This log needs to occur after the check to see if it is end(). Otherwise if \"line\" was not found, this causes an assertion/core dump.",
+      "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63961dbd_4a61d169",
+        "filename": "phosphor-power-sequencer/src/ucd90x_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-22T00:26:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c52ad65_7c1c874a",
       "revId": "3e5ae074eb12e0aa4106316b1c4baefc0867d2d2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
