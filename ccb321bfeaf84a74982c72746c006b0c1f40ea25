@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb2ee8c8_75101e51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-26T21:18:40Z",
+      "side": 1,
+      "message": "Jim no longer works on this team, so I will rebase this commit, fix my review comments, and push up a revised commit.",
+      "revId": "ccb321bfeaf84a74982c72746c006b0c1f40ea25",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0a3afa4_2719229d",
