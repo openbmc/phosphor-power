@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4678127_6e8a2573",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-26T13:59:05Z",
+      "side": 1,
+      "message": "I think the call to util::getSubTree() was replaced with low level D-bus code here because the util API does not support specifying multiple interfaces.\n\nThis seems strange, since the D-Bus GetSubTree API supports multiple interfaces.\n\nI think it would be hopeful to add an overload to util to support multiple interfaces.  Then other places in our repo that need to specify multiple interfaces can use common code.\n\nI\u0027ll put separate commit with that change up for review.  Then I\u0027ll rebase this pseq commit on top of it.",
+      "parentUuid": "5a15e196_009793ed",
+      "range": {
+        "startLine": 339,
+        "startChar": 27,
+        "endLine": 339,
+        "endChar": 40
+      },
+      "revId": "ccb321bfeaf84a74982c72746c006b0c1f40ea25",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c835570b_c03aa57e",
         "filename": "phosphor-power-sequencer/src/power_control.cpp",
         "patchSetId": 1
