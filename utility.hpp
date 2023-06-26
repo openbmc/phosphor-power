@@ -8,6 +8,7 @@
 #include <sdbusplus/bus.hpp>
 
 #include <string>
+#include <vector>
 
 namespace phosphor
 {
@@ -129,6 +130,24 @@ DbusPropertyMap getAllProperties(sdbusplus::bus_t& bus, const std::string& path,
  */
 DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
                        const std::string& interface, int32_t depth);
+
+/** @brief Get subtree from the object mapper.
+ *
+ * Helper function to find objects, services, and interfaces.
+ * See:
+ * https://github.com/openbmc/docs/blob/master/architecture/object-mapper.md
+ *
+ * @param[in] bus - The D-Bus object.
+ * @param[in] path - The root of the tree to search.
+ * @param[in] interfaces - Interfaces in the subtree to search for.
+ * @param[in] depth - The number of path elements to descend.
+ *
+ * @return DbusSubtree - Map of object paths to a map of service names to their
+ *                       interfaces.
+ */
+DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
+                       const std::vector<std::string>& interfaces,
+                       int32_t depth);
 
 /** @brief GetAssociatedSubTreePaths wrapper from the object mapper.
  *

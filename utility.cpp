@@ -90,11 +90,18 @@ DbusPropertyMap getAllProperties(sdbusplus::bus_t& bus, const std::string& path,
 DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
                        const std::string& interface, int32_t depth)
 {
+    return getSubTree(bus, path, std::vector<std::string>({interface}), depth);
+}
+
+DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
+                       const std::vector<std::string>& interfaces,
+                       int32_t depth)
+{
     auto mapperCall = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
                                           MAPPER_INTERFACE, "GetSubTree");
     mapperCall.append(path);
     mapperCall.append(depth);
-    mapperCall.append(std::vector<std::string>({interface}));
+    mapperCall.append(interfaces);
 
     auto reply = bus.call(mapperCall);
 
