@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fccf9a9d_aaa782cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-06-28T14:02:43Z",
+      "side": 1,
+      "message": "Jim no longer works on this team.  I am not aware of an immediate requirement for this functionality, and I don\u0027t have a multi-device system where I can test it.\n\nI asked Andrew to Abandon the commit since it will continue to get more out of sync with the current code base.  We can refer back to this commit if/when this support is added in the future.",
+      "revId": "3c3723191002bb264096e1988fa2618f2f3c472b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ],
   "submitRequirementResults": []
 }
