@@ -695,7 +695,7 @@ void PowerSupply::onOffConfig(uint8_t data)
 {
     using namespace phosphor::pmbus;
 
-    if (present)
+    if (present && driverName != ACBEL_FSG032_DD_NAME)
     {
         log<level::INFO>("ON_OFF_CONFIG write", entry("DATA=0x%02X", data));
         try
@@ -723,8 +723,16 @@ void PowerSupply::clearVinUVFault()
     // also clearing.
     //
     // Do not care about return value. Should be 1 if active, 0 if not.
-    static_cast<void>(
-        pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+    if (driverName != ACBEL_FSG032_DD_NAME)
+    {
+        static_cast<void>(
+            pmbusIntf->read("in1_lcrit_alarm", phosphor::pmbus::Type::Hwmon));
+    }
+    else
+    {
+        static_cast<void>(
+            pmbusIntf->read("curr1_crit_alarm", phosphor::pmbus::Type::Hwmon));
+    }
     vinUVFault = 0;
 }
 
@@ -882,7 +890,8 @@ void PowerSupply::updateInventory()
     // 1-byte reads into one string. So, the maximum size expected is 6 bytes.
     // However, it is formatted by the driver as a hex string with two ASCII
     // characters per byte.  So the maximum ASCII string size is 12.
-    const auto VERSION_SIZE = 12;
+    const auto IBMCFFPS_FW_VERSION_SIZE = 12;
+    const auto ACBEL_FSG032_FW_VERSION_SIZE = 6;
 
     using PropertyMap =
         std::map<std::string,
@@ -906,13 +915,15 @@ void PowerSupply::updateInventory()
         // TODO: non-IBM inventory updates?
 
 #if IBM_VPD
-        if (driverName != IBMCFFPS_DD_NAME)
+        if (driverName == ACBEL_FSG032_DD_NAME)
         {
             getPsuVpdFromDbus("CC", modelName);
             getPsuVpdFromDbus("PN", pn);
             getPsuVpdFromDbus("FN", fn);
             getPsuVpdFromDbus("SN", sn);
             assetProps.emplace(SN_PROP, sn);
+            fwVersion = readVPDValue(FW_VERSION, Type::Debug, ACBEL_FSG032_FW_VERSION_SIZE);
+            versionProps.emplace(VERSION_PROP, fwVersion);
         }
         else
         {
@@ -923,15 +934,14 @@ void PowerSupply::updateInventory()
             header = readVPDValue(SERIAL_HEADER, Type::Debug, HEADER_SIZE);
             sn = readVPDValue(SERIAL_NUMBER, Type::Debug, SERIAL_SIZE);
             assetProps.emplace(SN_PROP, header + sn);
+            fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
+                                     IBMCFFPS_FW_VERSION_SIZE);
+            versionProps.emplace(VERSION_PROP, fwVersion);
         }
 
         assetProps.emplace(MODEL_PROP, modelName);
         assetProps.emplace(PN_PROP, pn);
         assetProps.emplace(SPARE_PN_PROP, fn);
-
-        fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
-                                 VERSION_SIZE);
-        versionProps.emplace(VERSION_PROP, fwVersion);
 
         ipzvpdVINIProps.emplace(
             "CC", std::vector<uint8_t>(modelName.begin(), modelName.end()));
