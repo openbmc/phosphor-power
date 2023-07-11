@@ -51,6 +51,7 @@ constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
 constexpr auto AC_FAULT_LIMIT = 6;
 
 constexpr auto IBMCFFPS_DD_NAME = "ibm-cffps";
+constexpr auto ACBEL_FSG032_DD_NAME = "acbel-fsg032";
 
 using SensorInterface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
 using SensorObject = sdbusplus::server::object_t<SensorInterface>;
