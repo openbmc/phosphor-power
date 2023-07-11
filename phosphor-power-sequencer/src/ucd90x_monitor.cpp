@@ -287,8 +287,12 @@ void UCD90xMonitor::onFailureCheckPins(
     log<level::INFO>(
         fmt::format("GPIO chip number of lines: {}", numberLines).c_str());
 
-    // Workaround libgpiod bulk line maximum by getting values from individual
-    // lines
+    // Read GPIO values.  Work around libgpiod bulk line maximum by getting
+    // values from individual lines.  The libgpiod line offsets are the same as
+    // the Pin IDs defined in the UCD90xxx PMBus interface documentation.  These
+    // Pin IDs are different from the pin numbers on the chip.  For example, on
+    // the UCD90160, "FPWM1/GPIO5" is Pin ID/line offset 0, but it is pin number
+    // 17 on the chip.
     std::vector<int> values;
     try
     {
