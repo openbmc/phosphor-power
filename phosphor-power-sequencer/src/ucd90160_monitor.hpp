@@ -5,6 +5,9 @@
 #include <sdbusplus/bus.hpp>
 
 #include <cstdint>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace phosphor::power::sequencer
 {
@@ -32,6 +35,12 @@ class UCD90160Monitor : public UCD90xMonitor
      */
     UCD90160Monitor(sdbusplus::bus_t& bus, std::uint8_t i2cBus,
                     std::uint16_t i2cAddress);
+
+  protected:
+    /** @copydoc UCD90xMonitor::formatGpioValues() */
+    void formatGpioValues(
+        const std::vector<int>& values, unsigned int numberLines,
+        std::map<std::string, std::string>& additionalData) const override;
 };
 
 } // namespace phosphor::power::sequencer
