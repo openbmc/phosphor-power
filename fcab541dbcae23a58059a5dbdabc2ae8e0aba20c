@@ -46,6 +46,30 @@
       },
       "revId": "fcab541dbcae23a58059a5dbdabc2ae8e0aba20c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a5b40c_94ed5bc7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-17T14:56:57Z",
+      "side": 1,
+      "message": "I guess what I meant is to refer to the ACBEL PSU here and not a system it plugs into. (doesn\u0027t matter much since just a commit msg)",
+      "parentUuid": "b2f1a85c_6a20021f",
+      "range": {
+        "startLine": 17,
+        "startChar": 34,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "fcab541dbcae23a58059a5dbdabc2ae8e0aba20c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

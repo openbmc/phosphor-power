@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04ec5acf_97c7b627",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-17T14:56:57Z",
+      "side": 1,
+      "message": "since this is only used for the acbel, maybe better to name it like ACBEL_FSG032_FW_VERSION_SIZE?\n\nAlternatively, you could declare it down in the scope its used and then could leave off the PSU type.",
+      "range": {
+        "startLine": 890,
+        "startChar": 15,
+        "endLine": 890,
+        "endChar": 30
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
