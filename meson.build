@@ -32,8 +32,32 @@ else
 endif
 
 
-gmock = dependency('gmock', disabler: true, required: build_tests)
-gtest = dependency('gtest', main: true, disabler: true, required: build_tests)
+gmock = dependency('gmock', disabler: true, required: false)
+gtest = dependency('gtest', main: true, disabler: true, required: false)
+if (not gtest.found() or not gmock.found()) and build_tests.enabled()
+  gtest_opts = import('cmake').subproject_options()
+  gtest_opts.add_cmake_defines({
+  'BUILD_SHARED_LIBS': 'ON'
+  })
+  gtest_proj = import('cmake').subproject('googletest',
+                      options: gtest_opts,
+                      required: false)
+  if gtest_proj.found()
+    gtest = declare_dependency(
+      dependencies: [
+        dependency('threads'),
+        gtest_proj.dependency('gtest'),
+        gtest_proj.dependency('gtest_main'),
+      ]
+    )
+    gmock = gtest_proj.dependency('gmock')
+  else
+    assert(false, 'Googletest is required if tests are enabled')
+  endif
+endif
+
+
+
 phosphor_dbus_interfaces = dependency('phosphor-dbus-interfaces')
 phosphor_logging = dependency('phosphor-logging')
 prog_python = import('python').find_installation('python3')
