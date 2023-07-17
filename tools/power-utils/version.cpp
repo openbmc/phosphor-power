@@ -64,7 +64,7 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
     {
         if (fru["propertyName"] == "Version")
         {
-            versionStr = fru["fileName"];
+            versionStr = fru["fileName"].get<std::string>();
             break;
         }
     }
