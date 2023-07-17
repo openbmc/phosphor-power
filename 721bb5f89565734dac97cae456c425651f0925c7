@@ -16,6 +16,24 @@
       "message": "why protected?",
       "revId": "721bb5f89565734dac97cae456c425651f0925c7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38138758_ba4c53da",
+        "filename": "phosphor-power-sequencer/src/ucd90160_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-17T13:57:18Z",
+      "side": 1,
+      "message": "That is the access level in the parent class that Jim created.  I didn\u0027t see a reason to change it.  It is called as part of the pgood isolation process.\n\nI can change here, in the parent class, and in the 320 class if you think it is a problem.",
+      "parentUuid": "43091c40_8d83cca0",
+      "revId": "721bb5f89565734dac97cae456c425651f0925c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
