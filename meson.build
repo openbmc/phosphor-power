@@ -85,13 +85,7 @@ libgpiodcxx = dependency('libgpiodcxx',
 if cxx.has_header('nlohmann/json.hpp')
     nlohmann_json_dep = declare_dependency()
 else
-    subproject('nlohmann', required: false)
-    nlohmann_json_dep = declare_dependency(
-        include_directories: [
-            'subprojects/nlohmann-json/single_include',
-            'subprojects/nlohmann-json/single_include/nlohmann',
-        ]
-    )
+    nlohmann_json_dep = dependency('nlohmann-json')
 endif
 
 if cxx.has_header('CLI/CLI.hpp')
