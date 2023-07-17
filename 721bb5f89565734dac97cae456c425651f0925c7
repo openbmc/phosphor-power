@@ -52,6 +52,24 @@
       "parentUuid": "38138758_ba4c53da",
       "revId": "721bb5f89565734dac97cae456c425651f0925c7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f67c306a_9d8c5634",
+        "filename": "phosphor-power-sequencer/src/ucd90160_monitor.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-17T14:47:25Z",
+      "side": 1,
+      "message": "Matt and I discussed this offline.  Matt was wondering why it wasn\u0027t made private since this is a leaf class with no children.  I was leaving it protected to be consistent with the base class and to make it possible to subclass later if needed.",
+      "parentUuid": "e60f3cf7_db95efe7",
+      "revId": "721bb5f89565734dac97cae456c425651f0925c7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
