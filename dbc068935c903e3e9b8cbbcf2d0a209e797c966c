@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c361d550_8bde3c41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-07-18T00:22:26Z",
+      "side": 1,
+      "message": "Do we have plans to switch fmt::format to std::format?",
+      "revId": "dbc068935c903e3e9b8cbbcf2d0a209e797c966c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
