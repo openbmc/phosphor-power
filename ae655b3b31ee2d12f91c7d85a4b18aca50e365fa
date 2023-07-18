@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e44f21d_cfb91f2b",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-18T21:22:21Z",
+      "side": 1,
+      "message": "It would probably be better that way. I will change.",
+      "parentUuid": "61e416fb_de42a313",
+      "revId": "ae655b3b31ee2d12f91c7d85a4b18aca50e365fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17454c7c_e546c62c",
         "filename": "meson.build",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-07-18T20:04:17Z",
       "side": 1,
       "message": "This block is pretty ugly and assumes a lot about how gtest is built.  e.g. if it moved to meson then this would need to change, right?",
+      "revId": "ae655b3b31ee2d12f91c7d85a4b18aca50e365fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7d301d2_0e4eed8f",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-18T21:22:21Z",
+      "side": 1,
+      "message": "It is kinda ugly.   I haven\u0027t seen a better way to do it though.",
+      "parentUuid": "17454c7c_e546c62c",
       "revId": "ae655b3b31ee2d12f91c7d85a4b18aca50e365fa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
