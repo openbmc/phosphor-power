@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74d0c877_5e9142ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46f03e59_8b6fbdfe",
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef4924d9_85ecac75",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-07-18T19:48:38Z",
       "side": 1,
       "message": "Nit: Was this part of the previous sentence?",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5300d463_5707db92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef4924d9_85ecac75",
       "range": {
         "startLine": 12,
         "startChar": 6,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a40872_f5e4949a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12209d57_92b96a41",
+      "range": {
+        "startLine": 17,
+        "startChar": 34,
+        "endLine": 17,
+        "endChar": 42
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8aa6472_01c7ecd6",
@@ -87,6 +153,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fecccf1f_e051cfc6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8aa6472_01c7ecd6",
+      "range": {
+        "startLine": 20,
+        "startChar": 50,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5a28d7f_3de56826",
@@ -100,6 +190,24 @@
       "writtenOn": "2023-07-18T19:48:38Z",
       "side": 1,
       "message": "One OpenBMC coding convention is to put braces around all if/else blocks, even if they are only one line.  Otherwise it is easy for someone to later add a line that is a bug.\n\ne.g.\n\n```\n  if ...\n    foo();\n  else\n    bar();\n    baz();    // BUG: Not part of else\n```",
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1a6b08_63819f4e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5a28d7f_3de56826",
       "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -151,6 +259,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3269d7e_34c2e0d1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "968226ee_0dc65cb1",
+      "range": {
+        "startLine": 890,
+        "startChar": 15,
+        "endLine": 890,
+        "endChar": 30
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bcb0252_f9a0aef3",
@@ -164,6 +296,24 @@
       "writtenOn": "2023-07-18T19:48:38Z",
       "side": 1,
       "message": "This is a behavior change.  Previously if the driver was not IBMCFFPS, then it obtained 4 VPD properties.  Now it only does that if it is the ACBEL PSU.\n\nDo we know if there is a 3rd PSU type that was getting the 4 VPD properties before?  Maybe not since this is in a \u0027#if IBM_VPD\u0027 block.  Just asking.",
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e36b2409_b4500fe1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-07-18T21:23:17Z",
+      "side": 1,
+      "message": "The if condition did not exist prior to ACBEL series of commits.",
+      "parentUuid": "7bcb0252_f9a0aef3",
       "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
