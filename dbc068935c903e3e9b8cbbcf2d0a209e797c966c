@@ -16,6 +16,24 @@
       "message": "Do we have plans to switch fmt::format to std::format?",
       "revId": "dbc068935c903e3e9b8cbbcf2d0a209e797c966c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba82464_8a93a169",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-18T14:35:50Z",
+      "side": 1,
+      "message": "I don\u0027t think std::format supports printing vectors yet, which is done in a few places here, so I\u0027m not sure.",
+      "parentUuid": "c361d550_8bde3c41",
+      "revId": "dbc068935c903e3e9b8cbbcf2d0a209e797c966c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
