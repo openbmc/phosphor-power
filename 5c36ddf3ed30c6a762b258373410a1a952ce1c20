@@ -3,6 +3,109 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46f03e59_8b6fbdfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "Nit: Several lines in this commit message are too long and wrap strangely in Gerrit.\n\nThe convention is that the first line (summary) is no longer than 50 characters, and the rest of the lines are limited to 72.\n\nvim will help with formatting.  I have the following line in my ~/.vimrc\n\n```\n  autocmd Filetype gitcommit  setlocal textwidth\u003d72 tabstop\u003d2 shiftwidth\u003d2 expandtab spell\n```\n\nAlso, I would recommend against mentioning specific system types like Bonnell and Rainier unless necessary.  I think these changes are specific to the ACBEL PSU type rather than the system type right?  So you could mention ACBEL PSU enhancements and regression testing on other PSU types like IBMCFFPS.",
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef4924d9_85ecac75",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "Nit: Was this part of the previous sentence?",
+      "range": {
+        "startLine": 12,
+        "startChar": 6,
+        "endLine": 12,
+        "endChar": 7
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12209d57_92b96a41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "ACBEL?",
+      "range": {
+        "startLine": 17,
+        "startChar": 34,
+        "endLine": 17,
+        "endChar": 42
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8aa6472_01c7ecd6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "PELs are an error log extension that is only used on OpenPower systems.  So it might be better to mention that an error log was reported.",
+      "range": {
+        "startLine": 20,
+        "startChar": 50,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5a28d7f_3de56826",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "One OpenBMC coding convention is to put braces around all if/else blocks, even if they are only one line.  Otherwise it is easy for someone to later add a line that is a bug.\n\ne.g.\n\n```\n  if ...\n    foo();\n  else\n    bar();\n    baz();    // BUG: Not part of else\n```",
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04ec5acf_97c7b627",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 3
@@ -20,6 +123,47 @@
         "endLine": 890,
         "endChar": 30
       },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "968226ee_0dc65cb1",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "I agree this is confusing.  The other one should probably be called IBMCFFPS_FW_VERSION_SIZE since it sounds specific to that PSU type too right?",
+      "parentUuid": "04ec5acf_97c7b627",
+      "range": {
+        "startLine": 890,
+        "startChar": 15,
+        "endLine": 890,
+        "endChar": 30
+      },
+      "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bcb0252_f9a0aef3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-18T19:48:38Z",
+      "side": 1,
+      "message": "This is a behavior change.  Previously if the driver was not IBMCFFPS, then it obtained 4 VPD properties.  Now it only does that if it is the ACBEL PSU.\n\nDo we know if there is a 3rd PSU type that was getting the 4 VPD properties before?  Maybe not since this is in a \u0027#if IBM_VPD\u0027 block.  Just asking.",
       "revId": "5c36ddf3ed30c6a762b258373410a1a952ce1c20",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
