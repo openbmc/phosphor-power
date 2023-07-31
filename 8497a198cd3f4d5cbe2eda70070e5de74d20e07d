@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c931c5a_2de51b10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-07-31T19:55:39Z",
+      "side": 1,
+      "message": "This commit is quite old, and the author no longer works on code in this repository. Asking Andrew Geissler to abandon it. We can re-start the work again on the latest upstream/master if needed.",
+      "revId": "8497a198cd3f4d5cbe2eda70070e5de74d20e07d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "da57d42c_a384d6b1",
         "filename": "meson.build",
@@ -14,8 +32,7 @@
       "side": 1,
       "message": "Hi,\n\nI wouldn\u0027t like to change the meson.build for my supply_interface and supply_driver\n\nThanks,\nChanh",
       "revId": "8497a198cd3f4d5cbe2eda70070e5de74d20e07d",
-      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4",
-      "unresolved": true
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
