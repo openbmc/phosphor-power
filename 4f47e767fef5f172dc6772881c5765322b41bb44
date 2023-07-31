@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "269bc6f1_a1817c33",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-07-31T21:22:16Z",
+      "side": 1,
+      "message": "On line 1053 it is checking for the IBMCFFPS driver name before it goes on to create the recordManager object on line 1078.  Then on line 1124 in this function it will just exit early if it wasn\u0027t created.\n\nSo I\u0027m not sure if you need a check here?",
+      "revId": "4f47e767fef5f172dc6772881c5765322b41bb44",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
