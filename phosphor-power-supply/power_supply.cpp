@@ -1133,18 +1133,21 @@ void PowerSupply::updateHistory()
         return;
     }
 
-    // Read just the most recent average/max record
-    auto data = pmbusIntf->readBinary(INPUT_HISTORY,
-                                      pmbus::Type::HwmonDeviceDebug,
-                                      history::RecordManager::RAW_RECORD_SIZE);
-
-    // Update D-Bus only if something changed (a new record ID, or cleared
-    // out)
-    auto changed = recordManager->add(data);
-    if (changed)
+    if (driverName != ACBEL_FSG032_DD_NAME)
     {
-        average->values(recordManager->getAverageRecords());
-        maximum->values(recordManager->getMaximumRecords());
+        // Read just the most recent average/max record
+        auto data =
+            pmbusIntf->readBinary(INPUT_HISTORY, pmbus::Type::HwmonDeviceDebug,
+                                  history::RecordManager::RAW_RECORD_SIZE);
+
+        // Update D-Bus only if something changed (a new record ID, or cleared
+        // out)
+        auto changed = recordManager->add(data);
+        if (changed)
+        {
+            average->values(recordManager->getAverageRecords());
+            maximum->values(recordManager->getMaximumRecords());
+        }
     }
 }
 

@@ -72,7 +72,10 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
 
     try
     {
-        powerConfigGPIO = createGPIO("power-config-full-load");
+        if (driverName != ACBEL_FSG032_DD_NAME)
+        {
+            powerConfigGPIO = createGPIO("power-config-full-load");
+        }
     }
     catch (const std::exception& e)
     {
@@ -547,23 +550,25 @@ void PSUManager::createError(const std::string& faultName,
 
 void PSUManager::syncHistory()
 {
-    log<level::INFO>("Synchronize INPUT_HISTORY");
-
-    if (!syncHistoryGPIO)
+    if (driverName != ACBEL_FSG032_DD_NAME)
     {
-        syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
-    }
-    if (syncHistoryGPIO)
-    {
-        const std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
-        syncHistoryGPIO->toggleLowHigh(delay);
-        for (auto& psu : psus)
+        log<level::INFO>("Synchronize INPUT_HISTORY");
+        if (!syncHistoryGPIO)
         {
-            psu->clearSyncHistoryRequired();
+            syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
         }
-    }
+        if (syncHistoryGPIO)
+        {
+            const std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
+            syncHistoryGPIO->toggleLowHigh(delay);
+            for (auto& psu : psus)
+            {
+                psu->clearSyncHistoryRequired();
+            }
+        }
 
-    log<level::INFO>("Synchronize INPUT_HISTORY completed");
+        log<level::INFO>("Synchronize INPUT_HISTORY completed");
+    }
 }
 
 void PSUManager::analyze()
