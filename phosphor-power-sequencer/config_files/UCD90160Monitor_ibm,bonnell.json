@@ -1,0 +1,23 @@
+{
+    "rails": [
+        { "name": "12.0VA" },
+        { "name": "5.0VCS" },
+        { "name": "1.8V" },
+        { "name": "0.9V" },
+        { "name": "3.3V" },
+        { "name": "1.5V_AVDD" },
+        { "name": "0.65V_VDN" },
+        { "name": "0.7VA_VDD" },
+        { "name": "0.7VB_VDD" },
+        { "name": "0.75V_VCS" },
+        { "name": "0.9V_VIO" },
+        { "name": "0.85V_VPCIE" },
+        { "name": "PMIC2_PG" },
+        { "name": "PMIC3_PG" },
+        { "name": "VDDR_1.2VB" },
+        { "name": "VDDR_1.2VA" }
+    ],
+
+    "pins": [
+    ]
+}
