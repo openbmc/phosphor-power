@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ac6045f_a9f66445",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2023-08-01T14:29:11Z",
+      "side": 1,
+      "message": "We shouldn\u0027t need to do this check as we discussed at the team meeting. For Bonnell (and Everest), the catch below will basically ignore the error if the gpio isn\u0027t defined.  The existence of the gpio itself isn\u0027t determined based on what type of psu is attached, it\u0027s determined by the system.\n\nI\u0027m not sure if we\u0027d know the driverName at this point in the code, but regardless we don\u0027t need to check for it here.",
+      "revId": "e15948f067780082ff84f1efcd455641b62d40f4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
