@@ -51,6 +51,24 @@
       "parentUuid": "91ed8da5_86f821fc",
       "revId": "6db50be809f2c63132725ad0ef334a2856cc9e61",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d85f0e0_a08a9b4d",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-08-03T21:26:35Z",
+      "side": 1,
+      "message": "i just meant move the traces, not the actual if check.",
+      "parentUuid": "cc74a2cb_683cd931",
+      "revId": "6db50be809f2c63132725ad0ef334a2856cc9e61",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
