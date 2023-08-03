@@ -16,6 +16,23 @@
       "message": "Did you test with non-ACBEL PSUs to verify they still gathered input history?",
       "revId": "6db50be809f2c63132725ad0ef334a2856cc9e61",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ed8da5_86f821fc",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-08-03T20:43:47Z",
+      "side": 1,
+      "message": "i would if it would be better if the traces were inside the if block starting on line 559, since as it is now they\u0027d still show up on non IBM (ACBEL/CFFPS) PSU based systems.",
+      "revId": "6db50be809f2c63132725ad0ef334a2856cc9e61",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
