@@ -23,7 +23,6 @@ endif
 
 executable(
     'pseq-monitor',
-    'argument.cpp',
     error_hpp,
     'main.cpp',
     'pgood_monitor.cpp',
