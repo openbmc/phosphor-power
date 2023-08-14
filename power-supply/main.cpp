@@ -15,10 +15,10 @@
  */
 #include "config.h"
 
-#include "argument.hpp"
 #include "device_monitor.hpp"
 #include "power_supply.hpp"
 
+#include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
 
@@ -29,34 +29,42 @@ using namespace phosphor::logging;
 
 int main(int argc, char* argv[])
 {
-    auto options = ArgumentParser(argc, argv);
+    CLI::App app{"PSU Monitor"};
 
-    auto objpath = (options)["path"];
-    auto instnum = (options)["instance"];
-    auto invpath = (options)["inventory"];
-    if (argc < 4)
+    std::string objpath{};
+    std::string instnum{};
+    std::string invpath{};
+    std::string records{};
+    std::string syncGPIOPath{};
+    std::string syncGPIONum{};
+
+    app.add_option("-p,--path", objpath, "Path to location to monitor\n")
+        ->required();
+    app.add_option("-n,--instance", instnum,
+                   "Instance number for this power supply\n")
+        ->required();
+    app.add_option("-i,--inventory", invpath,
+                   "Inventory path for this power supply\n")
+        ->required();
+    app.add_option(
+           "-r,--num-history-records", records,
+           "Number of input power history records to provide on D-Bus\n")
+        ->expected(0, 1);
+    app.add_option(
+           "-a,--sync-gpio-path", syncGPIOPath,
+           "GPIO chip device for the GPIO that performs the sync function\n")
+        ->expected(0, 1);
+    app.add_option("-u,--sync-gpio-num", syncGPIONum,
+                   "GPIO number for the GPIO that performs the sync function\n")
+        ->expected(0, 1);
+
+    try
     {
-        std::cerr << std::endl << "Too few arguments" << std::endl;
-        options.usage(argv);
-        return -1;
+        app.parse(argc, argv);
     }
-
-    if (objpath == ArgumentParser::emptyString)
+    catch (const CLI::Error& e)
     {
-        log<level::ERR>("Device monitoring path argument required");
-        return -2;
-    }
-
-    if (instnum == ArgumentParser::emptyString)
-    {
-        log<level::ERR>("Device monitoring instance number argument required");
-        return -3;
-    }
-
-    if (invpath == ArgumentParser::emptyString)
-    {
-        log<level::ERR>("Device monitoring inventory path argument required");
-        return -4;
+        return app.exit(e);
     }
 
     auto bus = sdbusplus::bus::new_default();
@@ -87,8 +95,7 @@ int main(int argc, char* argv[])
 
     // Get the number of input power history records to keep in D-Bus.
     long int numRecords = 0;
-    auto records = (options)["num-history-records"];
-    if (records != ArgumentParser::emptyString)
+    if (!records.empty())
     {
         numRecords = std::stol(records);
         if (numRecords < 0)
@@ -102,20 +109,15 @@ int main(int argc, char* argv[])
     {
         // Get the GPIO information for controlling the SYNC signal.
         // If one is there, they both must be.
-        auto syncGPIOPath = (options)["sync-gpio-path"];
-        auto syncGPIONum = (options)["sync-gpio-num"];
-
-        if (((syncGPIOPath == ArgumentParser::emptyString) &&
-             (syncGPIONum != ArgumentParser::emptyString)) ||
-            ((syncGPIOPath != ArgumentParser::emptyString) &&
-             (syncGPIONum == ArgumentParser::emptyString)))
+        if ((syncGPIOPath.empty() && !syncGPIONum.empty()) ||
+            (!syncGPIOPath.empty() && syncGPIONum.empty()))
         {
             std::cerr << "Invalid sync GPIO number or path\n";
             return -7;
         }
 
         size_t gpioNum = 0;
-        if (syncGPIONum != ArgumentParser::emptyString)
+        if (!syncGPIONum.empty())
         {
             gpioNum = stoul(syncGPIONum);
         }
