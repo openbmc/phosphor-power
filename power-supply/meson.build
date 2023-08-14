@@ -1,6 +1,5 @@
 psu_monitor = executable(
     'psu-monitor',
-    'argument.cpp',
     error_hpp,
     'main.cpp',
     'power_supply.cpp',
