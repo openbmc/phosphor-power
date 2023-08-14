@@ -80,12 +80,12 @@ services = [
     ['power-control', 'phosphor-power-control.service'],
 ]
 
+fs = import('fs')
 foreach service : services
     if get_option(service[0])
-        configure_file(input: 'services/' + service[1],
-                 output: service[1],
-                 copy: true,
-                 install_dir: servicedir)
+        fs.copyfile('services/' + service[1],
+            install: true,
+            install_dir: servicedir)
     endif
 endforeach
 
