@@ -15,12 +15,12 @@
  */
 #include "config.h"
 
-#include "argument.hpp"
 #include "mihawk-cpld.hpp"
 #include "pgood_monitor.hpp"
 #include "runtime_monitor.hpp"
 #include "ucd90160.hpp"
 
+#include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
 
@@ -32,17 +32,31 @@ using namespace phosphor::logging;
 
 int main(int argc, char** argv)
 {
-    ArgumentParser args{argc, argv};
-    auto action = args["action"];
+    CLI::App app{"Phosphor sequencer monitor"};
+    std::string action{};
+    std::string interVal{};
 
-    if ((action != "pgood-monitor") && (action != "runtime-monitor"))
+    std::vector<std::string> actionTypes = {"pgood-monitor", "runtime-monitor"};
+    app.add_option("-a,--action", action,
+                   "Action: pgood-monitor or runtime-monitor\n")
+        ->required()
+        ->transform(CLI::IsMember(actionTypes));
+    app.add_option("-i,--interval", interVal,
+                   "Interval in milliseconds:\n"
+                   "PGOOD monitor:   time allowed for PGOOD to come up\n"
+                   "Runtime monitor: polling interval.\n")
+        ->required();
+
+    try
     {
-        std::cerr << "Invalid action\n";
-        args.usage(argv);
-        exit(EXIT_FAILURE);
+        app.parse(argc, argv);
+    }
+    catch (CLI::Error& e)
+    {
+        return app.exit(e);
     }
 
-    auto i = strtoul(args["interval"].c_str(), nullptr, 10);
+    auto i = strtoul(interVal.c_str(), nullptr, 10);
     if (i == 0)
     {
         std::cerr << "Invalid interval value\n";
