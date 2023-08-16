@@ -31,8 +31,8 @@ To clean the repository and remove all build output:
   rm -rf build
 ```
 
-You can specify [meson options](meson_options.txt) to customize the build
-process. For example, you can specify:
+You can specify [meson options](meson.options) to customize the build process.
+For example, you can specify:
 
 - Which applications to build and install.
 - Application-specific configuration data, such as power sequencer type.
