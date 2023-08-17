@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a73fd2ae_0b1cb84b",
+        "filename": "power-sequencer/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-08-17T13:28:09Z",
+      "side": 1,
+      "message": "Is there a reason you didn\u0027t want to use CLI11_PARSE() here?  Not a big deal, just wondering.",
+      "revId": "f02d93420ba3d4d784a6343b83353c0a1f07d204",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
