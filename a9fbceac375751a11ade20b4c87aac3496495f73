@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "20e6a4ab_cc9c74b6",
+        "filename": "power-supply/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-08-18T00:46:34Z",
+      "side": 1,
+      "message": "Thanks Shawn, let me explain:\n\nFor these three parameters, it is not necessary, we can ignore several options when running the process (just remove the required() method).\nBut in the `power-supply-monitor@.service` file, it is defined like this:\n```\nExecStart\u003d/usr/bin/env psu-monitor --path\u003d${DEVPATH} --instance\u003d${INSTANCE} --inventory\u003d${INVENTORY} --num-history-records\u003d${NUM_HISTORY_RECORDS} --sync-gpio-path\u003d${SYNC_GPIO_PATH} --sync-gpio-num\u003d${SYNC_GPIO_NUM}\n```\nBecause the service file supports these three parameters by default, and these three variables are not configured in some configuration files, expected(0,1) is added here, which means that if the caller does not configure, the default value is used. If the caller is configured, use the caller-configured value as an argument.\nOtherwise, if the expected(0,1) method is removed, systemd will report an error and exit when calling this service file.",
+      "parentUuid": "f866f950_db1eef24",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 25
+      },
+      "revId": "a9fbceac375751a11ade20b4c87aac3496495f73",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd5a06f6_031e9e6e",
         "filename": "power-supply/main.cpp",
         "patchSetId": 1
@@ -37,6 +61,24 @@
       "writtenOn": "2023-08-17T13:47:55Z",
       "side": 1,
       "message": "Is there a reason not to use CLI11_PARSE()?",
+      "revId": "a9fbceac375751a11ade20b4c87aac3496495f73",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f308d5_ccca6838",
+        "filename": "power-supply/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2023-08-18T00:46:34Z",
+      "side": 1,
+      "message": "There is no difference between these two methods. The current method is just an expansion of the `CLI11_PARSE` macro[1]. Both are fine. I respect the opinions of the maintainers here.\n\n[1] https://github.com/CLIUtils/CLI11/blob/main/README.md#usage",
+      "parentUuid": "cd5a06f6_031e9e6e",
       "revId": "a9fbceac375751a11ade20b4c87aac3496495f73",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
