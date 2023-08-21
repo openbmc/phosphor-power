@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cc9d8b8_95c699d9",
+        "filename": "power-supply/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-08-21T19:16:21Z",
+      "side": 1,
+      "message": "Thanks for the detailed explanation.  That makes sense.",
+      "parentUuid": "20e6a4ab_cc9c74b6",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 25
+      },
+      "revId": "a9fbceac375751a11ade20b4c87aac3496495f73",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd5a06f6_031e9e6e",
         "filename": "power-supply/main.cpp",
         "patchSetId": 1
