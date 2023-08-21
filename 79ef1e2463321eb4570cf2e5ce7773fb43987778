@@ -16,6 +16,24 @@
       "message": "It is nice that this became simpler.  Why were the other lines not needed any more?  Is this no longer considered a subproject?",
       "revId": "79ef1e2463321eb4570cf2e5ce7773fb43987778",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e50428_efd16a24",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-08-21T19:03:29Z",
+      "side": 1,
+      "message": "I think the dependency() function can find the subproject.\nI\u0027m not sure why the previous code needed to hardcode the config file paths, I guess something must have changed in nlohmann-json.",
+      "parentUuid": "fcafd4cb_42adf2d9",
+      "revId": "79ef1e2463321eb4570cf2e5ce7773fb43987778",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
