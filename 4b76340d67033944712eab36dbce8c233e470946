@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68d10142_250fe5ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-08-28T18:30:39Z",
+      "side": 1,
+      "message": "Nit: it would probably make more sense to say \"PSU\" information.  The PSU app is not getting sensor data from entity manager.",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "373181d6_7550f44e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-08-28T18:30:39Z",
+      "side": 1,
+      "message": "Nit: spelling -\u003e consistent",
+      "range": {
+        "startLine": 20,
+        "startChar": 46,
+        "endLine": 20,
+        "endChar": 58
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b873d521_e43f427c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-08-28T18:30:39Z",
+      "side": 1,
+      "message": "Was this old text that was intended to be deleted?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 11
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
