@@ -32,7 +32,7 @@ using PowerSystemInputsObject =
 
 // Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
-constexpr auto validationTimeout = std::chrono::seconds(10);
+constexpr auto validationTimeout = std::chrono::seconds(30);
 
 /**
  * @class PowerSystemInputs
