@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f91e016_af010c24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-08-28T19:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68d10142_250fe5ed",
+      "range": {
+        "startLine": 10,
+        "startChar": 24,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "373181d6_7550f44e",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-28T18:30:39Z",
       "side": 1,
       "message": "Nit: spelling -\u003e consistent",
+      "range": {
+        "startLine": 20,
+        "startChar": 46,
+        "endLine": 20,
+        "endChar": 58
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f710dbf7_15cc0836",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-08-28T19:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "373181d6_7550f44e",
       "range": {
         "startLine": 20,
         "startChar": 46,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d89c59ab_f54f9e05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-08-28T19:23:54Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "b873d521_e43f427c",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 11
+      },
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44f915be_c9268f90",
@@ -83,6 +155,24 @@
       "writtenOn": "2023-08-28T18:58:47Z",
       "side": 1,
       "message": "might as well update this comment.... maybe add some text stating that if it\u0027s too short, it results in incorrect errors being logged, but no real consequence of it being too long",
+      "revId": "4b76340d67033944712eab36dbce8c233e470946",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "481f269b_32af633c",
+        "filename": "phosphor-power-supply/psu_manager.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-08-28T19:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44f915be_c9268f90",
       "revId": "4b76340d67033944712eab36dbce8c233e470946",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
