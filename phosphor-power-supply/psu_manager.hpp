@@ -30,9 +30,11 @@ using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
 using PowerSystemInputsObject =
     sdbusplus::server::object_t<PowerSystemInputsInterface>;
 
-// Validation timeout. Allow 10s to detect if new EM interfaces show up in D-Bus
+// Validation timeout. Allow 30s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
-constexpr auto validationTimeout = std::chrono::seconds(10);
+// Previously the timer was set to 10 seconds was too short, it results in
+// incorrect errors being logged, but no real consequence of longer timeout.
+constexpr auto validationTimeout = std::chrono::seconds(30);
 
 /**
  * @class PowerSystemInputs
