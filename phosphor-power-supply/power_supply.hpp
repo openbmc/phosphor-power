@@ -547,9 +547,307 @@ class PowerSupply
 
   private:
     /**
+     * @brief Examine STATUS_WORD for CML (communication, memory, logic fault).
+     */
+    void analyzeCMLFault();
+
+    /**
+     * @brief Examine STATUS_WORD for INPUT bit on.
+     *
+     * "An input voltage, input current, or input power fault or warning has
+     * occurred."
+     */
+    void analyzeInputFault();
+
+    /**
+     * @brief Examine STATUS_WORD for VOUT being set.
+     *
+     * If VOUT is on, "An output voltage fault or warning has occurred.", and
+     * VOUT_OV_FAULT is on, there is an output over-voltage fault.
+     */
+    void analyzeVoutOVFault();
+
+    /**
+     * @brief Examine STATUS_WORD value read for IOUT_OC_FAULT.
+     *
+     * "An output overcurrent fault has occurred." If it is on, and fault not
+     * set, trace STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_IOUT values.
+     */
+    void analyzeIoutOCFault();
+
+    /**
+     * @brief Examines STATUS_WORD value read to see if there is a UV fault.
+     *
+     * Checks if the VOUT bit is on, indicating "An output voltage fault or
+     * warning has occurred", if it is on, but VOUT_OV_FAULT is off, it is
+     * determined to be an indication of an output under-voltage fault.
+     */
+    void analyzeVoutUVFault();
+
+    /**
+     * @brief Examine STATUS_WORD for the fan fault/warning bit.
+     *
+     * If fanFault is not on, trace that the bit now came on, include
+     * STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_FANS_1_2 values as well, to
+     * help with understanding what may have caused it to be set.
+     */
+    void analyzeFanFault();
+
+    /**
+     * @brief Examine STATUS_WORD for temperature fault.
+     */
+    void analyzeTemperatureFault();
+
+    /**
+     * @brief Examine STATUS_WORD for pgood or unit off faults.
+     */
+    void analyzePgoodFault();
+
+    /**
+     * @brief Determine possible manufacturer-specific faults from bits in
+     * STATUS_MFR.
+     *
+     * The bits in the STATUS_MFR_SPECIFIC command response have "Manufacturer
+     * Defined" meanings. Determine which faults, if any, are present based on
+     * the power supply (device driver) type.
+     */
+    void determineMFRFault();
+
+    /**
+     * @brief Examine STATUS_WORD value read for MFRSPECIFIC bit on.
+     *
+     * "A manufacturer specific fault or warning has occurred."
+     *
+     * If it is on, call the determineMFRFault() helper function to examine the
+     * value read from STATUS_MFR_SPECIFIC.
+     */
+    void analyzeMFRFault();
+
+    /**
+     * @brief Analyzes the STATUS_WORD for a VIN_UV_FAULT indicator.
+     */
+    void analyzeVinUVFault();
+
+    /**
+     * @brief Given a full inventory path, returns the last node of the path as
+     * the "short name"
+     */
+    std::string findShortName(const std::string& invPath)
+    {
+        const auto lastSlashPos = invPath.find_last_of('/');
+
+        if ((lastSlashPos == std::string::npos) ||
+            ((lastSlashPos + 1) == invPath.size()))
+        {
+            return invPath;
+        }
+        else
+        {
+            return invPath.substr(lastSlashPos + 1);
+        }
+    }
+
+    /**
+     * @brief Binds or unbinds the power supply device driver
+     *
+     * Called when a presence change is detected to either bind the device
+     * driver for the power supply when it is installed, or unbind the device
+     * driver when the power supply is removed.
+     *
+     * Writes <device> to <path>/bind (or unbind)
+     *
+     * @param present - when true, will bind the device driver
+     *                  when false, will unbind the device driver
+     */
+    void bindOrUnbindDriver(bool present);
+
+    /**
+     *  @brief Updates the presence status by querying D-Bus
+     *
+     * The D-Bus inventory properties for this power supply will be read to
+     * determine if the power supply is present or not and update this
+     * object's present member variable to reflect current status.
+     **/
+    void updatePresence();
+
+    /**
+     * @brief Updates the power supply presence by reading the GPIO line.
+     */
+    void updatePresenceGPIO();
+
+    /**
+     * @brief Callback for inventory property changes
+     *
+     * Process change of Present property for power supply.
+     *
+     * This is used if we are watching the D-Bus properties instead of reading
+     * the GPIO presence line ourselves.
+     *
+     * @param[in]  msg - Data associated with Present change signal
+     **/
+    void inventoryChanged(sdbusplus::message_t& msg);
+
+    /**
+     * @brief Callback for inventory property added.
+     *
+     * Process add of the interface with the Present property for power supply.
+     *
+     * This is used if we are watching the D-Bus properties instead of reading
+     * the GPIO presence line ourselves.
+     *
+     * @param[in]  msg - Data associated with Present add signal
+     **/
+    void inventoryAdded(sdbusplus::message_t& msg);
+
+    /**
+     * @brief Reads the pmbus MFR_POUT_MAX value.
+     *
+     * "The MFR_POUT_MAX command sets or retrieves the maximum rated output
+     * power, in watts, that the unit is rated to supply."
+     *
+     * @return max_power_out value converted from string.
+     */
+    auto getMaxPowerOut() const;
+
+    /**
+     * @brief Reads a VPD value from PMBus, correct size, and contents.
+     *
+     * If the VPD data read is not the passed in size, resize and fill with
+     * spaces. If the data contains a non-alphanumeric value, replace any of
+     * those values with spaces.
+     *
+     * @param[in] vpdName - The name of the sysfs "file" to read data from.
+     * @param[in] type - The HWMON file type to read from.
+     * @param[in] vpdSize - The expacted size of the data for this VPD/property
+     *
+     * @return A string containing the VPD data read, resized if necessary
+     */
+    auto readVPDValue(const std::string& vpdName,
+                      const phosphor::pmbus::Type& type,
+                      const std::size_t& vpdSize);
+
+    /**
+     * @brief Reads the most recent input history record from the power supply
+     * and updates the average and maximum properties in D-Bus if there is a new
+     * reading available.
+     *
+     * This will still run every time analyze() is called so code can post new
+     * data as soon as possible and the timestamp will more accurately reflect
+     * the correct time.
+     *
+     * D-Bus is only updated if there is a change and the oldest record will be
+     * pruned if the property already contains the max number of records.
+     */
+    void updateHistory();
+
+    /**
+     * @brief Retrieve PSU VPD keyword from D-Bus
+     *
+     * It retrieves PSU VPD keyword from D-Bus and assign the associated
+     * string to vpdStr.
+     * @param[in] keyword - The VPD search keyword
+     * @param[out] vpdStr - The VPD string associated with the keyword.
+     */
+    void getPsuVpdFromDbus(const std::string& keyword, std::string& vpdStr);
+
+    /**
      * @brief systemd bus member
      */
     sdbusplus::bus_t& bus;
+
+    /**
+     * @brief D-Bus path to use for this power supply's inventory status.
+     **/
+    std::string inventoryPath;
+
+    /**
+     * @brief The file system path used for binding the device driver.
+     */
+    const std::filesystem::path bindPath;
+
+    /**
+     * @brief Get the power on status of the psu manager class.
+     *
+     * This is a callback method used to get the power on status of the psu
+     * manager class.
+     */
+    std::function<bool()> isPowerOn;
+
+    /**
+     * @brief Set to true if INPUT_HISTORY command supported.
+     *
+     * Not all power supplies will support the INPUT_HISTORY command. The IBM
+     * Common Form Factor power supplies do support this command.
+     */
+    bool inputHistorySupported{false};
+
+    /**
+     * @brief Set to true when INPUT_HISTORY sync is required.
+     *
+     * A power supply will need to synchronize its INPUT_HISTORY data with the
+     * other power supplies installed in the system when it goes from missing to
+     * present.
+     */
+    bool syncHistoryRequired{false};
+
+    /**
+     * @brief Store the short name to avoid string processing.
+     *
+     * The short name will be something like powersupply1, the last part of the
+     * inventoryPath.
+     */
+    std::string shortName;
+
+    /**
+     * @brief The libgpiod object for monitoring PSU presence
+     */
+    std::unique_ptr<GPIOInterfaceBase> presenceGPIO = nullptr;
+
+    /**
+     * @brief True if the power supply is present.
+     */
+    bool present = false;
+
+    /**
+     * @brief Power supply model name.
+     */
+    std::string modelName;
+
+    /**
+     * @brief D-Bus match variable used to subscribe to Present property
+     * changes.
+     **/
+    std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
+
+    /**
+     * @brief D-Bus match variable used to subscribe for Present property
+     * interface added.
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
+
+    /**
+     * @brief Pointer to the PMBus interface
+     *
+     * Used to read or write to/from PMBus power supply devices.
+     */
+    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf = nullptr;
+
+    /**
+     * @brief Stored copy of the firmware version/revision string
+     */
+    std::string fwVersion;
+
+    /**
+     * @brief The string to pass in for binding the device driver.
+     */
+    std::string bindDevice;
+
+    /**
+     * @brief The result of the most recent availability check
+     *
+     * Saved on the object so changes can be detected.
+     */
+    bool available = false;
 
     /**
      * @brief Will be updated to the latest/lastvalue read from STATUS_WORD.
@@ -725,294 +1023,6 @@ class PowerSupply
     size_t readFail = 0;
 
     /**
-     * @brief Examine STATUS_WORD for CML (communication, memory, logic fault).
-     */
-    void analyzeCMLFault();
-
-    /**
-     * @brief Examine STATUS_WORD for INPUT bit on.
-     *
-     * "An input voltage, input current, or input power fault or warning has
-     * occurred."
-     */
-    void analyzeInputFault();
-
-    /**
-     * @brief Examine STATUS_WORD for VOUT being set.
-     *
-     * If VOUT is on, "An output voltage fault or warning has occurred.", and
-     * VOUT_OV_FAULT is on, there is an output over-voltage fault.
-     */
-    void analyzeVoutOVFault();
-
-    /**
-     * @brief Examine STATUS_WORD value read for IOUT_OC_FAULT.
-     *
-     * "An output overcurrent fault has occurred." If it is on, and fault not
-     * set, trace STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_IOUT values.
-     */
-    void analyzeIoutOCFault();
-
-    /**
-     * @brief Examines STATUS_WORD value read to see if there is a UV fault.
-     *
-     * Checks if the VOUT bit is on, indicating "An output voltage fault or
-     * warning has occurred", if it is on, but VOUT_OV_FAULT is off, it is
-     * determined to be an indication of an output under-voltage fault.
-     */
-    void analyzeVoutUVFault();
-
-    /**
-     * @brief Examine STATUS_WORD for the fan fault/warning bit.
-     *
-     * If fanFault is not on, trace that the bit now came on, include
-     * STATUS_WORD, STATUS_MFR_SPECIFIC, and STATUS_FANS_1_2 values as well, to
-     * help with understanding what may have caused it to be set.
-     */
-    void analyzeFanFault();
-
-    /**
-     * @brief Examine STATUS_WORD for temperature fault.
-     */
-    void analyzeTemperatureFault();
-
-    /**
-     * @brief Examine STATUS_WORD for pgood or unit off faults.
-     */
-    void analyzePgoodFault();
-
-    /**
-     * @brief Determine possible manufacturer-specific faults from bits in
-     * STATUS_MFR.
-     *
-     * The bits in the STATUS_MFR_SPECIFIC command response have "Manufacturer
-     * Defined" meanings. Determine which faults, if any, are present based on
-     * the power supply (device driver) type.
-     */
-    void determineMFRFault();
-
-    /**
-     * @brief Examine STATUS_WORD value read for MFRSPECIFIC bit on.
-     *
-     * "A manufacturer specific fault or warning has occurred."
-     *
-     * If it is on, call the determineMFRFault() helper function to examine the
-     * value read from STATUS_MFR_SPECIFIC.
-     */
-    void analyzeMFRFault();
-
-    /**
-     * @brief Analyzes the STATUS_WORD for a VIN_UV_FAULT indicator.
-     */
-    void analyzeVinUVFault();
-
-    /**
-     * @brief D-Bus path to use for this power supply's inventory status.
-     **/
-    std::string inventoryPath;
-
-    /**
-     * @brief Store the short name to avoid string processing.
-     *
-     * The short name will be something like powersupply1, the last part of the
-     * inventoryPath.
-     */
-    std::string shortName;
-
-    /**
-     * @brief Given a full inventory path, returns the last node of the path as
-     * the "short name"
-     */
-    std::string findShortName(const std::string& invPath)
-    {
-        const auto lastSlashPos = invPath.find_last_of('/');
-
-        if ((lastSlashPos == std::string::npos) ||
-            ((lastSlashPos + 1) == invPath.size()))
-        {
-            return invPath;
-        }
-        else
-        {
-            return invPath.substr(lastSlashPos + 1);
-        }
-    }
-
-    /**
-     * @brief The libgpiod object for monitoring PSU presence
-     */
-    std::unique_ptr<GPIOInterfaceBase> presenceGPIO = nullptr;
-
-    /**
-     * @brief True if the power supply is present.
-     */
-    bool present = false;
-
-    /**
-     * @brief Power supply model name.
-     */
-    std::string modelName;
-
-    /**
-     * @brief D-Bus match variable used to subscribe to Present property
-     * changes.
-     **/
-    std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
-
-    /**
-     * @brief D-Bus match variable used to subscribe for Present property
-     * interface added.
-     */
-    std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
-
-    /**
-     * @brief Pointer to the PMBus interface
-     *
-     * Used to read or write to/from PMBus power supply devices.
-     */
-    std::unique_ptr<phosphor::pmbus::PMBusBase> pmbusIntf = nullptr;
-
-    /**
-     * @brief Stored copy of the firmware version/revision string
-     */
-    std::string fwVersion;
-
-    /**
-     * @brief The file system path used for binding the device driver.
-     */
-    const std::filesystem::path bindPath;
-
-    /**
-     * @brief The string to pass in for binding the device driver.
-     */
-    std::string bindDevice;
-
-    /**
-     * @brief The result of the most recent availability check
-     *
-     * Saved on the object so changes can be detected.
-     */
-    bool available = false;
-
-    /**
-     * @brief Binds or unbinds the power supply device driver
-     *
-     * Called when a presence change is detected to either bind the device
-     * driver for the power supply when it is installed, or unbind the device
-     * driver when the power supply is removed.
-     *
-     * Writes <device> to <path>/bind (or unbind)
-     *
-     * @param present - when true, will bind the device driver
-     *                  when false, will unbind the device driver
-     */
-    void bindOrUnbindDriver(bool present);
-
-    /**
-     *  @brief Updates the presence status by querying D-Bus
-     *
-     * The D-Bus inventory properties for this power supply will be read to
-     * determine if the power supply is present or not and update this
-     * object's present member variable to reflect current status.
-     **/
-    void updatePresence();
-
-    /**
-     * @brief Updates the power supply presence by reading the GPIO line.
-     */
-    void updatePresenceGPIO();
-
-    /**
-     * @brief Callback for inventory property changes
-     *
-     * Process change of Present property for power supply.
-     *
-     * This is used if we are watching the D-Bus properties instead of reading
-     * the GPIO presence line ourselves.
-     *
-     * @param[in]  msg - Data associated with Present change signal
-     **/
-    void inventoryChanged(sdbusplus::message_t& msg);
-
-    /**
-     * @brief Callback for inventory property added.
-     *
-     * Process add of the interface with the Present property for power supply.
-     *
-     * This is used if we are watching the D-Bus properties instead of reading
-     * the GPIO presence line ourselves.
-     *
-     * @param[in]  msg - Data associated with Present add signal
-     **/
-    void inventoryAdded(sdbusplus::message_t& msg);
-
-    /**
-     * @brief Reads the pmbus MFR_POUT_MAX value.
-     *
-     * "The MFR_POUT_MAX command sets or retrieves the maximum rated output
-     * power, in watts, that the unit is rated to supply."
-     *
-     * @return max_power_out value converted from string.
-     */
-    auto getMaxPowerOut() const;
-
-    /**
-     * @brief Reads a VPD value from PMBus, correct size, and contents.
-     *
-     * If the VPD data read is not the passed in size, resize and fill with
-     * spaces. If the data contains a non-alphanumeric value, replace any of
-     * those values with spaces.
-     *
-     * @param[in] vpdName - The name of the sysfs "file" to read data from.
-     * @param[in] type - The HWMON file type to read from.
-     * @param[in] vpdSize - The expacted size of the data for this VPD/property
-     *
-     * @return A string containing the VPD data read, resized if necessary
-     */
-    auto readVPDValue(const std::string& vpdName,
-                      const phosphor::pmbus::Type& type,
-                      const std::size_t& vpdSize);
-
-    /**
-     * @brief Reads the most recent input history record from the power supply
-     * and updates the average and maximum properties in D-Bus if there is a new
-     * reading available.
-     *
-     * This will still run every time analyze() is called so code can post new
-     * data as soon as possible and the timestamp will more accurately reflect
-     * the correct time.
-     *
-     * D-Bus is only updated if there is a change and the oldest record will be
-     * pruned if the property already contains the max number of records.
-     */
-    void updateHistory();
-
-    /**
-     * @brief Get the power on status of the psu manager class.
-     *
-     * This is a callback method used to get the power on status of the psu
-     * manager class.
-     */
-    std::function<bool()> isPowerOn;
-
-    /**
-     * @brief Set to true if INPUT_HISTORY command supported.
-     *
-     * Not all power supplies will support the INPUT_HISTORY command. The IBM
-     * Common Form Factor power supplies do support this command.
-     */
-    bool inputHistorySupported{false};
-
-    /**
-     * @brief Set to true when INPUT_HISTORY sync is required.
-     *
-     * A power supply will need to synchronize its INPUT_HISTORY data with the
-     * other power supplies installed in the system when it goes from missing to
-     * present.
-     */
-    bool syncHistoryRequired{false};
-
-    /**
      * @brief Class that manages the input power history records.
      **/
     std::unique_ptr<history::RecordManager> recordManager;
@@ -1046,16 +1056,6 @@ class PowerSupply
      * @brief The device driver name
      */
     std::string driverName;
-
-    /**
-     * @brief Retrieve PSU VPD keyword from D-Bus
-     *
-     * It retrieves PSU VPD keyword from D-Bus and assign the associated
-     * string to vpdStr.
-     * @param[in] keyword - The VPD search keyword
-     * @param[out] vpdStr - The VPD string associated with the keyword.
-     */
-    void getPsuVpdFromDbus(const std::string& keyword, std::string& vpdStr);
 };
 
 } // namespace phosphor::power::psu
