@@ -22,12 +22,6 @@ namespace phosphor::power::psu
 // missing to present before running the bind command(s).
 constexpr auto bindDelay = 1000;
 
-// The number of INPUT_HISTORY records to keep on D-Bus.
-// Each record covers a 30-second span. That means two records are needed to
-// cover a minute of time. If we want one (1) hour of data, that would be 120
-// records.
-constexpr auto INPUT_HISTORY_MAX_RECORDS = 120;
-
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
@@ -94,7 +88,6 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
 
         updatePresence();
         updateInventory();
-        setupInputHistory();
         setupSensors();
     }
 
@@ -200,7 +193,6 @@ void PowerSupply::updatePresenceGPIO()
         }
 
         setPresence(bus, invpath, present, shortName);
-        setupInputHistory();
         setupSensors();
         updateInventory();
 
@@ -679,11 +671,6 @@ void PowerSupply::analyze()
             monitorSensors();
 
             checkAvailability();
-
-            if (inputHistorySupported)
-            {
-                updateHistory();
-            }
         }
         catch (const ReadFailure& e)
         {
@@ -1056,77 +1043,6 @@ auto PowerSupply::getMaxPowerOut() const
     return maxPowerOut;
 }
 
-void PowerSupply::setupInputHistory()
-{
-    if (bindPath.string().find(IBMCFFPS_DD_NAME) != std::string::npos)
-    {
-        auto maxPowerOut = getMaxPowerOut();
-
-        if (maxPowerOut != phosphor::pmbus::IBM_CFFPS_1400W)
-        {
-            // Do not enable input history for power supplies that are missing
-            if (present)
-            {
-                inputHistorySupported = true;
-                log<level::INFO>(
-                    fmt::format("{} INPUT_HISTORY enabled", shortName).c_str());
-
-                std::string name{fmt::format("{}_input_power", shortName)};
-
-                historyObjectPath = std::string{INPUT_HISTORY_SENSOR_ROOT} +
-                                    '/' + name;
-
-                // If the power supply was present, we created the
-                // recordManager. If it then went missing, the recordManager is
-                // still there. If it then is reinserted, we should be able to
-                // use the recordManager that was allocated when it was
-                // initially present.
-                if (!recordManager)
-                {
-                    recordManager = std::make_unique<history::RecordManager>(
-                        INPUT_HISTORY_MAX_RECORDS);
-                }
-
-                if (!average)
-                {
-                    auto avgPath = historyObjectPath + '/' +
-                                   history::Average::name;
-                    average = std::make_unique<history::Average>(bus, avgPath);
-                    log<level::DEBUG>(
-                        fmt::format("{} avgPath: {}", shortName, avgPath)
-                            .c_str());
-                }
-
-                if (!maximum)
-                {
-                    auto maxPath = historyObjectPath + '/' +
-                                   history::Maximum::name;
-                    maximum = std::make_unique<history::Maximum>(bus, maxPath);
-                    log<level::DEBUG>(
-                        fmt::format("{} maxPath: {}", shortName, maxPath)
-                            .c_str());
-                }
-
-                log<level::DEBUG>(fmt::format("{} historyObjectPath: {}",
-                                              shortName, historyObjectPath)
-                                      .c_str());
-            }
-        }
-        else
-        {
-            log<level::INFO>(
-                fmt::format("{} INPUT_HISTORY DISABLED. max_power_out: {}",
-                            shortName, maxPowerOut)
-                    .c_str());
-            inputHistorySupported = false;
-        }
-    }
-    else
-    {
-        inputHistorySupported = false;
-    }
-}
-
 void PowerSupply::setupSensors()
 {
     setupInputPowerPeakSensor();
@@ -1173,35 +1089,6 @@ void PowerSupply::setSensorsNotAvailable()
     {
         peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
         peakInputPowerSensor->available(false);
-    }
-}
-
-void PowerSupply::updateHistory()
-{
-    if (!recordManager)
-    {
-        // Not enabled
-        return;
-    }
-
-    if (!present)
-    {
-        // Cannot read when not present
-        return;
-    }
-
-    // Read just the most recent average/max record
-    auto data = pmbusIntf->readBinary(INPUT_HISTORY,
-                                      pmbus::Type::HwmonDeviceDebug,
-                                      history::RecordManager::RAW_RECORD_SIZE);
-
-    // Update D-Bus only if something changed (a new record ID, or cleared
-    // out)
-    auto changed = recordManager->add(data);
-    if (changed)
-    {
-        average->values(recordManager->getAverageRecords());
-        maximum->values(recordManager->getMaximumRecords());
     }
 }
 

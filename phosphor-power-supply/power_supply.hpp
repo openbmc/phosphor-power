@@ -1,9 +1,6 @@
 #pragma once
 
-#include "average.hpp"
-#include "maximum.hpp"
 #include "pmbus.hpp"
-#include "record_manager.hpp"
 #include "types.hpp"
 #include "util.hpp"
 #include "utility.hpp"
@@ -497,42 +494,6 @@ class PowerSupply
     void checkAvailability();
 
     /**
-     * @brief Setup for power supply input history.
-     *
-     * This will setup the variables and interfaces needed to get the power
-     * supply input history data over to D-Bus. The only known support for this
-     * at this time is the INPUT_HISTORY command implemented by the IBM Common
-     * Form Factor Power Suppplies (ibm-cffps). The INPUT_HISTORY command for
-     * ibm-cffps is implemented via a manufacturing specific PMBus command.
-     */
-    void setupInputHistory();
-
-    /**
-     * @brief Returns true if this power supply has input history (supported).
-     */
-    bool hasInputHistory() const
-    {
-        return inputHistorySupported;
-    }
-
-    /**
-     * @brief Returns the number of input history records
-     *
-     * PowerSupply wrapper to getNumRecords() from RecordManager.
-     */
-    size_t getNumInputHistoryRecords() const
-    {
-        if (recordManager)
-        {
-            return recordManager->getNumRecords();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    /**
      * @brief Returns true when INPUT_HISTORY sync is required.
      */
     bool isSyncHistoryRequired() const
@@ -768,20 +729,6 @@ class PowerSupply
                       const std::size_t& vpdSize);
 
     /**
-     * @brief Reads the most recent input history record from the power supply
-     * and updates the average and maximum properties in D-Bus if there is a new
-     * reading available.
-     *
-     * This will still run every time analyze() is called so code can post new
-     * data as soon as possible and the timestamp will more accurately reflect
-     * the correct time.
-     *
-     * D-Bus is only updated if there is a change and the oldest record will be
-     * pruned if the property already contains the max number of records.
-     */
-    void updateHistory();
-
-    /**
      * @brief Retrieve PSU VPD keyword from D-Bus
      *
      * It retrieves PSU VPD keyword from D-Bus and assign the associated
@@ -846,14 +793,6 @@ class PowerSupply
      * manager class.
      */
     std::function<bool()> isPowerOn;
-
-    /**
-     * @brief Set to true if INPUT_HISTORY command supported.
-     *
-     * Not all power supplies will support the INPUT_HISTORY command. The IBM
-     * Common Form Factor power supplies do support this command.
-     */
-    bool inputHistorySupported{false};
 
     /**
      * @brief Set to true when INPUT_HISTORY sync is required.
@@ -1095,27 +1034,6 @@ class PowerSupply
      * @brief Count of the number of read failures.
      */
     size_t readFail = 0;
-
-    /**
-     * @brief Class that manages the input power history records.
-     **/
-    std::unique_ptr<history::RecordManager> recordManager;
-
-    /**
-     * @brief The D-Bus object for the average input power history
-     **/
-    std::unique_ptr<history::Average> average;
-
-    /**
-     * @brief The D-Bus object for the maximum input power history
-     **/
-    std::unique_ptr<history::Maximum> maximum;
-
-    /**
-     * @brief The base D-Bus object path to use for the average and maximum
-     * objects.
-     **/
-    std::string historyObjectPath;
 
     /**
      * @brief The D-Bus object for the input voltage rating
