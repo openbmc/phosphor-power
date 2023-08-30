@@ -1,1 +1,0 @@
-../power-supply/average.hpp

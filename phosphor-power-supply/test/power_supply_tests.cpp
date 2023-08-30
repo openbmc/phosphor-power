@@ -1,5 +1,4 @@
 #include "../power_supply.hpp"
-#include "../record_manager.hpp"
 #include "mock.hpp"
 
 #include <xyz/openbmc_project/Common/Device/error.hpp>
@@ -2098,7 +2097,6 @@ TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
     auto bus = sdbusplus::bus::new_default();
     PowerSupply psu{bus,         PSUInventoryPath, 8,        0x6f,
                     "ibm-cffps", PSUGPIOLineName,  isPowerOn};
-    EXPECT_EQ(psu.hasInputHistory(), false);
     EXPECT_EQ(psu.isSyncHistoryRequired(), false);
     MockedGPIOInterface* mockPresenceGPIO =
         static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
@@ -2118,8 +2116,6 @@ TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
         .WillRepeatedly(Return("205000"));
     EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
     psu.analyze();
-    // The ibm-cffps power supply should support input history
-    EXPECT_EQ(psu.hasInputHistory(), true);
     // Missing -> Present requires history sync
     EXPECT_EQ(psu.isSyncHistoryRequired(), true);
     psu.clearSyncHistoryRequired();

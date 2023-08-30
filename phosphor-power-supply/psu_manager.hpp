@@ -363,15 +363,6 @@ class PSUManager
     sdbusplus::server::manager_t objectManager;
 
     /**
-     * @brief Implement the ObjectManager for power supply input history.
-     *
-     * Implements the org.freedesktop.DBus.ObjectManager interface used to
-     * communicate updates to the Average and Maximum interface properties on
-     * the /org/open_power/sensors root D-Bus path.
-     */
-    sdbusplus::server::manager_t historyManager;
-
-    /**
      * @brief Implement the ObjectManager for the input voltage rating.
      *
      * Implements the org.freedesktop.DBus.ObjectManager interface used to

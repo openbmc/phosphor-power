@@ -42,7 +42,6 @@ constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     bus(bus), powerSystemInputs(bus, powerSystemsInputsObjPath),
     objectManager(bus, objectManagerObjPath),
-    historyManager(bus, "/org/open_power/sensors"),
     sensorsObjManager(bus, "/xyz/openbmc_project/sensors")
 {
     // Subscribe to InterfacesAdded before doing a property read, otherwise

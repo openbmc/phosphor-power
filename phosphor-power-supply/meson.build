@@ -7,7 +7,6 @@ phosphor_psu_monitor = executable(
     'main.cpp',
     'psu_manager.cpp',
     'power_supply.cpp',
-    'record_manager.cpp',
     'util.cpp',
     dependencies: [
         cli11_dep,
