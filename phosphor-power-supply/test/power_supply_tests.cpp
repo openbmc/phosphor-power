@@ -16,6 +16,7 @@ using ::testing::Args;
 using ::testing::Assign;
 using ::testing::DoAll;
 using ::testing::ElementsAre;
+using ::testing::IsNan;
 using ::testing::NotNull;
 using ::testing::Return;
 using ::testing::StrEq;
@@ -75,6 +76,11 @@ void setPMBusExpectations(MockedPMBus& mockPMBus,
             .Times(1)
             .WillOnce(Return(expectations.statusTempValue));
     }
+
+    // Default max/peak is 213W
+    ON_CALL(mockPMBus, readBinary(INPUT_HISTORY, Type::HwmonDeviceDebug, 5))
+        .WillByDefault(
+            Return(std::vector<uint8_t>{0x01, 0x5c, 0xf3, 0x54, 0xf3}));
 }
 
 class PowerSupplyTests : public ::testing::Test
@@ -262,8 +268,7 @@ TEST_F(PowerSupplyTests, Analyze)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
 
     // STATUS_WORD INPUT fault.
     {
@@ -768,8 +773,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
         // for INPUT_HISTORY will check max_power_out to see if it is
         // old/unsupported power supply. Indicate good value, supported.
         EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-            .Times(1)
-            .WillOnce(Return("2000"));
+            .WillRepeatedly(Return("2000"));
         // If I am calling analyze(), I should probably give it good data.
         // STATUS_WORD 0x0000 is powered on, no faults.
         PMBusExpectations expectations;
@@ -804,8 +808,7 @@ TEST_F(PowerSupplyTests, ClearFaults)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1047,8 +1050,7 @@ TEST_F(PowerSupplyTests, UpdateInventory)
         // for INPUT_HISTORY will check max_power_out to see if it is
         // old/unsupported power supply. Indicate good value, supported.
         EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-            .Times(1)
-            .WillOnce(Return("2000"));
+            .WillRepeatedly(Return("2000"));
         // STATUS_WORD 0x0000 is powered on, no faults.
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
@@ -1099,8 +1101,7 @@ TEST_F(PowerSupplyTests, IsPresent)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // Call to analyze things will trigger read of STATUS_WORD and READ_VIN.
     // Default expectations will be on, no faults.
     PMBusExpectations expectations;
@@ -1130,8 +1131,7 @@ TEST_F(PowerSupplyTests, IsFaulted)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // Call to analyze things will trigger read of STATUS_WORD and READ_VIN.
     // Default expectations will be on, no faults.
     PMBusExpectations expectations;
@@ -1190,8 +1190,7 @@ TEST_F(PowerSupplyTests, HasInputFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1247,8 +1246,7 @@ TEST_F(PowerSupplyTests, HasMFRFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // First return STATUS_WORD with no bits on.
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
@@ -1298,8 +1296,7 @@ TEST_F(PowerSupplyTests, HasVINUVFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
 
     // Presence change from missing to present will trigger in1_input read in
     // an attempt to get CLEAR_FAULTS called. Return value ignored.
@@ -1369,8 +1366,7 @@ TEST_F(PowerSupplyTests, HasVoutOVFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1420,8 +1416,7 @@ TEST_F(PowerSupplyTests, HasIoutOCFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1476,8 +1471,7 @@ TEST_F(PowerSupplyTests, HasVoutUVFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1530,8 +1524,7 @@ TEST_F(PowerSupplyTests, HasFanFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1586,8 +1579,7 @@ TEST_F(PowerSupplyTests, HasTempFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1639,8 +1631,7 @@ TEST_F(PowerSupplyTests, HasPgoodFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1774,8 +1765,7 @@ TEST_F(PowerSupplyTests, HasPSKillFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1864,8 +1854,7 @@ TEST_F(PowerSupplyTests, HasPS12VcsFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1938,8 +1927,7 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     // STATUS_WORD 0x0000 is powered on, no faults.
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
@@ -1996,183 +1984,113 @@ TEST_F(PowerSupplyTests, HasPSCS12VFault)
     EXPECT_EQ(psu.hasPSCS12VFault(), false);
 }
 
-TEST_F(PowerSupplyTests, SetupInputHistory)
+TEST_F(PowerSupplyTests, PeakInputPowerSensor)
 {
     auto bus = sdbusplus::bus::new_default();
     {
         PowerSupply psu{bus,         PSUInventoryPath, 6,        0x6f,
                         "ibm-cffps", PSUGPIOLineName,  isPowerOn};
-        // Defaults to not present due to constructor and mock ordering.
-        psu.setupInputHistory();
-        EXPECT_EQ(psu.hasInputHistory(), false);
+        EXPECT_EQ(psu.getPeakInputPower(), std::nullopt);
+
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-        // Always return 1 to indicate present.
         EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+
         setMissingToPresentExpects(mockPMBus, mockedUtil);
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
-        // After reading STATUS_WORD, etc., there will be a READ_VIN check.
+
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("206000"));
-        // Missing/present will trigger attempt to setup INPUT_HISTORY. Setup
-        // for INPUT_HISTORY will check max_power_out to see if it is
-        // old/unsupported power supply. Indicate good value, supported.
-        /// Also called when I redo setupInputHistory().
         EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-            .Times(2)
             .WillRepeatedly(Return("2000"));
-        // Call to analyze() and above expectations to get missing/present and
-        // good status.
+
         psu.analyze();
-        psu.setupInputHistory();
-        EXPECT_EQ(psu.hasInputHistory(), true);
+        EXPECT_EQ(psu.getPeakInputPower().value_or(0), 213);
     }
+
+    // Test that there is no peak power sensor on 1400W PSs
     {
-        // Workaround - Disable INPUT_HISTORY collection if 1400W
         PowerSupply psu{bus,         PSUInventoryPath, 3,        0x68,
                         "ibm-cffps", PSUGPIOLineName,  isPowerOn};
-        // Defaults to not present due to constructor and mock ordering.
-        psu.setupInputHistory();
-        EXPECT_EQ(psu.hasInputHistory(), false);
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-        // Always return 1 to indicate present.
+
         EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+
         setMissingToPresentExpects(mockPMBus, mockedUtil);
-        // Missing/present will trigger attempt to setup INPUT_HISTORY. Setup
-        // for INPUT_HISTORY will check max_power_out to see if it is
-        // old/unsupported power supply. Indicate 1400W IBM value, unsupported.
+
         EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-            .Times(2)
             .WillRepeatedly(Return("30725"));
+
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
-        // After reading STATUS_WORD, etc., there will be a READ_VIN check.
+
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
-            .Times(1)
-            .WillOnce(Return("206000"));
-        // Call to analyze() and above expectations to get missing/present and
-        // good status.
+            .WillRepeatedly(Return("206000"));
         psu.analyze();
-        psu.setupInputHistory();
-        // After updating to present, and retrying setup, expect ibm-cffps with
-        // 1400W to still not support INPUT_HISTORY.
-        EXPECT_EQ(psu.hasInputHistory(), false);
+
+        EXPECT_EQ(psu.getPeakInputPower(), std::nullopt);
     }
+
+    // Test that IPSPS power supplies don't have peak power
     {
         PowerSupply psu{bus,      PSUInventoryPath, 11,
                         0x58,     "inspur-ipsps",   PSUGPIOLineName,
                         isPowerOn};
-        // Defaults to not present due to constructor and mock ordering.
-        psu.setupInputHistory();
-        EXPECT_EQ(psu.hasInputHistory(), false);
+
         MockedGPIOInterface* mockPresenceGPIO =
             static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+
         MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-        // Always return 1 to indicate present.
+
         EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+
         setMissingToPresentExpects(mockPMBus, mockedUtil);
         PMBusExpectations expectations;
         setPMBusExpectations(mockPMBus, expectations);
-        // After reading STATUS_WORD, etc., there will be a READ_VIN check.
+
+        EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
+            .WillRepeatedly(Return("206000"));
+
+        psu.analyze();
+
+        EXPECT_EQ(psu.getPeakInputPower(), std::nullopt);
+    }
+
+    // Test that a bad response from the input_history command leads
+    // to an NaN value.
+    {
+        PowerSupply psu{bus,         PSUInventoryPath, 6,        0x6f,
+                        "ibm-cffps", PSUGPIOLineName,  isPowerOn};
+
+        MockedGPIOInterface* mockPresenceGPIO =
+            static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
+        MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
+
+        EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
+
+        setMissingToPresentExpects(mockPMBus, mockedUtil);
+        PMBusExpectations expectations;
+        setPMBusExpectations(mockPMBus, expectations);
+
         EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
             .Times(1)
             .WillOnce(Return("206000"));
-        // Call to analyze() and above expectations to get missing/present and
-        // good status.
-        psu.analyze();
-        psu.setupInputHistory();
-        // After updating to present, and retrying setup, expect inspur-ipsps to
-        // still not support INPUT_HISTORY.
-        EXPECT_EQ(psu.hasInputHistory(), false);
-    }
-}
+        EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
+            .WillRepeatedly(Return("2000"));
 
-TEST_F(PowerSupplyTests, UpdateHistory)
-{
-    auto bus = sdbusplus::bus::new_default();
-    PowerSupply psu{bus,         PSUInventoryPath, 7,        0x6e,
-                    "ibm-cffps", PSUGPIOLineName,  isPowerOn};
-    EXPECT_EQ(psu.hasInputHistory(), false);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
-    MockedGPIOInterface* mockPresenceGPIO =
-        static_cast<MockedGPIOInterface*>(psu.getPresenceGPIO());
-    // Always return 1 to indicate present.
-    EXPECT_CALL(*mockPresenceGPIO, read()).WillRepeatedly(Return(1));
-    MockedPMBus& mockPMBus = static_cast<MockedPMBus&>(psu.getPMBus());
-    setMissingToPresentExpects(mockPMBus, mockedUtil);
-    // Missing/present will trigger attempt to setup INPUT_HISTORY. Setup
-    // for INPUT_HISTORY will check max_power_out to see if it is
-    // old/unsupported power supply. Indicate good value, supported.
-    EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
-    PMBusExpectations expectations;
-    setPMBusExpectations(mockPMBus, expectations);
-    EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
-        .Times(6)
-        .WillRepeatedly(Return("205000"));
-    EXPECT_CALL(mockedUtil, setAvailable(_, _, true));
-    // First read after missing/present will have no data.
-    std::vector<uint8_t> emptyHistory{};
-    // Second read, after about 30 seconds, should have a record. 5-bytes.
-    // Sequence Number: 0x00, Average: 0x50 0xf3 (212), Maximum: 0x54 0xf3 (213)
-    std::vector<uint8_t> firstHistory{0x00, 0x50, 0xf3, 0x54, 0xf3};
-    // Third read, after about 60 seconds, should have two records, 10-bytes,
-    // but only reading 5 bytes, so make sure new/next sequence number
-    std::vector<uint8_t> secondHistory{0x01, 0x54, 0xf3, 0x58, 0xf3};
-    // Fourth read, 3rd sequence number (0x02).
-    std::vector<uint8_t> thirdHistory{0x02, 0x54, 0xf3, 0x58, 0xf3};
-    // Fifth read, out of sequence, clear and insert this one?
-    std::vector<uint8_t> outseqHistory{0xff, 0x5c, 0xf3, 0x60, 0xf3};
-    EXPECT_CALL(
-        mockPMBus,
-        readBinary(INPUT_HISTORY, Type::HwmonDeviceDebug,
-                   phosphor::power::history::RecordManager::RAW_RECORD_SIZE))
-        .Times(6)
-        .WillOnce(Return(emptyHistory))
-        .WillOnce(Return(firstHistory))
-        .WillOnce(Return(secondHistory))
-        .WillOnce(Return(thirdHistory))
-        .WillOnce(Return(outseqHistory))
-        .WillOnce(Return(emptyHistory));
-    // Calling analyze will update the presence, which will setup the input
-    // history if the power supply went from missing to present.
-    psu.analyze();
-    // The ibm-cffps power supply should support input history
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    // Usually should have empty buffer right after missing to present.
-    // Faked that out above with mocked readBinary with emptyHistory data.
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
-    // Second run through...
-    setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 1);
-    // Third run through
-    setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 2);
-    // Fourth run through. Up to 3 records now?
-    setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 3);
-    // Out of sequencer, reset, insert new one.
-    setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 1);
-    // Empty one after last one good. Reset/clear.
-    setPMBusExpectations(mockPMBus, expectations);
-    psu.analyze();
-    EXPECT_EQ(psu.hasInputHistory(), true);
-    EXPECT_EQ(psu.getNumInputHistoryRecords(), 0);
+        // Don't return the full 5 bytes.
+        EXPECT_CALL(mockPMBus,
+                    readBinary(INPUT_HISTORY, Type::HwmonDeviceDebug, 5))
+            .WillRepeatedly(Return(std::vector<uint8_t>{0x01, 0x5c}));
+
+        psu.analyze();
+        EXPECT_THAT(psu.getPeakInputPower().value_or(0), IsNan());
+    }
 }
 
 TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
@@ -2192,8 +2110,7 @@ TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
     // for INPUT_HISTORY will check max_power_out to see if it is
     // old/unsupported power supply. Indicate good value, supported.
     EXPECT_CALL(mockPMBus, readString(MFR_POUT_MAX, _))
-        .Times(1)
-        .WillOnce(Return("2000"));
+        .WillRepeatedly(Return("2000"));
     PMBusExpectations expectations;
     setPMBusExpectations(mockPMBus, expectations);
     EXPECT_CALL(mockPMBus, readString(READ_VIN, _))
@@ -2207,4 +2124,44 @@ TEST_F(PowerSupplyTests, IsSyncHistoryRequired)
     EXPECT_EQ(psu.isSyncHistoryRequired(), true);
     psu.clearSyncHistoryRequired();
     EXPECT_EQ(psu.isSyncHistoryRequired(), false);
+}
+
+TEST_F(PowerSupplyTests, TestLinearConversions)
+{
+    // Mantissa > 0, exponent = 0
+    EXPECT_EQ(0, PowerSupply::linearToInteger(0));
+    EXPECT_EQ(1, PowerSupply::linearToInteger(1));
+    EXPECT_EQ(38, PowerSupply::linearToInteger(0x26));
+    EXPECT_EQ(1023, PowerSupply::linearToInteger(0x3FF));
+
+    // Mantissa < 0, exponent = 0
+    EXPECT_EQ(-1, PowerSupply::linearToInteger(0x7FF));
+    EXPECT_EQ(-20, PowerSupply::linearToInteger(0x7EC));
+    EXPECT_EQ(-769, PowerSupply::linearToInteger(0x4FF));
+    EXPECT_EQ(-989, PowerSupply::linearToInteger(0x423));
+    EXPECT_EQ(-1024, PowerSupply::linearToInteger(0x400));
+
+    // Mantissa >= 0, exponent > 0
+    // M = 1, E = 2
+    EXPECT_EQ(4, PowerSupply::linearToInteger(0x1001));
+
+    // M = 1000, E = 10
+    EXPECT_EQ(1024000, PowerSupply::linearToInteger(0x53E8));
+
+    // M = 10, E = 15
+    EXPECT_EQ(327680, PowerSupply::linearToInteger(0x780A));
+
+    // Mantissa >= 0, exponent < 0
+    // M = 0, E = -1
+    EXPECT_EQ(0, PowerSupply::linearToInteger(0xF800));
+
+    // M = 100, E = -2
+    EXPECT_EQ(25, PowerSupply::linearToInteger(0xF064));
+
+    // Mantissa < 0, exponent < 0
+    // M = -100, E = -1
+    EXPECT_EQ(-50, PowerSupply::linearToInteger(0xFF9C));
+
+    // M = -1024, E = -7
+    EXPECT_EQ(-8, PowerSupply::linearToInteger(0xCC00));
 }

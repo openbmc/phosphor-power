@@ -10,7 +10,10 @@
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <xyz/openbmc_project/Association/Definitions/server.hpp>
 #include <xyz/openbmc_project/Sensor/Value/server.hpp>
+#include <xyz/openbmc_project/State/Decorator/Availability/server.hpp>
+#include <xyz/openbmc_project/State/Decorator/OperationalStatus/server.hpp>
 
 #include <filesystem>
 #include <stdexcept>
@@ -53,8 +56,19 @@ constexpr auto AC_FAULT_LIMIT = 6;
 constexpr auto IBMCFFPS_DD_NAME = "ibm-cffps";
 constexpr auto ACBEL_FSG032_DD_NAME = "acbel-fsg032";
 
+using AvailabilityInterface =
+    sdbusplus::xyz::openbmc_project::State::Decorator::server::Availability;
+using OperationalStatusInterface = sdbusplus::xyz::openbmc_project::State::
+    Decorator::server::OperationalStatus;
+using AssocDefInterface =
+    sdbusplus::xyz::openbmc_project::Association::server::Definitions;
 using SensorInterface = sdbusplus::xyz::openbmc_project::Sensor::server::Value;
 using SensorObject = sdbusplus::server::object_t<SensorInterface>;
+using PowerSensorObject =
+    sdbusplus::server::object_t<SensorInterface, OperationalStatusInterface,
+                                AvailabilityInterface, AssocDefInterface>;
+
+using AssociationTuple = std::tuple<std::string, std::string, std::string>;
 
 /**
  * @class PowerSupply
@@ -545,6 +559,33 @@ class PowerSupply
      */
     void setInputVoltageRating();
 
+    /**
+     * @brief Returns the peak input power value if there is one,
+     *        otherwise std::nullopt.
+     */
+    std::optional<double> getPeakInputPower() const
+    {
+        std::optional<double> value;
+        if (peakInputPowerSensor)
+        {
+            value = peakInputPowerSensor->value();
+        }
+        return value;
+    }
+
+    /**
+     * @brief Converts a Linear Format power number to an integer
+     *
+     * The PMBus spec describes a 2 byte Linear Format
+     * number that is composed of an exponent and mantissa
+     * in two's complement notation.
+     *
+     * Value = Mantissa * 2**Exponent
+     *
+     * @return double - The converted value
+     */
+    static double linearToInteger(uint16_t data);
+
   private:
     /**
      * @brief Examine STATUS_WORD for CML (communication, memory, logic fault).
@@ -749,6 +790,39 @@ class PowerSupply
      * @param[out] vpdStr - The VPD string associated with the keyword.
      */
     void getPsuVpdFromDbus(const std::string& keyword, std::string& vpdStr);
+
+    /**
+     * @brief Creates the appropriate sensor D-Bus objects.
+     */
+    void setupSensors();
+
+    /**
+     * @brief Monitors sensor values and updates D-Bus.
+     *        Called from analyze().
+     */
+    void monitorSensors();
+
+    /**
+     * @brief Creates the peak input power sensor D-Bus object
+     *        if the PS supports it.
+     */
+    void setupInputPowerPeakSensor();
+
+    /**
+     * @brief Monitors the peak input power sensor
+     */
+    void monitorPeakInputPowerSensor();
+
+    /**
+     * @brief Sets any sensor objects to Available = false on D-Bus.
+     */
+    void setSensorsNotAvailable();
+
+    /**
+     * @brief Returns the associations to create for a sensor on this
+     *        power supply.
+     */
+    std::vector<AssociationTuple> getSensorAssociations();
 
     /**
      * @brief systemd bus member
@@ -1051,6 +1125,11 @@ class PowerSupply
      * again (though that could be done as a future improvement).
      */
     std::unique_ptr<SensorObject> inputVoltageRatingIface;
+
+    /**
+     * @brief The D-Bus object for the peak input power sensor.
+     */
+    std::unique_ptr<PowerSensorObject> peakInputPowerSensor;
 
     /**
      * @brief The device driver name
