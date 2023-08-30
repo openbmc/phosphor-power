@@ -95,6 +95,7 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
         updatePresence();
         updateInventory();
         setupInputHistory();
+        setupSensors();
     }
 
     setInputVoltageRating();
@@ -200,6 +201,7 @@ void PowerSupply::updatePresenceGPIO()
 
         setPresence(bus, invpath, present, shortName);
         setupInputHistory();
+        setupSensors();
         updateInventory();
 
         // Need Functional to already be correct before calling this.
@@ -213,6 +215,10 @@ void PowerSupply::updatePresenceGPIO()
             // the power supplies that are present in the system need to be
             // synchronized.
             syncHistoryRequired = true;
+        }
+        else
+        {
+            setSensorsNotAvailable();
         }
     }
 }
@@ -670,6 +676,8 @@ void PowerSupply::analyze()
                         .c_str());
             }
 
+            monitorSensors();
+
             checkAvailability();
 
             if (inputHistorySupported)
@@ -1119,6 +1127,55 @@ void PowerSupply::setupInputHistory()
     }
 }
 
+void PowerSupply::setupSensors()
+{
+    setupInputPowerPeakSensor();
+}
+
+void PowerSupply::setupInputPowerPeakSensor()
+{
+    if (peakInputPowerSensor || !present ||
+        (bindPath.string().find(IBMCFFPS_DD_NAME) == std::string::npos))
+    {
+        return;
+    }
+
+    // This PSU has problems with the input_history command
+    if (getMaxPowerOut() == phosphor::pmbus::IBM_CFFPS_1400W)
+    {
+        return;
+    }
+
+    auto sensorPath =
+        fmt::format("/xyz/openbmc_project/sensors/power/ps{}_input_power_peak",
+                    shortName.back());
+
+    peakInputPowerSensor = std::make_unique<PowerSensorObject>(
+        bus, sensorPath.c_str(), PowerSensorObject::action::defer_emit);
+
+    // The others can remain at the defaults.
+    peakInputPowerSensor->functional(true, true);
+    peakInputPowerSensor->available(true, true);
+    peakInputPowerSensor->value(0, true);
+    peakInputPowerSensor->unit(
+        sdbusplus::xyz::openbmc_project::Sensor::server::Value::Unit::Watts,
+        true);
+
+    auto associations = getSensorAssociations();
+    peakInputPowerSensor->associations(associations, true);
+
+    peakInputPowerSensor->emit_object_added();
+}
+
+void PowerSupply::setSensorsNotAvailable()
+{
+    if (peakInputPowerSensor)
+    {
+        peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
+        peakInputPowerSensor->available(false);
+    }
+}
+
 void PowerSupply::updateHistory()
 {
     if (!recordManager)
@@ -1146,6 +1203,59 @@ void PowerSupply::updateHistory()
         average->values(recordManager->getAverageRecords());
         maximum->values(recordManager->getMaximumRecords());
     }
+}
+
+void PowerSupply::monitorSensors()
+{
+    monitorPeakInputPowerSensor();
+}
+
+void PowerSupply::monitorPeakInputPowerSensor()
+{
+    if (!peakInputPowerSensor)
+    {
+        return;
+    }
+
+    constexpr size_t recordSize = 5;
+    std::vector<uint8_t> data;
+
+    // Get the peak input power with input history command.
+    // New data only shows up every 30s, but just try to read it every 1s
+    // anyway so we always have the most up to date value.
+    try
+    {
+        data = pmbusIntf->readBinary(INPUT_HISTORY,
+                                     pmbus::Type::HwmonDeviceDebug, recordSize);
+    }
+    catch (const ReadFailure& e)
+    {
+        peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
+        peakInputPowerSensor->functional(false);
+        throw;
+    }
+
+    if (data.size() != recordSize)
+    {
+        log<level::DEBUG>(
+            fmt::format("Input history command returned {} bytes instead of 5",
+                        data.size())
+                .c_str());
+        peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
+        peakInputPowerSensor->functional(false);
+        return;
+    }
+
+    // The format is SSAAAAPPPP:
+    //   SS = packet sequence number
+    //   AAAA = average power (linear format, little endian)
+    //   PPPP = peak power (linear format, little endian)
+    auto peak = static_cast<uint16_t>(data[4]) << 8 | data[3];
+    auto peakPower = linearToInteger(peak);
+
+    peakInputPowerSensor->value(peakPower);
+    peakInputPowerSensor->functional(true);
+    peakInputPowerSensor->available(true);
 }
 
 void PowerSupply::getInputVoltage(double& actualInputVoltage,
@@ -1265,4 +1375,43 @@ void PowerSupply::getPsuVpdFromDbus(const std::string& keyword,
             fmt::format("Failed getProperty error: {}", e.what()).c_str());
     }
 }
+
+double PowerSupply::linearToInteger(uint16_t data)
+{
+    // The exponent is the first 5 bits, followed by 11 bits of mantissa.
+    int8_t exponent = (data & 0xF800) >> 11;
+    int16_t mantissa = (data & 0x07FF);
+
+    // If exponent's MSB on, then it's negative.
+    // Convert from two's complement.
+    if (exponent & 0x10)
+    {
+        exponent = (~exponent) & 0x1F;
+        exponent = (exponent + 1) * -1;
+    }
+
+    // If mantissa's MSB on, then it's negative.
+    // Convert from two's complement.
+    if (mantissa & 0x400)
+    {
+        mantissa = (~mantissa) & 0x07FF;
+        mantissa = (mantissa + 1) * -1;
+    }
+
+    auto value = static_cast<double>(mantissa) * pow(2, exponent);
+    return value;
+}
+
+std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
+{
+    std::vector<AssociationTuple> associations;
+
+    associations.emplace_back("inventory", "sensors", inventoryPath);
+
+    auto chassis = getChassis(bus, inventoryPath);
+    associations.emplace_back("chassis", "all_sensors", std::move(chassis));
+
+    return associations;
+}
+
 } // namespace phosphor::power::psu
