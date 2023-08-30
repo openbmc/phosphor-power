@@ -31,6 +31,9 @@ class UtilBase
     virtual void handleChassisHealthRollup(sdbusplus::bus_t& bus,
                                            const std::string& invpath,
                                            bool addRollup) const = 0;
+
+    virtual std::string getChassis(sdbusplus::bus_t& /*bus*/,
+                                   const std::string& /*invpath*/) const = 0;
 };
 
 const UtilBase& getUtils();
@@ -57,6 +60,11 @@ inline void handleChassisHealthRollup(sdbusplus::bus_t& bus,
                                       bool addRollup)
 {
     getUtils().handleChassisHealthRollup(bus, invpath, addRollup);
+}
+
+inline std::string getChassis(sdbusplus::bus_t& bus, const std::string& invpath)
+{
+    return getUtils().getChassis(bus, invpath);
 }
 
 class GPIOInterfaceBase

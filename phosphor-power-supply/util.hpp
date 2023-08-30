@@ -196,7 +196,7 @@ class Util : public UtilBase
     }
 
     std::string getChassis(sdbusplus::bus_t& bus,
-                           const std::string& invpath) const
+                           const std::string& invpath) const override
     {
         sdbusplus::message::object_path assocPath = invpath + "/powering";
         sdbusplus::message::object_path basePath{"/"};

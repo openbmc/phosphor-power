@@ -61,6 +61,12 @@ class MockedUtil : public UtilBase
                 (sdbusplus::bus_t & bus, const std::string& invpath,
                  bool addRollup),
                 (const, override));
+
+    std::string getChassis(sdbusplus::bus_t& /*bus*/,
+                           const std::string& /*invpath*/) const override
+    {
+        return "/xyz/openbmc_project/inventory/system/chassis";
+    }
 };
 
 class MockedGPIOInterface : public GPIOInterfaceBase
