@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "161a795a_d2074fe9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2023-08-31T18:30:25Z",
+      "side": 1,
+      "message": "Nice description and code!  Just noted a couple of assumptions I had that I\u0027m pretty sure are correct.\n\nMight not hurt to mention in the description in: \n\"Some investigation showed the average power values weren\u0027t needed at all\nanymore, so that won\u0027t need an equivalent sensor.\"\nthat we still need the average but can get them from the existing hwmon input_power sensor so there\u0027s no confusion.",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbfe8fe4_b8f31dc6",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2023-08-31T18:30:25Z",
+      "side": 1,
+      "message": "Assuming this call is removed in a later change...",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b19601c_79687680",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2023-08-31T18:30:25Z",
+      "side": 1,
+      "message": "I assume this associates the sensor to the chassis, so we don\u0027t need to update the inv mgr config file like we do for hwmon sensors...",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
