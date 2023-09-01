@@ -10,1142 +10,236 @@
 #include <tuple>
 #include <type_traits>
 
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct MemoryPowerFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct GPUPowerFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSequencerPGOODFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSequencerVoltageFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct GPUOverTemp;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
-{
-namespace Error
-{
-struct IPMISensor;
-} // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerOnFailure;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct Shutdown;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyInputFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
-{
-namespace Error
-{
-struct Device;
-} // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode15;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode14;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode17;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode16;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode11;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode10;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode13;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode12;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode36;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode35;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode34;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode19;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode18;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode31;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode30;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
-{
-namespace Error
-{
-struct GPIO;
-} // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
-{
-namespace Error
-{
-struct IIC;
-} // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode32;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyOutputOvercurrent;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode33;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyTemperatureFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSequencerFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyFanFault;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyOutputOvervoltage;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode9;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode8;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
-{
-namespace Error
-{
-struct Inventory;
-} // namespace Error
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode5;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode4;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode7;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode6;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode1;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode0;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace org
+struct ErrorCode1;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace open_power
+struct ErrorCode10;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Witherspoon
+struct ErrorCode11;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Fault
+struct ErrorCode12;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Error
+struct ErrorCode13;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-struct ErrorCode3;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
+struct ErrorCode14;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace org
+struct ErrorCode15;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace open_power
+struct ErrorCode16;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Witherspoon
+struct ErrorCode17;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Fault
+struct ErrorCode18;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
-namespace Error
+struct ErrorCode19;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode2;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode28;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct ErrorCode29;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
-{
-struct PowerSupplyShouldBeOn;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode20;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode21;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode22;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode23;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode24;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode25;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode26;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
-
-namespace sdbusplus
-{
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace Error
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
 {
 struct ErrorCode27;
-} // namespace Error
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
-} // namespace sdbusplus
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode28;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode29;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode3;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode30;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode31;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode32;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode33;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode34;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode35;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode36;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode4;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode5;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode6;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode7;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode8;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct ErrorCode9;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct GPUOverTemp;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct GPUPowerFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct MemoryPowerFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerOnFailure;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSequencerFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSequencerPGOODFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSequencerVoltageFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyFanFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyInputFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyOutputOvercurrent;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyOutputOvervoltage;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyShouldBeOn;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct PowerSupplyTemperatureFault;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::org::open_power::witherspoon::fault
+{
+struct Shutdown;
+} // namespace sdbusplus::error::org::open_power::witherspoon::fault
+namespace sdbusplus::error::xyz::openbmc_project::common::callout
+{
+struct Device;
+} // namespace sdbusplus::error::xyz::openbmc_project::common::callout
+namespace sdbusplus::error::xyz::openbmc_project::common::callout
+{
+struct GPIO;
+} // namespace sdbusplus::error::xyz::openbmc_project::common::callout
+namespace sdbusplus::error::xyz::openbmc_project::common::callout
+{
+struct IIC;
+} // namespace sdbusplus::error::xyz::openbmc_project::common::callout
+namespace sdbusplus::error::xyz::openbmc_project::common::callout
+{
+struct IPMISensor;
+} // namespace sdbusplus::error::xyz::openbmc_project::common::callout
+namespace sdbusplus::error::xyz::openbmc_project::common::callout
+{
+struct Inventory;
+} // namespace sdbusplus::error::xyz::openbmc_project::common::callout
 
-namespace phosphor
+namespace phosphor::logging
 {
 
-namespace logging
+namespace org::open_power::witherspoon::fault
 {
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _Shutdown
-{} // namespace _Shutdown
 
 struct Shutdown
 {
@@ -1153,33 +247,30 @@ struct Shutdown
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using Shutdown =
+    phosphor::logging::org::open_power::witherspoon::fault::Shutdown;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::Shutdown>
+    sdbusplus::error::org::open_power::witherspoon::fault::Shutdown>
 {
-    using type = org::open_power::Witherspoon::Fault::Shutdown;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::Shutdown;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _PowerOnFailure
-{} // namespace _PowerOnFailure
 
 struct PowerOnFailure
 {
@@ -1187,33 +278,30 @@ struct PowerOnFailure
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerOnFailure =
+    phosphor::logging::org::open_power::witherspoon::fault::PowerOnFailure;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerOnFailure>
+    sdbusplus::error::org::open_power::witherspoon::fault::PowerOnFailure>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerOnFailure;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::PowerOnFailure;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode0
-{} // namespace _ErrorCode0
 
 struct ErrorCode0
 {
@@ -1221,33 +309,30 @@ struct ErrorCode0
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode0 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode0;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode0>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode0>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode0;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode0;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode1
-{} // namespace _ErrorCode1
 
 struct ErrorCode1
 {
@@ -1255,33 +340,30 @@ struct ErrorCode1
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode1 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode1;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode1>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode1>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode1;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode1;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode2
-{} // namespace _ErrorCode2
 
 struct ErrorCode2
 {
@@ -1289,33 +371,30 @@ struct ErrorCode2
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode2 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode2;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode2>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode2>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode2;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode2;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode3
-{} // namespace _ErrorCode3
 
 struct ErrorCode3
 {
@@ -1323,33 +402,30 @@ struct ErrorCode3
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode3 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode3;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode3>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode3>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode3;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode3;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode4
-{} // namespace _ErrorCode4
 
 struct ErrorCode4
 {
@@ -1357,33 +433,30 @@ struct ErrorCode4
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode4 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode4;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode4>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode4>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode4;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode4;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode5
-{} // namespace _ErrorCode5
 
 struct ErrorCode5
 {
@@ -1391,33 +464,30 @@ struct ErrorCode5
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode5 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode5;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode5>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode5>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode5;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode5;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode6
-{} // namespace _ErrorCode6
 
 struct ErrorCode6
 {
@@ -1425,33 +495,30 @@ struct ErrorCode6
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode6 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode6;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode6>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode6>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode6;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode6;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode7
-{} // namespace _ErrorCode7
 
 struct ErrorCode7
 {
@@ -1459,33 +526,30 @@ struct ErrorCode7
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode7 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode7;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode7>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode7>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode7;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode7;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode8
-{} // namespace _ErrorCode8
 
 struct ErrorCode8
 {
@@ -1493,33 +557,30 @@ struct ErrorCode8
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode8 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode8;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode8>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode8>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode8;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode8;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode9
-{} // namespace _ErrorCode9
 
 struct ErrorCode9
 {
@@ -1527,33 +588,30 @@ struct ErrorCode9
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode9 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode9;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode9>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode9>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode9;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode9;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode10
-{} // namespace _ErrorCode10
 
 struct ErrorCode10
 {
@@ -1561,33 +619,30 @@ struct ErrorCode10
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode10 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode10;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode10>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode10>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode10;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode10;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode11
-{} // namespace _ErrorCode11
 
 struct ErrorCode11
 {
@@ -1595,33 +650,30 @@ struct ErrorCode11
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode11 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode11;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode11>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode11>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode11;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode11;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode12
-{} // namespace _ErrorCode12
 
 struct ErrorCode12
 {
@@ -1629,33 +681,30 @@ struct ErrorCode12
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode12 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode12;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode12>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode12>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode12;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode12;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode13
-{} // namespace _ErrorCode13
 
 struct ErrorCode13
 {
@@ -1663,33 +712,30 @@ struct ErrorCode13
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode13 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode13;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode13>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode13>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode13;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode13;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode14
-{} // namespace _ErrorCode14
 
 struct ErrorCode14
 {
@@ -1697,33 +743,30 @@ struct ErrorCode14
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode14 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode14;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode14>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode14>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode14;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode14;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode15
-{} // namespace _ErrorCode15
 
 struct ErrorCode15
 {
@@ -1731,33 +774,30 @@ struct ErrorCode15
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode15 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode15;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode15>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode15>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode15;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode15;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode16
-{} // namespace _ErrorCode16
 
 struct ErrorCode16
 {
@@ -1765,33 +805,30 @@ struct ErrorCode16
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode16 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode16;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode16>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode16>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode16;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode16;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode17
-{} // namespace _ErrorCode17
 
 struct ErrorCode17
 {
@@ -1799,33 +836,30 @@ struct ErrorCode17
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode17 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode17;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode17>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode17>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode17;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode17;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode18
-{} // namespace _ErrorCode18
 
 struct ErrorCode18
 {
@@ -1833,33 +867,30 @@ struct ErrorCode18
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode18 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode18;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode18>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode18>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode18;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode18;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode19
-{} // namespace _ErrorCode19
 
 struct ErrorCode19
 {
@@ -1867,33 +898,30 @@ struct ErrorCode19
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode19 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode19;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode19>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode19>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode19;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode19;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode20
-{} // namespace _ErrorCode20
 
 struct ErrorCode20
 {
@@ -1901,33 +929,30 @@ struct ErrorCode20
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode20 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode20;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode20>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode20>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode20;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode20;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode21
-{} // namespace _ErrorCode21
 
 struct ErrorCode21
 {
@@ -1935,33 +960,30 @@ struct ErrorCode21
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode21 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode21;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode21>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode21>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode21;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode21;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode22
-{} // namespace _ErrorCode22
 
 struct ErrorCode22
 {
@@ -1969,33 +991,30 @@ struct ErrorCode22
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode22 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode22;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode22>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode22>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode22;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode22;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode23
-{} // namespace _ErrorCode23
 
 struct ErrorCode23
 {
@@ -2003,33 +1022,30 @@ struct ErrorCode23
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode23 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode23;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode23>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode23>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode23;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode23;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode24
-{} // namespace _ErrorCode24
 
 struct ErrorCode24
 {
@@ -2037,33 +1053,30 @@ struct ErrorCode24
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode24 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode24;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode24>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode24>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode24;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode24;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode25
-{} // namespace _ErrorCode25
 
 struct ErrorCode25
 {
@@ -2071,33 +1084,30 @@ struct ErrorCode25
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode25 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode25;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode25>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode25>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode25;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode25;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode26
-{} // namespace _ErrorCode26
 
 struct ErrorCode26
 {
@@ -2105,33 +1115,30 @@ struct ErrorCode26
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode26 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode26;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode26>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode26>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode26;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode26;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode27
-{} // namespace _ErrorCode27
 
 struct ErrorCode27
 {
@@ -2139,33 +1146,30 @@ struct ErrorCode27
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode27 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode27;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode27>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode27>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode27;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode27;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode28
-{} // namespace _ErrorCode28
 
 struct ErrorCode28
 {
@@ -2173,33 +1177,30 @@ struct ErrorCode28
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode28 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode28;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode28>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode28>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode28;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode28;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode29
-{} // namespace _ErrorCode29
 
 struct ErrorCode29
 {
@@ -2207,33 +1208,30 @@ struct ErrorCode29
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode29 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode29;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode29>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode29>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode29;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode29;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode30
-{} // namespace _ErrorCode30
 
 struct ErrorCode30
 {
@@ -2241,33 +1239,30 @@ struct ErrorCode30
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode30 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode30;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode30>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode30>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode30;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode30;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode31
-{} // namespace _ErrorCode31
 
 struct ErrorCode31
 {
@@ -2275,33 +1270,30 @@ struct ErrorCode31
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode31 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode31;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode31>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode31>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode31;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode31;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode32
-{} // namespace _ErrorCode32
 
 struct ErrorCode32
 {
@@ -2309,33 +1301,30 @@ struct ErrorCode32
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode32 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode32;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode32>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode32>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode32;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode32;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode33
-{} // namespace _ErrorCode33
 
 struct ErrorCode33
 {
@@ -2343,33 +1332,30 @@ struct ErrorCode33
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode33 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode33;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode33>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode33>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode33;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode33;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode34
-{} // namespace _ErrorCode34
 
 struct ErrorCode34
 {
@@ -2377,33 +1363,30 @@ struct ErrorCode34
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode34 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode34;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode34>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode34>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode34;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode34;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode35
-{} // namespace _ErrorCode35
 
 struct ErrorCode35
 {
@@ -2411,33 +1394,30 @@ struct ErrorCode35
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode35 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode35;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode35>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode35>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode35;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode35;
 };
 
 } // namespace details
-
-namespace org
+namespace org::open_power::witherspoon::fault
 {
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
-{
-namespace _ErrorCode36
-{} // namespace _ErrorCode36
 
 struct ErrorCode36
 {
@@ -2445,34 +1425,32 @@ struct ErrorCode36
     using metadata_types = std::tuple<>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using ErrorCode36 =
+    phosphor::logging::org::open_power::witherspoon::fault::ErrorCode36;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::ErrorCode36>
+    sdbusplus::error::org::open_power::witherspoon::fault::ErrorCode36>
 {
-    using type = org::open_power::Witherspoon::Fault::ErrorCode36;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::ErrorCode36;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSequencerVoltageFault
 {
-
 struct RAIL
 {
     /*
@@ -2513,7 +1491,6 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSequencerVoltageFault
 
 struct PowerSequencerVoltageFault
@@ -2525,35 +1502,32 @@ struct PowerSequencerVoltageFault
     using metadata_types = std::tuple<RAIL, RAIL_NAME, RAW_STATUS>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSequencerVoltageFault = phosphor::logging::org::open_power::
+    witherspoon::fault::PowerSequencerVoltageFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSequencerVoltageFault>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSequencerVoltageFault>
 {
-    using type =
-        org::open_power::Witherspoon::Fault::PowerSequencerVoltageFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSequencerVoltageFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSequencerPGOODFault
 {
-
 struct INPUT_NUM
 {
     /*
@@ -2595,7 +1569,6 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSequencerPGOODFault
 
 struct PowerSequencerPGOODFault
@@ -2607,34 +1580,32 @@ struct PowerSequencerPGOODFault
     using metadata_types = std::tuple<INPUT_NUM, INPUT_NAME, RAW_STATUS>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSequencerPGOODFault = phosphor::logging::org::open_power::
+    witherspoon::fault::PowerSequencerPGOODFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSequencerPGOODFault>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSequencerPGOODFault>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerSequencerPGOODFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSequencerPGOODFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSequencerFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -2649,7 +1620,6 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSequencerFault
 
 struct PowerSequencerFault
@@ -2659,34 +1629,32 @@ struct PowerSequencerFault
     using metadata_types = std::tuple<RAW_STATUS>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSequencerFault =
+    phosphor::logging::org::open_power::witherspoon::fault::PowerSequencerFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSequencerFault>
+    sdbusplus::error::org::open_power::witherspoon::fault::PowerSequencerFault>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerSequencerFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSequencerFault;
 };
 
 } // namespace details
-
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
+namespace xyz::openbmc_project::common::callout
 {
 namespace _Device
 {
-
 struct CALLOUT_ERRNO
 {
     /*
@@ -2715,7 +1683,6 @@ struct CALLOUT_DEVICE_PATH
         _entry(entry("CALLOUT_DEVICE_PATH=%s", a)){};
     type _entry;
 };
-
 } // namespace _Device
 
 struct Device
@@ -2726,34 +1693,31 @@ struct Device
     using metadata_types = std::tuple<CALLOUT_ERRNO, CALLOUT_DEVICE_PATH>;
 };
 
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace xyz::openbmc_project::common::callout
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace xyz::openbmc_project::Common::Callout
+{
+using Device = phosphor::logging::xyz::openbmc_project::common::callout::Device;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::xyz::openbmc_project::Common::Callout::Error::Device>
+    sdbusplus::error::xyz::openbmc_project::common::callout::Device>
 {
-    using type = xyz::openbmc_project::Common::Callout::Device;
+    using type =
+        phosphor::logging::xyz::openbmc_project::common::callout::Device;
 };
 
 } // namespace details
-
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
+namespace xyz::openbmc_project::common::callout
 {
 namespace _GPIO
 {
-
 struct CALLOUT_GPIO_NUM
 {
     /*
@@ -2768,49 +1732,44 @@ struct CALLOUT_GPIO_NUM
         _entry(entry("CALLOUT_GPIO_NUM=%u", a)){};
     type _entry;
 };
-
 } // namespace _GPIO
 
 struct GPIO
 {
     static constexpr auto L = level::ERR;
     using CALLOUT_GPIO_NUM = _GPIO::CALLOUT_GPIO_NUM;
-    using CALLOUT_ERRNO =
-        xyz::openbmc_project::Common::Callout::Device::CALLOUT_ERRNO;
-    using CALLOUT_DEVICE_PATH =
-        xyz::openbmc_project::Common::Callout::Device::CALLOUT_DEVICE_PATH;
+    using CALLOUT_ERRNO = phosphor::logging::xyz::openbmc_project::common::
+        callout::Device::CALLOUT_ERRNO;
+    using CALLOUT_DEVICE_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Device::CALLOUT_DEVICE_PATH;
     using metadata_types =
         std::tuple<CALLOUT_GPIO_NUM, CALLOUT_ERRNO, CALLOUT_DEVICE_PATH>;
 };
 
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace xyz::openbmc_project::common::callout
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace xyz::openbmc_project::Common::Callout
+{
+using GPIO = phosphor::logging::xyz::openbmc_project::common::callout::GPIO;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::xyz::openbmc_project::Common::Callout::Error::GPIO>
+    sdbusplus::error::xyz::openbmc_project::common::callout::GPIO>
 {
-    using type = xyz::openbmc_project::Common::Callout::GPIO;
+    using type = phosphor::logging::xyz::openbmc_project::common::callout::GPIO;
 };
 
 } // namespace details
-
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
+namespace xyz::openbmc_project::common::callout
 {
 namespace _IIC
 {
-
 struct CALLOUT_IIC_BUS
 {
     /*
@@ -2839,7 +1798,6 @@ struct CALLOUT_IIC_ADDR
         _entry(entry("CALLOUT_IIC_ADDR=0x%hx", a)){};
     type _entry;
 };
-
 } // namespace _IIC
 
 struct IIC
@@ -2847,42 +1805,38 @@ struct IIC
     static constexpr auto L = level::ERR;
     using CALLOUT_IIC_BUS = _IIC::CALLOUT_IIC_BUS;
     using CALLOUT_IIC_ADDR = _IIC::CALLOUT_IIC_ADDR;
-    using CALLOUT_ERRNO =
-        xyz::openbmc_project::Common::Callout::Device::CALLOUT_ERRNO;
-    using CALLOUT_DEVICE_PATH =
-        xyz::openbmc_project::Common::Callout::Device::CALLOUT_DEVICE_PATH;
+    using CALLOUT_ERRNO = phosphor::logging::xyz::openbmc_project::common::
+        callout::Device::CALLOUT_ERRNO;
+    using CALLOUT_DEVICE_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Device::CALLOUT_DEVICE_PATH;
     using metadata_types = std::tuple<CALLOUT_IIC_BUS, CALLOUT_IIC_ADDR,
                                       CALLOUT_ERRNO, CALLOUT_DEVICE_PATH>;
 };
 
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace xyz::openbmc_project::common::callout
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace xyz::openbmc_project::Common::Callout
+{
+using IIC = phosphor::logging::xyz::openbmc_project::common::callout::IIC;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::xyz::openbmc_project::Common::Callout::Error::IIC>
+    sdbusplus::error::xyz::openbmc_project::common::callout::IIC>
 {
-    using type = xyz::openbmc_project::Common::Callout::IIC;
+    using type = phosphor::logging::xyz::openbmc_project::common::callout::IIC;
 };
 
 } // namespace details
-
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
+namespace xyz::openbmc_project::common::callout
 {
 namespace _Inventory
 {
-
 struct CALLOUT_INVENTORY_PATH
 {
     /*
@@ -2897,7 +1851,6 @@ struct CALLOUT_INVENTORY_PATH
         _entry(entry("CALLOUT_INVENTORY_PATH=%s", a)){};
     type _entry;
 };
-
 } // namespace _Inventory
 
 struct Inventory
@@ -2907,34 +1860,32 @@ struct Inventory
     using metadata_types = std::tuple<CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace xyz::openbmc_project::common::callout
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace xyz::openbmc_project::Common::Callout
+{
+using Inventory =
+    phosphor::logging::xyz::openbmc_project::common::callout::Inventory;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::xyz::openbmc_project::Common::Callout::Error::Inventory>
+    sdbusplus::error::xyz::openbmc_project::common::callout::Inventory>
 {
-    using type = xyz::openbmc_project::Common::Callout::Inventory;
+    using type =
+        phosphor::logging::xyz::openbmc_project::common::callout::Inventory;
 };
 
 } // namespace details
-
-namespace xyz
-{
-namespace openbmc_project
-{
-namespace Common
-{
-namespace Callout
+namespace xyz::openbmc_project::common::callout
 {
 namespace _IPMISensor
 {
-
 struct CALLOUT_IPMI_SENSOR_NUM
 {
     /*
@@ -2950,7 +1901,6 @@ struct CALLOUT_IPMI_SENSOR_NUM
         _entry(entry("CALLOUT_IPMI_SENSOR_NUM=%u", a)){};
     type _entry;
 };
-
 } // namespace _IPMISensor
 
 struct IPMISensor
@@ -2960,34 +1910,32 @@ struct IPMISensor
     using metadata_types = std::tuple<CALLOUT_IPMI_SENSOR_NUM>;
 };
 
-} // namespace Callout
-} // namespace Common
-} // namespace openbmc_project
-} // namespace xyz
+} // namespace xyz::openbmc_project::common::callout
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace xyz::openbmc_project::Common::Callout
+{
+using IPMISensor =
+    phosphor::logging::xyz::openbmc_project::common::callout::IPMISensor;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::xyz::openbmc_project::Common::Callout::Error::IPMISensor>
+    sdbusplus::error::xyz::openbmc_project::common::callout::IPMISensor>
 {
-    using type = xyz::openbmc_project::Common::Callout::IPMISensor;
+    using type =
+        phosphor::logging::xyz::openbmc_project::common::callout::IPMISensor;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyInputFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3002,46 +1950,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyInputFault
 
 struct PowerSupplyInputFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyInputFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyInputFault = phosphor::logging::org::open_power::witherspoon::
+    fault::PowerSupplyInputFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSupplyInputFault>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSupplyInputFault>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerSupplyInputFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyInputFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyShouldBeOn
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3056,46 +2001,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyShouldBeOn
 
 struct PowerSupplyShouldBeOn
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyShouldBeOn::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyShouldBeOn = phosphor::logging::org::open_power::witherspoon::
+    fault::PowerSupplyShouldBeOn;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSupplyShouldBeOn>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSupplyShouldBeOn>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerSupplyShouldBeOn;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyShouldBeOn;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyOutputOvercurrent
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3110,47 +2052,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyOutputOvercurrent
 
 struct PowerSupplyOutputOvercurrent
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyOutputOvercurrent::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyOutputOvercurrent = phosphor::logging::org::open_power::
+    witherspoon::fault::PowerSupplyOutputOvercurrent;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSupplyOutputOvercurrent>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSupplyOutputOvercurrent>
 {
-    using type =
-        org::open_power::Witherspoon::Fault::PowerSupplyOutputOvercurrent;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyOutputOvercurrent;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyOutputOvervoltage
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3165,47 +2103,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyOutputOvervoltage
 
 struct PowerSupplyOutputOvervoltage
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyOutputOvervoltage::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyOutputOvervoltage = phosphor::logging::org::open_power::
+    witherspoon::fault::PowerSupplyOutputOvervoltage;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSupplyOutputOvervoltage>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSupplyOutputOvervoltage>
 {
-    using type =
-        org::open_power::Witherspoon::Fault::PowerSupplyOutputOvervoltage;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyOutputOvervoltage;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyFanFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3220,46 +2154,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyFanFault
 
 struct PowerSupplyFanFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyFanFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyFanFault =
+    phosphor::logging::org::open_power::witherspoon::fault::PowerSupplyFanFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::PowerSupplyFanFault>
+    sdbusplus::error::org::open_power::witherspoon::fault::PowerSupplyFanFault>
 {
-    using type = org::open_power::Witherspoon::Fault::PowerSupplyFanFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyFanFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _PowerSupplyTemperatureFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3274,47 +2205,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _PowerSupplyTemperatureFault
 
 struct PowerSupplyTemperatureFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _PowerSupplyTemperatureFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using PowerSupplyTemperatureFault = phosphor::logging::org::open_power::
+    witherspoon::fault::PowerSupplyTemperatureFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
-struct map_exception_type<sdbusplus::org::open_power::Witherspoon::Fault::
-                              Error::PowerSupplyTemperatureFault>
+struct map_exception_type<sdbusplus::error::org::open_power::witherspoon::
+                              fault::PowerSupplyTemperatureFault>
 {
-    using type =
-        org::open_power::Witherspoon::Fault::PowerSupplyTemperatureFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        PowerSupplyTemperatureFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _GPUPowerFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3329,46 +2256,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _GPUPowerFault
 
 struct GPUPowerFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _GPUPowerFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using GPUPowerFault =
+    phosphor::logging::org::open_power::witherspoon::fault::GPUPowerFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::GPUPowerFault>
+    sdbusplus::error::org::open_power::witherspoon::fault::GPUPowerFault>
 {
-    using type = org::open_power::Witherspoon::Fault::GPUPowerFault;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::GPUPowerFault;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _GPUOverTemp
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3383,46 +2307,43 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _GPUOverTemp
 
 struct GPUOverTemp
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _GPUOverTemp::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using GPUOverTemp =
+    phosphor::logging::org::open_power::witherspoon::fault::GPUOverTemp;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::GPUOverTemp>
+    sdbusplus::error::org::open_power::witherspoon::fault::GPUOverTemp>
 {
-    using type = org::open_power::Witherspoon::Fault::GPUOverTemp;
+    using type =
+        phosphor::logging::org::open_power::witherspoon::fault::GPUOverTemp;
 };
 
 } // namespace details
-
-namespace org
-{
-namespace open_power
-{
-namespace Witherspoon
-{
-namespace Fault
+namespace org::open_power::witherspoon::fault
 {
 namespace _MemoryPowerFault
 {
-
 struct RAW_STATUS
 {
     /*
@@ -3437,35 +2358,37 @@ struct RAW_STATUS
         _entry(entry("RAW_STATUS=%s", a)){};
     type _entry;
 };
-
 } // namespace _MemoryPowerFault
 
 struct MemoryPowerFault
 {
     static constexpr auto L = level::ERR;
     using RAW_STATUS = _MemoryPowerFault::RAW_STATUS;
-    using CALLOUT_INVENTORY_PATH = xyz::openbmc_project::Common::Callout::
-        Inventory::CALLOUT_INVENTORY_PATH;
+    using CALLOUT_INVENTORY_PATH = phosphor::logging::xyz::openbmc_project::
+        common::callout::Inventory::CALLOUT_INVENTORY_PATH;
     using metadata_types = std::tuple<RAW_STATUS, CALLOUT_INVENTORY_PATH>;
 };
 
-} // namespace Fault
-} // namespace Witherspoon
-} // namespace open_power
-} // namespace org
+} // namespace org::open_power::witherspoon::fault
+
+#ifndef SDBUSPP_REMOVE_DEPRECATED_NAMESPACE
+namespace org::open_power::Witherspoon::Fault
+{
+using MemoryPowerFault =
+    phosphor::logging::org::open_power::witherspoon::fault::MemoryPowerFault;
+}
+#endif
 
 namespace details
 {
 
 template <>
 struct map_exception_type<
-    sdbusplus::org::open_power::Witherspoon::Fault::Error::MemoryPowerFault>
+    sdbusplus::error::org::open_power::witherspoon::fault::MemoryPowerFault>
 {
-    using type = org::open_power::Witherspoon::Fault::MemoryPowerFault;
+    using type = phosphor::logging::org::open_power::witherspoon::fault::
+        MemoryPowerFault;
 };
 
 } // namespace details
-
-} // namespace logging
-
-} // namespace phosphor
+} // namespace phosphor::logging
