@@ -29,6 +29,7 @@ executable(
     'runtime_monitor.cpp',
     sequencer_src,
     dependencies: [
+        cli11_dep,
         libi2c_dep,
         nlohmann_json_dep,
         phosphor_dbus_interfaces,

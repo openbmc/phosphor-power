@@ -5,6 +5,7 @@ psu_monitor = executable(
     'power_supply.cpp',
     'record_manager.cpp',
     dependencies: [
+        cli11_dep,
         nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
