@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4f5125a_bd06f174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-06T17:49:31Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "161a795a_d2074fe9",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbfe8fe4_b8f31dc6",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8f19d0_aa600f03",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-06T17:49:31Z",
+      "side": 1,
+      "message": "Yea, the next commit.",
+      "parentUuid": "dbfe8fe4_b8f31dc6",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b19601c_79687680",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-08-31T18:30:25Z",
       "side": 1,
       "message": "I assume this associates the sensor to the chassis, so we don\u0027t need to update the inv mgr config file like we do for hwmon sensors...",
+      "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8396f946_d3b93538",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-06T17:49:31Z",
+      "side": 1,
+      "message": "That\u0027s correct, this handles all of the sensor associations here.\n\nI also tried to arrange things where we can just do all of the PSU sensors in this app so we can get rid of phosphor-hwmon in the future if it helps.",
+      "parentUuid": "7b19601c_79687680",
       "revId": "fd6867a816f08db6e1ee57933d33cde7c35c3b22",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
