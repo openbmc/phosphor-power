@@ -34,6 +34,24 @@
       "parentUuid": "c9dd350a_11d42ff1",
       "revId": "9bbe6977d04cef5b5476cd95302fd3a714b6e02d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8afe3a38_1e8ee2ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-07T17:51:37Z",
+      "side": 1,
+      "message": "i merged Patrick\u0027s fix and rebased my changes.  That should clear up the CI fails.",
+      "parentUuid": "7c5e9d8a_9bcda3cc",
+      "revId": "9bbe6977d04cef5b5476cd95302fd3a714b6e02d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
