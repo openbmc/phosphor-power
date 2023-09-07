@@ -16,6 +16,63 @@
       "message": "CI fail was caused by an unrelated change that\u0027ll need to be fixed upstream first.",
       "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cea9445_0858512b",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-09-07T15:27:30Z",
+      "side": 1,
+      "message": "Nit: Should this be std::move(associations) so we don\u0027t make a copy?",
+      "range": {
+        "startLine": 1165,
+        "startChar": 39,
+        "endLine": 1165,
+        "endChar": 51
+      },
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73709880_470f57d3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-09-07T15:27:30Z",
+      "side": 1,
+      "message": "Might want to mention AAAA and PPPP are in little endian format (according to record_manager.cpp).\n\nI see you did the swap on line 1253.",
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1595b74f_932805ee",
+        "filename": "phosphor-power-supply/test/mock.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-09-07T15:27:30Z",
+      "side": 1,
+      "message": "Did you choose not to make this a MOCK_METHOD because it was a hassle to constantly provide the desired return value?\n\nI think there is a way in gtest to provide a default output.",
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
