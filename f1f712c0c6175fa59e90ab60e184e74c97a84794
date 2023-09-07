@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e8b2d24c_6703037a",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-07T17:50:46Z",
+      "side": 1,
+      "message": "If I understand it right, I don\u0027t think it will help because the generated code doesn\u0027t take an rvalue:\n\n        virtual std::vector\u003cstd::tuple\u003cstd::string, std::string, std::string\u003e\u003e associations(std::vector\u003cstd::tuple\u003cstd::string, std::string, std::string\u003e\u003e value,\n               bool skipSignal);",
+      "parentUuid": "1cea9445_0858512b",
+      "range": {
+        "startLine": 1165,
+        "startChar": 39,
+        "endLine": 1165,
+        "endChar": 51
+      },
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73709880_470f57d3",
         "filename": "phosphor-power-supply/power_supply.cpp",
         "patchSetId": 2
@@ -54,6 +78,24 @@
       "writtenOn": "2023-09-07T15:27:30Z",
       "side": 1,
       "message": "Might want to mention AAAA and PPPP are in little endian format (according to record_manager.cpp).\n\nI see you did the swap on line 1253.",
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74750c59_f0933ebb",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-07T17:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73709880_470f57d3",
       "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -71,6 +113,24 @@
       "writtenOn": "2023-09-07T15:27:30Z",
       "side": 1,
       "message": "Did you choose not to make this a MOCK_METHOD because it was a hassle to constantly provide the desired return value?\n\nI think there is a way in gtest to provide a default output.",
+      "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "920389f3_611e92b0",
+        "filename": "phosphor-power-supply/test/mock.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-09-07T17:50:46Z",
+      "side": 1,
+      "message": "Yea. I never needed to change the value of this, and didn\u0027t really want to add even more mock related calls into the testcase file.",
+      "parentUuid": "1595b74f_932805ee",
       "revId": "f1f712c0c6175fa59e90ab60e184e74c97a84794",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
