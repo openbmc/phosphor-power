@@ -98,7 +98,13 @@ void PowerSupply::bindOrUnbindDriver(bool present)
 {
     auto action = (present) ? "bind" : "unbind";
     auto path = bindPath / action;
+    auto devicePath = bindPath / bindDevice;
 
+    if ((std::filesystem::exists(devicePath) && present) ||
+        !std::filesystem::exists(devicePath))
+    {
+        return;
+    }
     if (present)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
