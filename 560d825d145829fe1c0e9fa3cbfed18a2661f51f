@@ -52,6 +52,24 @@
       "parentUuid": "9ab03d70_e47f528e",
       "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5375e37_b0c8f16d",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-11T20:56:47Z",
+      "side": 1,
+      "message": "Sorry, I am maybe not explaining my thought well.  Here is a command line example.\n\nInitially there are two PSUs bound to the driver on my example system.  They are at address 0x68 and 0x69 on bus 3.\n\nI write 3-0068 to the unbind file to unbind the PSU at address 0x68.  Then I write the same thing to the bind file to re-bind the driver to that PSU.\n\n```\n# cd /sys/bus/i2c/drivers/ibm-cffps\n# ls\n3-0068  3-0069  bind    uevent  unbind\n# echo 3-0068 \u003e unbind\n# ls\n3-0069  bind    uevent  unbind\n# echo 3-0068 \u003e bind\n# ls\n3-0068  3-0069  bind    uevent  unbind\n```\n\nSo the 3-006x symbolic links are the binding for the individual PSU.  It doesn\u0027t have anything to do with the driver existing.  If the driver didn\u0027t exist then the ibm-cffps directory would not exist.",
+      "parentUuid": "350fb67a_699a3633",
+      "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
