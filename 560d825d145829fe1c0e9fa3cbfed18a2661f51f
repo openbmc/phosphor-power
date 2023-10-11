@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t the second line of this if statement be something like:\n```\n  (!std::filesystem::exists(devicePath) \u0026\u0026 !present)\n```  \n\nIf I am understanding this code correctly, we need to bind the driver in the case where devicePath doesn\u0027t exist and present is true.  With the code above, doesn\u0027t it just return immediately in that case?",
       "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab03d70_e47f528e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-11T18:53:00Z",
+      "side": 1,
+      "message": "In your commit message you mention checking if the driver exists.  But I don\u0027t think that is what you are checking, right?  You are checking if the binding exists for a specific PSU?\n\nHere is what the directory looks like on a sample system:\n```\n# ls /sys/bus/i2c/drivers/ibm-cffps\n3-0068  3-0069  bind    uevent  unbind\n```\n\nI believe the bind and unbind \u0027files\u0027 are what is used to bind and unbind the driver.  The 3-006* entries are symbolic links; I\u0027m guessing they represent the PSUs that have been bound to the driver?",
+      "parentUuid": "e37c81ba_1e14b294",
+      "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
