@@ -34,6 +34,24 @@
       "parentUuid": "e37c81ba_1e14b294",
       "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "350fb67a_699a3633",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-10-11T20:14:07Z",
+      "side": 1,
+      "message": "No, I\u0027m checking for /sys/bus/i2c/drivers/ibm-cffps/3-006x if exists and the PSU is not present then we need to bind. so \n(std::filesystem::exists(devicePath) \u0026\u0026 present) if the device path sys/bus/i2c/drivers/ibm-cffps/3-006x exist and the device present don\u0027t do anything.\n\nOR \n!std::filesystem::exists(devicePath) If the device driver does not exist don\u0027t do anything as you can\u0027t bind for something does not exist.",
+      "parentUuid": "9ab03d70_e47f528e",
+      "revId": "560d825d145829fe1c0e9fa3cbfed18a2661f51f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
