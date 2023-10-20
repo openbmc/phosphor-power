@@ -250,13 +250,13 @@ void ColdRedundancy::createPSU(
                         {
                             orders.push_back(psu->order);
                         }
-                        },
+                    },
                         serviceName.c_str(), pathName.c_str(),
                         "org.freedesktop.DBus.Properties", "GetAll", interface);
                 }
             }
         }
-        },
+    },
         "xyz.openbmc_project.ObjectMapper",
         "/xyz/openbmc_project/object_mapper",
         "xyz.openbmc_project.ObjectMapper", "GetSubTree",

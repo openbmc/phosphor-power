@@ -568,10 +568,9 @@ void PSUManager::syncHistory()
 
 void PSUManager::analyze()
 {
-    auto syncHistoryRequired = std::any_of(psus.begin(), psus.end(),
-                                           [](const auto& psu) {
-        return psu->isSyncHistoryRequired();
-    });
+    auto syncHistoryRequired = std::any_of(
+        psus.begin(), psus.end(),
+        [](const auto& psu) { return psu->isSyncHistoryRequired(); });
     if (syncHistoryRequired)
     {
         syncHistory();
