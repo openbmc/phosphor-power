@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d39c875c_8c40542d",
+        "filename": "cold-redundancy/cold_redundancy.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-23T16:48:37Z",
+      "side": 1,
+      "message": "I’ve gotten this comment in a lot of places where we pass a lambda into a function call. \n\nWhat happened is that clang-17 seems to have changed its interpretation of the lambda indent rule for “OuterScope” which is what we decided to go with for the whole project.",
+      "parentUuid": "b7b615ac_1b622435",
+      "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55861b63_d4d47150",
         "filename": "power-supply/power_supply.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-23T14:01:35Z",
       "side": 1,
       "message": "The new formatting seems wrong here.  It doesn\u0027t indent the source lines within parentheses and braces at all, and the ending braces/parentheses are at zero indentation on line 61.",
+      "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80ee14e6_8567328d",
+        "filename": "power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-23T16:48:37Z",
+      "side": 1,
+      "message": "Same story. It is because of the “OuterScope” setting.",
+      "parentUuid": "55861b63_d4d47150",
       "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
