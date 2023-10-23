@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ddcf9b9_b4eaf74d",
+        "filename": "cold-redundancy/cold_redundancy.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2023-10-23T18:21:57Z",
+      "side": 1,
+      "message": "I’m not really a fan of the OuterScope setting. The claim when we picked it is that it caused less white space churn in code changes because the indentation is more consistent.",
+      "parentUuid": "0bab6a3c_6eeeb4ac",
+      "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55861b63_d4d47150",
         "filename": "power-supply/power_supply.cpp",
         "patchSetId": 1
