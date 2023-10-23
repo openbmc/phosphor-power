@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7b615ac_1b622435",
+        "filename": "cold-redundancy/cold_redundancy.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-23T14:01:35Z",
+      "side": 1,
+      "message": "The indentation seems wrong here and on line 260.  Shouldn\u0027t the parameters following the lambda body be at the same indentation level as the closing brace of the lambda?",
+      "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55861b63_d4d47150",
+        "filename": "power-supply/power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-23T14:01:35Z",
+      "side": 1,
+      "message": "The new formatting seems wrong here.  It doesn\u0027t indent the source lines within parentheses and braces at all, and the ending braces/parentheses are at zero indentation on line 61.",
+      "revId": "319b0dddfa34c46e487923788c5dddf9f691860d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
