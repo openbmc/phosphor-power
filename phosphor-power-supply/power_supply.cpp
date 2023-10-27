@@ -96,9 +96,36 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
 
 void PowerSupply::bindOrUnbindDriver(bool present)
 {
+    // Symbolic link to the device will exist if the driver is bound.
+    // So exist no action required if both the link and PSU are present
+    // or neither is present.
+    namespace fs = std::filesystem;
+    fs::path path;
     auto action = (present) ? "bind" : "unbind";
-    auto path = bindPath / action;
 
+    // This case should not happen, if no device driver name return.
+    if (driverName.empty())
+    {
+        log<level::INFO>("No device driver name found");
+        return;
+    }
+    if (bindPath.string().find(driverName) != std::string::npos)
+    {
+        // bindPath has driver name
+        path = bindPath / action;
+    }
+    else
+    {
+        // Add driver name to bindPath
+        path = bindPath / driverName / action;
+        bindPath = bindPath / driverName;
+    }
+
+    if ((std::filesystem::exists(bindPath / bindDevice) && present) ||
+        (!std::filesystem::exists(bindPath / bindDevice) && !present))
+    {
+        return;
+    }
     if (present)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
