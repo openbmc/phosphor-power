@@ -547,6 +547,22 @@ class PowerSupply
      */
     static double linearToInteger(uint16_t data);
 
+    /**
+     * @brief Retrieve device driver name
+     */
+    const std::string& getDriverName() const
+    {
+        return driverName;
+    }
+    /**
+     * @brief Set device driver name
+     * @param[in] newDriver - device driver name.
+     */
+    void setDriverName(std::string newDriver)
+    {
+        driverName = newDriver;
+    }
+
   private:
     /**
      * @brief Examine STATUS_WORD for CML (communication, memory, logic fault).
@@ -656,6 +672,10 @@ class PowerSupply
      * driver for the power supply when it is installed, or unbind the device
      * driver when the power supply is removed.
      *
+     * Note:
+     *    Bind device when device present and i2cbus-i2caddr does not exist
+     *    UnBind device when device not present and i2cbus-i2caddr  exist
+
      * Writes <device> to <path>/bind (or unbind)
      *
      * @param present - when true, will bind the device driver
@@ -784,7 +804,7 @@ class PowerSupply
     /**
      * @brief The file system path used for binding the device driver.
      */
-    const std::filesystem::path bindPath;
+    std::filesystem::path bindPath;
 
     /**
      * @brief Get the power on status of the psu manager class.

@@ -97,21 +97,48 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
 void PowerSupply::bindOrUnbindDriver(bool present)
 {
     auto action = (present) ? "bind" : "unbind";
-    auto path = bindPath / action;
+    std::string path;
+    // This case should not happen, if no device driver name return.
+    if (getDriverName().empty())
+    {
+        return;
+    }
+    if (bindPath.string().find(getDriverName()) != std::string::npos)
+    {
+        // bindPath have driver name
+        path = bindPath.string() + "/" + action;
+    }
+    else
+    {
+        // Add driver name to bindPath
+        bindPath += getDriverName();
+        path = bindPath.string() + "/" + action;
+    }
 
+    auto devicePath = bindPath / bindDevice;
+
+    // Nothing to do in bindOrUnbind when
+    // Driver (i.e. 3-0068) exist and device present
+    // Or
+    // Driver does not exist and device not present.
+    if ((std::filesystem::exists(devicePath) && present) ||
+        (!std::filesystem::exists(devicePath) && !present))
+    {
+        return;
+    }
     if (present)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
         log<level::INFO>(
-            fmt::format("Binding device driver. path: {} device: {}",
-                        path.string(), bindDevice)
+            fmt::format("Binding device driver. path: {} device: {}", path,
+                        bindDevice)
                 .c_str());
     }
     else
     {
         log<level::INFO>(
-            fmt::format("Unbinding device driver. path: {} device: {}",
-                        path.string(), bindDevice)
+            fmt::format("Unbinding device driver. path: {} device: {}", path,
+                        bindDevice)
                 .c_str());
     }
 
