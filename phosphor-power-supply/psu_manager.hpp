@@ -411,6 +411,12 @@ class PSUManager
     void buildDriverName(uint64_t i2cbus, uint64_t i2caddr);
 
     /**
+     * @brief Find PSU with device driver name, then populate the device
+     *        driver name to all PSUs (including missing PSUs).
+     */
+    void populateDriverName();
+
+    /**
      * @brief The device driver name for all power supplies.
      */
     std::string driverName;
