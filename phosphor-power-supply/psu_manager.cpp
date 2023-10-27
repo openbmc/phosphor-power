@@ -272,6 +272,10 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
     {
         log<level::INFO>(fmt::format("No power supplies to monitor").c_str());
     }
+    else
+    {
+        populateDriverName();
+    }
 }
 
 void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
@@ -1312,5 +1316,20 @@ void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
                                     symLinkPath, e.what())
                             .c_str());
     }
+}
+
+void PSUManager::populateDriverName()
+{
+    std::string driverName;
+    // Search in PSUs for driver name
+    std::for_each(psus.begin(), psus.end(), [&driverName](auto& psu) {
+        if (!psu->getDriverName().empty())
+        {
+            driverName = psu->getDriverName();
+        }
+    });
+    // Assign driver name to all PSUs
+    std::for_each(psus.begin(), psus.end(),
+                  [=](auto& psu) { psu->setDriverName(driverName); });
 }
 } // namespace phosphor::power::manager
