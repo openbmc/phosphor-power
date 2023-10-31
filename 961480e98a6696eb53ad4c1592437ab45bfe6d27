@@ -1,0 +1,209 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e797501_252639be",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Did you test the unbind case too?",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd64df64_1532febe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Looks like a good solution in general.  Some smaller things to clean up.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdc09349_ee13c1bf",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Is there a reason you didn\u0027t want this to be a std::filesystem::path like bindPath?\n\nIt works as a string, you just have to do more work.\n\ne.g.\n\npath \u003d bindPath / action\n\nvs.\n\npath \u003d bindPath.string() + \"/\" + action",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f77513_b2fbb47e",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Normally we don\u0027t call one-line get methods like getDriverName() within the class itself.  You can just access the data member directly.\n\nThose get methods are usually called when the code inside is complex or when they are called from code *outside* of the class that doesn\u0027t (and shouldn\u0027t) have access to the data member.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb7669a1_85375703",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Nit: has",
+      "range": {
+        "startLine": 108,
+        "startChar": 20,
+        "endLine": 108,
+        "endChar": 25
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a38909_9d332626",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "This line is the same in both if branches right?  So the if could just modify bindPath if it has no driver.  Then this line could come after the if.  Not a bug just an observation.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21019ee3_d058af56",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "This should be \u0027Device\u0027 instead of \u0027Driver\u0027 here and on line 123 right?  The driver directory (like \u0027/sys/bus/i2c/drivers/ibm-cffps\u0027) exists in all cases.  The 3-0068 symbolic link within the driver directory is associated with a specific PSU device.",
+      "range": {
+        "startLine": 121,
+        "startChar": 7,
+        "endLine": 121,
+        "endChar": 14
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd1cf758_e2d9a588",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Nit: Missing a blank line between methods.  Also, the doxygen comment should have an @return line for the return value.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f21a155_653ed8d1",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "This should be a `const std::string\u0026` to avoid an unnecessary string copy.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e9be26e_c0fff327",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Nit: Missing blank line between methods.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e806662_50c732af",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-10-31T16:00:29Z",
+      "side": 1,
+      "message": "Please don\u0027t use tmp for a variable name.  Maybe \u0027driverName\u0027?",
+      "range": {
+        "startLine": 1322,
+        "startChar": 16,
+        "endLine": 1322,
+        "endChar": 19
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
