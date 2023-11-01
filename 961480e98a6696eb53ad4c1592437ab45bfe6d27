@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "882de12c_c54bb617",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-11-01T18:33:21Z",
+      "side": 1,
+      "message": "nit: instead of stating the problem, usually commit messages state the solution (i.e. what the change is)",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e797501_252639be",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -65,6 +88,23 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "Normally we don\u0027t call one-line get methods like getDriverName() within the class itself.  You can just access the data member directly.\n\nThose get methods are usually called when the code inside is complex or when they are called from code *outside* of the class that doesn\u0027t (and shouldn\u0027t) have access to the data member.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "955b7eba_a94c4eb3",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-11-01T18:33:21Z",
+      "side": 1,
+      "message": "Maybe put a trace here so if it does happen you\u0027ll know?",
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -162,6 +202,29 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "This should be a `const std::string\u0026` to avoid an unnecessary string copy.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a69e539_742ebee5",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2023-11-01T18:33:21Z",
+      "side": 1,
+      "message": "think this still needs to be passed in?",
+      "range": {
+        "startLine": 256,
+        "startChar": 44,
+        "endLine": 256,
+        "endChar": 55
+      },
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
