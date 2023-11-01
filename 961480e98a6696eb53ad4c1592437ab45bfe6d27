@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c80701fd_61443696",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "882de12c_c54bb617",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e797501_252639be",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "Did you test the unbind case too?",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a689ff4e_e802e72e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Yes, I will add comment verifying unbind",
+      "parentUuid": "6e797501_252639be",
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -75,6 +117,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8db282bb_7120b827",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdc09349_ee13c1bf",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7f77513_b2fbb47e",
@@ -92,6 +152,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "076cd249_20483b90",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "will change",
+      "parentUuid": "b7f77513_b2fbb47e",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "955b7eba_a94c4eb3",
@@ -105,6 +183,24 @@
       "writtenOn": "2023-11-01T18:33:21Z",
       "side": 1,
       "message": "Maybe put a trace here so if it does happen you\u0027ll know?",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef31f6d6_db6f2ae9",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "955b7eba_a94c4eb3",
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -132,6 +228,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d259da79_e2d70eb5",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb7669a1_85375703",
+      "range": {
+        "startLine": 108,
+        "startChar": 20,
+        "endLine": 108,
+        "endChar": 25
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81a38909_9d332626",
@@ -145,6 +265,24 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "This line is the same in both if branches right?  So the if could just modify bindPath if it has no driver.  Then this line could come after the if.  Not a bug just an observation.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac437dc_43d9293c",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "These line should be different, I must not have committed the change.",
+      "parentUuid": "81a38909_9d332626",
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -172,6 +310,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7cf9168_d050efac",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "21019ee3_d058af56",
+      "range": {
+        "startLine": 121,
+        "startChar": 7,
+        "endLine": 121,
+        "endChar": 14
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd1cf758_e2d9a588",
@@ -189,6 +351,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a06860e_d2aa77cb",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fd1cf758_e2d9a588",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f21a155_653ed8d1",
@@ -202,6 +382,24 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "This should be a `const std::string\u0026` to avoid an unnecessary string copy.",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b821005_4eecd2c8",
+        "filename": "phosphor-power-supply/power_supply.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f21a155_653ed8d1",
       "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -229,6 +427,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ab568ad_4bd665f2",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Not sure need to investigate",
+      "parentUuid": "9a69e539_742ebee5",
+      "range": {
+        "startLine": 256,
+        "startChar": 44,
+        "endLine": 256,
+        "endChar": 55
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e9be26e_c0fff327",
@@ -246,6 +468,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da7e0e1e_b3d12ad9",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e9be26e_c0fff327",
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e806662_50c732af",
@@ -259,6 +499,30 @@
       "writtenOn": "2023-10-31T16:00:29Z",
       "side": 1,
       "message": "Please don\u0027t use tmp for a variable name.  Maybe \u0027driverName\u0027?",
+      "range": {
+        "startLine": 1322,
+        "startChar": 16,
+        "endLine": 1322,
+        "endChar": 19
+      },
+      "revId": "961480e98a6696eb53ad4c1592437ab45bfe6d27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7665d846_9bda41c8",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-01T22:15:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e806662_50c732af",
       "range": {
         "startLine": 1322,
         "startChar": 16,
