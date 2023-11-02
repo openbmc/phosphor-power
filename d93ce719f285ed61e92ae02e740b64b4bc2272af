@@ -16,6 +16,24 @@
       "message": "looks good, do the extraneous \n\"Failed binding or unbinding device. errno\u003d16\"\nfor each psu after each bmc reset still show up?",
       "revId": "d93ce719f285ed61e92ae02e740b64b4bc2272af",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dc8a8a2_be886c69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2023-11-02T21:37:30Z",
+      "side": 1,
+      "message": "No more errors when bind device and the device is bound or when unbind and there is no device to unbind.",
+      "parentUuid": "e717981f_3526dbed",
+      "revId": "d93ce719f285ed61e92ae02e740b64b4bc2272af",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
