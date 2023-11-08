@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e07c9893_cc2f9d61",
+        "filename": "phosphor-power-supply/power_supply.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-11-08T22:57:22Z",
+      "side": 1,
+      "message": "In the previous commit, on line 114, you added the driverName to bindPath.  So bindPath was updated in the scenario that the driver name was initially \"\" but was later set via setDriverName().\n\nIn this new commit bindPath is not updated.  So if the driver name has changed, bindPath is not \u0027fixed\u0027.  That means that the value of devicePath won\u0027t be correct right?\n\nI would recommend setting bindPath data member in the setDriverName() method.  That is when the driver name is changing, and the bindPath data member is dependent on the driver name.  This would also handle a bug on line 112.  If setDriverName() was called multiple times, it would keep adding more directories to bindPath instead of replacing the old driver name.  So I would recommend setting bindPath to \"/sys/bus/i2c/drivers/\" + driverName in setDriverName().  This handles both the case where driverName was previously empty and the case where it was previously non-empty.",
+      "revId": "5e25b638f24a89568121deda393450508ce1e33f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
