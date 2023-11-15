@@ -595,7 +595,8 @@ void PSUManager::analyze()
         {
             std::map<std::string, std::string> additionalData;
 
-            if (!psu->isFaultLogged() && !psu->isPresent())
+            if (!psu->isFaultLogged() && !psu->isPresent() &&
+                !validationTimer->isEnabled())
             {
                 std::map<std::string, std::string> requiredPSUsData;
                 auto requiredPSUsPresent = hasRequiredPSUs(requiredPSUsData);
