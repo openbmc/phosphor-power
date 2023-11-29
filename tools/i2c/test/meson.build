@@ -7,7 +7,7 @@ libi2c_dev_mock = static_library(
         gmock
     ],
     link_args: dynamic_linker,
-    build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+    build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
     include_directories: [
         libi2c_inc,
         libi2c_dev_mock_inc
