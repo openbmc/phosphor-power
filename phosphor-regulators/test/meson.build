@@ -52,7 +52,7 @@ phosphor_regulators_tests_source_files = [
 ]
 
 # Long-running tests that are excluded from CI
-if get_option('long-tests').enabled()
+if get_option('long-tests').allowed()
     # This test requires the Python module 'jsonschema'
     phosphor_regulators_tests_source_files += 'validate-regulators-config_tests.cpp'
 endif
@@ -69,7 +69,7 @@ test('phosphor-regulators-tests',
                     sdbusplus,
                 ],
                 link_args: dynamic_linker,
-                build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+                build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
                 link_with: [
                     phosphor_regulators_library,
                     libi2c_dev_mock

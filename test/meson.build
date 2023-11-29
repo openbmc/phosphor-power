@@ -7,7 +7,7 @@ test(
             gtest,
         ],
         link_args: dynamic_linker,
-        build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         implicit_include_directories: false,
         include_directories: '..',
     )
@@ -21,7 +21,7 @@ test(
             gtest,
         ],
         link_args: dynamic_linker,
-        build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         implicit_include_directories: false,
         include_directories: '..',
     )
