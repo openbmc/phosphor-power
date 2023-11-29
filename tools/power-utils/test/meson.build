@@ -12,7 +12,7 @@ test(
         implicit_include_directories: false,
         include_directories: libpower_inc,
         link_args: dynamic_linker,
-        build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         link_with: [
             libpower,
         ],
@@ -39,7 +39,7 @@ test(
             libi2c_dev_mock_inc
         ],
         link_args: dynamic_linker,
-        build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         link_with: [
             libpower,
             libi2c_dev_mock

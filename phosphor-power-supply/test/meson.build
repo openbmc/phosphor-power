@@ -21,7 +21,7 @@ test('phosphor-power-supply-tests',
                 link_with: [
                   libpower,
                   ],
-                build_rpath: get_option('oe-sdk').enabled() ? rpath : '',
+                build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
                 objects: power_supply,
      )
 )
