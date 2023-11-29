@@ -42,7 +42,7 @@ option(
     description: 'The sequencer definition file to use.',
 )
 option(
-    'oe-sdk', type: 'feature', description: 'Enable OE SDK'
+    'oe-sdk', type: 'feature', value: 'disabled', description: 'Enable OE SDK'
 )
 option(
     'cold-redundancy', type: 'boolean',
