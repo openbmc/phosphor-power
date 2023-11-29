@@ -17,6 +17,6 @@ psutils = executable(
     ]
 )
 
-if get_option('tests').enabled()
+if get_option('tests').allowed()
     subdir('test')
 endif

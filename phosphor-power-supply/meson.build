@@ -27,6 +27,6 @@ phosphor_psu_monitor = executable(
 
 power_supply = phosphor_psu_monitor.extract_objects('power_supply.cpp')
 
-if get_option('tests').enabled()
+if get_option('tests').allowed()
   subdir('test')
 endif

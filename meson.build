@@ -17,7 +17,7 @@ cxx = meson.get_compiler('cpp')
 
 build_tests = get_option('tests')
 
-if get_option('oe-sdk').enabled()
+if get_option('oe-sdk').allowed()
   # Setup OE SYSROOT
   OECORE_TARGET_SYSROOT = run_command('sh', '-c', 'echo $OECORE_TARGET_SYSROOT').stdout().strip()
   if OECORE_TARGET_SYSROOT == ''
@@ -34,7 +34,7 @@ endif
 
 gmock = dependency('gmock', disabler: true, required: false)
 gtest = dependency('gtest', main: true, disabler: true, required: false)
-if (not gtest.found() or not gmock.found()) and build_tests.enabled()
+if (not gtest.found() or not gmock.found()) and build_tests.allowed()
   gtest_opts = import('cmake').subproject_options()
   gtest_opts.add_cmake_defines({
   'BUILD_SHARED_LIBS': 'ON'
@@ -194,7 +194,7 @@ endif
 if get_option('utils')
     subdir('tools/power-utils')
 endif
-if get_option('tests').enabled()
+if get_option('tests').allowed()
     subdir('test')
 endif
 if get_option('cold-redundancy')
