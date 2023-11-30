@@ -554,7 +554,16 @@ void PSUManager::syncHistory()
     {
         if (!syncHistoryGPIO)
         {
-            syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
+            try
+            {
+                syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
+            }
+            catch(const std::exception& e)
+            {
+                // Not an error, system just hasn't implemented the synch gpio
+                log<level::INFO>("No synchronization GPIO found");
+                syncHistoryGPIO = nullptr;
+            }
         }
         if (syncHistoryGPIO)
         {
