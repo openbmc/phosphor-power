@@ -21,7 +21,7 @@ that deliver power to the system.
 To build all applications in this repository:
 
 ```
-  meson build
+  meson setup build
   ninja -C build
 ```
 
