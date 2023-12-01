@@ -17,7 +17,7 @@ option(
     'tests', type: 'feature', description: 'Build tests.',
 )
 option(
-    'long-tests', type: 'feature',
+    'long-tests', type: 'feature', value: 'disabled',
     description: 'Build long-running tests that are excluded from CI.',
 )
 
