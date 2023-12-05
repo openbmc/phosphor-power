@@ -16,6 +16,24 @@
       "message": "I have not done a total deep dive, but here is my surface level understanding of the flow here:\n\n* analyze() called once per second\n  * Checks if PowerSupply::isSyncHistoryRequired() is true for any PSU\n  * If so, calls syncHistory()\n\nPowerSupply::isSyncHistoryRequired() returns the syncHistoryRequired data member.  This data member is initially false, but it is set to true when a PSU goes from not present to present.  It is not set back to false unless PowerSupply::clearSyncHistoryRequired() is called.\n\nDue to the above, I think it is going to fruitlessly try to create this GPIO over and over every second.\n\nTwo options:\n* Change line 553 to only get into this code if it is the IBMCFFPS driver.  I\u0027d suggest bouncing that off Derek and/or Faisal on whether there is a downside to that.\n* Move the loop on lines 573 to 576 outside of `if (syncHistoryGPIO)` so that it happens in all cases.  Then syncHistoryRequired will be set to false so that we don\u0027t keep trying to sync repeatedly.",
       "revId": "671d1f77dc2e6309107e11a8d312c320d8b3a9ab",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31c65fe1_4faa8080",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2023-12-05T21:38:03Z",
+      "side": 1,
+      "message": "That second option makes sense to me.",
+      "parentUuid": "ae7c3b40_a3e22acf",
+      "revId": "671d1f77dc2e6309107e11a8d312c320d8b3a9ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
