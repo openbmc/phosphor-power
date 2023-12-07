@@ -82,11 +82,7 @@ endif
 libgpiodcxx = dependency('libgpiodcxx',
     default_options: ['bindings=cxx'])
 
-if cxx.has_header('nlohmann/json.hpp')
-    nlohmann_json_dep = declare_dependency()
-else
-    nlohmann_json_dep = dependency('nlohmann-json')
-endif
+nlohmann_json_dep = dependency('nlohmann-json', include_type: 'system')
 
 if cxx.has_header('CLI/CLI.hpp')
     cli11_dep = declare_dependency()
