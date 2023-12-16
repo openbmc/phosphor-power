@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5a6288b_6c0034a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2023-12-16T04:41:10Z",
+      "side": 1,
+      "message": "Below are formatted versions of the documents.  They are easier to read that way, especially the tables.\n\nREADME.md: https://gist.github.com/smccarney/33920260f53eb18e91cde2a12e3a6bd0\nconfig_file.md: https://gist.github.com/smccarney/36153d592f8280a3fe7c1de251c55dd5\nrail.md: https://gist.github.com/smccarney/b2c21457c2831cf67039424a9d127350\ngpio.md: https://gist.github.com/smccarney/659876b718f47b4b82da62a0dba9086e",
+      "revId": "e4b76830eda5337c2ab5168d05c78737f7e0b3ac",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
