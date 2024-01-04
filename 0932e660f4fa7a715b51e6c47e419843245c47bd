@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c624570_3ad49fc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-04T14:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9276581c_06b8a700",
+      "range": {
+        "startLine": 9,
+        "startChar": 48,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "0932e660f4fa7a715b51e6c47e419843245c47bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf4ed47a_8ac402a1",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-01-02T17:25:02Z",
       "side": 1,
       "message": "Should probably say \u0027PMBus commands *from the driver* which cause...\u0027\n\nObviously most PSUs don\u0027t support all possible PMBus commands that could be sent from a user or application.  The issue here is that some drivers are sending commands the PSU doesn\u0027t support.",
+      "revId": "0932e660f4fa7a715b51e6c47e419843245c47bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6ea6e0_47565728",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-04T14:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf4ed47a_8ac402a1",
       "revId": "0932e660f4fa7a715b51e6c47e419843245c47bd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6effe64_7ad20709",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-04T14:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1ecaea2_dbe6662a",
+      "revId": "0932e660f4fa7a715b51e6c47e419843245c47bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14da8467_83d96dfe",
@@ -71,6 +131,30 @@
       "writtenOn": "2024-01-02T17:25:02Z",
       "side": 1,
       "message": "Should say \u0027error log\u0027 here, as PEL is specific to OpenPower systems.  Same comment on line 18.",
+      "range": {
+        "startLine": 15,
+        "startChar": 62,
+        "endLine": 15,
+        "endChar": 66
+      },
+      "revId": "0932e660f4fa7a715b51e6c47e419843245c47bd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a8bcc7_3111ec62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-04T14:19:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14da8467_83d96dfe",
       "range": {
         "startLine": 15,
         "startChar": 62,
