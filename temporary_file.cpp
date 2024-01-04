@@ -24,14 +24,16 @@
 #include <stdexcept>
 #include <string>
 
-namespace phosphor::power::regulators
+namespace phosphor::power::util
 {
+
+namespace fs = std::filesystem;
 
 TemporaryFile::TemporaryFile()
 {
     // Build template path required by mkstemp()
     std::string templatePath = fs::temp_directory_path() /
-                               "phosphor-regulators-XXXXXX";
+                               "phosphor-power-XXXXXX";
 
     // Generate unique file name, create file, and open it.  The XXXXXX
     // characters are replaced by mkstemp() to make the file name unique.
@@ -90,4 +92,4 @@ void TemporaryFile::remove()
     }
 }
 
-} // namespace phosphor::power::regulators
+} // namespace phosphor::power::util

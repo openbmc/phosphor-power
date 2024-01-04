@@ -36,8 +36,8 @@
     expectJsonInvalid(configFileJson, expectedErrorMessage,                    \
                       expectedOutputMessage)
 
-using namespace phosphor::power::regulators;
 using json = nlohmann::json;
+using TemporaryFile = phosphor::power::util::TemporaryFile;
 
 const json validConfigFile = R"(
     {

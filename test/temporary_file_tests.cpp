@@ -14,17 +14,55 @@
  * limitations under the License.
  */
 #include "temporary_file.hpp"
-#include "test_utils.hpp"
 
 #include <filesystem>
+#include <fstream>
 #include <string>
 #include <utility>
 
 #include <gtest/gtest.h>
 
-using namespace phosphor::power::regulators;
-using namespace phosphor::power::regulators::test_utils;
+using namespace phosphor::power::util;
 namespace fs = std::filesystem;
+
+/**
+ * Modify the specified file so that fs::remove() fails with an exception.
+ *
+ * The file will be renamed and can be restored by calling makeFileRemovable().
+ *
+ * @param path path to the file
+ */
+inline void makeFileUnRemovable(const fs::path& path)
+{
+    // Rename the file to save its contents
+    fs::path savePath{path.native() + ".save"};
+    fs::rename(path, savePath);
+
+    // Create a directory at the original file path
+    fs::create_directory(path);
+
+    // Create a file within the directory.  fs::remove() will throw an exception
+    // if the path is a non-empty directory.
+    std::ofstream childFile{path / "childFile"};
+}
+
+/**
+ * Modify the specified file so that fs::remove() can successfully delete it.
+ *
+ * Undo the modifications from an earlier call to makeFileUnRemovable().
+ *
+ * @param path path to the file
+ */
+inline void makeFileRemovable(const fs::path& path)
+{
+    // makeFileUnRemovable() creates a directory at the file path.  Remove the
+    // directory and all of its contents.
+    fs::remove_all(path);
+
+    // Rename the file back to the original path to restore its contents
+    fs::path savePath{path.native() + ".save"};
+    fs::rename(savePath, path);
+}
 
 TEST(TemporaryFileTests, DefaultConstructor)
 {
@@ -39,7 +77,7 @@ TEST(TemporaryFileTests, DefaultConstructor)
     EXPECT_EQ(parentDir, "/tmp");
 
     std::string fileName = path.filename();
-    std::string namePrefix = "phosphor-regulators-";
+    std::string namePrefix = "phosphor-power-";
     EXPECT_EQ(fileName.compare(0, namePrefix.size(), namePrefix), 0);
 }
 
