@@ -18,10 +18,8 @@
 #include <filesystem>
 #include <utility>
 
-namespace phosphor::power::regulators
+namespace phosphor::power::util
 {
-
-namespace fs = std::filesystem;
 
 /**
  * @class TemporaryFile
@@ -111,7 +109,7 @@ class TemporaryFile
      *
      * @return temporary file path
      */
-    const fs::path& getPath() const
+    const std::filesystem::path& getPath() const
     {
         return path;
     }
@@ -122,7 +120,7 @@ class TemporaryFile
      *
      * Empty when file has been deleted.
      */
-    fs::path path{};
+    std::filesystem::path path{};
 };
 
-} // namespace phosphor::power::regulators
+} // namespace phosphor::power::util

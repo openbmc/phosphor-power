@@ -24,7 +24,6 @@ phosphor_regulators_library_source_files = [
     'rail.cpp',
     'sensor_monitoring.cpp',
     'system.cpp',
-    'temporary_file.cpp',
     'vpd.cpp',
 
     'actions/compare_presence_action.cpp',

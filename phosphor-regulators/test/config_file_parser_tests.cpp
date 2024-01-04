@@ -69,6 +69,7 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::config_file_parser;
 using namespace phosphor::power::regulators::config_file_parser::internal;
 using json = nlohmann::json;
+using TemporaryFile = phosphor::power::util::TemporaryFile;
 
 void writeConfigFile(const std::filesystem::path& pathName,
                      const std::string& contents)

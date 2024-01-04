@@ -24,7 +24,6 @@ phosphor_regulators_tests_source_files = [
     'sensor_monitoring_tests.cpp',
     'sensors_tests.cpp',
     'system_tests.cpp',
-    'temporary_file_tests.cpp',
     'write_verification_error_tests.cpp',
 
     'actions/action_environment_tests.cpp',
@@ -72,7 +71,8 @@ test('phosphor-regulators-tests',
                 build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
                 link_with: [
                     phosphor_regulators_library,
-                    libi2c_dev_mock
+                    libi2c_dev_mock,
+                    libpower
                 ],
                 implicit_include_directories: false,
                 include_directories: [

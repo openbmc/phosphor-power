@@ -29,6 +29,7 @@ namespace fs = std::filesystem;
 using FFDCFormat =
     sdbusplus::xyz::openbmc_project::Logging::server::Create::FFDCFormat;
 using FileDescriptor = phosphor::power::util::FileDescriptor;
+using TemporaryFile = phosphor::power::util::TemporaryFile;
 
 /**
  * @class FFDCFile
