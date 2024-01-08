@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "efdf3b99_47aa4570",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-01-08T16:15:27Z",
+      "side": 1,
+      "message": "nit:  It\u0027s best to put here what the change is, so like:\nCreate directory to put power device FW images",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "041f8764_ca726972",
         "filename": "device-images/README.md",
         "patchSetId": 1
