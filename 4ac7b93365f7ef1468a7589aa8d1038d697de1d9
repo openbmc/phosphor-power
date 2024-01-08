@@ -50,6 +50,24 @@
       "message": "I think we need to be more specific that this is for \u0027power device firmware\u0027.  I don\u0027t think we want other device firmware in the phosphor-power repo, such as a PCIe card or NVMe drive firmware image.  The same comment applies to the git commit message.",
       "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ecd48c0_ae9de629",
+        "filename": "device-images/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-01-08T15:48:52Z",
+      "side": 1,
+      "message": "Correct, please specify \"power\".  Also probably worth adding something like \"so they can be used for firmware update.\".",
+      "parentUuid": "818d25e5_d708ef01",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
