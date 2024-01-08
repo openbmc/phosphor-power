@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a7906b_2dc72a43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-08T19:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efdf3b99_47aa4570",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "041f8764_ca726972",
@@ -83,6 +101,60 @@
       "side": 1,
       "message": "Correct, please specify \"power\".  Also probably worth adding something like \"so they can be used for firmware update.\".",
       "parentUuid": "818d25e5_d708ef01",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ef4e70_5a2aab1d",
+        "filename": "device-images/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-08T19:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ecd48c0_ae9de629",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb35fbcf_b272223a",
+        "filename": "device-images/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-08T19:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "585a4476_ff3ad81c",
+      "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf84e6c_df5740c1",
+        "filename": "device-images/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-08T19:36:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "041f8764_ca726972",
       "revId": "4ac7b93365f7ef1468a7589aa8d1038d697de1d9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
