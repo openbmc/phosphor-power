@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9dfa99d_d33e94f0",
+        "filename": "device-images/README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-01-08T23:32:36Z",
+      "side": 1,
+      "message": "nit: \"Typically the firmware image will be flashed to the power device to enable the hardware to continue to operate efficiently, to fix performance issues, or to fix existing firmware bugs.\"",
+      "revId": "e8e24eaebf107b5a55f02ee30493fde404bf58ba",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
