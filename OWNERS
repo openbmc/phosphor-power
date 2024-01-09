@@ -36,13 +36,13 @@ owners:
 - spinler@us.ibm.com
 
 reviewers:
-- liuxiwei@inspur.com
+- liuxiwei@ieisystem.com
 
 matchers:
 
 openbmc:
 - name: George Liu
-  email: liuxiwei@inspur.com
+  email: liuxiwei@ieisystem.com
   discord: George Liu
 - name: Matt Spinler
   email: spinler@us.ibm.com
