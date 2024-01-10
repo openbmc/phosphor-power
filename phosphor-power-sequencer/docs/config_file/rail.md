@@ -22,7 +22,7 @@ one of these properties if necessary.
 ### Notes
 
 - The "page" property is required if the "check_status_vout" or
-  "compare_voltage_to_limits" property is specified.
+  "compare_voltage_to_limits" property is true.
 
 ## Examples
 

@@ -3,6 +3,18 @@ phosphor_power_sequencer_include_directories = include_directories(
     '../..'
 )
 
+phosphor_power_sequencer_library = static_library(
+    'phosphor-power-sequencer',
+    'config_file_parser.cpp',
+    implicit_include_directories: false,
+    dependencies: [
+        nlohmann_json_dep
+    ],
+    include_directories: [
+        phosphor_power_sequencer_include_directories
+    ]
+)
+
 phosphor_power_sequencer = executable(
     'phosphor-power-control',
     'power_control_main.cpp',
