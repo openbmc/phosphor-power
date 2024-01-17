@@ -189,6 +189,9 @@ if get_option('supply-monitor-ng')
     subdir('phosphor-power-supply')
 endif
 if get_option('utils')
+    install_subdir('device-images',
+    strip_directory:true,
+    install_dir:get_option('datadir')/'obmc/psu')
     subdir('tools/power-utils')
 endif
 if get_option('tests').allowed()
