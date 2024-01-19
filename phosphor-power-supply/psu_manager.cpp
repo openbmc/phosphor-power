@@ -868,7 +868,7 @@ void PSUManager::analyzeBrownout()
                 util::getProperty<PowerState>(
                     "xyz.openbmc_project.State.Chassis", "CurrentPowerState",
                     "/xyz/openbmc_project/state/chassis0",
-                    "xyz.openbmc_project.State.Chassis", bus,
+                    "xyz.openbmc_project.State.Chassis0", bus,
                     currentPowerState);
 
                 if (currentPowerState == PowerState::Off)
