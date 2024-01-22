@@ -22,6 +22,30 @@
       },
       "revId": "918a3afd1eae62d9c28bd3fd62d4b74946280a98",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30f27038_8f642a0b",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-01-22T22:16:09Z",
+      "side": 1,
+      "message": "Yes, these are binary images where do you suggest to put them?",
+      "parentUuid": "05a9bb9c_49af6c64",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 5
+      },
+      "revId": "918a3afd1eae62d9c28bd3fd62d4b74946280a98",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
