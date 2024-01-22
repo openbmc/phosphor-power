@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a7003fc_bc208786",
+        "filename": "phosphor-power-supply/psu_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-01-22T20:51:05Z",
+      "side": 1,
+      "message": "I think you modified the wrong parameter here.  util::getProperty() from utility.hpp has the following signature:\n\n```\ntemplate \u003ctypename T\u003e\nvoid getProperty(const std::string\u0026 interface, const std::string\u0026 propertyName,\n                 const std::string\u0026 path, const std::string\u0026 service,\n                 sdbusplus::bus_t\u0026 bus, T\u0026 value)\n```\n\nI think from your commit message you meant to change the 4th parameter.",
+      "revId": "49f7bbb20bf36340943fa29b03dbe0e0267c48a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
