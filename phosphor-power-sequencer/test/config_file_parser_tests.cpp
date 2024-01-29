@@ -306,6 +306,7 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_EQ(rail->getName(), "VDD_CPU0");
         EXPECT_FALSE(rail->getPresence().has_value());
         EXPECT_FALSE(rail->getPage().has_value());
+        EXPECT_FALSE(rail->isPowerSupplyRail());
         EXPECT_FALSE(rail->getCheckStatusVout());
         EXPECT_FALSE(rail->getCompareVoltageToLimits());
         EXPECT_FALSE(rail->getGPIO().has_value());
@@ -315,22 +316,23 @@ TEST(ConfigFileParserTests, ParseRail)
     {
         const json element = R"(
             {
-                "name": "VCS_CPU1",
-                "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
+                "name": "12.0VB",
+                "presence": "/xyz/openbmc_project/inventory/system/chassis/powersupply1",
                 "page": 11,
+                "is_power_supply_rail": true,
                 "check_status_vout": true,
                 "compare_voltage_to_limits": true,
                 "gpio": { "line": 60, "active_low": true }
             }
         )"_json;
         std::unique_ptr<Rail> rail = parseRail(element);
-        EXPECT_EQ(rail->getName(), "VCS_CPU1");
+        EXPECT_EQ(rail->getName(), "12.0VB");
         EXPECT_TRUE(rail->getPresence().has_value());
-        EXPECT_EQ(
-            rail->getPresence().value(),
-            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1");
+        EXPECT_EQ(rail->getPresence().value(),
+                  "/xyz/openbmc_project/inventory/system/chassis/powersupply1");
         EXPECT_TRUE(rail->getPage().has_value());
         EXPECT_EQ(rail->getPage().value(), 11);
+        EXPECT_TRUE(rail->isPowerSupplyRail());
         EXPECT_TRUE(rail->getCheckStatusVout());
         EXPECT_TRUE(rail->getCompareVoltageToLimits());
         EXPECT_TRUE(rail->getGPIO().has_value());
@@ -415,6 +417,23 @@ TEST(ConfigFileParserTests, ParseRail)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an 8-bit unsigned integer");
+    }
+
+    // Test where fails: is_power_supply_rail value is invalid
+    try
+    {
+        const json element = R"(
+            {
+                "name": "12.0VA",
+                "is_power_supply_rail": "true"
+            }
+        )"_json;
+        parseRail(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
     }
 
     // Test where fails: check_status_vout value is invalid

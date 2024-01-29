@@ -71,6 +71,8 @@ class Rail
      *                 must be present in order for the rail to be present
      * @param page Optional PMBus PAGE number of the rail.  Required if
      *             checkStatusVout or compareVoltageToLimits is true.
+     * @param isPowerSupplyRail Specifies whether the rail is produced by a
+     *                          power supply
      * @param checkStatusVout Specifies whether to check the value of the PMBus
      *                        STATUS_VOUT command when determining the pgood
      *                        status of the rail
@@ -83,11 +85,12 @@ class Rail
      */
     explicit Rail(const std::string& name,
                   const std::optional<std::string>& presence,
-                  const std::optional<uint8_t>& page, bool checkStatusVout,
-                  bool compareVoltageToLimits,
+                  const std::optional<uint8_t>& page, bool isPowerSupplyRail,
+                  bool checkStatusVout, bool compareVoltageToLimits,
                   const std::optional<GPIO>& gpio) :
         name{name},
-        presence{presence}, page{page}, checkStatusVout{checkStatusVout},
+        presence{presence}, page{page}, isPsuRail{isPowerSupplyRail},
+        checkStatusVout{checkStatusVout},
         compareVoltageToLimits{compareVoltageToLimits}, gpio{gpio}
     {
         // If checking STATUS_VOUT or output voltage, verify PAGE was specified
@@ -126,6 +129,16 @@ class Rail
     const std::optional<uint8_t>& getPage() const
     {
         return page;
+    }
+
+    /**
+     * Returns whether the rail is produced by a power supply.
+     *
+     * @return true if rail is produced by a power supply, false otherwise
+     */
+    bool isPowerSupplyRail() const
+    {
+        return isPsuRail;
     }
 
     /**
@@ -178,6 +191,11 @@ class Rail
      * PMBus PAGE number of the rail.
      */
     std::optional<uint8_t> page{};
+
+    /**
+     * Specifies whether the rail is produced by a power supply.
+     */
+    bool isPsuRail{false};
 
     /**
      * Specifies whether to check the value of the PMBus STATUS_VOUT command

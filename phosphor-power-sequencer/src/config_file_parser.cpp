@@ -100,6 +100,15 @@ std::unique_ptr<Rail> parseRail(const json& element)
         ++propertyCount;
     }
 
+    // Optional is_power_supply_rail property
+    bool isPowerSupplyRail{false};
+    auto isPowerSupplyRailIt = element.find("is_power_supply_rail");
+    if (isPowerSupplyRailIt != element.end())
+    {
+        isPowerSupplyRail = parseBoolean(*isPowerSupplyRailIt);
+        ++propertyCount;
+    }
+
     // Optional check_status_vout property
     bool checkStatusVout{false};
     auto checkStatusVoutIt = element.find("check_status_vout");
@@ -137,8 +146,9 @@ std::unique_ptr<Rail> parseRail(const json& element)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Rail>(name, presence, page, checkStatusVout,
-                                  compareVoltageToLimits, gpio);
+    return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
+                                  checkStatusVout, compareVoltageToLimits,
+                                  gpio);
 }
 
 std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)
