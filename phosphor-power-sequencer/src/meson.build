@@ -21,6 +21,7 @@ phosphor_power_sequencer = executable(
     'power_control.cpp',
     'power_interface.cpp',
     'power_sequencer_monitor.cpp',
+    'services.cpp',
     'ucd90x_monitor.cpp',
     'ucd90160_monitor.cpp',
     'ucd90320_monitor.cpp',
