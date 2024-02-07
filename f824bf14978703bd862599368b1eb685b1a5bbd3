@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab8c846_34f773c0",
+        "filename": "phosphor-power-sequencer/src/services.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-02-07T20:16:46Z",
+      "side": 1,
+      "message": "i don\u0027t think you need the c_str() with lg2?",
+      "range": {
+        "startLine": 164,
+        "startChar": 27,
+        "endLine": 164,
+        "endChar": 34
+      },
+      "revId": "f824bf14978703bd862599368b1eb685b1a5bbd3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
