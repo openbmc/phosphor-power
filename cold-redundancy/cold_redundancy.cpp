@@ -24,7 +24,6 @@
 #include <phosphor-logging/elog-errors.hpp>
 #include <sdbusplus/asio/connection.hpp>
 #include <sdbusplus/asio/object_server.hpp>
-#include <sdbusplus/asio/sd_event.hpp>
 #include <sdbusplus/bus/match.hpp>
 
 #include <array>
