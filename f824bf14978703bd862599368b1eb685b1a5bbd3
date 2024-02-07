@@ -22,6 +22,30 @@
       },
       "revId": "f824bf14978703bd862599368b1eb685b1a5bbd3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "383619f0_2929be76",
+        "filename": "phosphor-power-sequencer/src/services.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-02-07T21:47:10Z",
+      "side": 1,
+      "message": "When I tried building without the .c_str(), it resulted in these errors:\n\n```\n../phosphor-power-sequencer/src/services.hpp:164:19: error: unnecessary parentheses in declaration of ‘message’ [-Werror\u003dparentheses]\n164 |         lg2::error(message);\n    |                   ^~~~~~~~~\n../phosphor-power-sequencer/src/services.hpp:164:19: note: remove parentheses\n164 |         lg2::error(message);\n    |                   ^~~~~~~~~\n    |                   -       -\n```",
+      "parentUuid": "5ab8c846_34f773c0",
+      "range": {
+        "startLine": 164,
+        "startChar": 27,
+        "endLine": 164,
+        "endChar": 34
+      },
+      "revId": "f824bf14978703bd862599368b1eb685b1a5bbd3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
