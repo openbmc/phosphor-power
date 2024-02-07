@@ -46,6 +46,30 @@
       },
       "revId": "f824bf14978703bd862599368b1eb685b1a5bbd3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39643839_6ae1085a",
+        "filename": "phosphor-power-sequencer/src/services.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-02-07T21:49:17Z",
+      "side": 1,
+      "message": "I was thinking about it some more, and now I think it specifically doesn\u0027t take a string because Patrick didn\u0027t want people doing what you\u0027re doing :)  which is passing in already formatted strings.\n\n```\nNote: Since a free-form message with data can be created using the `{KEY}`\nmechanism, no other string formatting libraries are necessary or should be used.\nAvoiding the `{KEY}` feature causes the journal messages to become unstructured.\nDo not use `sstream` or `{fmt}` to format the message!\n```",
+      "parentUuid": "383619f0_2929be76",
+      "range": {
+        "startLine": 164,
+        "startChar": 27,
+        "endLine": 164,
+        "endChar": 34
+      },
+      "revId": "f824bf14978703bd862599368b1eb685b1a5bbd3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
