@@ -118,12 +118,12 @@ std::unique_ptr<Rail> parseRail(const json& element)
         ++propertyCount;
     }
 
-    // Optional compare_voltage_to_limits property
-    bool compareVoltageToLimits{false};
-    auto compareVoltageToLimitsIt = element.find("compare_voltage_to_limits");
-    if (compareVoltageToLimitsIt != element.end())
+    // Optional compare_voltage_to_limit property
+    bool compareVoltageToLimit{false};
+    auto compareVoltageToLimitIt = element.find("compare_voltage_to_limit");
+    if (compareVoltageToLimitIt != element.end())
     {
-        compareVoltageToLimits = parseBoolean(*compareVoltageToLimitsIt);
+        compareVoltageToLimit = parseBoolean(*compareVoltageToLimitIt);
         ++propertyCount;
     }
 
@@ -136,9 +136,9 @@ std::unique_ptr<Rail> parseRail(const json& element)
         ++propertyCount;
     }
 
-    // If check_status_vout or compare_voltage_to_limits property is true,
-    // the page property is required; verify page was specified
-    if ((checkStatusVout || compareVoltageToLimits) && !page.has_value())
+    // If check_status_vout or compare_voltage_to_limit property is true, the
+    // page property is required; verify page was specified
+    if ((checkStatusVout || compareVoltageToLimit) && !page.has_value())
     {
         throw std::invalid_argument{"Required property missing: page"};
     }
@@ -147,8 +147,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
-                                  checkStatusVout, compareVoltageToLimits,
-                                  gpio);
+                                  checkStatusVout, compareVoltageToLimit, gpio);
 }
 
 std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)

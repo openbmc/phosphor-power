@@ -308,7 +308,7 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_FALSE(rail->getPage().has_value());
         EXPECT_FALSE(rail->isPowerSupplyRail());
         EXPECT_FALSE(rail->getCheckStatusVout());
-        EXPECT_FALSE(rail->getCompareVoltageToLimits());
+        EXPECT_FALSE(rail->getCompareVoltageToLimit());
         EXPECT_FALSE(rail->getGPIO().has_value());
     }
 
@@ -321,7 +321,7 @@ TEST(ConfigFileParserTests, ParseRail)
                 "page": 11,
                 "is_power_supply_rail": true,
                 "check_status_vout": true,
-                "compare_voltage_to_limits": true,
+                "compare_voltage_to_limit": true,
                 "gpio": { "line": 60, "active_low": true }
             }
         )"_json;
@@ -334,7 +334,7 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_EQ(rail->getPage().value(), 11);
         EXPECT_TRUE(rail->isPowerSupplyRail());
         EXPECT_TRUE(rail->getCheckStatusVout());
-        EXPECT_TRUE(rail->getCompareVoltageToLimits());
+        EXPECT_TRUE(rail->getCompareVoltageToLimit());
         EXPECT_TRUE(rail->getGPIO().has_value());
         EXPECT_EQ(rail->getGPIO().value().line, 60);
         EXPECT_TRUE(rail->getGPIO().value().activeLow);
@@ -453,13 +453,13 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_STREQ(e.what(), "Element is not a boolean");
     }
 
-    // Test where fails: compare_voltage_to_limits value is invalid
+    // Test where fails: compare_voltage_to_limit value is invalid
     try
     {
         const json element = R"(
             {
                 "name": "VCS_CPU1",
-                "compare_voltage_to_limits": 23
+                "compare_voltage_to_limit": 23
             }
         )"_json;
         parseRail(element);
@@ -504,14 +504,14 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_STREQ(e.what(), "Required property missing: page");
     }
 
-    // Test where fails: compare_voltage_to_limits is true and page not
+    // Test where fails: compare_voltage_to_limit is true and page not
     // specified
     try
     {
         const json element = R"(
             {
                 "name": "VCS_CPU1",
-                "compare_voltage_to_limits": true
+                "compare_voltage_to_limit": true
             }
         )"_json;
         parseRail(element);

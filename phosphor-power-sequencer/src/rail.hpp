@@ -70,31 +70,30 @@ class Rail
      * @param presence Optional D-Bus inventory path of a system component which
      *                 must be present in order for the rail to be present
      * @param page Optional PMBus PAGE number of the rail.  Required if
-     *             checkStatusVout or compareVoltageToLimits is true.
+     *             checkStatusVout or compareVoltageToLimit is true.
      * @param isPowerSupplyRail Specifies whether the rail is produced by a
      *                          power supply
      * @param checkStatusVout Specifies whether to check the value of the PMBus
      *                        STATUS_VOUT command when determining the pgood
      *                        status of the rail
-     * @param compareVoltageToLimits Specifies whether to compare the output
-     *                               voltage to the undervoltage and
-     *                               overvoltage limits when determining the
-     *                               pgood status of the rail
+     * @param compareVoltageToLimit Specifies whether to compare the output
+     *                              voltage to the undervoltage fault limit when
+     *                              determining the pgood status of the rail
      * @param gpio Optional GPIO to read to determine the pgood status of the
      *             rail
      */
     explicit Rail(const std::string& name,
                   const std::optional<std::string>& presence,
                   const std::optional<uint8_t>& page, bool isPowerSupplyRail,
-                  bool checkStatusVout, bool compareVoltageToLimits,
+                  bool checkStatusVout, bool compareVoltageToLimit,
                   const std::optional<GPIO>& gpio) :
         name{name},
         presence{presence}, page{page}, isPsuRail{isPowerSupplyRail},
         checkStatusVout{checkStatusVout},
-        compareVoltageToLimits{compareVoltageToLimits}, gpio{gpio}
+        compareVoltageToLimit{compareVoltageToLimit}, gpio{gpio}
     {
         // If checking STATUS_VOUT or output voltage, verify PAGE was specified
-        if ((checkStatusVout || compareVoltageToLimits) && !page.has_value())
+        if ((checkStatusVout || compareVoltageToLimit) && !page.has_value())
         {
             throw std::invalid_argument{"PMBus PAGE is required"};
         }
@@ -154,13 +153,13 @@ class Rail
 
     /**
      * Returns whether the output voltage should be compared to the undervoltage
-     * and overvoltage limits when determining the pgood status of the rail.
+     * fault limit when determining the pgood status of the rail.
      *
-     * @return true if output voltage is compared to limits, false otherwise
+     * @return true if output voltage is compared to limit, false otherwise
      */
-    bool getCompareVoltageToLimits() const
+    bool getCompareVoltageToLimit() const
     {
-        return compareVoltageToLimits;
+        return compareVoltageToLimit;
     }
 
     /**
@@ -207,16 +206,15 @@ class Rail
     bool checkStatusVout{false};
 
     /**
-     * Specifies whether to compare the output voltage to the undervoltage and
-     * overvoltage limits when determining the pgood status of the rail.
+     * Specifies whether to compare the output voltage to the undervoltage fault
+     * limit when determining the pgood status of the rail.
      *
-     * If the output voltage is beyond those limits, the rail pgood will be
+     * If the output voltage is below this limit, the rail pgood will be
      * considered false.
      *
-     * Uses the values of the PMBus READ_VOUT, VOUT_UV_FAULT_LIMIT, and
-     * VOUT_OV_FAULT_LIMIT commands.
+     * Uses the values of the PMBus READ_VOUT and VOUT_UV_FAULT_LIMIT commands.
      */
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
 
     /**
      * GPIO to read to determine the pgood status of the rail.

@@ -50,14 +50,14 @@ TEST(RailTests, Constructor)
         std::optional<uint8_t> page{};
         bool isPowerSupplyRail{true};
         bool checkStatusVout{false};
-        bool compareVoltageToLimits{false};
+        bool compareVoltageToLimit{false};
         std::optional<GPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
 
         EXPECT_EQ(rail.getName(), "12.0V");
@@ -65,7 +65,7 @@ TEST(RailTests, Constructor)
         EXPECT_FALSE(rail.getPage().has_value());
         EXPECT_TRUE(rail.isPowerSupplyRail());
         EXPECT_FALSE(rail.getCheckStatusVout());
-        EXPECT_FALSE(rail.getCompareVoltageToLimits());
+        EXPECT_FALSE(rail.getCompareVoltageToLimit());
         EXPECT_FALSE(rail.getGPIO().has_value());
     }
 
@@ -77,14 +77,14 @@ TEST(RailTests, Constructor)
         std::optional<uint8_t> page{11};
         bool isPowerSupplyRail{false};
         bool checkStatusVout{true};
-        bool compareVoltageToLimits{true};
+        bool compareVoltageToLimit{true};
         std::optional<GPIO> gpio{GPIO(60, true)};
         Rail rail{name,
                   presence,
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
 
         EXPECT_EQ(rail.getName(), "VCS_CPU1");
@@ -96,7 +96,7 @@ TEST(RailTests, Constructor)
         EXPECT_EQ(rail.getPage().value(), 11);
         EXPECT_FALSE(rail.isPowerSupplyRail());
         EXPECT_TRUE(rail.getCheckStatusVout());
-        EXPECT_TRUE(rail.getCompareVoltageToLimits());
+        EXPECT_TRUE(rail.getCompareVoltageToLimit());
         EXPECT_TRUE(rail.getGPIO().has_value());
         EXPECT_EQ(rail.getGPIO().value().line, 60);
         EXPECT_TRUE(rail.getGPIO().value().activeLow);
@@ -109,24 +109,24 @@ TEST(RailTests, Constructor)
         std::optional<uint8_t> page{};
         bool isPowerSupplyRail{false};
         bool checkStatusVout{true};
-        bool compareVoltageToLimits{false};
+        bool compareVoltageToLimit{false};
         std::optional<GPIO> gpio{};
         EXPECT_THROW((Rail{name, presence, page, isPowerSupplyRail,
-                           checkStatusVout, compareVoltageToLimits, gpio}),
+                           checkStatusVout, compareVoltageToLimit, gpio}),
                      std::invalid_argument);
     }
 
-    // Test where fails: compareVoltageToLimits is true and page has no value
+    // Test where fails: compareVoltageToLimit is true and page has no value
     {
         std::string name{"VDD1"};
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
         bool isPowerSupplyRail{false};
         bool checkStatusVout{false};
-        bool compareVoltageToLimits{true};
+        bool compareVoltageToLimit{true};
         std::optional<GPIO> gpio{};
         EXPECT_THROW((Rail{name, presence, page, isPowerSupplyRail,
-                           checkStatusVout, compareVoltageToLimits, gpio}),
+                           checkStatusVout, compareVoltageToLimit, gpio}),
                      std::invalid_argument);
     }
 }
@@ -138,14 +138,14 @@ TEST(RailTests, GetName)
     std::optional<uint8_t> page{};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
     std::optional<GPIO> gpio{};
     Rail rail{name,
               presence,
               page,
               isPowerSupplyRail,
               checkStatusVout,
-              compareVoltageToLimits,
+              compareVoltageToLimit,
               gpio};
 
     EXPECT_EQ(rail.getName(), "VDD2");
@@ -157,7 +157,7 @@ TEST(RailTests, GetPresence)
     std::optional<uint8_t> page{};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
     std::optional<GPIO> gpio{};
 
     // Test where presence has no value
@@ -168,7 +168,7 @@ TEST(RailTests, GetPresence)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_FALSE(rail.getPresence().has_value());
     }
@@ -182,7 +182,7 @@ TEST(RailTests, GetPresence)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_TRUE(rail.getPresence().has_value());
         EXPECT_EQ(
@@ -197,7 +197,7 @@ TEST(RailTests, GetPage)
     std::optional<std::string> presence{};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
     std::optional<GPIO> gpio{};
 
     // Test where page has no value
@@ -208,7 +208,7 @@ TEST(RailTests, GetPage)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_FALSE(rail.getPage().has_value());
     }
@@ -221,7 +221,7 @@ TEST(RailTests, GetPage)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_TRUE(rail.getPage().has_value());
         EXPECT_EQ(rail.getPage().value(), 7);
@@ -235,14 +235,14 @@ TEST(RailTests, IsPowerSupplyRail)
     std::optional<uint8_t> page{};
     bool isPowerSupplyRail{true};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
     std::optional<GPIO> gpio{};
     Rail rail{name,
               presence,
               page,
               isPowerSupplyRail,
               checkStatusVout,
-              compareVoltageToLimits,
+              compareVoltageToLimit,
               gpio};
 
     EXPECT_TRUE(rail.isPowerSupplyRail());
@@ -255,37 +255,37 @@ TEST(RailTests, GetCheckStatusVout)
     std::optional<uint8_t> page{};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
     std::optional<GPIO> gpio{};
     Rail rail{name,
               presence,
               page,
               isPowerSupplyRail,
               checkStatusVout,
-              compareVoltageToLimits,
+              compareVoltageToLimit,
               gpio};
 
     EXPECT_FALSE(rail.getCheckStatusVout());
 }
 
-TEST(RailTests, GetCompareVoltageToLimits)
+TEST(RailTests, GetCompareVoltageToLimit)
 {
     std::string name{"VDD2"};
     std::optional<std::string> presence{};
     std::optional<uint8_t> page{13};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{true};
+    bool compareVoltageToLimit{true};
     std::optional<GPIO> gpio{};
     Rail rail{name,
               presence,
               page,
               isPowerSupplyRail,
               checkStatusVout,
-              compareVoltageToLimits,
+              compareVoltageToLimit,
               gpio};
 
-    EXPECT_TRUE(rail.getCompareVoltageToLimits());
+    EXPECT_TRUE(rail.getCompareVoltageToLimit());
 }
 
 TEST(RailTests, GetGPIO)
@@ -295,7 +295,7 @@ TEST(RailTests, GetGPIO)
     std::optional<uint8_t> page{};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    bool compareVoltageToLimits{false};
+    bool compareVoltageToLimit{false};
 
     // Test where gpio has no value
     {
@@ -305,7 +305,7 @@ TEST(RailTests, GetGPIO)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_FALSE(rail.getGPIO().has_value());
     }
@@ -318,7 +318,7 @@ TEST(RailTests, GetGPIO)
                   page,
                   isPowerSupplyRail,
                   checkStatusVout,
-                  compareVoltageToLimits,
+                  compareVoltageToLimit,
                   gpio};
         EXPECT_TRUE(rail.getGPIO().has_value());
         EXPECT_EQ(rail.getGPIO().value().line, 12);
