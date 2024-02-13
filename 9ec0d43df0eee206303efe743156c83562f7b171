@@ -16,6 +16,24 @@
       "message": "I think I\u0027m missing where the actual behavior change is...",
       "revId": "9ec0d43df0eee206303efe743156c83562f7b171",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb20f3ed_e0972265",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-02-13T16:38:30Z",
+      "side": 1,
+      "message": "Yeah, this would be clearer if I had already implemented the new pgood isolation algorithm.  That is coming in the next few commits.\n\nThe net is that I had planned to compare the actual output voltage to both the UV and OV limits when determining if a pgood fault was occurring on a rail.  I had already implemented this in the JSON config file, config file parser, and the Rail object that holds the properties from the config file.\n\nAfter talking with others I came to the conclusion that comparing with the OV limit was not necessarily a good idea for determing if a pgood fault is occuring.  So I am removing the OV limit comparison.  This caused some minor changes in the config file, parser, and Rail object.",
+      "parentUuid": "726d07f2_9f8660f6",
+      "revId": "9ec0d43df0eee206303efe743156c83562f7b171",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
