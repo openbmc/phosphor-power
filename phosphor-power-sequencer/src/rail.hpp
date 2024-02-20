@@ -15,10 +15,15 @@
  */
 #pragma once
 
+#include "power_sequencer_device.hpp"
+#include "services.hpp"
+
 #include <cstdint>
+#include <map>
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace phosphor::power::sequencer
 {
@@ -93,7 +98,7 @@ class Rail
         compareVoltageToLimit{compareVoltageToLimit}, gpio{gpio}
     {
         // If checking STATUS_VOUT or output voltage, verify PAGE was specified
-        if ((checkStatusVout || compareVoltageToLimit) && !page.has_value())
+        if ((checkStatusVout || compareVoltageToLimit) && !page)
         {
             throw std::invalid_argument{"PMBus PAGE is required"};
         }
@@ -172,7 +177,157 @@ class Rail
         return gpio;
     }
 
+    /**
+     * Returns whether the rail is present.
+     *
+     * Returns true if no inventory path was specified for presence detection.
+     *
+     * @param services System services like hardware presence and the journal
+     * @return true if rail is present, false otherwise
+     */
+    bool isPresent(Services& services);
+
+    /**
+     * Returns the value of the PMBus STATUS_WORD command for the rail.
+     *
+     * Reads the value from the specified device.  The returned value is in
+     * host-endian order.
+     *
+     * Throws an exception if the value could not be obtained.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @return STATUS_WORD value
+     */
+    uint16_t getStatusWord(PowerSequencerDevice& device);
+
+    /**
+     * Returns the value of the PMBus STATUS_VOUT command for the rail.
+     *
+     * Reads the value from the specified device.
+     *
+     * Throws an exception if the value could not be obtained.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @return STATUS_VOUT value
+     */
+    uint8_t getStatusVout(PowerSequencerDevice& device);
+
+    /**
+     * Returns the value of the PMBus READ_VOUT command for the rail.
+     *
+     * Reads the value from the specified device.  The returned value is in
+     * volts.
+     *
+     * Throws an exception if the value could not be obtained.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @return READ_VOUT value in volts
+     */
+    double getReadVout(PowerSequencerDevice& device);
+
+    /**
+     * Returns the value of the PMBus VOUT_UV_FAULT_LIMIT command for the rail.
+     *
+     * Reads the value from the specified device.  The returned value is in
+     * volts.
+     *
+     * Throws an exception if the value could not be obtained.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @return VOUT_UV_FAULT_LIMIT value in volts
+     */
+    double getVoutUVFaultLimit(PowerSequencerDevice& device);
+
+    /**
+     * Returns whether a pgood (power good) fault has occurred on the rail.
+     *
+     * Throws an exception if an error occurs while trying to obtain the rail
+     * status.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @param services System services like hardware presence and the journal
+     * @param gpioValues GPIO values obtained from the device (if any)
+     * @param additionalData Additional data to include in an error log if this
+     *                       method returns true
+     * @return true if a pgood fault was found on the rail, false otherwise
+     */
+    bool hasPgoodFault(PowerSequencerDevice& device, Services& services,
+                       const std::vector<int>& gpioValues,
+                       std::map<std::string, std::string>& additionalData);
+
   private:
+    /**
+     * Verifies that a PMBus PAGE number is defined for the rail.
+     *
+     * Throws an exception if a PAGE number is not defined.
+     */
+    void verifyHasPage();
+
+    /**
+     * Returns whether the PMBus STATUS_VOUT command indicates a pgood fault
+     * has occurred on the rail.
+     *
+     * Throws an exception if an error occurs while trying to obtain the rail
+     * status.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @param services System services like hardware presence and the journal
+     * @param additionalData Additional data to include in an error log if this
+     *                       method returns true
+     * @return true if a pgood fault was found on the rail, false otherwise
+     */
+    bool hasPgoodFaultStatusVout(
+        PowerSequencerDevice& device, Services& services,
+        std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Returns whether a GPIO value indicates a pgood fault has occurred on the
+     * rail.
+     *
+     * Throws an exception if an error occurs while trying to obtain the rail
+     * status.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @param gpioValues GPIO values obtained from the device (if any)
+     * @param additionalData Additional data to include in an error log if this
+     *                       method returns true
+     * @return true if a pgood fault was found on the rail, false otherwise
+     */
+    bool hasPgoodFaultGPIO(Services& services,
+                           const std::vector<int>& gpioValues,
+                           std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Returns whether the output voltage is below the undervoltage limit
+     * indicating a pgood fault has occurred on the rail.
+     *
+     * Throws an exception if an error occurs while trying to obtain the rail
+     * status.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @param services System services like hardware presence and the journal
+     * @param additionalData Additional data to include in an error log if this
+     *                       method returns true
+     * @return true if a pgood fault was found on the rail, false otherwise
+     */
+    bool hasPgoodFaultOutputVoltage(
+        PowerSequencerDevice& device, Services& services,
+        std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Store pgood fault debug data in the specified additional data map.
+     *
+     * Stores data that is relevant regardless of which method was used to
+     * detect the pgood fault.
+     *
+     * @param device Power sequencer device that enables and monitors the rail
+     * @param services System services like hardware presence and the journal
+     * @param additionalData Additional data to include in an error log
+     */
+    void storePgoodFaultDebugData(
+        PowerSequencerDevice& device, Services& services,
+        std::map<std::string, std::string>& additionalData);
+
     /**
      * Unique name for the rail.
      */

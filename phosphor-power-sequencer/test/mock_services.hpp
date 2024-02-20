@@ -23,6 +23,8 @@
 namespace phosphor::power::sequencer
 {
 
+using MockPMBus = phosphor::pmbus::MockPMBus;
+
 /**
  * @class MockServices
  *
