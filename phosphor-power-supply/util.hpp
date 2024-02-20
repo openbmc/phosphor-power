@@ -42,6 +42,12 @@ class Util : public UtilBase
     void setPresence(sdbusplus::bus_t& bus, const std::string& invpath,
                      bool present, const std::string& name) const override
     {
+        using namespace phosphor::logging;
+        log<level::INFO>(fmt::format("Updating inventory present property. "
+                                     "present:{} invpath:{} name:{}",
+                                     present, invpath, name)
+                             .c_str());
+
         using InternalFailure =
             sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure;
         PropertyMap invProp;
@@ -59,12 +65,6 @@ class Util : public UtilBase
 
         ObjectMap invObj;
         invObj.emplace(std::move(invpath), std::move(invIntf));
-
-        using namespace phosphor::logging;
-        log<level::INFO>(fmt::format("Updating inventory present property. "
-                                     "present:{} invpath:{} name:{}",
-                                     present, invpath, name)
-                             .c_str());
 
         try
         {
