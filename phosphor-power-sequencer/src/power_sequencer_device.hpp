@@ -19,7 +19,6 @@
 
 #include <cstdint>
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -120,20 +119,6 @@ class PowerSequencerDevice
      * @return VOUT_UV_FAULT_LIMIT value in volts
      */
     virtual double getVoutUVFaultLimit(uint8_t page) = 0;
-
-    /**
-     * Returns the value of the PMBus VOUT_OV_FAULT_LIMIT command for the
-     * specified PMBus page.
-     *
-     * The returned value is in Volts.
-     *
-     * Throws an exception if the value could not be obtained or the device does
-     * not support the VOUT_OV_FAULT_LIMIT command.
-     *
-     * @param page PMBus page
-     * @return VOUT_OV_FAULT_LIMIT value in volts
-     */
-    virtual double getVoutOVFaultLimit(uint8_t page) = 0;
 
     /**
      * Returns whether a pgood fault has occurred on one of the rails being

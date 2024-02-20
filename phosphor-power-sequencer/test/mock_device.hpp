@@ -44,10 +44,9 @@ class MockDevice : public PowerSequencerDevice
     MOCK_METHOD(uint8_t, getStatusVout, (uint8_t page), (override));
     MOCK_METHOD(double, getReadVout, (uint8_t page), (override));
     MOCK_METHOD(double, getVoutUVFaultLimit, (uint8_t page), (override));
-    MOCK_METHOD(double, getVoutOVFaultLimit, (uint8_t page), (override));
     MOCK_METHOD(bool, hasPgoodFault,
                 (const std::string& powerSupplyError, std::string& error,
-                 std::map<std::string, std::string>& additionalData),
+                 (std::map<std::string, std::string> & additionalData)),
                 (override));
 };
 
