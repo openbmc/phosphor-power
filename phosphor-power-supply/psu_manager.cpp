@@ -978,7 +978,7 @@ void PSUManager::validateConfig()
 
     for (const auto& psu : psus)
     {
-        if ((psu->hasInputFault() || psu->hasVINUVFault()))
+        if ((psu->hasInputFault() || psu->hasVINUVFault()) && psu->isPresent())
         {
             // Do not try to validate if input voltage fault present.
             validationTimer->restartOnce(validationTimeout);
