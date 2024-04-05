@@ -44,7 +44,7 @@ class MockServices : public Services
     MOCK_METHOD(void, logInfoMsg, (const std::string& message), (override));
     MOCK_METHOD(void, logError,
                 (const std::string& message, Entry::Level severity,
-                 std::map<std::string, std::string>& additionalData),
+                 (std::map<std::string, std::string> & additionalData)),
                 (override));
     MOCK_METHOD(bool, isPresent, (const std::string& inventoryPath),
                 (override));
@@ -52,12 +52,12 @@ class MockServices : public Services
                 (override));
 
     virtual std::unique_ptr<PMBusBase>
-        createPMBus(uint8_t bus, uint16_t address,
-                    const std::string& driverName = "",
-                    size_t instance = 0) override
+        createPMBus(uint8_t, uint16_t, const std::string&, size_t) override
     {
         return std::make_unique<MockPMBus>();
     }
+
+    MOCK_METHOD(void, clearCache, (), (override));
 };
 
 } // namespace phosphor::power::sequencer

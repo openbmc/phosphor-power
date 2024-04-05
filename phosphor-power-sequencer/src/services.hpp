@@ -18,13 +18,12 @@
 #include "pmbus.hpp"
 #include "xyz/openbmc_project/Logging/Entry/server.hpp"
 
-#include <fmt/format.h>
-
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/exception.hpp>
 
 #include <cstdint>
+#include <format>
 #include <map>
 #include <memory>
 #include <string>
@@ -127,6 +126,15 @@ class Services
         createPMBus(uint8_t bus, uint16_t address,
                     const std::string& driverName = "",
                     size_t instance = 0) = 0;
+
+    /**
+     * Clear any cached data.
+     *
+     * Some data may be cached for performance reasons, such as hardware
+     * presence.  Clearing the cache results in the latest data being obtained
+     * by a subsequent method calls.
+     */
+    virtual void clearCache() = 0;
 };
 
 /**
@@ -188,9 +196,15 @@ class BMCServices : public Services
                     const std::string& driverName = "",
                     size_t instance = 0) override
     {
-        std::string path = fmt::format("/sys/bus/i2c/devices/{}-{:04x}", bus,
+        std::string path = std::format("/sys/bus/i2c/devices/{}-{:04x}", bus,
                                        address);
         return std::make_unique<PMBus>(path, driverName, instance);
+    }
+
+    /** @copydoc Services::clearCache() */
+    virtual void clearCache() override
+    {
+        presenceCache.clear();
     }
 
   private:
@@ -206,6 +220,13 @@ class BMCServices : public Services
      * D-Bus bus object.
      */
     sdbusplus::bus_t& bus;
+
+    /**
+     * Cached presence data.
+     *
+     * Map from inventory paths to presence values.
+     */
+    std::map<std::string, bool> presenceCache{};
 };
 
 } // namespace phosphor::power::sequencer

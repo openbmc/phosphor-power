@@ -4,6 +4,7 @@ test('phosphor-power-sequencer-tests',
                 'config_file_parser_tests.cpp',
                 'rail_tests.cpp',
                 dependencies: [
+                    gmock,
                     gtest,
                     nlohmann_json_dep
                 ],

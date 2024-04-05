@@ -61,24 +61,36 @@ bool BMCServices::isPresent(const std::string& inventoryPath)
     // Initially assume hardware is not present
     bool present{false};
 
-    // Get presence from D-Bus interface/property
-    try
+    // Try to find cached presence value
+    auto it = presenceCache.find(inventoryPath);
+    if (it != presenceCache.end())
     {
-        util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
-                          INVENTORY_MGR_IFACE, bus, present);
+        present = it->second;
     }
-    catch (const sdbusplus::exception_t& e)
+    else
     {
-        // If exception type is expected and indicates hardware not present
-        if (isExpectedException(e))
+        // Get presence from D-Bus interface/property
+        try
         {
-            present = false;
+            util::getProperty(INVENTORY_IFACE, PRESENT_PROP, inventoryPath,
+                              INVENTORY_MGR_IFACE, bus, present);
         }
-        else
+        catch (const sdbusplus::exception_t& e)
         {
-            // Re-throw unexpected exception
-            throw;
+            // If exception type is expected and indicates hardware not present
+            if (isExpectedException(e))
+            {
+                present = false;
+            }
+            else
+            {
+                // Re-throw unexpected exception
+                throw;
+            }
         }
+
+        // Cache presence value
+        presenceCache[inventoryPath] = present;
     }
 
     return present;
