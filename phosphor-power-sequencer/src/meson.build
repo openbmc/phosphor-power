@@ -10,7 +10,8 @@ phosphor_power_sequencer_library = static_library(
     'services.cpp',
     implicit_include_directories: false,
     dependencies: [
-        nlohmann_json_dep
+        nlohmann_json_dep,
+        phosphor_logging
     ],
     include_directories: [
         phosphor_power_sequencer_include_directories
