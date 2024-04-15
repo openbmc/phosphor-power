@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "591a4ac2_e865d31b",
+        "filename": "phosphor-power-sequencer/src/rail.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-04-15T17:56:42Z",
+      "side": 1,
+      "message": "is this only defined in the mock so far?  what\u0027s it eventually going to be doing?",
+      "range": {
+        "startLine": 108,
+        "startChar": 23,
+        "endLine": 108,
+        "endChar": 42
+      },
+      "revId": "6e36552517fbf3d028018c514b7f5b383aa8c50c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
