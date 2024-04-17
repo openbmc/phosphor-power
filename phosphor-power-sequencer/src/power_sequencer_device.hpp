@@ -129,8 +129,12 @@ class PowerSequencerDevice
     virtual double getVoutUVFaultLimit(uint8_t page) = 0;
 
     /**
-     * Returns whether a pgood fault has occurred on one of the rails being
+     * Checks whether a pgood fault has occurred on one of the rails being
      * monitored by this device.
+     *
+     * If a pgood fault was found, this method returns a string containing the
+     * error that should be logged.  If no fault was found, an empty string is
+     * returned.
      *
      * Throws an exception if an error occurs while trying to obtain the status
      * of the rails.
@@ -141,16 +145,14 @@ class PowerSequencerDevice
      *                         supply error occurred.  This error may be the
      *                         root cause if a pgood fault occurred on a power
      *                         supply rail monitored by this device.
-     * @param error Error that should be logged if this method returns true.
      * @param additionalData Additional data to include in the error log if
-     *                       this method returns true.
-     * @return true if a pgood fault was found on a rail monitored by this
-     *         device, false otherwise
+     *                       a pgood fault was found
+     * @return error that should be logged if a pgood fault was found, or an
+     *         empty string if no pgood fault was found
      */
-    virtual bool
-        hasPgoodFault(Services& services, const std::string& powerSupplyError,
-                      std::string& error,
-                      std::map<std::string, std::string>& additionalData) = 0;
+    virtual std::string
+        findPgoodFault(Services& services, const std::string& powerSupplyError,
+                       std::map<std::string, std::string>& additionalData) = 0;
 };
 
 } // namespace phosphor::power::sequencer

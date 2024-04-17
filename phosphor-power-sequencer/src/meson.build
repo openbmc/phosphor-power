@@ -8,6 +8,7 @@ phosphor_power_sequencer_library = static_library(
     'config_file_parser.cpp',
     'rail.cpp',
     'services.cpp',
+    'standard_device.cpp',
     implicit_include_directories: false,
     dependencies: [
         nlohmann_json_dep,
