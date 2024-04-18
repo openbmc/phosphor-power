@@ -39,13 +39,16 @@ class MockDevice : public PowerSequencerDevice
     virtual ~MockDevice() = default;
 
     MOCK_METHOD(const std::string&, getName, (), (const, override));
+    MOCK_METHOD(const std::vector<std::unique_ptr<Rail>>&, getRails, (),
+                (const, override));
     MOCK_METHOD(std::vector<int>, getGPIOValues, (), (override));
     MOCK_METHOD(uint16_t, getStatusWord, (uint8_t page), (override));
     MOCK_METHOD(uint8_t, getStatusVout, (uint8_t page), (override));
     MOCK_METHOD(double, getReadVout, (uint8_t page), (override));
     MOCK_METHOD(double, getVoutUVFaultLimit, (uint8_t page), (override));
     MOCK_METHOD(bool, hasPgoodFault,
-                (const std::string& powerSupplyError, std::string& error,
+                (Services & services, const std::string& powerSupplyError,
+                 std::string& error,
                  (std::map<std::string, std::string> & additionalData)),
                 (override));
 };

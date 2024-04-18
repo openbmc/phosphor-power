@@ -16,6 +16,7 @@
 #pragma once
 
 #include <format>
+#include <iterator>
 #include <span>
 #include <string>
 
