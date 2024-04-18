@@ -2,6 +2,7 @@ test('phosphor-power-sequencer-tests',
      executable('phosphor-power-sequencer-tests',
                 'config_file_parser_error_tests.cpp',
                 'config_file_parser_tests.cpp',
+                'format_utils_tests.cpp',
                 'rail_tests.cpp',
                 dependencies: [
                     gmock,
