@@ -17,6 +17,7 @@
 #include "rail.hpp"
 
 #include "pmbus.hpp"
+#include "power_sequencer_device.hpp"
 
 #include <exception>
 #include <format>

@@ -15,7 +15,6 @@
  */
 #pragma once
 
-#include "power_sequencer_device.hpp"
 #include "services.hpp"
 
 #include <cstdint>
@@ -27,6 +26,9 @@
 
 namespace phosphor::power::sequencer
 {
+
+// Forward declarations to avoid circular dependencies
+class PowerSequencerDevice;
 
 /**
  * @struct GPIO

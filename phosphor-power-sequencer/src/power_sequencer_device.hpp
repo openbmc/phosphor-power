@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "rail.hpp"
 #include "services.hpp"
 
 #include <cstdint>
@@ -49,6 +50,13 @@ class PowerSequencerDevice
      * @return device name
      */
     virtual const std::string& getName() const = 0;
+
+    /**
+     * Returns the voltage rails that are enabled and monitored by this device.
+     *
+     * @return voltage rails
+     */
+    virtual const std::vector<std::unique_ptr<Rail>>& getRails() const = 0;
 
     /**
      * Returns the GPIO values that can be read from the device.
@@ -127,6 +135,7 @@ class PowerSequencerDevice
      * Throws an exception if an error occurs while trying to obtain the status
      * of the rails.
      *
+     * @param services System services like hardware presence and the journal
      * @param powerSupplyError Power supply error that occurred before the pgood
      *                         fault.  Set to the empty string if no power
      *                         supply error occurred.  This error may be the
@@ -139,7 +148,8 @@ class PowerSequencerDevice
      *         device, false otherwise
      */
     virtual bool
-        hasPgoodFault(const std::string& powerSupplyError, std::string& error,
+        hasPgoodFault(Services& services, const std::string& powerSupplyError,
+                      std::string& error,
                       std::map<std::string, std::string>& additionalData) = 0;
 };
 
