@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe54dc5d_4bc514ab",
+        "filename": "phosphor-power-sequencer/src/format_utils.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-04-19T20:48:34Z",
+      "side": 1,
+      "message": "may as well just spell out the whole thing.  I always think removing vwls just makes things harder to read.",
+      "range": {
+        "startLine": 43,
+        "startChar": 41,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "7d5604bd5abd41e817054fe184abcf2eca1c0067",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
