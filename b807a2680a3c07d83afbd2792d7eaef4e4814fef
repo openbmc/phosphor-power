@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13191b82_8ce9723c",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-04-19T21:17:09Z",
+      "side": 1,
+      "message": "instead of having a pure virtual in the base class, what if you just had the base class store and return the name?",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "742084af_c0ffa95a",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-04-19T21:17:09Z",
+      "side": 1,
+      "message": "same question with the rails",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c4a7ab_21263e03",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-04-19T21:17:09Z",
+      "side": 1,
+      "message": "it may be more straightforward to return an option\u003cstring\u003e which is the error found instead of the code having to check in two places.",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 16
+      },
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
