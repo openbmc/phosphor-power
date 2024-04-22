@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcef6cf0_ece83d88",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T17:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e36d138_d6104447",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "742084af_c0ffa95a",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Same response as above.",
       "parentUuid": "742084af_c0ffa95a",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e710d6d1_55a0c71a",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T17:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c1ba651_b2ce4c35",
       "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -108,6 +144,30 @@
       "side": 1,
       "message": "OK will fix.",
       "parentUuid": "d9c4a7ab_21263e03",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 16
+      },
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ddceea2_a2f9b57a",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T17:10:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce7ff30c_afce91d6",
       "range": {
         "startLine": 98,
         "startChar": 12,
