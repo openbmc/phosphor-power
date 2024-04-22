@@ -6,7 +6,8 @@ test('phosphor-power-sequencer-tests',
                 dependencies: [
                     gmock,
                     gtest,
-                    nlohmann_json_dep
+                    nlohmann_json_dep,
+                    phosphor_logging
                 ],
                 link_args: dynamic_linker,
                 build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
