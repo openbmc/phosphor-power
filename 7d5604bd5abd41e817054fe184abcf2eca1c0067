@@ -22,6 +22,30 @@
       },
       "revId": "7d5604bd5abd41e817054fe184abcf2eca1c0067",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4440ee53_0c352e4e",
+        "filename": "phosphor-power-sequencer/src/format_utils.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T15:17:40Z",
+      "side": 1,
+      "message": "I did that because I thought having a variable name (span) that was the same as the type name (span) would be a compiler issue.  But since the type name is in the std:: namespace, it should work fine.  I\u0027ll fix.",
+      "parentUuid": "fe54dc5d_4bc514ab",
+      "range": {
+        "startLine": 43,
+        "startChar": 41,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "7d5604bd5abd41e817054fe184abcf2eca1c0067",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
