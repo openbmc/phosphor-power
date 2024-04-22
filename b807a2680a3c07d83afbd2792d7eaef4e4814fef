@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e36d138_d6104447",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T16:07:09Z",
+      "side": 1,
+      "message": "I would like to keep PowerSequencerDevice as a fully abstract base class.  The gmock documentation recommends this if you are going to define a mock subclass.  I am using a mock subclass (MockDevice) to test other parts of the application (like Rail).",
+      "parentUuid": "13191b82_8ce9723c",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "742084af_c0ffa95a",
         "filename": "phosphor-power-sequencer/src/standard_device.hpp",
         "patchSetId": 1
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c1ba651_b2ce4c35",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T16:07:09Z",
+      "side": 1,
+      "message": "Same response as above.",
+      "parentUuid": "742084af_c0ffa95a",
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9c4a7ab_21263e03",
         "filename": "phosphor-power-sequencer/src/standard_device.hpp",
         "patchSetId": 1
@@ -48,6 +84,30 @@
       "writtenOn": "2024-04-19T21:17:09Z",
       "side": 1,
       "message": "it may be more straightforward to return an option\u003cstring\u003e which is the error found instead of the code having to check in two places.",
+      "range": {
+        "startLine": 98,
+        "startChar": 12,
+        "endLine": 98,
+        "endChar": 16
+      },
+      "revId": "b807a2680a3c07d83afbd2792d7eaef4e4814fef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce7ff30c_afce91d6",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-22T16:07:09Z",
+      "side": 1,
+      "message": "OK will fix.",
+      "parentUuid": "d9c4a7ab_21263e03",
       "range": {
         "startLine": 98,
         "startChar": 12,
