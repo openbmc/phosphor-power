@@ -37,7 +37,7 @@ std::string StandardDevice::findPgoodFault(
 
         // Get all GPIO values (if possible) from device.  They may be slow to
         // obtain, so obtain them once and then pass values to each Rail object.
-        std::vector<int> gpioValues = getGPIOValuesIfPossible();
+        std::vector<int> gpioValues = getGPIOValuesIfPossible(services);
 
         // Loop through all the rails checking if any detected a pgood fault.
         // The rails are in power-on-sequence order.
@@ -76,12 +76,12 @@ std::string StandardDevice::findPgoodFault(
     return error;
 }
 
-std::vector<int> StandardDevice::getGPIOValuesIfPossible()
+std::vector<int> StandardDevice::getGPIOValuesIfPossible(Services& services)
 {
     std::vector<int> values{};
     try
     {
-        values = getGPIOValues();
+        values = getGPIOValues(services);
     }
     catch (...)
     {}

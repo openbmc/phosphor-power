@@ -70,9 +70,10 @@ class PowerSequencerDevice
      * Throws an exception if the values could not be read or the device does
      * not support GPIO values.
      *
+     * @param services System services like hardware presence and the journal
      * @return GPIO values
      */
-    virtual std::vector<int> getGPIOValues() = 0;
+    virtual std::vector<int> getGPIOValues(Services& services) = 0;
 
     /**
      * Returns the value of the PMBus STATUS_WORD command for the specified

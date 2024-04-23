@@ -16,6 +16,7 @@
 
 #include "mock_services.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 #include "standard_device.hpp"
 
 #include <cstdint>
@@ -65,7 +66,8 @@ class StandardDeviceImpl : public StandardDevice
     {}
 
     // Mock pure virtual methods
-    MOCK_METHOD(std::vector<int>, getGPIOValues, (), (override));
+    MOCK_METHOD(std::vector<int>, getGPIOValues, (Services & services),
+                (override));
     MOCK_METHOD(uint16_t, getStatusWord, (uint8_t page), (override));
     MOCK_METHOD(uint8_t, getStatusVout, (uint8_t page), (override));
     MOCK_METHOD(double, getReadVout, (uint8_t page), (override));

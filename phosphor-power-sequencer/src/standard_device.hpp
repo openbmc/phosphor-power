@@ -104,9 +104,10 @@ class StandardDevice : public PowerSequencerDevice
      * If the device does not support reading GPIO values or an error occurs, an
      * empty vector is returned.
      *
+     * @param services System services like hardware presence and the journal
      * @return GPIO values, or empty vector if values could not be read
      */
-    virtual std::vector<int> getGPIOValuesIfPossible();
+    virtual std::vector<int> getGPIOValuesIfPossible(Services& services);
 
     /**
      * Store pgood fault debug data in the specified additional data map.
