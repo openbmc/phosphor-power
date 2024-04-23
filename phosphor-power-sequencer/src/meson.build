@@ -6,6 +6,7 @@ phosphor_power_sequencer_include_directories = include_directories(
 phosphor_power_sequencer_library = static_library(
     'phosphor-power-sequencer',
     'config_file_parser.cpp',
+    'pmbus_driver_device.cpp',
     'rail.cpp',
     'services.cpp',
     'standard_device.cpp',

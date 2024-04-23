@@ -3,6 +3,7 @@ test('phosphor-power-sequencer-tests',
                 'config_file_parser_error_tests.cpp',
                 'config_file_parser_tests.cpp',
                 'format_utils_tests.cpp',
+                'pmbus_driver_device_tests.cpp',
                 'rail_tests.cpp',
                 'standard_device_tests.cpp',
                 dependencies: [
