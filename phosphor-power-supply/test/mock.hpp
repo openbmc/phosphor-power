@@ -6,6 +6,7 @@
 #include <gpiod.hpp>
 
 #include <bitset>
+#include <filesystem>
 
 #include <gmock/gmock.h>
 
@@ -13,6 +14,9 @@ namespace phosphor
 {
 namespace pmbus
 {
+
+namespace fs = std::filesystem;
+
 class MockedPMBus : public PMBusBase
 {
   public:
@@ -33,6 +37,7 @@ class MockedPMBus : public PMBusBase
     MOCK_METHOD(const fs::path&, path, (), (const, override));
     MOCK_METHOD(std::string, insertPageNum,
                 (const std::string& templateName, size_t page), (override));
+    MOCK_METHOD(fs::path, getPath, (Type type), (override));
 };
 } // namespace pmbus
 

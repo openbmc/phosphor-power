@@ -181,6 +181,7 @@ class PMBusBase
     virtual const fs::path& path() const = 0;
     virtual std::string insertPageNum(const std::string& templateName,
                                       size_t page) = 0;
+    virtual fs::path getPath(Type type) = 0;
 };
 
 /**
@@ -380,7 +381,7 @@ class PMBus : public PMBusBase
      *
      * @return fs::path - the full path
      */
-    fs::path getPath(Type type);
+    fs::path getPath(Type type) override;
 
   private:
     /**
