@@ -30,9 +30,9 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                          const std::string& driver,
                          const std::string& gpioLineName,
                          std::function<bool()>&& callback) :
-    bus(bus),
-    inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/" + driver),
-    isPowerOn(std::move(callback)), driverName(driver)
+    bus(bus), inventoryPath(invpath),
+    bindPath("/sys/bus/i2c/drivers/" + driver), isPowerOn(std::move(callback)),
+    driverName(driver)
 {
     if (inventoryPath.empty())
     {

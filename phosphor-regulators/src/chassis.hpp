@@ -69,8 +69,8 @@ class Chassis
     explicit Chassis(unsigned int number, const std::string& inventoryPath,
                      std::vector<std::unique_ptr<Device>> devices =
                          std::vector<std::unique_ptr<Device>>{}) :
-        number{number},
-        inventoryPath{inventoryPath}, devices{std::move(devices)}
+        number{number}, inventoryPath{inventoryPath},
+        devices{std::move(devices)}
     {
         if (number < 1)
         {

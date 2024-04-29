@@ -44,8 +44,7 @@ std::vector<std::unique_ptr<PowerSupply>> powerSupplies;
 ColdRedundancy::ColdRedundancy(
     boost::asio::io_service& io, sdbusplus::asio::object_server& objectServer,
     std::shared_ptr<sdbusplus::asio::connection>& systemBus) :
-    filterTimer(io),
-    systemBus(systemBus)
+    filterTimer(io), systemBus(systemBus)
 {
     post(io,
          [this, &io, &objectServer, &systemBus]() { createPSU(systemBus); });
@@ -265,8 +264,7 @@ void ColdRedundancy::createPSU(
 PowerSupply::PowerSupply(
     std::string& name, uint8_t bus, uint8_t address, uint8_t order,
     const std::shared_ptr<sdbusplus::asio::connection>& dbusConnection) :
-    name(name),
-    bus(bus), address(address), order(order)
+    name(name), bus(bus), address(address), order(order)
 {
     CR::getPSUEvent(dbusConnection, name, state);
 }

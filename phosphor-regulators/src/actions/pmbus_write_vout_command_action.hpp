@@ -91,8 +91,8 @@ class PMBusWriteVoutCommandAction : public I2CAction
                                          pmbus_utils::VoutDataFormat format,
                                          std::optional<int8_t> exponent,
                                          bool isVerified) :
-        volts{volts},
-        format{format}, exponent{exponent}, isWriteVerified{isVerified}
+        volts{volts}, format{format}, exponent{exponent},
+        isWriteVerified{isVerified}
     {
         // Currently only linear format is supported
         if (format != pmbus_utils::VoutDataFormat::linear)

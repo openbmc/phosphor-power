@@ -55,8 +55,7 @@ class CompareVPDAction : public Action
     explicit CompareVPDAction(const std::string& fru,
                               const std::string& keyword,
                               const std::vector<uint8_t>& value) :
-        fru{fru},
-        keyword{keyword}, value{value}
+        fru{fru}, keyword{keyword}, value{value}
     {}
 
     /**

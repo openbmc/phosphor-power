@@ -45,8 +45,7 @@ class PGOODMonitor : public DeviceMonitor
     PGOODMonitor(std::unique_ptr<phosphor::power::Device>&& d,
                  sdbusplus::bus_t& b, const sdeventplus::Event& e,
                  std::chrono::milliseconds& t) :
-        DeviceMonitor(std::move(d), e, t),
-        bus(b)
+        DeviceMonitor(std::move(d), e, t), bus(b)
     {}
 
     /**

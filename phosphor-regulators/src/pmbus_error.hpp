@@ -47,8 +47,8 @@ class PMBusError : public std::exception
      */
     explicit PMBusError(const std::string& error, const std::string& deviceID,
                         const std::string& inventoryPath) :
-        error{"PMBusError: " + error},
-        deviceID{deviceID}, inventoryPath{inventoryPath}
+        error{"PMBusError: " + error}, deviceID{deviceID},
+        inventoryPath{inventoryPath}
     {}
 
     /**

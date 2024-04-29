@@ -17,8 +17,7 @@ class I2CException : public std::exception
   public:
     explicit I2CException(const std::string& info, const std::string& bus,
                           uint8_t addr, int errorCode = 0) :
-        bus(bus),
-        addr(addr), errorCode(errorCode)
+        bus(bus), addr(addr), errorCode(errorCode)
     {
         std::stringstream ss;
         ss << "I2CException: " << info << ": bus " << bus << ", addr 0x"

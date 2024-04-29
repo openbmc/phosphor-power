@@ -46,8 +46,7 @@ UCD90xMonitor::UCD90xMonitor(sdbusplus::bus_t& bus, std::uint8_t i2cBus,
                              std::uint16_t i2cAddress,
                              const std::string& deviceName,
                              size_t numberPages) :
-    PowerSequencerMonitor(bus),
-    deviceName{deviceName},
+    PowerSequencerMonitor(bus), deviceName{deviceName},
     match{bus,
           sdbusplus::bus::match::rules::interfacesAdded() +
               sdbusplus::bus::match::rules::sender(

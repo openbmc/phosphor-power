@@ -45,20 +45,19 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath, const std::string& invpath,
                          sdbusplus::bus_t& bus, const sdeventplus::Event& e,
                          std::chrono::seconds& t, std::chrono::seconds& p) :
-    Device(name, inst),
-    monitorPath(objpath), pmbusIntf(objpath),
+    Device(name, inst), monitorPath(objpath), pmbusIntf(objpath),
     inventoryPath(INVENTORY_OBJ_PATH + invpath), bus(bus), presentInterval(p),
     presentTimer(e, std::bind([this]() {
-    // The hwmon path may have changed.
-    pmbusIntf.findHwmonDir();
-    this->present = true;
+                     // The hwmon path may have changed.
+                     pmbusIntf.findHwmonDir();
+                     this->present = true;
 
-    // Sync the INPUT_HISTORY data for all PSs
-    syncHistory();
+                     // Sync the INPUT_HISTORY data for all PSs
+                     syncHistory();
 
-    // Update the inventory for the new device
-    updateInventory();
-})),
+                     // Update the inventory for the new device
+                     updateInventory();
+                 })),
     powerOnInterval(t),
     powerOnTimer(e, std::bind([this]() { this->powerOn = true; }))
 {

@@ -101,9 +101,9 @@ bool update(const std::string& psuInventoryPath, const std::string& imageDir)
 
 Updater::Updater(const std::string& psuInventoryPath,
                  const std::string& devPath, const std::string& imageDir) :
-    bus(sdbusplus::bus::new_default()),
-    psuInventoryPath(psuInventoryPath), devPath(devPath),
-    devName(internal::getDeviceName(devPath)), imageDir(imageDir)
+    bus(sdbusplus::bus::new_default()), psuInventoryPath(psuInventoryPath),
+    devPath(devPath), devName(internal::getDeviceName(devPath)),
+    imageDir(imageDir)
 {
     fs::path p = fs::path(devPath) / "driver";
     try

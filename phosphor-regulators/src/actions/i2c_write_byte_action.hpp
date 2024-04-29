@@ -55,8 +55,7 @@ class I2CWriteByteAction : public I2CAction
      */
     explicit I2CWriteByteAction(uint8_t reg, uint8_t value,
                                 uint8_t mask = 0xFF) :
-        reg{reg},
-        value{value}, mask{mask}
+        reg{reg}, value{value}, mask{mask}
     {}
 
     /**

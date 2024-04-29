@@ -57,8 +57,7 @@ class StandardDevice : public PowerSequencerDevice
      */
     explicit StandardDevice(const std::string& name,
                             std::vector<std::unique_ptr<Rail>> rails) :
-        name{name},
-        rails{std::move(rails)}
+        name{name}, rails{std::move(rails)}
     {}
 
     /** @copydoc PowerSequencerDevice::getName() */

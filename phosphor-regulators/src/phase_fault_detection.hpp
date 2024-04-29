@@ -77,8 +77,7 @@ class PhaseFaultDetection
      */
     explicit PhaseFaultDetection(std::vector<std::unique_ptr<Action>> actions,
                                  const std::string& deviceID = "") :
-        actions{std::move(actions)},
-        deviceID{deviceID}
+        actions{std::move(actions)}, deviceID{deviceID}
     {}
 
     /**

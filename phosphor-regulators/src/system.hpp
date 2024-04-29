@@ -54,8 +54,7 @@ class System
      */
     explicit System(std::vector<std::unique_ptr<Rule>> rules,
                     std::vector<std::unique_ptr<Chassis>> chassis) :
-        rules{std::move(rules)},
-        chassis{std::move(chassis)}
+        rules{std::move(rules)}, chassis{std::move(chassis)}
     {
         buildIDMap();
     }

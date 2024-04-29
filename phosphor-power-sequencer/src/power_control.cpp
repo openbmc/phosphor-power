@@ -47,8 +47,8 @@ const std::string typePropertyName = "Type";
 
 PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
-    PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
-    bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
+    PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit}, bus{bus},
+    device{std::make_unique<PowerSequencerMonitor>(bus)},
     match{bus,
           sdbusplus::bus::match::rules::interfacesAdded() +
               sdbusplus::bus::match::rules::sender(

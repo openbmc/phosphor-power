@@ -69,8 +69,7 @@ class PMBusReadSensorAction : public I2CAction
     explicit PMBusReadSensorAction(SensorType type, uint8_t command,
                                    pmbus_utils::SensorDataFormat format,
                                    std::optional<int8_t> exponent) :
-        type{type},
-        command{command}, format{format}, exponent{exponent}
+        type{type}, command{command}, format{format}, exponent{exponent}
     {}
 
     /**

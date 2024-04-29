@@ -70,8 +70,7 @@ DBusSensor::DBusSensor(sdbusplus::bus_t& bus, const std::string& name,
                        SensorType type, double value, const std::string& rail,
                        const std::string& deviceInventoryPath,
                        const std::string& chassisInventoryPath) :
-    bus{bus},
-    name{name}, type{type}, rail{rail}
+    bus{bus}, name{name}, type{type}, rail{rail}
 {
     // Get sensor properties that are based on the sensor type
     std::string objectPath;

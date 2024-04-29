@@ -237,8 +237,7 @@ class PMBus : public PMBusBase
      */
     PMBus(const std::string& path, const std::string& driverName,
           size_t instance) :
-        basePath(path),
-        driverName(driverName), instance(instance)
+        basePath(path), driverName(driverName), instance(instance)
     {
         findHwmonDir();
     }
