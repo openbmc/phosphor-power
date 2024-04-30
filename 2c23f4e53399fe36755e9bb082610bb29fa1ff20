@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8996003_166f1578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-04-30T14:30:48Z",
+      "side": 1,
+      "message": "Looks OK to me.  Seems to make more sense than how clang 17 was formatting ctor init lists.\n\nSorry, I know we\u0027ve been through this before, but I forgot how the timing of this works.  Obviously this failed CI since CI is expecting clang 17 output.\n\nWhat is the order of events?  Do you wait for +2s in all repos, then change CI, then merge the repo commits?",
+      "revId": "2c23f4e53399fe36755e9bb082610bb29fa1ff20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
