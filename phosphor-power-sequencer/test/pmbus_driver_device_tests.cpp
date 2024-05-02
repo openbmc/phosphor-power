@@ -802,6 +802,10 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     createFile("in1_label"); // PAGE 6 -> file number 1
 
     MockServices services;
+    std::vector<int> gpioValues{1, 1, 1};
+    EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
+        .Times(1)
+        .WillOnce(Return(gpioValues));
 
     std::string name{"xyz_pseq"};
     std::vector<std::unique_ptr<Rail>> rails;
