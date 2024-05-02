@@ -92,10 +92,22 @@ void StandardDevice::storePgoodFaultDebugData(
     Services& services, const std::vector<int>& gpioValues,
     std::map<std::string, std::string>& additionalData)
 {
-    additionalData.emplace("DEVICE_NAME", name);
-    if (!gpioValues.empty())
+    try
     {
-        std::string valuesStr = format_utils::toString(std::span(gpioValues));
+        additionalData.emplace("DEVICE_NAME", name);
+        storeGPIOValues(services, gpioValues, additionalData);
+    }
+    catch (...)
+    {}
+}
+
+void StandardDevice::storeGPIOValues(
+    Services& services, const std::vector<int>& values,
+    std::map<std::string, std::string>& additionalData)
+{
+    if (!values.empty())
+    {
+        std::string valuesStr = format_utils::toString(std::span(values));
         services.logInfoMsg(
             std::format("Device {} GPIO values: {}", name, valuesStr));
         additionalData.emplace("GPIO_VALUES", valuesStr);

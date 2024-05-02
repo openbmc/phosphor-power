@@ -112,11 +112,10 @@ class StandardDevice : public PowerSequencerDevice
     /**
      * Store pgood fault debug data in the specified additional data map.
      *
-     * The default implementation stores the device name and all the GPIO
-     * values.  The GPIO values are stored as a simple list of integers.
+     * The default implementation stores the device name and then calls
+     * storeGPIOValues().
      *
-     * Sub-classes should override if needed to store device-specific data
-     * and/or a formatted representation of the GPIO values.
+     * Sub-classes should override if needed to store device-specific data.
      *
      * This method should NOT throw exceptions.  If debug data cannot be
      * obtained, the error should be caught and ignored so that pgood error
@@ -129,6 +128,24 @@ class StandardDevice : public PowerSequencerDevice
     virtual void storePgoodFaultDebugData(
         Services& services, const std::vector<int>& gpioValues,
         std::map<std::string, std::string>& additionalData);
+
+    /**
+     * Store GPIO values in the specified additional data map.
+     *
+     * The default implementation stores the values as a simple list of
+     * integers.
+     *
+     * Sub-classes should override if more advanced formatting is needed.  For
+     * example, GPIOs could be stored individually with a name and value, or
+     * related GPIOs could be formatted as a group.
+     *
+     * @param services System services like hardware presence and the journal
+     * @param values GPIO values obtained from the device (if any)
+     * @param additionalData Additional data to include in an error log
+     */
+    virtual void
+        storeGPIOValues(Services& services, const std::vector<int>& values,
+                        std::map<std::string, std::string>& additionalData);
 
     /**
      * Device name.
