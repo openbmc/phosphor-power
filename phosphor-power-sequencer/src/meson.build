@@ -10,6 +10,7 @@ phosphor_power_sequencer_library = static_library(
     'rail.cpp',
     'services.cpp',
     'standard_device.cpp',
+    'ucd90160_device.cpp',
     'ucd90320_device.cpp',
     'ucd90x_device.cpp',
     implicit_include_directories: false,

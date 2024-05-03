@@ -6,6 +6,7 @@ test('phosphor-power-sequencer-tests',
                 'pmbus_driver_device_tests.cpp',
                 'rail_tests.cpp',
                 'standard_device_tests.cpp',
+                'ucd90160_device_tests.cpp',
                 'ucd90320_device_tests.cpp',
                 'ucd90x_device_tests.cpp',
                 dependencies: [
