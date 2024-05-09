@@ -1,0 +1,105 @@
+{
+    "rails": [
+        {
+            "name": "12.0V",
+            "page": 0,
+            "is_power_supply_rail": true,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "5.0V_USB",
+            "page": 1,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "5.0V_DASD",
+            "page": 2,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "3.3VA",
+            "page": 3,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "3.3VB",
+            "page": 4,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDN_DCM0",
+            "page": 24,
+            "gpio": { "line": 72 }
+        },
+        {
+            "name": "VDN_DCM1",
+            "page": 25,
+            "gpio": { "line": 73 }
+        },
+        {
+            "name": "1.5V",
+            "page": 5,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDA_DCM0",
+            "page": 7,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDB_DCM0",
+            "page": 8,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDA_DCM1",
+            "page": 9,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDB_DCM1",
+            "page": 10,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VCS_DCM0",
+            "page": 26,
+            "gpio": { "line": 74 }
+        },
+        {
+            "name": "VCS_DCM1",
+            "page": 27,
+            "gpio": { "line": 75 }
+        },
+        {
+            "name": "VIO_DCM0",
+            "page": 28,
+            "gpio": { "line": 76 }
+        },
+        {
+            "name": "VIO_DCM1",
+            "page": 29,
+            "gpio": { "line": 77 }
+        },
+        {
+            "name": "VPCIE_DCM0",
+            "page": 30,
+            "gpio": { "line": 78 }
+        },
+        {
+            "name": "VPCIE_DCM1",
+            "page": 31,
+            "gpio": { "line": 79 }
+        }
+    ]
+}
