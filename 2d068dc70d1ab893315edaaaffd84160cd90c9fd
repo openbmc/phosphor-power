@@ -16,6 +16,24 @@
       "message": "Can you refresh my memory if the order in the array matters?",
       "revId": "2d068dc70d1ab893315edaaaffd84160cd90c9fd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49feca8_0a54e935",
+        "filename": "phosphor-power-sequencer/config_files/Rainier.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-05-10T19:21:09Z",
+      "side": 1,
+      "message": "Good question.\n\nIn the old JSON format, the array entries are in UCD PMBus PAGE order.  The first entry is PAGE 0, second entry is PAGE 1, etc.)\n\nThis led to problems because some UCD pages are not voltage rails and were getting improperly checked for pgood faults.  Also, the PAGE order is often not the same as the power on sequence order.  When isolating a pgood fault, we need to check the rails in power on sequence order.\n\nIn the new format, the entries are in power-on-sequence order.  The UCD PMBus PAGE is specified as a property.\n\nhttps://github.com/openbmc/phosphor-power/blob/master/phosphor-power-sequencer/docs/config_file/config_file.md",
+      "parentUuid": "67130f64_cc8c1b78",
+      "revId": "2d068dc70d1ab893315edaaaffd84160cd90c9fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
