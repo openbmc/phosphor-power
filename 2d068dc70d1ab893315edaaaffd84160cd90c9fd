@@ -34,6 +34,24 @@
       "parentUuid": "67130f64_cc8c1b78",
       "revId": "2d068dc70d1ab893315edaaaffd84160cd90c9fd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45590f4a_ed3c601c",
+        "filename": "phosphor-power-sequencer/config_files/Rainier.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-05-10T19:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c49feca8_0a54e935",
+      "revId": "2d068dc70d1ab893315edaaaffd84160cd90c9fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
