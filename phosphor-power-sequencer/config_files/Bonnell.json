@@ -1,0 +1,101 @@
+{
+    "rails": [
+        {
+            "name": "12.0VA",
+            "page": 0,
+            "is_power_supply_rail": true,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "5.0VCS",
+            "page": 1,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "1.8V",
+            "page": 2,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.9V",
+            "page": 3,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "3.3V",
+            "page": 4,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "1.5V_AVDD",
+            "page": 5,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.65V_VDN",
+            "page": 6,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.7VA_VDD",
+            "page": 7,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.7VB_VDD",
+            "page": 8,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.75V_VCS",
+            "page": 9,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.9V_VIO",
+            "page": 10,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "0.85V_VPCIE",
+            "page": 11,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "PMIC2_PG",
+            "page": 12,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "PMIC3_PG",
+            "page": 13,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDR_1.2VB",
+            "page": 14,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        },
+        {
+            "name": "VDDR_1.2VA",
+            "page": 15,
+            "check_status_vout": true,
+            "compare_voltage_to_limit": true
+        }
+    ]
+}
