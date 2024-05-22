@@ -30,6 +30,36 @@ namespace phosphor::power::sequencer::config_file_parser
 {
 
 /**
+ * Standard JSON configuration file directory on the BMC.
+ */
+extern const std::filesystem::path standardConfigFileDirectory;
+
+/**
+ * Finds the JSON configuration file for the current system based on the
+ * specified compatible system types.
+ *
+ * This is required when a single BMC firmware image supports multiple system
+ * types and some system types require different configuration files.
+ *
+ * The compatible system types must be ordered from most to least specific.
+ * Example:
+ *   - com.acme.Hardware.Chassis.Model.MegaServer4CPU
+ *   - com.acme.Hardware.Chassis.Model.MegaServer
+ *   - com.acme.Hardware.Chassis.Model.Server
+ *
+ * Throws an exception if an error occurs.
+ *
+ * @param compatibleSystemTypes compatible system types for the current system
+ *                              ordered from most to least specific
+ * @param configFileDir directory containing configuration files
+ * @return path to the JSON configuration file, or an empty path if none was
+ *         found
+ */
+std::filesystem::path find(
+    const std::vector<std::string>& compatibleSystemTypes,
+    const std::filesystem::path& configFileDir = standardConfigFileDirectory);
+
+/**
  * Parses the specified JSON configuration file.
  *
  * Returns the corresponding C++ Rail objects.

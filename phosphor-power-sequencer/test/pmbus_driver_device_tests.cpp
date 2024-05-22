@@ -20,9 +20,7 @@
 #include "pmbus_driver_device.hpp"
 #include "rail.hpp"
 #include "services.hpp"
-
-#include <errno.h>
-#include <stdlib.h> // for mkdtemp()
+#include "temporary_subdirectory.hpp"
 
 #include <cstdint>
 #include <exception>
@@ -42,6 +40,8 @@
 
 using namespace phosphor::power::sequencer;
 using namespace phosphor::pmbus;
+using namespace phosphor::power::util;
+namespace fs = std::filesystem;
 
 using ::testing::Return;
 using ::testing::Throw;
@@ -56,34 +56,7 @@ class PMBusDriverDeviceTests : public ::testing::Test
      */
     PMBusDriverDeviceTests() : ::testing::Test{}
     {
-        char pathTemplate[] = "/tmp/pmbus_driver_device_testsXXXXXX";
-        char* retVal = mkdtemp(pathTemplate);
-        if (retVal == nullptr)
-        {
-            throw std::runtime_error{std::format(
-                "Unable to create temporary directory: errno={}", errno)};
-        }
-        tempDir = fs::path{pathTemplate};
-    }
-
-    /**
-     * Destructor.
-     *
-     * Deletes the temporary directory created in the constructor.
-     */
-    virtual ~PMBusDriverDeviceTests()
-    {
-        try
-        {
-            if (!tempDir.empty() && fs::exists(tempDir))
-            {
-                fs::remove_all(tempDir);
-            }
-        }
-        catch (...)
-        {
-            // Destructors must not throw exceptions
-        }
+        tempDirPath = tempDir.getPath();
     }
 
     /**
@@ -115,16 +88,21 @@ class PMBusDriverDeviceTests : public ::testing::Test
      */
     void createFile(const std::string& name, const std::string& contents = "")
     {
-        fs::path path{tempDir / name};
+        fs::path path{tempDirPath / name};
         std::ofstream out{path};
         out << contents;
         out.close();
     }
 
     /**
-     * Temporary directory that is used to create simulated sysfs / hmmon files.
+     * Temporary subdirectory used to create simulated sysfs / hmmon files.
      */
-    fs::path tempDir{};
+    TemporarySubDirectory tempDir;
+
+    /**
+     * Path to temporary subdirectory.
+     */
+    fs::path tempDirPath;
 };
 
 TEST_F(PMBusDriverDeviceTests, Constructor)
@@ -427,7 +405,7 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in13_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout10")); // PAGE number 9 + 1
@@ -456,7 +434,7 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in13_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout9")); // PAGE number 8 + 1
@@ -496,7 +474,7 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in1_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout7")); // PAGE number 6 + 1
@@ -525,7 +503,7 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in1_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout8")); // PAGE number 7 + 1
@@ -570,7 +548,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString).Times(0);
 
         const std::map<uint8_t, unsigned int>& map =
@@ -603,7 +581,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in9_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout4")); // PAGE number 3 + 1
@@ -645,7 +623,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir / "in9_label"));
+            .WillOnce(Return(tempDirPath / "in9_label"));
         EXPECT_CALL(pmbus, readString).Times(0);
 
         const std::map<uint8_t, unsigned int>& map =
@@ -667,7 +645,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir / "does_not_exist"));
+            .WillOnce(Return(tempDirPath / "does_not_exist"));
         EXPECT_CALL(pmbus, readString).Times(0);
 
         const std::map<uint8_t, unsigned int>& map =
@@ -683,7 +661,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("in0_label");
 
         // Change temporary directory to be unreadable
-        fs::permissions(tempDir, fs::perms::none);
+        fs::permissions(tempDirPath, fs::perms::none);
 
         MockServices services;
 
@@ -697,7 +675,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString).Times(0);
 
         try
@@ -711,7 +689,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         }
 
         // Change temporary directory to be readable/writable
-        fs::permissions(tempDir, fs::perms::owner_all);
+        fs::permissions(tempDirPath, fs::perms::owner_all);
     }
 }
 
@@ -735,7 +713,7 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in0_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout7")); // PAGE number 6 + 1
@@ -770,7 +748,7 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
-            .WillOnce(Return(tempDir));
+            .WillOnce(Return(tempDirPath));
         EXPECT_CALL(pmbus, readString("in0_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout7")); // PAGE number 6 + 1
@@ -817,7 +795,7 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
     EXPECT_CALL(pmbus, getPath(Type::Hwmon))
         .Times(2)
-        .WillRepeatedly(Return(tempDir));
+        .WillRepeatedly(Return(tempDirPath));
     EXPECT_CALL(pmbus, readString("in1_label", Type::Hwmon))
         .Times(2)
         .WillRepeatedly(Return("vout7")); // PAGE number 6 + 1

@@ -17,6 +17,7 @@
 #include "config_file_parser_error.hpp"
 #include "rail.hpp"
 #include "temporary_file.hpp"
+#include "temporary_subdirectory.hpp"
 
 #include <sys/stat.h> // for chmod()
 
@@ -37,21 +38,207 @@
 using namespace phosphor::power::sequencer;
 using namespace phosphor::power::sequencer::config_file_parser;
 using namespace phosphor::power::sequencer::config_file_parser::internal;
+using namespace phosphor::power::util;
 using json = nlohmann::json;
-using TemporaryFile = phosphor::power::util::TemporaryFile;
+namespace fs = std::filesystem;
 
-void writeConfigFile(const std::filesystem::path& pathName,
-                     const std::string& contents)
+void writeConfigFile(const fs::path& pathName, const std::string& contents)
 {
     std::ofstream file{pathName};
     file << contents;
 }
 
-void writeConfigFile(const std::filesystem::path& pathName,
-                     const json& contents)
+void writeConfigFile(const fs::path& pathName, const json& contents)
 {
     std::ofstream file{pathName};
     file << contents;
+}
+
+TEST(ConfigFileParserTests, Find)
+{
+    std::vector<std::string> compatibleSystemTypes{
+        "com.acme.Hardware.Chassis.Model.MegaServer4CPU",
+        "com.acme.Hardware.Chassis.Model.MegaServer",
+        "com.acme.Hardware.Chassis.Model.Server"};
+
+    // Test where works: Fully qualified system type: First in list
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "com.acme.Hardware.Chassis.Model.MegaServer4CPU.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_EQ(pathFound, configFilePath);
+    }
+
+    // Test where works: Fully qualified system type: Second in list
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "com.acme.Hardware.Chassis.Model.MegaServer.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_EQ(pathFound, configFilePath);
+    }
+
+    // Test where works: Last node in system type: Second in list
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "MegaServer.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_EQ(pathFound, configFilePath);
+    }
+
+    // Test where works: Last node in system type: Last in list
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "Server.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_EQ(pathFound, configFilePath);
+    }
+
+    // Test where works: System type has no '.'
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "Server.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        std::vector<std::string> noDotSystemTypes{"MegaServer4CPU",
+                                                  "MegaServer", "Server"};
+        fs::path pathFound = find(noDotSystemTypes, configFileDirPath);
+        EXPECT_EQ(pathFound, configFilePath);
+    }
+
+    // Test where fails: System type list is empty
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "Server.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        std::vector<std::string> emptySystemTypes{};
+        fs::path pathFound = find(emptySystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: Configuration file directory is empty
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: Configuration file directory does not exist
+    {
+        fs::path configFileDirPath{"/tmp/does_not_exist_XYZ"};
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: Configuration file directory is not readable
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+        fs::permissions(configFileDirPath, fs::perms::none);
+
+        EXPECT_THROW(find(compatibleSystemTypes, configFileDirPath),
+                     std::exception);
+
+        fs::permissions(configFileDirPath, fs::perms::owner_all);
+    }
+
+    // Test where fails: No matching file name found
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "com.acme.Hardware.Chassis.Model.MegaServer";
+        writeConfigFile(configFilePath, std::string{""});
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: Matching file name is a directory: Fully qualified
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "com.acme.Hardware.Chassis.Model.MegaServer4CPU.json";
+        fs::create_directory(configFilePath);
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: Matching file name is a directory: Last node
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "MegaServer.json";
+        fs::create_directory(configFilePath);
+
+        fs::path pathFound = find(compatibleSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: System type has no '.'
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "MegaServer2CPU.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        std::vector<std::string> noDotSystemTypes{"MegaServer4CPU",
+                                                  "MegaServer", "Server", ""};
+        fs::path pathFound = find(noDotSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
+
+    // Test where fails: System type ends with '.'
+    {
+        TemporarySubDirectory configFileDir;
+        fs::path configFileDirPath = configFileDir.getPath();
+
+        fs::path configFilePath = configFileDirPath;
+        configFilePath /= "MegaServer4CPU.json";
+        writeConfigFile(configFilePath, std::string{""});
+
+        std::vector<std::string> dotAtEndSystemTypes{
+            "com.acme.Hardware.Chassis.Model.MegaServer4CPU.", "a.", "."};
+        fs::path pathFound = find(dotAtEndSystemTypes, configFileDirPath);
+        EXPECT_TRUE(pathFound.empty());
+    }
 }
 
 TEST(ConfigFileParserTests, Parse)
@@ -76,7 +263,7 @@ TEST(ConfigFileParserTests, Parse)
         )"_json;
 
         TemporaryFile configFile;
-        std::filesystem::path pathName{configFile.getPath()};
+        fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         std::vector<std::unique_ptr<Rail>> rails = parse(pathName);
@@ -88,7 +275,7 @@ TEST(ConfigFileParserTests, Parse)
 
     // Test where fails: File does not exist
     {
-        std::filesystem::path pathName{"/tmp/non_existent_file"};
+        fs::path pathName{"/tmp/non_existent_file"};
         EXPECT_THROW(parse(pathName), ConfigFileParserError);
     }
 
@@ -105,7 +292,7 @@ TEST(ConfigFileParserTests, Parse)
         )"_json;
 
         TemporaryFile configFile;
-        std::filesystem::path pathName{configFile.getPath()};
+        fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         chmod(pathName.c_str(), 0222);
@@ -117,7 +304,7 @@ TEST(ConfigFileParserTests, Parse)
         const std::string configFileContents = "] foo [";
 
         TemporaryFile configFile;
-        std::filesystem::path pathName{configFile.getPath()};
+        fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         EXPECT_THROW(parse(pathName), ConfigFileParserError);
@@ -128,7 +315,7 @@ TEST(ConfigFileParserTests, Parse)
         const json configFileContents = R"( [ "foo", "bar" ] )"_json;
 
         TemporaryFile configFile;
-        std::filesystem::path pathName{configFile.getPath()};
+        fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
         EXPECT_THROW(parse(pathName), ConfigFileParserError);

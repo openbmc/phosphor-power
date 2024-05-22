@@ -23,9 +23,50 @@
 #include <optional>
 
 using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 namespace phosphor::power::sequencer::config_file_parser
 {
+
+const std::filesystem::path standardConfigFileDirectory{
+    "/usr/share/phosphor-power-sequencer"};
+
+std::filesystem::path
+    find(const std::vector<std::string>& compatibleSystemTypes,
+         const std::filesystem::path& configFileDir)
+{
+    fs::path pathName, possiblePath;
+    std::string fileName;
+
+    for (const std::string& systemType : compatibleSystemTypes)
+    {
+        // Look for file name that is entire system type + ".json"
+        // Example: com.acme.Hardware.Chassis.Model.MegaServer.json
+        fileName = systemType + ".json";
+        possiblePath = configFileDir / fileName;
+        if (fs::is_regular_file(possiblePath))
+        {
+            pathName = possiblePath;
+            break;
+        }
+
+        // Look for file name that is last node of system type + ".json"
+        // Example: MegaServer.json
+        std::string::size_type pos = systemType.rfind('.');
+        if ((pos != std::string::npos) && ((systemType.size() - pos) > 1))
+        {
+            fileName = systemType.substr(pos + 1) + ".json";
+            possiblePath = configFileDir / fileName;
+            if (fs::is_regular_file(possiblePath))
+            {
+                pathName = possiblePath;
+                break;
+            }
+        }
+    }
+
+    return pathName;
+}
 
 std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
 {
