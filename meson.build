@@ -157,6 +157,7 @@ libpower = static_library(
     'gpio.cpp',
     'pmbus.cpp',
     'temporary_file.cpp',
+    'temporary_subdirectory.cpp',
     'utility.cpp',
     dependencies: [
         nlohmann_json_dep,

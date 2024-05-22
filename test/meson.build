@@ -5,6 +5,7 @@ test(
         'file_descriptor_tests.cpp',
         'nvtest.cpp',
         'temporary_file_tests.cpp',
+        'temporary_subdirectory_tests.cpp',
         dependencies: [
             gmock,
             gtest,
