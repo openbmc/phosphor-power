@@ -59,6 +59,7 @@ class MockServices : public Services
         return std::make_unique<MockPMBus>();
     }
 
+    MOCK_METHOD(void, createBMCDump, (), (override));
     MOCK_METHOD(void, clearCache, (), (override));
 };
 

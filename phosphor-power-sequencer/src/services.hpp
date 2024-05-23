@@ -128,6 +128,11 @@ class Services
                     size_t instance = 0) = 0;
 
     /**
+     * Creates a BMC dump.
+     */
+    virtual void createBMCDump() = 0;
+
+    /**
      * Clear any cached data.
      *
      * Some data may be cached for performance reasons, such as hardware
@@ -200,6 +205,9 @@ class BMCServices : public Services
                                        address);
         return std::make_unique<PMBus>(path, driverName, instance);
     }
+
+    /** @copydoc Services::createBMCDump() */
+    virtual void createBMCDump() override;
 
     /** @copydoc Services::clearCache() */
     virtual void clearCache() override

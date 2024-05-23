@@ -25,6 +25,7 @@
 #include <gpiod.hpp>
 
 #include <exception>
+#include <variant>
 
 namespace phosphor::power::sequencer
 {
@@ -148,6 +149,24 @@ bool BMCServices::isExpectedException(const sdbusplus::exception_t& e)
     }
 
     return isExpected;
+}
+
+void BMCServices::createBMCDump()
+{
+    try
+    {
+        auto method = bus.new_method_call(
+            "xyz.openbmc_project.Dump.Manager", "/xyz/openbmc_project/dump/bmc",
+            "xyz.openbmc_project.Dump.Create", "CreateDump");
+        method.append(
+            std::vector<
+                std::pair<std::string, std::variant<std::string, uint64_t>>>());
+        bus.call_noreply(method);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Unable to create BMC dump: {ERROR}", "ERROR", e);
+    }
 }
 
 } // namespace phosphor::power::sequencer
