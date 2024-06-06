@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <string>
 
 namespace phosphor::power::sequencer
@@ -72,6 +73,12 @@ class DeviceFinder
     /**
      * Constructor.
      *
+     * Note: The callback function may be called immediately by this
+     * constructor.  For this reason, do not use this constructor in the
+     * initialization list of constructors in other classes.  Otherwise the
+     * callback may be called before the other class is fully initialized,
+     * leading to unpredictable behavior.
+     *
      * @param bus D-Bus bus object
      * @param callback Callback function that is called each time a power
      *                 sequencer device is found
@@ -113,7 +120,7 @@ class DeviceFinder
      * Class used to find D-Bus interfaces that contain power sequencer device
      * properties.
      */
-    DBusInterfacesFinder interfacesFinder;
+    std::unique_ptr<DBusInterfacesFinder> interfacesFinder;
 };
 
 } // namespace phosphor::power::sequencer

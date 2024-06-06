@@ -21,6 +21,7 @@
 #include <sdbusplus/bus.hpp>
 
 #include <functional>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -70,6 +71,12 @@ class CompatibleSystemTypesFinder
     /**
      * Constructor.
      *
+     * Note: The callback function may be called immediately by this
+     * constructor.  For this reason, do not use this constructor in the
+     * initialization list of constructors in other classes.  Otherwise the
+     * callback may be called before the other class is fully initialized,
+     * leading to unpredictable behavior.
+     *
      * @param bus D-Bus bus object
      * @param callback Callback function that is called each time a list of
      *                 compatible system types is found
@@ -98,7 +105,7 @@ class CompatibleSystemTypesFinder
     /**
      * Class used to find instances of the D-Bus Compatible interface.
      */
-    DBusInterfacesFinder interfaceFinder;
+    std::unique_ptr<DBusInterfacesFinder> interfaceFinder;
 };
 
 } // namespace phosphor::power::util

@@ -73,6 +73,12 @@ class DBusInterfacesFinder
     /**
      * Constructor.
      *
+     * Note: The callback function may be called immediately by this
+     * constructor.  For this reason, do not use this constructor in the
+     * initialization list of constructors in other classes.  Otherwise the
+     * callback may be called before the other class is fully initialized,
+     * leading to unpredictable behavior.
+     *
      * @param bus D-Bus bus object
      * @param service D-Bus service that owns the object paths implementing
      *                the specified interfaces

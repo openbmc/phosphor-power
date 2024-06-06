@@ -40,11 +40,12 @@ const std::string busProperty = "Bus";
 const std::string addressProperty = "Address";
 
 DeviceFinder::DeviceFinder(sdbusplus::bus_t& bus, Callback callback) :
-    callback{std::move(callback)},
-    interfacesFinder{
+    callback{std::move(callback)}
+{
+    interfacesFinder = std::make_unique<DBusInterfacesFinder>(
         bus, deviceInterfacesService, deviceInterfaces,
-        std::bind_front(&DeviceFinder::interfaceFoundCallback, this)}
-{}
+        std::bind_front(&DeviceFinder::interfaceFoundCallback, this));
+}
 
 void DeviceFinder::interfaceFoundCallback(
     [[maybe_unused]] const std::string& path, const std::string& interface,

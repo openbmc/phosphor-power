@@ -40,13 +40,14 @@ const std::string namesProperty = "Names";
 
 CompatibleSystemTypesFinder::CompatibleSystemTypesFinder(sdbusplus::bus_t& bus,
                                                          Callback callback) :
-    callback{std::move(callback)},
-    interfaceFinder{
+    callback{std::move(callback)}
+{
+    interfaceFinder = std::make_unique<DBusInterfacesFinder>(
         bus, compatibleInterfaceService,
         std::vector<std::string>{compatibleInterface},
         std::bind_front(&CompatibleSystemTypesFinder::interfaceFoundCallback,
-                        this)}
-{}
+                        this));
+}
 
 void CompatibleSystemTypesFinder::interfaceFoundCallback(
     [[maybe_unused]] const std::string& path,
