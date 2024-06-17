@@ -1,0 +1,1429 @@
+{
+    "comments": [
+        "phosphor-regulators configuration file for IBM BlueRidge systems"
+    ],
+
+    "rules": [
+        {
+            "comments": ["Rule to set PMBus PAGE to 0"],
+            "id": "set_page0_rule",
+            "actions": [
+                { "i2c_write_byte": { "register": "0x00", "value": "0x00" } }
+            ]
+        },
+
+        {
+            "comments": ["Rule to set PMBus PAGE to 1"],
+            "id": "set_page1_rule",
+            "actions": [
+                { "i2c_write_byte": { "register": "0x00", "value": "0x01" } }
+            ]
+        },
+
+        {
+            "comments": ["Rule to set output voltage of a PMBus regulator"],
+            "id": "set_voltage_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Write volts value to VOUT_COMMAND in linear format.",
+                        "Get volts value from configuration.  Get exponent",
+                        "from VOUT_MODE.  Verify write was successful."
+                    ],
+                    "pmbus_write_vout_command": {
+                        "format": "linear",
+                        "is_verified": true
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of PAGE 0 of a PMBus regulator"
+            ],
+            "id": "set_voltage_page0_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_voltage_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of PAGE 1 of a PMBus regulator"
+            ],
+            "id": "set_voltage_page1_rule",
+            "actions": [
+                { "run_rule": "set_page1_rule" },
+                { "run_rule": "set_voltage_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of a PMBus regulator using",
+                "PMBus OPERATION and VOUT_COMMAND"
+            ],
+            "id": "set_operation_and_voltage_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Set PMBus OPERATION to 0x80 indicating output voltage",
+                        "is set by the PMBus VOUT_COMMAND"
+                    ],
+                    "i2c_write_byte": { "register": "0x01", "value": "0x80" }
+                },
+
+                {
+                    "comments": [
+                        "Set the output voltage using the PMBus VOUT_COMMAND"
+                    ],
+                    "run_rule": "set_voltage_rule"
+                },
+
+                {
+                    "comments": [
+                        "Set PMBus OPERATION to 0xB0 indicating output voltage",
+                        "will now be set by AVSBus (AVS_VOUT_COMMAND).",
+                        "Hardware settings cause the VOUT_COMMAND value to be",
+                        "the initial voltage value for AVSBus."
+                    ],
+                    "i2c_write_byte": { "register": "0x01", "value": "0xB0" }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set IOUT_OC_WARN_LIMIT for a PMBus regulator"
+            ],
+            "id": "set_iout_oc_warn_limit_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Set PMBus IOUT_OC_WARN_LIMIT to 326A to ensure OCW",
+                        "asserts at the roll-over bug identified in the",
+                        "silicon.  326A = 0x08A3.  PMBus requires",
+                        "the low order byte to be written first."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x4A",
+                        "values": ["0xA3", "0x08"]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to configure a VDD rail using the PMBus interface"
+            ],
+            "id": "configure_vdd_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_iout_oc_warn_limit_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MODE to exponent of -9 for VDD regulator",
+                        "to support older and newer hardware."
+                    ],
+                    "i2c_write_byte": { "register": "0x20", "value": "0x17" }
+                },
+                { "run_rule": "set_operation_and_voltage_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MIN to 0V since for VDD the voltage",
+                        "can go down to 0.5V so we want to lower this",
+                        "limit below 0.5V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x2B",
+                        "values": ["0x00", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_MAX to 1.255V since for VDD the voltage",
+                        "can go up to 1.1V so we want to raise this",
+                        "limit above 1.1V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x24",
+                        "values": ["0x83", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_ON for VDD to a value of 0.5V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5E",
+                        "values": ["0x00", "0x01"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_OFF for VDD to a value of 0.4V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5F",
+                        "values": ["0xCD", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_OV_WARN_LIMIT for VDD to a value of 1.30V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x42",
+                        "values": ["0x9A", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_UV_WARN_LIMIT for VDD to a value of 0.45V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x43",
+                        "values": ["0xE6", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set TOFF_FALL time for VDD to a value of 10ms."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x65",
+                        "values": ["0x28", "0xF0"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set IOUT_OC_FAULT_RESPONSE for VDD to shutdown."
+                    ],
+                    "i2c_write_byte": { "register": "0x47", "value": "0xC0" }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to configure a VDN rail using the PMBus interface"
+            ],
+            "id": "configure_vdn_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_operation_and_voltage_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MIN to 0V since for VDN the voltage",
+                        "can go down to 0.6V so we want to lower this",
+                        "limit below 0.6V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x2B",
+                        "values": ["0x00", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_MAX to 1.1V since for VDN the voltage",
+                        "can go up to 1.0V so we want to raise this",
+                        "limit above 1.0V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x24",
+                        "values": ["0x33", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_ON for VDN to a value of 0.45V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5E",
+                        "values": ["0xE6", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_OFF for VDN to a value of 0.40V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5F",
+                        "values": ["0xCC", "0x00"]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to configure a VCS rail using the PMBus interface"
+            ],
+            "id": "configure_vcs_rule",
+            "actions": [
+                { "run_rule": "set_page1_rule" },
+                { "run_rule": "set_operation_and_voltage_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MIN to 0V since for VCS the voltage",
+                        "can go down to 0.7V so we want to lower this",
+                        "limit below 0.7V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x2B",
+                        "values": ["0x00", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_MAX to 1.2V since for VCS the voltage",
+                        "can go up to 1.1V so we want to raise this",
+                        "limit above 1.1V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x24",
+                        "values": ["0x66", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_ON for VCS to a value of 0.55V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5E",
+                        "values": ["0x19", "0x01"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_OFF for VCS to a value of 0.50V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5F",
+                        "values": ["0x00", "0x01"]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to configure a VIO rail using the PMBus interface"
+            ],
+            "id": "configure_vio_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_operation_and_voltage_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MIN to 0V since for VIO the voltage",
+                        "can go down to 0.8V so we want to lower this",
+                        "limit below 0.8V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x2B",
+                        "values": ["0x00", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_MAX to 1.1V since for VIO the voltage",
+                        "can go up to 1.0V so we want to raise this",
+                        "limit above 1.0V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x24",
+                        "values": ["0x33", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_ON for VIO to a value of 0.55V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5E",
+                        "values": ["0x19", "0x01"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_OFF for VIO to a value of 0.50V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5F",
+                        "values": ["0x00", "0x01"]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to configure a VPCIE rail using the PMBus interface"
+            ],
+            "id": "configure_vpcie_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_voltage_rule" },
+                {
+                    "comments": [
+                        "Set VOUT_MIN to 0V since for VPCIE the voltage",
+                        "can go down to 0.81V so we want to lower this",
+                        "limit below 0.81V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x2B",
+                        "values": ["0x00", "0x00"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set VOUT_MAX to 1.0V since for VPCIE the voltage",
+                        "can go up to 0.91V so we want to raise this",
+                        "limit above 0.91V so the regulator does not trip."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x24",
+                        "values": ["0x00", "0x02"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_ON for VPCIE to a value of 0.65V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5E",
+                        "values": ["0x4C", "0x01"]
+                    }
+                },
+                {
+                    "comments": [
+                        "Set POWER_GOOD_OFF for VPCIE to a value of 0.60V."
+                    ],
+                    "i2c_write_bytes": {
+                        "register": "0x5F",
+                        "values": ["0x33", "0x01"]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to read sensors on IR38064 regulators using the",
+                "PMBus interface"
+            ],
+            "id": "read_sensors_ir38064_rule",
+            "actions": [
+                {
+                    "comments": ["Read output current from READ_IOUT"],
+                    "pmbus_read_sensor": {
+                        "type": "iout",
+                        "command": "0x8C",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read highest output current from MFR_IOUT_PEAK"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "iout_peak",
+                        "command": "0xDC",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read output power from READ_POUT"],
+                    "pmbus_read_sensor": {
+                        "type": "pout",
+                        "command": "0x96",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read temperature from READ_TEMPERATURE"],
+                    "pmbus_read_sensor": {
+                        "type": "temperature",
+                        "command": "0x8D",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read highest temperature from MFR_TEMPERATURE_PEAK"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "temperature_peak",
+                        "command": "0xDD",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read output voltage from READ_VOUT.",
+                        "Note: regulator does not support VOUT_MODE, so the",
+                        "exponent must be specified."
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "vout",
+                        "command": "0x8B",
+                        "format": "linear_16",
+                        "exponent": -8
+                    }
+                },
+                {
+                    "comments": [
+                        "Read highest output voltage from MFR_VOUT_PEAK.",
+                        "Note: regulator does not support VOUT_MODE, so the",
+                        "exponent must be specified."
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "vout_peak",
+                        "command": "0xDB",
+                        "format": "linear_16",
+                        "exponent": -8
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to read sensors on IR35221 regulators using the",
+                "PMBus interface"
+            ],
+            "id": "read_sensors_ir35221_rule",
+            "actions": [
+                {
+                    "comments": ["Read output current from READ_IOUT"],
+                    "pmbus_read_sensor": {
+                        "type": "iout",
+                        "command": "0x8C",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read highest output current from MFR_IOUT_PEAK"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "iout_peak",
+                        "command": "0xC7",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read lowest output current from MFR_IOUT_VALLEY"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "iout_valley",
+                        "command": "0xCB",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read output power from READ_POUT"],
+                    "pmbus_read_sensor": {
+                        "type": "pout",
+                        "command": "0x96",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read temperature from READ_TEMPERATURE_1"],
+                    "pmbus_read_sensor": {
+                        "type": "temperature",
+                        "command": "0x8D",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read highest temperature from MFR_TEMP_PEAK"],
+                    "pmbus_read_sensor": {
+                        "type": "temperature_peak",
+                        "command": "0xC8",
+                        "format": "linear_11"
+                    }
+                },
+                {
+                    "comments": ["Read output voltage from READ_VOUT"],
+                    "pmbus_read_sensor": {
+                        "type": "vout",
+                        "command": "0x8B",
+                        "format": "linear_16"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read highest output voltage from MFR_VOUT_PEAK"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "vout_peak",
+                        "command": "0xC6",
+                        "format": "linear_16"
+                    }
+                },
+                {
+                    "comments": [
+                        "Read lowest output voltage from MFR_VOUT_VALLEY"
+                    ],
+                    "pmbus_read_sensor": {
+                        "type": "vout_valley",
+                        "command": "0xCA",
+                        "format": "linear_16"
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to read sensors on PAGE 0 of IR35221 regulators",
+                "using the PMBus interface"
+            ],
+            "id": "read_sensors_ir35221_page0_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "read_sensors_ir35221_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to read sensors on PAGE 1 of IR35221 regulators",
+                "using the PMBus interface"
+            ],
+            "id": "read_sensors_ir35221_page1_rule",
+            "actions": [
+                { "run_rule": "set_page1_rule" },
+                { "run_rule": "read_sensors_ir35221_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to read sensors on PAGE 0 of XDPE132G5C regulators",
+                "using the PMBus interface"
+            ],
+            "id": "read_sensors_xdpe132g5c_page0_rule",
+            "actions": [
+                {
+                    "comments": ["Can use same rule as for IR35221 regulators"],
+                    "run_rule": "read_sensors_ir35221_page0_rule"
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if the current system is a 2S4U/2S2U.",
+                "2S systems have more regulators on the Nisqually system",
+                "planar than 1S systems.  Must return true if system is a",
+                "2S4U/2S2U and false if system is a 1S4U."
+            ],
+            "id": "is_2s_system_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Check whether the CCIN VPD keyword on the Nisqually",
+                        "system planar has the value for 2S4U or 2S2U"
+                    ],
+                    "or": [
+                        {
+                            "compare_vpd": {
+                                "fru": "system/chassis/motherboard",
+                                "keyword": "CCIN",
+                                "value": "2E2F"
+                            }
+                        },
+                        {
+                            "compare_vpd": {
+                                "fru": "system/chassis/motherboard",
+                                "keyword": "CCIN",
+                                "value": "2E2D"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if pass 2 or higher Nisqually",
+                "backplane is present.  Must return true if present and",
+                "false otherwise."
+            ],
+            "id": "is_pass2_nisqually_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Check that the PartNumber VPD keyword on the",
+                        "Nisqually system planar is not the value for",
+                        "the pass 1 2U or 4U."
+                    ],
+                    "not": {
+                        "or": [
+                            {
+                                "compare_vpd": {
+                                    "fru": "system/chassis/motherboard",
+                                    "keyword": "PartNumber",
+                                    "value": "02WG656"
+                                }
+                            },
+                            {
+                                "compare_vpd": {
+                                    "fru": "system/chassis/motherboard",
+                                    "keyword": "PartNumber",
+                                    "value": "02WG678"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if the VRM FRU for DCM-1 is present.",
+                "Must return true if VRM is present and false if VRM is",
+                "missing."
+            ],
+            "id": "is_dcm1_vrm_present_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Check whether the VRM FRU is present OR the DCM-1",
+                        "FRU is present.  This provides a double check in",
+                        "case the VRM presence line is not working.  If DCM-1",
+                        "is present, the associated VRM should be too."
+                    ],
+                    "or": [
+                        {
+                            "compare_presence": {
+                                "fru": "system/chassis/motherboard/vdd_vrm1",
+                                "value": true
+                            }
+                        },
+                        {
+                            "compare_presence": {
+                                "fru": "system/chassis/motherboard/dcm1/cpu0",
+                                "value": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if a Flett card is present in slot C8.",
+                "This requires a Nisqually pass2+ due to I2C bus number",
+                "differences between pass 1 and pass 2.",
+                "Pass 1 and pass 2 Fletts are both supported.",
+                "Must return true if present and false otherwise."
+            ],
+            "id": "is_flett_c8_present_rule",
+            "actions": [
+                {
+                    "if": {
+                        "condition": {
+                            "comments": ["Check if the Nisqually is pass 2"],
+                            "run_rule": "is_pass2_nisqually_rule"
+                        },
+                        "then": [
+                            {
+                                "comments": [
+                                    "Check if a card is present in slot C8"
+                                ],
+                                "if": {
+                                    "condition": {
+                                        "compare_presence": {
+                                            "fru": "system/chassis/motherboard/pcieslot8/pcie_card8",
+                                            "value": true
+                                        }
+                                    },
+                                    "then": [
+                                        {
+                                            "comments": [
+                                                "Check if card has Flett CCIN keyword"
+                                            ],
+                                            "compare_vpd": {
+                                                "fru": "system/chassis/motherboard/pcieslot8/pcie_card8",
+                                                "keyword": "CCIN",
+                                                "value": "6B87"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if a Flett card is present in slot C9.",
+                "This requires a Nisqually pass2+ due to I2C bus number",
+                "differences between pass 1 and pass 2.",
+                "This also requires the Flett to be pass 2 because the",
+                "pass 1 regulator has a different I2C address.",
+                "Must return true if present and false otherwise."
+            ],
+            "id": "is_flett_c9_present_rule",
+            "actions": [
+                {
+                    "if": {
+                        "condition": {
+                            "comments": ["Check if the Nisqually is pass 2"],
+                            "run_rule": "is_pass2_nisqually_rule"
+                        },
+                        "then": [
+                            {
+                                "comments": [
+                                    "Check if a card is present in slot C9"
+                                ],
+                                "if": {
+                                    "condition": {
+                                        "compare_presence": {
+                                            "fru": "system/chassis/motherboard/pcieslot9/pcie_card9",
+                                            "value": true
+                                        }
+                                    },
+                                    "then": [
+                                        {
+                                            "comments": [
+                                                "Check if card has Flett CCIN keyword"
+                                            ],
+                                            "if": {
+                                                "condition": {
+                                                    "compare_vpd": {
+                                                        "fru": "system/chassis/motherboard/pcieslot9/pcie_card9",
+                                                        "keyword": "CCIN",
+                                                        "value": "6B87"
+                                                    }
+                                                },
+                                                "then": [
+                                                    {
+                                                        "comments": [
+                                                            "Check that card does not have a pass 1",
+                                                            "part number"
+                                                        ],
+                                                        "not": {
+                                                            "or": [
+                                                                {
+                                                                    "compare_vpd": {
+                                                                        "fru": "system/chassis/motherboard/pcieslot9/pcie_card9",
+                                                                        "keyword": "PartNumber",
+                                                                        "value": "03FL194"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "compare_vpd": {
+                                                                        "fru": "system/chassis/motherboard/pcieslot9/pcie_card9",
+                                                                        "keyword": "PartNumber",
+                                                                        "value": "03FL204"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if a Flett card is present in slot C10.",
+                "This requires a Nisqually pass2+ due to I2C bus number",
+                "differences between pass 1 and pass 2.",
+                "This also requires the Flett to be pass 2 because the",
+                "pass 1 regulator has a different I2C address.",
+                "Must return true if present and false otherwise."
+            ],
+            "id": "is_flett_c10_present_rule",
+            "actions": [
+                {
+                    "if": {
+                        "condition": {
+                            "comments": ["Check if the Nisqually is pass 2"],
+                            "run_rule": "is_pass2_nisqually_rule"
+                        },
+                        "then": [
+                            {
+                                "comments": [
+                                    "Check if a card is present in slot C10"
+                                ],
+                                "if": {
+                                    "condition": {
+                                        "compare_presence": {
+                                            "fru": "system/chassis/motherboard/pcieslot10/pcie_card10",
+                                            "value": true
+                                        }
+                                    },
+                                    "then": [
+                                        {
+                                            "comments": [
+                                                "Check if card has Flett CCIN keyword"
+                                            ],
+                                            "if": {
+                                                "condition": {
+                                                    "compare_vpd": {
+                                                        "fru": "system/chassis/motherboard/pcieslot10/pcie_card10",
+                                                        "keyword": "CCIN",
+                                                        "value": "6B87"
+                                                    }
+                                                },
+                                                "then": [
+                                                    {
+                                                        "comments": [
+                                                            "Check that card does not have a pass 1",
+                                                            "part number"
+                                                        ],
+                                                        "not": {
+                                                            "or": [
+                                                                {
+                                                                    "compare_vpd": {
+                                                                        "fru": "system/chassis/motherboard/pcieslot10/pcie_card10",
+                                                                        "keyword": "PartNumber",
+                                                                        "value": "03FL194"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "compare_vpd": {
+                                                                        "fru": "system/chassis/motherboard/pcieslot10/pcie_card10",
+                                                                        "keyword": "PartNumber",
+                                                                        "value": "03FL204"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to determine if a Flett card is present in slot C11.",
+                "This requires a Nisqually pass2+ due to I2C bus number",
+                "differences between pass 1 and pass 2.",
+                "Pass 1 and pass 2 Fletts are both supported.",
+                "Must return true if present and false otherwise."
+            ],
+            "id": "is_flett_c11_present_rule",
+            "actions": [
+                {
+                    "if": {
+                        "condition": {
+                            "comments": ["Check if the Nisqually is pass 2"],
+                            "run_rule": "is_pass2_nisqually_rule"
+                        },
+                        "then": [
+                            {
+                                "comments": [
+                                    "Check if a card is present in slot C11"
+                                ],
+                                "if": {
+                                    "condition": {
+                                        "compare_presence": {
+                                            "fru": "system/chassis/motherboard/pcieslot11/pcie_card11",
+                                            "value": true
+                                        }
+                                    },
+                                    "then": [
+                                        {
+                                            "comments": [
+                                                "Check if card has Flett CCIN keyword"
+                                            ],
+                                            "compare_vpd": {
+                                                "fru": "system/chassis/motherboard/pcieslot11/pcie_card11",
+                                                "keyword": "CCIN",
+                                                "value": "6B87"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+
+    "chassis": [
+        {
+            "comments": ["Chassis (drawer) 1"],
+            "number": 1,
+            "inventory_path": "system/chassis",
+            "devices": [
+                {
+                    "comments": [
+                        "AVDD / IR38064: Primary PMBus Interface",
+                        "In schematic: bus 4 (1-based), address 0xE2 (8-bit)"
+                    ],
+                    "id": "avdd_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 3, "address": "0x71" },
+                    "presence_detection": {
+                        "rule_id": "is_pass2_nisqually_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "avdd_rail",
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir38064_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "3.3VA / TPS549D22",
+                        "In schematic: bus 9 (1-based), address 0x36 (8-bit)",
+                        "Does not have power at standby; cannot be configured",
+                        "Does not support the PMBus PAGE command"
+                    ],
+                    "id": "3_3va_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 8, "address": "0x1B" },
+                    "rails": [
+                        {
+                            "id": "3_3va_rail"
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "3.3VB / TPS549D22",
+                        "In schematic: bus 4 (1-based), address 0x38 (8-bit)",
+                        "Does not have power at standby; cannot be configured",
+                        "Does not support the PMBus PAGE command"
+                    ],
+                    "id": "3_3vb_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 3, "address": "0x1C" },
+                    "rails": [
+                        {
+                            "id": "3_3vb_rail"
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDDp0 DCM 0 / XDPE132G5C: Primary PMBus Interface",
+                        "In schematic: bus 10 (1-based), address 0xE2 (8-bit)"
+                    ],
+                    "id": "vdd_p0_dcm0_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/vdd_vrm0",
+                    "i2c_interface": { "bus": 9, "address": "0x71" },
+                    "rails": [
+                        {
+                            "id": "vdd_p0_dcm0_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdd_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_xdpe132g5c_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDDp1 DCM 0 / XDPE132G5C: Primary PMBus Interface",
+                        "In schematic: bus 10 (1-based), address 0xE0 (8-bit)"
+                    ],
+                    "id": "vdd_p1_dcm0_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/vdd_vrm0",
+                    "i2c_interface": { "bus": 9, "address": "0x70" },
+                    "rails": [
+                        {
+                            "id": "vdd_p1_dcm0_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdd_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_xdpe132g5c_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDDp0 DCM 1 / XDPE132G5C: Primary PMBus Interface",
+                        "In schematic: bus 11 (1-based), address 0xE2 (8-bit)"
+                    ],
+                    "id": "vdd_p0_dcm1_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/vdd_vrm1",
+                    "i2c_interface": { "bus": 10, "address": "0x71" },
+                    "presence_detection": {
+                        "rule_id": "is_dcm1_vrm_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "vdd_p0_dcm1_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdd_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_xdpe132g5c_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDDp1 DCM 1 / XDPE132G5C: Primary PMBus Interface",
+                        "In schematic: bus 11 (1-based), address 0xE0 (8-bit)"
+                    ],
+                    "id": "vdd_p1_dcm1_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/vdd_vrm1",
+                    "i2c_interface": { "bus": 10, "address": "0x70" },
+                    "presence_detection": {
+                        "rule_id": "is_dcm1_vrm_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "vdd_p1_dcm1_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdd_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_xdpe132g5c_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDN & VCSp0 DCM 0 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 10 (1-based), address 0xE4 (8-bit)"
+                    ],
+                    "id": "vdn_vcs_p0_dcm0_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 9, "address": "0x72" },
+                    "rails": [
+                        {
+                            "comments": ["PMBus PAGE 0 rail"],
+                            "id": "vdn_dcm0_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdn_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        },
+                        {
+                            "comments": ["PMBus PAGE 1 rail"],
+                            "id": "vcs_p0_dcm0_rail",
+                            "configuration": {
+                                "volts": 1.0,
+                                "rule_id": "configure_vcs_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page1_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VIO & VCSp1 DCM 0 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 10 (1-based), address 0xE6 (8-bit)"
+                    ],
+                    "id": "vio_vcs_p1_dcm0_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 9, "address": "0x73" },
+                    "rails": [
+                        {
+                            "comments": ["PMBus PAGE 0 rail"],
+                            "id": "vio_dcm0_rail",
+                            "configuration": {
+                                "volts": 1.02,
+                                "rule_id": "configure_vio_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        },
+                        {
+                            "comments": ["PMBus PAGE 1 rail"],
+                            "id": "vcs_p1_dcm0_rail",
+                            "configuration": {
+                                "volts": 1.0,
+                                "rule_id": "configure_vcs_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page1_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VDN & VCSp0 DCM 1 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 11 (1-based), address 0xE4 (8-bit)"
+                    ],
+                    "id": "vdn_vcs_p0_dcm1_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 10, "address": "0x72" },
+                    "presence_detection": { "rule_id": "is_2s_system_rule" },
+                    "rails": [
+                        {
+                            "comments": ["PMBus PAGE 0 rail"],
+                            "id": "vdn_dcm1_rail",
+                            "configuration": {
+                                "volts": 0.9,
+                                "rule_id": "configure_vdn_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        },
+                        {
+                            "comments": ["PMBus PAGE 1 rail"],
+                            "id": "vcs_p0_dcm1_rail",
+                            "configuration": {
+                                "volts": 1.0,
+                                "rule_id": "configure_vcs_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page1_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VIO & VCSp1 DCM 1 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 11 (1-based), address 0xE6 (8-bit)"
+                    ],
+                    "id": "vio_vcs_p1_dcm1_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 10, "address": "0x73" },
+                    "presence_detection": { "rule_id": "is_2s_system_rule" },
+                    "rails": [
+                        {
+                            "comments": ["PMBus PAGE 0 rail"],
+                            "id": "vio_dcm1_rail",
+                            "configuration": {
+                                "volts": 1.02,
+                                "rule_id": "configure_vio_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        },
+                        {
+                            "comments": ["PMBus PAGE 1 rail"],
+                            "id": "vcs_p1_dcm1_rail",
+                            "configuration": {
+                                "volts": 1.0,
+                                "rule_id": "configure_vcs_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page1_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VPCIe DCM 0 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 10 (1-based), address 0xE8 (8-bit)"
+                    ],
+                    "id": "vpcie_dcm0_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 9, "address": "0x74" },
+                    "rails": [
+                        {
+                            "id": "vpcie_dcm0_rail",
+                            "configuration": {
+                                "volts": 0.86,
+                                "rule_id": "configure_vpcie_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "VPCIe DCM 1 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 11 (1-based), address 0xE8 (8-bit)"
+                    ],
+                    "id": "vpcie_dcm1_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard",
+                    "i2c_interface": { "bus": 10, "address": "0x74" },
+                    "presence_detection": { "rule_id": "is_2s_system_rule" },
+                    "rails": [
+                        {
+                            "id": "vpcie_dcm1_rail",
+                            "configuration": {
+                                "volts": 0.86,
+                                "rule_id": "configure_vpcie_rule"
+                            },
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "Flett Slot C8 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 7 (1-based) mux channel 3,",
+                        "address 0xEC (8-bit).",
+                        "BMC I2C bus alias 28"
+                    ],
+                    "id": "flett_slot_c8_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/pcieslot8/pcie_card8",
+                    "i2c_interface": { "bus": 28, "address": "0x76" },
+                    "presence_detection": {
+                        "rule_id": "is_flett_c8_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "flett_slot_c8_rail",
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "Flett Slot C9 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 7 (1-based) mux channel 2,",
+                        "address 0xEC (8-bit).",
+                        "BMC I2C bus alias 27"
+                    ],
+                    "id": "flett_slot_c9_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/pcieslot9/pcie_card9",
+                    "i2c_interface": { "bus": 27, "address": "0x76" },
+                    "presence_detection": {
+                        "rule_id": "is_flett_c9_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "flett_slot_c9_rail",
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "Flett Slot C11 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 12 (1-based) mux channel 1,",
+                        "address 0xEC (8-bit).",
+                        "BMC I2C bus alias 30"
+                    ],
+                    "id": "flett_slot_c11_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/pcieslot11/pcie_card11",
+                    "i2c_interface": { "bus": 30, "address": "0x76" },
+                    "presence_detection": {
+                        "rule_id": "is_flett_c11_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "flett_slot_c11_rail",
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    "comments": [
+                        "Flett Slot C10 / IR35221: Primary PMBus Interface",
+                        "In schematic: bus 12 (1-based) mux channel 0,",
+                        "address 0xEC (8-bit).",
+                        "BMC I2C bus alias 29"
+                    ],
+                    "id": "flett_slot_c10_regulator",
+                    "is_regulator": true,
+                    "fru": "system/chassis/motherboard/pcieslot10/pcie_card10",
+                    "i2c_interface": { "bus": 29, "address": "0x76" },
+                    "presence_detection": {
+                        "rule_id": "is_flett_c10_present_rule"
+                    },
+                    "rails": [
+                        {
+                            "id": "flett_slot_c10_rail",
+                            "sensor_monitoring": {
+                                "rule_id": "read_sensors_ir35221_page0_rule"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
