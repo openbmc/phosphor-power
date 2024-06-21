@@ -1,0 +1,100 @@
+{
+    "rails": [
+        { "name": "12.0V" },
+        { "name": "3V3IO" },
+        { "name": "CP0_VDD0" },
+        { "name": "CP0_VDD1" },
+        { "name": "CP1_VDD0" },
+        { "name": "CP1_VDD1" },
+        { "name": "CP2_VDD0" },
+        { "name": "CP2_VDD1" },
+        { "name": "CP3_VDD0" },
+        { "name": "CP3_VDD1" },
+        { "name": "CP0_VCS0" },
+        { "name": "CP0_VCS1" },
+        { "name": "CP1_VCS0" },
+        { "name": "CP1_VCS1" },
+        { "name": "CP2_VCS0" },
+        {
+            "name": "CP2_VCS1",
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0"
+        },
+        { "name": "CP3_VCS0" },
+        { "name": "CP3_VCS1" },
+        { "name": "CP03_AVDD" },
+        { "name": "CP12_AVDD" },
+        { "name": "CP0_VDN" },
+        { "name": "CP1_VDN" },
+        { "name": "CP2_VDN" },
+        { "name": "CP3_VDN" },
+        { "name": "CP0_VIO" },
+        { "name": "CP1_VIO" },
+        { "name": "CP2_VIO" },
+        { "name": "CP3_VIO" },
+        { "name": "CP0_VPCIE" },
+        { "name": "CP1_VPCIE" },
+        { "name": "CP2_VPCIE" },
+        { "name": "CP3_VPCIE" }
+    ],
+
+    "pins": [
+        {
+            "name": "CP0_VPCIE",
+            "line": 59
+        },
+        {
+            "name": "CP1_VPCIE",
+            "line": 60
+        },
+        {
+            "name": "CP2_VPCIE",
+            "line": 61,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0"
+        },
+        {
+            "name": "CP3_VPCIE",
+            "line": 62,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0"
+        },
+        {
+            "name": "5.0V_USB_front",
+            "line": 67
+        },
+        {
+            "name": "CP0_VDN",
+            "line": 72
+        },
+        {
+            "name": "CP1_VDN",
+            "line": 73
+        },
+        {
+            "name": "CP2_VDN",
+            "line": 74,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0"
+        },
+        {
+            "name": "CP3_VDN",
+            "line": 75,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0"
+        },
+        {
+            "name": "CP0_VIO",
+            "line": 76
+        },
+        {
+            "name": "CP1_VIO",
+            "line": 77
+        },
+        {
+            "name": "CP2_VIO",
+            "line": 78,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0"
+        },
+        {
+            "name": "CP3_VIO",
+            "line": 79,
+            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0"
+        }
+    ]
+}
