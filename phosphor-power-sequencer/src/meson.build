@@ -31,10 +31,6 @@ phosphor_power_sequencer = executable(
     'power_control_main.cpp',
     'power_control.cpp',
     'power_interface.cpp',
-    'power_sequencer_monitor.cpp',
-    'ucd90x_monitor.cpp',
-    'ucd90160_monitor.cpp',
-    'ucd90320_monitor.cpp',
     dependencies: [
         libgpiodcxx,
         nlohmann_json_dep,
@@ -44,6 +40,7 @@ phosphor_power_sequencer = executable(
         stdplus,
     ],
     link_with: [
+        phosphor_power_sequencer_library,
         libpower
     ],
     implicit_include_directories: false,

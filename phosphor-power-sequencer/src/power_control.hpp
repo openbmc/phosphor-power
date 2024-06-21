@@ -1,20 +1,25 @@
 #pragma once
 
+#include "compatible_system_types_finder.hpp"
+#include "device_finder.hpp"
 #include "power_interface.hpp"
-#include "power_sequencer_monitor.hpp"
-#include "utility.hpp"
+#include "power_sequencer_device.hpp"
+#include "rail.hpp"
+#include "services.hpp"
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus.hpp>
-#include <sdbusplus/bus/match.hpp>
-#include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/clock.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 
 #include <chrono>
+#include <filesystem>
+#include <memory>
+#include <optional>
 #include <string>
+#include <vector>
 
 namespace phosphor::power::sequencer
 {
@@ -52,12 +57,6 @@ class PowerControl : public PowerObject
     /** @copydoc PowerInterface::getState() */
     int getState() const override;
 
-    /**
-     * Callback function to handle interfacesAdded D-Bus signals
-     * @param msg Expanded sdbusplus message data
-     */
-    void interfacesAddedHandler(sdbusplus::message_t& msg);
-
     /** @copydoc PowerInterface::setPgoodTimeout() */
     void setPgoodTimeout(int timeout) override;
 
@@ -67,6 +66,21 @@ class PowerControl : public PowerObject
     /** @copydoc PowerInterface::setPowerSupplyError() */
     void setPowerSupplyError(const std::string& error) override;
 
+    /**
+     * Callback that is called when a list of compatible system types is found.
+     *
+     * @param types Compatible system types for the current system ordered from
+     *              most to least specific
+     */
+    void compatibleSystemTypesFound(const std::vector<std::string>& types);
+
+    /**
+     * Callback that is called when a power sequencer device is found.
+     *
+     * @param properties Properties of device that was found
+     */
+    void deviceFound(const DeviceProperties& properties);
+
   private:
     /**
      * The D-Bus bus object
@@ -74,14 +88,35 @@ class PowerControl : public PowerObject
     sdbusplus::bus_t& bus;
 
     /**
-     * The power sequencer device to monitor.
+     * System services like hardware presence and the journal.
      */
-    std::unique_ptr<PowerSequencerMonitor> device;
+    BMCServices services;
 
     /**
-     * Indicates if a specific power sequencer device has already been found.
+     * Object that finds the compatible system types for the current system.
      */
-    bool deviceFound{false};
+    std::unique_ptr<util::CompatibleSystemTypesFinder> compatSysTypesFinder;
+
+    /**
+     * Compatible system types for the current system ordered from most to least
+     * specific.
+     */
+    std::vector<std::string> compatibleSystemTypes;
+
+    /**
+     * Object that finds the power sequencer device in the system.
+     */
+    std::unique_ptr<DeviceFinder> deviceFinder;
+
+    /**
+     * Power sequencer device properties.
+     */
+    std::optional<DeviceProperties> deviceProperties;
+
+    /**
+     * Power sequencer device that enables and monitors the voltage rails.
+     */
+    std::unique_ptr<PowerSequencerDevice> device;
 
     /**
      * Indicates if a failure has already been found. Cleared at power on.
@@ -92,11 +127,6 @@ class PowerControl : public PowerObject
      * Indicates if a state transition is taking place
      */
     bool inStateTransition{false};
-
-    /**
-     * The match to Entity Manager interfaces added.
-     */
-    sdbusplus::bus::match_t match;
 
     /**
      * Minimum time from cold start to power on constant
@@ -170,21 +200,17 @@ class PowerControl : public PowerObject
     sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> timer;
 
     /**
-     * Get the device properties
-     * @param properties A map of property names and values
-     */
-    void getDeviceProperties(const util::DbusPropertyMap& properties);
-
-    /**
      * Callback to begin failure processing after observing pgood failure wait
      */
     void onFailureCallback();
 
     /**
-     * Begin pgood failute processing
-     * @param timeout if the failure state was determined by timing out
+     * Begin pgood failure processing
+     *
+     * @param wasTimeOut Indicates whether failure state was determined by
+     *                   timing out
      */
-    void onFailure(bool timeout);
+    void onFailure(bool wasTimeOut);
 
     /**
      * Polling method for monitoring the system power good
@@ -192,14 +218,50 @@ class PowerControl : public PowerObject
     void pollPgood();
 
     /**
-     * Set up power sequencer device
-     */
-    void setUpDevice();
-
-    /**
      * Set up GPIOs
      */
     void setUpGpio();
+
+    /**
+     * Loads the JSON configuration file and creates the power sequencer device
+     * object.
+     *
+     * Does nothing if the compatible system types or device properties have not
+     * been found yet.  These are obtained from D-Bus.  The order in which they
+     * are found and the time to find them varies.
+     */
+    void loadConfigFileAndCreateDevice();
+
+    /**
+     * Finds the JSON configuration file for the current system based on the
+     * compatible system types.
+     *
+     * Does nothing if the compatible system types have not been found yet.
+     *
+     * @return absolute path to the config file, or empty path if file not found
+     */
+    std::filesystem::path findConfigFile();
+
+    /**
+     * Parses the specified JSON configuration file.
+     *
+     * Returns the resulting vector of Rail objects in the output parameter.
+     *
+     * @param configFile Absolute path to the config file
+     * @param rails Rail objects within the config file
+     * @return true if file was parsed successfully, false otherwise
+     */
+    bool parseConfigFile(const std::filesystem::path& configFile,
+                         std::vector<std::unique_ptr<Rail>>& rails);
+
+    /**
+     * Creates the power sequencer device object based on the device properties.
+     *
+     * Does nothing if the device properties have not been found yet.
+     *
+     * @param rails Voltage rails that are enabled and monitored by the device
+     */
+    void createDevice(std::vector<std::unique_ptr<Rail>> rails);
 };
 
 } // namespace phosphor::power::sequencer

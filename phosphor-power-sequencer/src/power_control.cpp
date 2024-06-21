@@ -16,45 +16,40 @@
 
 #include "power_control.hpp"
 
+#include "config_file_parser.hpp"
+#include "format_utils.hpp"
 #include "types.hpp"
-#include "ucd90160_monitor.hpp"
-#include "ucd90320_monitor.hpp"
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ranges.h>
-
-#include <phosphor-logging/elog-errors.hpp>
-#include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/log.hpp>
-#include <xyz/openbmc_project/Common/error.hpp>
+#include "ucd90160_device.hpp"
+#include "ucd90320_device.hpp"
+#include "utility.hpp"
 
 #include <exception>
-#include <vector>
-
-using namespace phosphor::logging;
+#include <format>
+#include <functional>
+#include <map>
+#include <span>
+#include <stdexcept>
+#include <thread>
+#include <utility>
 
 namespace phosphor::power::sequencer
 {
 
-const std::vector<std::string>
-    interfaceNames({"xyz.openbmc_project.Configuration.UCD90160",
-                    "xyz.openbmc_project.Configuration.UCD90320"});
-const std::string addressPropertyName = "Address";
-const std::string busPropertyName = "Bus";
-const std::string namePropertyName = "Name";
-const std::string typePropertyName = "Type";
+const std::string powerOnTimeoutError =
+    "xyz.openbmc_project.Power.Error.PowerOnTimeout";
+
+const std::string powerOffTimeoutError =
+    "xyz.openbmc_project.Power.Error.PowerOffTimeout";
+
+const std::string shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
+
+const std::string internalError =
+    "xyz.openbmc_project.Common.Error.InternalFailure";
 
 PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
     PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
-    bus{bus}, device{std::make_unique<PowerSequencerMonitor>(bus)},
-    match{bus,
-          sdbusplus::bus::match::rules::interfacesAdded() +
-              sdbusplus::bus::match::rules::sender(
-                  "xyz.openbmc_project.EntityManager"),
-          std::bind(&PowerControl::interfacesAddedHandler, this,
-                    std::placeholders::_1)},
+    bus{bus}, services{bus},
     pgoodWaitTimer{event, std::bind(&PowerControl::onFailureCallback, this)},
     powerOnAllowedTime{std::chrono::steady_clock::now() + minimumColdStartTime},
     timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
@@ -62,64 +57,13 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
 
-    setUpDevice();
+    compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
+        bus, std::bind_front(&PowerControl::compatibleSystemTypesFound, this));
+
+    deviceFinder = std::make_unique<DeviceFinder>(
+        bus, std::bind_front(&PowerControl::deviceFound, this));
+
     setUpGpio();
-}
-
-void PowerControl::getDeviceProperties(const util::DbusPropertyMap& properties)
-{
-    uint64_t i2cBus{0};
-    uint64_t i2cAddress{0};
-    std::string name;
-    std::string type;
-
-    for (const auto& [property, value] : properties)
-    {
-        try
-        {
-            if (property == busPropertyName)
-            {
-                i2cBus = std::get<uint64_t>(value);
-            }
-            else if (property == addressPropertyName)
-            {
-                i2cAddress = std::get<uint64_t>(value);
-            }
-            else if (property == namePropertyName)
-            {
-                name = std::get<std::string>(value);
-            }
-            else if (property == typePropertyName)
-            {
-                type = std::get<std::string>(value);
-            }
-        }
-        catch (const std::exception& e)
-        {
-            log<level::INFO>(
-                fmt::format("Error getting device properties, error: {}",
-                            e.what())
-                    .c_str());
-        }
-    }
-
-    log<level::INFO>(
-        fmt::format(
-            "Found power sequencer device properties, name: {}, type: {}, bus: {} addr: {:#02x} ",
-            name, type, i2cBus, i2cAddress)
-            .c_str());
-
-    // Create device object
-    if (type == "UCD90320")
-    {
-        device = std::make_unique<UCD90320Monitor>(bus, i2cBus, i2cAddress);
-        deviceFound = true;
-    }
-    else if (type == "UCD90160")
-    {
-        device = std::make_unique<UCD90160Monitor>(bus, i2cBus, i2cAddress);
-        deviceFound = true;
-    }
 }
 
 int PowerControl::getPgood() const
@@ -137,59 +81,9 @@ int PowerControl::getState() const
     return state;
 }
 
-void PowerControl::interfacesAddedHandler(sdbusplus::message_t& message)
-{
-    // Only continue if message is valid and device has not already been found
-    if (!message || deviceFound)
-    {
-        return;
-    }
-
-    try
-    {
-        // Read the dbus message
-        sdbusplus::message::object_path path;
-        std::map<std::string, std::map<std::string, util::DbusVariant>>
-            interfaces;
-        message.read(path, interfaces);
-
-        for (const auto& [interface, properties] : interfaces)
-        {
-            log<level::DEBUG>(
-                fmt::format(
-                    "Interfaces added handler found path: {}, interface: {}",
-                    path.str, interface)
-                    .c_str());
-
-            // Find the device interface, if present
-            for (const auto& interfaceName : interfaceNames)
-            {
-                if (interface == interfaceName)
-                {
-                    log<level::INFO>(
-                        fmt::format(
-                            "Interfaces added handler matched interface name: {}",
-                            interfaceName)
-                            .c_str());
-                    getDeviceProperties(properties);
-                }
-            }
-        }
-    }
-    catch (const std::exception& e)
-    {
-        // Error trying to read interfacesAdded message.
-        log<level::INFO>(
-            fmt::format(
-                "Error trying to read interfacesAdded message, error: {}",
-                e.what())
-                .c_str());
-    }
-}
-
 void PowerControl::onFailureCallback()
 {
-    log<level::INFO>("After onFailure wait");
+    services.logInfoMsg("After onFailure wait");
 
     onFailure(false);
 
@@ -201,10 +95,49 @@ void PowerControl::onFailureCallback()
     bus.call_noreply(method);
 }
 
-void PowerControl::onFailure(bool timeout)
+void PowerControl::onFailure(bool wasTimeOut)
 {
-    // Call device on failure
-    device->onFailure(timeout, powerSupplyError);
+    std::string error;
+    std::map<std::string, std::string> additionalData{};
+
+    // Check if pgood fault occurred on rail monitored by power sequencer device
+    if (device)
+    {
+        try
+        {
+            error = device->findPgoodFault(services, powerSupplyError,
+                                           additionalData);
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(e.what());
+            additionalData.emplace("ERROR", e.what());
+        }
+    }
+
+    // If fault was not isolated to a voltage rail, select a more generic error
+    if (error.empty())
+    {
+        if (!powerSupplyError.empty())
+        {
+            error = powerSupplyError;
+        }
+        else if (wasTimeOut)
+        {
+            error = powerOnTimeoutError;
+        }
+        else
+        {
+            error = shutdownError;
+        }
+    }
+
+    services.logError(error, Entry::Level::Critical, additionalData);
+
+    if (!wasTimeOut)
+    {
+        services.createBMCDump();
+    }
 }
 
 void PowerControl::pollPgood()
@@ -215,9 +148,8 @@ void PowerControl::pollPgood()
         const auto now = std::chrono::steady_clock::now();
         if (now > pgoodTimeoutTime)
         {
-            log<level::ERR>(
-                fmt::format("Power state transition timeout, state: {}", state)
-                    .c_str());
+            services.logErrorMsg(std::format(
+                "Power state transition timeout, state: {}", state));
             inStateTransition = false;
 
             if (state)
@@ -229,9 +161,8 @@ void PowerControl::pollPgood()
             {
                 // Time out powering off
                 std::map<std::string, std::string> additionalData{};
-                device->logError(
-                    "xyz.openbmc_project.Power.Error.PowerOffTimeout",
-                    additionalData);
+                services.logError(powerOffTimeoutError, Entry::Level::Critical,
+                                  additionalData);
             }
 
             failureFound = true;
@@ -265,7 +196,7 @@ void PowerControl::pollPgood()
     else if (!inStateTransition && (pgoodState == 0) && !failureFound)
     {
         // Not in power off state, not changing state, and power good is off
-        log<level::ERR>("Chassis pgood failure");
+        services.logErrorMsg("Chassis pgood failure");
         pgoodWaitTimer.restartOnce(std::chrono::seconds(7));
         failureFound = true;
     }
@@ -289,8 +220,8 @@ void PowerControl::setState(int s)
 {
     if (state == s)
     {
-        log<level::INFO>(
-            fmt::format("Power already at requested state: {}", state).c_str());
+        services.logInfoMsg(
+            std::format("Power already at requested state: {}", state));
         return;
     }
     if (s == 0)
@@ -304,18 +235,17 @@ void PowerControl::setState(int s)
         // If minimum power off time has not passed, wait
         if (powerOnAllowedTime > std::chrono::steady_clock::now())
         {
-            log<level::INFO>(
-                fmt::format(
-                    "Waiting {} seconds until power on allowed",
-                    std::chrono::duration_cast<std::chrono::seconds>(
-                        powerOnAllowedTime - std::chrono::steady_clock::now())
-                        .count())
-                    .c_str());
+            services.logInfoMsg(std::format(
+                "Waiting {} seconds until power on allowed",
+                std::chrono::duration_cast<std::chrono::seconds>(
+                    powerOnAllowedTime - std::chrono::steady_clock::now())
+                    .count()));
         }
         std::this_thread::sleep_until(powerOnAllowedTime);
     }
 
-    log<level::INFO>(fmt::format("setState: {}", s).c_str());
+    services.logInfoMsg(std::format("setState: {}", s));
+    services.logInfoMsg(std::format("Powering chassis {}", (s ? "on" : "off")));
     powerControlLine.request(
         {"phosphor-power-control", gpiod::line_request::DIRECTION_OUTPUT, 0});
     powerControlLine.set_value(s);
@@ -334,46 +264,39 @@ void PowerControl::setState(int s)
     emitPropertyChangedSignal("state");
 }
 
-void PowerControl::setUpDevice()
+void PowerControl::compatibleSystemTypesFound(
+    const std::vector<std::string>& types)
 {
-    try
+    // If we don't already have compatible system types
+    if (compatibleSystemTypes.empty())
     {
-        // Check if device information is already available
-        auto objects = util::getSubTree(bus, "/", interfaceNames, 0);
+        std::string typesStr = format_utils::toString(std::span{types});
+        services.logInfoMsg(
+            std::format("Compatible system types found: {}", typesStr));
 
-        // Search for matching interface in returned objects
-        for (const auto& [path, services] : objects)
-        {
-            log<level::DEBUG>(
-                fmt::format("Found path: {}, services: {}", path, services)
-                    .c_str());
-            for (const auto& [service, interfaces] : services)
-            {
-                log<level::DEBUG>(
-                    fmt::format("Found service: {}, interfaces: {}", service,
-                                interfaces)
-                        .c_str());
-                for (const auto& interface : interfaces)
-                {
-                    log<level::DEBUG>(
-                        fmt::format("Found interface: {}", interface).c_str());
-                    // Get the properties for the device interface
-                    auto properties =
-                        util::getAllProperties(bus, path, interface, service);
+        // Store compatible system types
+        compatibleSystemTypes = types;
 
-                    getDeviceProperties(properties);
-                }
-            }
-        }
+        // Load config file and create device object if possible
+        loadConfigFileAndCreateDevice();
     }
-    catch (const std::exception& e)
+}
+
+void PowerControl::deviceFound(const DeviceProperties& properties)
+{
+    // If we don't already have device properties
+    if (!deviceProperties)
     {
-        // Interface or property not found. Let the Interfaces Added
-        // callback process the information once the interfaces are added to
-        // D-Bus.
-        log<level::DEBUG>(
-            fmt::format("Error setting up device, error: {}", e.what())
-                .c_str());
+        services.logInfoMsg(std::format(
+            "Power sequencer device found: type={}, name={}, bus={:d}, address={:#02x}",
+            properties.type, properties.name, properties.bus,
+            properties.address));
+
+        // Store device properties
+        deviceProperties = properties;
+
+        // Load config file and create device object if possible
+        loadConfigFileAndCreateDevice();
     }
 }
 
@@ -381,14 +304,14 @@ void PowerControl::setUpGpio()
 {
     const std::string powerControlLineName = "power-chassis-control";
     const std::string pgoodLineName = "power-chassis-good";
+    std::map<std::string, std::string> additionalData{};
 
     pgoodLine = gpiod::find_line(pgoodLineName);
     if (!pgoodLine)
     {
         std::string errorString{"GPIO line name not found: " + pgoodLineName};
-        log<level::ERR>(errorString.c_str());
-        report<
-            sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
+        services.logErrorMsg(errorString);
+        services.logError(internalError, Entry::Level::Error, additionalData);
         throw std::runtime_error(errorString);
     }
     powerControlLine = gpiod::find_line(powerControlLineName);
@@ -396,9 +319,8 @@ void PowerControl::setUpGpio()
     {
         std::string errorString{"GPIO line name not found: " +
                                 powerControlLineName};
-        log<level::ERR>(errorString.c_str());
-        report<
-            sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure>();
+        services.logErrorMsg(errorString);
+        services.logError(internalError, Entry::Level::Error, additionalData);
         throw std::runtime_error(errorString);
     }
 
@@ -407,7 +329,104 @@ void PowerControl::setUpGpio()
     int pgoodState = pgoodLine.get_value();
     pgood = pgoodState;
     state = pgoodState;
-    log<level::INFO>(fmt::format("Pgood state: {}", pgoodState).c_str());
+    services.logInfoMsg(std::format("Pgood state: {}", pgoodState));
+}
+
+void PowerControl::loadConfigFileAndCreateDevice()
+{
+    // If compatible system types and device properties have been found
+    if (!compatibleSystemTypes.empty() && deviceProperties)
+    {
+        // Find the JSON configuration file
+        std::filesystem::path configFile = findConfigFile();
+        if (!configFile.empty())
+        {
+            // Parse the JSON configuration file
+            std::vector<std::unique_ptr<Rail>> rails;
+            if (parseConfigFile(configFile, rails))
+            {
+                // Create the power sequencer device object
+                createDevice(std::move(rails));
+            }
+        }
+    }
+}
+
+std::filesystem::path PowerControl::findConfigFile()
+{
+    // Find config file for current system based on compatible system types
+    std::filesystem::path configFile;
+    if (!compatibleSystemTypes.empty())
+    {
+        try
+        {
+            configFile = config_file_parser::find(compatibleSystemTypes);
+            if (!configFile.empty())
+            {
+                services.logInfoMsg(std::format(
+                    "JSON configuration file found: {}", configFile.string()));
+            }
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(std::format(
+                "Unable to find JSON configuration file: {}", e.what()));
+        }
+    }
+    return configFile;
+}
+
+bool PowerControl::parseConfigFile(const std::filesystem::path& configFile,
+                                   std::vector<std::unique_ptr<Rail>>& rails)
+{
+    // Parse JSON configuration file
+    bool wasParsed{false};
+    try
+    {
+        rails = config_file_parser::parse(configFile);
+        wasParsed = true;
+    }
+    catch (const std::exception& e)
+    {
+        services.logErrorMsg(std::format(
+            "Unable to parse JSON configuration file: {}", e.what()));
+    }
+    return wasParsed;
+}
+
+void PowerControl::createDevice(std::vector<std::unique_ptr<Rail>> rails)
+{
+    // Create power sequencer device based on device properties
+    if (deviceProperties)
+    {
+        try
+        {
+            if (deviceProperties->type == UCD90160Device::deviceName)
+            {
+                device = std::make_unique<UCD90160Device>(
+                    std::move(rails), services, deviceProperties->bus,
+                    deviceProperties->address);
+            }
+            else if (deviceProperties->type == UCD90320Device::deviceName)
+            {
+                device = std::make_unique<UCD90320Device>(
+                    std::move(rails), services, deviceProperties->bus,
+                    deviceProperties->address);
+            }
+            else
+            {
+                throw std::runtime_error{std::format(
+                    "Unsupported device type: {}", deviceProperties->type)};
+            }
+            services.logInfoMsg(std::format(
+                "Power sequencer device created: {}", device->getName()));
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(
+                std::format("Unable to create device object: {}", e.what()));
+        }
+    }
 }
 
 } // namespace phosphor::power::sequencer
