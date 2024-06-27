@@ -34,11 +34,13 @@
         {
             "name": "VDN_DCM0",
             "page": 24,
+            "check_status_vout": true,
             "gpio": { "line": 72 }
         },
         {
             "name": "VDN_DCM1",
             "page": 25,
+            "check_status_vout": true,
             "gpio": { "line": 73 }
         },
         {
@@ -74,31 +76,37 @@
         {
             "name": "VCS_DCM0",
             "page": 26,
+            "check_status_vout": true,
             "gpio": { "line": 74 }
         },
         {
             "name": "VCS_DCM1",
             "page": 27,
+            "check_status_vout": true,
             "gpio": { "line": 75 }
         },
         {
             "name": "VIO_DCM0",
             "page": 28,
+            "check_status_vout": true,
             "gpio": { "line": 76 }
         },
         {
             "name": "VIO_DCM1",
             "page": 29,
+            "check_status_vout": true,
             "gpio": { "line": 77 }
         },
         {
             "name": "VPCIE_DCM0",
             "page": 30,
+            "check_status_vout": true,
             "gpio": { "line": 78 }
         },
         {
             "name": "VPCIE_DCM1",
             "page": 31,
+            "check_status_vout": true,
             "gpio": { "line": 79 }
         }
     ]
