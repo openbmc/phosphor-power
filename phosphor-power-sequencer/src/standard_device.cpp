@@ -39,32 +39,28 @@ std::string StandardDevice::findPgoodFault(
         // obtain, so obtain them once and then pass values to each Rail object.
         std::vector<int> gpioValues = getGPIOValuesIfPossible(services);
 
-        // Loop through all the rails checking if any detected a pgood fault.
-        // The rails are in power-on-sequence order.
-        for (std::unique_ptr<Rail>& rail : rails)
+        // Try to find a voltage rail where a pgood fault occurred
+        Rail* rail = findRailWithPgoodFault(services, gpioValues,
+                                            additionalData);
+        if (rail != nullptr)
         {
-            if (rail->hasPgoodFault(*this, services, gpioValues,
-                                    additionalData))
+            services.logErrorMsg(std::format(
+                "Pgood fault found in rail monitored by device {}", name));
+
+            // If this is a PSU rail and a PSU error was previously detected
+            if (rail->isPowerSupplyRail() && !powerSupplyError.empty())
             {
-                services.logErrorMsg(std::format(
-                    "Pgood fault found in rail monitored by device {}", name));
-
-                // If this is a PSU rail and a PSU error was previously detected
-                if (rail->isPowerSupplyRail() && !powerSupplyError.empty())
-                {
-                    // Return power supply error as root cause
-                    error = powerSupplyError;
-                }
-                else
-                {
-                    // Return pgood fault as root cause
-                    error =
-                        "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
-                }
-
-                storePgoodFaultDebugData(services, gpioValues, additionalData);
-                break;
+                // Return power supply error as root cause
+                error = powerSupplyError;
             }
+            else
+            {
+                // Return pgood fault as root cause
+                error =
+                    "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault";
+            }
+
+            storePgoodFaultDebugData(services, gpioValues, additionalData);
         }
     }
     catch (const std::exception& e)
@@ -86,6 +82,43 @@ std::vector<int> StandardDevice::getGPIOValuesIfPossible(Services& services)
     catch (...)
     {}
     return values;
+}
+
+Rail* StandardDevice::findRailWithPgoodFault(
+    Services& services, const std::vector<int>& gpioValues,
+    std::map<std::string, std::string>& additionalData)
+{
+    // Look for the first rail in the power on sequence with a pgood fault based
+    // on STATUS_VOUT.  This is usually the most accurate method.  For example,
+    // if a pgood fault occurs, the power sequencer device may automatically
+    // shut off related rails.  Ideally the device will only set fault bits in
+    // STATUS_VOUT for the rail with the pgood fault.  However, all the related
+    // rails will likely appear to be faulted by the other methods.
+    for (std::unique_ptr<Rail>& rail : rails)
+    {
+        if (rail->hasPgoodFaultStatusVout(*this, services, additionalData))
+        {
+            return rail.get();
+        }
+    }
+
+    // Look for the first rail in the power on sequence with a pgood fault based
+    // on either a GPIO or the output voltage.  Both methods check if the rail
+    // is powered off.  If a pgood fault occurs during the power on sequence,
+    // the power sequencer device may stop powering on rails.  As a result, all
+    // rails after the faulted one in the sequence may also be powered off.
+    for (std::unique_ptr<Rail>& rail : rails)
+    {
+        if (rail->hasPgoodFaultGPIO(*this, services, gpioValues,
+                                    additionalData) ||
+            rail->hasPgoodFaultOutputVoltage(*this, services, additionalData))
+        {
+            return rail.get();
+        }
+    }
+
+    // No rail with pgood fault found
+    return nullptr;
 }
 
 void StandardDevice::storePgoodFaultDebugData(

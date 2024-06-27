@@ -121,46 +121,9 @@ bool Rail::hasPgoodFault(PowerSequencerDevice& device, Services& services,
                          const std::vector<int>& gpioValues,
                          std::map<std::string, std::string>& additionalData)
 {
-    // If rail is not present, return false and don't check anything else
-    if (!isPresent(services))
-    {
-        services.logInfoMsg(std::format("Rail {} is not present", name));
-        return false;
-    }
-
-    // Check if STATUS_VOUT indicates a pgood fault occurred
-    bool hasFault = hasPgoodFaultStatusVout(device, services, additionalData);
-
-    // Check if a GPIO value indicates a pgood fault occurred
-    if (!hasFault)
-    {
-        hasFault = hasPgoodFaultGPIO(services, gpioValues, additionalData);
-    }
-
-    // Check if output voltage is below UV limit indicating pgood fault occurred
-    if (!hasFault)
-    {
-        hasFault = hasPgoodFaultOutputVoltage(device, services, additionalData);
-    }
-
-    // If fault detected, store debug data in additional data map
-    if (hasFault)
-    {
-        services.logErrorMsg(
-            std::format("Pgood fault detected in rail {}", name));
-        storePgoodFaultDebugData(device, services, additionalData);
-    }
-
-    return hasFault;
-}
-
-void Rail::verifyHasPage()
-{
-    if (!page)
-    {
-        throw std::runtime_error{
-            std::format("No PAGE number defined for rail {}", name)};
-    }
+    return (hasPgoodFaultStatusVout(device, services, additionalData) ||
+            hasPgoodFaultGPIO(device, services, gpioValues, additionalData) ||
+            hasPgoodFaultOutputVoltage(device, services, additionalData));
 }
 
 bool Rail::hasPgoodFaultStatusVout(
@@ -169,8 +132,8 @@ bool Rail::hasPgoodFaultStatusVout(
 {
     bool hasFault{false};
 
-    // If we are checking the value of STATUS_VOUT for the rail
-    if (checkStatusVout)
+    // If rail is present and we are checking the value of STATUS_VOUT
+    if (isPresent(services) && checkStatusVout)
     {
         // Read STATUS_VOUT value from device
         uint8_t statusVout = getStatusVout(device);
@@ -184,6 +147,7 @@ bool Rail::hasPgoodFaultStatusVout(
                 statusVout));
             additionalData.emplace("STATUS_VOUT",
                                    std::format("{:#04x}", statusVout));
+            storePgoodFaultDebugData(device, services, additionalData);
         }
         else if (statusVout != 0)
         {
@@ -196,14 +160,14 @@ bool Rail::hasPgoodFaultStatusVout(
     return hasFault;
 }
 
-bool Rail::hasPgoodFaultGPIO(Services& services,
+bool Rail::hasPgoodFaultGPIO(PowerSequencerDevice& device, Services& services,
                              const std::vector<int>& gpioValues,
                              std::map<std::string, std::string>& additionalData)
 {
     bool hasFault{false};
 
-    // If a GPIO is defined for checking pgood status
-    if (gpio)
+    // If rail is present and a GPIO is defined for checking pgood status
+    if (isPresent(services) && gpio)
     {
         // Get GPIO value
         unsigned int line = gpio->line;
@@ -225,6 +189,7 @@ bool Rail::hasPgoodFaultGPIO(Services& services,
                 line, value));
             additionalData.emplace("GPIO_LINE", std::format("{}", line));
             additionalData.emplace("GPIO_VALUE", std::format("{}", value));
+            storePgoodFaultDebugData(device, services, additionalData);
         }
     }
 
@@ -237,8 +202,8 @@ bool Rail::hasPgoodFaultOutputVoltage(
 {
     bool hasFault{false};
 
-    // If we are comparing output voltage to UV limit to check pgood status
-    if (compareVoltageToLimit)
+    // If rail is present and we are comparing output voltage to UV limit
+    if (isPresent(services) && compareVoltageToLimit)
     {
         // Read output voltage and UV fault limit values from device
         double vout = getReadVout(device);
@@ -254,16 +219,27 @@ bool Rail::hasPgoodFaultOutputVoltage(
             additionalData.emplace("READ_VOUT", std::format("{}", vout));
             additionalData.emplace("VOUT_UV_FAULT_LIMIT",
                                    std::format("{}", uvLimit));
+            storePgoodFaultDebugData(device, services, additionalData);
         }
     }
 
     return hasFault;
 }
 
+void Rail::verifyHasPage()
+{
+    if (!page)
+    {
+        throw std::runtime_error{
+            std::format("No PAGE number defined for rail {}", name)};
+    }
+}
+
 void Rail::storePgoodFaultDebugData(
     PowerSequencerDevice& device, Services& services,
     std::map<std::string, std::string>& additionalData)
 {
+    services.logErrorMsg(std::format("Pgood fault detected in rail {}", name));
     additionalData.emplace("RAIL_NAME", name);
     if (page)
     {

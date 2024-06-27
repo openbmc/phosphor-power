@@ -257,14 +257,6 @@ class Rail
                        const std::vector<int>& gpioValues,
                        std::map<std::string, std::string>& additionalData);
 
-  private:
-    /**
-     * Verifies that a PMBus PAGE number is defined for the rail.
-     *
-     * Throws an exception if a PAGE number is not defined.
-     */
-    void verifyHasPage();
-
     /**
      * Returns whether the PMBus STATUS_VOUT command indicates a pgood fault
      * has occurred on the rail.
@@ -290,12 +282,13 @@ class Rail
      * status.
      *
      * @param device Power sequencer device that enables and monitors the rail
+     * @param services System services like hardware presence and the journal
      * @param gpioValues GPIO values obtained from the device (if any)
      * @param additionalData Additional data to include in an error log if this
      *                       method returns true
      * @return true if a pgood fault was found on the rail, false otherwise
      */
-    bool hasPgoodFaultGPIO(Services& services,
+    bool hasPgoodFaultGPIO(PowerSequencerDevice& device, Services& services,
                            const std::vector<int>& gpioValues,
                            std::map<std::string, std::string>& additionalData);
 
@@ -315,6 +308,14 @@ class Rail
     bool hasPgoodFaultOutputVoltage(
         PowerSequencerDevice& device, Services& services,
         std::map<std::string, std::string>& additionalData);
+
+  private:
+    /**
+     * Verifies that a PMBus PAGE number is defined for the rail.
+     *
+     * Throws an exception if a PAGE number is not defined.
+     */
+    void verifyHasPage();
 
     /**
      * Store pgood fault debug data in the specified additional data map.

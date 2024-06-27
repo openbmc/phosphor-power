@@ -773,16 +773,348 @@ TEST(RailTests, GetVoutUVFaultLimit)
 TEST(RailTests, HasPgoodFault)
 {
     std::string name{"VDD2"};
+    std::optional<std::string> presence{};
+    std::optional<uint8_t> page{2};
     bool isPowerSupplyRail{false};
+    bool checkStatusVout{true};
+    bool compareVoltageToLimit{true};
+    bool activeLow{true};
+    std::optional<GPIO> gpio{GPIO(3, activeLow)};
+    Rail rail{name,
+              presence,
+              page,
+              isPowerSupplyRail,
+              checkStatusVout,
+              compareVoltageToLimit,
+              gpio};
+
+    // No fault detected
+    {
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
+        EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
+        EXPECT_CALL(device, getVoutUVFaultLimit(2))
+            .Times(1)
+            .WillOnce(Return(1.0));
+
+        MockServices services{};
+
+        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Fault detected via STATUS_VOUT
+    {
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x10));
+        EXPECT_CALL(device, getReadVout(2)).Times(0);
+        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+            .Times(1);
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+            .Times(1);
+        EXPECT_CALL(
+            services,
+            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
+            .Times(1);
+
+        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_TRUE(
+            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_EQ(additionalData.size(), 3);
+        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
+        EXPECT_EQ(additionalData["STATUS_VOUT"], "0x10");
+        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
+    }
+
+    // Fault detected via GPIO
+    {
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
+        EXPECT_CALL(device, getReadVout(2)).Times(0);
+        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+            .Times(1);
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+            .Times(1);
+        EXPECT_CALL(
+            services,
+            logErrorMsg(
+                "Rail VDD2 pgood GPIO line offset 3 has inactive value 1"))
+            .Times(1);
+
+        std::vector<int> gpioValues{0, 0, 0, 1, 0, 0};
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_TRUE(
+            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_EQ(additionalData.size(), 4);
+        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
+        EXPECT_EQ(additionalData["GPIO_LINE"], "3");
+        EXPECT_EQ(additionalData["GPIO_VALUE"], "1");
+        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
+    }
+
+    // Fault detected via output voltage
+    {
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
+        EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
+        EXPECT_CALL(device, getVoutUVFaultLimit(2))
+            .Times(1)
+            .WillOnce(Return(1.1));
+        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+            .Times(1);
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+            .Times(1);
+        EXPECT_CALL(
+            services,
+            logErrorMsg(
+                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V"))
+            .Times(1);
+
+        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_TRUE(
+            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_EQ(additionalData.size(), 4);
+        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
+        EXPECT_EQ(additionalData["READ_VOUT"], "1.1");
+        EXPECT_EQ(additionalData["VOUT_UV_FAULT_LIMIT"], "1.1");
+        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
+    }
+}
+
+TEST(RailTests, HasPgoodFaultStatusVout)
+{
+    std::string name{"VDD2"};
+    std::optional<uint8_t> page{3};
+    bool isPowerSupplyRail{false};
+    bool compareVoltageToLimit{false};
+    std::optional<GPIO> gpio{};
+
+    // Test where presence check defined: Rail is not present
+    {
+        std::optional<std::string> presence{
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(0);
+
+        MockServices services{};
+        EXPECT_CALL(services, isPresent(*presence))
+            .Times(1)
+            .WillOnce(Return(false));
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where presence check defined: Rail is present: No fault detected
+    {
+        std::optional<std::string> presence{
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x00));
+
+        MockServices services{};
+        EXPECT_CALL(services, isPresent(*presence))
+            .Times(1)
+            .WillOnce(Return(true));
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where STATUS_VOUT check is not defined
+    {
+        std::optional<std::string> presence{};
+        bool checkStatusVout{false};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(0);
+
+        MockServices services{};
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where no fault detected: No warning bits set
+    {
+        std::optional<std::string> presence{};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x00));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg).Times(0);
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where no fault detected: Warning bits set
+    {
+        std::optional<std::string> presence{};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x6a));
+
+        MockServices services{};
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Rail VDD2 has warning bits set in STATUS_VOUT: 0x6a"))
+            .Times(1);
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where fault detected
+    // STATUS_WORD captured in additional data
+    {
+        std::optional<std::string> presence{};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x10));
+        EXPECT_CALL(device, getStatusWord(3)).Times(1).WillOnce(Return(0xbeef));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+            .Times(1);
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+            .Times(1);
+        EXPECT_CALL(
+            services,
+            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
+            .Times(1);
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_TRUE(
+            rail.hasPgoodFaultStatusVout(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 3);
+        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
+        EXPECT_EQ(additionalData["STATUS_VOUT"], "0x10");
+        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
+    }
+
+    // Test where exception thrown
+    {
+        std::optional<std::string> presence{};
+        bool checkStatusVout{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusVout(3))
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error{"File does not exist"}));
+
+        MockServices services{};
+
+        std::map<std::string, std::string> additionalData{};
+        try
+        {
+            rail.hasPgoodFaultStatusVout(device, services, additionalData);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Unable to read STATUS_VOUT value for rail VDD2: "
+                         "File does not exist");
+        }
+    }
+}
+
+TEST(RailTests, HasPgoodFaultGPIO)
+{
+    std::string name{"VDD2"};
+    bool isPowerSupplyRail{false};
+    bool checkStatusVout{false};
+    bool compareVoltageToLimit{false};
 
     // Test where presence check defined: Rail is not present
     {
         std::optional<std::string> presence{
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
         std::optional<uint8_t> page{3};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
+        bool activeLow{false};
+        std::optional<GPIO> gpio{GPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -797,23 +1129,21 @@ TEST(RailTests, HasPgoodFault)
         EXPECT_CALL(services, isPresent(*presence))
             .Times(1)
             .WillOnce(Return(false));
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 is not present")).Times(1);
 
-        std::vector<int> gpioValues{};
+        std::vector<int> gpioValues{1, 1, 1, 0, 1, 1};
         std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_FALSE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                            additionalData));
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // Test where presence check defined: Rail is present
+    // Test where presence check defined: Rail is present: No fault detected
     {
         std::optional<std::string> presence{
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
-        std::optional<uint8_t> page{};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
+        std::optional<uint8_t> page{3};
+        bool activeLow{false};
+        std::optional<GPIO> gpio{GPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -828,21 +1158,18 @@ TEST(RailTests, HasPgoodFault)
         EXPECT_CALL(services, isPresent(*presence))
             .Times(1)
             .WillOnce(Return(true));
-        EXPECT_CALL(services, logInfoMsg).Times(0);
 
-        std::vector<int> gpioValues{};
+        std::vector<int> gpioValues{1, 1, 1, 1, 1, 1};
         std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_FALSE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                            additionalData));
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // Test where no checks are specified
+    // Test where GPIO check not defined
     {
         std::optional<std::string> presence{};
-        std::optional<uint8_t> page{};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{false};
+        std::optional<uint8_t> page{3};
         std::optional<GPIO> gpio{};
         Rail rail{name,
                   presence,
@@ -856,156 +1183,18 @@ TEST(RailTests, HasPgoodFault)
 
         MockServices services{};
 
-        std::vector<int> gpioValues{};
+        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
         std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_FALSE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                            additionalData));
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // Test where 1 check defined: STATUS_VOUT: No fault detected
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
-
-        MockServices services{};
-
-        std::vector<int> gpioValues{};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 0);
-    }
-
-    // Test where 1 check defined: STATUS_VOUT: No fault detected, but warning
-    // bits set
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x6a));
-
-        MockServices services{};
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Rail VDD2 has warning bits set in STATUS_VOUT: 0x6a"))
-            .Times(1);
-
-        std::vector<int> gpioValues{};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 0);
-    }
-
-    // Test where 1 check defined: STATUS_VOUT: Fault detected
-    // STATUS_WORD captured in additional data
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x10));
-        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
-
-        MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
-            .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
-            .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
-            .Times(1);
-
-        std::vector<int> gpioValues{};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 3);
-        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
-        EXPECT_EQ(additionalData["STATUS_VOUT"], "0x10");
-        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
-    }
-
-    // Test where 1 check defined: STATUS_VOUT: Exception thrown
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2))
-            .Times(1)
-            .WillOnce(Throw(std::runtime_error{"File does not exist"}));
-
-        MockServices services{};
-
-        std::vector<int> gpioValues{};
-        std::map<std::string, std::string> additionalData{};
-        try
-        {
-            rail.hasPgoodFault(device, services, gpioValues, additionalData);
-            ADD_FAILURE() << "Should not have reached this line.";
-        }
-        catch (const std::exception& e)
-        {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_VOUT value for rail VDD2: "
-                         "File does not exist");
-        }
-    }
-
-    // Test where 1 check defined: GPIO: No fault detected
+    // Test where no fault detected
     // GPIO value is 1 and GPIO is active high
     {
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{false};
         bool activeLow{false};
         std::optional<GPIO> gpio{GPIO(3, activeLow)};
         Rail rail{name,
@@ -1022,19 +1211,17 @@ TEST(RailTests, HasPgoodFault)
 
         std::vector<int> gpioValues{1, 1, 1, 1, 1, 1};
         std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_FALSE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                            additionalData));
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // Test where 1 check defined: GPIO: Fault detected
+    // Test where fault detected
     // GPIO value is 0 and GPIO is active high
     // STATUS_WORD not captured since no PMBus page defined
     {
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{false};
         bool activeLow{false};
         std::optional<GPIO> gpio{GPIO(3, activeLow)};
         Rail rail{name,
@@ -1058,20 +1245,58 @@ TEST(RailTests, HasPgoodFault)
 
         std::vector<int> gpioValues{1, 1, 1, 0, 1, 1};
         std::map<std::string, std::string> additionalData{};
-        EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+        EXPECT_TRUE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                           additionalData));
         EXPECT_EQ(additionalData.size(), 3);
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
         EXPECT_EQ(additionalData["GPIO_LINE"], "3");
         EXPECT_EQ(additionalData["GPIO_VALUE"], "0");
     }
 
-    // Test where 1 check defined: GPIO: Exception thrown: Invalid line offset
+    // Test where fault detected
+    // GPIO value is 1 and GPIO is active low
+    {
+        std::optional<std::string> presence{};
+        std::optional<uint8_t> page{2};
+        bool activeLow{true};
+        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
+
+        MockServices services{};
+        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+            .Times(1);
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+            .Times(1);
+        EXPECT_CALL(
+            services,
+            logErrorMsg(
+                "Rail VDD2 pgood GPIO line offset 3 has inactive value 1"))
+            .Times(1);
+
+        std::vector<int> gpioValues{0, 0, 0, 1, 0, 0};
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_TRUE(rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                           additionalData));
+        EXPECT_EQ(additionalData.size(), 4);
+        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
+        EXPECT_EQ(additionalData["GPIO_LINE"], "3");
+        EXPECT_EQ(additionalData["GPIO_VALUE"], "1");
+        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
+    }
+
+    // Test where exception thrown
     {
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{false};
         bool activeLow{false};
         std::optional<GPIO> gpio{GPIO(6, activeLow)};
         Rail rail{name,
@@ -1090,7 +1315,8 @@ TEST(RailTests, HasPgoodFault)
         std::map<std::string, std::string> additionalData{};
         try
         {
-            rail.hasPgoodFault(device, services, gpioValues, additionalData);
+            rail.hasPgoodFaultGPIO(device, services, gpioValues,
+                                   additionalData);
             ADD_FAILURE() << "Should not have reached this line.";
         }
         catch (const std::exception& e)
@@ -1099,15 +1325,102 @@ TEST(RailTests, HasPgoodFault)
                                    "Device only has 6 GPIO values");
         }
     }
+}
 
-    // Test where 1 check defined: READ_VOUT: No fault detected
-    // Output voltage > UV limit
+TEST(RailTests, HasPgoodFaultOutputVoltage)
+{
+    std::string name{"VDD2"};
+    std::optional<uint8_t> page{2};
+    bool isPowerSupplyRail{false};
+    bool checkStatusVout{false};
+    std::optional<GPIO> gpio{};
+
+    // Test where presence check defined: Rail is not present
+    {
+        std::optional<std::string> presence{
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
+        bool compareVoltageToLimit{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getReadVout(2)).Times(0);
+        EXPECT_CALL(device, getVoutUVFaultLimit(2)).Times(0);
+
+        MockServices services{};
+        EXPECT_CALL(services, isPresent(*presence))
+            .Times(1)
+            .WillOnce(Return(false));
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where presence check defined: Rail is present: No fault detected
+    {
+        std::optional<std::string> presence{
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
+        bool compareVoltageToLimit{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
+        EXPECT_CALL(device, getVoutUVFaultLimit(2))
+            .Times(1)
+            .WillOnce(Return(1.0));
+
+        MockServices services{};
+        EXPECT_CALL(services, isPresent(*presence))
+            .Times(1)
+            .WillOnce(Return(true));
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where voltage output check not specified
     {
         std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{false};
+        bool compareVoltageToLimit{false};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getReadVout(2)).Times(0);
+        EXPECT_CALL(device, getVoutUVFaultLimit(2)).Times(0);
+
+        MockServices services{};
+
+        std::map<std::string, std::string> additionalData{};
+        EXPECT_FALSE(
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
+        EXPECT_EQ(additionalData.size(), 0);
+    }
+
+    // Test where no fault detected: Output voltage > UV limit
+    {
+        std::optional<std::string> presence{};
         bool compareVoltageToLimit{true};
-        std::optional<GPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
@@ -1124,21 +1437,16 @@ TEST(RailTests, HasPgoodFault)
 
         MockServices services{};
 
-        std::vector<int> gpioValues{};
         std::map<std::string, std::string> additionalData{};
         EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // Test where 1 check defined: READ_VOUT: Fault detected
-    // Output voltage < UV limit
+    // Test where fault detected: Output voltage < UV limit
     {
         std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{false};
         bool compareVoltageToLimit{true};
-        std::optional<GPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
@@ -1165,10 +1473,9 @@ TEST(RailTests, HasPgoodFault)
                 "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.2V"))
             .Times(1);
 
-        std::vector<int> gpioValues{};
         std::map<std::string, std::string> additionalData{};
         EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
         EXPECT_EQ(additionalData.size(), 4);
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
         EXPECT_EQ(additionalData["READ_VOUT"], "1.1");
@@ -1176,169 +1483,11 @@ TEST(RailTests, HasPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // Test where 1 check defined: READ_VOUT: Exception thrown
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{false};
-        bool compareVoltageToLimit{true};
-        std::optional<GPIO> gpio{};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getReadVout(2))
-            .Times(1)
-            .WillOnce(Throw(std::runtime_error{"File does not exist"}));
-
-        MockServices services{};
-
-        std::vector<int> gpioValues{};
-        std::map<std::string, std::string> additionalData{};
-        try
-        {
-            rail.hasPgoodFault(device, services, gpioValues, additionalData);
-            ADD_FAILURE() << "Should not have reached this line.";
-        }
-        catch (const std::exception& e)
-        {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read READ_VOUT value for rail VDD2: "
-                         "File does not exist");
-        }
-    }
-
-    // Test where 3 checks defined: No fault detected
-    // GPIO value is 0 and GPIO is active low
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{true};
-        bool activeLow{true};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
-        EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
-        EXPECT_CALL(device, getVoutUVFaultLimit(2))
-            .Times(1)
-            .WillOnce(Return(0.9));
-
-        MockServices services{};
-
-        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_FALSE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 0);
-    }
-
-    // Test where 3 checks defined: Fault detected via STATUS_VOUT
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{true};
-        bool activeLow{true};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x10));
-        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
-
-        MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
-            .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
-            .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
-            .Times(1);
-
-        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 3);
-        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
-        EXPECT_EQ(additionalData["STATUS_VOUT"], "0x10");
-        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
-    }
-
-    // Test where 3 checks defined: Fault detected via GPIO
-    // GPIO value is 1 and GPIO is active low
-    {
-        std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
-        bool compareVoltageToLimit{true};
-        bool activeLow{true};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
-        Rail rail{name,
-                  presence,
-                  page,
-                  isPowerSupplyRail,
-                  checkStatusVout,
-                  compareVoltageToLimit,
-                  gpio};
-
-        MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
-        EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
-
-        MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
-            .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
-            .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg(
-                "Rail VDD2 pgood GPIO line offset 3 has inactive value 1"))
-            .Times(1);
-
-        std::vector<int> gpioValues{0, 0, 0, 1, 0, 0};
-        std::map<std::string, std::string> additionalData{};
-        EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
-        EXPECT_EQ(additionalData.size(), 4);
-        EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
-        EXPECT_EQ(additionalData["GPIO_LINE"], "3");
-        EXPECT_EQ(additionalData["GPIO_VALUE"], "1");
-        EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
-    }
-
-    // Test where 3 checks defined: Fault detected via READ_VOUT
-    // Output voltage == UV limit
+    // Test where fault detected: Output voltage == UV limit
     // STATUS_WORD not captured because reading it caused an exception
     {
         std::optional<std::string> presence{};
-        std::optional<uint8_t> page{2};
-        bool checkStatusVout{true};
         bool compareVoltageToLimit{true};
-        bool activeLow{true};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1348,7 +1497,6 @@ TEST(RailTests, HasPgoodFault)
                   gpio};
 
         MockDevice device{};
-        EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
@@ -1366,13 +1514,45 @@ TEST(RailTests, HasPgoodFault)
                 "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V"))
             .Times(1);
 
-        std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
         std::map<std::string, std::string> additionalData{};
         EXPECT_TRUE(
-            rail.hasPgoodFault(device, services, gpioValues, additionalData));
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData));
         EXPECT_EQ(additionalData.size(), 3);
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD2");
         EXPECT_EQ(additionalData["READ_VOUT"], "1.1");
         EXPECT_EQ(additionalData["VOUT_UV_FAULT_LIMIT"], "1.1");
+    }
+
+    // Test where exception thrown
+    {
+        std::optional<std::string> presence{};
+        bool compareVoltageToLimit{true};
+        Rail rail{name,
+                  presence,
+                  page,
+                  isPowerSupplyRail,
+                  checkStatusVout,
+                  compareVoltageToLimit,
+                  gpio};
+
+        MockDevice device{};
+        EXPECT_CALL(device, getReadVout(2))
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error{"File does not exist"}));
+
+        MockServices services{};
+
+        std::map<std::string, std::string> additionalData{};
+        try
+        {
+            rail.hasPgoodFaultOutputVoltage(device, services, additionalData);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Unable to read READ_VOUT value for rail VDD2: "
+                         "File does not exist");
+        }
     }
 }

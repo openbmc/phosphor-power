@@ -110,6 +110,27 @@ class StandardDevice : public PowerSequencerDevice
     virtual std::vector<int> getGPIOValuesIfPossible(Services& services);
 
     /**
+     * Checks whether a pgood fault has occurred on one of the rails being
+     * monitored by this device.
+     *
+     * If a pgood fault was found in a rail, a pointer to the Rail object is
+     * returned.
+     *
+     * Throws an exception if an error occurs while trying to obtain the status
+     * of the rails.
+     *
+     * @param services System services like hardware presence and the journal
+     * @param gpioValues GPIO values obtained from the device (if any)
+     * @param additionalData Additional data to include in the error log if
+     *                       a pgood fault was found
+     * @return pointer to Rail object where fault was found, or nullptr if no
+     *         Rail found
+     */
+    virtual Rail* findRailWithPgoodFault(
+        Services& services, const std::vector<int>& gpioValues,
+        std::map<std::string, std::string>& additionalData);
+
+    /**
      * Store pgood fault debug data in the specified additional data map.
      *
      * The default implementation stores the device name and then calls
