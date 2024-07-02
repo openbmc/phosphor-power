@@ -22,6 +22,30 @@
       },
       "revId": "baa370f170afd9f3e5e276af702783ee772a3dd6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bbeb43e_2335d39b",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-07-02T16:09:09Z",
+      "side": 1,
+      "message": "This was in the previous version of the code, so I had just converted it to the new Services method call.\n\nI\u0027ve now removed it and the similar call a few lines later based on your recommendation.",
+      "parentUuid": "38a82a01_c57632df",
+      "range": {
+        "startLine": 314,
+        "startChar": 26,
+        "endLine": 314,
+        "endChar": 39
+      },
+      "revId": "baa370f170afd9f3e5e276af702783ee772a3dd6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
