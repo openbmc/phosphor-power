@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38a82a01_c57632df",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-07-02T14:10:30Z",
+      "side": 1,
+      "message": "internalfailure event logs aren\u0027t very useful in the the field, in fact we decided to make these PELs be informational because there\u0027s really no way for anyone to debug them.\n\nWhat happens with this function throws?  Looks like the app may just crash anyway which would trigger a dump? Probably don\u0027t even need this generic event log then.",
+      "range": {
+        "startLine": 314,
+        "startChar": 26,
+        "endLine": 314,
+        "endChar": 39
+      },
+      "revId": "baa370f170afd9f3e5e276af702783ee772a3dd6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
