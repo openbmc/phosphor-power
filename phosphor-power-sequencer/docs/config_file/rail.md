@@ -6,7 +6,21 @@ A voltage rail that is enabled or monitored by the power sequencer device.
 
 The "check_status_vout", "compare_voltage_to_limit", and "gpio" properties
 specify how to obtain the pgood status of the rail. You can specify more than
-one of these properties if necessary.
+one of these properties.
+
+The "check_status_vout" method is usually the most accurate. For example, if a
+pgood fault occurs, the power sequencer device may automatically shut off
+related rails. Ideally the device will only set fault bits in STATUS_VOUT for
+the rail with the pgood fault. However, all the related rails will likely appear
+to be faulted by the other methods.
+
+The "compare_voltage_to_limit" method is helpful when a rail fails to power on
+during the power on sequence and the power sequencer device waits indefinitely
+for it to power on.
+
+The "gpio" method is necessary when no PMBus information is available for the
+rail. It is also helpful when a rail fails to power on during the power on
+sequence and the power sequencer device waits indefinitely for it to power on.
 
 ## Properties
 

@@ -43,19 +43,24 @@ system types. The types are ordered from most specific to least specific.
 
 Example:
 
-- `com.ibm.Hardware.Chassis.Model.Rainier4U`
-- `com.ibm.Hardware.Chassis.Model.Rainier`
+- `com.acme.Hardware.Chassis.Model.MegaServer4CPU`
+- `com.acme.Hardware.Chassis.Model.MegaServer`
+- `com.acme.Hardware.Chassis.Model.Server`
 
-The `phosphor-power-sequencer` application converts each compatible system type
-into a config file name by adding a `.json` suffix.
+The `phosphor-power-sequencer` application searches for a config file name that
+matches one of these compatible system types. It searches from most specific to
+least specific. The first config file found, if any, will be used.
+
+For each compatible system type, the application will look for two config file
+names:
+
+- The complete compatible system type plus a '.json' suffix
+- The last node of the compatible system type plus a '.json' suffix
 
 Example:
 
-- `com.ibm.Hardware.Chassis.Model.Rainier.json`
-
-The application searches for a config file that exists with one of these file
-names. It searches from most specific to least specific. The first config file
-found, if any, will be used.
+- `com.acme.Hardware.Chassis.Model.MegaServer4CPU.json`
+- `MegaServer4CPU.json`
 
 ## Contents
 

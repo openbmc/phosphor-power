@@ -3,18 +3,23 @@
 This repository contains applications for configuring and monitoring devices
 that deliver power to the system.
 
+Actively-maintained applications:
+
 - cold-redundancy: Application that makes power supplies work in Cold Redundancy
   mode and rotates them at intervals.
-- [phosphor-power-sequencer](phosphor-power-sequencer/README.md): Applications
-  for configuring and monitoring power sequencer and related devices that
-  support JSON-driven configuration.
+- [phosphor-power-sequencer](phosphor-power-sequencer/README.md): JSON-driven
+  application that powers the chassis on/off and monitors the power sequencer
+  device.
 - [phosphor-power-supply](phosphor-power-supply/README.md): Next generation
   power supply monitoring application.
 - [phosphor-regulators](phosphor-regulators/README.md): JSON-driven application
   that configures and monitors voltage regulators.
-- power-sequencer: A power sequencer monitoring application.
-- power-supply: Original power supply monitoring application.
 - tools/power-utils: Power supply utilities.
+
+Legacy applications:
+
+- power-sequencer: Original power sequencer monitoring application.
+- power-supply: Original power supply monitoring application.
 
 ## Build
 
