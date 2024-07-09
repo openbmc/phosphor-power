@@ -67,18 +67,6 @@ sdeventplus = dependency('sdeventplus')
 pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
-fmt = dependency('fmt', required: false)
-if not fmt.found()
-  fmt_proj = import('cmake').subproject(
-    'fmt',
-    cmake_options: [
-      '-DCMAKE_POSITION_INDEPENDENT_CODE=ON',
-      '-DMASTER_PROJECT=OFF'
-    ],
-    required: false)
-  assert(fmt_proj.found(), 'fmtlib is required')
-  fmt = fmt_proj.dependency('fmt')
-endif
 libgpiodcxx = dependency('libgpiodcxx',
     default_options: ['bindings=cxx'])
 

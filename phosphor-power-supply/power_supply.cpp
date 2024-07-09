@@ -5,13 +5,12 @@
 #include "types.hpp"
 #include "util.hpp"
 
-#include <fmt/format.h>
-
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>  // sleep_for()
 #include <cmath>
 #include <cstdint> // uint8_t...
+#include <format>
 #include <fstream>
 #include <regex>
 #include <thread> // sleep_for()
@@ -47,7 +46,7 @@ PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
     shortName = findShortName(inventoryPath);
 
     log<level::DEBUG>(
-        fmt::format("{} gpioLineName: {}", shortName, gpioLineName).c_str());
+        std::format("{} gpioLineName: {}", shortName, gpioLineName).c_str());
     presenceGPIO = createGPIO(gpioLineName);
 
     std::ostringstream ss;
@@ -130,14 +129,14 @@ void PowerSupply::bindOrUnbindDriver(bool present)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
         log<level::INFO>(
-            fmt::format("Binding device driver. path: {} device: {}",
+            std::format("Binding device driver. path: {} device: {}",
                         path.string(), bindDevice)
                 .c_str());
     }
     else
     {
         log<level::INFO>(
-            fmt::format("Unbinding device driver. path: {} device: {}",
+            std::format("Unbinding device driver. path: {} device: {}",
                         path.string(), bindDevice)
                 .c_str());
     }
@@ -158,7 +157,7 @@ void PowerSupply::bindOrUnbindDriver(bool present)
         auto err = errno;
 
         log<level::ERR>(
-            fmt::format("Failed binding or unbinding device. errno={}", err)
+            std::format("Failed binding or unbinding device. errno={}", err)
                 .c_str());
     }
 }
@@ -174,7 +173,7 @@ void PowerSupply::updatePresence()
         // Relying on property change or interface added to retry.
         // Log an informational trace to the journal.
         log<level::INFO>(
-            fmt::format("D-Bus property {} access failure exception",
+            std::format("D-Bus property {} access failure exception",
                         inventoryPath)
                 .c_str());
     }
@@ -198,13 +197,13 @@ void PowerSupply::updatePresenceGPIO()
     catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format("presenceGPIO read fail: {}", e.what()).c_str());
+            std::format("presenceGPIO read fail: {}", e.what()).c_str());
         throw;
     }
 
     if (presentOld != present)
     {
-        log<level::DEBUG>(fmt::format("{} presentOld: {} present: {}",
+        log<level::DEBUG>(std::format("{} presentOld: {} present: {}",
                                       shortName, presentOld, present)
                               .c_str());
 
@@ -251,7 +250,7 @@ void PowerSupply::analyzeCMLFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("{} CML fault: STATUS_WORD = {:#06x}, "
+                    std::format("{} CML fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_CML = {:#02x}",
                                 shortName, statusWord, statusCML)
                         .c_str());
@@ -274,7 +273,7 @@ void PowerSupply::analyzeInputFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("{} INPUT fault: STATUS_WORD = {:#06x}, "
+                    std::format("{} INPUT fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_INPUT = {:#04x}",
                                 shortName, statusWord, statusMFR, statusInput)
@@ -290,7 +289,7 @@ void PowerSupply::analyzeInputFault()
         !(statusWord & phosphor::pmbus::status_word::INPUT_FAULT_WARN))
     {
         log<level::INFO>(
-            fmt::format("{} INPUT fault cleared: STATUS_WORD = {:#06x}, "
+            std::format("{} INPUT fault cleared: STATUS_WORD = {:#06x}, "
                         "STATUS_MFR_SPECIFIC = {:#04x}, "
                         "STATUS_INPUT = {:#04x}",
                         shortName, statusWord, statusMFR, statusInput)
@@ -308,7 +307,7 @@ void PowerSupply::analyzeVoutOVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format(
+                    std::format(
                         "{} VOUT_OV_FAULT fault: STATUS_WORD = {:#06x}, "
                         "STATUS_MFR_SPECIFIC = {:#04x}, "
                         "STATUS_VOUT = {:#02x}",
@@ -334,7 +333,7 @@ void PowerSupply::analyzeIoutOCFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("{} IOUT fault: STATUS_WORD = {:#06x}, "
+                    std::format("{} IOUT fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_IOUT = {:#04x}",
                                 shortName, statusWord, statusMFR, statusIout)
@@ -360,7 +359,7 @@ void PowerSupply::analyzeVoutUVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format(
+                    std::format(
                         "{} VOUT_UV_FAULT fault: STATUS_WORD = {:#06x}, "
                         "STATUS_MFR_SPECIFIC = {:#04x}, "
                         "STATUS_VOUT = {:#04x}",
@@ -384,7 +383,7 @@ void PowerSupply::analyzeFanFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("{} FANS fault/warning: "
+                log<level::ERR>(std::format("{} FANS fault/warning: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}, "
                                             "STATUS_FANS_1_2 = {:#04x}",
@@ -409,7 +408,7 @@ void PowerSupply::analyzeTemperatureFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("{} TEMPERATURE fault/warning: "
+                log<level::ERR>(std::format("{} TEMPERATURE fault/warning: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}, "
                                             "STATUS_TEMPERATURE = {:#04x}",
@@ -435,7 +434,7 @@ void PowerSupply::analyzePgoodFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("{} PGOOD fault: "
+                log<level::ERR>(std::format("{} PGOOD fault: "
                                             "STATUS_WORD = {:#06x}, "
                                             "STATUS_MFR_SPECIFIC = {:#04x}",
                                             shortName, statusWord, statusMFR)
@@ -501,7 +500,7 @@ void PowerSupply::analyzeMFRFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(fmt::format("{} MFR fault: "
+                log<level::ERR>(std::format("{} MFR fault: "
                                             "STATUS_WORD = {:#06x} "
                                             "STATUS_MFR_SPECIFIC = {:#04x}",
                                             shortName, statusWord, statusMFR)
@@ -527,7 +526,7 @@ void PowerSupply::analyzeVinUVFault()
             if (statusWord != statusWordOld)
             {
                 log<level::ERR>(
-                    fmt::format("{} VIN_UV fault: STATUS_WORD = {:#06x}, "
+                    std::format("{} VIN_UV fault: STATUS_WORD = {:#06x}, "
                                 "STATUS_MFR_SPECIFIC = {:#04x}, "
                                 "STATUS_INPUT = {:#04x}",
                                 shortName, statusWord, statusMFR, statusInput)
@@ -543,7 +542,7 @@ void PowerSupply::analyzeVinUVFault()
         if (vinUVFault != 0)
         {
             log<level::INFO>(
-                fmt::format("{} VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
+                std::format("{} VIN_UV fault cleared: STATUS_WORD = {:#06x}, "
                             "STATUS_MFR_SPECIFIC = {:#04x}, "
                             "STATUS_INPUT = {:#04x}",
                             shortName, statusWord, statusMFR, statusInput)
@@ -617,7 +616,7 @@ void PowerSupply::analyze()
             {
                 if (statusWord != statusWordOld)
                 {
-                    log<level::INFO>(fmt::format("{} STATUS_WORD = {:#06x}",
+                    log<level::INFO>(std::format("{} STATUS_WORD = {:#06x}",
                                                  shortName, statusWord)
                                          .c_str());
                 }
@@ -626,7 +625,7 @@ void PowerSupply::analyze()
                 if (inputFault)
                 {
                     log<level::INFO>(
-                        fmt::format(
+                        std::format(
                             "{} INPUT fault cleared: STATUS_WORD = {:#06x}",
                             shortName, statusWord)
                             .c_str());
@@ -635,7 +634,7 @@ void PowerSupply::analyze()
                 if (vinUVFault)
                 {
                     log<level::INFO>(
-                        fmt::format("{} VIN_UV cleared: STATUS_WORD = {:#06x}",
+                        std::format("{} VIN_UV cleared: STATUS_WORD = {:#06x}",
                                     shortName, statusWord)
                             .c_str());
                 }
@@ -643,7 +642,7 @@ void PowerSupply::analyze()
                 if (pgoodFault > 0)
                 {
                     log<level::INFO>(
-                        fmt::format("{} pgoodFault cleared", shortName)
+                        std::format("{} pgoodFault cleared", shortName)
                             .c_str());
                 }
 
@@ -666,7 +665,7 @@ void PowerSupply::analyze()
                 (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
                 log<level::INFO>(
-                    fmt::format(
+                    std::format(
                         "{} READ_VIN back in range: actualInputVoltageOld = {} "
                         "actualInputVoltage = {}",
                         shortName, actualInputVoltageOld, actualInputVoltage)
@@ -676,7 +675,7 @@ void PowerSupply::analyze()
             else if (vinUVFault && (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
                 log<level::INFO>(
-                    fmt::format(
+                    std::format(
                         "{} CLEAR_FAULTS: vinUVFault {} actualInputVoltage {}",
                         shortName, vinUVFault, actualInputVoltage)
                         .c_str());
@@ -689,7 +688,7 @@ void PowerSupply::analyze()
                      10.0)
             {
                 log<level::INFO>(
-                    fmt::format(
+                    std::format(
                         "{} actualInputVoltageOld = {} actualInputVoltage = {}",
                         shortName, actualInputVoltageOld, actualInputVoltage)
                         .c_str());
@@ -761,7 +760,7 @@ void PowerSupply::clearVinUVFault()
 void PowerSupply::clearFaults()
 {
     log<level::DEBUG>(
-        fmt::format("clearFaults() inventoryPath: {}", inventoryPath).c_str());
+        std::format("clearFaults() inventoryPath: {}", inventoryPath).c_str());
     faultLogged = false;
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a
@@ -844,7 +843,7 @@ void PowerSupply::inventoryAdded(sdbusplus::message_t& msg)
             {
                 present = std::get<bool>(property->second);
 
-                log<level::INFO>(fmt::format("Power Supply {} Present {}",
+                log<level::INFO>(std::format("Power Supply {} Present {}",
                                              inventoryPath, present)
                                      .c_str());
 
@@ -879,7 +878,7 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
 
     if (vpdValue.size() != vpdSize)
     {
-        log<level::INFO>(fmt::format("{} {} resize needed. size: {}", shortName,
+        log<level::INFO>(std::format("{} {} resize needed. size: {}", shortName,
                                      vpdName, vpdValue.size())
                              .c_str());
         vpdValue.resize(vpdSize, ' ');
@@ -929,7 +928,7 @@ void PowerSupply::updateInventory()
     ObjectMap object;
 #endif
     log<level::DEBUG>(
-        fmt::format("updateInventory() inventoryPath: {}", inventoryPath)
+        std::format("updateInventory() inventoryPath: {}", inventoryPath)
             .c_str());
 
     if (present)
@@ -1054,14 +1053,14 @@ auto PowerSupply::getMaxPowerOut() const
             // Read max_power_out, should be direct format
             auto maxPowerOutStr = pmbusIntf->readString(MFR_POUT_MAX,
                                                         Type::HwmonDeviceDebug);
-            log<level::INFO>(fmt::format("{} MFR_POUT_MAX read {}", shortName,
+            log<level::INFO>(std::format("{} MFR_POUT_MAX read {}", shortName,
                                          maxPowerOutStr)
                                  .c_str());
             maxPowerOut = std::stod(maxPowerOutStr);
         }
         catch (const std::exception& e)
         {
-            log<level::ERR>(fmt::format("{} MFR_POUT_MAX read error: {}",
+            log<level::ERR>(std::format("{} MFR_POUT_MAX read error: {}",
                                         shortName, e.what())
                                 .c_str());
         }
@@ -1090,7 +1089,7 @@ void PowerSupply::setupInputPowerPeakSensor()
     }
 
     auto sensorPath =
-        fmt::format("/xyz/openbmc_project/sensors/power/ps{}_input_power_peak",
+        std::format("/xyz/openbmc_project/sensors/power/ps{}_input_power_peak",
                     shortName.back());
 
     peakInputPowerSensor = std::make_unique<PowerSensorObject>(
@@ -1152,7 +1151,7 @@ void PowerSupply::monitorPeakInputPowerSensor()
     if (data.size() != recordSize)
     {
         log<level::DEBUG>(
-            fmt::format("Input history command returned {} bytes instead of 5",
+            std::format("Input history command returned {} bytes instead of 5",
                         data.size())
                 .c_str());
         peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
@@ -1207,7 +1206,7 @@ void PowerSupply::getInputVoltage(double& actualInputVoltage,
         catch (const std::exception& e)
         {
             log<level::ERR>(
-                fmt::format("{} READ_VIN read error: {}", shortName, e.what())
+                std::format("{} READ_VIN read error: {}", shortName, e.what())
                     .c_str());
         }
     }
@@ -1249,7 +1248,7 @@ void PowerSupply::setInputVoltageRating()
 
     if (!inputVoltageRatingIface)
     {
-        auto path = fmt::format(
+        auto path = std::format(
             "/xyz/openbmc_project/sensors/voltage/ps{}_input_voltage_rating",
             shortName.back());
 
@@ -1286,7 +1285,7 @@ void PowerSupply::getPsuVpdFromDbus(const std::string& keyword,
     catch (const sdbusplus::exception_t& e)
     {
         log<level::ERR>(
-            fmt::format("Failed getProperty error: {}", e.what()).c_str());
+            std::format("Failed getProperty error: {}", e.what()).c_str());
     }
 }
 

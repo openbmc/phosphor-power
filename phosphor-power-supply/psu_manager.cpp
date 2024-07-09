@@ -4,13 +4,13 @@
 
 #include "utility.hpp"
 
-#include <fmt/format.h>
 #include <sys/types.h>
 #include <unistd.h>
 
 #include <xyz/openbmc_project/State/Chassis/server.hpp>
 
 #include <algorithm>
+#include <format>
 #include <regex>
 #include <set>
 
@@ -125,7 +125,7 @@ void PSUManager::initialize()
     catch (const std::exception& e)
     {
         log<level::INFO>(
-            fmt::format(
+            std::format(
                 "Failed to get power state, assuming it is off, error {}",
                 e.what())
                 .c_str());
@@ -140,7 +140,7 @@ void PSUManager::initialize()
     setPowerConfigGPIO();
 
     log<level::INFO>(
-        fmt::format("initialize: power on: {}, power fault occurring: {}",
+        std::format("initialize: power on: {}, power fault occurring: {}",
                     powerOn, powerFaultOccurring)
             .c_str());
 }
@@ -177,7 +177,7 @@ void PSUManager::getPSUConfiguration()
     {
         // Interface or properties not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
-        log<level::INFO>(fmt::format("No power supplies to monitor").c_str());
+        log<level::INFO>(std::format("No power supplies to monitor").c_str());
     }
 }
 
@@ -225,7 +225,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         invpath.push_back(psuname->back());
         std::string presline = "";
 
-        log<level::DEBUG>(fmt::format("Inventory Path: {}", invpath).c_str());
+        log<level::DEBUG>(std::format("Inventory Path: {}", invpath).c_str());
 
         if (nullptr != preslineptr)
         {
@@ -249,7 +249,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
 
         buildDriverName(*i2cbus, *i2caddr);
         log<level::DEBUG>(
-            fmt::format("make PowerSupply bus: {} addr: {} presline: {}",
+            std::format("make PowerSupply bus: {} addr: {} presline: {}",
                         *i2cbus, *i2caddr, presline)
                 .c_str());
         auto psu = std::make_unique<PowerSupply>(
@@ -270,7 +270,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
 
     if (psus.empty())
     {
-        log<level::INFO>(fmt::format("No power supplies to monitor").c_str());
+        log<level::INFO>(std::format("No power supplies to monitor").c_str());
     }
     else
     {
@@ -394,7 +394,7 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
         if (itIntf != interfaces.cend())
         {
             log<level::INFO>(
-                fmt::format("InterfacesAdded for: {}", IBMCFFPSInterface)
+                std::format("InterfacesAdded for: {}", IBMCFFPSInterface)
                     .c_str());
             getPSUProperties(itIntf->second);
             updateMissingPSUs();
@@ -461,7 +461,7 @@ void PSUManager::powerStateChanged(sdbusplus::message_t& msg)
         }
     }
     log<level::INFO>(
-        fmt::format(
+        std::format(
             "powerStateChanged: power on: {}, power fault occurring: {}",
             powerOn, powerFaultOccurring)
             .c_str());
@@ -502,7 +502,7 @@ void PSUManager::setPowerSupplyError(const std::string& psuErrorString)
     catch (const std::exception& e)
     {
         log<level::INFO>(
-            fmt::format("Failed calling setPowerSupplyError due to error {}",
+            std::format("Failed calling setPowerSupplyError due to error {}",
                         e.what())
                 .c_str());
     }
@@ -541,7 +541,7 @@ void PSUManager::createError(const std::string& faultName,
     catch (const std::exception& e)
     {
         log<level::ERR>(
-            fmt::format(
+            std::format(
                 "Failed creating event log for fault {} due to error {}",
                 faultName, e.what())
                 .c_str());
@@ -629,8 +629,8 @@ void PSUManager::analyze()
                 // Add STATUS_WORD and STATUS_MFR last response, in padded
                 // hexadecimal format.
                 additionalData["STATUS_WORD"] =
-                    fmt::format("{:#04x}", psu->getStatusWord());
-                additionalData["STATUS_MFR"] = fmt::format("{:#02x}",
+                    std::format("{:#04x}", psu->getStatusWord());
+                additionalData["STATUS_MFR"] = std::format("{:#02x}",
                                                            psu->getMFRFault());
                 // If there are faults being reported, they possibly could be
                 // related to a bug in the firmware version running on the power
@@ -640,7 +640,7 @@ void PSUManager::analyze()
                 if (psu->hasCommFault())
                 {
                     additionalData["STATUS_CML"] =
-                        fmt::format("{:#02x}", psu->getStatusCML());
+                        std::format("{:#02x}", psu->getStatusCML());
                     /* Attempts to communicate with the power supply have
                      * reached there limit. Create an error. */
                     additionalData["CALLOUT_DEVICE_PATH"] =
@@ -656,7 +656,7 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_INPUT for input faults.
                     additionalData["STATUS_INPUT"] =
-                        fmt::format("{:#02x}", psu->getStatusInput());
+                        std::format("{:#02x}", psu->getStatusInput());
 
                     /* The power supply location might be needed if the input
                      * fault is due to a problem with the power supply itself.
@@ -682,7 +682,7 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_VOUT for Vout faults.
                     additionalData["STATUS_VOUT"] =
-                        fmt::format("{:#02x}", psu->getStatusVout());
+                        std::format("{:#02x}", psu->getStatusVout());
 
                     additionalData["CALLOUT_INVENTORY_PATH"] =
                         psu->getInventoryPath();
@@ -697,7 +697,7 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_IOUT for Iout faults.
                     additionalData["STATUS_IOUT"] =
-                        fmt::format("{:#02x}", psu->getStatusIout());
+                        std::format("{:#02x}", psu->getStatusIout());
 
                     createError(
                         "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault",
@@ -710,7 +710,7 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_VOUT for Vout faults.
                     additionalData["STATUS_VOUT"] =
-                        fmt::format("{:#02x}", psu->getStatusVout());
+                        std::format("{:#02x}", psu->getStatusVout());
 
                     additionalData["CALLOUT_INVENTORY_PATH"] =
                         psu->getInventoryPath();
@@ -728,9 +728,9 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_TEMPERATURE and STATUS_FANS_1_2
                     additionalData["STATUS_TEMPERATURE"] =
-                        fmt::format("{:#02x}", psu->getStatusTemperature());
+                        std::format("{:#02x}", psu->getStatusTemperature());
                     additionalData["STATUS_FANS_1_2"] =
-                        fmt::format("{:#02x}", psu->getStatusFans12());
+                        std::format("{:#02x}", psu->getStatusFans12());
 
                     additionalData["CALLOUT_INVENTORY_PATH"] =
                         psu->getInventoryPath();
@@ -745,7 +745,7 @@ void PSUManager::analyze()
                 {
                     // Include STATUS_TEMPERATURE for temperature faults.
                     additionalData["STATUS_TEMPERATURE"] =
-                        fmt::format("{:#02x}", psu->getStatusTemperature());
+                        std::format("{:#02x}", psu->getStatusTemperature());
 
                     additionalData["CALLOUT_INVENTORY_PATH"] =
                         psu->getInventoryPath();
@@ -842,7 +842,7 @@ void PSUManager::analyzeBrownout()
         additionalData.emplace("PGOOD_FAULT_COUNT",
                                std::to_string(pgoodFailedCount));
         log<level::INFO>(
-            fmt::format(
+            std::format(
                 "Brownout detected, not present count: {}, AC fault count {}, pgood fault count: {}",
                 notPresentCount, acFailedCount, pgoodFailedCount)
                 .c_str());
@@ -877,7 +877,7 @@ void PSUManager::analyzeBrownout()
                     // condition by setting the PowerSystemInputs status
                     // property to Good.
                     log<level::INFO>(
-                        fmt::format(
+                        std::format(
                             "Brownout cleared, not present count: {}, AC fault count {}, pgood fault count: {}",
                             notPresentCount, acFailedCount, pgoodFailedCount)
                             .c_str());
@@ -890,7 +890,7 @@ void PSUManager::analyzeBrownout()
             catch (const std::exception& e)
             {
                 log<level::ERR>(
-                    fmt::format("Error trying to clear brownout, error: {}",
+                    std::format("Error trying to clear brownout, error: {}",
                                 e.what())
                         .c_str());
             }
@@ -940,7 +940,7 @@ void PSUManager::updateMissingPSUs()
                 // Relying on property change or interface added to retry.
                 // Log an informational trace to the journal.
                 log<level::INFO>(
-                    fmt::format("D-Bus property {} access failure exception",
+                    std::format("D-Bus property {} access failure exception",
                                 psuInventoryPath)
                         .c_str());
             }
@@ -1324,7 +1324,7 @@ void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(fmt::format("Failed to find device driver {}, error {}",
+        log<level::ERR>(std::format("Failed to find device driver {}, error {}",
                                     symLinkPath, e.what())
                             .c_str());
     }

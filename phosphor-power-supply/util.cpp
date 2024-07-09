@@ -62,7 +62,7 @@ int GPIOInterface::read()
         catch (const std::exception& e)
         {
             log<level::ERR>(
-                fmt::format("Failed to get_value of GPIO line: {}", e.what())
+                std::format("Failed to get_value of GPIO line: {}", e.what())
                     .c_str());
             line.release();
             throw;
