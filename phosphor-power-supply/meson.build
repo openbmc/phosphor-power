@@ -10,7 +10,6 @@ phosphor_psu_monitor = executable(
     'util.cpp',
     dependencies: [
         cli11_dep,
-        fmt,
         libgpiodcxx,
         nlohmann_json_dep,
         phosphor_dbus_interfaces,

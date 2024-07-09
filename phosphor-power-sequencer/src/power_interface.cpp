@@ -18,13 +18,12 @@
 
 #include "types.hpp"
 
-#include <fmt/format.h>
-
 #include <phosphor-logging/log.hpp>
 #include <sdbusplus/exception.hpp>
 #include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server.hpp>
 
+#include <format>
 #include <string>
 #include <tuple>
 
@@ -50,7 +49,7 @@ int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
             auto pwrObj = static_cast<PowerInterface*>(context);
             int pgood = pwrObj->getPgood();
             log<level::INFO>(
-                fmt::format("callbackGetPgood: {}", pgood).c_str());
+                std::format("callbackGetPgood: {}", pgood).c_str());
 
             sdbusplus::message_t(msg).append(pgood);
         }
@@ -83,7 +82,7 @@ int PowerInterface::callbackGetPgoodTimeout(sd_bus* /*bus*/,
             auto pwrObj = static_cast<PowerInterface*>(context);
             int timeout = pwrObj->getPgoodTimeout();
             log<level::INFO>(
-                fmt::format("callbackGetPgoodTimeout: {}", timeout).c_str());
+                std::format("callbackGetPgoodTimeout: {}", timeout).c_str());
 
             sdbusplus::message_t(msg).append(timeout);
         }
@@ -115,7 +114,7 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
             // requested power state change
             int pgood = pwrObj->getPgood();
             log<level::INFO>(
-                fmt::format("callbackGetPowerState: {}", pgood).c_str());
+                std::format("callbackGetPowerState: {}", pgood).c_str());
 
             auto reply = sdbusplus::message_t(msg).new_method_return();
             reply.append(pgood);
@@ -152,7 +151,7 @@ int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
             int timeout{};
             m.read(timeout);
             log<level::INFO>(
-                fmt::format("callbackSetPgoodTimeout: {}", timeout).c_str());
+                std::format("callbackSetPgoodTimeout: {}", timeout).c_str());
 
             auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setPgoodTimeout(timeout);
@@ -186,7 +185,7 @@ int PowerInterface::callbackGetState(sd_bus* /*bus*/, const char* /*path*/,
             auto pwrObj = static_cast<PowerInterface*>(context);
             int state = pwrObj->getState();
             log<level::INFO>(
-                fmt::format("callbackGetState: {}", state).c_str());
+                std::format("callbackGetState: {}", state).c_str());
 
             sdbusplus::message_t(msg).append(state);
         }
@@ -224,7 +223,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
                                         "Invalid power state");
             }
             log<level::INFO>(
-                fmt::format("callbackSetPowerState: {}", state).c_str());
+                std::format("callbackSetPowerState: {}", state).c_str());
 
             auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setState(state);
@@ -259,7 +258,7 @@ int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
             std::string psError{};
             m.read(psError);
             log<level::INFO>(
-                fmt::format("callbackSetPowerSupplyError: {}", psError)
+                std::format("callbackSetPowerSupplyError: {}", psError)
                     .c_str());
 
             auto pwrObj = static_cast<PowerInterface*>(context);
@@ -298,7 +297,7 @@ void PowerInterface::emitPowerLostSignal()
 void PowerInterface::emitPropertyChangedSignal(const char* property)
 {
     log<level::INFO>(
-        fmt::format("emitPropertyChangedSignal: {}", property).c_str());
+        std::format("emitPropertyChangedSignal: {}", property).c_str());
     serverInterface.property_changed(property);
 }
 
