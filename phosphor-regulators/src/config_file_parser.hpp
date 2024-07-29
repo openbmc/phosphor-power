@@ -88,7 +88,7 @@ namespace internal
  * @param property property name
  */
 #pragma GCC diagnostic push
-#if __GNUC__ == 13
+#if __GNUC__ >= 13
 #pragma GCC diagnostic ignored "-Wdangling-reference"
 #endif
 inline const nlohmann::json& getRequiredProperty(const nlohmann::json& element,
