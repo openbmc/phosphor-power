@@ -31,8 +31,8 @@ performed by power sequencer hardware and related firmware.
 The config file is written using the
 [JSON (JavaScript Object Notation)](https://www.json.org/) data format.
 
-The config file can be created using any text editor, such as Atom, Notepad++,
-gedit, Vim, or Emacs.
+The config file can be created using any text editor, such as Visual Studio
+Code, Atom, Notepad++, Vim, or Emacs.
 
 ## Example
 
@@ -53,33 +53,44 @@ firmware image supports multiple system types that share a common config file.
 
 ### Name Based on System Type
 
-The config file name can be based on the system type, such as
-`ibm_rainier.json`. This is required if the BMC firmware image supports multiple
-system types, and those system types do not share a common config file.
+The config file name can be based on the system type that it supports. This is
+required if the BMC firmware image supports multiple system types, and those
+system types do not share a common config file.
 
-The system type is obtained from the `IBMCompatibleSystem` D-Bus interface that
-is provided by the [Entity Manager](https://github.com/openbmc/entity-manager)
-application. The `Names` property of this interface contains a list of one or
-more compatible system types, ordered from most specific to most general.
+A config file is normally system-specific. Each system type usually has a
+different set of voltage regulators and rails.
 
-Example:
+The system type is obtained from a D-Bus Chassis object created by the
+[Entity Manager](https://github.com/openbmc/entity-manager) application. The
+object must implement the `xyz.openbmc_project.Inventory.Decorator.Compatible`
+interface.
 
-- `ibm,rainier-2u`
-- `ibm,rainier`
-
-The `phosphor-regulators` application converts each system type into a
-corresponding config file name:
-
-- Replaces spaces and commas with underscores
-- Adds a ".json" suffix
+The `Names` property of this interface contains a list of one or more compatible
+system types. The types are ordered from most specific to least specific.
 
 Example:
 
-- `ibm,rainier -> ibm_rainier.json`
+- `com.acme.Hardware.Chassis.Model.MegaServer4CPU`
+- `com.acme.Hardware.Chassis.Model.MegaServer`
+- `com.acme.Hardware.Chassis.Model.Server`
 
-`phosphor-regulators` searches for a config file with one of these file names,
-from most specific to most general. If a config file is not found, it searches
-for a file with the [default name](#default-name).
+The `phosphor-regulators` application searches for a config file name that
+matches one of these compatible system types. It searches from most specific to
+least specific. The first config file found, if any, will be used.
+
+For each compatible system type, the application will look for two config file
+names:
+
+- The complete compatible system type plus a '.json' suffix
+- The last node of the compatible system type plus a '.json' suffix
+
+Example:
+
+- `com.acme.Hardware.Chassis.Model.MegaServer4CPU.json`
+- `MegaServer4CPU.json`
+
+If a config file is not found based on system type, `phosphor-regulators`
+searches for a file with the [default name](#default-name).
 
 ## Contents
 
