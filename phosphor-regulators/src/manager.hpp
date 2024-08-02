@@ -15,12 +15,12 @@
  */
 #pragma once
 
+#include "compatible_system_types_finder.hpp"
 #include "services.hpp"
 #include "system.hpp"
 
 #include <interfaces/manager_interface.hpp>
 #include <sdbusplus/bus.hpp>
-#include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/source/signal.hpp>
@@ -69,13 +69,6 @@ class Manager : public ManagerObject
     void configure() override;
 
     /**
-     * Callback function to handle interfacesAdded D-Bus signals
-     *
-     * @param msg Expanded sdbusplus message data
-     */
-    void interfacesAddedHandler(sdbusplus::message_t& msg);
-
-    /**
      * Implements the D-Bus "monitor" method.
      *
      * Sets whether regulator monitoring is enabled.
@@ -102,6 +95,14 @@ class Manager : public ManagerObject
      *               disabled
      */
     void monitor(bool enable) override;
+
+    /**
+     * Callback that is called when a list of compatible system types is found.
+     *
+     * @param types Compatible system types for the current system ordered from
+     *              most to least specific
+     */
+    void compatibleSystemTypesFound(const std::vector<std::string>& types);
 
     /**
      * Phase fault detection timer expired callback function.
@@ -132,19 +133,6 @@ class Manager : public ManagerObject
      * removed, or replaced.
      */
     void clearHardwareData();
-
-    /**
-     * Finds the list of compatible system types using D-Bus methods.
-     *
-     * This list is used to find the correct JSON configuration file for the
-     * current system.
-     *
-     * Note that some systems do not support the D-Bus compatible interface.
-     *
-     * If a list of compatible system types is found, it is stored in the
-     * compatibleSystemTypes data member.
-     */
-    void findCompatibleSystemTypes();
 
     /**
      * Finds the JSON configuration file.
@@ -216,6 +204,11 @@ class Manager : public ManagerObject
     BMCServices services;
 
     /**
+     * Object that finds the compatible system types for the current system.
+     */
+    std::unique_ptr<util::CompatibleSystemTypesFinder> compatSysTypesFinder;
+
+    /**
      * Event timer used to initiate phase fault detection.
      */
     Timer phaseFaultTimer;
@@ -224,11 +217,6 @@ class Manager : public ManagerObject
      * Event timer used to initiate sensor monitoring.
      */
     Timer sensorTimer;
-
-    /**
-     * List of D-Bus signal matches
-     */
-    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> signals{};
 
     /**
      * Indicates whether regulator monitoring is enabled.

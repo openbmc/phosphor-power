@@ -19,21 +19,20 @@
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "exception_utils.hpp"
+#include "format_utils.hpp"
 #include "rule.hpp"
 #include "utility.hpp"
 
 #include <xyz/openbmc_project/Common/error.hpp>
 #include <xyz/openbmc_project/State/Chassis/server.hpp>
 
-#include <algorithm>
 #include <chrono>
 #include <exception>
 #include <functional>
-#include <map>
+#include <span>
 #include <thread>
 #include <tuple>
 #include <utility>
-#include <variant>
 
 namespace phosphor::power::regulators
 {
@@ -42,9 +41,6 @@ namespace fs = std::filesystem;
 
 constexpr auto busName = "xyz.openbmc_project.Power.Regulators";
 constexpr auto managerObjPath = "/xyz/openbmc_project/power/regulators/manager";
-constexpr auto compatibleIntf =
-    "xyz.openbmc_project.Configuration.IBMCompatibleSystem";
-constexpr auto compatibleNamesProp = "Names";
 constexpr auto chassisStatePath = "/xyz/openbmc_project/state/chassis0";
 constexpr auto chassisStateIntf = "xyz.openbmc_project.State.Chassis";
 constexpr auto chassisStateProp = "CurrentPowerState";
@@ -77,25 +73,16 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
     phaseFaultTimer{event, std::bind(&Manager::phaseFaultTimerExpired, this)},
     sensorTimer{event, std::bind(&Manager::sensorTimerExpired, this)}
 {
-    // Subscribe to D-Bus interfacesAdded signal from Entity Manager.  This
-    // notifies us if the compatible interface becomes available later.
-    std::string matchStr = sdbusplus::bus::match::rules::interfacesAdded() +
-                           sdbusplus::bus::match::rules::sender(
-                               "xyz.openbmc_project.EntityManager");
-    std::unique_ptr<sdbusplus::bus::match_t> matchPtr =
-        std::make_unique<sdbusplus::bus::match_t>(
-            bus, matchStr,
-            std::bind(&Manager::interfacesAddedHandler, this,
-                      std::placeholders::_1));
-    signals.emplace_back(std::move(matchPtr));
+    // Create object to find compatible system types for current system.
+    // Note that some systems do not provide this information.
+    compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
+        bus, std::bind_front(&Manager::compatibleSystemTypesFound, this));
 
-    // Try to find compatible system types using D-Bus compatible interface.
-    // Note that it might not be supported on this system, or the service that
-    // provides the interface might not be running yet.
-    findCompatibleSystemTypes();
-
-    // Try to find and load the JSON configuration file
-    loadConfigFile();
+    // If no system types found so far, try to load default config file
+    if (compatibleSystemTypes.empty())
+    {
+        loadConfigFile();
+    }
 
     // Obtain D-Bus service name
     bus.request_name(busName);
@@ -134,55 +121,6 @@ void Manager::configure()
 
         // Throw InternalFailure to propogate error status to D-Bus client
         throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure{};
-    }
-}
-
-void Manager::interfacesAddedHandler(sdbusplus::message_t& msg)
-{
-    // Verify message is valid
-    if (!msg)
-    {
-        return;
-    }
-
-    try
-    {
-        // Read object path for object that was created or had interface added
-        sdbusplus::message::object_path objPath;
-        msg.read(objPath);
-
-        // Read the dictionary whose keys are interface names and whose values
-        // are dictionaries containing the interface property names and values
-        std::map<std::string,
-                 std::map<std::string, std::variant<std::vector<std::string>>>>
-            intfProp;
-        msg.read(intfProp);
-
-        // Find the compatible interface, if present
-        auto itIntf = intfProp.find(compatibleIntf);
-        if (itIntf != intfProp.cend())
-        {
-            // Find the Names property of the compatible interface, if present
-            auto itProp = itIntf->second.find(compatibleNamesProp);
-            if (itProp != itIntf->second.cend())
-            {
-                // Get value of Names property
-                auto propValue = std::get<0>(itProp->second);
-                if (!propValue.empty())
-                {
-                    // Store list of compatible system types
-                    compatibleSystemTypes = propValue;
-
-                    // Find and load JSON config file based on system types
-                    loadConfigFile();
-                }
-            }
-        }
-    }
-    catch (const std::exception&)
-    {
-        // Error trying to read interfacesAdded message.  One possible cause
-        // could be a property whose value is not a std::vector<std::string>.
     }
 }
 
@@ -228,6 +166,23 @@ void Manager::monitor(bool enable)
             // while the system is powered off.
             system->closeDevices(services);
         }
+    }
+}
+
+void Manager::compatibleSystemTypesFound(const std::vector<std::string>& types)
+{
+    // If we don't already have compatible system types
+    if (compatibleSystemTypes.empty())
+    {
+        std::string typesStr = format_utils::toString(std::span{types});
+        services.getJournal().logInfo(
+            std::format("Compatible system types found: {}", typesStr));
+
+        // Store compatible system types
+        compatibleSystemTypes = types;
+
+        // Find and load JSON config file based on system types
+        loadConfigFile();
     }
 }
 
@@ -281,46 +236,6 @@ void Manager::clearHardwareData()
     }
 }
 
-void Manager::findCompatibleSystemTypes()
-{
-    using namespace phosphor::power::util;
-
-    try
-    {
-        // Query object mapper for object paths that implement the compatible
-        // interface.  Returns a map of object paths to a map of services names
-        // to their interfaces.
-        DbusSubtree subTree = getSubTree(bus, "/xyz/openbmc_project/inventory",
-                                         compatibleIntf, 0);
-
-        // Get the first object path
-        auto objectIt = subTree.cbegin();
-        if (objectIt != subTree.cend())
-        {
-            std::string objPath = objectIt->first;
-
-            // Get the first service name
-            auto serviceIt = objectIt->second.cbegin();
-            if (serviceIt != objectIt->second.cend())
-            {
-                std::string service = serviceIt->first;
-                if (!service.empty())
-                {
-                    // Get compatible system types property value
-                    getProperty(compatibleIntf, compatibleNamesProp, objPath,
-                                service, bus, compatibleSystemTypes);
-                }
-            }
-        }
-    }
-    catch (const std::exception&)
-    {
-        // Compatible system types information is not available.  The current
-        // system might not support the interface, or the service that
-        // implements the interface might not be running yet.
-    }
-}
-
 fs::path Manager::findConfigFile()
 {
     // Build list of possible base file names
@@ -329,14 +244,17 @@ fs::path Manager::findConfigFile()
     // Add possible file names based on compatible system types (if any)
     for (const std::string& systemType : compatibleSystemTypes)
     {
-        // Replace all spaces and commas in system type name with underscores
-        std::string fileName{systemType};
-        std::replace(fileName.begin(), fileName.end(), ' ', '_');
-        std::replace(fileName.begin(), fileName.end(), ',', '_');
+        // Look for file name that is entire system type + ".json"
+        // Example: com.acme.Hardware.Chassis.Model.MegaServer.json
+        fileNames.emplace_back(systemType + ".json");
 
-        // Append .json suffix and add to list
-        fileName.append(".json");
-        fileNames.emplace_back(fileName);
+        // Look for file name that is last node of system type + ".json"
+        // Example: MegaServer.json
+        std::string::size_type pos = systemType.rfind('.');
+        if ((pos != std::string::npos) && ((systemType.size() - pos) > 1))
+        {
+            fileNames.emplace_back(systemType.substr(pos + 1) + ".json");
+        }
     }
 
     // Add default file name for systems that don't use compatible interface
@@ -440,16 +358,13 @@ void Manager::waitUntilConfigFileLoaded()
         while (compatibleSystemTypes.empty() &&
                (timeWaited <= maxTimeToWaitForCompatTypes))
         {
-            // Try to find list of compatible system types
-            findCompatibleSystemTypes();
-            if (!compatibleSystemTypes.empty())
+            // Try to find list of compatible system types.  Force finder object
+            // to re-find system types on D-Bus because we are not receiving
+            // InterfacesAdded signals within this while loop.
+            compatSysTypesFinder->refind();
+            if (compatibleSystemTypes.empty())
             {
-                // Compatible system types found; try to load config file
-                loadConfigFile();
-            }
-            else
-            {
-                // Sleep 5 seconds
+                // Not found; sleep 5 seconds
                 using namespace std::chrono_literals;
                 std::this_thread::sleep_for(5s);
             }
