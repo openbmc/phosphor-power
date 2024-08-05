@@ -92,6 +92,22 @@ class DBusInterfacesFinder
                                   Callback callback);
 
     /**
+     * Refind all instances of the interfaces specified in the constructor.
+     *
+     * The callback specified in the constructor will be called for each
+     * instance found.
+     *
+     * This method normally does not need to be called.  New instances are
+     * automatically detected using an InterfacesAdded listener.  However, this
+     * method may be useful if the caller is not currently receiving D-Bus
+     * signals (such as within a loop).
+     */
+    void refind()
+    {
+        findInterfaces();
+    }
+
+    /**
      * Callback function to handle InterfacesAdded D-Bus signals
      *
      * @param message Expanded sdbusplus message data

@@ -85,6 +85,22 @@ class CompatibleSystemTypesFinder
                                          Callback callback);
 
     /**
+     * Refind all compatible system types for the current system.
+     *
+     * The callback specified in the constructor will be called for each list of
+     * compatible system types found.
+     *
+     * This method normally does not need to be called.  New lists of compatible
+     * system types are automatically detected using an InterfacesAdded
+     * listener.  However, this method may be useful if the caller is not
+     * currently receiving D-Bus signals (such as within a loop).
+     */
+    void refind()
+    {
+        interfaceFinder->refind();
+    }
+
+    /**
      * Callback function that is called when a Compatible interface is found.
      *
      * @param path D-Bus object path that implements the interface
