@@ -38,7 +38,7 @@ true
 
 ## Example
 
-```
+```json
 {
   "log_phase_fault": {
     "type": "n+1"

@@ -26,7 +26,7 @@ The following devices should be defined in the config file:
 
 ## Example
 
-```
+```json
 {
   "comments": [ "IR35221 regulator producing the Vdd rail" ],
   "id": "vdd_regulator",

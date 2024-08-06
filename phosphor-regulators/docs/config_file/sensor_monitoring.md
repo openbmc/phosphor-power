@@ -33,24 +33,26 @@ The "pmbus_read_sensor" actions can be specified in two ways:
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Read all sensors supported by the IR35221 regulator" ],
+  "comments": ["Read all sensors supported by the IR35221 regulator"],
   "rule_id": "read_ir35221_sensors_rule"
 }
+```
 
+```json
 {
-  "comments": [ "Only read sensors if version register 0x75 contains 2.",
-                "Earlier versions produced invalid sensor values." ],
+  "comments": [
+    "Only read sensors if version register 0x75 contains 2.",
+    "Earlier versions produced invalid sensor values."
+  ],
   "actions": [
     {
       "if": {
         "condition": {
           "i2c_compare_byte": { "register": "0x75", "value": "0x02" }
         },
-        "then": [
-          { "run_rule": "read_sensors_rule" }
-        ]
+        "then": [{ "run_rule": "read_sensors_rule" }]
       }
     }
   ]

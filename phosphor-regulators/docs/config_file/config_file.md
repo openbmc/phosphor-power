@@ -14,7 +14,7 @@ The root (outer-most) object in a phosphor-regulators configuration file.
 
 ## Example
 
-```
+```json
 {
   "comments": [ "Config file for a FooBar one-chassis system" ],
   "rules": [

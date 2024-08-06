@@ -22,7 +22,7 @@ that need to be configured or monitored.
 
 ## Example
 
-```
+```json
 {
   "comments": [ "Chassis number 1 containing CPUs and memory" ],
   "number": 1,

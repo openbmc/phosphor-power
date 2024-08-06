@@ -19,7 +19,7 @@ true
 
 ## Example
 
-```
+```json
 {
   "i2c_write_bit": {
     "register": "0xA0",

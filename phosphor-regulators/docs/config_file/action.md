@@ -51,15 +51,17 @@ for the specified action type describes what value will be returned.
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Set frequency to 800kHz" ],
+  "comments": ["Set frequency to 800kHz"],
   "i2c_write_byte": {
     "register": "0x2C",
     "value": "0x0F"
   }
 }
+```
 
+```json
 {
   "run_rule": "set_voltage_rule"
 }

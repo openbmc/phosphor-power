@@ -49,14 +49,16 @@ detection is not supported for devices that can be removed or added
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Regulator is only present on the FooBar backplane" ],
+  "comments": ["Regulator is only present on the FooBar backplane"],
   "rule_id": "is_foobar_backplane_installed_rule"
 }
+```
 
+```json
 {
-  "comments": [ "Regulator is only present when CPU 3 is present" ],
+  "comments": ["Regulator is only present when CPU 3 is present"],
   "actions": [
     {
       "compare_presence": {

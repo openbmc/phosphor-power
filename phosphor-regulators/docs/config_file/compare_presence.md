@@ -23,9 +23,9 @@ returns false.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Check if CPU3 is present" ],
+  "comments": ["Check if CPU3 is present"],
   "compare_presence": {
     "fru": "system/chassis/motherboard/cpu3",
     "value": true

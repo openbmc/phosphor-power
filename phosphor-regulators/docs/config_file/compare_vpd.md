@@ -62,9 +62,9 @@ false.
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Check if disk backplane has CCIN value 2D35" ],
+  "comments": ["Check if disk backplane has CCIN value 2D35"],
   "compare_vpd": {
     "fru": "system/chassis/disk_backplane",
     "keyword": "CCIN",
@@ -73,13 +73,13 @@ false.
 }
 ```
 
-```
+```json
 {
-  "comments": [ "Check if disk backplane has CCIN value 0x32, 0x44, 0x33, 0x35" ],
+  "comments": ["Check if disk backplane has CCIN value 0x32, 0x44, 0x33, 0x35"],
   "compare_vpd": {
     "fru": "system/chassis/disk_backplane",
     "keyword": "CCIN",
-    "byte_values": [ "0x32", "0x44", "0x33", "0x35" ]
+    "byte_values": ["0x32", "0x44", "0x33", "0x35"]
   }
 }
 ```

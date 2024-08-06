@@ -21,9 +21,9 @@ PAGE command. Subsequent PMBus commands are sent to that PAGE/rail.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Vdd rail on PAGE 0 of the Vdd/Vio regulator" ],
+  "comments": ["Vdd rail on PAGE 0 of the Vdd/Vio regulator"],
   "id": "vdd",
   "configuration": {
     "volts": 1.1,
