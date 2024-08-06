@@ -64,7 +64,7 @@ configurations.
   - Hwmon: The hwmon dir, e.g. `/sys/bus/i2c/devices/3-0069/hwmon/hwmonX/`
   - Debug: The pmbus debug dir, e.g. `/sys/kernel/debug/pmbus/hwmonX/`
   - DeviceDebug: The device debug dir, e.g.
-    '/sys/kernel/debug/<driver>.<instance>/`
+    `/sys/kernel/debug/<driver>.<instance>/`
   - HwmonDeviceDebug: The hwmon device debug dir, e.g.
     `/sys/kernel/debug/pmbus/hwmonX/cffps1/`
 - `fruConfigs` defines the mapping between the attribute file and the FRU
