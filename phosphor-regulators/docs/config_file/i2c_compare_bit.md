@@ -20,9 +20,9 @@ false.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Check if bit 3 is on in register 0xA0" ],
+  "comments": ["Check if bit 3 is on in register 0xA0"],
   "i2c_compare_bit": {
     "register": "0xA0",
     "position": 3,

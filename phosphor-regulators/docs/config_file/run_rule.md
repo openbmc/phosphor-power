@@ -17,7 +17,7 @@ Return value of the rule that was run.
 
 ## Example
 
-```
+```json
 {
   "run_rule": "set_voltage_rule"
 }

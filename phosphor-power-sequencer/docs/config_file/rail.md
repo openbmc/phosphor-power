@@ -41,18 +41,18 @@ sequence and the power sequencer device waits indefinitely for it to power on.
 
 ## Examples
 
-```
+```json
 {
-    "name": "VDD_CPU0",
-    "page": 11,
-    "check_status_vout": true
+  "name": "VDD_CPU0",
+  "page": 11,
+  "check_status_vout": true
 }
 ```
 
-```
+```json
 {
-    "name": "VCS_CPU1",
-    "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
-    "gpio": { "line": 60 }
+  "name": "VCS_CPU1",
+  "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
+  "gpio": { "line": 60 }
 }
 ```

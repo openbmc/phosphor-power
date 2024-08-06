@@ -157,7 +157,7 @@ file. The "comments" properties are ignored when the config file is read by the
 
 Examples:
 
-```
+```text
 "comments": [ "IR35221 regulator producing the Vdd rail" ]
 
 "comments": [ "Check if register 0x82 contains 0x7302",
@@ -172,7 +172,7 @@ reason, properties with hexadecimal values use the string data type.
 
 Example:
 
-```
+```text
 "address": "0x70"
 ```
 
@@ -196,7 +196,7 @@ The tool requires two input files:
 
 The tool has the following command line syntax:
 
-```
+```sh
 validate-regulators-config.py -c <config file> -s config_schema.json
 ```
 

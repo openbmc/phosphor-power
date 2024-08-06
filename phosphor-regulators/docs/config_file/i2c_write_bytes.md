@@ -25,24 +25,30 @@ true
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Write 0xFF01 to register 0xA0.  Device requires bytes to be",
-                "written in big-endian order." ],
+  "comments": [
+    "Write 0xFF01 to register 0xA0.  Device requires bytes to be",
+    "written in big-endian order."
+  ],
   "i2c_write_bytes": {
     "register": "0xA0",
-    "values": [ "0xFF", "0x01" ]
+    "values": ["0xFF", "0x01"]
   }
 }
+```
 
+```json
 {
-  "comments": [ "Write 0x7302 to register 0x82.  Device requires bytes to be",
-                "written in little-endian order.  Do not write the most",
-                "significant bit in each byte because the bit is reserved." ],
+  "comments": [
+    "Write 0x7302 to register 0x82.  Device requires bytes to be",
+    "written in little-endian order.  Do not write the most",
+    "significant bit in each byte because the bit is reserved."
+  ],
   "i2c_write_bytes": {
     "register": "0x82",
-    "values": [ "0x02", "0x73" ],
-    "masks":  [ "0x7F", "0x7F" ]
+    "values": ["0x02", "0x73"],
+    "masks": ["0x7F", "0x7F"]
   }
 }
 ```

@@ -36,9 +36,9 @@ true
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Capture 2 bytes from register 0xA0 to store in error log" ],
+  "comments": ["Capture 2 bytes from register 0xA0 to store in error log"],
   "i2c_capture_bytes": {
     "register": "0xA0",
     "count": 2

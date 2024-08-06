@@ -27,20 +27,24 @@ Return value of the last action in the "actions" property.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Sets output voltage of PAGE 0 of a PMBus regulator" ],
+  "comments": ["Sets output voltage of PAGE 0 of a PMBus regulator"],
   "id": "set_page0_voltage_rule",
   "actions": [
     { "i2c_write_byte": { "register": "0x00", "value": "0x00" } },
     { "pmbus_write_vout_command": { "format": "linear" } }
   ]
 }
+```
 
 ... later in the config file ...
 
-"configuration": {
-  "volts": 1.03,
-  "rule_id": "set_page0_voltage_rule"
+```json
+{
+  "configuration": {
+    "volts": 1.03,
+    "rule_id": "set_page0_voltage_rule"
+  }
 }
 ```

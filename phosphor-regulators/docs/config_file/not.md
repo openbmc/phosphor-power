@@ -15,9 +15,9 @@ true.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Check if register 0xA0 is not equal to 0xFF" ],
+  "comments": ["Check if register 0xA0 is not equal to 0xFF"],
   "not": {
     "i2c_compare_byte": { "register": "0xA0", "value": "0xFF" }
   }

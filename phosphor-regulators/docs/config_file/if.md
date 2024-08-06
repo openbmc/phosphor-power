@@ -30,19 +30,15 @@ property. If no "else" property was specified, returns false.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "If regulator is downlevel use different configuration rule" ],
+  "comments": ["If regulator is downlevel use different configuration rule"],
   "if": {
     "condition": {
       "run_rule": "is_downlevel_regulator"
     },
-    "then": [
-      { "run_rule": "configure_downlevel_regulator" }
-    ],
-    "else": [
-      { "run_rule": "configure_standard_regulator" }
-    ]
+    "then": [{ "run_rule": "configure_downlevel_regulator" }],
+    "else": [{ "run_rule": "configure_standard_regulator" }]
   }
 }
 ```

@@ -26,24 +26,30 @@ returns false.
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Check if register 0xA0 contains 0xFF01.",
-                "Device returns bytes in big-endian order." ],
+  "comments": [
+    "Check if register 0xA0 contains 0xFF01.",
+    "Device returns bytes in big-endian order."
+  ],
   "i2c_compare_bytes": {
     "register": "0xA0",
-    "values": [ "0xFF", "0x01" ]
+    "values": ["0xFF", "0x01"]
   }
 }
+```
 
+```json
 {
-  "comments": [ "Check if register 0x82 contains 0x7302.",
-                "Device returns bytes in little-endian order.",
-                "Ignore the most significant bit in each byte." ],
+  "comments": [
+    "Check if register 0x82 contains 0x7302.",
+    "Device returns bytes in little-endian order.",
+    "Ignore the most significant bit in each byte."
+  ],
   "i2c_compare_bytes": {
     "register": "0x82",
-    "values": [ "0x02", "0x73" ],
-    "masks":  [ "0x7F", "0x7F" ]
+    "values": ["0x02", "0x73"],
+    "masks": ["0x7F", "0x7F"]
   }
 }
 ```

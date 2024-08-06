@@ -19,9 +19,9 @@ returns false.
 
 ## Example
 
-```
+```json
 {
-  "comments": [ "Check whether registers 0xA0 and 0xA1 both contain 0x00" ],
+  "comments": ["Check whether registers 0xA0 and 0xA1 both contain 0x00"],
   "and": [
     { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } },
     { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }

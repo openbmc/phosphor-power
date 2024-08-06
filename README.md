@@ -25,14 +25,14 @@ Legacy applications:
 
 To build all applications in this repository:
 
-```
+```sh
   meson setup build
   ninja -C build
 ```
 
 To clean the repository and remove all build output:
 
-```
+```sh
   rm -rf build
 ```
 
@@ -70,7 +70,8 @@ configurations.
   that the service will read `part_number` attribute file from a directory
   specified by the above pmbus access type, and assign to `PartNumber` property
   in `xyz.openbmc_project.Inventory.Decorator.Asset` interface.
-  ```
+
+  ```json
     "fruConfigs": [
       {
         "propertyName": "PartNumber",
@@ -79,10 +80,12 @@ configurations.
       }
     ]
   ```
+
 - `psuDevices` defines the kernel device dir for each PSU in inventory. The
   configuration example below indicates that `powersupply0`'s device is located
   in `/sys/bus/i2c/devices/3-0069`.
-  ```
+
+  ```json
     "psuDevices": {
       "/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0" : "/sys/bus/i2c/devices/3-0069",
     }

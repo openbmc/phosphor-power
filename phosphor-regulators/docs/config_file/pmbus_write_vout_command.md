@@ -64,18 +64,24 @@ true
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Set output voltage.  Get volts value from configuration.",
-                "Get exponent from VOUT_MODE." ],
+  "comments": [
+    "Set output voltage.  Get volts value from configuration.",
+    "Get exponent from VOUT_MODE."
+  ],
   "pmbus_write_vout_command": {
     "format": "linear"
   }
 }
+```
 
+```json
 {
-  "comments": [ "Set output voltage.  Explicitly specify volts and exponent.",
-                "Verify value was successfully written to VOUT_COMMAND." ],
+  "comments": [
+    "Set output voltage.  Explicitly specify volts and exponent.",
+    "Verify value was successfully written to VOUT_COMMAND."
+  ],
   "pmbus_write_vout_command": {
     "volts": 1.03,
     "format": "linear",

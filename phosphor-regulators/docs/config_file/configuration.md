@@ -34,16 +34,20 @@ actions can be specified in two ways:
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Set rail to 1.25V using standard rule" ],
+  "comments": ["Set rail to 1.25V using standard rule"],
   "volts": 1.25,
   "rule_id": "set_voltage_rule"
 }
+```
 
+```json
 {
-  "comments": [ "If version register 0x75 contains 1, device is downlevel",
-                "and registers 0x31/0x34 need to be updated." ],
+  "comments": [
+    "If version register 0x75 contains 1, device is downlevel",
+    "and registers 0x31/0x34 need to be updated."
+  ],
   "actions": [
     {
       "if": {
