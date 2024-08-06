@@ -58,17 +58,21 @@ devices, use the [set_device](set_device.md) action.
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Detect phase fault using I/O expander" ],
+  "comments": ["Detect phase fault using I/O expander"],
   "device_id": "io_expander",
   "rule_id": "detect_phase_fault_rule"
 }
+```
 
+```json
 {
-  "comments": [ "Detect N phase fault using I/O expander.",
-                "A fault occurred if bit 3 is ON in register 0x02.",
-                "Capture value of registers 0x02 and 0x04 in error log." ],
+  "comments": [
+    "Detect N phase fault using I/O expander.",
+    "A fault occurred if bit 3 is ON in register 0x02.",
+    "Capture value of registers 0x02 and 0x04 in error log."
+  ],
   "device_id": "io_expander",
   "actions": [
     {

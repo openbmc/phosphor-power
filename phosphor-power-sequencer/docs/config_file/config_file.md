@@ -12,19 +12,19 @@ The root (outer-most) object in the configuration file.
 
 ## Example
 
-```
+```json
 {
-    "rails": [
-        {
-            "name": "VDD_CPU0",
-            "page": 11,
-            "check_status_vout": true
-        },
-        {
-            "name": "VCS_CPU1",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
-            "gpio": { "line": 60 }
-        }
-    ]
+  "rails": [
+    {
+      "name": "VDD_CPU0",
+      "page": 11,
+      "check_status_vout": true
+    },
+    {
+      "name": "VCS_CPU1",
+      "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
+      "gpio": { "line": 60 }
+    }
+  ]
 }
 ```

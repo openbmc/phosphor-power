@@ -16,8 +16,8 @@ GPIO values are read using the libgpiod interface.
 
 ## Example
 
-```
+```json
 {
-    "line": 60
+  "line": 60
 }
 ```

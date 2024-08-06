@@ -59,7 +59,7 @@ available to external interfaces like Redfish.
 
 D-Bus sensors have an object path with the following format:
 
-```
+```text
 /xyz/openbmc_project/sensors/<namespace>/<sensor_name>
 ```
 
@@ -82,7 +82,7 @@ following table shows how the sensor type is mapped to a D-Bus sensors
 The D-Bus `<sensor_name>` must be unique across the entire system. It will be
 set to the following:
 
-```
+```text
 <rail_id>_<sensor_type>
 ```
 
@@ -112,18 +112,20 @@ true
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Read output current from READ_IOUT." ],
+  "comments": ["Read output current from READ_IOUT."],
   "pmbus_read_sensor": {
     "type": "iout",
     "command": "0x8C",
     "format": "linear_11"
   }
 }
+```
 
+```json
 {
-  "comments": [ "Read output voltage from READ_VOUT.  Specify exponent." ],
+  "comments": ["Read output voltage from READ_VOUT.  Specify exponent."],
   "pmbus_read_sensor": {
     "type": "vout",
     "command": "0x8B",

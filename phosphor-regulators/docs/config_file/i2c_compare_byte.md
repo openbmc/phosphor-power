@@ -20,18 +20,22 @@ false.
 
 ## Examples
 
-```
+```json
 {
-  "comments": [ "Check if register 0xA0 contains 0xFF" ],
+  "comments": ["Check if register 0xA0 contains 0xFF"],
   "i2c_compare_byte": {
     "register": "0xA0",
     "value": "0xFF"
   }
 }
+```
 
+```json
 {
-  "comments": [ "Check if register 0x82 contains 0x40.",
-                "Ignore the most significant bit." ],
+  "comments": [
+    "Check if register 0x82 contains 0x40.",
+    "Ignore the most significant bit."
+  ],
   "i2c_compare_byte": {
     "register": "0x82",
     "value": "0x40",

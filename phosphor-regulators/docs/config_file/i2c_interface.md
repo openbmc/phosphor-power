@@ -19,7 +19,7 @@ device.
 
 ## Example
 
-```
+```json
 {
   "bus": 1,
   "address": "0x70"

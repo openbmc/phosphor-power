@@ -23,7 +23,7 @@ true
 
 ## Example
 
-```
+```json
 {
   "set_device": "io_expander2"
 }
