@@ -1,3 +1,5 @@
+# phosphor-regulators
+
 ## Overview
 
 The `phosphor-regulators` application configures and monitors voltage
