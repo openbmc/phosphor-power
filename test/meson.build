@@ -3,6 +3,7 @@ test(
     executable(
         'common-code-tests',
         'file_descriptor_tests.cpp',
+        'format_utils_tests.cpp',
         'nvtest.cpp',
         'temporary_file_tests.cpp',
         'temporary_subdirectory_tests.cpp',
