@@ -1,5 +1,5 @@
 /**
- * Copyright © 2019 IBM Corporation
+ * Copyright © 2024 IBM Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
 
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
+#include <sdbusplus/bus.hpp>
 
 #include <cassert>
+#include <format>
 
 using namespace phosphor::logging;
 
@@ -49,7 +51,8 @@ int main(int argc, char** argv)
 
     if (!psuPath.empty())
     {
-        ret = version::getVersion(psuPath);
+        auto bus = sdbusplus::bus::new_default();
+        ret = version::getVersion(bus, psuPath);
     }
     if (!versions.empty())
     {

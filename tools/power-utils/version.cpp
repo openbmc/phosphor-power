@@ -1,5 +1,5 @@
 /**
- * Copyright © 2019 IBM Corporation
+ * Copyright © 2024 IBM Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,63 +21,140 @@
 #include "utility.hpp"
 
 #include <phosphor-logging/log.hpp>
+#include <xyz/openbmc_project/Common/Device/error.hpp>
 
+#include <format>
+#include <iostream>
+#include <regex>
 #include <tuple>
 
-using json = nlohmann::json;
-
 using namespace phosphor::logging;
-
-// PsuInfo contains the device path, pmbus read type, and the version string
-using PsuVersionInfo =
-    std::tuple<std::string, phosphor::pmbus::Type, std::string>;
+using namespace phosphor::power::util;
+using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 namespace utils
 {
-PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
+
+constexpr auto IBMCFFPSInterface =
+    "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
+constexpr auto i2cBusProp = "I2CBus";
+constexpr auto i2cAddressProp = "I2CAddress";
+
+std::string readVPDValue(phosphor::pmbus::PMBusBase* pmbusIntf,
+                         const std::string& vpdName,
+                         const phosphor::pmbus::Type& type,
+                         const std::size_t& vpdSize)
 {
-    auto data = phosphor::power::util::loadJSONFromFile(PSU_JSON_PATH);
-
-    if (data == nullptr)
+    std::string vpdValue;
+    const std::regex illegalVPDRegex = std::regex("[^[:alnum:]]",
+                                                  std::regex::basic);
+    try
     {
-        return {};
+        vpdValue = pmbusIntf->readString(vpdName, type);
+    }
+    catch (const ReadFailure& e)
+    {
+        // Ignore the read failure, let pmbus code indicate failure.
     }
 
-    auto devices = data.find("psuDevices");
-    if (devices == data.end())
+    if (vpdValue.size() != vpdSize)
     {
-        log<level::WARNING>("Unable to find psuDevices");
-        return {};
-    }
-    auto devicePath = devices->find(psuInventoryPath);
-    if (devicePath == devices->end())
-    {
-        log<level::WARNING>("Unable to find path for PSU",
-                            entry("PATH=%s", psuInventoryPath.c_str()));
-        return {};
+        log<level::INFO>(
+            std::format(" {} resize needed. size: {}", vpdName, vpdValue.size())
+                .c_str());
+        vpdValue.resize(vpdSize, ' ');
     }
 
-    auto type = phosphor::power::util::getPMBusAccessType(data);
+    // Replace any illegal values with space(s).
+    std::regex_replace(vpdValue.begin(), vpdValue.begin(), vpdValue.end(),
+                       illegalVPDRegex, " ");
 
-    std::string versionStr;
-    for (const auto& fru : data["fruConfigs"])
+    return vpdValue;
+}
+
+PsuI2cInfo getPSUI2c(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
+{
+    auto depth = 0;
+    auto objects = getSubTree(bus, "/", IBMCFFPSInterface, depth);
+    if (objects.empty())
     {
-        if (fru["propertyName"] == "Version")
+        throw std::runtime_error("Supported Configuration Not Found");
+    }
+
+    std::optional<std::uint64_t> i2cbus;
+    std::optional<std::uint64_t> i2caddr;
+
+    // Get a map of objects back.
+    // Each object will have a path, a service, and an interface.
+    for (const auto& [path, services] : objects)
+    {
+        auto service = services.begin()->first;
+
+        if (path.empty() || service.empty())
         {
-            versionStr = fru["fileName"].get<std::string>();
-            break;
+            continue;
+        }
+
+        // Match the PSU identifier in the path with the passed PSU inventory
+        // path. Compare the last character of both paths to find the PSU bus
+        // and address. example: PSU path:
+        // /xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_0
+        // PSU inventory path:
+        // /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0
+        if (path.back() == psuInventoryPath.back())
+        {
+            // For each object in the array of objects, get properties
+            // from the service, path, and interface.
+            auto properties = getAllProperties(bus, path, IBMCFFPSInterface,
+                                               service);
+            for (const auto& property : properties)
+            {
+                try
+                {
+                    if (property.first == i2cBusProp)
+                    {
+                        i2cbus = std::get<uint64_t>(properties.at(i2cBusProp));
+                    }
+                    else if (property.first == i2cAddressProp)
+                    {
+                        i2caddr =
+                            std::get<uint64_t>(properties.at(i2cAddressProp));
+                    }
+                }
+                catch (const std::exception& e)
+                {
+                    log<level::WARNING>(
+                        std::format("Error reading property {}: {}",
+                                    property.first, e.what())
+                            .c_str());
+                }
+            }
+
+            if (i2cbus.has_value() && i2caddr.has_value())
+            {
+                break;
+            }
         }
     }
-    if (versionStr.empty())
+
+    if (!i2cbus.has_value() || !i2caddr.has_value())
     {
-        log<level::WARNING>("Unable to find Version file");
-        return {};
+        throw std::runtime_error("Failed to get I2C bus or address");
     }
-    return std::make_tuple(*devicePath, type, versionStr);
+
+    return std::make_tuple(*i2cbus, *i2caddr);
+}
+
+std::unique_ptr<phosphor::pmbus::PMBusBase> getPmbusIntf(std::uint64_t i2cBus,
+                                                         std::uint64_t i2cAddr)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setw(4) << std::setfill('0') << i2cAddr;
+    return phosphor::pmbus::createPMBus(i2cBus, ss.str());
 }
 
 // A default implemention compare the string itself
-std::string getLatestDefault(const std::vector<std::string>& versions)
+std::string getLatestDefaults(const std::vector<std::string>& versions)
 {
     std::string latest;
     for (const auto& version : versions)
@@ -89,31 +166,28 @@ std::string getLatestDefault(const std::vector<std::string>& versions)
     }
     return latest;
 }
-
 } // namespace utils
 
 namespace version
 {
 
-std::string getVersion(const std::string& psuInventoryPath)
+std::string getVersion(sdbusplus::bus_t& bus,
+                       const std::string& psuInventoryPath)
 {
-    const auto& [devicePath, type,
-                 versionStr] = utils::getVersionInfo(psuInventoryPath);
-    if (devicePath.empty() || versionStr.empty())
+    constexpr auto FW_VERSION = "fw_version";
+    using namespace phosphor::pmbus;
+    const auto IBMCFFPS_FW_VERSION_SIZE = 12;
+    const auto& [i2cbus, i2caddr] = utils::getPSUI2c(bus, psuInventoryPath);
+    auto pmbusIntf = utils::getPmbusIntf(i2cbus, i2caddr);
+
+    if (!pmbusIntf)
     {
-        return {};
+        log<level::INFO>("pmbusIntf is null!!");
     }
-    std::string version;
-    try
-    {
-        phosphor::pmbus::PMBus pmbus(devicePath);
-        version = pmbus.readString(versionStr, type);
-    }
-    catch (const std::exception& ex)
-    {
-        log<level::ERR>(ex.what());
-    }
-    return version;
+    std::string fwVersion = utils ::readVPDValue(pmbusIntf.get(), FW_VERSION,
+                                                 Type::HwmonDeviceDebug,
+                                                 IBMCFFPS_FW_VERSION_SIZE);
+    return fwVersion;
 }
 
 std::string getLatest(const std::vector<std::string>& versions)
@@ -134,7 +208,22 @@ std::string getLatest(const std::vector<std::string>& versions)
     // means a newer version.
     //
     // So just compare by strings is OK for these cases
-    return utils::getLatestDefault(versions);
+    return utils::getLatestDefaults(versions);
+}
+
+std::string compareVersion(const std::string& fsVersion,
+                           const std::string& psuInventoryPath)
+{
+    std::string version; //= getVersion(psuInventoryPath);
+    if (fsVersion > version)
+    {
+        log<level::INFO>(
+            std::format("return fsVersion={} {}", fsVersion, psuInventoryPath)
+                .c_str());
+        return fsVersion;
+    }
+    log<level::INFO>(std::format("return version={}", version).c_str());
+    return version;
 }
 
 } // namespace version
