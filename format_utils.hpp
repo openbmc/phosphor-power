@@ -25,7 +25,7 @@
  *
  * Contains utility functions for formatting data.
  */
-namespace phosphor::power::sequencer::format_utils
+namespace phosphor::power::format_utils
 {
 
 /**
@@ -56,4 +56,4 @@ std::string toString(const std::span<T>& span)
     return str;
 }
 
-} // namespace phosphor::power::sequencer::format_utils
+} // namespace phosphor::power::format_utils

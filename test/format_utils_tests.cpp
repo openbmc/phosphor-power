@@ -23,7 +23,7 @@
 
 #include <gtest/gtest.h>
 
-using namespace phosphor::power::sequencer::format_utils;
+using namespace phosphor::power::format_utils;
 
 TEST(FormatUtilsTests, toString)
 {
