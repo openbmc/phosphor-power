@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b770f6fa_1058ca5a",
+        "filename": "phosphor-regulators/docs/config_file/rule.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-07T14:28:33Z",
+      "side": 1,
+      "message": "The braces should not be removed here.  This is a rule object, and the braces are needed.  Please revert this back to the original JSON for this example.\n\nMy previous comment was just to remove the braces you added on the second example on line 42.",
+      "revId": "232e79d45248d5c557646cd5fd61e819b42be333",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
