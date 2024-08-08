@@ -16,6 +16,24 @@
       "message": "The braces should not be removed here.  This is a rule object, and the braces are needed.  Please revert this back to the original JSON for this example.\n\nMy previous comment was just to remove the braces you added on the second example on line 42.",
       "revId": "232e79d45248d5c557646cd5fd61e819b42be333",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ac07153_89bb3607",
+        "filename": "phosphor-regulators/docs/config_file/rule.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2024-08-08T00:26:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b770f6fa_1058ca5a",
+      "revId": "232e79d45248d5c557646cd5fd61e819b42be333",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
