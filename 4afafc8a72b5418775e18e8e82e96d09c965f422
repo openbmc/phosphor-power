@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3954463c_c9fe82c3",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 0,
+      "message": "Big picture question: Is this commit adding a new method for getting this information, or replacing the old method?\n\nIf this is currently being used, I don\u0027t think we can just remove the old method unless the community has said they don\u0027t need it any more.",
+      "revId": "4afafc8a72b5418775e18e8e82e96d09c965f422",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

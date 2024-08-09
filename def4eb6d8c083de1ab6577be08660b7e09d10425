@@ -1,0 +1,198 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5a0865_b39b2b86",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Why is this include needed here?",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632ae661_8ee9229b",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "I would recommend moving this line outside the if (such as on line 51) in case the bus is needed in other places in the future.",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d05ce09_47d1d73b",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Is this header needed?  I don\u0027t see any references to it.",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ed77e5_2977e59e",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Why is the header including itself?",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "979f5089_86ee0479",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Should add an include of \u003cmemory\u003e since you added usage of unique_ptr.",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae656b5b_44f3f9f3",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "This name is not used in this file.\n\nAlso, I think it is confusing to rename a class.  I would suggest:\n\nusing PMBus \u003d phosphor::pmbus::PMBus;\n\nor\n\nusing namespace phosphor::pmbus;\n\nThe second one gives you access to all the names in the pmbus namespace without qualification.",
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2a546f2_7c92903b",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Nit: I don\u0027t know what \u0027member\u0027 means here.",
+      "range": {
+        "startLine": 36,
+        "startChar": 32,
+        "endLine": 36,
+        "endChar": 38
+      },
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6a4ff39_582bd23f",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Nit: did you mean \u0027corrects\u0027 size (ie fixes it)?",
+      "range": {
+        "startLine": 56,
+        "startChar": 40,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62c062c_27742878",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 65,
+        "startChar": 28,
+        "endLine": 65,
+        "endChar": 37
+      },
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5aa077d_f019983f",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-09T21:01:51Z",
+      "side": 1,
+      "message": "Same question as above about \u0027member\u0027",
+      "range": {
+        "startLine": 81,
+        "startChar": 32,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "def4eb6d8c083de1ab6577be08660b7e09d10425",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
