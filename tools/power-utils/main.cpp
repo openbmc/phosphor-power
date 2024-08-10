@@ -18,9 +18,12 @@
 
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
+#include <sdbusplus/bus.hpp>
 
 #include <cassert>
+#include <filesystem>
 
+constexpr auto PSU_JSON_PATH = "/usr/share/phosphor-power/psu.json";
 using namespace phosphor::logging;
 
 int main(int argc, char** argv)
@@ -47,9 +50,18 @@ int main(int argc, char** argv)
 
     std::string ret;
 
+    bool useJsonFile = std::filesystem::exists(PSU_JSON_PATH);
+    auto bus = sdbusplus::bus::new_default();
     if (!psuPath.empty())
     {
-        ret = version::getVersion(psuPath);
+        if (!useJsonFile)
+        {
+            ret = version::getVersion(bus, psuPath);
+        }
+        else
+        {
+            ret = version::getVersion(psuPath);
+        }
     }
     if (!versions.empty())
     {
