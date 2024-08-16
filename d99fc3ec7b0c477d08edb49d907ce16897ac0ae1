@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83d6742_f31450b2",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "This path is defined by the constant PSU_JSON_PATH in the generated header file config.h.  This is defined in the top level meson.build file.\n\nSo you should include config.h and use that constant like version.cpp already does.",
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "971d3beb_56ea805f",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "This can throw an exception, which if it occurs will cause this application to exit abnormally with a signal.\n\nSo you should probably put it within a try/catch.  In the catch you could ignore the error or write it to stderr.  But you probably want to assume the file doesn\u0027t exist in that case.",
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "634b9834_0b248303",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "I don\u0027t think this is being caught anywhere.  That will cause the application to exit abnormally with a signal.  Is that what you want?  If not, you need to catch this somewhere and determine how to proceed.",
+      "range": {
+        "startLine": 106,
+        "startChar": 19,
+        "endLine": 106,
+        "endChar": 32
+      },
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad8154a8_27cdaf7a",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "I don\u0027t think this comment matches the code right?  It is not looping through an array of objects.",
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0f3cc2d_56e26752",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "Same comment: who is catching this?",
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3264b24_de6efa9d",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "Nit: Not sure why there is a space here.",
+      "range": {
+        "startLine": 255,
+        "startChar": 33,
+        "endLine": 255,
+        "endChar": 34
+      },
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41c91c31_1215b58f",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "remove commented out code",
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f99171c_cb868a9c",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-08-16T19:34:41Z",
+      "side": 1,
+      "message": "We don\u0027t normally pass raw pointers.  I would suggest changing this to\n```\nphosphor::pmbus::PMBusBase\u0026 pmbusIntf\n```\nAnd then pass in by de-referencing the unique_ptr.\n\nRaw pointers bring issues, like needing to check if they are nullptr and wondering who is responsible for deleting.",
+      "range": {
+        "startLine": 91,
+        "startChar": 25,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "d99fc3ec7b0c477d08edb49d907ce16897ac0ae1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
