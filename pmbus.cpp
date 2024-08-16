@@ -151,11 +151,11 @@ bool PMBus::readBit(const std::string& name, Type type)
     {
         auto rc = errno;
 
-        log<level::ERR>((std::string("Failed to read sysfs file "
-                                     "errno=") +
-                         std::to_string(rc) + std::string(" FILENAME=") +
-                         path.string())
-                            .c_str());
+        log<level::ERR>(
+            (std::string("Failed to read sysfs file "
+                         "errno=") +
+             std::to_string(rc) + std::string(" FILENAME=") + path.string())
+                .c_str());
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -261,8 +261,8 @@ std::vector<uint8_t> PMBus::readBinary(const std::string& name, Type type,
     {
         std::vector<uint8_t> data(length, 0);
 
-        auto bytes = fread(data.data(), sizeof(decltype(data[0])), length,
-                           file.get());
+        auto bytes =
+            fread(data.data(), sizeof(decltype(data[0])), length, file.get());
 
         if (bytes != length)
         {
@@ -274,11 +274,11 @@ std::vector<uint8_t> PMBus::readBinary(const std::string& name, Type type,
             else if (ferror(file.get()))
             {
                 auto rc = errno;
-                log<level::ERR>((std::string("Failed to read sysfs file "
-                                             "errno=") +
-                                 std::to_string(rc) +
-                                 " FILENAME=" + path.string())
-                                    .c_str());
+                log<level::ERR>(
+                    (std::string("Failed to read sysfs file "
+                                 "errno=") +
+                     std::to_string(rc) + " FILENAME=" + path.string())
+                        .c_str());
                 using metadata =
                     xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -397,11 +397,11 @@ void PMBus::findHwmonDir()
     }
 }
 
-std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint8_t bus,
-                                              const std::string& address)
+std::unique_ptr<PMBusBase>
+    PMBus::createPMBus(std::uint8_t bus, const std::string& address)
 {
-    const std::string physpath = {"/sys/bus/i2c/devices/" +
-                                  std::to_string(bus) + "-" + address};
+    const std::string physpath = {
+        "/sys/bus/i2c/devices/" + std::to_string(bus) + "-" + address};
     auto interface = std::make_unique<PMBus>(physpath);
 
     return interface;

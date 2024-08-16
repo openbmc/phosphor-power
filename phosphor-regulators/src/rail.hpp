@@ -61,8 +61,7 @@ class Rail
         const std::string& id,
         std::unique_ptr<Configuration> configuration = nullptr,
         std::unique_ptr<SensorMonitoring> sensorMonitoring = nullptr) :
-        id{id},
-        configuration{std::move(configuration)},
+        id{id}, configuration{std::move(configuration)},
         sensorMonitoring{std::move(sensorMonitoring)}
     {}
 

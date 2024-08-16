@@ -45,8 +45,8 @@ const std::string shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
 
 PowerControl::PowerControl(sdbusplus::bus_t& bus,
                            const sdeventplus::Event& event) :
-    PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit},
-    bus{bus}, services{bus},
+    PowerObject{bus, POWER_OBJ_PATH, PowerObject::action::defer_emit}, bus{bus},
+    services{bus},
     pgoodWaitTimer{event, std::bind(&PowerControl::onFailureCallback, this)},
     powerOnAllowedTime{std::chrono::steady_clock::now() + minimumColdStartTime},
     timer{event, std::bind(&PowerControl::pollPgood, this), pollInterval}
@@ -251,8 +251,8 @@ void PowerControl::setState(int s)
     if (s == 0)
     {
         // Set a minimum amount of time to wait before next power on
-        powerOnAllowedTime = std::chrono::steady_clock::now() +
-                             minimumPowerOffTime;
+        powerOnAllowedTime =
+            std::chrono::steady_clock::now() + minimumPowerOffTime;
     }
 
     pgoodTimeoutTime = std::chrono::steady_clock::now() + timeout;
@@ -312,8 +312,8 @@ void PowerControl::setUpGpio()
     powerControlLine = gpiod::find_line(powerControlLineName);
     if (!powerControlLine)
     {
-        std::string errorString{"GPIO line name not found: " +
-                                powerControlLineName};
+        std::string errorString{
+            "GPIO line name not found: " + powerControlLineName};
         services.logErrorMsg(errorString);
         throw std::runtime_error(errorString);
     }

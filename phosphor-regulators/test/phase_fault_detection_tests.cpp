@@ -108,8 +108,8 @@ class PhaseFaultDetectionTests : public ::testing::Test
         std::vector<std::unique_ptr<Rule>> rules{};
         std::vector<std::unique_ptr<Chassis>> chassisVec{};
         chassisVec.emplace_back(std::move(chassis));
-        this->system = std::make_unique<System>(std::move(rules),
-                                                std::move(chassisVec));
+        this->system =
+            std::make_unique<System>(std::move(rules), std::move(chassisVec));
     }
 
   protected:

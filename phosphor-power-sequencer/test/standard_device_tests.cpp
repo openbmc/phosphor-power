@@ -87,9 +87,8 @@ class StandardDeviceImpl : public StandardDevice
  * @param pageNum PMBus PAGE number of the rail
  * @return Rail object
  */
-std::unique_ptr<Rail> createRailStatusVout(const std::string& name,
-                                           bool isPowerSupplyRail,
-                                           uint8_t pageNum)
+std::unique_ptr<Rail> createRailStatusVout(
+    const std::string& name, bool isPowerSupplyRail, uint8_t pageNum)
 {
     std::optional<std::string> presence{};
     std::optional<uint8_t> page{pageNum};
@@ -109,9 +108,8 @@ std::unique_ptr<Rail> createRailStatusVout(const std::string& name,
  * @param gpio GPIO line to read to determine the pgood status of the rail
  * @return Rail object
  */
-std::unique_ptr<Rail> createRailGPIO(const std::string& name,
-                                     bool isPowerSupplyRail,
-                                     unsigned int gpioLine)
+std::unique_ptr<Rail> createRailGPIO(
+    const std::string& name, bool isPowerSupplyRail, unsigned int gpioLine)
 {
     std::optional<std::string> presence{};
     std::optional<uint8_t> page{};
@@ -132,9 +130,8 @@ std::unique_ptr<Rail> createRailGPIO(const std::string& name,
  * @param pageNum PMBus PAGE number of the rail
  * @return Rail object
  */
-std::unique_ptr<Rail> createRailOutputVoltage(const std::string& name,
-                                              bool isPowerSupplyRail,
-                                              uint8_t pageNum)
+std::unique_ptr<Rail> createRailOutputVoltage(
+    const std::string& name, bool isPowerSupplyRail, uint8_t pageNum)
 {
     std::optional<std::string> presence{};
     std::optional<uint8_t> page{pageNum};
@@ -230,8 +227,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_TRUE(error.empty());
         EXPECT_EQ(additionalData.size(), 0);
     }
@@ -273,8 +270,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);
@@ -322,8 +319,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{"Undervoltage fault: PSU1"};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error, powerSupplyError);
         EXPECT_EQ(additionalData.size(), 5);
         EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
@@ -375,8 +372,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{"Undervoltage fault: PSU1"};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
@@ -426,8 +423,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 4);
@@ -474,8 +471,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 4);
@@ -523,8 +520,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);
@@ -578,8 +575,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);

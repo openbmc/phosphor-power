@@ -167,8 +167,8 @@ void PSUManager::getPSUConfiguration()
 
         // For each object in the array of objects, I want to get properties
         // from the service, path, and interface.
-        auto properties = getAllProperties(bus, path, IBMCFFPSInterface,
-                                           service);
+        auto properties =
+            getAllProperties(bus, path, IBMCFFPSInterface, service);
 
         getPSUProperties(properties);
     }
@@ -232,10 +232,10 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
             presline = *preslineptr;
         }
 
-        auto invMatch = std::find_if(psus.begin(), psus.end(),
-                                     [&invpath](auto& psu) {
-            return psu->getInventoryPath() == invpath;
-        });
+        auto invMatch =
+            std::find_if(psus.begin(), psus.end(), [&invpath](auto& psu) {
+                return psu->getInventoryPath() == invpath;
+            });
         if (invMatch != psus.end())
         {
             // This power supply has the same inventory path as the one with
@@ -348,8 +348,8 @@ void PSUManager::getSystemProperties()
 {
     try
     {
-        util::DbusSubtree subtree = util::getSubTree(bus, INVENTORY_OBJ_PATH,
-                                                     supportedConfIntf, 0);
+        util::DbusSubtree subtree =
+            util::getSubTree(bus, INVENTORY_OBJ_PATH, supportedConfIntf, 0);
         if (subtree.empty())
         {
             throw std::runtime_error("Supported Configuration Not Found");
@@ -520,8 +520,8 @@ void PSUManager::createError(const std::string& faultName,
     {
         additionalData["_PID"] = std::to_string(getpid());
 
-        auto service = util::getService(loggingObjectPath,
-                                        loggingCreateInterface, bus);
+        auto service =
+            util::getService(loggingObjectPath, loggingCreateInterface, bus);
 
         if (service.empty())
         {
@@ -583,9 +583,10 @@ void PSUManager::syncHistory()
 
 void PSUManager::analyze()
 {
-    auto syncHistoryRequired = std::any_of(
-        psus.begin(), psus.end(),
-        [](const auto& psu) { return psu->isSyncHistoryRequired(); });
+    auto syncHistoryRequired =
+        std::any_of(psus.begin(), psus.end(), [](const auto& psu) {
+            return psu->isSyncHistoryRequired();
+        });
     if (syncHistoryRequired)
     {
         syncHistory();
@@ -630,8 +631,8 @@ void PSUManager::analyze()
                 // hexadecimal format.
                 additionalData["STATUS_WORD"] =
                     std::format("{:#04x}", psu->getStatusWord());
-                additionalData["STATUS_MFR"] = std::format("{:#02x}",
-                                                           psu->getMFRFault());
+                additionalData["STATUS_MFR"] =
+                    std::format("{:#02x}", psu->getMFRFault());
                 // If there are faults being reported, they possibly could be
                 // related to a bug in the firmware version running on the power
                 // supply. Capture that data into the error as well.
@@ -1082,8 +1083,8 @@ bool PSUManager::hasRequiredPSUs(
             psu->getInputVoltage(actualInputVoltage, inputVoltage);
 
             if (std::find(config.second.inputVoltage.begin(),
-                          config.second.inputVoltage.end(),
-                          inputVoltage) == config.second.inputVoltage.end())
+                          config.second.inputVoltage.end(), inputVoltage) ==
+                config.second.inputVoltage.end())
             {
                 tmpAdditionalData.clear();
                 tmpAdditionalData["ACTUAL_VOLTAGE"] =
@@ -1315,8 +1316,8 @@ void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
     namespace fs = std::filesystem;
     std::stringstream ss;
     ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
-    std::string symLinkPath = deviceDirPath + std::to_string(i2cbus) + "-" +
-                              ss.str() + driverDirName;
+    std::string symLinkPath =
+        deviceDirPath + std::to_string(i2cbus) + "-" + ss.str() + driverDirName;
     try
     {
         fs::path linkStrPath = fs::read_symlink(symLinkPath);

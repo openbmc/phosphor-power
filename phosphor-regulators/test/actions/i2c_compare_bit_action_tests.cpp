@@ -109,14 +109,15 @@ TEST(I2CCompareBitActionTests, Execute)
         // Test where actual bit value is equal to expected bit value.
         // Test all bits in register value 0x96 == 1001 0110).
         {
-            I2CCompareBitAction actions[] = {I2CCompareBitAction{0x7C, 7, 1},
-                                             I2CCompareBitAction{0x7C, 6, 0},
-                                             I2CCompareBitAction{0x7C, 5, 0},
-                                             I2CCompareBitAction{0x7C, 4, 1},
-                                             I2CCompareBitAction{0x7C, 3, 0},
-                                             I2CCompareBitAction{0x7C, 2, 1},
-                                             I2CCompareBitAction{0x7C, 1, 1},
-                                             I2CCompareBitAction{0x7C, 0, 0}};
+            I2CCompareBitAction actions[] = {
+                I2CCompareBitAction{0x7C, 7, 1},
+                I2CCompareBitAction{0x7C, 6, 0},
+                I2CCompareBitAction{0x7C, 5, 0},
+                I2CCompareBitAction{0x7C, 4, 1},
+                I2CCompareBitAction{0x7C, 3, 0},
+                I2CCompareBitAction{0x7C, 2, 1},
+                I2CCompareBitAction{0x7C, 1, 1},
+                I2CCompareBitAction{0x7C, 0, 0}};
             for (I2CCompareBitAction& action : actions)
             {
                 EXPECT_EQ(action.execute(env), true);
@@ -126,14 +127,15 @@ TEST(I2CCompareBitActionTests, Execute)
         // Test where actual bit value is not equal to expected bit value.
         // Test all bits in register value 0x96 == 1001 0110).
         {
-            I2CCompareBitAction actions[] = {I2CCompareBitAction{0x7C, 7, 0},
-                                             I2CCompareBitAction{0x7C, 6, 1},
-                                             I2CCompareBitAction{0x7C, 5, 1},
-                                             I2CCompareBitAction{0x7C, 4, 0},
-                                             I2CCompareBitAction{0x7C, 3, 1},
-                                             I2CCompareBitAction{0x7C, 2, 0},
-                                             I2CCompareBitAction{0x7C, 1, 0},
-                                             I2CCompareBitAction{0x7C, 0, 1}};
+            I2CCompareBitAction actions[] = {
+                I2CCompareBitAction{0x7C, 7, 0},
+                I2CCompareBitAction{0x7C, 6, 1},
+                I2CCompareBitAction{0x7C, 5, 1},
+                I2CCompareBitAction{0x7C, 4, 0},
+                I2CCompareBitAction{0x7C, 3, 1},
+                I2CCompareBitAction{0x7C, 2, 0},
+                I2CCompareBitAction{0x7C, 1, 0},
+                I2CCompareBitAction{0x7C, 0, 1}};
             for (I2CCompareBitAction& action : actions)
             {
                 EXPECT_EQ(action.execute(env), false);

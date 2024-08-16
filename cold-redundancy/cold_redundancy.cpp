@@ -44,93 +44,92 @@ std::vector<std::unique_ptr<PowerSupply>> powerSupplies;
 ColdRedundancy::ColdRedundancy(
     boost::asio::io_service& io, sdbusplus::asio::object_server& objectServer,
     std::shared_ptr<sdbusplus::asio::connection>& systemBus) :
-    filterTimer(io),
-    systemBus(systemBus)
+    filterTimer(io), systemBus(systemBus)
 {
     post(io,
          [this, &io, &objectServer, &systemBus]() { createPSU(systemBus); });
     std::function<void(sdbusplus::message_t&)> eventHandler =
         [this, &io, &objectServer, &systemBus](sdbusplus::message_t& message) {
-        if (message.is_method_error())
-        {
-            std::cerr << "callback method error\n";
-            return;
-        }
-        filterTimer.expires_after(std::chrono::seconds(1));
-        filterTimer.async_wait([this, &io, &objectServer, &systemBus](
-                                   const boost::system::error_code& ec) {
-            if (ec == boost::asio::error::operation_aborted)
+            if (message.is_method_error())
             {
+                std::cerr << "callback method error\n";
                 return;
             }
-            else if (ec)
-            {
-                std::cerr << "timer error\n";
-            }
-            createPSU(systemBus);
-        });
-    };
+            filterTimer.expires_after(std::chrono::seconds(1));
+            filterTimer.async_wait([this, &io, &objectServer, &systemBus](
+                                       const boost::system::error_code& ec) {
+                if (ec == boost::asio::error::operation_aborted)
+                {
+                    return;
+                }
+                else if (ec)
+                {
+                    std::cerr << "timer error\n";
+                }
+                createPSU(systemBus);
+            });
+        };
 
     std::function<void(sdbusplus::message_t&)> eventCollect =
         [&](sdbusplus::message_t& message) {
-        std::string objectName;
-        boost::container::flat_map<std::string, std::variant<bool>> values;
-        std::string path = message.get_path();
-        std::size_t slantingPos = path.find_last_of("/\\");
-        if ((slantingPos == std::string::npos) ||
-            ((slantingPos + 1) >= path.size()))
-        {
-            std::cerr << "Unable to get PSU state name from path\n";
-            return;
-        }
-        std::string statePSUName = path.substr(slantingPos + 1);
-
-        std::size_t hypenPos = statePSUName.find("_");
-        if (hypenPos == std::string::npos)
-        {
-            std::cerr << "Unable to get PSU name from PSU path\n";
-            return;
-        }
-        std::string psuName = statePSUName.substr(0, hypenPos);
-
-        try
-        {
-            message.read(objectName, values);
-        }
-        catch (const sdbusplus::exception_t& e)
-        {
-            std::cerr << "Failed to read message from PSU Event\n";
-            return;
-        }
-
-        for (auto& psu : powerSupplies)
-        {
-            if (psu->name != psuName)
+            std::string objectName;
+            boost::container::flat_map<std::string, std::variant<bool>> values;
+            std::string path = message.get_path();
+            std::size_t slantingPos = path.find_last_of("/\\");
+            if ((slantingPos == std::string::npos) ||
+                ((slantingPos + 1) >= path.size()))
             {
-                continue;
+                std::cerr << "Unable to get PSU state name from path\n";
+                return;
+            }
+            std::string statePSUName = path.substr(slantingPos + 1);
+
+            std::size_t hypenPos = statePSUName.find("_");
+            if (hypenPos == std::string::npos)
+            {
+                std::cerr << "Unable to get PSU name from PSU path\n";
+                return;
+            }
+            std::string psuName = statePSUName.substr(0, hypenPos);
+
+            try
+            {
+                message.read(objectName, values);
+            }
+            catch (const sdbusplus::exception_t& e)
+            {
+                std::cerr << "Failed to read message from PSU Event\n";
+                return;
             }
 
-            std::string psuEventName = "functional";
-            auto findEvent = values.find(psuEventName);
-            if (findEvent != values.end())
+            for (auto& psu : powerSupplies)
             {
-                bool* functional = std::get_if<bool>(&(findEvent->second));
-                if (functional == nullptr)
+                if (psu->name != psuName)
                 {
-                    std::cerr << "Unable to get valid functional status\n";
                     continue;
                 }
-                if (*functional)
+
+                std::string psuEventName = "functional";
+                auto findEvent = values.find(psuEventName);
+                if (findEvent != values.end())
                 {
-                    psu->state = CR::PSUState::normal;
-                }
-                else
-                {
-                    psu->state = CR::PSUState::acLost;
+                    bool* functional = std::get_if<bool>(&(findEvent->second));
+                    if (functional == nullptr)
+                    {
+                        std::cerr << "Unable to get valid functional status\n";
+                        continue;
+                    }
+                    if (*functional)
+                    {
+                        psu->state = CR::PSUState::normal;
+                    }
+                    else
+                    {
+                        psu->state = CR::PSUState::acLost;
+                    }
                 }
             }
-        }
-    };
+        };
 
     using namespace sdbusplus::bus::match::rules;
     for (const char* type : psuInterfaceTypes)
@@ -167,95 +166,100 @@ void ColdRedundancy::createPSU(
     conn->async_method_call(
         [this, &conn](const boost::system::error_code ec,
                       CR::GetSubTreeType subtree) {
-        if (ec)
-        {
-            std::cerr << "Exception happened when communicating to "
-                         "ObjectMapper\n";
-            return;
-        }
-        for (const auto& object : subtree)
-        {
-            std::string pathName = object.first;
-            for (const auto& serviceIface : object.second)
+            if (ec)
             {
-                std::string serviceName = serviceIface.first;
-                for (const auto& interface : serviceIface.second)
+                std::cerr << "Exception happened when communicating to "
+                             "ObjectMapper\n";
+                return;
+            }
+            for (const auto& object : subtree)
+            {
+                std::string pathName = object.first;
+                for (const auto& serviceIface : object.second)
                 {
-                    // only get property of matched interface
-                    bool isIfaceMatched = false;
-                    for (const auto& type : psuInterfaceTypes)
+                    std::string serviceName = serviceIface.first;
+                    for (const auto& interface : serviceIface.second)
                     {
-                        if (type == interface)
+                        // only get property of matched interface
+                        bool isIfaceMatched = false;
+                        for (const auto& type : psuInterfaceTypes)
                         {
-                            isIfaceMatched = true;
-                            break;
-                        }
-                    }
-                    if (!isIfaceMatched)
-                        continue;
-
-                    conn->async_method_call(
-                        [this, &conn,
-                         interface](const boost::system::error_code ec,
-                                    CR::PropertyMapType propMap) {
-                        if (ec)
-                        {
-                            std::cerr << "Exception happened when get all "
-                                         "properties\n";
-                            return;
-                        }
-
-                        auto configName =
-                            std::get_if<std::string>(&propMap["Name"]);
-                        if (configName == nullptr)
-                        {
-                            std::cerr << "error finding necessary "
-                                         "entry in configuration\n";
-                            return;
-                        }
-
-                        auto configBus = std::get_if<uint64_t>(&propMap["Bus"]);
-                        auto configAddress =
-                            std::get_if<uint64_t>(&propMap["Address"]);
-
-                        if (configBus == nullptr || configAddress == nullptr)
-                        {
-                            std::cerr << "error finding necessary "
-                                         "entry in configuration\n";
-                            return;
-                        }
-                        for (auto& psu : powerSupplies)
-                        {
-                            if ((static_cast<uint8_t>(*configBus) ==
-                                 psu->bus) &&
-                                (static_cast<uint8_t>(*configAddress) ==
-                                 psu->address))
+                            if (type == interface)
                             {
-                                return;
+                                isIfaceMatched = true;
+                                break;
                             }
                         }
+                        if (!isIfaceMatched)
+                            continue;
 
-                        uint8_t order = 0;
+                        conn->async_method_call(
+                            [this, &conn,
+                             interface](const boost::system::error_code ec,
+                                        CR::PropertyMapType propMap) {
+                                if (ec)
+                                {
+                                    std::cerr
+                                        << "Exception happened when get all "
+                                           "properties\n";
+                                    return;
+                                }
 
-                        powerSupplies.emplace_back(
-                            std::make_unique<PowerSupply>(
-                                *configName, static_cast<uint8_t>(*configBus),
-                                static_cast<uint8_t>(*configAddress), order,
-                                conn));
+                                auto configName =
+                                    std::get_if<std::string>(&propMap["Name"]);
+                                if (configName == nullptr)
+                                {
+                                    std::cerr << "error finding necessary "
+                                                 "entry in configuration\n";
+                                    return;
+                                }
 
-                        numberOfPSU++;
-                        std::vector<uint8_t> orders = {};
-                        for (auto& psu : powerSupplies)
-                        {
-                            orders.push_back(psu->order);
-                        }
-                    },
-                        serviceName.c_str(), pathName.c_str(),
-                        "org.freedesktop.DBus.Properties", "GetAll", interface);
+                                auto configBus =
+                                    std::get_if<uint64_t>(&propMap["Bus"]);
+                                auto configAddress =
+                                    std::get_if<uint64_t>(&propMap["Address"]);
+
+                                if (configBus == nullptr ||
+                                    configAddress == nullptr)
+                                {
+                                    std::cerr << "error finding necessary "
+                                                 "entry in configuration\n";
+                                    return;
+                                }
+                                for (auto& psu : powerSupplies)
+                                {
+                                    if ((static_cast<uint8_t>(*configBus) ==
+                                         psu->bus) &&
+                                        (static_cast<uint8_t>(*configAddress) ==
+                                         psu->address))
+                                    {
+                                        return;
+                                    }
+                                }
+
+                                uint8_t order = 0;
+
+                                powerSupplies.emplace_back(
+                                    std::make_unique<PowerSupply>(
+                                        *configName,
+                                        static_cast<uint8_t>(*configBus),
+                                        static_cast<uint8_t>(*configAddress),
+                                        order, conn));
+
+                                numberOfPSU++;
+                                std::vector<uint8_t> orders = {};
+                                for (auto& psu : powerSupplies)
+                                {
+                                    orders.push_back(psu->order);
+                                }
+                            },
+                            serviceName.c_str(), pathName.c_str(),
+                            "org.freedesktop.DBus.Properties", "GetAll",
+                            interface);
+                    }
                 }
             }
-        }
-    },
+        },
         "xyz.openbmc_project.ObjectMapper",
         "/xyz/openbmc_project/object_mapper",
         "xyz.openbmc_project.ObjectMapper", "GetSubTree",
@@ -265,8 +269,7 @@ void ColdRedundancy::createPSU(
 PowerSupply::PowerSupply(
     std::string& name, uint8_t bus, uint8_t address, uint8_t order,
     const std::shared_ptr<sdbusplus::asio::connection>& dbusConnection) :
-    name(name),
-    bus(bus), address(address), order(order)
+    name(name), bus(bus), address(address), order(order)
 {
     CR::getPSUEvent(dbusConnection, name, state);
 }

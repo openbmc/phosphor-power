@@ -55,9 +55,8 @@ inline void setAvailable(sdbusplus::bus_t& bus, const std::string& invpath,
     getUtils().setAvailable(bus, invpath, available);
 }
 
-inline void handleChassisHealthRollup(sdbusplus::bus_t& bus,
-                                      const std::string& invpath,
-                                      bool addRollup)
+inline void handleChassisHealthRollup(
+    sdbusplus::bus_t& bus, const std::string& invpath, bool addRollup)
 {
     getUtils().handleChassisHealthRollup(bus, invpath, addRollup);
 }

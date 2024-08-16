@@ -81,8 +81,7 @@ class I2CCompareBytesAction : public I2CAction
     explicit I2CCompareBytesAction(uint8_t reg,
                                    const std::vector<uint8_t>& values,
                                    const std::vector<uint8_t>& masks) :
-        reg{reg},
-        values{values}, masks{masks}
+        reg{reg}, values{values}, masks{masks}
     {
         // Values vector must not be empty
         if (values.size() < 1)

@@ -102,8 +102,8 @@ TEST(SystemTests, ClearCache)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    auto chassis = std::make_unique<Chassis>(1, chassisInvPath,
-                                             std::move(devices));
+    auto chassis =
+        std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
     Chassis* chassisPtr = chassis.get();
 
     // Create System that contains Chassis
@@ -157,8 +157,8 @@ TEST(SystemTests, ClearErrorHistory)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    auto chassis = std::make_unique<Chassis>(1, chassisInvPath,
-                                             std::move(devices));
+    auto chassis =
+        std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
 
     // Create System that contains Chassis
     std::vector<std::unique_ptr<Rule>> rules{};

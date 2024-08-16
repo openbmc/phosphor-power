@@ -103,10 +103,10 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
             .WillOnce(Return(gpioValues));
         EXPECT_CALL(services, logInfoMsg("Device UCD90160 GPIO values:"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logInfoMsg("[FPWM1_GPIO5, FPWM2_GPIO6, FPWM3_GPIO7, FPWM4_GPIO8]: "
-                       "[1, 0, 0, 1]"))
+        EXPECT_CALL(services,
+                    logInfoMsg(
+                        "[FPWM1_GPIO5, FPWM2_GPIO6, FPWM3_GPIO7, FPWM4_GPIO8]: "
+                        "[1, 0, 0, 1]"))
             .Times(1);
         EXPECT_CALL(
             services,
@@ -165,8 +165,8 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
         // Call findPgoodFault() which calls storeGPIOValues()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 31);
@@ -219,14 +219,15 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
         EXPECT_CALL(services, getGPIOValues("ucd90160"))
             .Times(1)
             .WillOnce(Return(gpioValues));
-        EXPECT_CALL(services, logInfoMsg("Device UCD90160 GPIO values: ["
-                                         "1, 0, 0, 1, "
-                                         "1, 1, 0, 0, "
-                                         "1, 0, 1, 1, "
-                                         "0, 0, 1, 1, "
-                                         "1, 0, 0, 0, "
-                                         "1, 0, 0, 1, "
-                                         "1, 1, 0]"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Device UCD90160 GPIO values: ["
+                               "1, 0, 0, 1, "
+                               "1, 1, 0, 0, "
+                               "1, 0, 1, 1, "
+                               "0, 0, 1, 1, "
+                               "1, 0, 0, 0, "
+                               "1, 0, 0, 1, "
+                               "1, 1, 0]"))
             .Times(1);
         EXPECT_CALL(services,
                     logInfoMsg("Device UCD90160 MFR_STATUS: 0x123456789abc"))
@@ -261,20 +262,21 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
         // Call findPgoodFault() which calls storeGPIOValues()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
         EXPECT_EQ(additionalData["MFR_STATUS"], "0x123456789abc");
         EXPECT_EQ(additionalData["DEVICE_NAME"], "UCD90160");
-        EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 0, 0, 1, "
-                                                 "1, 1, 0, 0, "
-                                                 "1, 0, 1, 1, "
-                                                 "0, 0, 1, 1, "
-                                                 "1, 0, 0, 0, "
-                                                 "1, 0, 0, 1, "
-                                                 "1, 1, 0]");
+        EXPECT_EQ(additionalData["GPIO_VALUES"],
+                  "[1, 0, 0, 1, "
+                  "1, 1, 0, 0, "
+                  "1, 0, 1, 1, "
+                  "0, 0, 1, 1, "
+                  "1, 0, 0, 0, "
+                  "1, 0, 0, 1, "
+                  "1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD");
         EXPECT_EQ(additionalData["GPIO_LINE"], "2");
         EXPECT_EQ(additionalData["GPIO_VALUE"], "0");

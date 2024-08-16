@@ -157,8 +157,8 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
         // Call findPgoodFault() which calls storeGPIOValues()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 10);
@@ -200,16 +200,17 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
         EXPECT_CALL(services, getGPIOValues("ucd90320"))
             .Times(1)
             .WillOnce(Return(gpioValues));
-        EXPECT_CALL(services, logInfoMsg("Device UCD90320 GPIO values: ["
-                                         "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
-                                         "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, "
-                                         "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
-                                         "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, "
-                                         "1, 1, 0, 0, 1, 1, 1, 0, "
-                                         "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
-                                         "1, 1, 0, 0, "
-                                         "1, 0, 0, 1, 1, 1, 0, 0, "
-                                         "1, 0, 0]"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Device UCD90320 GPIO values: ["
+                               "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
+                               "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, "
+                               "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
+                               "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, "
+                               "1, 1, 0, 0, 1, 1, 1, 0, "
+                               "1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
+                               "1, 1, 0, 0, "
+                               "1, 0, 0, 1, 1, 1, 0, 0, "
+                               "1, 0, 0]"))
             .Times(1);
         EXPECT_CALL(services,
                     logInfoMsg("Device UCD90320 MFR_STATUS: 0x123456789abc"))
@@ -244,8 +245,8 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
         // Call findPgoodFault() which calls storeGPIOValues()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);

@@ -72,8 +72,7 @@ class ActionEnvironment
      */
     explicit ActionEnvironment(const IDMap& idMap, const std::string& deviceID,
                                Services& services) :
-        idMap{idMap},
-        deviceID{deviceID}, services{services}
+        idMap{idMap}, deviceID{deviceID}, services{services}
     {}
 
     /**
@@ -219,8 +218,8 @@ class ActionEnvironment
     {
         if (ruleDepth >= maxRuleDepth)
         {
-            throw std::runtime_error("Maximum rule depth exceeded by rule " +
-                                     ruleID + '.');
+            throw std::runtime_error(
+                "Maximum rule depth exceeded by rule " + ruleID + '.');
         }
         ++ruleDepth;
     }

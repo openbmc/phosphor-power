@@ -58,8 +58,7 @@ class Rule
      */
     explicit Rule(const std::string& id,
                   std::vector<std::unique_ptr<Action>> actions) :
-        id{id},
-        actions{std::move(actions)}
+        id{id}, actions{std::move(actions)}
     {}
 
     /**

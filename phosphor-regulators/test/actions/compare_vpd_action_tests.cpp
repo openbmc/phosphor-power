@@ -216,10 +216,11 @@ TEST(CompareVPDActionTests, ToString)
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
             "CCIN", std::vector<uint8_t>{0x01, 0xA3, 0x0, 0xFF}};
-        EXPECT_EQ(action.toString(), "compare_vpd: { fru: "
-                                     "/xyz/openbmc_project/inventory/system/"
-                                     "chassis/disk_backplane, keyword: "
-                                     "CCIN, value: [ 0x1, 0xA3, 0x0, 0xFF ] }");
+        EXPECT_EQ(action.toString(),
+                  "compare_vpd: { fru: "
+                  "/xyz/openbmc_project/inventory/system/"
+                  "chassis/disk_backplane, keyword: "
+                  "CCIN, value: [ 0x1, 0xA3, 0x0, 0xFF ] }");
     }
 
     // Test where value vector is empty
@@ -227,9 +228,10 @@ TEST(CompareVPDActionTests, ToString)
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
             "CCIN", std::vector<uint8_t>{}};
-        EXPECT_EQ(action.toString(), "compare_vpd: { fru: "
-                                     "/xyz/openbmc_project/inventory/system/"
-                                     "chassis/disk_backplane, keyword: "
-                                     "CCIN, value: [  ] }");
+        EXPECT_EQ(action.toString(),
+                  "compare_vpd: { fru: "
+                  "/xyz/openbmc_project/inventory/system/"
+                  "chassis/disk_backplane, keyword: "
+                  "CCIN, value: [  ] }");
     }
 }

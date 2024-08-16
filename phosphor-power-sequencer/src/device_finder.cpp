@@ -77,9 +77,8 @@ void DeviceFinder::interfaceFoundCallback(
     }
 }
 
-const DbusVariant&
-    DeviceFinder::getPropertyValue(const DbusPropertyMap& properties,
-                                   const std::string& propertyName)
+const DbusVariant& DeviceFinder::getPropertyValue(
+    const DbusPropertyMap& properties, const std::string& propertyName)
 {
     auto it = properties.find(propertyName);
     if (it == properties.end())

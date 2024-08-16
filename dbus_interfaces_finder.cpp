@@ -27,8 +27,8 @@ namespace phosphor::power::util
 DBusInterfacesFinder::DBusInterfacesFinder(
     sdbusplus::bus_t& bus, const std::string& service,
     const std::vector<std::string>& interfaces, Callback callback) :
-    bus{bus},
-    service{service}, interfaces{interfaces}, callback{std::move(callback)},
+    bus{bus}, service{service}, interfaces{interfaces},
+    callback{std::move(callback)},
     match{bus,
           sdbusplus::bus::match::rules::interfacesAdded() +
               sdbusplus::bus::match::rules::sender(service),

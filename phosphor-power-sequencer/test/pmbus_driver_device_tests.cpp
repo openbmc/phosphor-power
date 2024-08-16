@@ -808,8 +808,8 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     // rebuilds the map.
     std::string powerSupplyError{};
     std::map<std::string, std::string> additionalData{};
-    std::string error = device.findPgoodFault(services, powerSupplyError,
-                                              additionalData);
+    std::string error =
+        device.findPgoodFault(services, powerSupplyError, additionalData);
     EXPECT_TRUE(error.empty());
     EXPECT_EQ(additionalData.size(), 0);
 

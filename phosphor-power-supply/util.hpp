@@ -71,9 +71,9 @@ class Util : public UtilBase
                 INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
 
             // Update inventory
-            auto invMsg = bus.new_method_call(invService.c_str(),
-                                              INVENTORY_OBJ_PATH,
-                                              INVENTORY_MGR_IFACE, "Notify");
+            auto invMsg =
+                bus.new_method_call(invService.c_str(), INVENTORY_OBJ_PATH,
+                                    INVENTORY_MGR_IFACE, "Notify");
             invMsg.append(std::move(invObj));
             auto invMgrResponseMsg = bus.call(invMsg);
         }
@@ -105,9 +105,9 @@ class Util : public UtilBase
             auto invService = phosphor::power::util::getService(
                 INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
 
-            auto invMsg = bus.new_method_call(invService.c_str(),
-                                              INVENTORY_OBJ_PATH,
-                                              INVENTORY_MGR_IFACE, "Notify");
+            auto invMsg =
+                bus.new_method_call(invService.c_str(), INVENTORY_OBJ_PATH,
+                                    INVENTORY_MGR_IFACE, "Notify");
             invMsg.append(std::move(invObj));
             auto invMgrResponseMsg = bus.call(invMsg);
         }

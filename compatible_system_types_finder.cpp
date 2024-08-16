@@ -69,8 +69,8 @@ void CompatibleSystemTypesFinder::interfaceFoundCallback(
             // If all the compatible names are system or chassis types
             std::regex pattern{"\\.(system|chassis)\\.", std::regex::icase};
             if (std::ranges::all_of(names, [&pattern](auto&& name) {
-                return std::regex_search(name, pattern);
-            }))
+                    return std::regex_search(name, pattern);
+                }))
             {
                 // Call callback with compatible system type names
                 callback(names);

@@ -23,8 +23,8 @@ GPIOInterface::GPIOInterface(const std::string& namedGpio)
     }
     catch (const std::exception& e)
     {
-        throw std::runtime_error(std::string("Failed to find line: ") +
-                                 e.what());
+        throw std::runtime_error(
+            std::string("Failed to find line: ") + e.what());
     }
 }
 
@@ -92,9 +92,9 @@ void GPIOInterface::write(int value, std::bitset<32> flags)
 
     try
     {
-        line.request(
-            {__FUNCTION__, gpiod::line_request::DIRECTION_OUTPUT, flags},
-            value);
+        line.request({__FUNCTION__, gpiod::line_request::DIRECTION_OUTPUT,
+                      flags},
+                     value);
 
         line.release();
     }

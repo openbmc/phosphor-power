@@ -175,9 +175,9 @@ TEST_F(PowerSupplyTests, Constructor)
     // NOT using D-Bus inventory path for presence.
     try
     {
-        auto psu = std::make_unique<PowerSupply>(bus, PSUInventoryPath, 3, 0x68,
-                                                 "ibm-cffps", PSUGPIOLineName,
-                                                 isPowerOn);
+        auto psu = std::make_unique<PowerSupply>(
+            bus, PSUInventoryPath, 3, 0x68, "ibm-cffps", PSUGPIOLineName,
+            isPowerOn);
 
         EXPECT_EQ(psu->isPresent(), false);
         EXPECT_EQ(psu->isFaulted(), false);

@@ -111,11 +111,10 @@ class PowerInterface
     /**
      * Systemd bus callback for getting the pgood_timeout property
      */
-    static int callbackGetPgoodTimeout(sd_bus* bus, const char* path,
-                                       const char* interface,
-                                       const char* property,
-                                       sd_bus_message* msg, void* context,
-                                       sd_bus_error* error);
+    static int callbackGetPgoodTimeout(
+        sd_bus* bus, const char* path, const char* interface,
+        const char* property, sd_bus_message* msg, void* context,
+        sd_bus_error* error);
 
     /**
      * Systemd bus callback for the getPowerState method
@@ -134,11 +133,10 @@ class PowerInterface
     /**
      * Systemd bus callback for setting the pgood_timeout property
      */
-    static int callbackSetPgoodTimeout(sd_bus* bus, const char* path,
-                                       const char* interface,
-                                       const char* property,
-                                       sd_bus_message* msg, void* context,
-                                       sd_bus_error* error);
+    static int callbackSetPgoodTimeout(
+        sd_bus* bus, const char* path, const char* interface,
+        const char* property, sd_bus_message* msg, void* context,
+        sd_bus_error* error);
 
     /**
      * Systemd bus callback for the setPowerSupplyError method

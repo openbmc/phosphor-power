@@ -321,8 +321,8 @@ void Manager::loadConfigFile()
         if (!pathName.empty())
         {
             // Log info message in journal; config file path is important
-            services.getJournal().logInfo("Loading configuration file " +
-                                          pathName.string());
+            services.getJournal().logInfo(
+                "Loading configuration file " + pathName.string());
 
             // Parse the config file
             std::vector<std::unique_ptr<Rule>> rules{};
@@ -331,8 +331,8 @@ void Manager::loadConfigFile()
 
             // Store config file information in a new System object.  The old
             // System object, if any, is automatically deleted.
-            system = std::make_unique<System>(std::move(rules),
-                                              std::move(chassis));
+            system =
+                std::make_unique<System>(std::move(rules), std::move(chassis));
         }
     }
     catch (const std::exception& e)

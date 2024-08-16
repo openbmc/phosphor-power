@@ -51,10 +51,10 @@ class RuntimeMonitor : public DeviceMonitor
     RuntimeMonitor(std::unique_ptr<phosphor::power::Device>&& d,
                    sdbusplus::bus_t& b, const sdeventplus::Event& e,
                    std::chrono::milliseconds& i) :
-        DeviceMonitor(std::move(d), e, i),
-        bus(b), match(bus, getMatchString(),
-                      std::bind(std::mem_fn(&RuntimeMonitor::onPowerLost), this,
-                                std::placeholders::_1))
+        DeviceMonitor(std::move(d), e, i), bus(b),
+        match(bus, getMatchString(),
+              std::bind(std::mem_fn(&RuntimeMonitor::onPowerLost), this,
+                        std::placeholders::_1))
     {}
 
     /**

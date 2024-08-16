@@ -54,9 +54,8 @@ class JournalCloser
     sd_journal* journal{nullptr};
 };
 
-std::vector<std::string>
-    SystemdJournal::getMessages(const std::string& field,
-                                const std::string& fieldValue, unsigned int max)
+std::vector<std::string> SystemdJournal::getMessages(
+    const std::string& field, const std::string& fieldValue, unsigned int max)
 {
     // Sleep 100ms; otherwise recent journal entries sometimes not available
     using namespace std::chrono_literals;
@@ -67,8 +66,8 @@ std::vector<std::string>
     int rc = sd_journal_open(&journal, SD_JOURNAL_LOCAL_ONLY);
     if (rc < 0)
     {
-        throw std::runtime_error{std::string{"Failed to open journal: "} +
-                                 strerror(-rc)};
+        throw std::runtime_error{
+            std::string{"Failed to open journal: "} + strerror(-rc)};
     }
 
     // Create object to automatically close journal
@@ -79,8 +78,8 @@ std::vector<std::string>
     rc = sd_journal_add_match(journal, match.c_str(), 0);
     if (rc < 0)
     {
-        throw std::runtime_error{std::string{"Failed to add journal match: "} +
-                                 strerror(-rc)};
+        throw std::runtime_error{
+            std::string{"Failed to add journal match: "} + strerror(-rc)};
     }
 
     // Loop through matching entries from newest to oldest

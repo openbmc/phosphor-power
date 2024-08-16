@@ -123,16 +123,16 @@ int main(int argc, char* argv[])
         }
 
         std::string name{"ps" + instnum + "_input_power"};
-        std::string basePath = std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' +
-                               name;
+        std::string basePath =
+            std::string{INPUT_HISTORY_SENSOR_ROOT} + '/' + name;
 
         psuDevice->enableHistory(basePath, numRecords, syncGPIOPath, gpioNum);
 
         // Systemd object manager
         sdbusplus::server::manager_t objManager{bus, basePath.c_str()};
 
-        std::string busName = std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' +
-                              name;
+        std::string busName =
+            std::string{INPUT_HISTORY_BUSNAME_ROOT} + '.' + name;
         bus.request_name(busName.c_str());
     }
 

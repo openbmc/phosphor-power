@@ -72,8 +72,7 @@ class Configuration
      */
     explicit Configuration(std::optional<double> volts,
                            std::vector<std::unique_ptr<Action>> actions) :
-        volts{volts},
-        actions{std::move(actions)}
+        volts{volts}, actions{std::move(actions)}
     {}
 
     /**

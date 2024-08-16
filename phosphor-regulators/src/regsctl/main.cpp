@@ -39,12 +39,12 @@ int main(int argc, char* argv[])
         // Add dbus methods group
         auto methods = app.add_option_group("Methods");
         // Configure method
-        CLI::App* config = methods->add_subcommand("config",
-                                                   "Configure regulators");
+        CLI::App* config =
+            methods->add_subcommand("config", "Configure regulators");
         config->set_help_flag("-h,--help", "Configure regulators method help");
         // Monitor method
-        CLI::App* monitor = methods->add_subcommand("monitor",
-                                                    "Monitor regulators");
+        CLI::App* monitor =
+            methods->add_subcommand("monitor", "Monitor regulators");
         monitor->set_help_flag("-h,--help", "Monitor regulators method help");
         monitor->add_flag("-e,--enable", monitorEnable,
                           "Enable regulator monitoring");

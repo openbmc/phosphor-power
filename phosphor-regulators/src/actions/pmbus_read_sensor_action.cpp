@@ -49,8 +49,8 @@ bool PMBusReadSensorAction::execute(ActionEnvironment& environment)
                 break;
             case pmbus_utils::SensorDataFormat::linear_16:
                 int8_t exponentValue = getExponentValue(environment, interface);
-                sensorValue = pmbus_utils::convertFromVoutLinear(value,
-                                                                 exponentValue);
+                sensorValue =
+                    pmbus_utils::convertFromVoutLinear(value, exponentValue);
                 break;
         }
 

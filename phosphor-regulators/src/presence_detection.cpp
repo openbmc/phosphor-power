@@ -52,8 +52,8 @@ bool PresenceDetection::execute(Services& services, System& system,
         {
             // Log error messages in journal
             services.getJournal().logError(exception_utils::getMessages(e));
-            services.getJournal().logError("Unable to determine presence of " +
-                                           device.getID());
+            services.getJournal().logError(
+                "Unable to determine presence of " + device.getID());
 
             // Create error log entry
             error_logging_utils::logError(std::current_exception(),

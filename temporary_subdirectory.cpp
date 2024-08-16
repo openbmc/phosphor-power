@@ -31,8 +31,8 @@ namespace fs = std::filesystem;
 TemporarySubDirectory::TemporarySubDirectory()
 {
     // Build template path required by mkdtemp()
-    std::string templatePath = fs::temp_directory_path() /
-                               "phosphor-power-XXXXXX";
+    std::string templatePath =
+        fs::temp_directory_path() / "phosphor-power-XXXXXX";
 
     // Generate unique subdirectory name and create it.  The XXXXXX characters
     // are replaced by mkdtemp() to make the subdirectory name unique.

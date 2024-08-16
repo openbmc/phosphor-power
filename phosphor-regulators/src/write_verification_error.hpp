@@ -51,8 +51,8 @@ class WriteVerificationError : public std::exception
     explicit WriteVerificationError(const std::string& error,
                                     const std::string& deviceID,
                                     const std::string& inventoryPath) :
-        error{"WriteVerificationError: " + error},
-        deviceID{deviceID}, inventoryPath{inventoryPath}
+        error{"WriteVerificationError: " + error}, deviceID{deviceID},
+        inventoryPath{inventoryPath}
     {}
 
     /**

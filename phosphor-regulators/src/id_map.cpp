@@ -28,8 +28,8 @@ void IDMap::addDevice(Device& device)
     const std::string& id = device.getID();
     if (deviceMap.count(id) != 0)
     {
-        throw std::invalid_argument{"Unable to add device: Duplicate ID \"" +
-                                    id + '"'};
+        throw std::invalid_argument{
+            "Unable to add device: Duplicate ID \"" + id + '"'};
     }
     deviceMap[id] = &device;
 }
@@ -39,8 +39,8 @@ void IDMap::addRail(Rail& rail)
     const std::string& id = rail.getID();
     if (railMap.count(id) != 0)
     {
-        throw std::invalid_argument{"Unable to add rail: Duplicate ID \"" + id +
-                                    '"'};
+        throw std::invalid_argument{
+            "Unable to add rail: Duplicate ID \"" + id + '"'};
     }
     railMap[id] = &rail;
 }
@@ -50,8 +50,8 @@ void IDMap::addRule(Rule& rule)
     const std::string& id = rule.getID();
     if (ruleMap.count(id) != 0)
     {
-        throw std::invalid_argument{"Unable to add rule: Duplicate ID \"" + id +
-                                    '"'};
+        throw std::invalid_argument{
+            "Unable to add rule: Duplicate ID \"" + id + '"'};
     }
     ruleMap[id] = &rule;
 }

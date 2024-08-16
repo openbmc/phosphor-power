@@ -53,8 +53,8 @@ TEST(SetDeviceActionTests, Execute)
     idMap.addDevice(reg1);
 
     // Create Device regulator2 and add to IDMap
-    i2cInterface = i2c::create(1, 0x72,
-                               i2c::I2CInterface::InitialState::CLOSED);
+    i2cInterface =
+        i2c::create(1, 0x72, i2c::I2CInterface::InitialState::CLOSED);
     Device reg2{
         "regulator2", true,
         "/xyz/openbmc_project/inventory/system/chassis/motherboard/reg2",

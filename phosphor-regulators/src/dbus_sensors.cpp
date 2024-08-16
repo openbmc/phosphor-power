@@ -92,9 +92,9 @@ void DBusSensors::setValue(SensorType type, double value)
     else
     {
         // Sensor doesn't exist; create it and add it to the map
-        auto sensor = std::make_unique<DBusSensor>(bus, sensorName, type, value,
-                                                   rail, deviceInventoryPath,
-                                                   chassisInventoryPath);
+        auto sensor = std::make_unique<DBusSensor>(
+            bus, sensorName, type, value, rail, deviceInventoryPath,
+            chassisInventoryPath);
         sensors.emplace(sensorName, std::move(sensor));
     }
 }

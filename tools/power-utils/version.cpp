@@ -97,8 +97,8 @@ namespace version
 
 std::string getVersion(const std::string& psuInventoryPath)
 {
-    const auto& [devicePath, type,
-                 versionStr] = utils::getVersionInfo(psuInventoryPath);
+    const auto& [devicePath, type, versionStr] =
+        utils::getVersionInfo(psuInventoryPath);
     if (devicePath.empty() || versionStr.empty())
     {
         return {};

@@ -68,8 +68,8 @@ TEST(IDMapTests, AddDevice)
     // Test where device ID already exists in map
     try
     {
-        i2cInterface = i2c::create(1, 0x72,
-                                   i2c::I2CInterface::InitialState::CLOSED);
+        i2cInterface =
+            i2c::create(1, 0x72, i2c::I2CInterface::InitialState::CLOSED);
         Device device2{"vio_reg", true,
                        "/xyz/openbmc_project/inventory/system/chassis/"
                        "motherboard/vio_reg2",

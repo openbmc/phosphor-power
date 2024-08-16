@@ -116,9 +116,9 @@ std::vector<DbusPath> getAssociatedSubTreePaths(
     const sdbusplus::message::object_path& path,
     const std::vector<std::string>& interfaces, int32_t depth)
 {
-    auto mapperCall = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
-                                          MAPPER_INTERFACE,
-                                          "GetAssociatedSubTreePaths");
+    auto mapperCall =
+        bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH, MAPPER_INTERFACE,
+                            "GetAssociatedSubTreePaths");
     mapperCall.append(associationPath);
     mapperCall.append(path);
     mapperCall.append(depth);

@@ -55,9 +55,8 @@ inline std::unique_ptr<i2c::I2CInterface> createI2CInterface()
  * @param railIDs rail IDs (optional)
  * @return Device object
  */
-inline std::unique_ptr<Device>
-    createDevice(const std::string& id,
-                 const std::vector<std::string>& railIDs = {})
+inline std::unique_ptr<Device> createDevice(
+    const std::string& id, const std::vector<std::string>& railIDs = {})
 {
     // Create Rails (if any)
     std::vector<std::unique_ptr<Rail>> rails{};

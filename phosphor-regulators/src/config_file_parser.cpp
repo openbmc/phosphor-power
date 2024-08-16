@@ -214,8 +214,8 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     ++propertyCount;
 
     // Required inventory_path property
-    const json& inventoryPathElement = getRequiredProperty(element,
-                                                           "inventory_path");
+    const json& inventoryPathElement =
+        getRequiredProperty(element, "inventory_path");
     std::string inventoryPath = parseInventoryPath(inventoryPathElement);
     ++propertyCount;
 
@@ -356,8 +356,8 @@ std::unique_ptr<Device> parseDevice(const json& element)
     ++propertyCount;
 
     // Required is_regulator property
-    const json& isRegulatorElement = getRequiredProperty(element,
-                                                         "is_regulator");
+    const json& isRegulatorElement =
+        getRequiredProperty(element, "is_regulator");
     bool isRegulator = parseBoolean(isRegulatorElement);
     ++propertyCount;
 
@@ -367,8 +367,8 @@ std::unique_ptr<Device> parseDevice(const json& element)
     ++propertyCount;
 
     // Required i2c_interface property
-    const json& i2cInterfaceElement = getRequiredProperty(element,
-                                                          "i2c_interface");
+    const json& i2cInterfaceElement =
+        getRequiredProperty(element, "i2c_interface");
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
         parseI2CInterface(i2cInterfaceElement);
     ++propertyCount;

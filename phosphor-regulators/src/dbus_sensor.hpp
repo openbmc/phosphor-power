@@ -64,10 +64,9 @@ using AssociationDefinitionsInterface =
  * Define simple name for the sdbusplus object_t class that implements all
  * the necessary D-Bus interfaces via templates/multiple inheritance.
  */
-using DBusSensorObject =
-    sdbusplus::server::object_t<ValueInterface, OperationalStatusInterface,
-                                AvailabilityInterface,
-                                AssociationDefinitionsInterface>;
+using DBusSensorObject = sdbusplus::server::object_t<
+    ValueInterface, OperationalStatusInterface, AvailabilityInterface,
+    AssociationDefinitionsInterface>;
 
 /**
  * Define simple name for the generated C++ enum that implements the

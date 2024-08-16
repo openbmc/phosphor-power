@@ -51,8 +51,8 @@ void Chassis::clearErrorHistory()
 void Chassis::closeDevices(Services& services)
 {
     // Log debug message in journal
-    services.getJournal().logDebug("Closing devices in chassis " +
-                                   std::to_string(number));
+    services.getJournal().logDebug(
+        "Closing devices in chassis " + std::to_string(number));
 
     // Close devices
     for (std::unique_ptr<Device>& device : devices)
@@ -64,8 +64,8 @@ void Chassis::closeDevices(Services& services)
 void Chassis::configure(Services& services, System& system)
 {
     // Log info message in journal; important for verifying success of boot
-    services.getJournal().logInfo("Configuring chassis " +
-                                  std::to_string(number));
+    services.getJournal().logInfo(
+        "Configuring chassis " + std::to_string(number));
 
     // Configure devices
     for (std::unique_ptr<Device>& device : devices)

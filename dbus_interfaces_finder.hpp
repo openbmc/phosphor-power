@@ -86,10 +86,9 @@ class DBusInterfacesFinder
      * @param callback Callback function that is called each time an interface
      *                 instance is found
      */
-    explicit DBusInterfacesFinder(sdbusplus::bus_t& bus,
-                                  const std::string& service,
-                                  const std::vector<std::string>& interfaces,
-                                  Callback callback);
+    explicit DBusInterfacesFinder(
+        sdbusplus::bus_t& bus, const std::string& service,
+        const std::vector<std::string>& interfaces, Callback callback);
 
     /**
      * Refind all instances of the interfaces specified in the constructor.

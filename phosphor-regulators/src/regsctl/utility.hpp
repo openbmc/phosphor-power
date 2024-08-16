@@ -23,8 +23,8 @@ template <typename... Args>
 auto callMethod(const std::string& method, Args&&... args)
 {
     auto bus = sdbusplus::bus::new_default();
-    auto reqMsg = bus.new_method_call(busName, objPath, interface,
-                                      method.c_str());
+    auto reqMsg =
+        bus.new_method_call(busName, objPath, interface, method.c_str());
     reqMsg.append(std::forward<Args>(args)...);
 
     // Set timeout to 6 minutes; some regulator methods take over 5 minutes

@@ -40,8 +40,8 @@ std::string StandardDevice::findPgoodFault(
         std::vector<int> gpioValues = getGPIOValuesIfPossible(services);
 
         // Try to find a voltage rail where a pgood fault occurred
-        Rail* rail = findRailWithPgoodFault(services, gpioValues,
-                                            additionalData);
+        Rail* rail =
+            findRailWithPgoodFault(services, gpioValues, additionalData);
         if (rail != nullptr)
         {
             services.logErrorMsg(std::format(

@@ -72,8 +72,7 @@ class Device
         std::unique_ptr<PhaseFaultDetection> phaseFaultDetection = nullptr,
         std::vector<std::unique_ptr<Rail>> rails =
             std::vector<std::unique_ptr<Rail>>{}) :
-        id{id},
-        isRegulatorDevice{isRegulator}, fru{fru},
+        id{id}, isRegulatorDevice{isRegulator}, fru{fru},
         i2cInterface{std::move(i2cInterface)},
         presenceDetection{std::move(presenceDetection)},
         configuration{std::move(configuration)},

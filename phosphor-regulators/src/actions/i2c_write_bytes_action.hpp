@@ -58,8 +58,7 @@ class I2CWriteBytesAction : public I2CAction
      */
     explicit I2CWriteBytesAction(uint8_t reg,
                                  const std::vector<uint8_t>& values) :
-        reg{reg},
-        values{values}, masks{}
+        reg{reg}, values{values}, masks{}
     {
         // Values vector must not be empty
         if (values.size() < 1)
@@ -86,8 +85,7 @@ class I2CWriteBytesAction : public I2CAction
     explicit I2CWriteBytesAction(uint8_t reg,
                                  const std::vector<uint8_t>& values,
                                  const std::vector<uint8_t>& masks) :
-        reg{reg},
-        values{values}, masks{masks}
+        reg{reg}, values{values}, masks{masks}
     {
         // Values vector must not be empty
         if (values.size() < 1)

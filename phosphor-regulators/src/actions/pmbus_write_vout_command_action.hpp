@@ -87,12 +87,11 @@ class PMBusWriteVoutCommandAction : public I2CAction
      * @param isVerified Specifies whether the updated value of VOUT_COMMAND is
      *                   verified by reading it from the device.
      */
-    explicit PMBusWriteVoutCommandAction(std::optional<double> volts,
-                                         pmbus_utils::VoutDataFormat format,
-                                         std::optional<int8_t> exponent,
-                                         bool isVerified) :
-        volts{volts},
-        format{format}, exponent{exponent}, isWriteVerified{isVerified}
+    explicit PMBusWriteVoutCommandAction(
+        std::optional<double> volts, pmbus_utils::VoutDataFormat format,
+        std::optional<int8_t> exponent, bool isVerified) :
+        volts{volts}, format{format}, exponent{exponent},
+        isWriteVerified{isVerified}
     {
         // Currently only linear format is supported
         if (format != pmbus_utils::VoutDataFormat::linear)

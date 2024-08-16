@@ -93,8 +93,8 @@ double PMBusDriverDevice::getReadVout(uint8_t page)
     {
         unsigned int fileNumber = getFileNumber(page);
         std::string fileName = std::format("in{}_input", fileNumber);
-        std::string millivoltsStr = pmbusInterface->readString(fileName,
-                                                               Type::Hwmon);
+        std::string millivoltsStr =
+            pmbusInterface->readString(fileName, Type::Hwmon);
         unsigned long millivolts = std::stoul(millivoltsStr);
         volts = millivolts / 1000.0;
     }
@@ -114,8 +114,8 @@ double PMBusDriverDevice::getVoutUVFaultLimit(uint8_t page)
     {
         unsigned int fileNumber = getFileNumber(page);
         std::string fileName = std::format("in{}_lcrit", fileNumber);
-        std::string millivoltsStr = pmbusInterface->readString(fileName,
-                                                               Type::Hwmon);
+        std::string millivoltsStr =
+            pmbusInterface->readString(fileName, Type::Hwmon);
         unsigned long millivolts = std::stoul(millivoltsStr);
         volts = millivolts / 1000.0;
     }
@@ -224,8 +224,8 @@ std::optional<uint8_t>
     try
     {
         // Read voltage label file contents
-        std::string contents = pmbusInterface->readString(fileName,
-                                                          Type::Hwmon);
+        std::string contents =
+            pmbusInterface->readString(fileName, Type::Hwmon);
 
         // Check if file contents match the expected pattern
         std::regex regex{"vout(\\d+)"};

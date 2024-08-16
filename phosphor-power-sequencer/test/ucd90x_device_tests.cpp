@@ -182,8 +182,8 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
         // Call findPgoodFault() which calls storePgoodFaultDebugData()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
@@ -236,8 +236,8 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
         // Call findPgoodFault() which calls storePgoodFaultDebugData()
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
-        std::string error = device.findPgoodFault(services, powerSupplyError,
-                                                  additionalData);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);

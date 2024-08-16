@@ -35,8 +35,8 @@ FFDCFile::FFDCFile(FFDCFormat format, uint8_t subType, uint8_t version) :
     int fd = open(tempFile.getPath().c_str(), O_RDWR);
     if (fd == -1)
     {
-        throw std::runtime_error{std::string{"Unable to open FFDC file: "} +
-                                 strerror(errno)};
+        throw std::runtime_error{
+            std::string{"Unable to open FFDC file: "} + strerror(errno)};
     }
 
     // Store file descriptor in FileDescriptor object
@@ -49,8 +49,8 @@ void FFDCFile::remove()
     // Returns -1 if close failed.
     if (descriptor.close() == -1)
     {
-        throw std::runtime_error{std::string{"Unable to close FFDC file: "} +
-                                 strerror(errno)};
+        throw std::runtime_error{
+            std::string{"Unable to close FFDC file: "} + strerror(errno)};
     }
 
     // Delete temporary file.  Does nothing if file was already deleted.

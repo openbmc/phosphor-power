@@ -24,14 +24,13 @@ constexpr auto bindDelay = 1000;
 using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
-PowerSupply::PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
-                         std::uint8_t i2cbus, std::uint16_t i2caddr,
-                         const std::string& driver,
-                         const std::string& gpioLineName,
-                         std::function<bool()>&& callback) :
-    bus(bus),
-    inventoryPath(invpath), bindPath("/sys/bus/i2c/drivers/" + driver),
-    isPowerOn(std::move(callback)), driverName(driver)
+PowerSupply::PowerSupply(
+    sdbusplus::bus_t& bus, const std::string& invpath, std::uint8_t i2cbus,
+    std::uint16_t i2caddr, const std::string& driver,
+    const std::string& gpioLineName, std::function<bool()>&& callback) :
+    bus(bus), inventoryPath(invpath),
+    bindPath("/sys/bus/i2c/drivers/" + driver), isPowerOn(std::move(callback)),
+    driverName(driver)
 {
     if (inventoryPath.empty())
     {
@@ -383,13 +382,13 @@ void PowerSupply::analyzeFanFault()
         {
             if (statusWord != statusWordOld)
             {
-                log<level::ERR>(std::format("{} FANS fault/warning: "
-                                            "STATUS_WORD = {:#06x}, "
-                                            "STATUS_MFR_SPECIFIC = {:#04x}, "
-                                            "STATUS_FANS_1_2 = {:#04x}",
-                                            shortName, statusWord, statusMFR,
-                                            statusFans12)
-                                    .c_str());
+                log<level::ERR>(
+                    std::format("{} FANS fault/warning: "
+                                "STATUS_WORD = {:#06x}, "
+                                "STATUS_MFR_SPECIFIC = {:#04x}, "
+                                "STATUS_FANS_1_2 = {:#04x}",
+                                shortName, statusWord, statusMFR, statusFans12)
+                        .c_str());
             }
             fanFault++;
         }
@@ -589,8 +588,8 @@ void PowerSupply::analyze()
                 statusVout = pmbusIntf->read(status0Vout, Type::Debug);
                 statusIout = pmbusIntf->read(STATUS_IOUT, Type::Debug);
                 statusFans12 = pmbusIntf->read(STATUS_FANS_1_2, Type::Debug);
-                statusTemperature = pmbusIntf->read(STATUS_TEMPERATURE,
-                                                    Type::Debug);
+                statusTemperature =
+                    pmbusIntf->read(STATUS_TEMPERATURE, Type::Debug);
 
                 analyzeCMLFault();
 
@@ -859,8 +858,8 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
                                const std::size_t& vpdSize)
 {
     std::string vpdValue;
-    const std::regex illegalVPDRegex = std::regex("[^[:alnum:]]",
-                                                  std::regex::basic);
+    const std::regex illegalVPDRegex =
+        std::regex("[^[:alnum:]]", std::regex::basic);
 
     try
     {
@@ -1013,8 +1012,8 @@ void PowerSupply::updateInventory()
 
         try
         {
-            auto service = util::getService(INVENTORY_OBJ_PATH,
-                                            INVENTORY_MGR_IFACE, bus);
+            auto service =
+                util::getService(INVENTORY_OBJ_PATH, INVENTORY_MGR_IFACE, bus);
 
             if (service.empty())
             {
@@ -1022,9 +1021,9 @@ void PowerSupply::updateInventory()
                 return;
             }
 
-            auto method = bus.new_method_call(service.c_str(),
-                                              INVENTORY_OBJ_PATH,
-                                              INVENTORY_MGR_IFACE, "Notify");
+            auto method =
+                bus.new_method_call(service.c_str(), INVENTORY_OBJ_PATH,
+                                    INVENTORY_MGR_IFACE, "Notify");
 
             method.append(std::move(object));
 
@@ -1051,8 +1050,8 @@ auto PowerSupply::getMaxPowerOut() const
         try
         {
             // Read max_power_out, should be direct format
-            auto maxPowerOutStr = pmbusIntf->readString(MFR_POUT_MAX,
-                                                        Type::HwmonDeviceDebug);
+            auto maxPowerOutStr =
+                pmbusIntf->readString(MFR_POUT_MAX, Type::HwmonDeviceDebug);
             log<level::INFO>(std::format("{} MFR_POUT_MAX read {}", shortName,
                                          maxPowerOutStr)
                                  .c_str());

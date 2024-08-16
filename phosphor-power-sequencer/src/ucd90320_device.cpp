@@ -56,8 +56,8 @@ void UCD90320Device::storeGPIOValues(
     std::map<std::string, std::string>& additionalData)
 {
     // Verify the expected number of GPIO values were passed in
-    unsigned int expectedCount = gpioGroups.back().offset +
-                                 gpioGroups.back().count;
+    unsigned int expectedCount =
+        gpioGroups.back().offset + gpioGroups.back().count;
     if (values.size() != expectedCount)
     {
         // Unexpected number of values; store as a plain list of integers

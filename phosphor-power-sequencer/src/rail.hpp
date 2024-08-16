@@ -94,9 +94,8 @@ class Rail
                   const std::optional<uint8_t>& page, bool isPowerSupplyRail,
                   bool checkStatusVout, bool compareVoltageToLimit,
                   const std::optional<GPIO>& gpio) :
-        name{name},
-        presence{presence}, page{page}, isPsuRail{isPowerSupplyRail},
-        checkStatusVout{checkStatusVout},
+        name{name}, presence{presence}, page{page},
+        isPsuRail{isPowerSupplyRail}, checkStatusVout{checkStatusVout},
         compareVoltageToLimit{compareVoltageToLimit}, gpio{gpio}
     {
         // If checking STATUS_VOUT or output voltage, verify PAGE was specified

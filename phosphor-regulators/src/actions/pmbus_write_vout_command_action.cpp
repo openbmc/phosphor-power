@@ -41,8 +41,8 @@ bool PMBusWriteVoutCommandAction::execute(ActionEnvironment& environment)
         int8_t exponentValue = getExponentValue(environment, interface);
 
         // Convert volts value to linear data format
-        uint16_t linearValue = pmbus_utils::convertToVoutLinear(voltsValue,
-                                                                exponentValue);
+        uint16_t linearValue =
+            pmbus_utils::convertToVoutLinear(voltsValue, exponentValue);
 
         // Write linear format value to VOUT_COMMAND.  I2CInterface method
         // writes low-order byte first as required by PMBus.

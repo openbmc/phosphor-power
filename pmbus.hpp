@@ -237,8 +237,7 @@ class PMBus : public PMBusBase
      */
     PMBus(const std::string& path, const std::string& driverName,
           size_t instance) :
-        basePath(path),
-        driverName(driverName), instance(instance)
+        basePath(path), driverName(driverName), instance(instance)
     {
         findHwmonDir();
     }
@@ -251,8 +250,8 @@ class PMBus : public PMBusBase
      *
      * @return PMBusBase pointer
      */
-    static std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus,
-                                                  const std::string& address);
+    static std::unique_ptr<PMBusBase>
+        createPMBus(std::uint8_t bus, const std::string& address);
 
     /**
      * Reads a file in sysfs that represents a single bit,

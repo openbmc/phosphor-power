@@ -83,10 +83,9 @@ void PhaseFaultDetection::execute(Services& services, System& system,
     }
 }
 
-void PhaseFaultDetection::checkForPhaseFault(PhaseFaultType faultType,
-                                             Services& services,
-                                             Device& regulator,
-                                             ActionEnvironment& environment)
+void PhaseFaultDetection::checkForPhaseFault(
+    PhaseFaultType faultType, Services& services, Device& regulator,
+    ActionEnvironment& environment)
 {
     // Find ErrorType that corresponds to PhaseFaultType; used by ErrorHistory
     ErrorType errorType = toErrorType(faultType);

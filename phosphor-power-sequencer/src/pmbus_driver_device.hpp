@@ -61,17 +61,15 @@ class PMBusDriverDevice : public StandardDevice
      * @param driverName Device driver name
      * @param instance Chip instance number
      */
-    explicit PMBusDriverDevice(const std::string& name,
-                               std::vector<std::unique_ptr<Rail>> rails,
-                               Services& services, uint8_t bus,
-                               uint16_t address,
-                               const std::string& driverName = "",
-                               size_t instance = 0) :
-        StandardDevice(name, std::move(rails)),
-        bus{bus}, address{address}, driverName{driverName}, instance{instance}
+    explicit PMBusDriverDevice(
+        const std::string& name, std::vector<std::unique_ptr<Rail>> rails,
+        Services& services, uint8_t bus, uint16_t address,
+        const std::string& driverName = "", size_t instance = 0) :
+        StandardDevice(name, std::move(rails)), bus{bus}, address{address},
+        driverName{driverName}, instance{instance}
     {
-        pmbusInterface = services.createPMBus(bus, address, driverName,
-                                              instance);
+        pmbusInterface =
+            services.createPMBus(bus, address, driverName, instance);
     }
 
     /**

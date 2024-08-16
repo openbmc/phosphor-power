@@ -293,11 +293,11 @@ TEST_F(ChassisTests, CloseDevices)
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            auto device =
-                std::make_unique<Device>("vdd0_reg", true,
-                                         "/xyz/openbmc_project/inventory/"
-                                         "system/chassis/motherboard/vdd0_reg",
-                                         std::move(i2cInterface));
+            auto device = std::make_unique<Device>(
+                "vdd0_reg", true,
+                "/xyz/openbmc_project/inventory/"
+                "system/chassis/motherboard/vdd0_reg",
+                std::move(i2cInterface));
             devices.emplace_back(std::move(device));
         }
 
@@ -309,11 +309,11 @@ TEST_F(ChassisTests, CloseDevices)
             EXPECT_CALL(*i2cInterface, close).Times(1);
 
             // Create Device
-            auto device =
-                std::make_unique<Device>("vdd1_reg", true,
-                                         "/xyz/openbmc_project/inventory/"
-                                         "system/chassis/motherboard/vdd1_reg",
-                                         std::move(i2cInterface));
+            auto device = std::make_unique<Device>(
+                "vdd1_reg", true,
+                "/xyz/openbmc_project/inventory/"
+                "system/chassis/motherboard/vdd1_reg",
+                std::move(i2cInterface));
             devices.emplace_back(std::move(device));
         }
 

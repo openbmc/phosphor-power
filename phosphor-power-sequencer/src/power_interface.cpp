@@ -36,11 +36,10 @@ PowerInterface::PowerInterface(sdbusplus::bus_t& bus, const char* path) :
     serverInterface(bus, path, POWER_IFACE, vtable, this)
 {}
 
-int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
-                                     const char* /*interface*/,
-                                     const char* /*property*/,
-                                     sd_bus_message* msg, void* context,
-                                     sd_bus_error* error)
+int PowerInterface::callbackGetPgood(
+    sd_bus* /*bus*/, const char* /*path*/, const char* /*interface*/,
+    const char* /*property*/, sd_bus_message* msg, void* context,
+    sd_bus_error* error)
 {
     if (msg != nullptr && context != nullptr)
     {
@@ -68,12 +67,10 @@ int PowerInterface::callbackGetPgood(sd_bus* /*bus*/, const char* /*path*/,
     return 1;
 }
 
-int PowerInterface::callbackGetPgoodTimeout(sd_bus* /*bus*/,
-                                            const char* /*path*/,
-                                            const char* /*interface*/,
-                                            const char* /*property*/,
-                                            sd_bus_message* msg, void* context,
-                                            sd_bus_error* error)
+int PowerInterface::callbackGetPgoodTimeout(
+    sd_bus* /*bus*/, const char* /*path*/, const char* /*interface*/,
+    const char* /*property*/, sd_bus_message* msg, void* context,
+    sd_bus_error* error)
 {
     if (msg != nullptr && context != nullptr)
     {
@@ -135,12 +132,10 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
     return 1;
 }
 
-int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
-                                            const char* /*path*/,
-                                            const char* /*interface*/,
-                                            const char* /*property*/,
-                                            sd_bus_message* msg, void* context,
-                                            sd_bus_error* error)
+int PowerInterface::callbackSetPgoodTimeout(
+    sd_bus* /*bus*/, const char* /*path*/, const char* /*interface*/,
+    const char* /*property*/, sd_bus_message* msg, void* context,
+    sd_bus_error* error)
 {
     if (msg != nullptr && context != nullptr)
     {
@@ -172,11 +167,10 @@ int PowerInterface::callbackSetPgoodTimeout(sd_bus* /*bus*/,
     return 1;
 }
 
-int PowerInterface::callbackGetState(sd_bus* /*bus*/, const char* /*path*/,
-                                     const char* /*interface*/,
-                                     const char* /*property*/,
-                                     sd_bus_message* msg, void* context,
-                                     sd_bus_error* error)
+int PowerInterface::callbackGetState(
+    sd_bus* /*bus*/, const char* /*path*/, const char* /*interface*/,
+    const char* /*property*/, sd_bus_message* msg, void* context,
+    sd_bus_error* error)
 {
     if (msg != nullptr && context != nullptr)
     {
@@ -245,9 +239,8 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
     return 1;
 }
 
-int PowerInterface::callbackSetPowerSupplyError(sd_bus_message* msg,
-                                                void* context,
-                                                sd_bus_error* error)
+int PowerInterface::callbackSetPowerSupplyError(
+    sd_bus_message* msg, void* context, sd_bus_error* error)
 {
     if (msg != nullptr && context != nullptr)
     {

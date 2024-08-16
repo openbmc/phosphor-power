@@ -122,10 +122,9 @@ class Services
      * @param instance Chip instance number
      * @return object for communicating with PMBus device
      */
-    virtual std::unique_ptr<PMBusBase>
-        createPMBus(uint8_t bus, uint16_t address,
-                    const std::string& driverName = "",
-                    size_t instance = 0) = 0;
+    virtual std::unique_ptr<PMBusBase> createPMBus(
+        uint8_t bus, uint16_t address, const std::string& driverName = "",
+        size_t instance = 0) = 0;
 
     /**
      * Creates a BMC dump.
@@ -196,13 +195,12 @@ class BMCServices : public Services
         getGPIOValues(const std::string& chipLabel) override;
 
     /** @copydoc Services::createPMBus() */
-    virtual std::unique_ptr<PMBusBase>
-        createPMBus(uint8_t bus, uint16_t address,
-                    const std::string& driverName = "",
-                    size_t instance = 0) override
+    virtual std::unique_ptr<PMBusBase> createPMBus(
+        uint8_t bus, uint16_t address, const std::string& driverName = "",
+        size_t instance = 0) override
     {
-        std::string path = std::format("/sys/bus/i2c/devices/{}-{:04x}", bus,
-                                       address);
+        std::string path =
+            std::format("/sys/bus/i2c/devices/{}-{:04x}", bus, address);
         return std::make_unique<PMBus>(path, driverName, instance);
     }
 

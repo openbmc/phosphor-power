@@ -84,8 +84,8 @@ class IDMap
         auto it = deviceMap.find(id);
         if (it == deviceMap.end())
         {
-            throw std::invalid_argument{"Unable to find device with ID \"" +
-                                        id + '"'};
+            throw std::invalid_argument{
+                "Unable to find device with ID \"" + id + '"'};
         }
         return *(it->second);
     }
@@ -103,8 +103,8 @@ class IDMap
         auto it = railMap.find(id);
         if (it == railMap.end())
         {
-            throw std::invalid_argument{"Unable to find rail with ID \"" + id +
-                                        '"'};
+            throw std::invalid_argument{
+                "Unable to find rail with ID \"" + id + '"'};
         }
         return *(it->second);
     }
@@ -122,8 +122,8 @@ class IDMap
         auto it = ruleMap.find(id);
         if (it == ruleMap.end())
         {
-            throw std::invalid_argument{"Unable to find rule with ID \"" + id +
-                                        '"'};
+            throw std::invalid_argument{
+                "Unable to find rule with ID \"" + id + '"'};
         }
         return *(it->second);
     }
