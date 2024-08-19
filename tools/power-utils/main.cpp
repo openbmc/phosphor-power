@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
 #include "updater.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
 #include <phosphor-logging/log.hpp>
+#include <sdbusplus/bus.hpp>
 
 #include <cassert>
+#include <filesystem>
 
 using namespace phosphor::logging;
 
@@ -47,9 +51,18 @@ int main(int argc, char** argv)
 
     std::string ret;
 
+    bool useJsonFile = version::utils::checkFileExists(PSU_JSON_PATH);
+    auto bus = sdbusplus::bus::new_default();
     if (!psuPath.empty())
     {
-        ret = version::getVersion(psuPath);
+        if (!useJsonFile)
+        {
+            ret = version::getVersion(bus, psuPath);
+        }
+        else
+        {
+            ret = version::getVersion(psuPath);
+        }
     }
     if (!versions.empty())
     {
