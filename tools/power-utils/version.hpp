@@ -15,14 +15,109 @@
  */
 #pragma once
 
+#include "pmbus.hpp"
+
+#include <sdbusplus/bus.hpp>
+
+#include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
+namespace utils
+{
+// PsuInfo contains the device path, pmbus read type, and the version string
+using PsuVersionInfo =
+    std::tuple<std::string, phosphor::pmbus::Type, std::string>;
+
+// PsuI2cInfo contains the device i2c bus and i2c address
+using PsuI2cInfo = std::tuple<std::uint64_t, std::uint64_t>;
+
+/**
+ * @brief Get PSU version information
+ *
+ * @param[in] psuInventoryPath - The PSU inventory path.
+ *
+ * @return tuple - device path, pmbus read type and PSU version
+ */
+PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath);
+
+/**
+ * @brief Get firmware latest version
+ *
+ * @param[in] versions - String of versions
+ *
+ * @return version - latest firmware level
+ */
+std::string getLatestDefault(const std::vector<std::string>& versions);
+
+/**
+ * @brief Get i2c bus and address
+ *
+ * @param[in] bus - Systemd bus connection
+ * @param[in] psuInventoryPath - The PSU inventory path.
+ *
+ * @return tuple - i2cBus and i2cAddr.
+ */
+PsuI2cInfo getPsuI2c(sdbusplus::bus_t& bus,
+                     const std::string& psuInventoryPath);
+
+/**
+ * @brief Get PMBus interface pointer
+ *
+ * @param[in] i2cBus - PSU i2c bus
+ * @param[in] i2cAddr - PSU i2c address
+ *
+ * @return Pointer to PSU PMBus interface
+ */
+std::unique_ptr<phosphor::pmbus::PMBusBase>
+    getPmbusIntf(std::uint64_t i2cBus, std::uint64_t i2cAddr);
+
+/**
+ * @brief Reads a VPD value from PMBus, corrects size, and contents.
+ *
+ * If the VPD data read is not the passed in size, resize and fill with
+ * spaces. If the data contains a non-alphanumeric value, replace any of
+ * those values with spaces.
+ *
+ * @param[in] pmbusIntf - PMBus Interface.
+ * @param[in] vpdName - The name of the sysfs "file" to read data from.
+ * @param[in] type - The HWMON file type to read from.
+ * @param[in] vpdSize - The expected size of the data for this VPD/property
+ *
+ * @return A string containing the VPD data read, resized if necessary
+ */
+std::string readVPDValue(phosphor::pmbus::PMBusBase& pmbusIntf,
+                         const std::string& vpdName,
+                         const phosphor::pmbus::Type& type,
+                         const std::size_t& vpdSize);
+
+/**
+ * @brief Check for file existence
+ *
+ * @param[in] filePath - File path
+ *
+ * @return bool
+ */
+bool checkFileExists(const std::string& filePath);
+
+} // namespace utils
 namespace version
 {
 
 /**
- * Get the software version of the PSU
+ * Get the software version of the PSU using sysfs
+ *
+ * @param[in] bus - Systemd bus connection
+ * @param[in] psuInventoryPath - The inventory path of the PSU
+ *
+ * @return The version of the PSU
+ */
+std::string getVersion(sdbusplus::bus_t& bus,
+                       const std::string& psuInventoryPath);
+
+/**
+ * Get the software version of the PSU using psu.json
  *
  * @param[in] psuInventoryPath - The inventory path of the PSU
  *
