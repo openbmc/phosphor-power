@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b7c8aaf_95a32cc2",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-08-21T19:34:20Z",
+      "side": 1,
+      "message": "I think you could just have:\n\n  return std::filesystem::exists(filePath);\n  \n?",
+      "range": {
+        "startLine": 219,
+        "startChar": 8,
+        "endLine": 226,
+        "endChar": 9
+      },
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23597efb_fb199dc0",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-08-21T19:34:20Z",
+      "side": 1,
+      "message": "You would only want files in this header file that others can call. It looks like all of the ones in the util namespace were just for use inside version.cpp?",
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f5143f3_91ef90d5",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-08-21T19:34:20Z",
+      "side": 1,
+      "message": "This isn\u0027t quite consistent with the naming you\u0027ve added in other places here.  For example the return type is PsuI2cInfo, so I think they should all be either PSUI2C or PsuI2c.  The standard says all caps for acronyms, but PSUI2C looks pretty ugly so I\u0027m ok either way.",
+      "range": {
+        "startLine": 62,
+        "startChar": 13,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
