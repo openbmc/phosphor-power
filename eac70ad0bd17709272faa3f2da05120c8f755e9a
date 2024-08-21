@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7c5f13_300d7131",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-21T18:39:54Z",
+      "side": 1,
+      "message": "Added include files",
+      "parentUuid": "7d08efc3_7a65df63",
+      "revId": "eac70ad0bd17709272faa3f2da05120c8f755e9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f886c8f7_2883ac9b",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-08-21T14:38:21Z",
       "side": 1,
       "message": "It would be helpful to know what the path was (since this is a util function) and why it failed.  It would help diagnose the problem.\n\nSo I\u0027d suggest something like:\n\n```\ncatch (const std::exception\u0026 e)\n{\n    log\u003clevel::ERR\u003e(\n       std::format(\"Unable to check for existence of {}: {}\", filePath, e.what()).c_str());\n}\n```",
+      "range": {
+        "startLine": 226,
+        "startChar": 4,
+        "endLine": 229,
+        "endChar": 5
+      },
+      "revId": "eac70ad0bd17709272faa3f2da05120c8f755e9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e539a08_1461c0f7",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-21T18:39:54Z",
+      "side": 1,
+      "message": "Modified to your suggestions",
+      "parentUuid": "f886c8f7_2883ac9b",
       "range": {
         "startLine": 226,
         "startChar": 4,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "636a7b03_36e071c1",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-21T18:39:54Z",
+      "side": 1,
+      "message": "Removed runtime catch",
+      "parentUuid": "bbacf63c_1becb5a3",
+      "range": {
+        "startLine": 281,
+        "startChar": 4,
+        "endLine": 285,
+        "endChar": 5
+      },
+      "revId": "eac70ad0bd17709272faa3f2da05120c8f755e9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "085012ae_2add5db2",
@@ -77,6 +143,30 @@
       "writtenOn": "2024-08-21T14:38:21Z",
       "side": 1,
       "message": "Nit: On line 273 you return \"\".  Might want to do the same thing in both places because I was trying to determine for a minute whether it was an intentional difference.  return {} is probably a bit more efficient, but return \"\" is very clear.",
+      "range": {
+        "startLine": 289,
+        "startChar": 15,
+        "endLine": 289,
+        "endChar": 17
+      },
+      "revId": "eac70ad0bd17709272faa3f2da05120c8f755e9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1525dc0_ef8e672c",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-21T18:39:54Z",
+      "side": 1,
+      "message": "Replaced with \"\"",
+      "parentUuid": "085012ae_2add5db2",
       "range": {
         "startLine": 289,
         "startChar": 15,
