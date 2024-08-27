@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "949d942a_38e98ce9",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-27T16:10:35Z",
+      "side": 1,
+      "message": "Modified",
+      "parentUuid": "f83df704_0596aaae",
+      "range": {
+        "startLine": 219,
+        "startChar": 8,
+        "endLine": 226,
+        "endChar": 9
+      },
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23597efb_fb199dc0",
