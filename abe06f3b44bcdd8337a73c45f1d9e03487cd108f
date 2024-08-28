@@ -125,6 +125,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a69f33_a075275a",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-08-28T21:31:46Z",
+      "side": 1,
+      "message": "Modified namespace version to have namespace utils",
+      "parentUuid": "d9a669c8_891cfd45",
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f5143f3_91ef90d5",
