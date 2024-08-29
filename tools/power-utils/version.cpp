@@ -301,4 +301,25 @@ std::string getLatest(const std::vector<std::string>& versions)
     // So just compare by strings is OK for these cases
     return utils::getLatestDefault(versions);
 }
+
+std::string getDifferentVersion(const std::vector<std::string>& versions)
+{
+    try
+    {
+        if (versions.size() == 2)
+        {
+            return (versions[0] != versions[1]) ? versions[1] : versions[0];
+        }
+        else
+        {
+            throw std::runtime_error(
+                "GetDifferentVersion requires two versions to compare");
+        }
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(std::format("Error: {}", e.what()).c_str());
+        return "";
+    }
+}
 } // namespace version

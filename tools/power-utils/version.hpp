@@ -134,4 +134,15 @@ std::string getVersion(const std::string& psuInventoryPath);
  */
 std::string getLatest(const std::vector<std::string>& versions);
 
+/**
+ * Get other PSU version level if different then version[0].
+ * version[0] is the current PSU level.
+ *
+ * @param[in] versions - The list of PSU version strings
+ *
+ * @return The different version string other then current PSU version
+ *      otherwise return current level.
+ */
+std::string getDifferentVersion(const std::vector<std::string>& versions);
+
 } // namespace version

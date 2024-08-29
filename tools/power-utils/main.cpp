@@ -32,6 +32,7 @@ int main(int argc, char** argv)
     std::string psuPath;
     std::vector<std::string> versions;
     bool rawOutput = false;
+    bool overrideCompare = false;
     std::vector<std::string> updateArguments;
 
     CLI::App app{"PSU utils app for OpenBMC"};
@@ -47,6 +48,9 @@ int main(int argc, char** argv)
         ->expected(2);
     action->require_option(1); // Only one option is supported
     app.add_flag("--raw", rawOutput, "Output raw text without linefeed");
+    app.add_flag("--override", overrideCompare,
+                 "Override compare with different level.");
+
     CLI11_PARSE(app, argc, argv);
 
     std::string ret;
@@ -64,9 +68,16 @@ int main(int argc, char** argv)
             ret = version::getVersion(psuPath);
         }
     }
-    if (!versions.empty())
+    if (overrideCompare && !versions.empty())
     {
-        ret = version::getLatest(versions);
+        ret = version::getDifferentVersion(versions);
+    }
+    else
+    {
+        if (!versions.empty())
+        {
+            ret = version::getLatest(versions);
+        }
     }
     if (!updateArguments.empty())
     {
