@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e39face_41d52220",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-08-30T19:26:05Z",
+      "side": 1,
+      "message": "can you include the return values here?",
+      "revId": "06bd6f9ee3e6a315427cf1065ff8d4516864cd1b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7aef13e_ff4e0d4b",
+        "filename": "tools/power-utils/version.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-08-30T19:26:05Z",
+      "side": 1,
+      "message": "I feel like you could simplify this down to:\n\n```\nif (versions.size() \u003d\u003d 2)\n    return versions[1];\n\nlog\u003cERR\u003e...\nreturn \"\"\n```\n\nor if you don\u0027t need the trace:\n\nreturn (versions.size() \u003d\u003d 2) ? versions[1] : \"\";",
+      "range": {
+        "startLine": 307,
+        "startChar": 3,
+        "endLine": 324,
+        "endChar": 1
+      },
+      "revId": "06bd6f9ee3e6a315427cf1065ff8d4516864cd1b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
