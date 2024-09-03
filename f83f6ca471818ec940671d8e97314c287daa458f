@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0060ffe4_f3a4e106",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-09-03T19:27:30Z",
+      "side": 1,
+      "message": "So it seems like the caller is the one that needs a --override flag right?  And if that is specified, they get the current PSU version, and if that is different from the desired version, it moves straight to doing the update?",
+      "revId": "f83f6ca471818ec940671d8e97314c287daa458f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5eaa630d_2ce914da",
