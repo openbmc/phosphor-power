@@ -16,6 +16,24 @@
       "message": "I guess I should ask, why even pass values into a program to do this, and not just do it in the caller?",
       "revId": "f83f6ca471818ec940671d8e97314c287daa458f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a5e330a_b78c78de",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-09-03T19:25:00Z",
+      "side": 1,
+      "message": "Good question I don\u0027t know why phosphor-psu-code-manager needs to call psutils to do level compare \"--compare ver1 ver2 \" and expect to get back the latest FW level (maybe flexibility and leave it up to psutils to decide which level need to flash). For IBM \"--override --compare ver1 ver2 \" means any level such as current level if they are the same, previous level or latest level if either different then current level.",
+      "parentUuid": "5eaa630d_2ce914da",
+      "revId": "f83f6ca471818ec940671d8e97314c287daa458f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
