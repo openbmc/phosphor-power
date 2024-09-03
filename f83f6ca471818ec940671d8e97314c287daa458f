@@ -34,6 +34,24 @@
       "parentUuid": "5eaa630d_2ce914da",
       "revId": "f83f6ca471818ec940671d8e97314c287daa458f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45820805_0021246e",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-09-03T19:26:09Z",
+      "side": 1,
+      "message": "I agree with Matt this enhancement is confusing.  My understanding is that --get-version will tell you the version installed on the PSU.  And --compare will tell you the newest version within a list of versions.\n\nIn the case of --override, you are saying the caller already knows what the PSU\u0027s current version is because it has to be the first argument.  And they already know they want the second version even if it is older.  So there is no point to calling --compare --override because it doesn\u0027t do anything right?",
+      "parentUuid": "5eaa630d_2ce914da",
+      "revId": "f83f6ca471818ec940671d8e97314c287daa458f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
