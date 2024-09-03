@@ -79,6 +79,7 @@ else
 endif
 
 systemd = dependency('systemd')
+libsystemd_dep = dependency('libsystemd')
 servicedir = systemd.get_variable('systemdsystemunitdir')
 
 services = [
