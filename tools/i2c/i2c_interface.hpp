@@ -184,6 +184,44 @@ class I2CInterface
      */
     virtual void write(uint8_t addr, uint8_t size, const uint8_t* data,
                        Mode mode = Mode::SMBUS) = 0;
+
+    /** @brief SMBus Process Call protocol to write and then read word data
+     *
+     * @param[in] addr - The register address of the i2c device
+     * @param[in] writeData - The data to write to the i2c device
+     * @param[out] readData - The data read from the i2c device
+     *
+     * @throw I2CException on error
+     */
+    virtual void processCall(uint8_t addr, uint16_t writeData,
+                             uint16_t& readData) = 0;
+
+    /** @brief SMBus Block Write-Block Read Process Call protocol
+     *
+     * The maximum write size depends on the SMBus version being used and what
+     * functionality the I2C adapter supports.
+     *
+     * If SMBus version 2.0 is being used, the maximum write size is 32 bytes.
+     * The read size + write size must be <= 32 bytes.
+     *
+     * If SMBus version 3.0 is being used and the I2C adapter supports plain
+     * I2C-level commands, the maximum write size is 255 bytes. The read size +
+     * write size must be <= 255 bytes.
+     *
+     * @param[in] addr - The register address of the i2c device
+     * @param[in] writeSize - The size of data to write
+     * @param[in] writeData - The data to write to the i2c device
+     * @param[out] readSize - The size of data read from i2c device. Max read
+     *                        size is 32 bytes.
+     * @param[out] readData - Pointer to buffer to hold the data read from the
+     *                        i2c device. Must be large enough to hold the data
+     *                        returned by the device (max is 32 bytes).
+     *
+     * @throw I2CException on error
+     */
+    virtual void processCall(uint8_t addr, uint8_t writeSize,
+                             const uint8_t* writeData, uint8_t& readSize,
+                             uint8_t* readData) = 0;
 };
 
 /** @brief Create an I2CInterface instance

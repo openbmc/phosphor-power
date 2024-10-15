@@ -29,6 +29,14 @@ class MockedI2CInterface : public I2CInterface
     MOCK_METHOD(void, write,
                 (uint8_t addr, uint8_t size, const uint8_t* data, Mode mode),
                 (override));
+
+    MOCK_METHOD(void, processCall,
+                (uint8_t addr, uint16_t writeData, uint16_t& readData),
+                (override));
+    MOCK_METHOD(void, processCall,
+                (uint8_t addr, uint8_t writeSize, const uint8_t* writeData,
+                 uint8_t& readSize, uint8_t* readData),
+                (override));
 };
 
 } // namespace i2c

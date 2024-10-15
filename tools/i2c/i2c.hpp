@@ -112,6 +112,55 @@ class I2CDevice : public I2CInterface
      */
     void checkWriteFuncs(int type);
 
+    /** @brief SMBus Block Write-Block Read Process Call using SMBus function
+     *
+     * In SMBus 2.0 the maximum write size + read size is <= 32 bytes.
+     * In SMBus 3.0 the maximum write size + read size is <= 255 bytes.
+     * The Linux SMBus function currently only supports the SMBus 2.0 maximum.
+     *
+     * @param[in] addr - The register address of the i2c device
+     * @param[in] writeSize - The size of data to write. Write size + read size
+     *                        must be <= 32 bytes.
+     * @param[in] writeData - The data to write to the i2c device
+     * @param[out] readSize - The size of data read from i2c device. Write size
+     *                        + read size must be <= 32 bytes.
+     * @param[out] readData - Pointer to buffer to hold the data read from the
+     *                        i2c device. Must be large enough to hold the data
+     *                        returned by the device (max is 32 bytes).
+     *
+     * @throw I2CException on error
+     */
+    void processCallSMBus(uint8_t addr, uint8_t writeSize,
+                          const uint8_t* writeData, uint8_t& readSize,
+                          uint8_t* readData);
+
+    /** @brief SMBus Block Write-Block Read Process Call using I2C messages
+     *
+     * This method supports block writes of more than 32 bytes.  It can also be
+     * used with I2C adapters that do not support the block process call
+     * protocol but do support I2C-level commands.
+     *
+     * This method implements the block process call using the lower level
+     * I2C_RDWR ioctl to send I2C messages.  Using this ioctl allows for writes
+     * up to 255 bytes.  The write size + read size must be <= 255 bytes.
+     *
+     * @param[in] addr - The register address of the i2c device
+     * @param[in] writeSize - The size of data to write. Write size + read size
+     *                        must be <= 255 bytes.
+     * @param[in] writeData - The data to write to the i2c device
+     * @param[out] readSize - The size of data read from i2c device. Max read
+     *                        size is 32 bytes, and write size + read size must
+     *                        be <= 255 bytes.
+     * @param[out] readData - Pointer to buffer to hold the data read from the
+     *                        i2c device. Must be large enough to hold the data
+     *                        returned by the device (max is 32 bytes).
+     *
+     * @throw I2CException on error
+     */
+    void processCallI2C(uint8_t addr, uint8_t writeSize,
+                        const uint8_t* writeData, uint8_t& readSize,
+                        uint8_t* readData);
+
   public:
     /** @copydoc I2CInterface::~I2CInterface() */
     ~I2CDevice()
@@ -160,6 +209,15 @@ class I2CDevice : public I2CInterface
     /** @copydoc I2CInterface::write(uint8_t,uint8_t,const uint8_t*,Mode) */
     void write(uint8_t addr, uint8_t size, const uint8_t* data,
                Mode mode = Mode::SMBUS) override;
+
+    /** @copydoc I2CInterface::processCall(uint8_t,uint16_t,uint16_t&) */
+    void processCall(uint8_t addr, uint16_t writeData,
+                     uint16_t& readData) override;
+
+    /** @copydoc I2CInterface::processCall(uint8_t,uint8_t,const
+     *                                     uint8_t*,uint8_t&,uint8_t*) */
+    void processCall(uint8_t addr, uint8_t writeSize, const uint8_t* writeData,
+                     uint8_t& readSize, uint8_t* readData) override;
 
     /** @brief Create an I2CInterface instance
      *
