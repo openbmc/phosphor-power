@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf9247fa_82a2dea7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-10-24T15:28:37Z",
+      "side": 1,
+      "message": "Solid code",
+      "revId": "a3ff7e71b1e044bfe4edcbb338e335b45a624715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c453fd28_4de7cc4e",
+        "filename": "tools/i2c/i2c.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-10-24T15:28:37Z",
+      "side": 1,
+      "message": "Add retry to match other method",
+      "range": {
+        "startLine": 504,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 5
+      },
+      "revId": "a3ff7e71b1e044bfe4edcbb338e335b45a624715",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
