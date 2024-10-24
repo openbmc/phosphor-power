@@ -254,31 +254,20 @@ std::string getVersion(const std::string& psuInventoryPath)
 std::string getVersion(sdbusplus::bus_t& bus,
                        const std::string& psuInventoryPath)
 {
+    std::string version;
     try
     {
-        constexpr auto FW_VERSION = "fw_version";
-        using namespace phosphor::pmbus;
-        const auto IBMCFFPS_FW_VERSION_SIZE = 12;
         const auto& [i2cbus, i2caddr] = utils::getPsuI2c(bus, psuInventoryPath);
-
-        auto pmbusIntf = utils::getPmbusIntf(i2cbus, i2caddr);
-
-        if (!pmbusIntf)
-        {
-            log<level::WARNING>("Unable to get pointer PMBus Interface");
-            return "";
-        }
-
-        std::string fwVersion =
-            utils::readVPDValue(*pmbusIntf, FW_VERSION, Type::HwmonDeviceDebug,
-                                IBMCFFPS_FW_VERSION_SIZE);
-        return fwVersion;
+        auto pmbus = utils::getPmbusIntf(i2cbus, i2caddr);
+        auto name = "fw_version";
+        auto type = phosphor::pmbus::Type::HwmonDeviceDebug;
+        version = pmbus->readString(name, type);
     }
     catch (const std::exception& e)
     {
         log<level::ERR>(std::format("Error: {}", e.what()).c_str());
-        return "";
     }
+    return version;
 }
 
 std::string getLatest(const std::vector<std::string>& versions)
