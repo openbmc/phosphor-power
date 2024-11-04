@@ -71,7 +71,7 @@ int main(int argc, char** argv)
     if (!updateArguments.empty())
     {
         assert(updateArguments.size() == 2);
-        if (updater::update(updateArguments[0], updateArguments[1]))
+        if (updater::update(bus, updateArguments[0], updateArguments[1]))
         {
             ret = "Update successful";
         }
