@@ -26,6 +26,7 @@ test(
         'test_updater',
         'test_updater.cpp',
         '../updater.cpp',
+        '../version.cpp',
         dependencies: [
             gtest,
             gmock,
