@@ -21,11 +21,14 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <sys/stat.h>
+
 #include <phosphor-logging/log.hpp>
 
 #include <chrono>
 #include <fstream>
 #include <thread>
+#include <vector>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -35,6 +38,10 @@ namespace updater
 
 namespace internal
 {
+
+// Define the CRC-8 polynomial (CRC-8-CCITT)
+constexpr uint8_t CRC8_POLYNOMIAL = 0x07;
+constexpr uint8_t CRC8_INITIAL = 0x00;
 
 /* Get the device name from the device path */
 std::string getDeviceName(std::string devPath)
@@ -46,6 +53,7 @@ std::string getDeviceName(std::string devPath)
     return fs::path(devPath).stem().string();
 }
 
+// Retrieve the device path from PSU inventory
 std::string getDevicePath(const std::string& psuInventoryPath)
 {
     auto data = util::loadJSONFromFile(PSU_JSON_PATH);
@@ -63,6 +71,23 @@ std::string getDevicePath(const std::string& psuInventoryPath)
     return devicePath;
 }
 
+// Construct the device path using the I2C bus and address
+std::string getDevicePath(sdbusplus::bus_t& bus,
+                          const std::string& psuInventoryPath)
+{
+    using namespace version;
+    const auto& [i2cbus, i2caddr] =
+        version::utils::getPsuI2c(bus, psuInventoryPath);
+    const auto DevicePath = "/sys/bus/i2c/devices/";
+    std::ostringstream ss;
+    ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
+    std::string addrStr = ss.str();
+    std::string busStr = std::to_string(i2cbus);
+    std::string devPath = DevicePath + busStr + "-" + addrStr;
+    return devPath;
+}
+
+// Parse the device name to get I2C bus ID and address
 std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
 {
     // Get I2C bus id and device address, e.g. 3-0068
@@ -74,28 +99,169 @@ std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
     return {busId, devAddr};
 }
 
+// Get the appropriate Updater class instance based on CCIN
+std::unique_ptr<updater::Updater> getClassInstance(
+    const std::string& ccin, const std::string& psuInventoryPath,
+    const std::string& devPath, const std::string& imageDir)
+{
+    if (ccin == "XXXX")
+    {
+        // XXXX updater class
+    }
+    return std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
+}
+
+// Function to locate FW file with prefix and extention bin or hex
+std::optional<std::string> getFWFilenamePath(const std::string& directory)
+{
+    namespace fs = std::filesystem;
+    // Get the last part of the directory name (ccin)
+    std::string prefix = fs::path(directory).filename().string();
+    for (const auto& entry : fs::directory_iterator(directory))
+    {
+        if (entry.is_regular_file())
+        {
+            std::string filename = entry.path().filename().string();
+
+            if ((filename.rfind(prefix, 0) == 0) &&
+                (filename.ends_with(".bin") || filename.ends_with(".hex")))
+            {
+                log<level::INFO>(std::format("getFWFilenamePath - filename={}",
+                                             entry.path().filename().string())
+                                     .c_str());
+                return directory + "/" + entry.path().filename().string();
+            }
+        }
+    }
+    return std::nullopt;
+}
+
+// Compute CRC-8 checksum for a vector of bytes
+uint8_t calculateCRC8(const std::vector<uint8_t>& data)
+{
+    uint8_t crc = CRC8_INITIAL;
+
+    for (const auto& byte : data)
+    {
+        crc ^= byte;
+        for (int i = 0; i < 8; ++i)
+        {
+            if (crc & 0x80)
+                crc = (crc << 1) ^ CRC8_POLYNOMIAL;
+            else
+                crc <<= 1;
+        }
+    }
+    return crc;
+}
+
+// Delay execution for a specified number of milliseconds
+void delay(const int& milliseconds)
+{
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+
+// Convert big endian (32 bit integer) to a vector of little endian.
+std::vector<uint8_t> bigEndianToLittleEndian(const uint32_t bigEndianValue)
+{
+    std::vector<uint8_t> littleEndianBytes(4);
+
+    littleEndianBytes[3] = (bigEndianValue >> 24) & 0xFF;
+    littleEndianBytes[2] = (bigEndianValue >> 16) & 0xFF;
+    littleEndianBytes[1] = (bigEndianValue >> 8) & 0xFF;
+    littleEndianBytes[0] = bigEndianValue & 0xFF;
+    return littleEndianBytes;
+}
+
+// Validate the existence and size of a firmware file.
+bool validateFWFile(const std::optional<std::string>& fileName)
+{
+    // Ensure the file exists and get the file size.
+    if (!std::filesystem::exists(*fileName))
+    {
+        log<level::ERR>(
+            std::format("Firmware file not found: {}", *fileName).c_str());
+        return false;
+    }
+
+    // Check the file size
+    auto fileSize = std::filesystem::file_size(*fileName);
+    if (fileSize == 0)
+    {
+        log<level::ERR>("Firmware file is empty");
+        return false;
+    }
+    return true;
+}
+
+// Open a firmware file for reading in binary mode.
+std::unique_ptr<std::ifstream>
+    openFirmwareFile(const std::optional<std::string> fileName)
+{
+    if (!fileName)
+    {
+        log<level::ERR>("Firmware file path is not provided");
+        return nullptr;
+    }
+    auto inputFile =
+        std::make_unique<std::ifstream>(*fileName, std::ios::binary);
+    if (!inputFile->is_open())
+    {
+        log<level::ERR>(
+            std::format("Failed to open firmware file: {}", *fileName).c_str());
+        return nullptr;
+    }
+    return inputFile;
+}
+
+// Read a block of firmware data from the input file.
+std::vector<uint8_t> readFirmwareBlock(
+    std::ifstream& inputFile, size_t& bytesRead, const int readBlockSize)
+{
+    std::vector<uint8_t> readDataBlock(readBlockSize, 0xFF);
+    inputFile.read(reinterpret_cast<char*>(readDataBlock.data()),
+                   readBlockSize);
+    bytesRead += inputFile.gcount();
+    return readDataBlock;
+}
+
 } // namespace internal
 
-bool update(const std::string& psuInventoryPath, const std::string& imageDir)
+bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
+            const std::string& imageDir, const bool useJsonFile)
 {
-    auto devPath = internal::getDevicePath(psuInventoryPath);
+    std::string devPath;
+    if (useJsonFile)
+    {
+        devPath = internal::getDevicePath(psuInventoryPath);
+    }
+    else
+    {
+        devPath = internal::getDevicePath(bus, psuInventoryPath);
+    }
+
     if (devPath.empty())
     {
         return false;
     }
 
     Updater updater(psuInventoryPath, devPath, imageDir);
-    if (!updater.isReadyToUpdate())
+    std::filesystem::path fsPath(imageDir);
+
+    std::unique_ptr<updater::Updater> updaterPtr = internal::getClassInstance(
+        fsPath.filename().string(), psuInventoryPath, devPath, imageDir);
+
+    if (!updaterPtr->isReadyToUpdate(useJsonFile))
     {
         log<level::ERR>("PSU not ready to update",
                         entry("PSU=%s", psuInventoryPath.c_str()));
         return false;
     }
 
-    updater.bindUnbind(false);
-    updater.createI2CDevice();
-    int ret = updater.doUpdate();
-    updater.bindUnbind(true);
+    updaterPtr->bindUnbind(false);
+    updaterPtr->createI2CDevice();
+    int ret = updaterPtr->doUpdate();
+    updaterPtr->bindUnbind(true);
     return ret == 0;
 }
 
@@ -160,7 +326,7 @@ void Updater::setPresent(bool present)
     }
 }
 
-bool Updater::isReadyToUpdate()
+bool Updater::isReadyToUpdate(const bool useJsonFile)
 {
     using namespace phosphor::pmbus;
 
@@ -210,11 +376,20 @@ bool Updater::isReadyToUpdate()
         // directly read the debugfs to get the status.
         try
         {
-            auto path = internal::getDevicePath(p);
+            std::string path;
+            if (useJsonFile)
+            {
+                path = internal::getDevicePath(p);
+            }
+            else
+            {
+                path = internal::getDevicePath(bus, p);
+            }
             PMBus pmbus(path);
             uint16_t statusWord = pmbus.read(STATUS_WORD, Type::Debug);
             auto status0Vout = pmbus.insertPageNum(STATUS_VOUT, 0);
             uint8_t voutStatus = pmbus.read(status0Vout, Type::Debug);
+
             if ((statusWord & status_word::VOUT_FAULT) ||
                 (statusWord & status_word::INPUT_FAULT_WARN) ||
                 (statusWord & status_word::VIN_UV_FAULT) ||
@@ -228,7 +403,7 @@ bool Updater::isReadyToUpdate()
                     "Unable to update PSU when other PSU has input/ouput fault",
                     entry("PSU=%s", p.c_str()),
                     entry("STATUS_WORD=0x%04x", statusWord),
-                    entry("VOUT_BYTE=0x%02x", voutStatus));
+                    entry("VOUT_BYTE:=0x%02x", voutStatus));
                 return false;
             }
         }
@@ -271,7 +446,7 @@ int Updater::doUpdate()
 void Updater::createI2CDevice()
 {
     auto [id, addr] = internal::parseDeviceName(devName);
+    setDeviceAddress(addr);
     i2c = i2c::create(id, addr);
 }
-
 } // namespace updater

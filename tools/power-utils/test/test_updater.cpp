@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "../updater.hpp"
+#include "../version.hpp"
 #include "mocked_i2c_interface.hpp"
 
 #include <filesystem>
@@ -85,7 +86,6 @@ class TestUpdater : public ::testing::Test
     std::string psuInventoryPath = "/com/example/psu";
     std::string imageDir = "/tmp/image/xxx";
 };
-
 TEST_F(TestUpdater, ctordtor)
 {
     updater = std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
