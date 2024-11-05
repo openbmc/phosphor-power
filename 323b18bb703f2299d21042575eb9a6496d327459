@@ -1,0 +1,495 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b041d9c_87bfb2bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Should probably use model instead of CCIN in most places.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95a87bf_53f41851",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "In looking at the new code and the existing code for the --get-version option, I think it would make more sense to remove useJsonFile from main().  It is an implementation detail that should be determined at a lower level when the data is actually obtained from JSON or D-Bus.  Forcing higher level callers to pass the variable and know which overloaded function to call seems wrong.\n\nI am planning to soon push a commit that refactors some functionality into a utils.hpp/cpp that is shared across --get-version, --get-model (new), and --update.  I can make the suggested change for useJsonFile in that commit if you prefer.",
+      "range": {
+        "startLine": 75,
+        "startChar": 28,
+        "endLine": 75,
+        "endChar": 39
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d32d562_e956b7b3",
+        "filename": "tools/power-utils/test/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Why was this needed?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa1b5fcb_76876971",
+        "filename": "tools/power-utils/test/test_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Why was this needed?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff402c6b_f0cf001b",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "naming convention is that local variables should start with a lower case level (devicePath).",
+      "range": {
+        "startLine": 81,
+        "startChar": 15,
+        "endLine": 81,
+        "endChar": 26
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f17981_f13fb079",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "model?",
+      "range": {
+        "startLine": 119,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 23
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "986131de_45fe8cc2",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Is this journal message intended to be kept long term?  If so, it probably should be more generic and not mention function names.  Maybe \"Found PSU firmware file: {}\"?  Also, can\u0027t you just specify the filename variable here?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0878852_3abae40c",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "filename?",
+      "range": {
+        "startLine": 132,
+        "startChar": 41,
+        "endLine": 132,
+        "endChar": 73
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86e96617_1e0437f9",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "What happens if this fails?  I think depending on how the stream is configured it either sets some internal error bits you can check or throws an exception.  Need to handle a failed read.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c83acefb_59864343",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "It is unusual to increment the parameter vs. just setting the parameter to gcount().  At a minimum the doxygen should explain this.  However, I think it would be simpler if it just returned the bytesRead (as the name implies).  Leave it up to the caller to add that to some other variable that is tracking total bytes read.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b47f7bf_f700e32f",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Should this line be deleted?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22803433_b2442d52",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Intentional change?",
+      "range": {
+        "startLine": 406,
+        "startChar": 36,
+        "endLine": 406,
+        "endChar": 37
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56ccc220_5a48d397",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Why did you add this?  This is the old way of avoiding multiple inclusions of the same header.  #pragma once is now the standard way.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f17ecb2_6ee4ca23",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bfd5ae7_20939782",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Why did you move this from private to protected?  Normally we don\u0027t want to give class users direct access to internal data members.  If you need to access it in child classes, maybe you want to create a protected method to access it like the new ones below?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8170bc9c_dfbd9c24",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "It is more efficient to return a const std::string\u0026 vs. std::string.\n\nRight now you are forcing a copy to be made.  With a const reference, the caller can assign it to a reference variable and no copy needs to be made.  Same comment on several other new functions below.",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 15
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "add683a8_8441418a",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Need to add doxygen comment describing it.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e03a1e7f_1678d50b",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "I think the first 4 methods could be useful for other actions like --get-version and --get-model.  So it would be helpful if these were put in a separate file like utils.hpp/cpp.\n\nI was going to do some similar work in a new commit soon, so if you prefer I can handle it there.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ece1733_dee188bc",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "This sentence doesn\u0027t make sense.  Maybe \"Get the device path that corresponds to a PSU inventory path\"?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b011c8a2_098ee505",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "I\u0027m not sure what busId means.  I assume this is just the bus number (like 3)?",
+      "range": {
+        "startLine": 212,
+        "startChar": 42,
+        "endLine": 212,
+        "endChar": 48
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "822ec0c2_b864c672",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "I2C bus number and device address?",
+      "range": {
+        "startLine": 216,
+        "startChar": 11,
+        "endLine": 216,
+        "endChar": 33
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a8b9fe9_5d42cd70",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "It would probably be better to use the term model, as that is more generic.  CCIN may be an IBM-specific term.",
+      "range": {
+        "startLine": 221,
+        "startChar": 75,
+        "endLine": 221,
+        "endChar": 79
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8cba1d1_ad8a9149",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "I\u0027d recommend renaming this to model.  If you keep ccin, this is a typo.",
+      "range": {
+        "startLine": 223,
+        "startChar": 21,
+        "endLine": 223,
+        "endChar": 28
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df0cb83e_4a0ca6c8",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "I don\u0027t think this function or openFirmwareFile should accept a std::optional argument.  Why call them if you don\u0027t even have a file name?  If the caller has a std::optional\u003cstd::string\u003e, the caller should verify it has a value and then deference it when calling these two functions.",
+      "range": {
+        "startLine": 275,
+        "startChar": 31,
+        "endLine": 275,
+        "endChar": 39
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22809499_2621eaa2",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 1,
+      "message": "Missing doxygen on this function and the one below.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

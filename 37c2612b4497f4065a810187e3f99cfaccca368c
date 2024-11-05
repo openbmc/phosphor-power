@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4597e73_4ab65ea1",
+        "filename": "tools/power-utils/test/test_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-05T20:19:56Z",
+      "side": 0,
+      "message": "Shouldn\u0027t this blank line be there as a separator?",
+      "revId": "37c2612b4497f4065a810187e3f99cfaccca368c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
