@@ -15,6 +15,7 @@
  */
 #include "config.h"
 
+#include "model.hpp"
 #include "updater.hpp"
 #include "utils.hpp"
 #include "version.hpp"
@@ -30,15 +31,17 @@ using namespace phosphor::logging;
 
 int main(int argc, char** argv)
 {
-    std::string psuPath;
+    std::string psuPathVersion, psuPathModel;
     std::vector<std::string> versions;
     bool rawOutput = false;
     std::vector<std::string> updateArguments;
 
     CLI::App app{"PSU utils app for OpenBMC"};
     auto action = app.add_option_group("Action");
-    action->add_option("-g,--get-version", psuPath,
+    action->add_option("-g,--get-version", psuPathVersion,
                        "Get PSU version from inventory path");
+    action->add_option("-m,--get-model", psuPathModel,
+                       "Get PSU model from inventory path");
     action->add_option("-c,--compare", versions,
                        "Compare and get the latest version");
     action
@@ -54,16 +57,20 @@ int main(int argc, char** argv)
 
     bool useJsonFile = utils::checkFileExists(PSU_JSON_PATH);
     auto bus = sdbusplus::bus::new_default();
-    if (!psuPath.empty())
+    if (!psuPathVersion.empty())
     {
         if (!useJsonFile)
         {
-            ret = version::getVersion(bus, psuPath);
+            ret = version::getVersion(bus, psuPathVersion);
         }
         else
         {
-            ret = version::getVersion(psuPath);
+            ret = version::getVersion(psuPathVersion);
         }
+    }
+    if (!psuPathModel.empty())
+    {
+        ret = model::getModel(bus, psuPathModel);
     }
     if (!versions.empty())
     {
