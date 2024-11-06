@@ -4,6 +4,7 @@ test(
         'test_version',
         'test_version.cpp',
         '../version.cpp',
+        '../utils.cpp',
         dependencies: [
             gtest,
             nlohmann_json_dep,

@@ -16,6 +16,7 @@
 #include "config.h"
 
 #include "updater.hpp"
+#include "utils.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
@@ -51,7 +52,7 @@ int main(int argc, char** argv)
 
     std::string ret;
 
-    bool useJsonFile = version::utils::checkFileExists(PSU_JSON_PATH);
+    bool useJsonFile = utils::checkFileExists(PSU_JSON_PATH);
     auto bus = sdbusplus::bus::new_default();
     if (!psuPath.empty())
     {
