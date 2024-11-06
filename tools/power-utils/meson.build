@@ -2,6 +2,7 @@ psutils = executable(
     'psutils',
     'version.cpp',
     'updater.cpp',
+    'utils.cpp',
     'main.cpp',
     dependencies: [
         cli11_dep,

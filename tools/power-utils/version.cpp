@@ -19,35 +19,29 @@
 
 #include "pmbus.hpp"
 #include "utility.hpp"
+#include "utils.hpp"
 
+#include <nlohmann/json.hpp>
 #include <phosphor-logging/log.hpp>
-#include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <exception>
-#include <iostream>
-#include <regex>
-#include <stdexcept>
 #include <tuple>
 
 using json = nlohmann::json;
 
+using namespace utils;
 using namespace phosphor::logging;
-
 using namespace phosphor::power::util;
-using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 namespace version
 {
-namespace utils
+
+namespace internal
 {
-constexpr auto IBMCFFPSInterface =
-    "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
-constexpr auto i2cBusProp = "I2CBus";
-constexpr auto i2cAddressProp = "I2CAddress";
 
 PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
 {
-    auto data = phosphor::power::util::loadJSONFromFile(PSU_JSON_PATH);
+    auto data = loadJSONFromFile(PSU_JSON_PATH);
 
     if (data == nullptr)
     {
@@ -68,7 +62,7 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
         return {};
     }
 
-    auto type = phosphor::power::util::getPMBusAccessType(data);
+    auto type = getPMBusAccessType(data);
 
     std::string versionStr;
     for (const auto& fru : data["fruConfigs"])
@@ -101,139 +95,12 @@ std::string getLatestDefault(const std::vector<std::string>& versions)
     return latest;
 }
 
-PsuI2cInfo getPsuI2c(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
-{
-    auto depth = 0;
-    auto objects = getSubTree(bus, "/", IBMCFFPSInterface, depth);
-    if (objects.empty())
-    {
-        throw std::runtime_error("Supported Configuration Not Found");
-    }
-
-    std::optional<std::uint64_t> i2cbus;
-    std::optional<std::uint64_t> i2caddr;
-
-    // GET a map of objects back.
-    // Each object will have a path, a service, and an interface.
-    for (const auto& [path, services] : objects)
-    {
-        auto service = services.begin()->first;
-
-        if (path.empty() || service.empty())
-        {
-            continue;
-        }
-
-        // Match the PSU identifier in the path with the passed PSU inventory
-        // path. Compare the last character of both paths to find the PSU bus
-        // and address. example: PSU path:
-        // /xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_0
-        // PSU inventory path:
-        // /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0
-        if (path.back() == psuInventoryPath.back())
-        {
-            // Retrieve i2cBus and i2cAddress from array of properties.
-            auto properties =
-                getAllProperties(bus, path, IBMCFFPSInterface, service);
-            for (const auto& property : properties)
-            {
-                try
-                {
-                    if (property.first == i2cBusProp)
-                    {
-                        i2cbus = std::get<uint64_t>(properties.at(i2cBusProp));
-                    }
-                    else if (property.first == i2cAddressProp)
-                    {
-                        i2caddr =
-                            std::get<uint64_t>(properties.at(i2cAddressProp));
-                    }
-                }
-                catch (const std::exception& e)
-                {
-                    log<level::WARNING>(
-                        std::format("Error reading property {}: {}",
-                                    property.first, e.what())
-                            .c_str());
-                }
-            }
-
-            if (i2cbus.has_value() && i2caddr.has_value())
-            {
-                break;
-            }
-        }
-    }
-
-    if (!i2cbus.has_value() || !i2caddr.has_value())
-    {
-        throw std::runtime_error("Failed to get I2C bus or address");
-    }
-
-    return std::make_tuple(*i2cbus, *i2caddr);
-}
-
-std::unique_ptr<phosphor::pmbus::PMBusBase>
-    getPmbusIntf(std::uint64_t i2cBus, std::uint64_t i2cAddr)
-{
-    std::stringstream ss;
-    ss << std::hex << std::setw(4) << std::setfill('0') << i2cAddr;
-    return phosphor::pmbus::createPMBus(i2cBus, ss.str());
-}
-
-std::string readVPDValue(phosphor::pmbus::PMBusBase& pmbusIntf,
-                         const std::string& vpdName,
-                         const phosphor::pmbus::Type& type,
-                         const std::size_t& vpdSize)
-{
-    std::string vpdValue;
-    const std::regex illegalVPDRegex =
-        std::regex("[^[:alnum:]]", std::regex::basic);
-
-    try
-    {
-        vpdValue = pmbusIntf.readString(vpdName, type);
-    }
-    catch (const ReadFailure& e)
-    {
-        // Ignore the read failure, let pmbus code indicate failure.
-    }
-
-    if (vpdValue.size() != vpdSize)
-    {
-        log<level::INFO>(
-            std::format(" {} resize needed. size: {}", vpdName, vpdValue.size())
-                .c_str());
-        vpdValue.resize(vpdSize, ' ');
-    }
-
-    // Replace any illegal values with space(s).
-    std::regex_replace(vpdValue.begin(), vpdValue.begin(), vpdValue.end(),
-                       illegalVPDRegex, " ");
-
-    return vpdValue;
-}
-
-bool checkFileExists(const std::string& filePath)
-{
-    try
-    {
-        return std::filesystem::exists(filePath);
-    }
-    catch (const std::exception& e)
-    {
-        log<level::ERR>(std::format("Unable to check for existence of {}: {}",
-                                    filePath, e.what())
-                            .c_str());
-    }
-    return false;
-}
-} // namespace utils
+} // namespace internal
 
 std::string getVersion(const std::string& psuInventoryPath)
 {
     const auto& [devicePath, type, versionStr] =
-        utils::getVersionInfo(psuInventoryPath);
+        internal::getVersionInfo(psuInventoryPath);
     if (devicePath.empty() || versionStr.empty())
     {
         return "";
@@ -257,8 +124,8 @@ std::string getVersion(sdbusplus::bus_t& bus,
     std::string version;
     try
     {
-        const auto& [i2cbus, i2caddr] = utils::getPsuI2c(bus, psuInventoryPath);
-        auto pmbus = utils::getPmbusIntf(i2cbus, i2caddr);
+        const auto& [i2cbus, i2caddr] = getPsuI2c(bus, psuInventoryPath);
+        auto pmbus = getPmbusIntf(i2cbus, i2caddr);
         std::string name = "fw_version";
         auto type = phosphor::pmbus::Type::HwmonDeviceDebug;
         version = pmbus->readString(name, type);
@@ -288,6 +155,6 @@ std::string getLatest(const std::vector<std::string>& versions)
     // means a newer version.
     //
     // So just compare by strings is OK for these cases
-    return utils::getLatestDefault(versions);
+    return internal::getLatestDefault(versions);
 }
 } // namespace version

@@ -20,6 +20,7 @@
 #include "pmbus.hpp"
 #include "types.hpp"
 #include "utility.hpp"
+#include "utils.hpp"
 
 #include <sys/stat.h>
 
@@ -76,9 +77,8 @@ std::string getDevicePath(sdbusplus::bus_t& bus,
         }
         else
         {
-            using namespace version;
             const auto& [i2cbus, i2caddr] =
-                version::utils::getPsuI2c(bus, psuInventoryPath);
+                utils::getPsuI2c(bus, psuInventoryPath);
             const auto DevicePath = "/sys/bus/i2c/devices/";
             std::ostringstream ss;
             ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
@@ -253,7 +253,7 @@ std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
 // Wrapper to check existence of PSU JSON file.
 bool usePsuJsonFile()
 {
-    return version::utils::checkFileExists(PSU_JSON_PATH);
+    return utils::checkFileExists(PSU_JSON_PATH);
 }
 } // namespace internal
 

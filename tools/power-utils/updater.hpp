@@ -16,7 +16,6 @@
 #pragma once
 
 #include "i2c_interface.hpp"
-#include "version.hpp"
 
 #include <sdbusplus/bus.hpp>
 
