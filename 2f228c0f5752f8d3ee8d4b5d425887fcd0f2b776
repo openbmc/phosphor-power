@@ -16,6 +16,23 @@
       "message": "Thanks for your reviews, Updated the comment please review again",
       "revId": "2f228c0f5752f8d3ee8d4b5d425887fcd0f2b776",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad28fee2_1692a59e",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T21:41:18Z",
+      "side": 1,
+      "message": "It is possible that read() read fewer than numberOfBytesToRead bytes right?\n\n\u003e Characters are extracted and stored until any of the following conditions occurs:\n\u003e * count characters were extracted and stored. \n\u003e * end of file condition occurs on the input sequence (in which case, setstate(failbit|eofbit) is called). The number of successfully extracted characters can be queried using gcount(). \n\nSo this should still determine the number of bytes actually read using gcount().  Then it should set the vector size to that using vector.resize() right?\n\nFor example, we try to read 32 bytes, only get 2 (maybe end of file).  So the returned vector should be resized to 2 since only the first two bytes are from the file.\n\nThat enables the caller to trust that whatever the vector size is, that is the number of bytes that were read successfully.",
+      "revId": "2f228c0f5752f8d3ee8d4b5d425887fcd0f2b776",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
