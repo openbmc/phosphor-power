@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0b400c5_f2b88388",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b041d9c_87bfb2bf",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e95a87bf_53f41851",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "In looking at the new code and the existing code for the --get-version option, I think it would make more sense to remove useJsonFile from main().  It is an implementation detail that should be determined at a lower level when the data is actually obtained from JSON or D-Bus.  Forcing higher level callers to pass the variable and know which overloaded function to call seems wrong.\n\nI am planning to soon push a commit that refactors some functionality into a utils.hpp/cpp that is shared across --get-version, --get-model (new), and --update.  I can make the suggested change for useJsonFile in that commit if you prefer.",
+      "range": {
+        "startLine": 75,
+        "startChar": 28,
+        "endLine": 75,
+        "endChar": 39
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "986fb79d_ae06197a",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Renoved useJsonFile to function needs it. We should do same for version above",
+      "parentUuid": "e95a87bf_53f41851",
       "range": {
         "startLine": 75,
         "startChar": 28,
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a9155fc_13425f35",
+        "filename": "tools/power-utils/test/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "updater::internal::getDevicePath() calls version::utils::getPsuI2c",
+      "parentUuid": "0d32d562_e956b7b3",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa1b5fcb_76876971",
@@ -75,6 +135,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12d616bd_c7b89497",
+        "filename": "tools/power-utils/test/test_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "updater::internal::getDevicePath calls version::utils::getPsuI2c",
+      "parentUuid": "aa1b5fcb_76876971",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff402c6b_f0cf001b",
@@ -88,6 +166,30 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "naming convention is that local variables should start with a lower case level (devicePath).",
+      "range": {
+        "startLine": 81,
+        "startChar": 15,
+        "endLine": 81,
+        "endChar": 26
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a08588_92bd1f73",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff402c6b_f0cf001b",
       "range": {
         "startLine": 81,
         "startChar": 15,
@@ -121,6 +223,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95c9dad_a4689899",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14f17981_f13fb079",
+      "range": {
+        "startLine": 119,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 23
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "986131de_45fe8cc2",
@@ -134,6 +260,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Is this journal message intended to be kept long term?  If so, it probably should be more generic and not mention function names.  Maybe \"Found PSU firmware file: {}\"?  Also, can\u0027t you just specify the filename variable here?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0edbaf4_a57d1022",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Debug message removed",
+      "parentUuid": "986131de_45fe8cc2",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -161,6 +305,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce0ba82_442d8a7b",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Modified return to directory +\"/\" +filename",
+      "parentUuid": "a0878852_3abae40c",
+      "range": {
+        "startLine": 132,
+        "startChar": 41,
+        "endLine": 132,
+        "endChar": 73
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86e96617_1e0437f9",
@@ -174,6 +342,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "What happens if this fails?  I think depending on how the stream is configured it either sets some internal error bits you can check or throws an exception.  Need to handle a failed read.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9bacebf_824318a0",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86e96617_1e0437f9",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -195,6 +381,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cf94f7_80a31f99",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c83acefb_59864343",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b47f7bf_f700e32f",
@@ -208,6 +412,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Should this line be deleted?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1917fdf6_c3b60409",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b47f7bf_f700e32f",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -235,6 +457,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c65c8db8_c7a5b39c",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Oops typo",
+      "parentUuid": "22803433_b2442d52",
+      "range": {
+        "startLine": 406,
+        "startChar": 36,
+        "endLine": 406,
+        "endChar": 37
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56ccc220_5a48d397",
@@ -248,6 +494,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Why did you add this?  This is the old way of avoiding multiple inclusions of the same header.  #pragma once is now the standard way.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d9ec50_3886da42",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56ccc220_5a48d397",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -269,6 +533,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce81341b_5ae829bf",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "getDevicePath calls version::utils::getPsuI2c",
+      "parentUuid": "4f17ecb2_6ee4ca23",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bfd5ae7_20939782",
@@ -282,6 +564,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Why did you move this from private to protected?  Normally we don\u0027t want to give class users direct access to internal data members.  If you need to access it in child classes, maybe you want to create a protected method to access it like the new ones below?",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "347b42da_84a3b7a6",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "accident meant to add protected accessor",
+      "parentUuid": "6bfd5ae7_20939782",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -309,6 +609,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb078c62_c3e5d949",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Declaring the return type to const can limit usability. I think if we should have \"std::string getPsuInventoryPath() const\"\n\nWill change to \"const std::string getPsuInventoryPath()\"",
+      "parentUuid": "8170bc9c_dfbd9c24",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 15
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "add683a8_8441418a",
@@ -322,6 +646,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Need to add doxygen comment describing it.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26444912_cfc4a43d",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Removed deviceAddress, debug leftover",
+      "parentUuid": "add683a8_8441418a",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -343,6 +685,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47ea1992_4174c949",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "You can add these functions with your commit",
+      "parentUuid": "e03a1e7f_1678d50b",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ece1733_dee188bc",
@@ -360,6 +720,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc8dc27_91e9c3a5",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Corrected: Get the device path from the PSU inventory path.",
+      "parentUuid": "0ece1733_dee188bc",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b011c8a2_098ee505",
@@ -373,6 +751,30 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "I\u0027m not sure what busId means.  I assume this is just the bus number (like 3)?",
+      "range": {
+        "startLine": 212,
+        "startChar": 42,
+        "endLine": 212,
+        "endChar": 48
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1564bc4c_8f2a7b58",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "BusId listed in the constructor of I2CDevice (https://github.com/openbmc/phosphor-power/blob/master/tools/i2c/i2c.hpp) I believe it\u0027s the bus identifier.\n\nI will change all reference of bus ID to bus",
+      "parentUuid": "b011c8a2_098ee505",
       "range": {
         "startLine": 212,
         "startChar": 42,
@@ -406,6 +808,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4d669e5_5cf9a102",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "822ec0c2_b864c672",
+      "range": {
+        "startLine": 216,
+        "startChar": 11,
+        "endLine": 216,
+        "endChar": 33
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a8b9fe9_5d42cd70",
@@ -419,6 +845,30 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "It would probably be better to use the term model, as that is more generic.  CCIN may be an IBM-specific term.",
+      "range": {
+        "startLine": 221,
+        "startChar": 75,
+        "endLine": 221,
+        "endChar": 79
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d441ec4d_bbe06902",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a8b9fe9_5d42cd70",
       "range": {
         "startLine": 221,
         "startChar": 75,
@@ -452,6 +902,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ceea13_fc6e998c",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8cba1d1_ad8a9149",
+      "range": {
+        "startLine": 223,
+        "startChar": 21,
+        "endLine": 223,
+        "endChar": 28
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df0cb83e_4a0ca6c8",
@@ -475,6 +949,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62688ca7_e47753a6",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df0cb83e_4a0ca6c8",
+      "range": {
+        "startLine": 275,
+        "startChar": 31,
+        "endLine": 275,
+        "endChar": 39
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22809499_2621eaa2",
@@ -488,6 +986,24 @@
       "writtenOn": "2024-11-05T20:19:56Z",
       "side": 1,
       "message": "Missing doxygen on this function and the one below.",
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60af1fc6_e00e8d14",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22809499_2621eaa2",
       "revId": "323b18bb703f2299d21042575eb9a6496d327459",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

@@ -16,6 +16,24 @@
       "message": "Shouldn\u0027t this blank line be there as a separator?",
       "revId": "37c2612b4497f4065a810187e3f99cfaccca368c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85ee628_10290d29",
+        "filename": "tools/power-utils/test/test_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T15:00:45Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "e4597e73_4ab65ea1",
+      "revId": "37c2612b4497f4065a810187e3f99cfaccca368c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
