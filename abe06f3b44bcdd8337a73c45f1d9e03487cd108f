@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed23d99d_f10dbb64",
+        "filename": "tools/power-utils/version.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-08T14:59:31Z",
+      "side": 1,
+      "message": "At meeting Faisal said they would eventually be used in other places beyond version.cpp.",
+      "parentUuid": "071fab11_9dcabdb7",
+      "revId": "abe06f3b44bcdd8337a73c45f1d9e03487cd108f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f5143f3_91ef90d5",
         "filename": "tools/power-utils/version.hpp",
         "patchSetId": 2

@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1924f001_543bff25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-08T14:59:31Z",
+      "side": 1,
+      "message": "just cleaning up old comments, already merged.",
+      "revId": "5dce1a746e3b4f567940afd2bacd16ee8e6e1fd6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ],
   "submitRequirementResults": []
 }
