@@ -69,6 +69,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc242b6b_b5cc7628",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "No this is not specific for AEI",
+      "parentUuid": "6b435f4d_fe88d0f0",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38029dc2_62cd9ad8",
@@ -86,6 +104,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c7d5ca_c589a13d",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "No, I did not since this was an old code, I tested new code I added. I have added try and catch around this code.",
+      "parentUuid": "38029dc2_62cd9ad8",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b813b4fb_29592ff4",
@@ -99,6 +135,30 @@
       "writtenOn": "2024-11-08T17:25:50Z",
       "side": 1,
       "message": "Nit: spelling error: extension",
+      "range": {
+        "startLine": 114,
+        "startChar": 45,
+        "endLine": 114,
+        "endChar": 55
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a601848e_5fa44f5d",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b813b4fb_29592ff4",
       "range": {
         "startLine": 114,
         "startChar": 45,
@@ -132,6 +192,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8dfea1c_583af9c4",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b97346af_a3178071",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 25
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8cd5f86_8c68baaf",
@@ -145,6 +229,30 @@
       "writtenOn": "2024-11-08T17:25:50Z",
       "side": 1,
       "message": "As we discussed offline, \"const std::string\" doesn\u0027t make sense, since the return type is a copy anyway.\n\nThe desired return type is \"const std::string\u0026\".  Then we don\u0027t always make a copy, and the caller can choose to make a copy if they want to modify the value.\n\nYou can also add \u0027const\u0027 to the end of this declaration since the method is safe to call if the caller has a const Updater\u0026 (e.g. read-only access).\n\nSo the final declaration should look like:\n\n```\nconst std::string\u0026 getPsuInventoryPath() const\n```\n\nThe same comments apply to getDevPath(), getDevName(), and getImageDir().",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 10
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cac0fde_eb98a4c0",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8cd5f86_8c68baaf",
       "range": {
         "startLine": 104,
         "startChar": 4,
@@ -178,6 +286,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "699ead91_6c153c6d",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98a569bb_8ee27a05",
+      "range": {
+        "startLine": 128,
+        "startChar": 32,
+        "endLine": 128,
+        "endChar": 37
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cb4097e_07ac8fbe",
@@ -191,6 +323,30 @@
       "writtenOn": "2024-11-08T17:25:50Z",
       "side": 1,
       "message": "It looks like this isn\u0027t overloaded any more?",
+      "range": {
+        "startLine": 181,
+        "startChar": 10,
+        "endLine": 181,
+        "endChar": 21
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d7ab0f_abb5059b",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cb4097e_07ac8fbe",
       "range": {
         "startLine": 181,
         "startChar": 10,
@@ -224,6 +380,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a56f8dfa_f5209ff5",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b840106c_93ab25b7",
+      "range": {
+        "startLine": 272,
+        "startChar": 65,
+        "endLine": 272,
+        "endChar": 73
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df0f374a_ab328856",
@@ -237,6 +417,30 @@
       "writtenOn": "2024-11-08T17:25:50Z",
       "side": 1,
       "message": "This should be \"out\" right?",
+      "range": {
+        "startLine": 273,
+        "startChar": 10,
+        "endLine": 273,
+        "endChar": 12
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1eaa15_53b0cea9",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Removed numberOfBytesRead",
+      "parentUuid": "df0f374a_ab328856",
       "range": {
         "startLine": 273,
         "startChar": 10,
@@ -264,6 +468,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83ec1fd_f9d8bec0",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Removed numberOfBytesRead",
+      "parentUuid": "02ab07f8_d52a934d",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "357f2308_1f21dae8",
@@ -277,6 +499,30 @@
       "writtenOn": "2024-11-08T17:25:50Z",
       "side": 1,
       "message": "If you decide to keep both numberOfBytesToRead() and numberOfBytesRead(), they should probably have the same data type.  Maybe change numberOfBytesToRead to be a size_t too?",
+      "range": {
+        "startLine": 279,
+        "startChar": 39,
+        "endLine": 279,
+        "endChar": 45
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da264a43_9441f0b9",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-08T21:02:11Z",
+      "side": 1,
+      "message": "Removed numberOfBytesRead",
+      "parentUuid": "357f2308_1f21dae8",
       "range": {
         "startLine": 279,
         "startChar": 39,
