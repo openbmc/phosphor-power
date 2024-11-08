@@ -16,6 +16,40 @@
       "message": "Resolved all the issues, please review",
       "revId": "556aca29645bb2fe73752f12122c5e981feec795",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "418ddeec_93d00985",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-08T17:14:33Z",
+      "side": 1,
+      "message": "Just a general comment, is any of this specific to a certain vendor (like the CRC stuff)?  Will the vendor-specific things be named differently, and stored in different files?",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b435f4d_fe88d0f0",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-08T17:14:33Z",
+      "side": 1,
+      "message": "is this specific to AEI, if so, should it be prefaced as such?",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
