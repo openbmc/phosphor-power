@@ -35,6 +35,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "832327b0_80010dd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "Lots of good changes.  I think a few more are needed, but this is close.",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b435f4d_fe88d0f0",
@@ -48,6 +65,224 @@
       "writtenOn": "2024-11-08T17:14:33Z",
       "side": 1,
       "message": "is this specific to AEI, if so, should it be prefaced as such?",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38029dc2_62cd9ad8",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "Did you try testing this with an invalid psuInventoryPath?  I\u0027m just asking because the nlohmann::json documentation is confusing about how it handles the case where the key doesn\u0027t exist.  It seems like it might automatically add a nullptr value, or it might throw an exception.",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b813b4fb_29592ff4",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "Nit: spelling error: extension",
+      "range": {
+        "startLine": 114,
+        "startChar": 45,
+        "endLine": 114,
+        "endChar": 55
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b97346af_a3178071",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "I don\u0027t think you want the ! here right?  It should be \"if (fileName.empty())\" ?",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 25
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8cd5f86_8c68baaf",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "As we discussed offline, \"const std::string\" doesn\u0027t make sense, since the return type is a copy anyway.\n\nThe desired return type is \"const std::string\u0026\".  Then we don\u0027t always make a copy, and the caller can choose to make a copy if they want to modify the value.\n\nYou can also add \u0027const\u0027 to the end of this declaration since the method is safe to call if the caller has a const Updater\u0026 (e.g. read-only access).\n\nSo the final declaration should look like:\n\n```\nconst std::string\u0026 getPsuInventoryPath() const\n```\n\nThe same comments apply to getDevPath(), getDevName(), and getImageDir().",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 10
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a569bb_8ee27a05",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "Please remove the const at the end of this method declaration.  Since it is returning a non-const (writable) pointer to this class\u0027s i2c data member, it is allowing the internal state of this class to be modified.  So it is not a const method.",
+      "range": {
+        "startLine": 128,
+        "startChar": 32,
+        "endLine": 128,
+        "endChar": 37
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cb4097e_07ac8fbe",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "It looks like this isn\u0027t overloaded any more?",
+      "range": {
+        "startLine": 181,
+        "startChar": 10,
+        "endLine": 181,
+        "endChar": 21
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b840106c_93ab25b7",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "typo: firmware",
+      "range": {
+        "startLine": 272,
+        "startChar": 65,
+        "endLine": 272,
+        "endChar": 73
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df0f374a_ab328856",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "This should be \"out\" right?",
+      "range": {
+        "startLine": 273,
+        "startChar": 10,
+        "endLine": 273,
+        "endChar": 12
+      },
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02ab07f8_d52a934d",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "Will the vector.size() always be equal to the number of bytes read?  If so, we probably don\u0027t need the numberOfBytesRead output parameter right?\n\nIf they can be different, maybe they shouldn\u0027t be?  The vector resize() method can be used to modify the size.",
+      "revId": "556aca29645bb2fe73752f12122c5e981feec795",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357f2308_1f21dae8",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "If you decide to keep both numberOfBytesToRead() and numberOfBytesRead(), they should probably have the same data type.  Maybe change numberOfBytesToRead to be a size_t too?",
+      "range": {
+        "startLine": 279,
+        "startChar": 39,
+        "endLine": 279,
+        "endChar": 45
+      },
       "revId": "556aca29645bb2fe73752f12122c5e981feec795",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

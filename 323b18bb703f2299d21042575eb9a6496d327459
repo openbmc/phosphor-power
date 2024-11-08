@@ -785,6 +785,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b48af4d2_9520c243",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T17:25:50Z",
+      "side": 1,
+      "message": "You are right that is my mistake.  I didn\u0027t realize the I2C interface class used that term for the bus number.",
+      "parentUuid": "1564bc4c_8f2a7b58",
+      "range": {
+        "startLine": 212,
+        "startChar": 42,
+        "endLine": 212,
+        "endChar": 48
+      },
+      "revId": "323b18bb703f2299d21042575eb9a6496d327459",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "822ec0c2_b864c672",
