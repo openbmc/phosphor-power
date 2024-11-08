@@ -22,6 +22,30 @@
       },
       "revId": "efc0f0f6358bbf4765171b16002e105473ee7792",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1079d05_8481553b",
+        "filename": "tools/power-utils/model.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-08T20:07:33Z",
+      "side": 1,
+      "message": "I copied this line from version.cpp, but your question really made me think.  It is binding variables to a temporary return value.\n\nI *think* the binding automatically extends the life of the temporary until the binding variable goes out of scope.\n\nhttps://en.cppreference.com/w/cpp/language/structured_binding\n\n\u003e The usual rules for reference-binding to temporaries (including lifetime-extension) apply if a ref-qualifier is present and the expression is a prvalue. In those cases the hidden variable e is a reference that binds to the temporary variable materialized from the prvalue expression, extending its lifetime.\n\nHowever, that is some dense C++ legal-ese.  I removed the reference since it is not needed here.",
+      "parentUuid": "0c10c02f_ed290a63",
+      "range": {
+        "startLine": 126,
+        "startChar": 10,
+        "endLine": 126,
+        "endChar": 15
+      },
+      "revId": "efc0f0f6358bbf4765171b16002e105473ee7792",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
