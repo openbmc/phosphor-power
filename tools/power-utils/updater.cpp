@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "config.h"
-
 #include "updater.hpp"
 
 #include "pmbus.hpp"
 #include "types.hpp"
 #include "utility.hpp"
 #include "utils.hpp"
-
-#include <sys/stat.h>
 
 #include <phosphor-logging/log.hpp>
 
@@ -43,75 +39,6 @@ namespace internal
 // Define the CRC-8 polynomial (CRC-8-CCITT)
 constexpr uint8_t CRC8_POLYNOMIAL = 0x07;
 constexpr uint8_t CRC8_INITIAL = 0x00;
-
-/* Get the device name from the device path */
-std::string getDeviceName(std::string devPath)
-{
-    if (devPath.back() == '/')
-    {
-        devPath.pop_back();
-    }
-    return fs::path(devPath).stem().string();
-}
-
-// Construct the device path using the I2C bus and address or read inventory
-// path
-std::string getDevicePath(sdbusplus::bus_t& bus,
-                          const std::string& psuInventoryPath)
-{
-    try
-    {
-        if (internal::usePsuJsonFile())
-        {
-            auto data = util::loadJSONFromFile(PSU_JSON_PATH);
-            if (data == nullptr)
-            {
-                return {};
-            }
-            auto devicePath = data["psuDevices"][psuInventoryPath];
-            if (devicePath.empty())
-            {
-                log<level::WARNING>("Unable to find psu devices or path");
-            }
-            return devicePath;
-        }
-        else
-        {
-            const auto& [i2cbus, i2caddr] =
-                utils::getPsuI2c(bus, psuInventoryPath);
-            const auto DevicePath = "/sys/bus/i2c/devices/";
-            std::ostringstream ss;
-            ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
-            std::string addrStr = ss.str();
-            std::string busStr = std::to_string(i2cbus);
-            std::string devPath = DevicePath + busStr + "-" + addrStr;
-            return devPath;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        log<level::ERR>(
-            std::format("Error in getDevicePath: {}", e.what()).c_str());
-        return {};
-    }
-    catch (...)
-    {
-        log<level::ERR>("Unknown error occurred in getDevicePath");
-        return {};
-    }
-}
-
-// Parse the device name to get I2C bus and address
-std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
-{
-    // Get I2C bus and device address, e.g. 3-0068
-    // is parsed to bus 3, device address 0x68
-    auto pos = devName.find('-');
-    assert(pos != std::string::npos);
-    uint8_t busId = std::stoi(devName.substr(0, pos));
-    uint8_t devAddr = std::stoi(devName.substr(pos + 1), nullptr, 16);
-    return {busId, devAddr};
-}
 
 // Get the appropriate Updater class instance based PSU model number
 std::unique_ptr<updater::Updater> getClassInstance(
@@ -250,17 +177,12 @@ std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
     return readDataBytes;
 }
 
-// Wrapper to check existence of PSU JSON file.
-bool usePsuJsonFile()
-{
-    return utils::checkFileExists(PSU_JSON_PATH);
-}
 } // namespace internal
 
 bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
             const std::string& imageDir)
 {
-    auto devPath = internal::getDevicePath(bus, psuInventoryPath);
+    auto devPath = utils::getDevicePath(bus, psuInventoryPath);
 
     if (devPath.empty())
     {
@@ -289,8 +211,7 @@ bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
 Updater::Updater(const std::string& psuInventoryPath,
                  const std::string& devPath, const std::string& imageDir) :
     bus(sdbusplus::bus::new_default()), psuInventoryPath(psuInventoryPath),
-    devPath(devPath), devName(internal::getDeviceName(devPath)),
-    imageDir(imageDir)
+    devPath(devPath), devName(utils::getDeviceName(devPath)), imageDir(imageDir)
 {
     fs::path p = fs::path(devPath) / "driver";
     try
@@ -397,7 +318,7 @@ bool Updater::isReadyToUpdate()
         // directly read the debugfs to get the status.
         try
         {
-            auto path = internal::getDevicePath(bus, p);
+            auto path = utils::getDevicePath(bus, p);
             PMBus pmbus(path);
             uint16_t statusWord = pmbus.read(STATUS_WORD, Type::Debug);
             auto status0Vout = pmbus.insertPageNum(STATUS_VOUT, 0);
@@ -457,7 +378,7 @@ int Updater::doUpdate()
 
 void Updater::createI2CDevice()
 {
-    auto [id, addr] = internal::parseDeviceName(devName);
+    auto [id, addr] = utils::parseDeviceName(devName);
     i2c = i2c::create(id, addr);
 }
 } // namespace updater

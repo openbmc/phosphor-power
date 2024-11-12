@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "config.h"
+
 #include "utils.hpp"
 
 #include "utility.hpp"
@@ -20,14 +22,21 @@
 #include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
+#include <cassert>
 #include <exception>
+#include <filesystem>
+#include <format>
+#include <iomanip>
+#include <ios>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <stdexcept>
 
 using namespace phosphor::logging;
 using namespace phosphor::power::util;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
+namespace fs = std::filesystem;
 
 namespace utils
 {
@@ -163,6 +172,75 @@ bool checkFileExists(const std::string& filePath)
                             .c_str());
     }
     return false;
+}
+
+std::string getDeviceName(std::string devPath)
+{
+    if (devPath.back() == '/')
+    {
+        devPath.pop_back();
+    }
+    return fs::path(devPath).stem().string();
+}
+
+std::string getDevicePath(sdbusplus::bus_t& bus,
+                          const std::string& psuInventoryPath)
+{
+    try
+    {
+        if (usePsuJsonFile())
+        {
+            auto data = loadJSONFromFile(PSU_JSON_PATH);
+            if (data == nullptr)
+            {
+                return {};
+            }
+            auto devicePath = data["psuDevices"][psuInventoryPath];
+            if (devicePath.empty())
+            {
+                log<level::WARNING>("Unable to find psu devices or path");
+            }
+            return devicePath;
+        }
+        else
+        {
+            const auto [i2cbus, i2caddr] = getPsuI2c(bus, psuInventoryPath);
+            const auto DevicePath = "/sys/bus/i2c/devices/";
+            std::ostringstream ss;
+            ss << std::hex << std::setw(4) << std::setfill('0') << i2caddr;
+            std::string addrStr = ss.str();
+            std::string busStr = std::to_string(i2cbus);
+            std::string devPath = DevicePath + busStr + "-" + addrStr;
+            return devPath;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        log<level::ERR>(
+            std::format("Error in getDevicePath: {}", e.what()).c_str());
+        return {};
+    }
+    catch (...)
+    {
+        log<level::ERR>("Unknown error occurred in getDevicePath");
+        return {};
+    }
+}
+
+std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
+{
+    // Get I2C bus and device address, e.g. 3-0068
+    // is parsed to bus 3, device address 0x68
+    auto pos = devName.find('-');
+    assert(pos != std::string::npos);
+    uint8_t busId = std::stoi(devName.substr(0, pos));
+    uint8_t devAddr = std::stoi(devName.substr(pos + 1), nullptr, 16);
+    return {busId, devAddr};
+}
+
+bool usePsuJsonFile()
+{
+    return checkFileExists(PSU_JSON_PATH);
 }
 
 } // namespace utils

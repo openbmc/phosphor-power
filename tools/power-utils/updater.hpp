@@ -19,11 +19,9 @@
 
 #include <sdbusplus/bus.hpp>
 
-#include <chrono>
 #include <filesystem>
 #include <memory>
 #include <string>
-#include <thread>
 
 class TestUpdater;
 
@@ -168,36 +166,6 @@ namespace internal
 {
 
 /**
- * @brief Get the device name from the device path
- *
- * @param[in] devPath - PSU path
- *
- * @return device name e.g. 3-0068
- */
-std::string getDeviceName(std::string devPath);
-
-/**
- * @brief Function to get device path using DBus bus and PSU
- * inventory Path
- *
- * @param[in] bus - The sdbusplus DBus bus connection
- * @param[in] psuInventoryPath - PSU inventory path
- *
- * @return device path e.g. /sys/bus/i2c/devices/3-0068
- */
-std::string getDevicePath(sdbusplus::bus_t& bus,
-                          const std::string& psuInventoryPath);
-
-/**
- * @brief Parse the device name to obtain bus and device address
- *
- * @param[in] devName - Device name
- *
- * @return bus and device address
- */
-std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName);
-
-/**
  * @brief Factory function to create an Updater instance based on PSU model
  * number
  *
@@ -275,11 +243,5 @@ std::unique_ptr<std::ifstream> openFirmwareFile(const std::string& fileName);
 std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
                                        const size_t numberOfBytesToRead);
 
-/**
- * @brief Wrapper to check existence of PSU JSON file
- *
- * @return true or false (true if using JSON file)
- */
-bool usePsuJsonFile();
 } // namespace internal
 } // namespace updater

@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "config.h"
-
 #include "model.hpp"
 #include "updater.hpp"
-#include "utils.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
@@ -55,18 +52,10 @@ int main(int argc, char** argv)
 
     std::string ret;
 
-    bool useJsonFile = utils::checkFileExists(PSU_JSON_PATH);
     auto bus = sdbusplus::bus::new_default();
     if (!psuPathVersion.empty())
     {
-        if (!useJsonFile)
-        {
-            ret = version::getVersion(bus, psuPathVersion);
-        }
-        else
-        {
-            ret = version::getVersion(psuPathVersion);
-        }
+        ret = version::getVersion(bus, psuPathVersion);
     }
     if (!psuPathModel.empty())
     {

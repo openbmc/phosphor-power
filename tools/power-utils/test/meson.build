@@ -1,33 +1,13 @@
 test(
-    'test_version',
+    'psutils-tests',
     executable(
-        'test_version',
-        'test_version.cpp',
-        '../version.cpp',
-        '../utils.cpp',
-        dependencies: [
-            gtest,
-            nlohmann_json_dep,
-            phosphor_logging,
-        ],
-        implicit_include_directories: false,
-        include_directories: libpower_inc,
-        link_args: dynamic_linker,
-        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
-        link_with: [
-            libpower,
-        ],
-        objects: record_manager,
-    )
-)
-
-test(
-    'test_updater',
-    executable(
-        'test_updater',
+        'psutils-tests',
         'test_updater.cpp',
+        'test_utils.cpp',
+        'test_version.cpp',
         '../updater.cpp',
         '../utils.cpp',
+        '../version.cpp',
         dependencies: [
             gtest,
             gmock,
@@ -46,6 +26,5 @@ test(
             libpower,
             libi2c_dev_mock
         ],
-        objects: record_manager,
     )
 )

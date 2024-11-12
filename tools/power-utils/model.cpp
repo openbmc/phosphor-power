@@ -140,8 +140,7 @@ std::string getModel(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
     std::string model;
     try
     {
-        // If PSU JSON file exists
-        if (checkFileExists(PSU_JSON_PATH))
+        if (usePsuJsonFile())
         {
             // Obtain PSU information from JSON file
             model = internal::getModelJson(psuInventoryPath);

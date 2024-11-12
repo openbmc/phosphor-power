@@ -27,17 +27,6 @@ using ::testing::_;
 using ::testing::An;
 using ::testing::Pointee;
 
-namespace updater
-{
-namespace internal
-{
-
-std::string getDeviceName(std::string devPath);
-std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName);
-
-} // namespace internal
-} // namespace updater
-
 using namespace updater;
 
 class TestUpdater : public ::testing::Test
@@ -102,31 +91,4 @@ TEST_F(TestUpdater, doUpdate)
     EXPECT_CALL(i2c, write(0xf1, An<uint8_t>()));
     EXPECT_CALL(i2c, read(0xf1, An<uint8_t&>()));
     updater->doUpdate();
-}
-
-TEST_F(TestUpdater, getDeviceName)
-{
-    auto ret = internal::getDeviceName("");
-    EXPECT_TRUE(ret.empty());
-
-    ret = internal::getDeviceName("/sys/bus/i2c/devices/3-0069");
-    EXPECT_EQ("3-0069", ret);
-
-    ret = internal::getDeviceName("/sys/bus/i2c/devices/3-0069/");
-    EXPECT_EQ("3-0069", ret);
-}
-
-TEST_F(TestUpdater, parseDeviceName)
-{
-    auto [id, addr] = internal::parseDeviceName("3-0068");
-    EXPECT_EQ(3, id);
-    EXPECT_EQ(0x68, addr);
-
-    std::tie(id, addr) = internal::parseDeviceName("11-0069");
-    EXPECT_EQ(11, id);
-    EXPECT_EQ(0x69, addr);
-
-    EXPECT_THROW(internal::parseDeviceName("no-number"), std::invalid_argument);
-
-    EXPECT_DEATH(internal::parseDeviceName("invalid"), "");
 }

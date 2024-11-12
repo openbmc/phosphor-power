@@ -39,6 +39,17 @@ namespace version
 namespace internal
 {
 
+// PsuInfo contains the device path, PMBus access type, and sysfs file name
+using PsuVersionInfo =
+    std::tuple<std::string, phosphor::pmbus::Type, std::string>;
+
+/**
+ * @brief Get PSU version information
+ *
+ * @param[in] psuInventoryPath - The PSU inventory path.
+ *
+ * @return tuple - device path, PMBus access type, and sysfs file name
+ */
 PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
 {
     auto data = loadJSONFromFile(PSU_JSON_PATH);
@@ -64,24 +75,83 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
 
     auto type = getPMBusAccessType(data);
 
-    std::string versionStr;
+    std::string fileName;
     for (const auto& fru : data["fruConfigs"])
     {
-        if (fru["propertyName"] == "Version")
+        if (fru.contains("propertyName") &&
+            (fru["propertyName"] == "Version") && fru.contains("fileName"))
         {
-            versionStr = fru["fileName"].get<std::string>();
+            fileName = fru["fileName"];
             break;
         }
     }
-    if (versionStr.empty())
+    if (fileName.empty())
     {
         log<level::WARNING>("Unable to find Version file");
         return {};
     }
-    return std::make_tuple(*devicePath, type, versionStr);
+    return std::make_tuple(*devicePath, type, fileName);
 }
 
-// A default implemention compare the string itself
+/**
+ * @brief Get the PSU version from sysfs.
+ *
+ * Obtain PSU information from the PSU JSON file.
+ *
+ * Throws an exception if an error occurs.
+ *
+ * @param[in] psuInventoryPath - PSU D-Bus inventory path
+ *
+ * @return PSU version, or "" if none found
+ */
+std::string getVersionJson(const std::string& psuInventoryPath)
+{
+    // Get PSU device path, PMBus access type, and sysfs file name from JSON
+    const auto [devicePath, type, fileName] = getVersionInfo(psuInventoryPath);
+
+    // Read version from sysfs file
+    std::string version;
+    if (!devicePath.empty() && !fileName.empty())
+    {
+        phosphor::pmbus::PMBus pmbus(devicePath);
+        version = pmbus.readString(fileName, type);
+    }
+    return version;
+}
+
+/**
+ * @brief Get the PSU version from sysfs.
+ *
+ * Obtain PSU information from D-Bus.
+ *
+ * Throws an exception if an error occurs.
+ *
+ * @param[in] bus - D-Bus connection
+ * @param[in] psuInventoryPath - PSU D-Bus inventory path
+ *
+ * @return PSU version, or "" if none found
+ */
+std::string getVersionDbus(sdbusplus::bus_t& bus,
+                           const std::string& psuInventoryPath)
+{
+    // Get PSU I2C bus/address and create PMBus interface
+    const auto [i2cbus, i2caddr] = getPsuI2c(bus, psuInventoryPath);
+    auto pmbus = getPmbusIntf(i2cbus, i2caddr);
+
+    // Read version from sysfs file
+    std::string name = "fw_version";
+    auto type = phosphor::pmbus::Type::HwmonDeviceDebug;
+    std::string version = pmbus->readString(name, type);
+    return version;
+}
+
+/**
+ * @brief Get firmware latest version
+ *
+ * @param[in] versions - String of versions
+ *
+ * @return version - latest firmware level
+ */
 std::string getLatestDefault(const std::vector<std::string>& versions)
 {
     std::string latest;
@@ -97,38 +167,22 @@ std::string getLatestDefault(const std::vector<std::string>& versions)
 
 } // namespace internal
 
-std::string getVersion(const std::string& psuInventoryPath)
-{
-    const auto& [devicePath, type, versionStr] =
-        internal::getVersionInfo(psuInventoryPath);
-    if (devicePath.empty() || versionStr.empty())
-    {
-        return "";
-    }
-    std::string version;
-    try
-    {
-        phosphor::pmbus::PMBus pmbus(devicePath);
-        version = pmbus.readString(versionStr, type);
-    }
-    catch (const std::exception& ex)
-    {
-        log<level::ERR>(ex.what());
-    }
-    return version;
-}
-
 std::string getVersion(sdbusplus::bus_t& bus,
                        const std::string& psuInventoryPath)
 {
     std::string version;
     try
     {
-        const auto& [i2cbus, i2caddr] = getPsuI2c(bus, psuInventoryPath);
-        auto pmbus = getPmbusIntf(i2cbus, i2caddr);
-        std::string name = "fw_version";
-        auto type = phosphor::pmbus::Type::HwmonDeviceDebug;
-        version = pmbus->readString(name, type);
+        if (usePsuJsonFile())
+        {
+            // Obtain PSU information from JSON file
+            version = internal::getVersionJson(psuInventoryPath);
+        }
+        else
+        {
+            // Obtain PSU information from D-Bus
+            version = internal::getVersionDbus(bus, psuInventoryPath);
+        }
     }
     catch (const std::exception& e)
     {
@@ -157,4 +211,5 @@ std::string getLatest(const std::vector<std::string>& versions)
     // So just compare by strings is OK for these cases
     return internal::getLatestDefault(versions);
 }
+
 } // namespace version
