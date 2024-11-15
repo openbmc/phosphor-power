@@ -2,6 +2,7 @@ psutils = executable(
     'psutils',
     'version.cpp',
     'updater.cpp',
+    'aeiUpdater.cpp',
     'utils.cpp',
     'model.cpp',
     'main.cpp',
