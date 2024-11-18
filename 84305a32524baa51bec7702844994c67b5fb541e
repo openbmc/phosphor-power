@@ -1,0 +1,329 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92e601f3_6fe43a07",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Nit: bit",
+      "range": {
+        "startLine": 43,
+        "startChar": 16,
+        "endLine": 43,
+        "endChar": 20
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dca019e_cdf2c469",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Looks good.  Some minor comments.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da57a0c2_ae47d354",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "What is this needed for?  We try to use the C++ filesystem classes/functions rather than the lower level Unix C APIs if possible.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a6f9e62_53a134b1",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Good job defining your constants with really good comments.\n\nShould they be within the aeiUpdater namespace so they do not conflict with some global constants/variables from another header?  e.g. if someone else like pmbus.hpp defines STATUS_REGISTER in the future.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2205f7bd_3f4b7b50",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Nit: Address",
+      "range": {
+        "startLine": 74,
+        "startChar": 45,
+        "endLine": 74,
+        "endChar": 52
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1db222f0_4abd1f4c",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "When you add more of your code, does this variable get used more?\n\nIf not, it seems like it would be simpler to remove it, do `return 1;` within your if statement, and then `return 0;` at the end of the method.",
+      "range": {
+        "startLine": 93,
+        "startChar": 9,
+        "endLine": 93,
+        "endChar": 28
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f3b8aa0_3a2e9e5f",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "delete `//` if no comment",
+      "range": {
+        "startLine": 93,
+        "startChar": 37,
+        "endLine": 93,
+        "endChar": 39
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf573122_a5c2cd77",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Since there is doxygen in the header that describes this method, you don\u0027t need to put a summary comment about it here.  If someone wants to know what it does they should look at the doxygen.  Same comment for other methods in this file.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e038b60d_299a7808",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Why do the other 2 methods have retries but this one does not?",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a379a031_d6c221b1",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "There is an optional fourth parameter to this overload of write().  It specifies whether to do an SMBus block write or an I2C block write.  The default is SMBus.\n\nThe SMBus block write has the byte count that precedes the data.  The byte count will automatically be prepended before the data buffer by this method (you don\u0027t have to do it).\n\nThe I2C block write does not add the byte count byte; it just writes the buffer as is.\n\nIn looking at the AEI download documentation, it looks like they want the SMBus block write, so your code here is correct.  I just wanted to explain the purpose of that parameter in case it was not clear from the doxygen.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8370dfdb_f9616c3e",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Nit: variable name not very descriptive.  ispStatus maybe?  Same comment in next method too.",
+      "range": {
+        "startLine": 133,
+        "startChar": 12,
+        "endLine": 133,
+        "endChar": 17
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690ffd43_eac8c1b3",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "I notice that you check if equal to B_ISP_MODE here (no other bits set), and in the previous method you check if the B_ISP_MODE bit is on (uses \u0026).\n\nIs that difference intentional?  Could other bits be set here?",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 2
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d632239_242da272",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Should probably mention AEI in here somewhere, such as \"firmware updates for AEI PSUs\"",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62966c4f_4f5469e6",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "The BMC convention is to specify delete or default for six methods that the compiler will normally automatically generate:\n```\n    AeiUpdater() \u003d delete;\n    AeiUpdater(const AeiUpdater\u0026) \u003d delete;\n    AeiUpdater(AeiUpdater\u0026\u0026) \u003d delete;\n    AeiUpdater\u0026 operator\u003d(const AeiUpdater\u0026) \u003d delete;\n    AeiUpdater\u0026 operator\u003d(AeiUpdater\u0026\u0026) \u003d delete;\n    ~AeiUpdater() \u003d default;\n```\n\nYou are missing the second (copy constructor), third (move constructor), fourth (assignment operator), and fifth (move assignment operator).\n\nGenerally those methods are deleted if the class has a data member that should not be copied, such as a pointer, unique_ptr, file handle, etc.  In your case, due to the i2c::I2CInterface*, I think you should delete those four methods.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418942d1_c238a72d",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "You should specify what status code values indicate success or failure, such as 0 means success and non-zero means failure.  The idea with doxygen is it should give the caller all the information they need to use the method/function without going to the .cpp file and looking at the implementation.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d81d7254_46a68758",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "Missing blank divider line",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82682e49_ad894b29",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-11-18T15:35:09Z",
+      "side": 1,
+      "message": "This is a little confusing.\n\nMy understanding is the parent class owns the I2CInterface data member, and it is private, so it is accessed with the protected getI2C() method.\n\nSo is this pointer just caching the return value from getI2C()?\n\nIf so, it would be good to mention that in the doxygen.  Specify when it is set so people know if they have to check for nullptr.  Also specify that this class does *NOT* own the pointed to object and should *NOT* delete it.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
