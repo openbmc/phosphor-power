@@ -60,6 +60,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fd88671_f442842f",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-11-19T20:57:01Z",
+      "side": 1,
+      "message": "is this used?  in fact, are all of these?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a6f9e62_53a134b1",
         "filename": "tools/power-utils/aeiUpdater.cpp",
         "patchSetId": 2
@@ -197,6 +220,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fccf01f9_0c87cddb",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-11-19T20:57:01Z",
+      "side": 1,
+      "message": "On new code you may as well just use lg2, since it\u0027s easier when there are args:\n\nlg2::error(\"I2C write failed: {ERROR}\", \"ERROR\", e);\n\nyou\u0027d just include phosphor-logging/lg2.hpp instead",
+      "range": {
+        "startLine": 124,
+        "startChar": 6,
+        "endLine": 124,
+        "endChar": 79
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8370dfdb_f9616c3e",
         "filename": "tools/power-utils/aeiUpdater.cpp",
         "patchSetId": 2
@@ -236,6 +282,29 @@
         "startChar": 0,
         "endLine": 175,
         "endChar": 2
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08a798d_4c96a567",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-11-19T20:57:01Z",
+      "side": 1,
+      "message": "this namespace probably isn\u0027t necessary as it just matches the class name.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 20
       },
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -322,6 +391,23 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "This is a little confusing.\n\nMy understanding is the parent class owns the I2CInterface data member, and it is private, so it is accessed with the protected getI2C() method.\n\nSo is this pointer just caching the return value from getI2C()?\n\nIf so, it would be good to mention that in the doxygen.  Specify when it is set so people know if they have to check for nullptr.  Also specify that this class does *NOT* own the pointed to object and should *NOT* delete it.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f2122bf_2e8cdc1c",
+        "filename": "tools/power-utils/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-11-19T20:57:01Z",
+      "side": 1,
+      "message": "other files in this repo are all snake_case",
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
