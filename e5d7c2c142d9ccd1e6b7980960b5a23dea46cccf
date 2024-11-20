@@ -16,6 +16,29 @@
       "message": "Please review again, thanks",
       "revId": "e5d7c2c142d9ccd1e6b7980960b5a23dea46cccf",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04cda816_df390a5b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2024-11-20T20:10:51Z",
+      "side": 1,
+      "message": "lg2 needs a name to match on inside the {} (like in my example).  See https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2",
+      "range": {
+        "startLine": 115,
+        "startChar": 50,
+        "endLine": 115,
+        "endChar": 52
+      },
+      "revId": "e5d7c2c142d9ccd1e6b7980960b5a23dea46cccf",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
