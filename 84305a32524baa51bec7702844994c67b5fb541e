@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "48038d11_6e8fa429",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92e601f3_6fe43a07",
+      "range": {
+        "startLine": 43,
+        "startChar": 16,
+        "endLine": 43,
+        "endChar": 20
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3dca019e_cdf2c469",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -58,6 +82,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79bdd513_58255f3e",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da57a0c2_ae47d354",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd88671_f442842f",
@@ -71,6 +113,30 @@
       "writtenOn": "2024-11-19T20:57:01Z",
       "side": 1,
       "message": "is this used?  in fact, are all of these?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356c22ce_d0adea53",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Removed unnecessary inlcudes",
+      "parentUuid": "7fd88671_f442842f",
       "range": {
         "startLine": 34,
         "startChar": 0,
@@ -98,6 +164,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53a79328_97969aab",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a6f9e62_53a134b1",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2205f7bd_3f4b7b50",
@@ -111,6 +195,30 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "Nit: Address",
+      "range": {
+        "startLine": 74,
+        "startChar": 45,
+        "endLine": 74,
+        "endChar": 52
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7959ab7c_10d219d8",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2205f7bd_3f4b7b50",
       "range": {
         "startLine": 74,
         "startChar": 45,
@@ -167,6 +275,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac66a203_0fbb24d2",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Yes, this will be used to restore the PSU and prevent download",
+      "parentUuid": "1db222f0_4abd1f4c",
+      "range": {
+        "startLine": 93,
+        "startChar": 9,
+        "endLine": 93,
+        "endChar": 28
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a9aae48_76dc50f3",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Added comments",
+      "parentUuid": "9f3b8aa0_3a2e9e5f",
+      "range": {
+        "startLine": 93,
+        "startChar": 37,
+        "endLine": 93,
+        "endChar": 39
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf573122_a5c2cd77",
@@ -180,6 +336,24 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "Since there is doxygen in the header that describes this method, you don\u0027t need to put a summary comment about it here.  If someone wants to know what it does they should look at the doxygen.  Same comment for other methods in this file.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80182e5b_5fc73daa",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf573122_a5c2cd77",
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -218,6 +392,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d95ce1e1_07cfc057",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a379a031_d6c221b1",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f82e9aeb_cd5bbcd4",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "In AEI update documentation the key have no retry.",
+      "parentUuid": "e038b60d_299a7808",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fccf01f9_0c87cddb",
@@ -231,6 +441,30 @@
       "writtenOn": "2024-11-19T20:57:01Z",
       "side": 1,
       "message": "On new code you may as well just use lg2, since it\u0027s easier when there are args:\n\nlg2::error(\"I2C write failed: {ERROR}\", \"ERROR\", e);\n\nyou\u0027d just include phosphor-logging/lg2.hpp instead",
+      "range": {
+        "startLine": 124,
+        "startChar": 6,
+        "endLine": 124,
+        "endChar": 79
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e75c2b_9ef94d1c",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Changed log to use lg2",
+      "parentUuid": "fccf01f9_0c87cddb",
       "range": {
         "startLine": 124,
         "startChar": 6,
@@ -264,6 +498,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae45a9c7_1571d7ec",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Renamed to ispStatus",
+      "parentUuid": "8370dfdb_f9616c3e",
+      "range": {
+        "startLine": 133,
+        "startChar": 12,
+        "endLine": 133,
+        "endChar": 17
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "690ffd43_eac8c1b3",
@@ -277,6 +535,30 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "I notice that you check if equal to B_ISP_MODE here (no other bits set), and in the previous method you check if the B_ISP_MODE bit is on (uses \u0026).\n\nIs that difference intentional?  Could other bits be set here?",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 2
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92c2b2f0_91c948ef",
+        "filename": "tools/power-utils/aeiUpdater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "This is intentional as per AEI instruction.",
+      "parentUuid": "690ffd43_eac8c1b3",
       "range": {
         "startLine": 175,
         "startChar": 0,
@@ -310,6 +592,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a40f307_d2f41f40",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "keeping namespace to stay consistence",
+      "parentUuid": "c08a798d_4c96a567",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 20
+      },
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d632239_242da272",
@@ -323,6 +629,24 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "Should probably mention AEI in here somewhere, such as \"firmware updates for AEI PSUs\"",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa2db7d5_d5e4d421",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d632239_242da272",
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -344,6 +668,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ad3fa5_c1ed9eb9",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Added the missing methods\n    AeiUpdater(const AeiUpdater\u0026) \u003d delete;\n    AeiUpdater(AeiUpdater\u0026\u0026) \u003d delete;\n    AeiUpdater\u0026 operator\u003d(const AeiUpdater\u0026) \u003d delete;\n    AeiUpdater\u0026 operator\u003d(AeiUpdater\u0026\u0026) \u003d delete;",
+      "parentUuid": "62966c4f_4f5469e6",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "418942d1_c238a72d",
@@ -357,6 +699,24 @@
       "writtenOn": "2024-11-18T15:35:09Z",
       "side": 1,
       "message": "You should specify what status code values indicate success or failure, such as 0 means success and non-zero means failure.  The idea with doxygen is it should give the caller all the information they need to use the method/function without going to the .cpp file and looking at the implementation.",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451ff741_120f0ba1",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "418942d1_c238a72d",
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -378,6 +738,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd0bd653_ff278759",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d81d7254_46a68758",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82682e49_ad894b29",
@@ -395,6 +773,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d24cc45d_152b8308",
+        "filename": "tools/power-utils/aeiUpdater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Added note the caller responsible to check for null and ensure valid  interface.",
+      "parentUuid": "82682e49_ad894b29",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f2122bf_2e8cdc1c",
@@ -408,6 +804,24 @@
       "writtenOn": "2024-11-19T20:57:01Z",
       "side": 1,
       "message": "other files in this repo are all snake_case",
+      "revId": "84305a32524baa51bec7702844994c67b5fb541e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74427e2e_acae89f5",
+        "filename": "tools/power-utils/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-20T17:05:49Z",
+      "side": 1,
+      "message": "Replaced file names to aei_updater.cpp",
+      "parentUuid": "6f2122bf_2e8cdc1c",
       "revId": "84305a32524baa51bec7702844994c67b5fb541e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
