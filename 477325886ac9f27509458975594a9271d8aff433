@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "680d7546_39b193c6",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-21T16:45:10Z",
+      "side": 1,
+      "message": "Compiler will execute in the order listed.",
+      "parentUuid": "9838971f_b4fcae8b",
+      "revId": "477325886ac9f27509458975594a9271d8aff433",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90dd9493_4df02f97",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-11-20T22:40:05Z",
       "side": 1,
       "message": "what does the error() call do in regards to creating a PEL? or does it just create a journal entry and/or other bmc error?",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 8
+      },
+      "revId": "477325886ac9f27509458975594a9271d8aff433",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1c58bb7_d47ac000",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2024-11-21T16:45:10Z",
+      "side": 1,
+      "message": "Log error doesn\u0027t create any PELs",
+      "parentUuid": "90dd9493_4df02f97",
       "range": {
         "startLine": 116,
         "startChar": 0,
