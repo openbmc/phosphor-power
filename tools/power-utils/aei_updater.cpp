@@ -25,13 +25,15 @@
 
 #include <phosphor-logging/lg2.hpp>
 
+#include <fstream>
+
 namespace aeiUpdater
 {
 constexpr uint8_t MAX_RETRIES = 0x02;    // Constants for retry limits
 
 constexpr int ISP_STATUS_DELAY = 1200;   // Delay for ISP status check (1.2s)
 constexpr int MEM_WRITE_DELAY = 5000;    // Memory write delay (5s)
-constexpr int MEM_STRETCH_DELAY = 50;    // Delay between writes (50ms)
+constexpr int MEM_STRETCH_DELAY = 10;    // Delay between writes (10ms)
 constexpr int MEM_COMPLETE_DELAY = 2000; // Delay before completion (2s)
 constexpr int REBOOT_DELAY = 8000;       // Delay for reboot (8s)
 
@@ -70,6 +72,8 @@ constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not match
 constexpr uint8_t B_ISP_MODE = 0x40;          // ISP mode
 constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good checksum.
 constexpr uint8_t B_PRGM_BUSY = 0x80;            // Write operation in progress.
+constexpr uint8_t SUCCESSFUL_ISP_REBOOT_STATUS = 0x0; // Successful ISP
+                                                      // reboot status
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -112,7 +116,7 @@ bool AeiUpdater::writeIspKey()
     catch (const std::exception& e)
     {
         // Log failure if I2C write fails.
-        lg2::error("I2C write failed: {ERROR}", "ERROR", e.what());
+        lg2::error("I2C write failed: {ERROR}", "ERROR", e);
         return false;
     }
 }
@@ -141,7 +145,7 @@ bool AeiUpdater::writeIspMode()
         {
             // Log I2C error with each retry attempt.
             lg2::error("I2C error during ISP mode write/read: {ERROR}", "ERROR",
-                       e.what());
+                       e);
         }
     }
     lg2::error("Failed to set ISP Mode");
@@ -172,9 +176,113 @@ bool AeiUpdater::writeIspStatusReset()
     {
         // Log any errors encountered during reset sequence.
         lg2::error("I2C Read/Write error during ISP reset: {ERROR}", "ERROR",
-                   e.what());
+                   e);
     }
     lg2::error("Failed to reset ISP Status");
+    return false;
+}
+
+std::string AeiUpdater::getFirmwarePath()
+{
+    const std::string fspath =
+        updater::internal::getFWFilenamePath(getImageDir());
+    if (fspath.empty())
+    {
+        lg2::error("Firmware file path not found");
+    }
+    return fspath;
+}
+
+bool AeiUpdater::isFirmwareFileValid(const std::string& fspath)
+{
+    if (!updater::internal::validateFWFile(fspath))
+    {
+        lg2::error("Firmware validation failed");
+        return false;
+    }
+    return true;
+}
+
+std::unique_ptr<std::ifstream>
+    AeiUpdater::openFirmwareFile(const std::string& fspath)
+{
+    auto inputFile = updater::internal::openFirmwareFile(fspath);
+    if (!inputFile)
+    {
+        lg2::error("Failed to open firmware file");
+    }
+    return inputFile;
+}
+
+std::vector<uint8_t> AeiUpdater::readFirmwareBlock(std::ifstream& file,
+                                                   const size_t& bytesToRead)
+{
+    auto block = updater::internal::readFirmwareBytes(file, bytesToRead);
+    return block;
+}
+
+std::vector<uint8_t>
+    AeiUpdater::prepareCommandBlock(const std::vector<uint8_t>& dataBlockRead)
+{
+    std::vector<uint8_t> cmdBlockWrite = {ISP_MEMORY_REGISTER,
+                                          BLOCK_WRITE_SIZE};
+
+    cmdBlockWrite.insert(cmdBlockWrite.end(), byteSwappedIndex.begin(),
+                         byteSwappedIndex.end());
+    cmdBlockWrite.insert(cmdBlockWrite.end(), dataBlockRead.begin(),
+                         dataBlockRead.end());
+
+    // Resize to ensure it matches BLOCK_WRITE_SIZE + 1 and append CRC
+    if (cmdBlockWrite.size() != BLOCK_WRITE_SIZE + 1)
+    {
+        cmdBlockWrite.resize(BLOCK_WRITE_SIZE + 1, 0xFF);
+    }
+    cmdBlockWrite.push_back(updater::internal::calculateCRC8(cmdBlockWrite));
+    // Remove the F9 and byte count
+    cmdBlockWrite.erase(cmdBlockWrite.begin(), cmdBlockWrite.erase() + 2);
+
+    return cmdBlockWrite;
+}
+
+void AeiUpdater::ispReboot()
+{
+    updater::internal::delay(
+        MEM_COMPLETE_DELAY); // Delay before starting the reboot process
+
+    try
+    {
+        // Write reboot command to the status register
+        i2cInterface->write(STATUS_REGISTER, CMD_BOOT_PWR);
+
+        updater::internal::delay(
+            REBOOT_DELAY); // Add delay after writing reboot command
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("I2C write error during reboot: {ERROR}", "ERROR", e);
+    }
+}
+
+bool AeiUpdater::ispReadRebootStatus()
+{
+    try
+    {
+        // Read from the status register to verify reboot
+        uint8_t data = 1; // Initialize data to a non-zero value
+        i2cInterface->read(STATUS_REGISTER, data);
+
+        uint8_t status = SUCCESSFUL_ISP_REBOOT_STATUS;
+        // If the reboot was successful, the read data should be 0
+        if (data == status)
+        {
+            lg2::info("ISP Status Reboot successful.");
+            return true;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("I2C read error during reboot attempt: {ERROR}", "ERROR", e);
+    }
     return false;
 }
 
