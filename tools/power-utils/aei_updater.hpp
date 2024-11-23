@@ -53,7 +53,7 @@ class AeiUpdater : public updater::Updater
     /**
      * @brief Initiates the firmware update process.
      *
-     * @return int Status code 0 for success or 1 for failure.
+     * @return Status code 0 for success or 1 for failure.
      */
     int doUpdate() override;
 
@@ -61,23 +61,80 @@ class AeiUpdater : public updater::Updater
     /**
      * @brief Writes an ISP (In-System Programming) key to initiate the update.
      *
-     * @return bool True if successful, false otherwise.
+     * @return True if successful, false otherwise.
      */
     bool writeIspKey();
 
     /**
      * @brief Writes the mode required for ISP to start firmware programming.
      *
-     * @return bool True if successful, false otherwise.
+     * @return True if successful, false otherwise.
      */
     bool writeIspMode();
 
     /**
      * @brief Resets the ISP status to prepare for a firmware update.
      *
-     * @return bool True if successful, false otherwise.
+     * @return True if successful, false otherwise.
      */
     bool writeIspStatusReset();
+
+    /**
+     * @brief Retrieves the path to the firmware file.
+     *
+     * @return The file path of the firmware.
+     */
+    std::string getFirmwarePath();
+
+    /**
+     * @brief Validates the firmware file.
+     *
+     * @param fspath The file path to validate.
+     * @return True if the file is valid, false otherwise.
+     */
+    bool isFirmwareFileValid(const std::string& fspath);
+
+    /**
+     * @brief Opens a firmware file in binary mode.
+     *
+     * @param fspath The path to the firmware file.
+     * @return A file stream to read the firmware
+     * file.
+     */
+    std::unique_ptr<std::ifstream> openFirmwareFile(const std::string& fspath);
+
+    /**
+     * @brief Reads a block of firmware data from the file.
+     *
+     * @param file The input file stream from which to read data.
+     * @param bytesToRead The number of bytes to read.
+     * @return A vector containing the firmware block.
+     */
+    std::vector<uint8_t> readFirmwareBlock(std::ifstream& file,
+                                           const size_t& bytesToRead);
+
+    /**
+     * @brief Prepares an ISP_MEMORY  command block by processing the firmware
+     * data block.
+     *
+     * @param dataBlockRead The firmware data block read from the file.
+     * @return The prepared command block.
+     */
+    std::vector<uint8_t>
+        prepareCommandBlock(const std::vector<uint8_t>& dataBlockRead);
+
+    /**
+     * @brief Initiates a reboot of the ISP to apply new firmware.
+     */
+    void ispReboot();
+
+    /**
+     * @brief Reads the reboot status from the ISP.
+     *
+     * @return True if the reboot status indicates success, false
+     * otherwise.
+     */
+    bool ispReadRebootStatus();
 
     /**
      * @brief Pointer to the I2C interface for communication
