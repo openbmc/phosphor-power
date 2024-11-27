@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e35d1a1_39d4091c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-27T23:09:33Z",
+      "side": 1,
+      "message": "Couple of comments so far, Shawn/Matt will do a better review than me though.",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9832872_412a0b6b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-27T23:09:33Z",
+      "side": 1,
+      "message": "Have you heard back from AEI on a final value to use for this yet?",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbe1ff7_037b4062",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-27T23:09:33Z",
+      "side": 1,
+      "message": "maybe use a constant for status in the check below like the other i2c read compares?",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8910db26_1c63021c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-11-27T23:09:33Z",
+      "side": 1,
+      "message": "with a later change, here is where we\u0027ll want to log an informational PEL for the download success",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
