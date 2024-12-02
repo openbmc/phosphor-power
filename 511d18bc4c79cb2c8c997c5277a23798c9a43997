@@ -240,6 +240,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8098ae5b_47dc83b1",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2024-12-02T22:30:35Z",
+      "side": 1,
+      "message": "Informational for success, serviceable for failure, these can be added in a later story as we discussed.",
+      "parentUuid": "3b989986_246186c3",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa8aab80_e36ae126",
