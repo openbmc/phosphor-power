@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ae5e0c_d2f5c9e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-02T17:54:51Z",
+      "side": 1,
+      "message": "Nit: open",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 4
+      },
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6e35d1a1_39d4091c",
@@ -37,6 +60,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e71d4619_de5ea603",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-02T17:54:51Z",
+      "side": 1,
+      "message": "This comparison doesn\u0027t make sense to me.\n\nThe BLOCK_WRITE_SIZE constant is 0x25/37 decimal.  This is the number of bytes written in the I2C block write/read.  It includes the index bytes (4), data bytes (32), and PEC (1).  It does not include the I2C command F9 or the byte count itself.\n\nThe cmdBlockWrite vector at this point includes the I2C command F9 (1), byte count (1), index bytes (4), and data bytes (32), but no PEC. So I think the vector size should be 38?  Then the resize() sets it to 38 (no change).\n\nSo should the comparison be `if cmdBlockWrite.size() !\u003d BLOCK_WRITE_SIZE + 1`?\n\nPlease double check my math.  I could be wrong.",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d79ec0_ada6ab37",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-02T17:54:51Z",
+      "side": 1,
+      "message": "I think this is a bug.  The documentation on assign says:\n\u003e If either argument is an iterator into *this, the behavior is undefined. \n\nSo it might work now, but it might stop with a different version of the compiler.  In general assigning a vector to a subset of itself one byte at a time is tricky to get right.\n\nI think the supported way would be\n```\ncmdBlockWrite.erase(cmdBlockWrite.begin(), cmdBlockWrite.begin() + 2);\n```\n\nNote that the second parameter to erase() is the element *after* the last one to erase.  See https://en.cppreference.com/w/cpp/container/vector/erase.",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fbe1ff7_037b4062",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 2
@@ -65,6 +122,46 @@
       "writtenOn": "2024-11-27T23:09:33Z",
       "side": 1,
       "message": "with a later change, here is where we\u0027ll want to log an informational PEL for the download success",
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8aab80_e36ae126",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-02T17:54:51Z",
+      "side": 1,
+      "message": "It is not necessary to include the return type in the @return comment.  We can look a line down and see it.  If the return type changes, you\u0027ll have to change it in two spots.  Same comment for other methods.",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 26
+      },
+      "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156c2f93_461e06cb",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-02T17:54:51Z",
+      "side": 1,
+      "message": "This method name is a little confusing, since there are multiple commands that are written (ISP_COMMAND, ISP_MEMORY).\n\nI believe this is specific to the ISP_MEMORY (F9) command, so the doxygen should probably state that.  e.g. `Prepares an ISP_MEMORY command block by ...`",
       "revId": "511d18bc4c79cb2c8c997c5277a23798c9a43997",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
