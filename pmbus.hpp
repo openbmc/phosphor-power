@@ -320,7 +320,7 @@ class PMBus : public PMBusBase
      * @return vector<uint8_t> - The data read from the file.
      */
     std::vector<uint8_t> readBinary(const std::string& name, Type type,
-                                    size_t length);
+                                    size_t length) override;
 
     /**
      * Writes an integer value to the file, therefore doing

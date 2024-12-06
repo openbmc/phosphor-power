@@ -173,16 +173,16 @@ class I2CDevice : public I2CInterface
     }
 
     /** @copydoc I2CInterface::open() */
-    void open();
+    void open() override;
 
     /** @copydoc I2CInterface::isOpen() */
-    bool isOpen() const
+    bool isOpen() const override
     {
         return (fd != INVALID_FD);
     }
 
     /** @copydoc I2CInterface::close() */
-    void close();
+    void close() override;
 
     /** @copydoc I2CInterface::read(uint8_t&) */
     void read(uint8_t& data) override;
