@@ -196,7 +196,7 @@ class Manager : public ManagerObject
     /**
      * Event to loop on
      */
-    const sdeventplus::Event& eventLoop;
+    const sdeventplus::Event& eventLoop [[maybe_unused]];
 
     /**
      * System services like error logging and the journal.

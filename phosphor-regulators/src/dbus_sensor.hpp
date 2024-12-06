@@ -313,7 +313,7 @@ class DBusSensor
     /**
      * D-Bus bus object.
      */
-    sdbusplus::bus_t& bus;
+    sdbusplus::bus_t& bus [[maybe_unused]];
 
     /**
      * Sensor name.
