@@ -15,6 +15,11 @@ project(
 
 cxx = meson.get_compiler('cpp')
 
+# Check if the compiler is Clang
+if meson.get_compiler('cpp').get_id() == 'clang'
+  add_global_arguments('-Wno-defaulted-function-deleted', language: 'cpp')
+endif
+
 build_tests = get_option('tests')
 
 if get_option('oe-sdk').allowed()
