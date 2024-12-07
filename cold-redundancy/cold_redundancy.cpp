@@ -41,6 +41,11 @@ const constexpr char* eventPath = "/xyz/openbmc_project/State/Decorator";
 std::vector<std::unique_ptr<PowerSupply>> powerSupplies;
 } // namespace
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-lambda-capture"
+#endif
+
 ColdRedundancy::ColdRedundancy(
     boost::asio::io_service& io, sdbusplus::asio::object_server& objectServer,
     std::shared_ptr<sdbusplus::asio::connection>& systemBus) :
@@ -152,6 +157,10 @@ ColdRedundancy::ColdRedundancy(
         matches.emplace_back(std::move(eventMatch));
     }
 }
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 static const constexpr int psuDepth = 3;
 // Check PSU information from entity-manager D-Bus interface and use the bus
