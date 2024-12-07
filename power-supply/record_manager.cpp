@@ -80,7 +80,13 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
             }
         }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpessimizing-move"
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wpessimizing-move"
+#endif
         records.push_front(std::move(createRecord(rawRecord)));
+#pragma GCC diagnostic pop
 
         // If no more should be stored, prune the oldest
         if (records.size() > maxRecords)
