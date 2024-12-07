@@ -29,21 +29,21 @@
 
 namespace aeiUpdater
 {
-constexpr uint8_t MAX_RETRIES = 0x02;    // Constants for retry limits
+constexpr uint8_t MAX_RETRIES = 0x02;  // Constants for retry limits
 
-constexpr int ISP_STATUS_DELAY = 1200;   // Delay for ISP status check (1.2s)
-constexpr int MEM_WRITE_DELAY = 5000;    // Memory write delay (5s)
-constexpr int MEM_STRETCH_DELAY = 10;    // Delay between writes (10ms)
+constexpr int ISP_STATUS_DELAY = 1200; // Delay for ISP status check (1.2s)
+// constexpr int MEM_WRITE_DELAY = 5000;    // Memory write delay (5s)
+// constexpr int MEM_STRETCH_DELAY = 10;    // Delay between writes (10ms)
 constexpr int MEM_COMPLETE_DELAY = 2000; // Delay before completion (2s)
 constexpr int REBOOT_DELAY = 8000;       // Delay for reboot (8s)
 
-constexpr uint8_t I2C_SMBUS_BLOCK_MAX = 0x20; // Max Read bytes from PSU
-constexpr uint8_t FW_READ_BLOCK_SIZE = 0x20;  // Read bytes from FW file
-constexpr uint8_t BLOCK_WRITE_SIZE = 0x25;    // I2C block write size
-constexpr uint8_t READ_SEQ_ST_CML_SIZE = 0x6; // Read sequence and status CML
-                                              // size
-constexpr uint8_t START_SEQUENCE_INDEX = 0x1; // Starting sequence index
-constexpr uint8_t STATUS_CML_INDEX = 0x5;     // Status CML read index
+// constexpr uint8_t I2C_SMBUS_BLOCK_MAX = 0x20; // Max Read bytes from PSU
+// constexpr uint8_t FW_READ_BLOCK_SIZE = 0x20;  // Read bytes from FW file
+constexpr uint8_t BLOCK_WRITE_SIZE = 0x25; // I2C block write size
+// constexpr uint8_t READ_SEQ_ST_CML_SIZE = 0x6; // Read sequence and status CML
+// size
+// constexpr uint8_t START_SEQUENCE_INDEX = 0x1; // Starting sequence index
+// constexpr uint8_t STATUS_CML_INDEX = 0x5;     // Status CML read index
 
 // Register addresses for commands.
 constexpr uint8_t KEY_REGISTER = 0xF6;        // Key register
@@ -60,18 +60,19 @@ constexpr uint8_t CMD_BOOT_PWR = 0x03; // Attempt to boot the Power Management
                                        // OS.
 
 // Define AEI ISP response status bit
-constexpr uint8_t B_CHKSUM_ERR = 0x0; // The checksum verification unsuccessful
-constexpr uint8_t B_CHKSUM_SUCCESS = 0x1; // The checksum verification
-                                          // successful.
-constexpr uint8_t B_MEM_ERR = 0x2;        // Memory boundry error indication.
-constexpr uint8_t B_ALIGN_ERR = 0x4;      // Address error indication.
-constexpr uint8_t B_KEY_ERR = 0x8;        // Invalid Key
-constexpr uint8_t B_START_ERR = 0x10;     // Error indicator set at startup.
-constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not match
-                                              // PSU
-constexpr uint8_t B_ISP_MODE = 0x40;          // ISP mode
-constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good checksum.
-constexpr uint8_t B_PRGM_BUSY = 0x80;            // Write operation in progress.
+// constexpr uint8_t B_CHKSUM_ERR = 0x0; // The checksum verification
+// unsuccessful constexpr uint8_t B_CHKSUM_SUCCESS = 0x1; // The checksum
+// verification successful.
+// constexpr uint8_t B_MEM_ERR = 0x2;        // Memory boundry error indication.
+// constexpr uint8_t B_ALIGN_ERR = 0x4;      // Address error indication.
+// constexpr uint8_t B_KEY_ERR = 0x8;        // Invalid Key
+// constexpr uint8_t B_START_ERR = 0x10;     // Error indicator set at startup.
+// constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not
+// match PSU
+constexpr uint8_t B_ISP_MODE = 0x40; // ISP mode
+// constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good
+// checksum. constexpr uint8_t B_PRGM_BUSY = 0x80;            // Write operation
+// in progress.
 constexpr uint8_t SUCCESSFUL_ISP_REBOOT_STATUS = 0x0; // Successful ISP reboot
                                                       // status
 
