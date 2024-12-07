@@ -29,6 +29,14 @@
 
 namespace aeiUpdater
 {
+
+// Suppress clang-tidy errors for unused variables that are intended
+// for future use
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+#endif
+
 constexpr uint8_t MAX_RETRIES = 0x02;    // Constants for retry limits
 
 constexpr int ISP_STATUS_DELAY = 1200;   // Delay for ISP status check (1.2s)
@@ -60,20 +68,25 @@ constexpr uint8_t CMD_BOOT_PWR = 0x03; // Attempt to boot the Power Management
                                        // OS.
 
 // Define AEI ISP response status bit
-constexpr uint8_t B_CHKSUM_ERR = 0x0; // The checksum verification unsuccessful
-constexpr uint8_t B_CHKSUM_SUCCESS = 0x1; // The checksum verification
-                                          // successful.
-constexpr uint8_t B_MEM_ERR = 0x2;        // Memory boundry error indication.
-constexpr uint8_t B_ALIGN_ERR = 0x4;      // Address error indication.
-constexpr uint8_t B_KEY_ERR = 0x8;        // Invalid Key
-constexpr uint8_t B_START_ERR = 0x10;     // Error indicator set at startup.
-constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not match
+constexpr uint8_t B_CHKSUM_ERR = 0x0;     // The checksum verification
+                                          // unsuccessful
+constexpr uint8_t B_CHKSUM_SUCCESS = 0x1; // The checksum
+// verification successful.
+constexpr uint8_t B_MEM_ERR = 0x2;    // Memory boundry error indication.
+constexpr uint8_t B_ALIGN_ERR = 0x4;  // Address error indication.
+constexpr uint8_t B_KEY_ERR = 0x8;    // Invalid Key
+constexpr uint8_t B_START_ERR = 0x10; // Error indicator set at startup.
+constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not  match
                                               // PSU
 constexpr uint8_t B_ISP_MODE = 0x40;          // ISP mode
 constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good checksum.
 constexpr uint8_t B_PRGM_BUSY = 0x80;            // Write operation in progress.
 constexpr uint8_t SUCCESSFUL_ISP_REBOOT_STATUS = 0x0; // Successful ISP reboot
                                                       // status
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
