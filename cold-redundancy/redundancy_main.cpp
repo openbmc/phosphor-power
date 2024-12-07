@@ -23,9 +23,8 @@ int main(void)
     auto systemBus = std::make_shared<sdbusplus::asio::connection>(io);
 
     systemBus->request_name("xyz.openbmc_project.PSURedundancy");
-    sdbusplus::asio::object_server objectServer(systemBus);
 
-    ColdRedundancy coldRedundancy(io, objectServer, systemBus);
+    ColdRedundancy coldRedundancy(io, systemBus);
 
     io.run();
 
