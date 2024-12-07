@@ -29,12 +29,10 @@ class ColdRedundancy
      * Constructor
      *
      * @param[in] io - boost asio context
-     * @param[in] objectServer - D-Bus object
      * @param[in] dbusConnection - D-Bus connection
      */
     ColdRedundancy(
         boost::asio::io_service& io,
-        sdbusplus::asio::object_server& objectServer,
         std::shared_ptr<sdbusplus::asio::connection>& dbusConnection);
 
     /**
