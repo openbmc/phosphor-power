@@ -46,28 +46,27 @@ ColdRedundancy::ColdRedundancy(
     std::shared_ptr<sdbusplus::asio::connection>& systemBus) :
     filterTimer(io), systemBus(systemBus)
 {
-    post(io,
-         [this, &io, &objectServer, &systemBus]() { createPSU(systemBus); });
+    post(io, [this, &systemBus]() { createPSU(systemBus); });
     std::function<void(sdbusplus::message_t&)> eventHandler =
-        [this, &io, &objectServer, &systemBus](sdbusplus::message_t& message) {
+        [this, &systemBus](sdbusplus::message_t& message) {
             if (message.is_method_error())
             {
                 std::cerr << "callback method error\n";
                 return;
             }
             filterTimer.expires_after(std::chrono::seconds(1));
-            filterTimer.async_wait([this, &io, &objectServer, &systemBus](
-                                       const boost::system::error_code& ec) {
-                if (ec == boost::asio::error::operation_aborted)
-                {
-                    return;
-                }
-                else if (ec)
-                {
-                    std::cerr << "timer error\n";
-                }
-                createPSU(systemBus);
-            });
+            filterTimer.async_wait(
+                [this, &systemBus](const boost::system::error_code& ec) {
+                    if (ec == boost::asio::error::operation_aborted)
+                    {
+                        return;
+                    }
+                    else if (ec)
+                    {
+                        std::cerr << "timer error\n";
+                    }
+                    createPSU(systemBus);
+                });
         };
 
     std::function<void(sdbusplus::message_t&)> eventCollect =
