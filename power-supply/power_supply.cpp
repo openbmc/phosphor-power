@@ -41,6 +41,10 @@ using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
+#pragma GCC diagnostic push
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wpessimizing-move"
+#endif
 PowerSupply::PowerSupply(const std::string& name, size_t inst,
                          const std::string& objpath, const std::string& invpath,
                          sdbusplus::bus_t& bus, const sdeventplus::Event& e,
@@ -98,6 +102,7 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     // Get initial power state.
     updatePowerState();
 }
+#pragma GCC diagnostic pop
 
 void PowerSupply::getAccessType()
 {
