@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "198c908a_909c0606",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000086
+      },
+      "writtenOn": "2024-12-10T05:41:38Z",
+      "side": 1,
+      "message": "clang-tidy internally creates a compilation database before executing the actual tool. During this build process, errors related to unused variables are reported. For now, I\u0027ve commented out these variables instead of removing them, as they might be needed in the future. Without addressing these issues, we can\u0027t enable clang-tidy.\n\nRegarding the format issue, clang-format handles the formatting automatically, not me.",
+      "parentUuid": "f848cc1c_0950bd39",
+      "revId": "cd4ce76e24db0d2950166dbed6fbf205f7100f17",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df9c2e4b_0225631f",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 2
