@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd300a4_2e9a2c0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2024-12-12T16:05:20Z",
+      "side": 1,
+      "message": "I think this should wait until this related review has been agreed upon and merged: https://gerrit.openbmc.org/c/openbmc/docs/+/76345",
+      "revId": "0ddbb7b748ecf6ca3d6b20eea9a9d6f5af2a47c1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
