@@ -24,7 +24,7 @@ class I2CDevice : public I2CInterface
     explicit I2CDevice(uint8_t busId, uint8_t devAddr,
                        InitialState initialState = InitialState::OPEN,
                        int maxRetries = 0) :
-        busId(busId), devAddr(devAddr), maxRetries(maxRetries),
+        devAddr(devAddr), maxRetries(maxRetries),
         busStr("/dev/i2c-" + std::to_string(busId))
     {
         if (initialState == InitialState::OPEN)
@@ -38,9 +38,6 @@ class I2CDevice : public I2CInterface
 
     /** @brief Empty adapter functionality value with no bit flags set */
     static constexpr unsigned long NO_FUNCS = 0;
-
-    /** @brief The I2C bus ID */
-    uint8_t busId;
 
     /** @brief The i2c device address in the bus */
     uint8_t devAddr;
