@@ -128,7 +128,7 @@ bool PMBus::readBit(const std::string& name, Type type)
 
     try
     {
-        char* err = NULL;
+        char* err = nullptr;
         std::string val{1, '\0'};
 
         file.open(path);

@@ -350,7 +350,7 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
     {
         throw std::invalid_argument{"Element is not hexadecimal string"};
     }
-    return static_cast<uint8_t>(std::stoul(value, 0, 0));
+    return static_cast<uint8_t>(std::stoul(value, nullptr, 0));
 }
 
 /**
