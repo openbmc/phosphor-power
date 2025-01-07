@@ -30,26 +30,18 @@
 namespace aeiUpdater
 {
 
-// Suppress clang-tidy errors for unused variables that are intended
-// for future use
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-#endif
-
 constexpr uint8_t MAX_RETRIES = 0x02;    // Constants for retry limits
 
 constexpr int ISP_STATUS_DELAY = 1200;   // Delay for ISP status check (1.2s)
 constexpr int MEM_WRITE_DELAY = 5000;    // Memory write delay (5s)
-constexpr int MEM_STRETCH_DELAY = 10;    // Delay between writes (10ms)
+constexpr int MEM_STRETCH_DELAY = 1;     // Delay between writes (1ms)
 constexpr int MEM_COMPLETE_DELAY = 2000; // Delay before completion (2s)
 constexpr int REBOOT_DELAY = 8000;       // Delay for reboot (8s)
 
 constexpr uint8_t I2C_SMBUS_BLOCK_MAX = 0x20; // Max Read bytes from PSU
 constexpr uint8_t FW_READ_BLOCK_SIZE = 0x20;  // Read bytes from FW file
 constexpr uint8_t BLOCK_WRITE_SIZE = 0x25;    // I2C block write size
-constexpr uint8_t READ_SEQ_ST_CML_SIZE = 0x6; // Read sequence and status CML
-                                              // size
+
 constexpr uint8_t START_SEQUENCE_INDEX = 0x1; // Starting sequence index
 constexpr uint8_t STATUS_CML_INDEX = 0x5;     // Status CML read index
 
@@ -68,26 +60,10 @@ constexpr uint8_t CMD_BOOT_PWR = 0x03; // Attempt to boot the Power Management
                                        // OS.
 
 // Define AEI ISP response status bit
-constexpr uint8_t B_CHKSUM_ERR = 0x0;     // The checksum verification
-                                          // unsuccessful
-constexpr uint8_t B_CHKSUM_SUCCESS = 0x1; // The checksum
-// verification successful.
-constexpr uint8_t B_MEM_ERR = 0x2;    // Memory boundry error indication.
-constexpr uint8_t B_ALIGN_ERR = 0x4;  // Address error indication.
-constexpr uint8_t B_KEY_ERR = 0x8;    // Invalid Key
-constexpr uint8_t B_START_ERR = 0x10; // Error indicator set at startup.
-constexpr uint8_t B_IMG_MISSMATCH_ERR = 0x20; // Firmware image does not  match
-                                              // PSU
-constexpr uint8_t B_ISP_MODE = 0x40;          // ISP mode
+constexpr uint8_t B_ISP_MODE = 0x40;             // ISP mode
 constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good checksum.
-constexpr uint8_t B_PRGM_BUSY = 0x80;            // Write operation in progress.
 constexpr uint8_t SUCCESSFUL_ISP_REBOOT_STATUS = 0x0; // Successful ISP reboot
                                                       // status
-
-#ifdef __clang__
-#pragma clang diagnostic pop
-#endif
-
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
 
@@ -98,21 +74,82 @@ int AeiUpdater::doUpdate()
     {
         throw std::runtime_error("I2C interface error");
     }
-    bool cleanFailedIspMode = false; // Flag to prevent download and continue to
-                                     // restore the PSU to it's original state.
-
-    // Set ISP mode by writing necessary keys and resetting ISP status
-    if (!writeIspKey() || !writeIspMode() || !writeIspStatusReset())
+    bool downloadFwFailed = false; // Download Firmware status
+    int retryProcessTwo(0);
+    while (retryProcessTwo < MAX_RETRIES)
     {
-        lg2::error("Failed to set ISP key or mode or reset ISP status");
-        cleanFailedIspMode = true;
-    }
+        retryProcessTwo++;
+        // Write AEI PSU ISP key
+        if (!writeIspKey())
+        {
+            lg2::error("Failed to set ISP Key");
+            downloadFwFailed = true; // Download Firmware status
+            continue;
+        }
 
-    if (cleanFailedIspMode)
+        downloadFwFailed = false; // Download Firmware status
+        int retryProcessOne(0);
+        while (retryProcessOne < MAX_RETRIES)
+        {
+            retryProcessOne++;
+            // Set ISP mode
+            if (!writeIspMode())
+            {
+                // Write ISP Mode failed MAX_RETRIES times
+                retryProcessTwo = MAX_RETRIES;
+                downloadFwFailed = true; // Download Firmware Failed
+                break;
+            }
+
+            // Reset ISP status
+            if (writeIspStatusReset())
+            {
+                // Start PSU frimware download.
+                if (downloadPsuFirmware())
+                {
+                    if (!verifyDownloadFWStatus())
+                    {
+                        downloadFwFailed = true;
+                        continue;
+                    }
+                }
+                else
+                {
+                    downloadFwFailed = true;
+                    continue;
+                }
+            }
+            else
+            {
+                // ISP Status Reset failed MAX_RETRIES times
+                retryProcessTwo = MAX_RETRIES;
+                downloadFwFailed = true;
+                break;
+            }
+
+            ispReboot();
+            if (ispReadRebootStatus() && !downloadFwFailed)
+            {
+                // Download completed successful
+                retryProcessTwo = MAX_RETRIES;
+                break;
+            }
+            else
+            {
+                if ((retryProcessOne < (MAX_RETRIES - 1)) &&
+                    (retryProcessTwo < (MAX_RETRIES - 1)))
+                {
+                    downloadFwFailed = false;
+                    continue;
+                }
+            }
+        }
+    }
+    if (downloadFwFailed)
     {
         return 1;
     }
-    return 0; // Update successful.
+    return 0; // Update successful
 }
 
 bool AeiUpdater::writeIspKey()
@@ -151,6 +188,7 @@ bool AeiUpdater::writeIspMode()
 
             if (ispStatus & B_ISP_MODE)
             {
+                lg2::info("Set ISP Mode");
                 return true;
             }
         }
@@ -175,21 +213,31 @@ bool AeiUpdater::writeIspStatusReset()
                             CMD_RESET_SEQ); // Start reset sequence.
         for (int retry = 0; retry < MAX_RETRIES; ++retry)
         {
-            i2cInterface->read(STATUS_REGISTER, ispStatus);
-            if (ispStatus == B_ISP_MODE)
+            try
             {
-                return true; // ISP status reset successfully.
+                i2cInterface->read(STATUS_REGISTER, ispStatus);
+                if (ispStatus == B_ISP_MODE)
+                {
+                    return true; // ISP status reset successfully.
+                    lg2::info("Read/Write ISP reset");
+                }
+                i2cInterface->write(STATUS_REGISTER,
+                                    CMD_CLEAR_STATUS); // Clear status if
+                                                       // not reset.
+                lg2::error("Read/Write ISP reset failed");
             }
-            i2cInterface->write(STATUS_REGISTER,
-                                CMD_CLEAR_STATUS); // Clear status if
-                                                   // not reset.
+            catch (const std::exception& e)
+            {
+                // Log any errors encountered during reset sequence.
+                lg2::error("I2C Read/Write error during ISP reset: {ERROR}",
+                           "ERROR", e);
+            }
         }
     }
     catch (const std::exception& e)
     {
         // Log any errors encountered during reset sequence.
-        lg2::error("I2C Read/Write error during ISP reset: {ERROR}", "ERROR",
-                   e);
+        lg2::error("I2C Write ISP reset failed: {ERROR}", "ERROR", e);
     }
     lg2::error("Failed to reset ISP Status");
     return false;
@@ -257,6 +305,129 @@ std::vector<uint8_t>
     return cmdBlockWrite;
 }
 
+bool AeiUpdater::downloadPsuFirmware()
+{
+    // Get firmware path
+    const std::string fspath = getFirmwarePath();
+    if (fspath.empty())
+        return false;
+
+    // Validate firmware file
+    if (!isFirmwareFileValid(fspath))
+        return false;
+
+    // Open firmware file
+    auto inputFile = openFirmwareFile(fspath);
+    if (!inputFile)
+        return false;
+
+    // Read and process firmware file in blocks
+    size_t bytesRead = 0;
+    const auto fileSize = std::filesystem::file_size(fspath);
+    bool downloadFailed = false;
+    byteSwappedIndex =
+        updater::internal::bigEndianToLittleEndian(START_SEQUENCE_INDEX);
+    int writeBlockDelay = MEM_WRITE_DELAY;
+
+    int readCounter(0);
+
+    while (bytesRead < fileSize && !downloadFailed)
+    {
+        readCounter++;
+        // Read a block of firmware data
+        auto dataRead = readFirmwareBlock(*inputFile, FW_READ_BLOCK_SIZE);
+        bytesRead += dataRead.size();
+
+        // Prepare command block with the current index and data
+        // auto cmdBlockWrite = prepareCommandBlock(byteSwappedIndex,
+        // dataRead);
+        auto cmdBlockWrite = prepareCommandBlock(dataRead);
+
+        // Perform I2C write/read with retries
+        uint8_t readData[I2C_SMBUS_BLOCK_MAX] = {};
+        downloadFailed = !performI2cWriteReadWithRetries(
+            ISP_MEMORY_REGISTER, cmdBlockWrite, I2C_SMBUS_BLOCK_MAX, readData,
+            MAX_RETRIES, writeBlockDelay);
+
+        // Adjust delay after first write block
+        writeBlockDelay = MEM_STRETCH_DELAY;
+    }
+
+    inputFile->close();
+
+    // Log final download status
+    if (downloadFailed)
+    {
+        lg2::error("Firmware download failed after retries.");
+        return false; // Failed
+    }
+
+    return true;
+}
+
+bool AeiUpdater::performI2cWriteReadWithRetries(
+    uint8_t regAddr, const std::vector<uint8_t>& cmdBlockWrite,
+    const uint8_t readSize, uint8_t* readData, const int retries,
+    const int& delayTime)
+{
+    for (int i = 0; i < retries; ++i)
+    {
+        try
+        {
+            performI2cWriteRead(regAddr, cmdBlockWrite, readSize, readData,
+                                delayTime);
+            if (readData[STATUS_CML_INDEX] == 0 &&
+                !std::equal(readData, readData + 4, byteSwappedIndex.begin()))
+            {
+                std::copy(readData, readData + 4, byteSwappedIndex.begin());
+                return true;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            lg2::error("I2C write/read block failed: {ERROR}", "ERROR", e);
+            if (i == retries - 1)
+            {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+void AeiUpdater::performI2cWriteRead(
+    uint8_t regAddr, const std::vector<uint8_t>& cmdBlockWrite,
+    uint8_t readSize, uint8_t* readData, const int& delayTime)
+{
+    i2cInterface->processCall(regAddr, cmdBlockWrite.size(),
+                              cmdBlockWrite.data(), readSize, readData);
+
+    updater::internal::delay(delayTime);
+}
+
+bool AeiUpdater::verifyDownloadFWStatus()
+{
+    try
+    {
+        // Read and verify firmware download status.
+        uint8_t status = 0;
+        i2cInterface->read(STATUS_REGISTER, status);
+        if (status != B_ISP_MODE_CHKSUM_GOOD)
+        {
+            lg2::error("Firmware download failed - status: {ERR}", "ERR",
+                       status);
+
+            return false; // Failed checksum
+        }
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("I2C read status register failed: {ERROR}", "ERROR", e);
+    }
+    return false; // Failed
+}
+
 void AeiUpdater::ispReboot()
 {
     updater::internal::delay(
@@ -284,9 +455,8 @@ bool AeiUpdater::ispReadRebootStatus()
         uint8_t data = 1; // Initialize data to a non-zero value
         i2cInterface->read(STATUS_REGISTER, data);
 
-        uint8_t status = SUCCESSFUL_ISP_REBOOT_STATUS;
         // If the reboot was successful, the read data should be 0
-        if (data == status)
+        if (data == SUCCESSFUL_ISP_REBOOT_STATUS)
         {
             lg2::info("ISP Status Reboot successful.");
             return true;
@@ -296,6 +466,9 @@ bool AeiUpdater::ispReadRebootStatus()
     {
         lg2::error("I2C read error during reboot attempt: {ERROR}", "ERROR", e);
     }
+
+    // If we reach here, all retries have failed
+    lg2::error("Failed to reboot ISP status after max retries.");
     return false;
 }
 
