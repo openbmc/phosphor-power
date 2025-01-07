@@ -176,6 +176,10 @@ bool checkFileExists(const std::string& filePath)
 
 std::string getDeviceName(std::string devPath)
 {
+    if (devPath.empty())
+    {
+        return devPath;
+    }
     if (devPath.back() == '/')
     {
         devPath.pop_back();
