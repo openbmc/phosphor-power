@@ -6,6 +6,7 @@ test(
         'test_utils.cpp',
         'test_version.cpp',
         '../updater.cpp',
+        '../aei_updater.cpp',
         '../utils.cpp',
         '../version.cpp',
         dependencies: [
