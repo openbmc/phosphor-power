@@ -15,6 +15,7 @@
  */
 #include "updater.hpp"
 
+#include "aei_updater.hpp"
 #include "pmbus.hpp"
 #include "types.hpp"
 #include "utility.hpp"
@@ -45,9 +46,10 @@ std::unique_ptr<updater::Updater> getClassInstance(
     const std::string& model, const std::string& psuInventoryPath,
     const std::string& devPath, const std::string& imageDir)
 {
-    if (model == "XXXX")
+    if (model == "51E9" || model == "51DA")
     {
-        // XXXX updater class
+        return std::make_unique<aeiUpdater::AeiUpdater>(psuInventoryPath,
+                                                        devPath, imageDir);
     }
     return std::make_unique<Updater>(psuInventoryPath, devPath, imageDir);
 }
@@ -64,8 +66,7 @@ const std::string getFWFilenamePath(const std::string& directory)
         {
             std::string filename = entry.path().filename().string();
 
-            if ((filename.rfind(model, 0) == 0) &&
-                (filename.ends_with(".bin") || filename.ends_with(".hex")))
+            if ((filename.rfind(model, 0) == 0) && (filename.ends_with(".bin")))
             {
                 return directory + "/" + filename;
             }

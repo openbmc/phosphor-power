@@ -114,7 +114,7 @@ class AeiUpdater : public updater::Updater
                                            const size_t& bytesToRead);
 
     /**
-     * @brief Prepares an ISP_MEMORY  command block by processing the firmware
+     * @brief Prepares an ISP_MEMORY command block by processing the firmware
      * data block.
      *
      * @param dataBlockRead The firmware data block read from the file.
@@ -122,6 +122,61 @@ class AeiUpdater : public updater::Updater
      */
     std::vector<uint8_t>
         prepareCommandBlock(const std::vector<uint8_t>& dataBlockRead);
+
+    /**
+     * @brief Performs firmware update for the power supply unit (PSU)
+     *
+     * This function retrieves the firmware file from appropriate path,
+     * validate existence of the file and initiate the update process.
+     * The process includes processing the data into blocks, and writes
+     * these blocks to the PSU.
+     *
+     * @return True if firmware download was successful, false otherwise.
+     */
+    bool downloadPsuFirmware();
+
+    /**
+     * @brief Performs an I2C write and read with retry logic.
+     *
+     * This function attempts to write a command block to PSU register
+     * and read next block sequence and CML write status. If the block
+     * sequence number the same as written block, then retry to write
+     * same block again.
+     *
+     * @param regAddr The register address to write to.
+     * @param cmdBlockWrite The command block to write.
+     * @param expectedReadSize The number of bytes expected to read
+     * @param readData The buffer to store read data.
+     * @param retries The number of retry attempts allowed.
+     * @param delayTime The delay time between retries.
+     * @return True if the operation is successful, false otherwise.
+     */
+    bool performI2cWriteReadWithRetries(
+        uint8_t regAddr, const std::vector<uint8_t>& cmdBlockWrite,
+        const uint8_t expectedReadSize, uint8_t* readData, const int retries,
+        const int delayTime);
+
+    /**
+     * @brief Performs a single I2C write and read without retry logic.
+     *
+     * @param regAddr The register address to write to.
+     * @param cmdBlockWrite The command block to write.
+     * @param readSize The number of bytes to read after writing.
+     * @param readData The buffer to store read data.
+     * @param delayTime The delay time between write and read operations.
+     */
+    void performI2cWriteRead(uint8_t regAddr,
+                             const std::vector<uint8_t>& cmdBlockWrite,
+                             uint8_t& readReplySize, uint8_t* readData,
+                             const int& delayTime);
+
+    /**
+     * @brief Verifies the status of the firmware download.
+     *
+     * @return True if the download status is verified as successful, false
+     * otherwise.
+     */
+    bool verifyDownloadFWStatus();
 
     /**
      * @brief Initiates a reboot of the ISP to apply new firmware.
@@ -149,5 +204,10 @@ class AeiUpdater : public updater::Updater
      * @brief Stores byte-swapped indices for command processing
      */
     std::vector<uint8_t> byteSwappedIndex;
+
+    /**
+     * @brief Command block used for writing data to the device
+     */
+    std::vector<uint8_t> cmdBlockWrite;
 };
 } // namespace aeiUpdater
