@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bf87a6e_0ebed32b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "if writeispkey() failed twice, shouldn\u0027t it set downloadFwFailed \u003d true?",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1318ad_0ae74ad2",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "if writeispmode() fails twice, shouldn\u0027t it set downloadFwFailed \u003d true?",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4332c06_38741e89",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "if writeIspStatusReset() fails, we wouldn\u0027t need to do the F703 write and wait 8 seconds in ispReboot() if we\u0027re just going to just try again anyway.",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eee4b1b_831131c3",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "should a trace be added here so we know this worked?\neg, if it failed the first time through, we\u0027d get the line 186 i2c error message.  then if it worked the second time through, how do we know the retry worked?\n\nthis comment applies to some of the other steps as well, such as writing the isp key.  maybe add \", retrying\" to the message?",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f257794d_c9146a84",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "this would catch i2c fails from previous write/read, correct? does it \"catch\" anything else?",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a6c998_4f164939",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-09T21:54:38Z",
+      "side": 1,
+      "message": "if this write() has i2c failure, would it just fall through to the catch on line 214, and NOT do a retry?",
+      "revId": "db94b6e97909d031f623f86ffe329298c977909b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
