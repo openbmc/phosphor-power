@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ec363e_9a51fb03",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-13T16:57:16Z",
+      "side": 1,
+      "message": "let\u0027s discuss at team meeting how test all the error paths",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6c5dd04_c4a9c398",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-13T16:57:16Z",
+      "side": 1,
+      "message": "if this cmd (F701) fails, the code won\u0027t retry neither the same cmd, nor the whole download process.  We should fall through and try the F700 cmds per the flowchart.  If that fails, then we should try putting it back into powermanagement mode like \"IBM Error 6\" states.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
