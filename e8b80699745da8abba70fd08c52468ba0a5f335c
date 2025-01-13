@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd252255_82efaf4e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-13T22:50:09Z",
+      "side": 1,
+      "message": "failures here will go to step 2 right? aei recommended going to step 1 in their flowchart...",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6c5dd04_c4a9c398",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
