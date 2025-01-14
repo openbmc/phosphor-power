@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "652b6b08_fd3b95d4",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-14T21:25:16Z",
+      "side": 1,
+      "message": "My mistake, the code here WILL correctly go back and do step 2 and try again.  \n\nIf it fails again, up to you if you want to add the IBM Error11 stuff with this code patch or a future story.",
+      "parentUuid": "d33caede_638dd181",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd252255_82efaf4e",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
