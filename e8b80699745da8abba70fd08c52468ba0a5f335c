@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29b0b485_e1b5b445",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I think this is wrong and needs to be 4.  But I might be misunderstanding.\n\nIn the AEI documentation, it shows the read buffer as:\n```\n|Byte Count|Next Index Byte 1|Next Index Byte 2|Next Index Byte 3|Next Index Byte 4|STATUS_CML|PEC2|\n```\n\nThat is the way it looks in the raw I2C traffic.\n\nHowever, the I2CInterface::processCall() method does not copy the Byte Count byte into the returned buffer.  The returned buffer starts with Next Index Byte 1.  That is the way the underlying C API works.  It returns the byte count in the readSize output parameter.\n\nSo in the buffer that your code gets, the data will look like:\n```\n|Next Index Byte 1|Next Index Byte 2|Next Index Byte 2|Next Index Byte 2|STATUS_CML|PEC2|\n```\n\nThe 0-based STATUS index is 4 for that buffer.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "39ec363e_9a51fb03",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
@@ -31,6 +48,24 @@
       "writtenOn": "2025-01-13T20:08:14Z",
       "side": 1,
       "message": "do you need to set \"downloadFwFailed \u003d false;\" inside the while loop so if the retry works we don\u0027t say it failed still?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8906b7b0_8d2fc500",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I agree with this comment/question.",
+      "parentUuid": "82751a58_9c7148ad",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -106,6 +141,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f210ae9_ebfcfebc",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I agree I\u0027m curious why some of the I2C commands in general (across the flow chart) are retried and some are not.  Maybe that is necessary based on how the PSU works?",
+      "parentUuid": "a6c5dd04_c4a9c398",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d9bb5185_35f11213",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
@@ -117,6 +170,24 @@
       "writtenOn": "2025-01-13T20:08:14Z",
       "side": 1,
       "message": "wouldn\u0027t it always return before doing line 222?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a09e2879_509163e5",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "Agree I assume you want these two lines swapped.",
+      "parentUuid": "d9bb5185_35f11213",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -140,6 +211,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4dfeebef_d4a2a2e5",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I think you said it does hundreds or thousands of writes during a PSU code update, right?\n\nIf so, we are creating and deleting a 39 byte vector hundreds or thousands of times.  That hits the heap pretty hard.  Seems like it would make sense to make cmdBlockWrite a data member?  Then it only gets created/deleted once.  In this method it could just clear it as the first step and keep the rest of the code the same?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb6ad894_dcce4330",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I think it is preferred to put braces around the code in \"if\" or \"else\" clauses, even if it is just one line.  This prevents someone else in the future from making this common error:\n\n```\nif (fspath.empty())\n    lg2::error(\"Unable to find path);  // New code that was added\n    return false;                      // Despite indention, no longer in if clause\n```\n\nSame comment applies to a few other one line ifs clauses below.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5c50c814_733b5f71",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
@@ -157,6 +262,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36a7281b_8d6b94f1",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "remove commented out code",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79df92e3_4b26a407",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
@@ -168,6 +290,97 @@
       "writtenOn": "2025-01-13T20:08:14Z",
       "side": 1,
       "message": "worth specifying which block failed in this error message so we\u0027d know?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c162f3c_f93f4116",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "Why is this check necessary?  Wouldn\u0027t it just naturally exit the loop and return false on line 395?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07dd7333_67b11a78",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "readSize is not an input parameter with the size of the read buffer or the expected number of bytes to be read.\n\nI2CInterface::processCall() documents that readSize is an output parameter.  It returns how many bytes were actually read from the device and stored in readData.\n\nThe doxygen states that readData points to a buffer large enough to hold the max data read from the device (32 bytes).  So the read buffer size is not passed in.\n\nYou should change the readSize variable to be a uint8_t\u0026 here and in performI2cWriteReadWithRetries().  You should also change their doxygen to state that this is an output parameter containing the number of bytes actually read.\n\nThen the callers of performI2cWriteRead() or performI2cWriteReadWithRetries() should check the returned readSize and make sure it matches how much data they expected.\n\nFor example, for memory block write/read, you are expecting 6 bytes.  If only 2 were read, then something went wrong and looking at the data beyond the first two bytes is invalid.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79963e96_217106c1",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "It should probably only call this if delayTime \u003e 0. Otherwise it will call sleep_for(0). The documentation does not state that it makes a special case for 0.  So it will probably give up the processor for at least some amount of time.  Meaning if the caller specifies 0, they are still going to have some delay.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8eb8df6_c185dd00",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "I don\u0027t see any retries here?  Maybe that logic was removed?",
+      "range": {
+        "startLine": 470,
+        "startChar": 29,
+        "endLine": 470,
+        "endChar": 37
+      },
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84664af_d0b1735b",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-16T23:04:13Z",
+      "side": 1,
+      "message": "This is documented as a generic method to perform an I2C write/read (process call), which is good (reusable code).\n\nHowever, the implementation is not generic.  It checks the index bytes and status byte that are only present for the boot loader memory case.  So it is actually specific to the boot loader memory block write/read.\n\nSo either this should be renamed and the doxygen updated to state it is specific to that use case, or the logic that checks the index/status bytes should be moved somewhere else.",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
