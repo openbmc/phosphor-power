@@ -383,6 +383,29 @@
       "message": "This is documented as a generic method to perform an I2C write/read (process call), which is good (reusable code).\n\nHowever, the implementation is not generic.  It checks the index bytes and status byte that are only present for the boot loader memory case.  So it is actually specific to the boot loader memory block write/read.\n\nSo either this should be renamed and the doxygen updated to state it is specific to that use case, or the logic that checks the index/status bytes should be moved somewhere else.",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e7ef55_d304f19b",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-01-17T17:04:00Z",
+      "side": 1,
+      "message": "nit: ints don\u0027t need to be references",
+      "range": {
+        "startLine": 147,
+        "startChar": 14,
+        "endLine": 147,
+        "endChar": 19
+      },
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
