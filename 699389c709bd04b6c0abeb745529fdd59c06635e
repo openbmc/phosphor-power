@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "32398ab1_438d4e8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Nit: /usr",
+      "range": {
+        "startLine": 30,
+        "startChar": 47,
+        "endLine": 30,
+        "endChar": 50
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6186c264_b1e01dd4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Is something missing here?  From these sentences it sounded like a psutils command was going to be shown?",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4233b53d_ec402707",
@@ -14,6 +54,126 @@
       "writtenOn": "2025-01-21T17:37:51Z",
       "side": 1,
       "message": "Please review the update, thanks",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51af39f1_c95c57bd",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Did you mean to insert this call here?  It is also called in AeiUpdater::doUpdate()",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dff5ea73_03151f6c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Need to delete this statement.  It is still creating a local that hides the data member.",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86588c40_2b8bc435",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Since the signature of this method is `std::vector\u003cuint8_t\u003e`, it is going to return a *copy* of the data member.  So we are still creating many copies of this vector.\n\nSince it is a data member, the caller to prepareCommandBlock can just use the data member and doesn\u0027t need to receive a copy as a return value.  So this method can be changed to a void.",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "138c9629_c3c0700c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "As noted above, should just delete the `auto cmdBlockWrite \u003d` part and use the data member directly.",
+      "range": {
+        "startLine": 359,
+        "startChar": 8,
+        "endLine": 359,
+        "endChar": 29
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e48635_1c6892d2",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "I mention this in the .cpp file too, but this method is still returning a copy of the vector hundreds of times.  Since the vector is now a data member, this method should probably have a return type of void.  The caller can just access the data member directly after calling this.  The @return line in the doxygen should be removed if you make this change.",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eccbd8dc_6a8cc1c3",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-01-21T19:19:05Z",
+      "side": 1,
+      "message": "Need to update name and behavior of this parameter.",
+      "range": {
+        "startLine": 164,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 2
+      },
       "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
