@@ -24,6 +24,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6593eb0_389f430f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "will add /",
+      "parentUuid": "32398ab1_438d4e8a",
+      "range": {
+        "startLine": 30,
+        "startChar": 47,
+        "endLine": 30,
+        "endChar": 50
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab21b4e_688b10fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32398ab1_438d4e8a",
+      "range": {
+        "startLine": 30,
+        "startChar": 47,
+        "endLine": 30,
+        "endChar": 50
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6186c264_b1e01dd4",
@@ -37,6 +85,42 @@
       "writtenOn": "2025-01-21T19:19:05Z",
       "side": 1,
       "message": "Is something missing here?  From these sentences it sounded like a psutils command was going to be shown?",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c4aa44_b5a1e628",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Oops, yes I will add the command",
+      "parentUuid": "6186c264_b1e01dd4",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2101f61e_2866ac42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6186c264_b1e01dd4",
       "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -75,6 +159,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "727090b3_3da1c3ce",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Yes, this added to try to restore PSU mode on failure",
+      "parentUuid": "51af39f1_c95c57bd",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dff5ea73_03151f6c",
@@ -88,6 +190,24 @@
       "writtenOn": "2025-01-21T19:19:05Z",
       "side": 1,
       "message": "Need to delete this statement.  It is still creating a local that hides the data member.",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c380eba_67402c61",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff5ea73_03151f6c",
       "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -109,6 +229,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ecc7fa_78e5ab70",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86588c40_2b8bc435",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "138c9629_c3c0700c",
@@ -122,6 +260,30 @@
       "writtenOn": "2025-01-21T19:19:05Z",
       "side": 1,
       "message": "As noted above, should just delete the `auto cmdBlockWrite \u003d` part and use the data member directly.",
+      "range": {
+        "startLine": 359,
+        "startChar": 8,
+        "endLine": 359,
+        "endChar": 29
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b12d3d1f_87b67197",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "138c9629_c3c0700c",
       "range": {
         "startLine": 359,
         "startChar": 8,
@@ -155,6 +317,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d58c31_782a4bcd",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61e48635_1c6892d2",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 24
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eccbd8dc_6a8cc1c3",
@@ -168,6 +354,30 @@
       "writtenOn": "2025-01-21T19:19:05Z",
       "side": 1,
       "message": "Need to update name and behavior of this parameter.",
+      "range": {
+        "startLine": 164,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 2
+      },
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa683ad_ef033e1d",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T21:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eccbd8dc_6a8cc1c3",
       "range": {
         "startLine": 164,
         "startChar": 0,
