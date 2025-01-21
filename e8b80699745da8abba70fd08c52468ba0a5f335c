@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2af704d_8aa27d92",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "I didn\u0027t know I2C does not send the count, yes that would be 4",
+      "parentUuid": "29b0b485_e1b5b445",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39ec363e_9a51fb03",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-01-13T16:57:16Z",
       "side": 1,
       "message": "let\u0027s discuss at team meeting how test all the error paths",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17cb2120_65b29cda",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "39ec363e_9a51fb03",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "I agree with this comment/question.",
+      "parentUuid": "82751a58_9c7148ad",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5df225_3a6235fd",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Moved flag into second while loop",
       "parentUuid": "82751a58_9c7148ad",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -105,6 +159,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b29a740c_44fb7a2f",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "652b6b08_fd3b95d4",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd252255_82efaf4e",
@@ -118,6 +190,24 @@
       "writtenOn": "2025-01-13T22:50:09Z",
       "side": 1,
       "message": "failures here will go to step 2 right? aei recommended going to step 1 in their flowchart...",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551ce7a7_9097fba4",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "changed to break",
+      "parentUuid": "dd252255_82efaf4e",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -152,6 +242,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "I agree I\u0027m curious why some of the I2C commands in general (across the flow chart) are retried and some are not.  Maybe that is necessary based on how the PSU works?",
+      "parentUuid": "a6c5dd04_c4a9c398",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33b9d720_64d2da55",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Modify to Retry (F701) twice,and continue to read the status (F7)\n\nThe following comment fixed in updated code line 250 if you don\u0027t agree will\nbe handled in future update \n\"If that fails, then we should try putting it back into powermanagement mode like \"IBM Error 6\" states.\"\n\nAEI flow chart shows some command to be retried not all i.e. does not mention retries to block 1,5,8 and 16. The code modified to retry all commands twice.",
       "parentUuid": "a6c5dd04_c4a9c398",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -192,6 +300,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a37cec27_96056c33",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "typo",
+      "parentUuid": "d9bb5185_35f11213",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db7c16ee_9c808d95",
@@ -205,6 +331,24 @@
       "writtenOn": "2025-01-13T20:08:14Z",
       "side": 1,
       "message": "I think if any of the STATUS_REGISTER reads/writes fails in here, then we should try putting it back into powermanagement mode like \"IBM Error 6\" states.  Same if no i2c fails happened, but the ispStatus isn\u0027t 0x40.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7722f93_1496cf92",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Added ispReboot if STATUS_REGISTER reads/writes fails",
+      "parentUuid": "db7c16ee_9c808d95",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -226,6 +370,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb39d95_817f05ca",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Made cmdBlockWrite as data member",
+      "parentUuid": "4dfeebef_d4a2a2e5",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb6ad894_dcce4330",
@@ -239,6 +401,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "I think it is preferred to put braces around the code in \"if\" or \"else\" clauses, even if it is just one line.  This prevents someone else in the future from making this common error:\n\n```\nif (fspath.empty())\n    lg2::error(\"Unable to find path);  // New code that was added\n    return false;                      // Despite indention, no longer in if clause\n```\n\nSame comment applies to a few other one line ifs clauses below.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d7e77af_32f15e8e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb6ad894_dcce4330",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -260,6 +440,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c620a86c_387c1890",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c50c814_733b5f71",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36a7281b_8d6b94f1",
@@ -273,6 +471,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "remove commented out code",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02abd3dc_8a0235c9",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36a7281b_8d6b94f1",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -294,6 +510,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "717ef1d1_3490daa5",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Add FW byte count to error msg",
+      "parentUuid": "79df92e3_4b26a407",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c162f3c_f93f4116",
@@ -307,6 +541,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "Why is this check necessary?  Wouldn\u0027t it just naturally exit the loop and return false on line 395?",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69aee592_66895f6f",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c162f3c_f93f4116",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -328,6 +580,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0067c76f_b3212b23",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07dd7333_67b11a78",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79963e96_217106c1",
@@ -341,6 +611,24 @@
       "writtenOn": "2025-01-16T23:04:13Z",
       "side": 1,
       "message": "It should probably only call this if delayTime \u003e 0. Otherwise it will call sleep_for(0). The documentation does not state that it makes a special case for 0.  So it will probably give up the processor for at least some amount of time.  Meaning if the caller specifies 0, they are still going to have some delay.",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1aa5f29_219891fd",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79963e96_217106c1",
       "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -368,6 +656,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e136e9_fcc2c40b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "retry done in doUpdate \"while (retryProcessOne...\"",
+      "parentUuid": "b8eb8df6_c185dd00",
+      "range": {
+        "startLine": 470,
+        "startChar": 29,
+        "endLine": 470,
+        "endChar": 37
+      },
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d84664af_d0b1735b",
@@ -385,6 +697,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "745e18be_86d3ed80",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d84664af_d0b1735b",
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09e7ef55_d304f19b",
@@ -398,6 +728,54 @@
       "writtenOn": "2025-01-17T17:04:00Z",
       "side": 1,
       "message": "nit: ints don\u0027t need to be references",
+      "range": {
+        "startLine": 147,
+        "startChar": 14,
+        "endLine": 147,
+        "endChar": 19
+      },
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2fec6dd_e0fe1764",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09e7ef55_d304f19b",
+      "range": {
+        "startLine": 147,
+        "startChar": 14,
+        "endLine": 147,
+        "endChar": 19
+      },
+      "revId": "e8b80699745da8abba70fd08c52468ba0a5f335c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38009c4a_a8e8d73f",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-21T17:37:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09e7ef55_d304f19b",
       "range": {
         "startLine": 147,
         "startChar": 14,
