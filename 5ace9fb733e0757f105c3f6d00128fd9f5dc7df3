@@ -35,6 +35,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95dbe862_fb6159f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-22T17:10:02Z",
+      "side": 1,
+      "message": "Just the first comment remains unresolved, per discussion will be done in a future story.",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "975c6224_32811178",
@@ -69,6 +86,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "058b90cf_e32349b5",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-22T17:10:02Z",
+      "side": 1,
+      "message": "Discussed with Faisal off-line, I agree that it\u0027s ok if the i2c write fails to just drop through and try the reads in case it actually worked fine.  If the reads fail, then we\u0027d do the ispreboot() which tries to put the psu back in powerManagement mode.  So we can leave the code as-is, I\u0027ll click \u0027resolved\u0027.",
+      "parentUuid": "14f929c1_2cb12eb9",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "036cdc9a_10b4f01e",
@@ -82,6 +117,24 @@
       "writtenOn": "2025-01-22T15:25:09Z",
       "side": 1,
       "message": "Patchset 5 comment was \"I think if any of the STATUS_REGISTER reads/writes fails in here, then we should try putting it back into powermanagement mode like \"IBM Error 6\" states. Same if no i2c fails happened, but the ispStatus isn\u0027t 0x40.\"\n\nFor both of the above scenarios, will it be put back in powermanagement mode in this commmit or a future commit?",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89624114_77c7b48c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-01-22T17:10:02Z",
+      "side": 1,
+      "message": "Discussed with Faisal off-line, for both of the above scenarios the code will now drop through and do the ispReboot(), so should be trying to put the psu in powerManagement mode.  I\u0027ll mark this as resolved.",
+      "parentUuid": "036cdc9a_10b4f01e",
       "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
