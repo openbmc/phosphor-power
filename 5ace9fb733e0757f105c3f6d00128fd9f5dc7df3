@@ -52,6 +52,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a951e325_ccff009d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "95dbe862_fb6159f6",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "975c6224_32811178",
@@ -65,6 +83,24 @@
       "writtenOn": "2025-01-22T15:25:09Z",
       "side": 1,
       "message": "I can\u0027t update patchset 5 where the comments existed now that 6\u00267\u00268 have been done, so will repeat them here. Patchset 5 comment was \"once we start downloading code blocks, if it fails, we should probably go back to step 2 like their charts say in ErrorProcess1. Then if it fails again, exit out after trying to put back in good state. In other words, do IBM Error11 steps...\"\n\nSo for \"Then if it fails again, exit out after trying to put back in good state.\"\n\nWill this be addressed with this commit or a future one?",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3b0bd7_a8529069",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "Will be addressed in future commit",
+      "parentUuid": "975c6224_32811178",
       "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -104,6 +140,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b795f366_f3f20ec0",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "058b90cf_e32349b5",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "036cdc9a_10b4f01e",
@@ -135,6 +189,24 @@
       "side": 1,
       "message": "Discussed with Faisal off-line, for both of the above scenarios the code will now drop through and do the ispReboot(), so should be trying to put the psu in powerManagement mode.  I\u0027ll mark this as resolved.",
       "parentUuid": "036cdc9a_10b4f01e",
+      "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e49545_15a4df26",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "89624114_77c7b48c",
       "revId": "5ace9fb733e0757f105c3f6d00128fd9f5dc7df3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

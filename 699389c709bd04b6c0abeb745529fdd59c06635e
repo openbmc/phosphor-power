@@ -159,6 +159,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe713ab_d22429dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "539ad0ad_956a45b5",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc602d22_62254338",
@@ -172,6 +190,24 @@
       "writtenOn": "2025-01-22T15:22:30Z",
       "side": 1,
       "message": "I can\u0027t update patchset 5 where the comments existed now that 6\u00267\u00268 have been done, so will repeat them here.  Patchset 5 comment was \"once we start downloading code blocks, if it fails, we should probably go back to step 2 like their charts say in ErrorProcess1. Then if it fails again, exit out after trying to put back in good state. In other words, do IBM Error11 steps...\"\n\nSo for \"Then if it fails again, exit out after trying to put back in good state.\"\n\nWill this be addressed with this commit or a future one?",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56bf3e3d_61b23001",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fc602d22_62254338",
       "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -193,6 +229,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ef1bc1_2f6d80d9",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cf05331a_e671c3ff",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daa0aa06_64db6358",
@@ -206,6 +260,24 @@
       "writtenOn": "2025-01-22T15:22:30Z",
       "side": 1,
       "message": "Patchset 5 comment was \"I think if any of the STATUS_REGISTER reads/writes fails in here, then we should try putting it back into powermanagement mode like \"IBM Error 6\" states. Same if no i2c fails happened, but the ispStatus isn\u0027t 0x40.\"\n\nFor both of the above scenarios, will it be put back in powermanagement mode in this commmit or a future commit?",
+      "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3efcea1e_1adaf311",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-01-23T20:03:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "daa0aa06_64db6358",
       "revId": "699389c709bd04b6c0abeb745529fdd59c06635e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
