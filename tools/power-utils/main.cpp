@@ -15,10 +15,11 @@
  */
 #include "model.hpp"
 #include "updater.hpp"
+#include "utility.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
 
 #include <cassert>
@@ -71,6 +72,14 @@ int main(int argc, char** argv)
         if (updater::update(bus, updateArguments[0], updateArguments[1]))
         {
             ret = "Update successful";
+            lg2::info("Successful update to PSU: {PSU}", "PSU",
+                      updateArguments[0]);
+        }
+        else
+        {
+            lg2::error("Failed to update PSU: {PSU}", "PSU",
+                       updateArguments[0]);
+            ret = "Update failed";
         }
     }
 
