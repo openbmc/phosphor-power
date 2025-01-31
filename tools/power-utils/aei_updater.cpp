@@ -76,15 +76,26 @@ int AeiUpdater::doUpdate()
     {
         throw std::runtime_error("I2C interface error");
     }
+    if (!getFirmwarePath() || !isFirmwareFileValid())
+    {
+        return 1;                  // No firmware file abort download
+    }
     bool downloadFwFailed = false; // Download Firmware status
     int retryProcessTwo(0);
     int retryProcessOne(0);
+    int serviceableEvent(0);
     while ((retryProcessTwo < MAX_RETRIES) && (retryProcessOne < MAX_RETRIES))
     {
         retryProcessTwo++;
         // Write AEI PSU ISP key
         if (!writeIspKey())
         {
+            serviceableEvent++;
+            if (serviceableEvent == MAX_RETRIES)
+            {
+                createServiceableError(
+                    "createServiceableError: ISP key failed");
+            }
             lg2::error("Failed to set ISP Key");
             downloadFwFailed = true; // Download Firmware status
             continue;
@@ -117,6 +128,13 @@ int AeiUpdater::doUpdate()
                 }
                 else
                 {
+                    if (retryProcessOne == MAX_RETRIES)
+                    {
+                        // no more retries report serviceable error
+                        createServiceableError(
+                            "serviceableError: Download firmware failed");
+                        ispReboot(); // Try to set PSU to normal mode
+                    }
                     downloadFwFailed = true;
                     continue;
                 }
@@ -201,6 +219,7 @@ bool AeiUpdater::writeIspMode()
                        e);
         }
     }
+    createServiceableError("createServiceableError: ISP Status failed");
     lg2::error("Failed to set ISP Mode");
     return false; // Failed to set ISP Mode after retries
 }
@@ -246,34 +265,34 @@ bool AeiUpdater::writeIspStatusReset()
                        "ERROR", e);
         }
     }
+    createServiceableError("createServiceableError: Failed to reset ISP");
     lg2::error("Failed to reset ISP Status");
     ispReboot();
     return false;
 }
 
-std::string AeiUpdater::getFirmwarePath()
+bool AeiUpdater::getFirmwarePath()
 {
-    const std::string fspath =
-        updater::internal::getFWFilenamePath(getImageDir());
+    fspath = updater::internal::getFWFilenamePath(getImageDir());
     if (fspath.empty())
     {
         lg2::error("Firmware file path not found");
-    }
-    return fspath;
-}
-
-bool AeiUpdater::isFirmwareFileValid(const std::string& fspath)
-{
-    if (!updater::internal::validateFWFile(fspath))
-    {
-        lg2::error("Firmware validation failed");
         return false;
     }
     return true;
 }
 
-std::unique_ptr<std::ifstream> AeiUpdater::openFirmwareFile(
-    const std::string& fspath)
+bool AeiUpdater::isFirmwareFileValid()
+{
+    if (!updater::internal::validateFWFile(fspath))
+    {
+        lg2::error("Firmware validation failed, fspath={PATH}", "PATH", fspath);
+        return false;
+    }
+    return true;
+}
+
+std::unique_ptr<std::ifstream> AeiUpdater::openFirmwareFile()
 {
     auto inputFile = updater::internal::openFirmwareFile(fspath);
     if (!inputFile)
@@ -313,22 +332,8 @@ void AeiUpdater::prepareCommandBlock(const std::vector<uint8_t>& dataBlockRead)
 
 bool AeiUpdater::downloadPsuFirmware()
 {
-    // Get firmware path
-    const std::string fspath = getFirmwarePath();
-    if (fspath.empty())
-    {
-        lg2::error("Unable to find path");
-        return false;
-    }
-    // Validate firmware file
-    if (!isFirmwareFileValid(fspath))
-    {
-        lg2::error("Invalid file path");
-        return false;
-    }
-
     // Open firmware file
-    auto inputFile = openFirmwareFile(fspath);
+    auto inputFile = openFirmwareFile();
     if (!inputFile)
     {
         lg2::error("Unable to open firmware file {FILE}", "FILE", fspath);
@@ -386,7 +391,13 @@ bool AeiUpdater::performI2cWriteReadWithRetries(
         try
         {
             performI2cWriteRead(regAddr, readReplySize, readData, delayTime);
-            if ((readData[STATUS_CML_INDEX] == 0) &&
+            if ((readData[STATUS_CML_INDEX] == 0 ||
+                 // The first firmware data packet sent to the PSU have a
+                 // response of 0x80 which indicates firmware update in
+                 // progress. If retry to send the first packet again reply will
+                 // be 0.
+                 (readData[STATUS_CML_INDEX] == 0x80 &&
+                  delayTime == MEM_WRITE_DELAY)) &&
                 (readReplySize == expectedReadSize) &&
                 !std::equal(readData, readData + 4, byteSwappedIndex.begin()))
             {
@@ -395,7 +406,14 @@ bool AeiUpdater::performI2cWriteReadWithRetries(
             }
             else
             {
-                lg2::error("I2C write/read block failed");
+                uint32_t littleEndianValue = *reinterpret_cast<int*>(readData);
+                uint32_t bigEndianValue =
+                    ((littleEndianValue & 0x000000FF) << 24) |
+                    ((littleEndianValue & 0x0000FF00) << 8) |
+                    ((littleEndianValue & 0x00FF0000) >> 8) |
+                    ((littleEndianValue & 0xFF000000) >> 24);
+                lg2::error("Write/read block {NUM} failed", "NUM",
+                           bigEndianValue);
             }
         }
         catch (const std::exception& e)

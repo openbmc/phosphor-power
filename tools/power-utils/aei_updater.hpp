@@ -82,26 +82,24 @@ class AeiUpdater : public updater::Updater
     /**
      * @brief Retrieves the path to the firmware file.
      *
-     * @return The file path of the firmware.
+     * @return True if successful, false otherwise.
      */
-    std::string getFirmwarePath();
+    bool getFirmwarePath();
 
     /**
      * @brief Validates the firmware file.
      *
-     * @param fspath The file path to validate.
      * @return True if the file is valid, false otherwise.
      */
-    bool isFirmwareFileValid(const std::string& fspath);
+    bool isFirmwareFileValid();
 
     /**
      * @brief Opens a firmware file in binary mode.
      *
-     * @param fspath The path to the firmware file.
      * @return A file stream to read the firmware
      * file.
      */
-    std::unique_ptr<std::ifstream> openFirmwareFile(const std::string& fspath);
+    std::unique_ptr<std::ifstream> openFirmwareFile();
 
     /**
      * @brief Reads a block of firmware data from the file.
@@ -184,6 +182,16 @@ class AeiUpdater : public updater::Updater
     bool ispReadRebootStatus();
 
     /**
+     * @brief Create serviceable error
+     *
+     * Place holder for future enhancement
+     */
+    void createServiceableError(const std::string str)
+    {
+        std::cout << "createServiceableError: " << str << "\n";
+    }
+
+    /**
      * @brief Pointer to the I2C interface for communication
      *
      * This pointer is not owned by the class. The caller is responsible for
@@ -201,5 +209,10 @@ class AeiUpdater : public updater::Updater
      * @brief Command block used for writing data to the device
      */
     std::vector<uint8_t> cmdBlockWrite;
+
+    /**
+     * @brief The firmware file path
+     */
+    std::string fspath;
 };
 } // namespace aeiUpdater

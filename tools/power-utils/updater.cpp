@@ -21,7 +21,7 @@
 #include "utility.hpp"
 #include "utils.hpp"
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
 #include <fstream>
@@ -118,8 +118,7 @@ bool validateFWFile(const std::string& fileName)
     // Ensure the file exists and get the file size.
     if (!std::filesystem::exists(fileName))
     {
-        log<level::ERR>(
-            std::format("Firmware file not found: {}", fileName).c_str());
+        lg2::error("Firmware file not found: {FILE}", "FILE", fileName);
         return false;
     }
 
@@ -127,7 +126,7 @@ bool validateFWFile(const std::string& fileName)
     auto fileSize = std::filesystem::file_size(fileName);
     if (fileSize == 0)
     {
-        log<level::ERR>("Firmware file is empty");
+        lg2::error("Firmware {FILE} is empty", "FILE", fileName);
         return false;
     }
     return true;
@@ -138,15 +137,14 @@ std::unique_ptr<std::ifstream> openFirmwareFile(const std::string& fileName)
 {
     if (fileName.empty())
     {
-        log<level::ERR>("Firmware file path is not provided");
+        lg2::error("Firmware file path is not provided");
         return nullptr;
     }
     auto inputFile =
         std::make_unique<std::ifstream>(fileName, std::ios::binary);
     if (!inputFile->is_open())
     {
-        log<level::ERR>(
-            std::format("Failed to open firmware file: {}", fileName).c_str());
+        lg2::error("Failed to open firmware file: {FILE}", "FILE", fileName);
         return nullptr;
     }
     return inputFile;
@@ -171,8 +169,7 @@ std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
     }
     catch (const std::ios_base::failure& e)
     {
-        log<level::ERR>(
-            std::format("Error reading firmware: {}", e.what()).c_str());
+        lg2::error("Error reading firmware: {ERROR}", "ERROR", e.what());
         readDataBytes.clear();
     }
     return readDataBytes;
@@ -197,8 +194,8 @@ bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
 
     if (!updaterPtr->isReadyToUpdate())
     {
-        log<level::ERR>("PSU not ready to update",
-                        entry("PSU=%s", psuInventoryPath.c_str()));
+        lg2::error("PSU not ready to update PSU = {PATH}", "PATH",
+                   psuInventoryPath);
         return false;
     }
 
@@ -222,10 +219,8 @@ Updater::Updater(const std::string& psuInventoryPath,
     }
     catch (const fs::filesystem_error& e)
     {
-        log<level::ERR>("Failed to get canonical path",
-                        entry("DEVPATH=%s", devPath.c_str()),
-                        entry("ERROR=%s", e.what()));
-        throw;
+        lg2::error("Failed to get canonical path DEVPATH= {PATH}, ERROR= {ERR}",
+                   "PATH", devPath, "ERR", e.what());
     }
 }
 
@@ -245,6 +240,11 @@ void Updater::bindUnbind(bool doBind)
     p /= doBind ? "bind" : "unbind";
     std::ofstream out(p.string());
     out << devName;
+    if (doBind)
+    {
+        internal::delay(500);
+    }
+    out.close();
 
     if (doBind)
     {
@@ -263,9 +263,9 @@ void Updater::setPresent(bool present)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>("Failed to set present property",
-                        entry("PSU=%s", psuInventoryPath.c_str()),
-                        entry("PRESENT=%d", present));
+        lg2::error(
+            "Failed to set present property PSU= {PATH}, PRESENT= {PRESENT}",
+            "PATH", psuInventoryPath, "PRESENT", present);
     }
 }
 
@@ -281,7 +281,7 @@ bool Updater::isReadyToUpdate()
 
     if (util::isPoweredOn(bus, true))
     {
-        log<level::WARNING>("Unable to update PSU when host is on");
+        lg2::warning("Unable to update PSU when host is on");
         return false;
     }
 
@@ -305,12 +305,11 @@ bool Updater::isReadyToUpdate()
         }
         catch (const std::exception& e)
         {
-            log<level::ERR>("Failed to get present property",
-                            entry("PSU=%s", p.c_str()));
+            lg2::error("Failed to get present property PSU={PSU}", "PSU", p);
         }
         if (!present)
         {
-            log<level::WARNING>("PSU not present", entry("PSU=%s", p.c_str()));
+            lg2::warning("PSU not present PSU={PSU}", "PSU", p);
             continue;
         }
         hasOtherPresent = true;
@@ -333,11 +332,10 @@ bool Updater::isReadyToUpdate()
                 (voutStatus & status_vout::UV_FAULT) ||
                 (voutStatus & status_vout::OV_FAULT))
             {
-                log<level::WARNING>(
-                    "Unable to update PSU when other PSU has input/ouput fault",
-                    entry("PSU=%s", p.c_str()),
-                    entry("STATUS_WORD=0x%04x", statusWord),
-                    entry("VOUT_BYTE=0x%02x", voutStatus));
+                lg2::warning(
+                    "Unable to update PSU when other PSU has input/ouput fault PSU={PSU}, STATUS_WORD={STATUS}, VOUT_BYTE={VOUT}",
+                    "PSU", p, "STATUS", lg2::hex, statusWord, "VOUT", lg2::hex,
+                    voutStatus);
                 return false;
             }
         }
@@ -345,7 +343,7 @@ bool Updater::isReadyToUpdate()
         {
             // If error occurs on accessing the debugfs, it means something went
             // wrong, e.g. PSU is not present, and it's not ready to update.
-            log<level::ERR>(ex.what());
+            lg2::error("{EX}", "EX", ex.what());
             return false;
         }
     }
