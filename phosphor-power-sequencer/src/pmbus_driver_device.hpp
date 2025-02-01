@@ -218,8 +218,8 @@ class PMBusDriverDevice : public StandardDevice
      * @param fileName voltage label file within the sysfs hwmon directory
      * @return PMBus page number
      */
-    virtual std::optional<uint8_t>
-        readPageFromLabelFile(const std::string& fileName);
+    virtual std::optional<uint8_t> readPageFromLabelFile(
+        const std::string& fileName);
 
     /**
      * I2C bus for the device.

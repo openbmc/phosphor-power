@@ -94,8 +94,8 @@ class UCD90160 : public Device
      * @return fs::path - The gpiochip path, like
      *                   /dev/gpiochip1
      */
-    static std::filesystem::path
-        findGPIODevice(const std::filesystem::path& path);
+    static std::filesystem::path findGPIODevice(
+        const std::filesystem::path& path);
 
     /**
      * Checks for VOUT faults on the device.

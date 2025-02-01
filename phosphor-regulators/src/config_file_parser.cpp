@@ -775,8 +775,8 @@ std::unique_ptr<OrAction> parseOr(const json& element)
     return std::make_unique<OrAction>(std::move(actions));
 }
 
-std::unique_ptr<PhaseFaultDetection>
-    parsePhaseFaultDetection(const json& element)
+std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
+    const json& element)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -864,8 +864,8 @@ std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
                                                    exponent);
 }
 
-std::unique_ptr<PMBusWriteVoutCommandAction>
-    parsePMBusWriteVoutCommand(const json& element)
+std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
+    const json& element)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -1061,8 +1061,8 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(const json& element)
     return rules;
 }
 
-std::vector<std::unique_ptr<Action>>
-    parseRuleIDOrActionsProperty(const json& element)
+std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
+    const json& element)
 {
     verifyIsObject(element);
     // Required rule_id or actions property

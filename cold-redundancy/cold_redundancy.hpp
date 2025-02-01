@@ -41,8 +41,8 @@ class ColdRedundancy
      *
      * @param[in] dbusConnection - D-Bus connection
      */
-    void
-        createPSU(std::shared_ptr<sdbusplus::asio::connection>& dbusConnection);
+    void createPSU(
+        std::shared_ptr<sdbusplus::asio::connection>& dbusConnection);
 
   private:
     /**

@@ -122,8 +122,8 @@ int8_t PMBusWriteVoutCommandAction::getExponentValue(
     return parameter;
 }
 
-double
-    PMBusWriteVoutCommandAction::getVoltsValue(ActionEnvironment& environment)
+double PMBusWriteVoutCommandAction::getVoltsValue(
+    ActionEnvironment& environment)
 {
     double voltsValue;
 

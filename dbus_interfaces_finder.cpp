@@ -38,8 +38,8 @@ DBusInterfacesFinder::DBusInterfacesFinder(
     findInterfaces();
 }
 
-void
-    DBusInterfacesFinder::interfacesAddedCallback(sdbusplus::message_t& message)
+void DBusInterfacesFinder::interfacesAddedCallback(
+    sdbusplus::message_t& message)
 {
     // Exit if message is invalid
     if (!message)

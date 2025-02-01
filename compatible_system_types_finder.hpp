@@ -52,10 +52,10 @@ class CompatibleSystemTypesFinder
     CompatibleSystemTypesFinder() = delete;
     CompatibleSystemTypesFinder(const CompatibleSystemTypesFinder&) = delete;
     CompatibleSystemTypesFinder(CompatibleSystemTypesFinder&&) = delete;
-    CompatibleSystemTypesFinder&
-        operator=(const CompatibleSystemTypesFinder&) = delete;
-    CompatibleSystemTypesFinder&
-        operator=(CompatibleSystemTypesFinder&&) = delete;
+    CompatibleSystemTypesFinder& operator=(const CompatibleSystemTypesFinder&) =
+        delete;
+    CompatibleSystemTypesFinder& operator=(CompatibleSystemTypesFinder&&) =
+        delete;
     ~CompatibleSystemTypesFinder() = default;
 
     /**

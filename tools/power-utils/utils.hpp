@@ -55,8 +55,8 @@ PsuI2cInfo getPsuI2c(sdbusplus::bus_t& bus,
  *
  * @return Pointer to PSU PMBus interface
  */
-std::unique_ptr<phosphor::pmbus::PMBusBase>
-    getPmbusIntf(std::uint64_t i2cBus, std::uint64_t i2cAddr);
+std::unique_ptr<phosphor::pmbus::PMBusBase> getPmbusIntf(std::uint64_t i2cBus,
+                                                         std::uint64_t i2cAddr);
 
 /**
  * @brief Reads a VPD value from PMBus, corrects size, and contents.

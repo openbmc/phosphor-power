@@ -155,8 +155,8 @@ std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Rail objects
  */
-std::vector<std::unique_ptr<Rail>>
-    parseRailArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Rail>> parseRailArray(
+    const nlohmann::json& element);
 
 /**
  * Parses the JSON root element of the entire configuration file.

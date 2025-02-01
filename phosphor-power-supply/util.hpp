@@ -235,8 +235,8 @@ class GPIOInterface : public GPIOInterfaceBase
      */
     GPIOInterface(const std::string& namedGpio);
 
-    static std::unique_ptr<GPIOInterfaceBase>
-        createGPIO(const std::string& namedGpio);
+    static std::unique_ptr<GPIOInterfaceBase> createGPIO(
+        const std::string& namedGpio);
 
     /**
      * @brief Attempts to read the state of the GPIO line.

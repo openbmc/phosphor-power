@@ -48,8 +48,8 @@ TemporarySubDirectory::TemporarySubDirectory()
     path = templatePath;
 }
 
-TemporarySubDirectory&
-    TemporarySubDirectory::operator=(TemporarySubDirectory&& subdirectory)
+TemporarySubDirectory& TemporarySubDirectory::operator=(
+    TemporarySubDirectory&& subdirectory)
 {
     // Verify not assigning object to itself (a = std::move(a))
     if (this != &subdirectory)

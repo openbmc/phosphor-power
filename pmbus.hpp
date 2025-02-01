@@ -250,8 +250,8 @@ class PMBus : public PMBusBase
      *
      * @return PMBusBase pointer
      */
-    static std::unique_ptr<PMBusBase>
-        createPMBus(std::uint8_t bus, const std::string& address);
+    static std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus,
+                                                  const std::string& address);
 
     /**
      * Reads a file in sysfs that represents a single bit,

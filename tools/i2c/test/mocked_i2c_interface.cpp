@@ -5,9 +5,9 @@
 namespace i2c
 {
 
-std::unique_ptr<I2CInterface>
-    create(uint8_t /*busId*/, uint8_t /*devAddr*/,
-           I2CInterface::InitialState /*initialState*/, int /*maxRetries*/)
+std::unique_ptr<I2CInterface> create(
+    uint8_t /*busId*/, uint8_t /*devAddr*/,
+    I2CInterface::InitialState /*initialState*/, int /*maxRetries*/)
 {
     return std::make_unique<MockedI2CInterface>();
 }

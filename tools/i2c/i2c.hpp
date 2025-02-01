@@ -227,10 +227,9 @@ class I2CDevice : public I2CInterface
      *
      * @return The unique_ptr holding the I2CInterface
      */
-    static std::unique_ptr<I2CInterface>
-        create(uint8_t busId, uint8_t devAddr,
-               InitialState initialState = InitialState::OPEN,
-               int maxRetries = 0);
+    static std::unique_ptr<I2CInterface> create(
+        uint8_t busId, uint8_t devAddr,
+        InitialState initialState = InitialState::OPEN, int maxRetries = 0);
 };
 
 } // namespace i2c

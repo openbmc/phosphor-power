@@ -68,10 +68,10 @@ class PMBusWriteVoutCommandAction : public I2CAction
     PMBusWriteVoutCommandAction() = delete;
     PMBusWriteVoutCommandAction(const PMBusWriteVoutCommandAction&) = delete;
     PMBusWriteVoutCommandAction(PMBusWriteVoutCommandAction&&) = delete;
-    PMBusWriteVoutCommandAction&
-        operator=(const PMBusWriteVoutCommandAction&) = delete;
-    PMBusWriteVoutCommandAction&
-        operator=(PMBusWriteVoutCommandAction&&) = delete;
+    PMBusWriteVoutCommandAction& operator=(const PMBusWriteVoutCommandAction&) =
+        delete;
+    PMBusWriteVoutCommandAction& operator=(PMBusWriteVoutCommandAction&&) =
+        delete;
     virtual ~PMBusWriteVoutCommandAction() = default;
 
     /**

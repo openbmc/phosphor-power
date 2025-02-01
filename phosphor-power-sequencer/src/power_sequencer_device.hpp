@@ -151,9 +151,9 @@ class PowerSequencerDevice
      * @return error that should be logged if a pgood fault was found, or an
      *         empty string if no pgood fault was found
      */
-    virtual std::string
-        findPgoodFault(Services& services, const std::string& powerSupplyError,
-                       std::map<std::string, std::string>& additionalData) = 0;
+    virtual std::string findPgoodFault(
+        Services& services, const std::string& powerSupplyError,
+        std::map<std::string, std::string>& additionalData) = 0;
 };
 
 } // namespace phosphor::power::sequencer

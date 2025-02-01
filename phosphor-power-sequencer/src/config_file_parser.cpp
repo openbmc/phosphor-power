@@ -31,9 +31,9 @@ namespace phosphor::power::sequencer::config_file_parser
 const std::filesystem::path standardConfigFileDirectory{
     "/usr/share/phosphor-power-sequencer"};
 
-std::filesystem::path
-    find(const std::vector<std::string>& compatibleSystemTypes,
-         const std::filesystem::path& configFileDir)
+std::filesystem::path find(
+    const std::vector<std::string>& compatibleSystemTypes,
+    const std::filesystem::path& configFileDir)
 {
     fs::path pathName, possiblePath;
     std::string fileName;

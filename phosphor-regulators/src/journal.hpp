@@ -55,9 +55,9 @@ class Journal
      *            matching messages.
      * @return matching messages from the journal
      */
-    virtual std::vector<std::string>
-        getMessages(const std::string& field, const std::string& fieldValue,
-                    unsigned int max = 0) = 0;
+    virtual std::vector<std::string> getMessages(const std::string& field,
+                                                 const std::string& fieldValue,
+                                                 unsigned int max = 0) = 0;
 
     /**
      * Logs a debug message in the system journal.
@@ -119,9 +119,9 @@ class SystemdJournal : public Journal
     virtual ~SystemdJournal() = default;
 
     /** @copydoc Journal::getMessages() */
-    virtual std::vector<std::string>
-        getMessages(const std::string& field, const std::string& fieldValue,
-                    unsigned int max) override;
+    virtual std::vector<std::string> getMessages(const std::string& field,
+                                                 const std::string& fieldValue,
+                                                 unsigned int max) override;
 
     /** @copydoc Journal::logDebug(const std::string&) */
     virtual void logDebug(const std::string& message) override

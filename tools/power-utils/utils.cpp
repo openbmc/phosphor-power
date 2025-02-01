@@ -118,8 +118,8 @@ PsuI2cInfo getPsuI2c(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
     return std::make_tuple(*i2cbus, *i2caddr);
 }
 
-std::unique_ptr<phosphor::pmbus::PMBusBase>
-    getPmbusIntf(std::uint64_t i2cBus, std::uint64_t i2cAddr)
+std::unique_ptr<phosphor::pmbus::PMBusBase> getPmbusIntf(std::uint64_t i2cBus,
+                                                         std::uint64_t i2cAddr)
 {
     std::stringstream ss;
     ss << std::hex << std::setw(4) << std::setfill('0') << i2cAddr;

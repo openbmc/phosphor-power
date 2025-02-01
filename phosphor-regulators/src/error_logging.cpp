@@ -192,8 +192,8 @@ std::vector<FFDCFile> DBusErrorLogging::createFFDCFiles(Journal& journal)
     return files;
 }
 
-std::vector<FFDCTuple>
-    DBusErrorLogging::createFFDCTuples(std::vector<FFDCFile>& files)
+std::vector<FFDCTuple> DBusErrorLogging::createFFDCTuples(
+    std::vector<FFDCFile>& files)
 {
     std::vector<FFDCTuple> ffdcTuples{};
     for (FFDCFile& file : files)

@@ -28,8 +28,8 @@ GPIOInterface::GPIOInterface(const std::string& namedGpio)
     }
 }
 
-std::unique_ptr<GPIOInterfaceBase>
-    GPIOInterface::createGPIO(const std::string& namedGpio)
+std::unique_ptr<GPIOInterfaceBase> GPIOInterface::createGPIO(
+    const std::string& namedGpio)
 {
     return std::make_unique<GPIOInterface>(namedGpio);
 }

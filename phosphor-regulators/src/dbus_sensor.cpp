@@ -152,9 +152,9 @@ void DBusSensor::setValue(double value)
     setLastUpdateTime();
 }
 
-std::vector<AssocationTuple>
-    DBusSensor::getAssociations(const std::string& deviceInventoryPath,
-                                const std::string& chassisInventoryPath)
+std::vector<AssocationTuple> DBusSensor::getAssociations(
+    const std::string& deviceInventoryPath,
+    const std::string& chassisInventoryPath)
 {
     std::vector<AssocationTuple> associations{};
 

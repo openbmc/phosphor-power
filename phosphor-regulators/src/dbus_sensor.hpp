@@ -268,9 +268,9 @@ class DBusSensor
      * @param chassisInventoryPath D-Bus inventory path of the chassis that
      *                             contains the voltage regulator device
      */
-    std::vector<AssocationTuple>
-        getAssociations(const std::string& deviceInventoryPath,
-                        const std::string& chassisInventoryPath);
+    std::vector<AssocationTuple> getAssociations(
+        const std::string& deviceInventoryPath,
+        const std::string& chassisInventoryPath);
 
     /**
      * Get sensor properties that are based on the sensor type.

@@ -110,10 +110,10 @@ class ErrorLogging
      *                      occurred
      * @param additionalData additional error data (if any)
      */
-    virtual void
-        logPhaseFault(Entry::Level severity, Journal& journal,
-                      PhaseFaultType type, const std::string& inventoryPath,
-                      std::map<std::string, std::string> additionalData) = 0;
+    virtual void logPhaseFault(
+        Entry::Level severity, Journal& journal, PhaseFaultType type,
+        const std::string& inventoryPath,
+        std::map<std::string, std::string> additionalData) = 0;
 
     /**
      * Log a PMBus error.
@@ -140,9 +140,9 @@ class ErrorLogging
      * @param inventoryPath D-Bus inventory path of the device where the error
      *                      occurred
      */
-    virtual void
-        logWriteVerificationError(Entry::Level severity, Journal& journal,
-                                  const std::string& inventoryPath) = 0;
+    virtual void logWriteVerificationError(
+        Entry::Level severity, Journal& journal,
+        const std::string& inventoryPath) = 0;
 };
 
 /**
@@ -195,9 +195,9 @@ class DBusErrorLogging : public ErrorLogging
                                const std::string& inventoryPath) override;
 
     /** @copydoc ErrorLogging::logWriteVerificationError() */
-    virtual void
-        logWriteVerificationError(Entry::Level severity, Journal& journal,
-                                  const std::string& inventoryPath) override;
+    virtual void logWriteVerificationError(
+        Entry::Level severity, Journal& journal,
+        const std::string& inventoryPath) override;
 
   private:
     /**

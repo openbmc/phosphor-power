@@ -93,8 +93,8 @@ class StandardDevice : public PowerSequencerDevice
      *
      * @param services System services like hardware presence and the journal
      */
-    virtual void
-        prepareForPgoodFaultDetection([[maybe_unused]] Services& services)
+    virtual void prepareForPgoodFaultDetection(
+        [[maybe_unused]] Services& services)
     {}
 
     /**
@@ -163,9 +163,9 @@ class StandardDevice : public PowerSequencerDevice
      * @param values GPIO values obtained from the device (if any)
      * @param additionalData Additional data to include in an error log
      */
-    virtual void
-        storeGPIOValues(Services& services, const std::vector<int>& values,
-                        std::map<std::string, std::string>& additionalData);
+    virtual void storeGPIOValues(
+        Services& services, const std::vector<int>& values,
+        std::map<std::string, std::string>& additionalData);
 
     /**
      * Device name.

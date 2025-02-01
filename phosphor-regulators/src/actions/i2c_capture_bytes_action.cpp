@@ -60,8 +60,8 @@ std::string I2CCaptureBytesAction::toString() const
     return ss.str();
 }
 
-std::string
-    I2CCaptureBytesAction::getErrorDataKey(ActionEnvironment& environment) const
+std::string I2CCaptureBytesAction::getErrorDataKey(
+    ActionEnvironment& environment) const
 {
     // Additional error data key format: <deviceID>_register_<register>
     std::ostringstream ss;
@@ -91,8 +91,8 @@ std::string
     return key;
 }
 
-std::string
-    I2CCaptureBytesAction::getErrorDataValue(const uint8_t* values) const
+std::string I2CCaptureBytesAction::getErrorDataValue(
+    const uint8_t* values) const
 {
     // Additional error data value format: [ <byte 0>, <byte 1>, ... ]
     std::ostringstream ss;

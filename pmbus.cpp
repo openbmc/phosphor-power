@@ -397,8 +397,8 @@ void PMBus::findHwmonDir()
     }
 }
 
-std::unique_ptr<PMBusBase>
-    PMBus::createPMBus(std::uint8_t bus, const std::string& address)
+std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint8_t bus,
+                                              const std::string& address)
 {
     const std::string physpath = {
         "/sys/bus/i2c/devices/" + std::to_string(bus) + "-" + address};

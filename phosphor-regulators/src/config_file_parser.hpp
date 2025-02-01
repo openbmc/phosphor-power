@@ -125,8 +125,8 @@ std::unique_ptr<Action> parseAction(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Action objects
  */
-std::vector<std::unique_ptr<Action>>
-    parseActionArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Action>> parseActionArray(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an and action.
@@ -232,8 +232,8 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Chassis objects
  */
-std::vector<std::unique_ptr<Chassis>>
-    parseChassisArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Chassis>> parseChassisArray(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a compare_presence action.
@@ -245,8 +245,8 @@ std::vector<std::unique_ptr<Chassis>>
  * @param element JSON element
  * @return ComparePresenceAction object
  */
-std::unique_ptr<ComparePresenceAction>
-    parseComparePresence(const nlohmann::json& element);
+std::unique_ptr<ComparePresenceAction> parseComparePresence(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a compare_vpd action.
@@ -258,8 +258,8 @@ std::unique_ptr<ComparePresenceAction>
  * @param element JSON element
  * @return CompareVPDAction object
  */
-std::unique_ptr<CompareVPDAction>
-    parseCompareVPD(const nlohmann::json& element);
+std::unique_ptr<CompareVPDAction> parseCompareVPD(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a configuration object.
@@ -271,8 +271,8 @@ std::unique_ptr<CompareVPDAction>
  * @param element JSON element
  * @return Configuration object
  */
-std::unique_ptr<Configuration>
-    parseConfiguration(const nlohmann::json& element);
+std::unique_ptr<Configuration> parseConfiguration(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a device.
@@ -296,8 +296,8 @@ std::unique_ptr<Device> parseDevice(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Device objects
  */
-std::vector<std::unique_ptr<Device>>
-    parseDeviceArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Device>> parseDeviceArray(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a double (floating point number).
@@ -376,8 +376,8 @@ std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
  * @param element JSON element
  * @return I2CCaptureBytesAction object
  */
-std::unique_ptr<I2CCaptureBytesAction>
-    parseI2CCaptureBytes(const nlohmann::json& element);
+std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_compare_bit action.
@@ -389,8 +389,8 @@ std::unique_ptr<I2CCaptureBytesAction>
  * @param element JSON element
  * @return I2CCompareBitAction object
  */
-std::unique_ptr<I2CCompareBitAction>
-    parseI2CCompareBit(const nlohmann::json& element);
+std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_compare_byte action.
@@ -402,8 +402,8 @@ std::unique_ptr<I2CCompareBitAction>
  * @param element JSON element
  * @return I2CCompareByteAction object
  */
-std::unique_ptr<I2CCompareByteAction>
-    parseI2CCompareByte(const nlohmann::json& element);
+std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_compare_bytes action.
@@ -415,8 +415,8 @@ std::unique_ptr<I2CCompareByteAction>
  * @param element JSON element
  * @return I2CCompareBytesAction object
  */
-std::unique_ptr<I2CCompareBytesAction>
-    parseI2CCompareBytes(const nlohmann::json& element);
+std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_interface.
@@ -428,8 +428,8 @@ std::unique_ptr<I2CCompareBytesAction>
  * @param element JSON element
  * @return i2c::I2CInterface object
  */
-std::unique_ptr<i2c::I2CInterface>
-    parseI2CInterface(const nlohmann::json& element);
+std::unique_ptr<i2c::I2CInterface> parseI2CInterface(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_write_bit action.
@@ -441,8 +441,8 @@ std::unique_ptr<i2c::I2CInterface>
  * @param element JSON element
  * @return I2CWriteBitAction object
  */
-std::unique_ptr<I2CWriteBitAction>
-    parseI2CWriteBit(const nlohmann::json& element);
+std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_write_byte action.
@@ -454,8 +454,8 @@ std::unique_ptr<I2CWriteBitAction>
  * @param element JSON element
  * @return I2CWriteByteAction object
  */
-std::unique_ptr<I2CWriteByteAction>
-    parseI2CWriteByte(const nlohmann::json& element);
+std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an i2c_write_bytes action.
@@ -467,8 +467,8 @@ std::unique_ptr<I2CWriteByteAction>
  * @param element JSON element
  * @return I2CWriteBytesAction object
  */
-std::unique_ptr<I2CWriteBytesAction>
-    parseI2CWriteBytes(const nlohmann::json& element);
+std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an if action.
@@ -532,8 +532,8 @@ std::string parseInventoryPath(const nlohmann::json& element);
  * @param element JSON element
  * @return LogPhaseFaultAction object
  */
-std::unique_ptr<LogPhaseFaultAction>
-    parseLogPhaseFault(const nlohmann::json& element);
+std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a not action.
@@ -569,8 +569,8 @@ std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
  * @param element JSON element
  * @return PhaseFaultDetection object
  */
-std::unique_ptr<PhaseFaultDetection>
-    parsePhaseFaultDetection(const nlohmann::json& element);
+std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a PhaseFaultType expressed as a string.
@@ -594,8 +594,8 @@ PhaseFaultType parsePhaseFaultType(const nlohmann::json& element);
  * @param element JSON element
  * @return PMBusReadSensorAction object
  */
-std::unique_ptr<PMBusReadSensorAction>
-    parsePMBusReadSensor(const nlohmann::json& element);
+std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a pmbus_write_vout_command action.
@@ -607,8 +607,8 @@ std::unique_ptr<PMBusReadSensorAction>
  * @param element JSON element
  * @return PMBusWriteVoutCommandAction object
  */
-std::unique_ptr<PMBusWriteVoutCommandAction>
-    parsePMBusWriteVoutCommand(const nlohmann::json& element);
+std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a presence_detection object.
@@ -620,8 +620,8 @@ std::unique_ptr<PMBusWriteVoutCommandAction>
  * @param element JSON element
  * @return PresenceDetection object
  */
-std::unique_ptr<PresenceDetection>
-    parsePresenceDetection(const nlohmann::json& element);
+std::unique_ptr<PresenceDetection> parsePresenceDetection(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a rail.
@@ -645,8 +645,8 @@ std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Rail objects
  */
-std::vector<std::unique_ptr<Rail>>
-    parseRailArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Rail>> parseRailArray(
+    const nlohmann::json& element);
 
 /**
  * Parses the JSON root element of the entire configuration file.
@@ -684,8 +684,8 @@ std::unique_ptr<Rule> parseRule(const nlohmann::json& element);
  * @param element JSON element
  * @return vector of Rule objects
  */
-std::vector<std::unique_ptr<Rule>>
-    parseRuleArray(const nlohmann::json& element);
+std::vector<std::unique_ptr<Rule>> parseRuleArray(
+    const nlohmann::json& element);
 
 /**
  * Parses the "rule_id" or "actions" property in a JSON element.
@@ -703,8 +703,8 @@ std::vector<std::unique_ptr<Rule>>
  * @param element JSON element
  * @return vector of Action objects
  */
-std::vector<std::unique_ptr<Action>>
-    parseRuleIDOrActionsProperty(const nlohmann::json& element);
+std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a run_rule action.
@@ -728,8 +728,8 @@ std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
  * @param element JSON element
  * @return SensorDataFormat enum value
  */
-pmbus_utils::SensorDataFormat
-    parseSensorDataFormat(const nlohmann::json& element);
+pmbus_utils::SensorDataFormat parseSensorDataFormat(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a sensor_monitoring object.
@@ -741,8 +741,8 @@ pmbus_utils::SensorDataFormat
  * @param element JSON element
  * @return SensorMonitoring object
  */
-std::unique_ptr<SensorMonitoring>
-    parseSensorMonitoring(const nlohmann::json& element);
+std::unique_ptr<SensorMonitoring> parseSensorMonitoring(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a SensorType expressed as a string.

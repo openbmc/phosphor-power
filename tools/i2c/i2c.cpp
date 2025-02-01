@@ -530,9 +530,9 @@ std::unique_ptr<I2CInterface> I2CDevice::create(
     return dev;
 }
 
-std::unique_ptr<I2CInterface>
-    create(uint8_t busId, uint8_t devAddr,
-           I2CInterface::InitialState initialState, int maxRetries)
+std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr,
+                                     I2CInterface::InitialState initialState,
+                                     int maxRetries)
 {
     return I2CDevice::create(busId, devAddr, initialState, maxRetries);
 }

@@ -84,9 +84,9 @@ class Services
      * @param severity Severity property of the error log entry
      * @param additionalData AdditionalData property of the error log entry
      */
-    virtual void
-        logError(const std::string& message, Entry::Level severity,
-                 std::map<std::string, std::string>& additionalData) = 0;
+    virtual void logError(
+        const std::string& message, Entry::Level severity,
+        std::map<std::string, std::string>& additionalData) = 0;
 
     /**
      * Returns whether the hardware with the specified inventory path is
@@ -183,16 +183,16 @@ class BMCServices : public Services
     }
 
     /** @copydoc Services::logError() */
-    virtual void
-        logError(const std::string& message, Entry::Level severity,
-                 std::map<std::string, std::string>& additionalData) override;
+    virtual void logError(
+        const std::string& message, Entry::Level severity,
+        std::map<std::string, std::string>& additionalData) override;
 
     /** @copydoc Services::isPresent() */
     virtual bool isPresent(const std::string& inventoryPath) override;
 
     /** @copydoc Services::getGPIOValues() */
-    virtual std::vector<int>
-        getGPIOValues(const std::string& chipLabel) override;
+    virtual std::vector<int> getGPIOValues(
+        const std::string& chipLabel) override;
 
     /** @copydoc Services::createPMBus() */
     virtual std::unique_ptr<PMBusBase> createPMBus(

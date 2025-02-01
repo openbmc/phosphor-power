@@ -272,8 +272,8 @@ bool AeiUpdater::isFirmwareFileValid(const std::string& fspath)
     return true;
 }
 
-std::unique_ptr<std::ifstream>
-    AeiUpdater::openFirmwareFile(const std::string& fspath)
+std::unique_ptr<std::ifstream> AeiUpdater::openFirmwareFile(
+    const std::string& fspath)
 {
     auto inputFile = updater::internal::openFirmwareFile(fspath);
     if (!inputFile)

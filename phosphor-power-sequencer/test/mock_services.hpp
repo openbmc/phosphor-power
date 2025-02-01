@@ -53,8 +53,8 @@ class MockServices : public Services
     MOCK_METHOD(std::vector<int>, getGPIOValues, (const std::string& chipLabel),
                 (override));
 
-    virtual std::unique_ptr<PMBusBase>
-        createPMBus(uint8_t, uint16_t, const std::string&, size_t) override
+    virtual std::unique_ptr<PMBusBase> createPMBus(
+        uint8_t, uint16_t, const std::string&, size_t) override
     {
         return std::make_unique<MockPMBus>();
     }

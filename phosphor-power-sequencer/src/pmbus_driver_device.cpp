@@ -217,8 +217,8 @@ bool PMBusDriverDevice::isLabelFile(const std::string& fileName,
     return isLabel;
 }
 
-std::optional<uint8_t>
-    PMBusDriverDevice::readPageFromLabelFile(const std::string& fileName)
+std::optional<uint8_t> PMBusDriverDevice::readPageFromLabelFile(
+    const std::string& fileName)
 {
     std::optional<uint8_t> page;
     try

@@ -62,8 +62,8 @@ using ::testing::Throw;
  *         Device objects are contained within the System object and will be
  *         automatically destructed.
  */
-std::tuple<std::unique_ptr<System>, Chassis*, Device*>
-    createParentObjects(std::unique_ptr<PresenceDetection> detection)
+std::tuple<std::unique_ptr<System>, Chassis*, Device*> createParentObjects(
+    std::unique_ptr<PresenceDetection> detection)
 {
     // Create mock I2CInterface
     std::unique_ptr<i2c::MockedI2CInterface> i2cInterface =
