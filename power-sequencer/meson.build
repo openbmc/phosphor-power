@@ -4,13 +4,17 @@ if sequencer == 'ucd90160'
     ucd90160_defs_cpp = custom_target(
         'ucd90160_defs.cpp',
         command: [
-            prog_python, '@INPUT0@',
-            '-i', '@INPUT1@', '-o', meson.current_build_dir(),
+            prog_python,
+            '@INPUT0@',
+            '-i',
+            '@INPUT1@',
+            '-o',
+            meson.current_build_dir(),
         ],
         input: [
             'gen-ucd90160-defs.py',
             get_option('ucd90160-yaml'),
-            'templates/ucd90160_defs.mako.cpp'
+            'templates/ucd90160_defs.mako.cpp',
         ],
         output: 'ucd90160_defs.cpp',
     )

@@ -14,9 +14,7 @@ psu_monitor = executable(
     ],
     include_directories: '..',
     install: true,
-    link_with: [
-        libpower,
-    ]
+    link_with: [libpower],
 )
 
 record_manager = psu_monitor.extract_objects('record_manager.cpp')

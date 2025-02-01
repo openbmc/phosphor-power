@@ -12,9 +12,6 @@ cold_redundancy = executable(
         pthread,
         sdbusplus,
     ],
-    include_directories: [
-        '.',
-        '..',
-    ],
+    include_directories: ['.', '..'],
     install: false,
 )

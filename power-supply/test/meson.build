@@ -13,9 +13,7 @@ test(
         include_directories: '../..',
         link_args: dynamic_linker,
         build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
-        link_with: [
-            libpower,
-        ],
+        link_with: [libpower],
         objects: record_manager,
-    )
+    ),
 )
