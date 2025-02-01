@@ -1,6 +1,8 @@
-install_subdir('config_files',
+install_subdir(
+    'config_files',
     strip_directory: true,
-    install_dir: get_option('datadir')/'phosphor-regulators')
+    install_dir: get_option('datadir') / 'phosphor-regulators',
+)
 
 subdir('src')
 

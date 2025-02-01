@@ -15,9 +15,7 @@ psutils = executable(
     ],
     include_directories: [libpower_inc, libi2c_inc],
     install: true,
-    link_with: [
-        libpower,
-    ]
+    link_with: [libpower],
 )
 
 if get_option('tests').allowed()

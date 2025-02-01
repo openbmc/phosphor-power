@@ -1,6 +1,6 @@
 phosphor_regulators_tests_include_directories = include_directories(
     '.',
-    'actions'
+    'actions',
 )
 
 phosphor_regulators_tests_source_files = [
@@ -25,7 +25,6 @@ phosphor_regulators_tests_source_files = [
     'sensors_tests.cpp',
     'system_tests.cpp',
     'write_verification_error_tests.cpp',
-
     'actions/action_environment_tests.cpp',
     'actions/action_error_tests.cpp',
     'actions/action_utils_tests.cpp',
@@ -47,7 +46,7 @@ phosphor_regulators_tests_source_files = [
     'actions/pmbus_read_sensor_action_tests.cpp',
     'actions/pmbus_write_vout_command_action_tests.cpp',
     'actions/run_rule_action_tests.cpp',
-    'actions/set_device_action_tests.cpp'
+    'actions/set_device_action_tests.cpp',
 ]
 
 # Long-running tests that are excluded from CI
@@ -56,31 +55,29 @@ if get_option('long-tests').allowed()
     phosphor_regulators_tests_source_files += 'validate-regulators-config_tests.cpp'
 endif
 
-test('phosphor-regulators-tests',
-     executable('phosphor-regulators-tests',
-                phosphor_regulators_tests_source_files,
-                dependencies: [
-                    gmock,
-                    gtest,
-                    nlohmann_json_dep,
-                    phosphor_dbus_interfaces,
-                    phosphor_logging,
-                    sdbusplus,
-                ],
-                link_args: dynamic_linker,
-                build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
-                link_with: [
-                    phosphor_regulators_library,
-                    libi2c_dev_mock,
-                    libpower
-                ],
-                implicit_include_directories: false,
-                include_directories: [
-                    phosphor_regulators_include_directories,
-                    phosphor_regulators_tests_include_directories,
-                    libi2c_inc,
-                    libi2c_dev_mock_inc
-                ]
-     ),
-     timeout : 180
+test(
+    'phosphor-regulators-tests',
+    executable(
+        'phosphor-regulators-tests',
+        phosphor_regulators_tests_source_files,
+        dependencies: [
+            gmock,
+            gtest,
+            nlohmann_json_dep,
+            phosphor_dbus_interfaces,
+            phosphor_logging,
+            sdbusplus,
+        ],
+        link_args: dynamic_linker,
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
+        link_with: [phosphor_regulators_library, libi2c_dev_mock, libpower],
+        implicit_include_directories: false,
+        include_directories: [
+            phosphor_regulators_include_directories,
+            phosphor_regulators_tests_include_directories,
+            libi2c_inc,
+            libi2c_dev_mock_inc,
+        ],
+    ),
+    timeout: 180,
 )

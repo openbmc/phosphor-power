@@ -3,7 +3,8 @@ error_hpp = custom_target(
     capture: true,
     command: [
         sdbuspp,
-        '-r', meson.project_source_root(),
+        '-r',
+        meson.project_source_root(),
         'error',
         'exception-header',
         'org.open_power.Witherspoon.Fault',
@@ -19,7 +20,8 @@ error_cpp = custom_target(
     capture: true,
     command: [
         sdbuspp,
-        '-r', meson.project_source_root(),
+        '-r',
+        meson.project_source_root(),
         'error',
         'exception-cpp',
         'org.open_power.Witherspoon.Fault',

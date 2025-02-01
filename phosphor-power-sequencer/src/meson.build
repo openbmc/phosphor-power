@@ -1,7 +1,4 @@
-phosphor_power_sequencer_include_directories = include_directories(
-    '.',
-    '../..'
-)
+phosphor_power_sequencer_include_directories = include_directories('.', '../..')
 
 phosphor_power_sequencer_library = static_library(
     'phosphor-power-sequencer',
@@ -21,9 +18,7 @@ phosphor_power_sequencer_library = static_library(
         phosphor_logging,
         sdbusplus,
     ],
-    include_directories: [
-        phosphor_power_sequencer_include_directories
-    ]
+    include_directories: [phosphor_power_sequencer_include_directories],
 )
 
 phosphor_power_sequencer = executable(
@@ -39,11 +34,8 @@ phosphor_power_sequencer = executable(
         sdeventplus,
         stdplus,
     ],
-    link_with: [
-        phosphor_power_sequencer_library,
-        libpower
-    ],
+    link_with: [phosphor_power_sequencer_library, libpower],
     implicit_include_directories: false,
     include_directories: phosphor_power_sequencer_include_directories,
-    install: true
+    install: true,
 )

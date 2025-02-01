@@ -6,7 +6,7 @@ project(
         'werror=true',
         'cpp_std=c++23',
         'buildtype=debugoptimized',
-        'prefix=/usr'
+        'prefix=/usr',
     ],
     license: 'Apache-2.0',
     version: '1.0',
@@ -17,48 +17,58 @@ cxx = meson.get_compiler('cpp')
 
 # Check if the compiler is Clang
 if meson.get_compiler('cpp').get_id() == 'clang'
-  add_global_arguments('-Wno-defaulted-function-deleted', language: 'cpp')
+    add_global_arguments('-Wno-defaulted-function-deleted', language: 'cpp')
 endif
 
 build_tests = get_option('tests')
 
 if get_option('oe-sdk').allowed()
-  # Setup OE SYSROOT
-  OECORE_TARGET_SYSROOT = run_command('sh', '-c', 'echo $OECORE_TARGET_SYSROOT').stdout().strip()
-  if OECORE_TARGET_SYSROOT == ''
-    error('Unable to get $OECORE_TARGET_SYSROOT, check your environment.')
-  endif
-  message('OE_SYSROOT: ' + OECORE_TARGET_SYSROOT)
-  rpath = ':'.join([OECORE_TARGET_SYSROOT + '/lib', OECORE_TARGET_SYSROOT + '/usr/lib'])
-  ld_so = run_command('sh', '-c', 'find ' + OECORE_TARGET_SYSROOT + '/lib/ld-*.so | sort -r -n | head -n1').stdout().strip()
-  dynamic_linker = ['-Wl,-dynamic-linker,' + ld_so]
+    # Setup OE SYSROOT
+    OECORE_TARGET_SYSROOT = run_command(
+        'sh',
+        '-c',
+        'echo $OECORE_TARGET_SYSROOT',
+    ).stdout().strip()
+    if OECORE_TARGET_SYSROOT == ''
+        error('Unable to get $OECORE_TARGET_SYSROOT, check your environment.')
+    endif
+    message('OE_SYSROOT: ' + OECORE_TARGET_SYSROOT)
+    rpath = ':'.join(
+        [OECORE_TARGET_SYSROOT + '/lib', OECORE_TARGET_SYSROOT + '/usr/lib'],
+    )
+    ld_so = run_command(
+        'sh',
+        '-c',
+        'find ' + OECORE_TARGET_SYSROOT + '/lib/ld-*.so | sort -r -n | head -n1',
+    ).stdout().strip()
+    dynamic_linker = ['-Wl,-dynamic-linker,' + ld_so]
 else
-  dynamic_linker = []
+    dynamic_linker = []
 endif
 
 
 gmock = dependency('gmock', disabler: true, required: false)
 gtest = dependency('gtest', main: true, disabler: true, required: false)
 if (not gtest.found() or not gmock.found()) and build_tests.allowed()
-  gtest_opts = import('cmake').subproject_options()
-  gtest_opts.add_cmake_defines({
-  'BUILD_SHARED_LIBS': 'ON'
-  })
-  gtest_proj = import('cmake').subproject('googletest',
-                      options: gtest_opts,
-                      required: false)
-  if gtest_proj.found()
-    gtest = declare_dependency(
-      dependencies: [
-        dependency('threads'),
-        gtest_proj.dependency('gtest'),
-        gtest_proj.dependency('gtest_main'),
-      ]
+    gtest_opts = import('cmake').subproject_options()
+    gtest_opts.add_cmake_defines({'BUILD_SHARED_LIBS': 'ON'})
+    gtest_proj = import('cmake').subproject(
+        'googletest',
+        options: gtest_opts,
+        required: false,
     )
-    gmock = gtest_proj.dependency('gmock')
-  else
-    assert(false, 'Googletest is required if tests are enabled')
-  endif
+    if gtest_proj.found()
+        gtest = declare_dependency(
+            dependencies: [
+                dependency('threads'),
+                gtest_proj.dependency('gtest'),
+                gtest_proj.dependency('gtest_main'),
+            ],
+        )
+        gmock = gtest_proj.dependency('gmock')
+    else
+        assert(false, 'Googletest is required if tests are enabled')
+    endif
 endif
 
 
@@ -72,8 +82,7 @@ sdeventplus = dependency('sdeventplus')
 pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
-libgpiodcxx = dependency('libgpiodcxx',
-    default_options: ['bindings=cxx'])
+libgpiodcxx = dependency('libgpiodcxx', default_options: ['bindings=cxx'])
 
 nlohmann_json_dep = dependency('nlohmann_json', include_type: 'system')
 
@@ -102,9 +111,11 @@ services = [
 fs = import('fs')
 foreach service : services
     if get_option(service[0])
-        fs.copyfile('services/' + service[1],
+        fs.copyfile(
+            'services/' + service[1],
             install: true,
-            install_dir: servicedir)
+            install_dir: servicedir,
+        )
     endif
 endforeach
 
@@ -121,17 +132,17 @@ endif
 
 conf = configuration_data()
 conf.set_quoted(
-    'INPUT_HISTORY_BUSNAME_ROOT', get_option('input-history-busname-root'))
+    'INPUT_HISTORY_BUSNAME_ROOT',
+    get_option('input-history-busname-root'),
+)
 conf.set_quoted(
-    'INPUT_HISTORY_SENSOR_ROOT', get_option('input-history-sensor-root'))
-conf.set_quoted(
-    'INPUT_HISTORY_SYNC_GPIO', get_option('input-history-sync-gpio'))
-conf.set_quoted(
-    'PSU_JSON_PATH', '/usr/share/phosphor-power/psu.json')
-conf.set(
-    'SEQUENCER', sequencer_class)
-conf.set10(
-    'DEVICE_ACCESS', get_option('device-access'))
+    'INPUT_HISTORY_SENSOR_ROOT',
+    get_option('input-history-sensor-root'),
+)
+conf.set_quoted('INPUT_HISTORY_SYNC_GPIO', get_option('input-history-sync-gpio'))
+conf.set_quoted('PSU_JSON_PATH', '/usr/share/phosphor-power/psu.json')
+conf.set('SEQUENCER', sequencer_class)
+conf.set10('DEVICE_ACCESS', get_option('device-access'))
 conf.set10('IBM_VPD', get_option('ibm-vpd'))
 
 configure_file(output: 'config.h', configuration: conf)
