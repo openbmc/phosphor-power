@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba1bfb8a_f891eecb",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "This method returns an int. So should return 1 here?",
+      "range": {
+        "startLine": 81,
+        "startChar": 17,
+        "endLine": 81,
+        "endChar": 18
+      },
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ad81c7e_a3a0e0bc",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "Does this mean it will log a serviceable event before all the retries are done?  If so, that seems wrong.  If the final retry works, then we wouldn\u0027t want an error right?",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebddd856_04e29e04",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "Does this mean it will log a serviceable event before all the retries are done? If so, that seems wrong. If the final retry works, then we wouldn\u0027t want an error right?",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed7c76c2_7949ad09",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "I might help future maintainers to put a brief comment here explaining the new or condition (e.g why is status 0x80 with that delay time OK?)",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e00cfba_44701ca8",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "What data are you trying to get here?  The next index bytes are at offset 0.  Offset 4 has the STATUS_CML, offset 5 has PEC2, and offset 6/7 are invalid/undefined.",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98325594_7185520f",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "Just a question: what does \"fs\" mean in the variable name?",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b838bc78_8989c38f",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "This utility has the convention that if it prints something, it worked and the return code is 0.  If the operation fails, it doesn\u0027t print anything and the return code is 1.  See line 91. The PSU code update app expects this behavior.",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fdb4c39_4e35fb63",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "Remove commented out code",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0350baf4_bcdfb3e7",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-03T19:56:20Z",
+      "side": 1,
+      "message": "The old code wrote STATUS_WORD and VOUT_BYTE in hex format.  Shouldn\u0027t we do that in the new code?\n\nSee https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2 on how to do that.",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
