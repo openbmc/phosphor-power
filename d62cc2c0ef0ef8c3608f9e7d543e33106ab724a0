@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "119aca73_e0c73f49",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ba1bfb8a_f891eecb",
+      "range": {
+        "startLine": 81,
+        "startChar": 17,
+        "endLine": 81,
+        "endChar": 18
+      },
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ad81c7e_a3a0e0bc",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-02-03T19:56:20Z",
       "side": 1,
       "message": "Does this mean it will log a serviceable event before all the retries are done?  If so, that seems wrong.  If the final retry works, then we wouldn\u0027t want an error right?",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77430a45_2fb2099e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "0ad81c7e_a3a0e0bc",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f489ec_44c1acaa",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "ebddd856_04e29e04",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed7c76c2_7949ad09",
@@ -71,6 +131,24 @@
       "writtenOn": "2025-02-03T19:56:20Z",
       "side": 1,
       "message": "I might help future maintainers to put a brief comment here explaining the new or condition (e.g why is status 0x80 with that delay time OK?)",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad9e78d_b63cee18",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ed7c76c2_7949ad09",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -92,6 +170,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af150cf_fe96f30e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Getting sequence index",
+      "parentUuid": "2e00cfba_44701ca8",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98325594_7185520f",
@@ -105,6 +201,24 @@
       "writtenOn": "2025-02-03T19:56:20Z",
       "side": 1,
       "message": "Just a question: what does \"fs\" mean in the variable name?",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e32ac8_c1b68609",
+        "filename": "tools/power-utils/aei_updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Means file system path",
+      "parentUuid": "98325594_7185520f",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -126,6 +240,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8e51a6_223c36a3",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b838bc78_8989c38f",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fdb4c39_4e35fb63",
@@ -143,6 +275,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b768998_9827293a",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fdb4c39_4e35fb63",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0350baf4_bcdfb3e7",
@@ -156,6 +306,24 @@
       "writtenOn": "2025-02-03T19:56:20Z",
       "side": 1,
       "message": "The old code wrote STATUS_WORD and VOUT_BYTE in hex format.  Shouldn\u0027t we do that in the new code?\n\nSee https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2 on how to do that.",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f20022_21111695",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-04T20:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0350baf4_bcdfb3e7",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
