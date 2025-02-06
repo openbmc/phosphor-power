@@ -206,6 +206,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f4fc875_a02ea0a7",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-06T20:30:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3a83ce64_c1d51013",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98325594_7185520f",
@@ -360,6 +378,24 @@
       "side": 1,
       "message": "Did your change work?  According to the docs at the link I provided, the formatting is specified in a separate argument not within the initial string.",
       "parentUuid": "b1f20022_21111695",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8c61734_03f7548d",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-02-06T20:30:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f263b955_7b6162b8",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
