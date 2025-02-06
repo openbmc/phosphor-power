@@ -190,6 +190,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a83ce64_c1d51013",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-06T15:55:15Z",
+      "side": 1,
+      "message": "Isn\u0027t the sequence index at offset 0?",
+      "parentUuid": "6af150cf_fe96f30e",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98325594_7185520f",
         "filename": "tools/power-utils/aei_updater.hpp",
         "patchSetId": 4
@@ -324,6 +342,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "0350baf4_bcdfb3e7",
+      "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f263b955_7b6162b8",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-06T15:55:15Z",
+      "side": 1,
+      "message": "Did your change work?  According to the docs at the link I provided, the formatting is specified in a separate argument not within the initial string.",
+      "parentUuid": "b1f20022_21111695",
       "revId": "d62cc2c0ef0ef8c3608f9e7d543e33106ab724a0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
