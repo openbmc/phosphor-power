@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3da46350_116dc821",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-07T21:04:54Z",
+      "side": 1,
+      "message": "Looks good other than",
+      "revId": "abda0035dc60e3e41d2f4a1500bc4bed143a9092",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1c7fd9_63e13cf8",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-07T21:04:54Z",
+      "side": 1,
+      "message": "Sorry, I should have noticed this before.  You should be casting to a `uint32*`, not an `int*`.\n\nC++ makes no promises on the size of an int.  It can be 2 bytes, 4 bytes, 8 bytes, depending on the target system processor.\n\nCasting to `uint32*` ensures 4 bytes.  Also, you want an unsigned value not a signed one.  int is signed.",
+      "range": {
+        "startLine": 409,
+        "startChar": 63,
+        "endLine": 409,
+        "endChar": 66
+      },
+      "revId": "abda0035dc60e3e41d2f4a1500bc4bed143a9092",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
