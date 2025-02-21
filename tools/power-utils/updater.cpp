@@ -20,6 +20,7 @@
 #include "types.hpp"
 #include "utility.hpp"
 #include "utils.hpp"
+#include "version.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
@@ -27,6 +28,13 @@
 #include <fstream>
 #include <thread>
 #include <vector>
+// #include <sdbusplus/bus.hpp>
+// #include <utility.hpp>
+#include <xyz/openbmc_project/Logging/Create/server.hpp>
+
+#include <iostream>
+#include <map>
+#include <string>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -379,5 +387,99 @@ void Updater::createI2CDevice()
 {
     auto [id, addr] = utils::parseDeviceName(devName);
     i2c = i2c::create(id, addr);
+}
+
+void Updater::createServiceablePel(
+    const std::string& errorName, const std::string& severity,
+    const std::map<std::string, std::string>& additionalData)
+{
+    using namespace sdbusplus::xyz::openbmc_project;
+    constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging"; // Object
+                                                                       // path
+    constexpr auto loggingCreateInterface =
+        "xyz.openbmc_project.Logging.Create"; // Interface
+    try
+    {
+        auto service = phosphor::power::util::getService(
+            loggingObjectPath, loggingCreateInterface, bus);
+        if (service.empty())
+        {
+            lg2::error("Unable to get logging manager service");
+            return;
+        }
+
+        auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
+                                          loggingCreateInterface, "Create");
+
+        method.append(errorName, severity, additionalData);
+
+        bus.call(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        lg2::error("Failed creating event log for fault {FILE}, error {ERR}",
+                   "FILE", errorName, "ERR", e.what());
+    }
+}
+
+std::map<std::string, std::string> Updater::getI2CAdditionalData()
+{
+    std::map<std::string, std::string> additionalData;
+    auto [id, addr] = utils::parseDeviceName(getDevName());
+    std::string hexIdString = std::format("0x{:x}", id);
+    std::string hexAddrString = std::format("0x{:x}", addr);
+    std::string errnoString = std::to_string(errno);
+
+    additionalData["CALLOUT_IIC_BUS"] = hexIdString;
+    additionalData["CALLOUT_IIC_ADDR"] = hexAddrString;
+    additionalData["CALLOUT_ERRNO"] = errnoString;
+    return additionalData;
+}
+
+void Updater::reportI2CPel(
+    std::map<std::string, std::string> extraAdditionalData,
+    const std::string& exceptionString)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()},
+        {"CALLOUT_PRIORITY", "H"}};
+    additionalData.merge(extraAdditionalData);
+    additionalData.merge(getI2CAdditionalData());
+    if (!exceptionString.empty())
+    {
+        additionalData["Exception:"] = exceptionString;
+    }
+    createServiceablePel(BMC_FW_UPDATE_FAILED_MSG, ERROR_SEVERITY,
+                         additionalData);
+}
+
+void Updater::reportPSUPel(
+    std::map<std::string, std::string> extraAdditionalData)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()},
+        {"CALLOUT_PRIORITY", "H"}};
+    additionalData.merge(extraAdditionalData);
+    createServiceablePel(updater::BMC_FW_UPDATE_FAILED_MSG,
+                         updater::ERROR_SEVERITY, additionalData);
+}
+
+void Updater::reportSWPel(
+    std::map<std::string, std::string> extraAdditionalData)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_PRIORITY", "H"}};
+    additionalData.merge(extraAdditionalData);
+    createServiceablePel(updater::PSU_FW_FILE_ISSUE_MSG,
+                         updater::ERROR_SEVERITY, additionalData);
+}
+
+void Updater::reportGoodPel()
+{
+    std::map<std::string, std::string> additionalData = {
+        {"Successful PSU Update:", getPsuInventoryPath()},
+        {"Firmware Version:", version::getVersion(bus, getPsuInventoryPath())}};
+    createServiceablePel(updater::FW_UPDATE_SUCCESS_MSG,
+                         updater::INFORMATIONAL_SEVEVERITY, additionalData);
 }
 } // namespace updater

@@ -30,6 +30,17 @@ namespace updater
 
 namespace fs = std::filesystem;
 
+constexpr auto BMC_FW_UPDATE_FAILED_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Error.BmcFirmwareUpdateFailed";
+constexpr auto PSU_FW_FILE_ISSUE_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Error.BmcFirmwareIssue";
+constexpr auto FW_UPDATE_SUCCESS_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Error.FirmwareUpdateSuccessful";
+
+constexpr auto ERROR_SEVERITY = "xyz.openbmc_project.Logging.Entry.Level.Error";
+constexpr auto INFORMATIONAL_SEVEVERITY =
+    "xyz.openbmc_project.Logging.Entry.Level.Informational";
+
 /**
  * Update PSU firmware
  *
@@ -126,6 +137,77 @@ class Updater
     {
         return i2c.get();
     }
+
+    /**
+     * @brief Creates a serviceable Predictive Error Log (PEL).
+     *
+     * This method generates an event log with the given error name, severity,
+     * and additional data. It interacts with the OpenBMC logging service to
+     * record faults.
+     *
+     * @param[in] errorName The name of the error to log.
+     * @param[in] severity The severity level of the error.
+     * @param[in] additionalData Additional key-value pairs containing details
+     *                           about the error.
+     */
+    void createServiceablePel(
+        const std::string& errorName, const std::string& severity,
+        const std::map<std::string, std::string>& additionalData);
+
+    /**
+     * @brief Retrieves additional data related to I2C communication.
+     *
+     * This method collects and returns I2C bus information, including the
+     * bus ID, address, and error number, which are used for reporting
+     * Predictive Error Log.
+     *
+     * @return A map containing I2C-related key-value pairs.
+     */
+    std::map<std::string, std::string> getI2CAdditionalData();
+
+    /**
+     * @brief Reports an I2C-related Predictive Error Log.
+     *
+     * This method creates a serviceable event log related to I2C failures.
+     * It collects additional data about the I2C communication and logs the
+     * failure with appropriate severity.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the error context.
+     * @param[in] exceptionString A string describing the exception that
+     *                            triggered the error.
+     */
+    void reportI2CPel(std::map<std::string, std::string> additionalData,
+                      const std::string& exceptionString);
+
+    /**
+     * @brief Reports a PSU-related Predictive Error Log.
+     *
+     * This method logs a failure related to PSU firmware updates and additional
+     * diagnostics data to the event log.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the PSU-related error.
+     */
+    void reportPSUPel(std::map<std::string, std::string> extraAdditionalData);
+
+    /**
+     * @brief Reports a software-related Predictive Error Log.
+     *
+     * This method logs a failure related to PSU firmware file issues or other
+     * software-related errors. It merges any additional error-specific data
+     * before logging the event.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the software-related error.
+     */
+    void reportSWPel(std::map<std::string, std::string> extraAdditionalData);
+
+    /**
+     * @brief Reports good PSU firmware update.
+     *
+     */
+    void reportGoodPel();
 
   private:
     /** @brief The sdbusplus DBus bus connection */

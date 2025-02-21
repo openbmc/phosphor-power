@@ -182,16 +182,6 @@ class AeiUpdater : public updater::Updater
     bool ispReadRebootStatus();
 
     /**
-     * @brief Create serviceable error
-     *
-     * Place holder for future enhancement
-     */
-    void createServiceableError(const std::string str)
-    {
-        std::cout << "createServiceableError: " << str << "\n";
-    }
-
-    /**
      * @brief Pointer to the I2C interface for communication
      *
      * This pointer is not owned by the class. The caller is responsible for
