@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "updater.hpp"
 
+#include "updater.hpp"
 #include "aei_updater.hpp"
 #include "pmbus.hpp"
 #include "types.hpp"
 #include "utility.hpp"
 #include "utils.hpp"
+#include "version.hpp"
+#include <xyz/openbmc_project/Logging/Create/client.hpp>
 
 #include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
 #include <fstream>
-#include <thread>
-#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -169,7 +172,7 @@ std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
     }
     catch (const std::ios_base::failure& e)
     {
-        lg2::error("Error reading firmware: {ERROR}", "ERROR", e.what());
+        lg2::error("Error reading firmware: {ERROR}", "ERROR", e);
         readDataBytes.clear();
     }
     return readDataBytes;
@@ -220,7 +223,7 @@ Updater::Updater(const std::string& psuInventoryPath,
     catch (const fs::filesystem_error& e)
     {
         lg2::error("Failed to get canonical path DEVPATH= {PATH}, ERROR= {ERR}",
-                   "PATH", devPath, "ERR", e.what());
+                   "PATH", devPath, "ERR", e);
     }
 }
 
@@ -379,5 +382,109 @@ void Updater::createI2CDevice()
 {
     auto [id, addr] = utils::parseDeviceName(devName);
     i2c = i2c::create(id, addr);
+}
+
+void Updater::createServiceableEventLog(
+    const std::string& errorName, const std::string& severity,
+    std::map<std::string, std::string>& additionalData)
+{
+    if (!isEventLogEnabled() || isEventLoggedThisSession())
+    {
+        return;
+    }
+
+    using namespace sdbusplus::xyz::openbmc_project;
+    using LoggingCreate =
+        sdbusplus::client::xyz::openbmc_project::logging::Create<>;
+    enableEventLoggedThisSession();
+    try
+    {
+        additionalData["_PID"] = std::to_string(getpid());
+        auto method = bus.new_method_call(LoggingCreate::default_service,
+                                          LoggingCreate::instance_path,
+                                          LoggingCreate::interface, "Create");
+        method.append(errorName, severity, additionalData);
+
+        bus.call(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        lg2::error(
+            "Failed creating event log for fault {ERROR_NAME}, error {ERR}",
+            "ERROR_NAME", errorName, "ERR", e);
+    }
+    disableEventLogging();
+}
+
+std::map<std::string, std::string> Updater::getI2CAdditionalData()
+{
+    std::map<std::string, std::string> additionalData;
+    auto [id, addr] = utils::parseDeviceName(getDevName());
+    std::string hexIdString = std::format("0x{:x}", id);
+    std::string hexAddrString = std::format("0x{:x}", addr);
+
+    additionalData["CALLOUT_IIC_BUS"] = hexIdString;
+    additionalData["CALLOUT_IIC_ADDR"] = hexAddrString;
+    return additionalData;
+}
+
+/*
+ * reportI2CEventLog calls out FRUs in the following order:
+ * 1 - PSU  high priority
+ * 2 - CALLOUT_IIC_BUS
+ */
+void Updater::reportI2CEventLog(
+    std::map<std::string, std::string> extraAdditionalData,
+    const std::string& exceptionString, const int& errorCode)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()}};
+    additionalData.merge(extraAdditionalData);
+    additionalData.merge(getI2CAdditionalData());
+    if (errorCode)
+    {
+        additionalData["I2C_CALLOUT_ERRNO"] = std::to_string(errorCode);
+    }
+    if (!exceptionString.empty())
+    {
+        additionalData["I2C_EXCEPTION"] = exceptionString;
+    }
+    createServiceableEventLog(FW_UPDATE_FAILED_MSG, ERROR_SEVERITY,
+                              additionalData);
+}
+
+/*
+ * reportPSUEventLog calls out PSU and system planar
+ */
+void Updater::reportPSUEventLog(
+    std::map<std::string, std::string> extraAdditionalData)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()}};
+    additionalData.merge(extraAdditionalData);
+    createServiceableEventLog(updater::FW_UPDATE_FAILED_MSG,
+                              updater::ERROR_SEVERITY, additionalData);
+}
+
+/*
+ * reportSWEventLog report BMC0001 procedure.
+ */
+void Updater::reportSWEventLog(
+    std::map<std::string, std::string> additionalData)
+{
+    createServiceableEventLog(updater::PSU_FW_FILE_ISSUE_MSG,
+                              updater::ERROR_SEVERITY, additionalData);
+}
+
+/*
+ * reportGoodEventLog reports a successful firmware update event log.
+ */
+void Updater::reportGoodEventLog()
+{
+    std::map<std::string, std::string> additionalData = {
+        {"SUCCESSFUL_PSU_UPDATE", getPsuInventoryPath()},
+        {"FIRMWARE_VERSION", version::getVersion(bus, getPsuInventoryPath())}};
+    createServiceableEventLog(updater::FW_UPDATE_SUCCESS_MSG,
+                              updater::INFORMATIONAL_SEVERITY, additionalData);
 }
 } // namespace updater
