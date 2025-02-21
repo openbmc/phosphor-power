@@ -30,6 +30,17 @@ namespace updater
 
 namespace fs = std::filesystem;
 
+constexpr auto FW_UPDATE_FAILED_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Error.FirmwareUpdateFailed";
+constexpr auto PSU_FW_FILE_ISSUE_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Error.FirmwareIssue";
+constexpr auto FW_UPDATE_SUCCESS_MSG =
+    "xyz.openbmc_project.Power.PowerSupply.Info.FirmwareUpdateSuccessful";
+
+constexpr auto ERROR_SEVERITY = "xyz.openbmc_project.Logging.Entry.Level.Error";
+constexpr auto INFORMATIONAL_SEVERITY =
+    "xyz.openbmc_project.Logging.Entry.Level.Informational";
+
 /**
  * Update PSU firmware
  *
@@ -127,6 +138,126 @@ class Updater
         return i2c.get();
     }
 
+    /**
+     * @brief Creates a serviceable Predictive Error Log (PEL).
+     *
+     * This method generates an event log with the given error name, severity,
+     * and additional data. It interacts with the OpenBMC logging service to
+     * record faults.
+     *
+     * @param[in] errorName The name of the error to log.
+     * @param[in] severity The severity level of the error.
+     * @param[in] additionalData Additional key-value pairs containing details
+     *                           about the error.
+     */
+    void createServiceablePel(
+        const std::string& errorName, const std::string& severity,
+        const std::map<std::string, std::string>& additionalData);
+
+    /**
+     * @brief Retrieves additional data related to I2C communication.
+     *
+     * This method collects and returns I2C bus information, including the
+     * bus ID, address, and error number, which are used for reporting
+     * Predictive Error Log.
+     *
+     * @return A map containing I2C-related key-value pairs.
+     */
+    std::map<std::string, std::string> getI2CAdditionalData();
+
+    /**
+     * @brief Reports an I2C-related Predictive Error Log.
+     *
+     * This method creates a serviceable event log related to I2C failures.
+     * It collects additional data about the I2C communication and logs the
+     * failure with appropriate severity.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the error context.
+     * @param[in] exceptionString A string describing the exception that
+     *                            triggered the error.
+     * @param[in] errnoString Exception errno string
+     */
+    void reportI2CPel(std::map<std::string, std::string> extraAdditionalData,
+                      const std::string& exceptionString,
+                      const std::string& errnoString);
+
+    /**
+     * @brief Reports a PSU-related Predictive Error Log.
+     *
+     * This method logs a failure related to PSU firmware updates and additional
+     * diagnostics data to the event log.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the PSU-related error.
+     */
+    void reportPSUPel(std::map<std::string, std::string> extraAdditionalData);
+
+    /**
+     * @brief Reports a software-related Predictive Error Log.
+     *
+     * This method logs a failure related to PSU firmware file issues or other
+     * software-related errors. It merges any additional error-specific data
+     * before logging the event.
+     *
+     * @param[in] extraAdditionalData Additional key-value pairs specific to
+     *                                the software-related error.
+     */
+    void reportSWPel(std::map<std::string, std::string> extraAdditionalData);
+
+    /**
+     * @brief Accessor to set logPel to true
+     *
+     */
+    void enablePelLogging()
+    {
+        logPel = true;
+    }
+
+    /**
+     * @brief Accessor to set logPel to false
+     *
+     */
+    void disablePelLogging()
+    {
+        logPel = false;
+    }
+
+    /**
+     * @brief Accessor logPel status (enable true, disable false)
+     *
+     * @return true or false
+     */
+    bool isPelLogEnabled()
+    {
+        return logPel;
+    }
+
+    /**
+     * @brief Accessor to disable pelLoggedThisSession
+     *
+     */
+    void enablePelLoggedThisSession()
+    {
+        pelLoggedThisSession = true;
+    }
+
+    /**
+     * @brief Accessor to retieve pelLoggedThisSession status
+     *
+     * @return true or false
+     */
+    bool isPelLoggedThisSession()
+    {
+        return pelLoggedThisSession;
+    }
+
+    /**
+     * @brief Reports good PSU firmware update.
+     *
+     */
+    void reportGoodPel();
+
   private:
     /** @brief The sdbusplus DBus bus connection */
     sdbusplus::bus_t bus;
@@ -160,6 +291,14 @@ class Updater
 
     /** @brief The i2c device interface */
     std::unique_ptr<i2c::I2CInterface> i2c;
+
+    /** @brief Log PEL flag */
+    bool logPel;
+
+    /** @brief PEL logged this session flag, this is to make sure no other pel
+     * can be logged
+     * */
+    bool pelLoggedThisSession = false;
 };
 
 namespace internal
