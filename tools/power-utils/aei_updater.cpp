@@ -22,6 +22,7 @@
 #include "types.hpp"
 #include "updater.hpp"
 #include "utility.hpp"
+#include "utils.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
@@ -72,8 +73,14 @@ namespace util = phosphor::power::util;
 int AeiUpdater::doUpdate()
 {
     i2cInterface = Updater::getI2C();
+    enablePelLogging();
     if (i2cInterface == nullptr)
     {
+        // Report serviceable error
+        std::map<std::string, std::string> additionalData = {
+            {"I2C_INTERFACE", "I2C interface is null pointer."}};
+        reportI2CPel(additionalData, "", std::to_string(errno));
+
         throw std::runtime_error("I2C interface error");
     }
     if (!getFirmwarePath() || !isFirmwareFileValid())
@@ -83,24 +90,22 @@ int AeiUpdater::doUpdate()
     bool downloadFwFailed = false; // Download Firmware status
     int retryProcessTwo(0);
     int retryProcessOne(0);
-    int serviceableEvent(0);
+    disablePelLogging();
     while ((retryProcessTwo < MAX_RETRIES) && (retryProcessOne < MAX_RETRIES))
     {
-        retryProcessTwo++;
         // Write AEI PSU ISP key
         if (!writeIspKey())
         {
-            serviceableEvent++;
-            if (serviceableEvent == MAX_RETRIES)
-            {
-                createServiceableError(
-                    "createServiceableError: ISP key failed");
-            }
             lg2::error("Failed to set ISP Key");
             downloadFwFailed = true; // Download Firmware status
-            continue;
+            break;
         }
 
+        if (retryProcessTwo == (MAX_RETRIES - 1))
+        {
+            enablePelLogging();
+        }
+        retryProcessTwo++;
         while (retryProcessOne < MAX_RETRIES)
         {
             downloadFwFailed = false; // Download Firmware status
@@ -128,11 +133,14 @@ int AeiUpdater::doUpdate()
                 }
                 else
                 {
+                    // IBM - E11
                     if (retryProcessOne == MAX_RETRIES)
                     {
                         // no more retries report serviceable error
-                        createServiceableError(
-                            "serviceableError: Download firmware failed");
+                        std::map<std::string, std::string> additionalData = {
+                            {"UPDATE_FAILED", "Download firmware failed"}};
+
+                        reportPSUPel(additionalData);
                         ispReboot(); // Try to set PSU to normal mode
                     }
                     downloadFwFailed = true;
@@ -148,6 +156,7 @@ int AeiUpdater::doUpdate()
             }
 
             ispReboot();
+            // IBM E16
             if (ispReadRebootStatus() && !downloadFwFailed)
             {
                 // Download completed successful
@@ -169,6 +178,10 @@ int AeiUpdater::doUpdate()
     {
         return 1;
     }
+    enablePelLogging();
+    bindUnbind(true);
+    updater::internal::delay(100);
+    reportGoodPel();
     return 0; // Update successful
 }
 
@@ -177,24 +190,34 @@ bool AeiUpdater::writeIspKey()
     // ISP Key to unlock programming mode ( ASCII for "artY").
     constexpr std::array<uint8_t, 4> unlockData = {0x61, 0x72, 0x74,
                                                    0x59}; // ISP Key "artY"
-    try
+    for (int retry = 0; retry < MAX_RETRIES; ++retry)
     {
-        // Send ISP Key to unlock device for firmware update
-        i2cInterface->write(KEY_REGISTER, unlockData.size(), unlockData.data());
-        return true;
+        try
+        {
+            // Send ISP Key to unlock device for firmware update
+            i2cInterface->write(KEY_REGISTER, unlockData.size(),
+                                unlockData.data());
+            disablePelLogging();
+            return true;
+        }
+        catch (const std::exception& e)
+        {
+            // Log failure if I2C write fails.
+            lg2::error("I2C write failed: {ERROR}", "ERROR", e);
+            std::map<std::string, std::string> additionalData = {
+                {"ISP_KEY", "ISP key failed due to I2C exception"}};
+            reportI2CPel(additionalData, e.what(), std::to_string(errno));
+            enablePelLogging(); // If fails again report PEL - IBM E1
+        }
     }
-    catch (const std::exception& e)
-    {
-        // Log failure if I2C write fails.
-        lg2::error("I2C write failed: {ERROR}", "ERROR", e);
-        return false;
-    }
+    return false;
 }
 
 bool AeiUpdater::writeIspMode()
 {
     // Attempt to set device in ISP mode with retries.
     uint8_t ispStatus = 0x0;
+    uint8_t i2cFailCount = 0;
     for (int retry = 0; retry < MAX_RETRIES; ++retry)
     {
         try
@@ -209,17 +232,39 @@ bool AeiUpdater::writeIspMode()
             if (ispStatus & B_ISP_MODE)
             {
                 lg2::info("Set ISP Mode");
+                disablePelLogging();
                 return true;
             }
+            enablePelLogging();
         }
         catch (const std::exception& e)
         {
+            i2cFailCount++;
             // Log I2C error with each retry attempt.
             lg2::error("I2C error during ISP mode write/read: {ERROR}", "ERROR",
                        e);
+            if (i2cFailCount == MAX_RETRIES)
+            {
+                enablePelLogging();
+                std::map<std::string, std::string> additionalData = {
+                    {"FIRMWARE_I2C_STATUS",
+                     "Download firmware failed during writeIspMode due to I2C exception"}};
+                // Report I2C PEL IBM E4
+                reportI2CPel(additionalData, e.what(), std::to_string(errno));
+                return false; // Failed to set ISP Mode
+            }
         }
     }
-    createServiceableError("createServiceableError: ISP Status failed");
+
+    if (i2cFailCount != MAX_RETRIES)
+    {
+        // Report PEL IBM E4
+        std::map<std::string, std::string> additionalData = {
+            {"FIRMWARE_STATUS",
+             "Download firmware failed during writeIspMode"}};
+        reportPSUPel(additionalData);
+    }
+
     lg2::error("Failed to set ISP Mode");
     return false; // Failed to set ISP Mode after retries
 }
@@ -228,6 +273,7 @@ bool AeiUpdater::writeIspStatusReset()
 {
     // Reset ISP status register before firmware download.
     uint8_t ispStatus = 0;
+    uint8_t i2cFailCount = 0;
     for (int retry = 0; retry < MAX_RETRIES; retry++)
     {
         try
@@ -238,11 +284,23 @@ bool AeiUpdater::writeIspStatusReset()
         }
         catch (const std::exception& e)
         {
+            i2cFailCount++;
             // Log any errors encountered during reset sequence.
             lg2::error("I2C Write ISP reset failed: {ERROR}", "ERROR", e);
+            if (i2cFailCount == MAX_RETRIES)
+            {
+                enablePelLogging();
+                std::map<std::string, std::string> additionalData = {
+                    {"ISP_RESET", "I2C exception during ISP status reset"}};
+                // Report I2C Pel IBM E6
+                reportI2CPel(additionalData, e.what(), std::to_string(errno));
+                ispReboot();
+                return false;
+            }
         }
     }
 
+    i2cFailCount = 0;
     for (int retry = 0; retry < MAX_RETRIES; ++retry)
     {
         try
@@ -250,22 +308,41 @@ bool AeiUpdater::writeIspStatusReset()
             i2cInterface->read(STATUS_REGISTER, ispStatus);
             if (ispStatus == B_ISP_MODE)
             {
-                lg2::info("Read/Write ISP reset");
+                lg2::info("write/read ISP reset");
+                disablePelLogging();
                 return true; // ISP status reset successfully.
             }
             i2cInterface->write(STATUS_REGISTER,
                                 CMD_CLEAR_STATUS); // Clear status if
                                                    // not reset.
-            lg2::error("Read/Write ISP reset failed");
+            lg2::error("Write ISP reset failed");
+            enablePelLogging();
         }
         catch (const std::exception& e)
         {
+            i2cFailCount++;
             // Log any errors encountered during reset sequence.
-            lg2::error("I2C Read/Write error during ISP reset: {ERROR}",
-                       "ERROR", e);
+            lg2::error(
+                "I2C Write/Read or Write error during ISP reset: {ERROR}",
+                "ERROR", e);
+            if (i2cFailCount == MAX_RETRIES)
+            {
+                enablePelLogging();
+                std::map<std::string, std::string> additionalData = {
+                    {"ISP_I2C_READ_STATUS",
+                     "I2C exception during read ISP status"}};
+                // Report PEL IBM E6
+                reportI2CPel(additionalData, e.what(), std::to_string(errno));
+            }
         }
     }
-    createServiceableError("createServiceableError: Failed to reset ISP");
+    if (i2cFailCount != MAX_RETRIES)
+    {
+        std::map<std::string, std::string> additionalData = {
+            {"ISP_REST_FAILED", "Failed to read ISP expected status"}};
+        // Report PEL IBM E6
+        reportPSUPel(additionalData);
+    }
     lg2::error("Failed to reset ISP Status");
     ispReboot();
     return false;
@@ -276,6 +353,9 @@ bool AeiUpdater::getFirmwarePath()
     fspath = updater::internal::getFWFilenamePath(getImageDir());
     if (fspath.empty())
     {
+        std::map<std::string, std::string> additionalData = {
+            {"FILE_PATH", "Firmware file path is null"}};
+        reportSWPel(additionalData);
         lg2::error("Firmware file path not found");
         return false;
     }
@@ -286,6 +366,10 @@ bool AeiUpdater::isFirmwareFileValid()
 {
     if (!updater::internal::validateFWFile(fspath))
     {
+        std::map<std::string, std::string> additionalData = {
+            {"FIRMWARE_VALID",
+             "Firmware validation failed, FW file path = " + fspath}};
+        reportSWPel(additionalData);
         lg2::error("Firmware validation failed, fspath={PATH}", "PATH", fspath);
         return false;
     }
@@ -297,6 +381,10 @@ std::unique_ptr<std::ifstream> AeiUpdater::openFirmwareFile()
     auto inputFile = updater::internal::openFirmwareFile(fspath);
     if (!inputFile)
     {
+        std::map<std::string, std::string> additionalData = {
+            {"FIRMWARE_OPEN",
+             "Firmware file failed to open, FW file path = " + fspath}};
+        reportSWPel(additionalData);
         lg2::error("Failed to open firmware file");
     }
     return inputFile;
@@ -336,6 +424,16 @@ bool AeiUpdater::downloadPsuFirmware()
     auto inputFile = openFirmwareFile();
     if (!inputFile)
     {
+        if (isPelLogEnabled())
+        {
+            // report software serviceable error
+            std::map<std::string, std::string> additionalData = {
+                {"FW_FAILED_TO_OPEN", "Firmware file failed to open"},
+                {"FW_FILE_PATH", fspath}};
+
+            reportSWPel(additionalData);
+            ispReboot(); // Try to set PSU to normal mode
+        }
         lg2::error("Unable to open firmware file {FILE}", "FILE", fspath);
         return false;
     }
@@ -377,7 +475,6 @@ bool AeiUpdater::downloadPsuFirmware()
             "BYTESREAD", bytesRead);
         return false; // Failed
     }
-
     return true;
 }
 
@@ -385,6 +482,8 @@ bool AeiUpdater::performI2cWriteReadWithRetries(
     uint8_t regAddr, const uint8_t expectedReadSize, uint8_t* readData,
     const int retries, const int delayTime)
 {
+    uint8_t i2cFailCount = 0;
+    uint32_t bigEndianValue = 0;
     for (int i = 0; i < retries; ++i)
     {
         uint8_t readReplySize = 0;
@@ -406,22 +505,30 @@ bool AeiUpdater::performI2cWriteReadWithRetries(
             }
             else
             {
-                uint32_t littleEndianValue =
-                    *reinterpret_cast<uint32_t*>(readData);
-                uint32_t bigEndianValue =
-                    ((littleEndianValue & 0x000000FF) << 24) |
-                    ((littleEndianValue & 0x0000FF00) << 8) |
-                    ((littleEndianValue & 0x00FF0000) >> 8) |
-                    ((littleEndianValue & 0xFF000000) >> 24);
+                bigEndianValue = (readData[0] << 24) | (readData[1] << 16) |
+                                 (readData[2] << 8) | (readData[3]);
                 lg2::error("Write/read block {NUM} failed", "NUM",
                            bigEndianValue);
             }
         }
         catch (const std::exception& e)
         {
-            lg2::error("I2C write/read block failed: {ERROR}", "ERROR", e);
+            i2cFailCount++;
+            if (i2cFailCount == MAX_RETRIES)
+            {
+                std::map<std::string, std::string> additionalData = {
+                    {"I2C_WRITE_READ",
+                     "I2C exception while flashing the firmware."}};
+                reportI2CPel(additionalData, e.what(), std::to_string(errno));
+            }
+            lg2::error("I2C write/read block failed: {ERROR}", "ERROR",
+                       e.what());
         }
     }
+    std::map<std::string, std::string> additionalData = {
+        {"WRITE_READ",
+         "Download firmware failed block: " + std::to_string(bigEndianValue)}};
+    reportPSUPel(additionalData);
     return false;
 }
 
@@ -481,27 +588,41 @@ void AeiUpdater::ispReboot()
 
 bool AeiUpdater::ispReadRebootStatus()
 {
-    try
+    for (int retry = 0; retry < MAX_RETRIES; ++retry)
     {
-        // Read from the status register to verify reboot
-        uint8_t data = 1; // Initialize data to a non-zero value
-        i2cInterface->read(STATUS_REGISTER, data);
-
-        // If the reboot was successful, the read data should be 0
-        if (data == SUCCESSFUL_ISP_REBOOT_STATUS)
+        try
         {
-            lg2::info("ISP Status Reboot successful.");
-            return true;
+            // Read from the status register to verify reboot
+            uint8_t data = 1; // Initialize data to a non-zero value
+            i2cInterface->read(STATUS_REGISTER, data);
+
+            // If the reboot was successful, the read data should be 0
+            if (data == SUCCESSFUL_ISP_REBOOT_STATUS)
+            {
+                lg2::info("ISP Status Reboot successful.");
+                return true;
+            }
         }
-    }
-    catch (const std::exception& e)
-    {
-        lg2::error("I2C read error during reboot attempt: {ERROR}", "ERROR", e);
+        catch (const std::exception& e)
+        {
+            if (isPelLogEnabled())
+            {
+                // report software serviceable error
+                std::map<std::string, std::string> additionalData = {
+                    {"I2C_READ_REBOOT",
+                     "I2C exception while reading ISP reboot status"}};
+
+                reportI2CPel(additionalData, e.what(), std::to_string(errno));
+            }
+            lg2::error("I2C read error during reboot attempt: {ERROR}", "ERROR",
+                       e);
+        }
+        // IBM E16
+        ispReboot(); // Try to set PSU to normal mode
     }
 
     // If we reach here, all retries have failed
     lg2::error("Failed to reboot ISP status after max retries.");
     return false;
 }
-
 } // namespace aeiUpdater

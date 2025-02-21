@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #include "updater.hpp"
 
 #include "aei_updater.hpp"
@@ -20,13 +21,15 @@
 #include "types.hpp"
 #include "utility.hpp"
 #include "utils.hpp"
+#include "version.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
 #include <fstream>
-#include <thread>
-#include <vector>
+#include <iostream>
+#include <map>
+#include <string>
 
 using namespace phosphor::logging;
 namespace util = phosphor::power::util;
@@ -169,7 +172,7 @@ std::vector<uint8_t> readFirmwareBytes(std::ifstream& inputFile,
     }
     catch (const std::ios_base::failure& e)
     {
-        lg2::error("Error reading firmware: {ERROR}", "ERROR", e.what());
+        lg2::error("Error reading firmware: {ERROR}", "ERROR", e);
         readDataBytes.clear();
     }
     return readDataBytes;
@@ -220,7 +223,7 @@ Updater::Updater(const std::string& psuInventoryPath,
     catch (const fs::filesystem_error& e)
     {
         lg2::error("Failed to get canonical path DEVPATH= {PATH}, ERROR= {ERR}",
-                   "PATH", devPath, "ERR", e.what());
+                   "PATH", devPath, "ERR", e);
     }
 }
 
@@ -379,5 +382,106 @@ void Updater::createI2CDevice()
 {
     auto [id, addr] = utils::parseDeviceName(devName);
     i2c = i2c::create(id, addr);
+}
+
+void Updater::createServiceablePel(
+    const std::string& errorName, const std::string& severity,
+    const std::map<std::string, std::string>& additionalData)
+{
+    if (!isPelLogEnabled() || isPelLoggedThisSession())
+    {
+        return;
+    }
+
+    using namespace sdbusplus::xyz::openbmc_project;
+    constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging"; // Object
+                                                                       // path
+    constexpr auto loggingCreateInterface =
+        "xyz.openbmc_project.Logging.Create"; // Interface
+    enablePelLoggedThisSession();
+    try
+    {
+        auto service = phosphor::power::util::getService(
+            loggingObjectPath, loggingCreateInterface, bus);
+        if (service.empty())
+        {
+            lg2::error("Unable to get logging manager service");
+            return;
+        }
+
+        auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
+                                          loggingCreateInterface, "Create");
+
+        method.append(errorName, severity, additionalData);
+
+        bus.call(method);
+    }
+    catch (const sdbusplus::exception::SdBusError& e)
+    {
+        lg2::error(
+            "Failed creating event log for fault {ERROR_NAME}, error {ERR}",
+            "ERROR_NAME", errorName, "ERR", e);
+    }
+    disablePelLogging();
+}
+
+std::map<std::string, std::string> Updater::getI2CAdditionalData()
+{
+    std::map<std::string, std::string> additionalData;
+    auto [id, addr] = utils::parseDeviceName(getDevName());
+    std::string hexIdString = std::format("0x{:x}", id);
+    std::string hexAddrString = std::format("0x{:x}", addr);
+
+    additionalData["CALLOUT_IIC_BUS"] = hexIdString;
+    additionalData["CALLOUT_IIC_ADDR"] = hexAddrString;
+    return additionalData;
+}
+
+/*
+ * reportI2CPel will callout FRUs in the following order:
+ * 1 - PSU - high priority
+ * 2 - eBMC card - high priority
+ * 3 - BMC0001 procedure - high priority
+ * 4,5 - BMC - low priority.
+ */
+void Updater::reportI2CPel(
+    std::map<std::string, std::string> extraAdditionalData,
+    const std::string& exceptionString, const std::string& errnoString)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()}};
+    additionalData.merge(extraAdditionalData);
+    additionalData.merge(getI2CAdditionalData());
+    additionalData["CALLOUT_ERRNO"] = errnoString;
+    if (!exceptionString.empty())
+    {
+        additionalData["Exception:"] = exceptionString;
+    }
+    createServiceablePel(FW_UPDATE_FAILED_MSG, ERROR_SEVERITY, additionalData);
+}
+
+void Updater::reportPSUPel(
+    std::map<std::string, std::string> extraAdditionalData)
+{
+    std::map<std::string, std::string> additionalData = {
+        {"CALLOUT_INVENTORY_PATH", getPsuInventoryPath()}};
+    additionalData.merge(extraAdditionalData);
+    createServiceablePel(updater::FW_UPDATE_FAILED_MSG, updater::ERROR_SEVERITY,
+                         additionalData);
+}
+
+void Updater::reportSWPel(std::map<std::string, std::string> additionalData)
+{
+    createServiceablePel(updater::PSU_FW_FILE_ISSUE_MSG,
+                         updater::ERROR_SEVERITY, additionalData);
+}
+
+void Updater::reportGoodPel()
+{
+    std::map<std::string, std::string> additionalData = {
+        {"SUCCESSFUL_PSU_UPDATE", getPsuInventoryPath()},
+        {"FIRMWARE_VERSION", version::getVersion(bus, getPsuInventoryPath())}};
+    createServiceablePel(updater::FW_UPDATE_SUCCESS_MSG,
+                         updater::INFORMATIONAL_SEVERITY, additionalData);
 }
 } // namespace updater
