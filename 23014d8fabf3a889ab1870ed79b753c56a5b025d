@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "180fbb23_f86906f5",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "There\u0027s some new constants that can be used for these now, though they\u0027re hidden in generated files:\nin \u003cxyz/openbmc_project/Logging/Create/common.hpp\u003e, you can use Create::interface, Create::instance_path, and even Create::default_service:\n\n```\nnamespace sdbusplus::common::xyz::openbmc_project::logging\n{\n\nstruct Create\n{\n    static constexpr auto interface \u003d \"xyz.openbmc_project.Logging.Create\";\n\n    enum class FFDCFormat\n    {\n        JSON,\n        CBOR,\n        Text,\n        Custom,\n    };\n\n    static constexpr auto instance_path \u003d \"/xyz/openbmc_project/logging\";\n    static constexpr auto default_service \u003d \"xyz.openbmc_project.Logging\";\n   ...\n  };\n ```\n  \nthough I think it\u0027s fine to use still the mapper instead of default_service.",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "476ec06d_10650db4",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "minor nit:  lg2 knows what do do with exceptions, so you can just pass in \u0027e\u0027.",
+      "range": {
+        "startLine": 421,
+        "startChar": 45,
+        "endLine": 421,
+        "endChar": 53
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fb3f08c_03518a61",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "Is it possible errno from a device fail could have been overwritten by, say, one of functions you use above in this function?",
+      "range": {
+        "startLine": 431,
+        "startChar": 29,
+        "endLine": 431,
+        "endChar": 52
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d02324_4e65161d",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "the default priority of CALLOUT_INVENTORY_PATH is high, so you can leave this off.  Same for below as well.",
+      "range": {
+        "startLine": 445,
+        "startChar": 9,
+        "endLine": 445,
+        "endChar": 35
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1395bc43_82cf4f26",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "You can leave this off, since there is no callout to modify.",
+      "range": {
+        "startLine": 470,
+        "startChar": 0,
+        "endLine": 471,
+        "endChar": 35
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b0937c_7a20ec70",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-02-24T21:24:58Z",
+      "side": 1,
+      "message": "nit: spelling.",
+      "range": {
+        "startLine": 41,
+        "startChar": 29,
+        "endLine": 41,
+        "endChar": 39
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
