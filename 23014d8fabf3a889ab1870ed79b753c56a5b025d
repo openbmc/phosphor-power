@@ -1,6 +1,176 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0f1ad77_2379e881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "I\u0027m not done reviewing yet, but didn\u0027t want to make you wait while I finish",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c25597_f38162e3",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "nit: we haven\u0027t done any retries and will do none, but saying \"no more\" implies we\u0027ve done some already, which adds a little confusion.  can we just say \"no retries; report serviceable error\" so it\u0027s clear",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7e2470_2e44e3ba",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "nit: spelling \"interface\"",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b48496_0885aded",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "this isn\u0027t a problem with the i2c bus right (where we need to callout all frus in i2c path)?  isn\u0027t this a problem with the finding the i2c information in the bmc image? ie, what should be called out for Updater::getI2C() fails...",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef868b89_f919e3ec",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "this would be an i2c bus problem right, not just a psu problem?  writeIspKey() checks for i2c problems, but doesn\u0027t check only if the i2c cmd worked fine, but some psu status didn\u0027t accept the key...",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52e6e1f0_578566cf",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "might as well differentiate in the text string this failed due to i2c bus fail",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe41d0af_d0f022e6",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "nit: spelling \"Download\"",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af28a344_3cd155ef",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "nit: spelling \"Download\"",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f7c46c_23148415",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "might as well differentiate in the text string this failed due to ISP status bit and not due to i2c bus fail",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f06e2ce_602dc25d",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-02-25T15:40:14Z",
+      "side": 1,
+      "message": "We don\u0027t want to log an error if the psu firmware image isn\u0027t in the bmc image right?  Eg Delta or AcBel psus...",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "180fbb23_f86906f5",
