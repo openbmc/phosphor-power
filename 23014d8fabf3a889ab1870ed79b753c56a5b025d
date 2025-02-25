@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87ee750a_772b22e6",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Is the retries part of this comment correct?",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 2
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf7e2470_2e44e3ba",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 1
@@ -48,6 +71,29 @@
       "writtenOn": "2025-02-25T15:40:14Z",
       "side": 1,
       "message": "nit: spelling \"interface\"",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58dc908d_42eb1c2c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "The convention for the built-in keywords is uppercase with underscores.\n\nSo maybe should be I2C_INTERFACE?  Same question/comment on the other additionalData keywords.",
+      "range": {
+        "startLine": 80,
+        "startChar": 14,
+        "endLine": 80,
+        "endChar": 27
+      },
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -88,6 +134,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fb6abd4_6b661eb8",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 142,
+        "startChar": 53,
+        "endLine": 142,
+        "endChar": 61
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "52e6e1f0_578566cf",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 1
@@ -116,6 +185,46 @@
       "writtenOn": "2025-02-25T15:40:14Z",
       "side": 1,
       "message": "nit: spelling \"Download\"",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23c87c8b_6254847b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Nit: spelling.  There are other occurrences of this in the file too.  Please search for \"Dowload\".",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 30
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f3fc0d_155c79b0",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Does execution reach this when the I2C operations were working but the ISP status value was not correct?  If so, do you want the additionalData value to mention that?  Otherwise it has the same text as line 236.",
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -173,6 +282,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e43655c_36e57924",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Nit: This is doing a write/read I think",
+      "range": {
+        "startLine": 488,
+        "startChar": 26,
+        "endLine": 488,
+        "endChar": 36
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceeaea29_ec8e2a8b",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Should this be reportPSUPel()?  This is an issue with the PSU rather than the BMC firmware right?",
+      "range": {
+        "startLine": 499,
+        "startChar": 4,
+        "endLine": 499,
+        "endChar": 15
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac1097f_3b2375ce",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Remove commented out code",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "180fbb23_f86906f5",
         "filename": "tools/power-utils/updater.cpp",
         "patchSetId": 1
@@ -184,6 +356,29 @@
       "writtenOn": "2025-02-24T21:24:58Z",
       "side": 1,
       "message": "There\u0027s some new constants that can be used for these now, though they\u0027re hidden in generated files:\nin \u003cxyz/openbmc_project/Logging/Create/common.hpp\u003e, you can use Create::interface, Create::instance_path, and even Create::default_service:\n\n```\nnamespace sdbusplus::common::xyz::openbmc_project::logging\n{\n\nstruct Create\n{\n    static constexpr auto interface \u003d \"xyz.openbmc_project.Logging.Create\";\n\n    enum class FFDCFormat\n    {\n        JSON,\n        CBOR,\n        Text,\n        Custom,\n    };\n\n    static constexpr auto instance_path \u003d \"/xyz/openbmc_project/logging\";\n    static constexpr auto default_service \u003d \"xyz.openbmc_project.Logging\";\n   ...\n  };\n ```\n  \nthough I think it\u0027s fine to use still the mapper instead of default_service.",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b99b6f9d_5b8f0a0d",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Nit: Not sure why you picked FILE instead of ERROR_NAME or something?",
+      "range": {
+        "startLine": 420,
+        "startChar": 57,
+        "endLine": 420,
+        "endChar": 61
+      },
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -229,6 +424,53 @@
         "startChar": 29,
         "endLine": 431,
         "endChar": 52
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38d4ebab_682b6257",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "I agree.  errno gets set by *tons* of functions, and there could be one or more called \"under the covers\" before we get her.  The errno should be obtained from the I2CException and passed in.",
+      "parentUuid": "5fb3f08c_03518a61",
+      "range": {
+        "startLine": 431,
+        "startChar": 29,
+        "endLine": 431,
+        "endChar": 52
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9505a62e_03167ac2",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Does specifying the bus as 0x\u003chex\u003e work?  It seems like it should, but I wasn\u0027t totally clear from the documentation:\n\n\"CALLOUT_IIC_BUS is in the form \"/dev/i2c-X\" where X is the bus number, or just the bus number by itself.\"",
+      "range": {
+        "startLine": 433,
+        "startChar": 40,
+        "endLine": 433,
+        "endChar": 51
       },
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -282,6 +524,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1abc0b3b_5dacca2d",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Need to update these three to match the changes in the message registry review.",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32b0937c_7a20ec70",
         "filename": "tools/power-utils/updater.hpp",
         "patchSetId": 1
@@ -298,6 +557,52 @@
         "startChar": 29,
         "endLine": 41,
         "endChar": 39
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a331d1_3d4096b5",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Nit: Variable name in declaration does not match variable name in doxygen.",
+      "range": {
+        "startLine": 175,
+        "startChar": 18,
+        "endLine": 175,
+        "endChar": 38
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c39809b_d296a183",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-02-25T16:10:29Z",
+      "side": 1,
+      "message": "Should this be a const reference, or do you really need to make a copy?\n\nAlso, the variable name here does not match the variable name in the .cpp file.",
+      "range": {
+        "startLine": 180,
+        "startChar": 57,
+        "endLine": 180,
+        "endChar": 71
       },
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
