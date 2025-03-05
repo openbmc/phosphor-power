@@ -58,6 +58,48 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86e50ee_bd77365f",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81c25597_f38162e3",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45805be3_15ba6813",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Modified comment to say \"Report serviceable error\"",
+      "parentUuid": "87ee750a_772b22e6",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 2
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf7e2470_2e44e3ba",
@@ -98,6 +140,48 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad6eff7_bf1cc3c6",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58dc908d_42eb1c2c",
+      "range": {
+        "startLine": 80,
+        "startChar": 14,
+        "endLine": 80,
+        "endChar": 27
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9c5cce7_31fa8ae4",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf7e2470_2e44e3ba",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75b48496_0885aded",
@@ -111,6 +195,24 @@
       "writtenOn": "2025-02-25T15:40:14Z",
       "side": 1,
       "message": "this isn\u0027t a problem with the i2c bus right (where we need to callout all frus in i2c path)?  isn\u0027t this a problem with the finding the i2c information in the bmc image? ie, what should be called out for Updater::getI2C() fails...",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ab1f69_143c9716",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "No, we are not getting to interface with I2C and can be HW failure.",
+      "parentUuid": "75b48496_0885aded",
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -132,6 +234,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "414b3486_dfd960a5",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "If the issue in the I2C we should exception and that\u0027s handled in writeIspKey().",
+      "parentUuid": "ef868b89_f919e3ec",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3fb6abd4_6b661eb8",
@@ -145,6 +265,30 @@
       "writtenOn": "2025-02-25T16:10:29Z",
       "side": 1,
       "message": "Nit: spelling",
+      "range": {
+        "startLine": 142,
+        "startChar": 53,
+        "endLine": 142,
+        "endChar": 61
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e6eb4b8_6ff74b1f",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fb6abd4_6b661eb8",
       "range": {
         "startLine": 142,
         "startChar": 53,
@@ -212,6 +356,66 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a8a650_9f9335f7",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23c87c8b_6254847b",
+      "range": {
+        "startLine": 236,
+        "startChar": 22,
+        "endLine": 236,
+        "endChar": 30
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9502194a_e39341d7",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe41d0af_d0f022e6",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be975ed8_e6d7196c",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Modified to: \"Download firmware failed during writeIspMode due to I2C exception\"",
+      "parentUuid": "52e6e1f0_578566cf",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9f3fc0d_155c79b0",
@@ -225,6 +429,24 @@
       "writtenOn": "2025-02-25T16:10:29Z",
       "side": 1,
       "message": "Does execution reach this when the I2C operations were working but the ISP status value was not correct?  If so, do you want the additionalData value to mention that?  Otherwise it has the same text as line 236.",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56dfc03_ba5431a7",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9f3fc0d_155c79b0",
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -263,6 +485,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b5e7de_4cd0a8c4",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8f7c46c_23148415",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22bbb517_b2eca8c3",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af28a344_3cd155ef",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f06e2ce_602dc25d",
@@ -280,6 +538,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea281901_286e22ac",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "This will not log an error for other PSUs if they don\u0027t have FW. The error will be logged if the targeted PSU does not have FW. In this case the caller can invoke with the wrong FW PATH. Here is the command to invoke psutils\n/usr/bin/psutils --update /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0 /usr/share/obmc/psu/51E9\n\nso if the caller sent 51E0 instead of 51E9 or others ... then it\u0027s a catch",
+      "parentUuid": "6f06e2ce_602dc25d",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e43655c_36e57924",
@@ -293,6 +569,30 @@
       "writtenOn": "2025-02-25T16:10:29Z",
       "side": 1,
       "message": "Nit: This is doing a write/read I think",
+      "range": {
+        "startLine": 488,
+        "startChar": 26,
+        "endLine": 488,
+        "endChar": 36
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f09513d_14c39aa3",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e43655c_36e57924",
       "range": {
         "startLine": 488,
         "startChar": 26,
@@ -326,6 +626,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ee7dc7d_c677fb93",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Correct modified to reportPSUPel",
+      "parentUuid": "ceeaea29_ec8e2a8b",
+      "range": {
+        "startLine": 499,
+        "startChar": 4,
+        "endLine": 499,
+        "endChar": 15
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ac1097f_3b2375ce",
@@ -343,6 +667,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c933b6e5_e63a2c41",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ac1097f_3b2375ce",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "180fbb23_f86906f5",
@@ -356,6 +698,24 @@
       "writtenOn": "2025-02-24T21:24:58Z",
       "side": 1,
       "message": "There\u0027s some new constants that can be used for these now, though they\u0027re hidden in generated files:\nin \u003cxyz/openbmc_project/Logging/Create/common.hpp\u003e, you can use Create::interface, Create::instance_path, and even Create::default_service:\n\n```\nnamespace sdbusplus::common::xyz::openbmc_project::logging\n{\n\nstruct Create\n{\n    static constexpr auto interface \u003d \"xyz.openbmc_project.Logging.Create\";\n\n    enum class FFDCFormat\n    {\n        JSON,\n        CBOR,\n        Text,\n        Custom,\n    };\n\n    static constexpr auto instance_path \u003d \"/xyz/openbmc_project/logging\";\n    static constexpr auto default_service \u003d \"xyz.openbmc_project.Logging\";\n   ...\n  };\n ```\n  \nthough I think it\u0027s fine to use still the mapper instead of default_service.",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b39a769_5c7eb0ee",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "180fbb23_f86906f5",
       "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -383,6 +743,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c83b0d04_f8ca97a6",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b99b6f9d_5b8f0a0d",
+      "range": {
+        "startLine": 420,
+        "startChar": 57,
+        "endLine": 420,
+        "endChar": 61
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "476ec06d_10650db4",
@@ -396,6 +780,30 @@
       "writtenOn": "2025-02-24T21:24:58Z",
       "side": 1,
       "message": "minor nit:  lg2 knows what do do with exceptions, so you can just pass in \u0027e\u0027.",
+      "range": {
+        "startLine": 421,
+        "startChar": 45,
+        "endLine": 421,
+        "endChar": 53
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba6ad4a_82512c97",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "476ec06d_10650db4",
       "range": {
         "startLine": 421,
         "startChar": 45,
@@ -453,6 +861,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16891bb3_3a17664b",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fb3f08c_03518a61",
+      "range": {
+        "startLine": 431,
+        "startChar": 29,
+        "endLine": 431,
+        "endChar": 52
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9505a62e_03167ac2",
@@ -466,6 +898,30 @@
       "writtenOn": "2025-02-25T16:10:29Z",
       "side": 1,
       "message": "Does specifying the bus as 0x\u003chex\u003e work?  It seems like it should, but I wasn\u0027t totally clear from the documentation:\n\n\"CALLOUT_IIC_BUS is in the form \"/dev/i2c-X\" where X is the bus number, or just the bus number by itself.\"",
+      "range": {
+        "startLine": 433,
+        "startChar": 40,
+        "endLine": 433,
+        "endChar": 51
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5da4437_b24b3f44",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "yes, it does I can leave it as dec if you like",
+      "parentUuid": "9505a62e_03167ac2",
       "range": {
         "startLine": 433,
         "startChar": 40,
@@ -499,6 +955,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db7781ec_2289835b",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1d02324_4e65161d",
+      "range": {
+        "startLine": 445,
+        "startChar": 9,
+        "endLine": 445,
+        "endChar": 35
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1395bc43_82cf4f26",
@@ -512,6 +992,30 @@
       "writtenOn": "2025-02-24T21:24:58Z",
       "side": 1,
       "message": "You can leave this off, since there is no callout to modify.",
+      "range": {
+        "startLine": 470,
+        "startChar": 0,
+        "endLine": 471,
+        "endChar": 35
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c713301_df49d497",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1395bc43_82cf4f26",
       "range": {
         "startLine": 470,
         "startChar": 0,
@@ -539,6 +1043,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b81922_a94f47ac",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1abc0b3b_5dacca2d",
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32b0937c_7a20ec70",
@@ -552,6 +1074,30 @@
       "writtenOn": "2025-02-24T21:24:58Z",
       "side": 1,
       "message": "nit: spelling.",
+      "range": {
+        "startLine": 41,
+        "startChar": 29,
+        "endLine": 41,
+        "endChar": 39
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbc8d83f_cf970e8f",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32b0937c_7a20ec70",
       "range": {
         "startLine": 41,
         "startChar": 29,
@@ -585,6 +1131,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "150bd2f6_0bc93401",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a331d1_3d4096b5",
+      "range": {
+        "startLine": 175,
+        "startChar": 18,
+        "endLine": 175,
+        "endChar": 38
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c39809b_d296a183",
@@ -598,6 +1168,30 @@
       "writtenOn": "2025-02-25T16:10:29Z",
       "side": 1,
       "message": "Should this be a const reference, or do you really need to make a copy?\n\nAlso, the variable name here does not match the variable name in the .cpp file.",
+      "range": {
+        "startLine": 180,
+        "startChar": 57,
+        "endLine": 180,
+        "endChar": 71
+      },
+      "revId": "23014d8fabf3a889ab1870ed79b753c56a5b025d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "072cb6e8_be6bfbf2",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Yes, I do need to have a copy to merge",
+      "parentUuid": "2c39809b_d296a183",
       "range": {
         "startLine": 180,
         "startChar": 57,

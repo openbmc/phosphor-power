@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f144f0f1_dbe373bb",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Validation of the file path done on  line 85, open will be handled in the downloadPsuFirmware()",
+      "parentUuid": "3d27fc0c_f4ce17af",
+      "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0a4c584_4b5bb37a",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-02-25T20:01:16Z",
       "side": 1,
       "message": "just documenting so I don\u0027t forget, we discussed at team meeting that in general we don\u0027t want to log a serviceable error here and THEN do a retry, because if the retry works we don\u0027t want the customer to replace anything. this applies to multiple failure paths.  ie, only log a serviceable PEL after we\u0027ve given up trying to download the psu and a repair action is needed.",
+      "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1360d93f_5af50d4e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0a4c584_4b5bb37a",
       "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9351f3_ef376c49",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "This loop for the exception if the command does not have an exception then we move on to next command as in the chart",
+      "parentUuid": "f29ae0b2_9e94270b",
+      "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a18b9187_0ba0ed60",
@@ -69,6 +123,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15c056b_486d841a",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Not sure what you mean, this is for exception happens couple times",
+      "parentUuid": "a18b9187_0ba0ed60",
+      "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87a3cfdf_ad5434bc",
@@ -82,6 +154,24 @@
       "writtenOn": "2025-02-25T20:59:00Z",
       "side": 1,
       "message": "can you please add a comment about what the callouts will look like, eg will the psu fru callout be high priority, then every other fru that the i2c bus travels on be listed next, or?",
+      "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea4a6097_f7f9859e",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-05T15:43:35Z",
+      "side": 1,
+      "message": "Added callout FRUs with priority",
+      "parentUuid": "87a3cfdf_ad5434bc",
       "revId": "89b2c4209aed47e914b2b6ae2d9361f7f8601036",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
