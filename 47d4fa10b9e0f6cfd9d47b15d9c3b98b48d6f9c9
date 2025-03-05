@@ -50,6 +50,23 @@
       "message": "as helpful as these comments are, I don\u0027t think we want to upstream \"IBM\" text.  you could replace it with a text description of the step, eg \"// One of the block write commands failed, retry download procedure one time starting with re-writing initial ISP mode. If it fails again, log serviceable error.",
       "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ae740b_ab21674e",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-05T21:09:37Z",
+      "side": 1,
+      "message": "I don\u0027t understand the above list but don\u0027t want to hold up the review. eg whats the difference between 2 and 4 and 5?  are we doing 5 callouts each time we call reportI2CPel, including the bmc twice (3 times counting #2)?",
+      "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
