@@ -16,6 +16,40 @@
       "message": "Please review resolved comment issues and improved PEL logging",
       "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0390bd_72383f9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-05T17:50:02Z",
+      "side": 1,
+      "message": "comments so far, will look more this afternoon",
+      "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0423cee_f6ae8360",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-05T17:50:02Z",
+      "side": 1,
+      "message": "as helpful as these comments are, I don\u0027t think we want to upstream \"IBM\" text.  you could replace it with a text description of the step, eg \"// One of the block write commands failed, retry download procedure one time starting with re-writing initial ISP mode. If it fails again, log serviceable error.",
+      "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
