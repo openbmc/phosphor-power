@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ee0b0f_644432b8",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "In this situation it is not accurate to pass errno.  We don\u0027t know why the pointer is nullptr.  It could be a firmware error, or it could be an I2C error.  Since we don\u0027t have an I2CException, we don\u0027t have a valid captured errno value.\n\nerrno is set by many C functions, and it is difficult to know when those functions are called by higher level C++ code.  So unless you capture the value right where the failure occurs, there is a good chance another line of C/C++ code calls a function that modifies errno.\n\nI\u0027d suggest modifying the last parameter of reportI2CPel() to default to \"0\".  That is a safe value indicating no problem within errno.  You could also just change the parameter to be an int and default to 0.\n\nThen in cases like this where you want to call reportI2CPel() but you don\u0027t have a valid errno value, you can just omit that parameter.\n\nThis comment applies to all places where you call reportI2CPel() but did not catch an I2CException with the captured errno value.",
+      "range": {
+        "startLine": 83,
+        "startChar": 41,
+        "endLine": 83,
+        "endChar": 62
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c40db9f_87b9ad5e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "As discussed above, the value of errno could have been modified by other code since the failure occurred.\n\nYou can just change your catch to\n```\ncatch (const i2c::I2CException\u0026 e)\n```\n\nand then get the captured errno value from `e.errorCode`.  The exception contains the captured errno value.\n\nThis same comment applies to all other places where you catch an exception from the I2CInterface class.",
+      "range": {
+        "startLine": 214,
+        "startChar": 51,
+        "endLine": 214,
+        "endChar": 72
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95b1bd19_fcffea11",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "The additional data keys by convention are all uppercase and do not have a trailing colon.",
+      "range": {
+        "startLine": 456,
+        "startChar": 24,
+        "endLine": 456,
+        "endChar": 34
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ec0c89_2a8666c5",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "As mentioned in one of the other files, I think you should change this to have a default value.  Then when callers don\u0027t have a valid errno value then can just omit the parameter.  You could also make it an int if that would be simpler.\n\ne.g.\n```\nconst std::string\u0026 errnoString \u003d \"0\");\n```\n\nor\n```\nint errnoValue \u003d 0);\n```",
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

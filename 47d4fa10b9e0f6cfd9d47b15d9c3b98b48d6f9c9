@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ded3d66_d922c12c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "Nit: extra \"logged\" here?",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 29
+      },
+      "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc14220b_b5d02bd4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-10T23:00:43Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 50,
+        "startChar": 13,
+        "endLine": 50,
+        "endChar": 16
+      },
+      "revId": "47d4fa10b9e0f6cfd9d47b15d9c3b98b48d6f9c9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e8aa58bb_118d16a1",
