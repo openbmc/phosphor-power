@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d5a90f_68c7744e",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-11T17:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67ee0b0f_644432b8",
+      "range": {
+        "startLine": 83,
+        "startChar": 41,
+        "endLine": 83,
+        "endChar": 62
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c40db9f_87b9ad5e",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-10T23:00:43Z",
       "side": 1,
       "message": "As discussed above, the value of errno could have been modified by other code since the failure occurred.\n\nYou can just change your catch to\n```\ncatch (const i2c::I2CException\u0026 e)\n```\n\nand then get the captured errno value from `e.errorCode`.  The exception contains the captured errno value.\n\nThis same comment applies to all other places where you catch an exception from the I2CInterface class.",
+      "range": {
+        "startLine": 214,
+        "startChar": 51,
+        "endLine": 214,
+        "endChar": 72
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "546a0e5c_57af2106",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-11T17:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c40db9f_87b9ad5e",
       "range": {
         "startLine": 214,
         "startChar": 51,
@@ -70,6 +118,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d437539_f27cb0cd",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-11T17:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95b1bd19_fcffea11",
+      "range": {
+        "startLine": 456,
+        "startChar": 24,
+        "endLine": 456,
+        "endChar": 34
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e847e34_a42ada85",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-11T17:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95b1bd19_fcffea11",
+      "range": {
+        "startLine": 456,
+        "startChar": 24,
+        "endLine": 456,
+        "endChar": 34
+      },
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24ec0c89_2a8666c5",
@@ -83,6 +179,24 @@
       "writtenOn": "2025-03-10T23:00:43Z",
       "side": 1,
       "message": "As mentioned in one of the other files, I think you should change this to have a default value.  Then when callers don\u0027t have a valid errno value then can just omit the parameter.  You could also make it an int if that would be simpler.\n\ne.g.\n```\nconst std::string\u0026 errnoString \u003d \"0\");\n```\n\nor\n```\nint errnoValue \u003d 0);\n```",
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2eed18_22760b3e",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-11T17:52:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24ec0c89_2a8666c5",
       "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
