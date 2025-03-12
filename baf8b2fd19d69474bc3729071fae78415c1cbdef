@@ -50,6 +50,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d78d35b_00ae9696",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-12T15:31:59Z",
+      "side": 1,
+      "message": "Just curious; did you mean to remove this comment?  Same on line 171.",
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c40db9f_87b9ad5e",
         "filename": "tools/power-utils/aei_updater.cpp",
         "patchSetId": 5
