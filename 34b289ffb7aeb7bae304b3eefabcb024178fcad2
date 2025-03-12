@@ -3,6 +3,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16c0d699_fc901dd8",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-12T16:24:24Z",
+      "side": 1,
+      "message": "nit spelling",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d64aab_7df35e56",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-12T16:24:24Z",
+      "side": 1,
+      "message": "nit I think \"Event Log\" text is not needed here... we don\u0027t callout a log, and all the other similar comments just say for example \"// Callout PSU\" or \"// Callout PSU \u0026 I2C\"",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "183efccf_78d19e91",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-12T16:24:24Z",
+      "side": 1,
+      "message": "we\u0027ll do an extra 2s delay when we do the retry here, but this is an error path so thats fine",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c9b73d1_eef55fc8",
         "filename": "tools/power-utils/updater.cpp",
         "patchSetId": 8
@@ -14,6 +65,23 @@
       "writtenOn": "2025-03-12T15:31:59Z",
       "side": 1,
       "message": "I\u0027m not sure if the phosphor-logging support requires I2C_CALLOUT_ERRNO to be specified along with the bus and address for the automatic callouts to work.  That seems to be implied in the documentation here: https://github.com/openbmc/phosphor-logging/blob/master/extensions/openpower-pels/README.md#passing-callouts-in-with-the-additionaldata-property\n\nIn the phosphor-regulators code, in cases where I did not capture errno but it is an I2C problem, I specify I2C_CALLOUT_ERRNO with a value of \"0\".\n\nBut if you tested this and it wasn\u0027t required, then this code seems fine.",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5e05a0_c9420ac1",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-12T16:24:24Z",
+      "side": 1,
+      "message": "nit reportSWEventLog calls out the BMC0001 procedure.",
       "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
