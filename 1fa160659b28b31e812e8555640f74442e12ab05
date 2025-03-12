@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "12e09454_12c970ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-12T22:17:32Z",
+      "side": 1,
+      "message": "This has the same name as the previous one",
+      "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b7853560_b044d2b4",
@@ -14,6 +31,29 @@
       "writtenOn": "2025-03-12T21:08:36Z",
       "side": 1,
       "message": "Please review",
+      "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea1fc20_2aaeb8d8",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-12T22:17:32Z",
+      "side": 1,
+      "message": "Nit: missing \u0027g\u0027",
+      "range": {
+        "startLine": 433,
+        "startChar": 3,
+        "endLine": 433,
+        "endChar": 21
+      },
       "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
