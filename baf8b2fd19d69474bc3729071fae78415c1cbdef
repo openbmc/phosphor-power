@@ -65,6 +65,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e6ab69_192109f0",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Oops, no re-inserted",
+      "parentUuid": "9d78d35b_00ae9696",
+      "revId": "baf8b2fd19d69474bc3729071fae78415c1cbdef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c40db9f_87b9ad5e",

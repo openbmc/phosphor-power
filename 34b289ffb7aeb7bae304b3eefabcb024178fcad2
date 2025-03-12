@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56ea99ec_41ae4a2d",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16c0d699_fc901dd8",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35d64aab_7df35e56",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-03-12T16:24:24Z",
       "side": 1,
       "message": "nit I think \"Event Log\" text is not needed here... we don\u0027t callout a log, and all the other similar comments just say for example \"// Callout PSU\" or \"// Callout PSU \u0026 I2C\"",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c727cf0_a0266680",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35d64aab_7df35e56",
       "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c5c897_c3971a31",
+        "filename": "tools/power-utils/aei_updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "We have already 2s delay before reboot and 8s after.",
+      "parentUuid": "183efccf_78d19e91",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c9b73d1_eef55fc8",
@@ -65,6 +119,24 @@
       "writtenOn": "2025-03-12T15:31:59Z",
       "side": 1,
       "message": "I\u0027m not sure if the phosphor-logging support requires I2C_CALLOUT_ERRNO to be specified along with the bus and address for the automatic callouts to work.  That seems to be implied in the documentation here: https://github.com/openbmc/phosphor-logging/blob/master/extensions/openpower-pels/README.md#passing-callouts-in-with-the-additionaldata-property\n\nIn the phosphor-regulators code, in cases where I did not capture errno but it is an I2C problem, I specify I2C_CALLOUT_ERRNO with a value of \"0\".\n\nBut if you tested this and it wasn\u0027t required, then this code seems fine.",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cc8c1aa_8154d524",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c9b73d1_eef55fc8",
       "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -86,6 +158,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8cba8c9_3b7268b7",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f5e05a0_c9420ac1",
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1928530c_a80f81ad",
@@ -99,6 +189,30 @@
       "writtenOn": "2025-03-12T15:31:59Z",
       "side": 1,
       "message": "Nit: No need for this to be a reference.",
+      "range": {
+        "startLine": 183,
+        "startChar": 58,
+        "endLine": 183,
+        "endChar": 59
+      },
+      "revId": "34b289ffb7aeb7bae304b3eefabcb024178fcad2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "978c4b07_4948b233",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-12T21:08:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1928530c_a80f81ad",
       "range": {
         "startLine": 183,
         "startChar": 58,
