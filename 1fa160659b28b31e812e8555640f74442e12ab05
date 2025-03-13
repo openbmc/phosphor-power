@@ -20,6 +20,42 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "636d2fd3_7b89702f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-13T01:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12e09454_12c970ea",
+      "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd76ca9a_311ca34a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-13T01:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12e09454_12c970ea",
+      "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b7853560_b044d2b4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -48,6 +84,30 @@
       "writtenOn": "2025-03-12T22:17:32Z",
       "side": 1,
       "message": "Nit: missing \u0027g\u0027",
+      "range": {
+        "startLine": 433,
+        "startChar": 3,
+        "endLine": 433,
+        "endChar": 21
+      },
+      "revId": "1fa160659b28b31e812e8555640f74442e12ab05",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e8dfa11_c09881bf",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-13T01:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aea1fc20_2aaeb8d8",
       "range": {
         "startLine": 433,
         "startChar": 3,
