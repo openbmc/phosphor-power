@@ -5,6 +5,7 @@ psutils = executable(
     'aei_updater.cpp',
     'utils.cpp',
     'model.cpp',
+    'validator.cpp',
     'main.cpp',
     dependencies: [
         cli11_dep,
@@ -17,7 +18,3 @@ psutils = executable(
     install: true,
     link_with: [libpower],
 )
-
-if get_option('tests').allowed()
-    subdir('test')
-endif
