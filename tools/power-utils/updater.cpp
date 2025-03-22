@@ -21,6 +21,7 @@
 #include "types.hpp"
 #include "utility.hpp"
 #include "utils.hpp"
+#include "validator.hpp"
 #include "version.hpp"
 
 #include <phosphor-logging/lg2.hpp>
@@ -208,6 +209,22 @@ bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
     int ret = updaterPtr->doUpdate();
     updaterPtr->bindUnbind(true);
     return ret == 0;
+}
+
+bool validateAndUpdate(sdbusplus::bus_t& bus,
+                       const std::string& psuInventoryPath,
+                       const std::string& imageDir)
+{
+    auto poweredOn = phosphor::power::util::isPoweredOn(bus, true);
+    validator::PSUUpdateValidator psuValidator(bus, psuInventoryPath);
+    if (!poweredOn && psuValidator.validToUpdate())
+    {
+        return updater::update(bus, psuInventoryPath, imageDir);
+    }
+    else
+    {
+        return false;
+    }
 }
 
 Updater::Updater(const std::string& psuInventoryPath,

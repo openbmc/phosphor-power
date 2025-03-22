@@ -16,6 +16,7 @@
 #include "model.hpp"
 #include "updater.hpp"
 #include "utility.hpp"
+#include "validator.hpp"
 #include "version.hpp"
 
 #include <CLI/CLI.hpp>
@@ -31,6 +32,7 @@ int main(int argc, char** argv)
 {
     std::string psuPathVersion, psuPathModel;
     std::vector<std::string> versions;
+    bool validateUpdate = false;
     bool rawOutput = false;
     std::vector<std::string> updateArguments;
 
@@ -42,11 +44,17 @@ int main(int argc, char** argv)
                        "Get PSU model from inventory path");
     action->add_option("-c,--compare", versions,
                        "Compare and get the latest version");
-    action
-        ->add_option("-u,--update", updateArguments,
-                     "Update PSU firmware, expecting two arguments: "
-                     "<PSU inventory path> <image-dir>")
-        ->expected(2);
+    auto updateOpt =
+        action
+            ->add_option("-u,--update", updateArguments,
+                         "Update PSU firmware, expecting two arguments: "
+                         "<PSU inventory path> <image-dir>")
+            ->expected(2)
+            ->type_name("PSU_PATH IMAGE_DIR");
+    app.add_flag(
+           "--validate", validateUpdate,
+           "Validate number of present PSU vs number of required PSUs and all PSUs have same model  before updating firmware")
+        ->needs(updateOpt);
     action->require_option(1); // Only one option is supported
     app.add_flag("--raw", rawOutput, "Output raw text without linefeed");
     CLI11_PARSE(app, argc, argv);
@@ -69,7 +77,18 @@ int main(int argc, char** argv)
     if (!updateArguments.empty())
     {
         assert(updateArguments.size() == 2);
-        if (updater::update(bus, updateArguments[0], updateArguments[1]))
+        bool updateStatus = false;
+        if (validateUpdate)
+        {
+            updateStatus = updater::validateAndUpdate(bus, updateArguments[0],
+                                                      updateArguments[1]);
+        }
+        else
+        {
+            updateStatus =
+                updater::update(bus, updateArguments[0], updateArguments[1]);
+        }
+        if (updateStatus)
         {
             ret = "Update successful";
             lg2::info("Successful update to PSU: {PSU}", "PSU",
