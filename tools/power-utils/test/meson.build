@@ -7,6 +7,8 @@ test(
         'test_version.cpp',
         '../updater.cpp',
         '../aei_updater.cpp',
+        '../validator.cpp',
+        '../model.cpp',
         '../utils.cpp',
         '../version.cpp',
         dependencies: [gtest, gmock, nlohmann_json_dep, phosphor_logging],
