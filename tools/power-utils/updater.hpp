@@ -53,6 +53,19 @@ constexpr auto INFORMATIONAL_SEVERITY =
 bool update(sdbusplus::bus_t& bus, const std::string& psuInventoryPath,
             const std::string& imageDir);
 
+/**
+ * Validate and Update PSU firmware
+ *
+ * @param[in] bus - The sdbusplus DBus bus connection
+ * @param[in] psuInventoryPath - The inventory path of the PSU
+ * @param[in] imageDir - The directory containing the PSU image
+ *
+ * @return true if successful, otherwise false
+ */
+bool validateAndUpdate(sdbusplus::bus_t& bus,
+                       const std::string& psuInventoryPath,
+                       const std::string& imageDir);
+
 class Updater
 {
   public:
