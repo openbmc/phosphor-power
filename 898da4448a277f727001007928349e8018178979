@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bec38ec3_ebcb3fb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-24T21:54:12Z",
+      "side": 1,
+      "message": "You may 3 present and same model PSUs while the redundancy defined as two. If you don\u0027t like that I can remove it.",
+      "parentUuid": "7f578352_bbbfc971",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fc18ade_636ead28",
         "filename": "tools/power-utils/main.cpp",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "writtenOn": "2025-03-24T20:51:34Z",
       "side": 1,
       "message": "is it worth describing what \"PSU requirement\" this is for (eg checking for valid system psu configuration since there is not just 1 config per system), or is it intentionally vauge to allow for other potential requirements?",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86dfcf56_b640a781",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-24T21:54:12Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean, isn\u0027t systems have different requirement? some require 4PSUs while other require 2 PSUs?",
+      "parentUuid": "4fc18ade_636ead28",
       "revId": "898da4448a277f727001007928349e8018178979",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "223850f7_02f756f0",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-24T21:54:12Z",
+      "side": 1,
+      "message": "This function calls validate class and update. Do I need to explain each?",
+      "parentUuid": "ee02ca65_907cf91c",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80d75e5e_927bfaf2",
         "filename": "tools/power-utils/validator.hpp",
         "patchSetId": 4
@@ -82,6 +136,24 @@
       "writtenOn": "2025-03-24T20:51:34Z",
       "side": 1,
       "message": "looks like copy/paste text needs to be updated",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf99ac8f_e35c1ae1",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-24T21:54:12Z",
+      "side": 1,
+      "message": "yep, I will fix it.",
+      "parentUuid": "80d75e5e_927bfaf2",
       "revId": "898da4448a277f727001007928349e8018178979",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
