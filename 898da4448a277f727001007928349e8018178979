@@ -90,6 +90,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "973bab7e_e3151010",
+        "filename": "tools/power-utils/main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-25T14:39:27Z",
+      "side": 1,
+      "message": "We have lots of requirements for handling PSU\u0027s (eg we\u0027re required to log SRCs for faults, we\u0027re required to support hot-plug, we\u0027re required to turn them on during a system power on, etc).  What requirement are we \"validating\" with this check?",
+      "parentUuid": "86dfcf56_b640a781",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb47046_13744841",
+        "filename": "tools/power-utils/updater.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-25T14:39:27Z",
+      "side": 1,
+      "message": "nit: typically \"power on\" means to power the system on, and \"powered on\" is used when checking the state of the system (for example the \"isPoweredOn\" function is used to check the system state).\n\nCan you name the variable something like \"poweredOn\" instead of \"powerOn\" so it\u0027s obvious we\u0027re checking the state of the system; and we\u0027re not deciding whether to power on?  It\u0027s a subtle distinction but will make reading the code a little easier.",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee02ca65_907cf91c",
         "filename": "tools/power-utils/updater.hpp",
         "patchSetId": 4
@@ -125,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1f3444a_10ba8839",
+        "filename": "tools/power-utils/updater.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-25T14:39:27Z",
+      "side": 1,
+      "message": "No need to explain what we\u0027re updating, thats obvious from \"update psu firmware\".  But what are we validating, the psu firmware itself, or something else?",
+      "parentUuid": "223850f7_02f756f0",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "80d75e5e_927bfaf2",
         "filename": "tools/power-utils/validator.hpp",
         "patchSetId": 4
@@ -154,6 +207,23 @@
       "side": 1,
       "message": "yep, I will fix it.",
       "parentUuid": "80d75e5e_927bfaf2",
+      "revId": "898da4448a277f727001007928349e8018178979",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf72623d_26498a8f",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-03-25T14:39:27Z",
+      "side": 1,
+      "message": "\"redundantCount\" is the Total number of PSU\u0027s required to be in this system configuration",
       "revId": "898da4448a277f727001007928349e8018178979",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
