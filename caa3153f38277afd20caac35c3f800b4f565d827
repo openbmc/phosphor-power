@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34ac95c3_b22f0ebd",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "900f9abf_738e6dac",
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "514fa0cd_f021a1bd",
@@ -48,6 +66,30 @@
       "writtenOn": "2025-03-26T21:10:06Z",
       "side": 1,
       "message": "it doesn\u0027t matter too much, but you could cut down on mapper calls by making this static, and only calling the mapper if it\u0027s empty:\n\nstatic string service;\nif (service.empty())\n   service \u003d ...",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 26
+      },
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d140799f_9fd4991a",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "I don\u0027t need the service will change getProperty to\ngetProperty(INVENTORY_IFACE, PRESENT_PROP, path,INVENTORY_MGR_IFACE, bus, present)",
+      "parentUuid": "514fa0cd_f021a1bd",
       "range": {
         "startLine": 54,
         "startChar": 12,
@@ -81,6 +123,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b55f51da_e7ddabd5",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "Removed all unneeded namespaces.",
+      "parentUuid": "e9c23667_bc0a02ba",
+      "range": {
+        "startLine": 56,
+        "startChar": 12,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7c56344_a3d2695f",
@@ -94,6 +160,30 @@
       "writtenOn": "2025-03-26T21:10:06Z",
       "side": 1,
       "message": "If you use get_if, you\u0027ll want to check if the pointer comes back null or not before using it, otherwise you may as well just call std::get, which is also fine as far as I\u0027m concerned.  This applies below as well.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 54
+      },
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e529495d_a3ba0c85",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "Good point, added check for null ptr",
+      "parentUuid": "e7c56344_a3d2695f",
       "range": {
         "startLine": 115,
         "startChar": 0,
@@ -127,6 +217,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f55ce734_af5790ad",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53127afc_06cff51b",
+      "range": {
+        "startLine": 138,
+        "startChar": 66,
+        "endLine": 138,
+        "endChar": 74
+      },
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a4bd970_51d7f650",
@@ -140,6 +254,24 @@
       "writtenOn": "2025-03-26T21:10:06Z",
       "side": 1,
       "message": "nit: empty line",
+      "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80fb9b80_fab0b46f",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-26T23:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a4bd970_51d7f650",
       "revId": "caa3153f38277afd20caac35c3f800b4f565d827",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
