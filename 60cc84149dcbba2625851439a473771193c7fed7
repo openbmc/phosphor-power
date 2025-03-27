@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21e37d51_c0bacd51",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-03-27T13:29:55Z",
+      "side": 1,
+      "message": "can just remove this",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 27
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f5dd3a_9d8c8100",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-03-27T13:29:55Z",
+      "side": 1,
+      "message": "get_if says it returns:\n```\nPointer to the value stored in the pointed-to variant or null pointer on error. \n```\nso you\u0027d still want to check against nullptr  before you dereference it.  Checking against empty() probably isn\u0027t necessary:\n\nif ((supportedModel \u003d\u003d nullptr) || (*supportedModel !\u003d targetPsuModel))\n   continue",
+      "range": {
+        "startLine": 118,
+        "startChar": 13,
+        "endLine": 118,
+        "endChar": 37
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4ee92d_94b4779f",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-03-27T13:29:55Z",
+      "side": 1,
+      "message": "Basically, I think you need to either use std::get_if and then check the result against a nullptr, or just use std::get and then you don\u0027t have to worry about it though it assumes the variant holds that type or else it will throw.",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
