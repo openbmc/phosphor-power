@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "777490e7_95108038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Looks close.  Nice work.  A few comments.",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89b16738_3a5357a7",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Is this needed in this file?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21e37d51_c0bacd51",
@@ -19,6 +59,75 @@
         "startChar": 4,
         "endLine": 52,
         "endChar": 27
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0a78700_052b7f19",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "I noticed in the phosphor-power-supply application it specifies \"/\" here rather than \"/xyz/openbmc_project/inventory\".\n\nMore specific is better, since it will lead to less wasted results.  But do we know if the EM data is guaranteed to be below that path?",
+      "range": {
+        "startLine": 85,
+        "startChar": 43,
+        "endLine": 85,
+        "endChar": 53
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07c12922_8b0fa52f",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Since you assigned this to the service variable above, you should use it here?",
+      "range": {
+        "startLine": 103,
+        "startChar": 42,
+        "endLine": 103,
+        "endChar": 65
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48868214_1fff961c",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Nit: properties?",
+      "range": {
+        "startLine": 107,
+        "startChar": 56,
+        "endLine": 107,
+        "endChar": 65
       },
       "revId": "60cc84149dcbba2625851439a473771193c7fed7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -49,6 +158,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f7994a0_ce3464c4",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Not sure why you want a C string here?",
+      "range": {
+        "startLine": 119,
+        "startChar": 27,
+        "endLine": 119,
+        "endChar": 36
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6b4ee92d_94b4779f",
         "filename": "tools/power-utils/validator.cpp",
         "patchSetId": 6
@@ -60,6 +192,115 @@
       "writtenOn": "2025-03-27T13:29:55Z",
       "side": 1,
       "message": "Basically, I think you need to either use std::get_if and then check the result against a nullptr, or just use std::get and then you don\u0027t have to worry about it though it assumes the variant holds that type or else it will throw.",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e41d819_7098587d",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Yeah if you use std::get then you\u0027ll need to wrap it in a throw/catch",
+      "parentUuid": "6b4ee92d_94b4779f",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44f5cd0a_882d4a8c",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "I had a design question.  Is this class supposed to replace Updater::isReadyToUpdate()?  Or be in addition to it?\n\nThere are some checks that are now done twice, like whether the system is on.  \n\nThere are some checks that isReadyToUpdate() does that this code does not, like looking at the PMBus data (VOUT_FAULT, UV_FAULT), etc.\n\nIf they are both supposed to run, and the PMBus data for all PSUs is checked, then a little duplication is OK I guess?",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e27d28_03072d92",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Headers should include the types they explicitly use, so you should include the headers for sdbusplus::bus, std::string, etc.",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2548b307_73735ab2",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Missing the \u0027bus\u0027 parameter name",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d55658a7_468ff72a",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "Not a parameter",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0b56b1c_b622f69f",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-03-27T19:57:06Z",
+      "side": 1,
+      "message": "The BMC coding convention is to not used sized integers unless it is necessary, such as when we have I2C or binary data with a fixed size.\n\nFor this reason these two vars should probably be int or unsigned int.",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 13
+      },
       "revId": "60cc84149dcbba2625851439a473771193c7fed7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
