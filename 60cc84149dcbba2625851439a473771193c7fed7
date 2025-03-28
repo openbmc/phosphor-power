@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "531ce124_e106ef0a",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "89b16738_3a5357a7",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21e37d51_c0bacd51",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-03-27T13:29:55Z",
       "side": 1,
       "message": "can just remove this",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 27
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af23740b_01c55775",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21e37d51_c0bacd51",
       "range": {
         "startLine": 52,
         "startChar": 4,
@@ -87,6 +135,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c42222a_11bcdc81",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0a78700_052b7f19",
+      "range": {
+        "startLine": 85,
+        "startChar": 43,
+        "endLine": 85,
+        "endChar": 53
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07c12922_8b0fa52f",
@@ -100,6 +172,30 @@
       "writtenOn": "2025-03-27T19:57:06Z",
       "side": 1,
       "message": "Since you assigned this to the service variable above, you should use it here?",
+      "range": {
+        "startLine": 103,
+        "startChar": 42,
+        "endLine": 103,
+        "endChar": 65
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a20f5589_cf5e4362",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07c12922_8b0fa52f",
       "range": {
         "startLine": 103,
         "startChar": 42,
@@ -133,6 +229,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54225bce_fa39ccce",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48868214_1fff961c",
+      "range": {
+        "startLine": 107,
+        "startChar": 56,
+        "endLine": 107,
+        "endChar": 65
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24f5dd3a_9d8c8100",
@@ -156,6 +276,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "938ce718_ba1c1950",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24f5dd3a_9d8c8100",
+      "range": {
+        "startLine": 118,
+        "startChar": 13,
+        "endLine": 118,
+        "endChar": 37
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f7994a0_ce3464c4",
@@ -169,6 +313,30 @@
       "writtenOn": "2025-03-27T19:57:06Z",
       "side": 1,
       "message": "Not sure why you want a C string here?",
+      "range": {
+        "startLine": 119,
+        "startChar": 27,
+        "endLine": 119,
+        "endChar": 36
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdca3508_44ee2f2d",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f7994a0_ce3464c4",
       "range": {
         "startLine": 119,
         "startChar": 27,
@@ -214,6 +382,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d630e66_209cf81f",
+        "filename": "tools/power-utils/validator.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b4ee92d_94b4779f",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44f5cd0a_882d4a8c",
@@ -227,6 +413,24 @@
       "writtenOn": "2025-03-27T19:57:06Z",
       "side": 1,
       "message": "I had a design question.  Is this class supposed to replace Updater::isReadyToUpdate()?  Or be in addition to it?\n\nThere are some checks that are now done twice, like whether the system is on.  \n\nThere are some checks that isReadyToUpdate() does that this code does not, like looking at the PMBus data (VOUT_FAULT, UV_FAULT), etc.\n\nIf they are both supposed to run, and the PMBus data for all PSUs is checked, then a little duplication is OK I guess?",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "131d0e41_7b78311d",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Using --validate flag will do validation in Validation class and will use isReadyToUpdate.",
+      "parentUuid": "44f5cd0a_882d4a8c",
       "revId": "60cc84149dcbba2625851439a473771193c7fed7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -248,6 +452,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "722f6e72_c58e71b5",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9e27d28_03072d92",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2548b307_73735ab2",
@@ -261,6 +483,24 @@
       "writtenOn": "2025-03-27T19:57:06Z",
       "side": 1,
       "message": "Missing the \u0027bus\u0027 parameter name",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10748d2e_c5835d31",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2548b307_73735ab2",
       "revId": "60cc84149dcbba2625851439a473771193c7fed7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -282,6 +522,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6309e244_74bf342f",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "d55658a7_468ff72a",
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0b56b1c_b622f69f",
@@ -295,6 +553,30 @@
       "writtenOn": "2025-03-27T19:57:06Z",
       "side": 1,
       "message": "The BMC coding convention is to not used sized integers unless it is necessary, such as when we have I2C or binary data with a fixed size.\n\nFor this reason these two vars should probably be int or unsigned int.",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 13
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2f1366_a08d552f",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-03-28T20:23:03Z",
+      "side": 1,
+      "message": "Changed to int",
+      "parentUuid": "e0b56b1c_b622f69f",
       "range": {
         "startLine": 92,
         "startChar": 4,
