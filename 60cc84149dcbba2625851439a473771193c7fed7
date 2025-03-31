@@ -585,6 +585,30 @@
       },
       "revId": "60cc84149dcbba2625851439a473771193c7fed7",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "619aa807_518df172",
+        "filename": "tools/power-utils/validator.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-03-31T14:46:29Z",
+      "side": 1,
+      "message": "size_t would also have been fine here.",
+      "parentUuid": "8f2f1366_a08d552f",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 13
+      },
+      "revId": "60cc84149dcbba2625851439a473771193c7fed7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
