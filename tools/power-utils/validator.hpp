@@ -87,7 +87,7 @@ class PSUUpdateValidator
     bool isItFunctional(const std::string& path);
 
   private:
-    sdbusplus::bus::bus& bus;          // D-Bus connection instance
+    sdbusplus::bus_t& bus;             // D-Bus connection instance
     std::vector<std::string> psuPaths; // List of PSU object paths
     std::string targetPsuModel;        // Model name of the reference PSU
     std::string psuPath;               // Path  of the referenced PSU
