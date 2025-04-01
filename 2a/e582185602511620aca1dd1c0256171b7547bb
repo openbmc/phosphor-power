@@ -1,0 +1,8 @@
+Code-Review+2: Shawn McCarney <shawnmm@us.ibm.com>
+Verified+1: OpenBMC CI <openbmcbump-ci@yahoo.com>
+Code-Review+1: George Liu <liuxiwei@ieisystem.com>
+Submitted-by: Shawn McCarney <shawnmm@us.ibm.com>
+Submitted-at: Tue, 01 Apr 2025 15:21:17 +0000
+Reviewed-on: https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/79320
+Project: openbmc/phosphor-power
+Branch: refs/heads/master
