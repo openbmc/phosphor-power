@@ -93,3 +93,12 @@ option(
     type: 'boolean',
     description: 'Enable support for power supply utilities',
 )
+option(
+    'pgood-timeout-value',
+    type: 'integer',
+    min: 5,
+    max: 30,
+    value: 10,
+    description: '''The amount of time the power-sequencer will wait for pgood
+                    to turn on or off before timing out''',
+)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+
 #include "compatible_system_types_finder.hpp"
 #include "device_finder.hpp"
 #include "power_interface.hpp"
@@ -151,7 +153,7 @@ class PowerControl : public PowerObject
     /**
      * Power good timeout constant
      */
-    static constexpr std::chrono::seconds pgoodTimeout{10};
+    static constexpr std::chrono::seconds pgoodTimeout{PGOOD_TIMEOUT};
 
     /**
      * Point in time at which power good timeout will take place
