@@ -42,7 +42,7 @@ std::vector<std::unique_ptr<PowerSupply>> powerSupplies;
 } // namespace
 
 ColdRedundancy::ColdRedundancy(
-    boost::asio::io_service& io,
+    boost::asio::io_context& io,
     std::shared_ptr<sdbusplus::asio::connection>& systemBus) :
     filterTimer(io), systemBus(systemBus)
 {

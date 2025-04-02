@@ -32,7 +32,7 @@ class ColdRedundancy
      * @param[in] dbusConnection - D-Bus connection
      */
     ColdRedundancy(
-        boost::asio::io_service& io,
+        boost::asio::io_context& io,
         std::shared_ptr<sdbusplus::asio::connection>& dbusConnection);
 
     /**

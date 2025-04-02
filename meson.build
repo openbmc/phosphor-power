@@ -20,6 +20,17 @@ if meson.get_compiler('cpp').get_id() == 'clang'
     add_global_arguments('-Wno-defaulted-function-deleted', language: 'cpp')
 endif
 
+add_project_arguments(
+    cxx.get_supported_arguments(
+        [
+            '-DBOOST_ALL_NO_LIB',
+            '-DBOOST_ASIO_DISABLE_THREADS',
+            '-DBOOST_ASIO_NO_DEPRECATED',
+        ],
+    ),
+    language: 'cpp',
+)
+
 build_tests = get_option('tests')
 
 if get_option('oe-sdk').allowed()
