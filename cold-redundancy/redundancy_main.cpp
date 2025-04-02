@@ -19,7 +19,7 @@
 
 int main(void)
 {
-    boost::asio::io_service io;
+    boost::asio::io_context io;
     auto systemBus = std::make_shared<sdbusplus::asio::connection>(io);
 
     systemBus->request_name("xyz.openbmc_project.PSURedundancy");
