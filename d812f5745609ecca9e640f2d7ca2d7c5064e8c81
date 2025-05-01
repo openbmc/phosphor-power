@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "922c69e4_ad76b576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "Good start Faisal.  Thanks for putting this document in Gerrit so we can more easily handle comments/replies.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "408c6fe7_18e27db7",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "I\u0027m not sure what this sentence is saying.  I think this app gets the PSUs and PSU configuration by looking for interfaces hosted by EM.  I don\u0027t think (?) it uses a fixed path with EM data.\n\nThe app does make assumptions about the path of the PSU object paths from Inventory Manager, using a fixed \u0027base path\u0027 and appending a PSU number.",
+      "range": {
+        "startLine": 5,
+        "startChar": 70,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f714f5b_a82bbd30",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "Nit: changes",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b05a152_c2a7bf46",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "Should add something about getting the status of each chassis.  A chassis maybe be missing, might not have input power, might be garded/deconfigured, etc.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8fb031d_98057067",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "As we discussed offline, I would suggest a class hierarchy like the following:\n* PSUManager - one object, handles D-Bus/Entity Manager queries/events, loops over all chassis\n  * Chassis - one per physical chassis.  Checks the chassis state.  Loops over all PSUs within the chassis\n    * PowerSupply - one per PSU.  Few/no changes from current class.\n\nI think we don\u0027t want a bunch of PSUManager objects, because then each one will be doing expensive D-Bus queries and subscribing to D-Bus events.  Instead of receiving events one time we\u0027ll receive them many times.  This could increase some of the timing problems we\u0027ve had to work around.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14b0bfbb_81d7d440",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "@spinler@us.ibm.com Do you think it is better to look for the list of chassis initially from Inventory Manager or Entity Manager?\n\nIn both cases, should the code look for objects implementing a chassis interface vs. hardcoding paths?",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba0528b_32b1df66",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "We initially need to get the PSU information from Entity Manager right?  To get the I2C bus, address, configuration, etc.\n\nThen given that information we need to find the corresponding Inventory Manager object path in order to get information like presence, availability, etc.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "106b795d_896996b4",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "Note that based on a recent design meeting, single chassis systems will still have \u0027chassis\u0027 in the object path vs \u0027chassis0\u0027 or \u0027chassis1\u0027.\n\nSo the number is only present in multi-chassis systems, but we need to support both with the same implementation.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b7a9686_cdddb58a",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-01T14:39:23Z",
+      "side": 1,
+      "message": "What paths does the PSU app publish?  I know it publishes some PSU sensors, but are there others?",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
