@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07f8c872_63174fcb",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "408c6fe7_18e27db7",
+      "range": {
+        "startLine": 5,
+        "startChar": 70,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f714f5b_a82bbd30",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-05-01T14:39:23Z",
       "side": 1,
       "message": "Nit: changes",
+      "range": {
+        "startLine": 12,
+        "startChar": 10,
+        "endLine": 12,
+        "endChar": 16
+      },
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4840081a_ca2ffc5b",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f714f5b_a82bbd30",
       "range": {
         "startLine": 12,
         "startChar": 10,
@@ -81,6 +129,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "878cb47e_350e41a1",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0b05a152_c2a7bf46",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8fb031d_98057067",
@@ -94,6 +160,24 @@
       "writtenOn": "2025-05-01T14:39:23Z",
       "side": 1,
       "message": "As we discussed offline, I would suggest a class hierarchy like the following:\n* PSUManager - one object, handles D-Bus/Entity Manager queries/events, loops over all chassis\n  * Chassis - one per physical chassis.  Checks the chassis state.  Loops over all PSUs within the chassis\n    * PowerSupply - one per PSU.  Few/no changes from current class.\n\nI think we don\u0027t want a bunch of PSUManager objects, because then each one will be doing expensive D-Bus queries and subscribing to D-Bus events.  Instead of receiving events one time we\u0027ll receive them many times.  This could increase some of the timing problems we\u0027ve had to work around.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2ca8ed_3d6e1832",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d8fb031d_98057067",
       "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -115,6 +199,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "913f1fc4_7af92a9c",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "14b0bfbb_81d7d440",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ba0528b_32b1df66",
@@ -128,6 +230,24 @@
       "writtenOn": "2025-05-01T14:39:23Z",
       "side": 1,
       "message": "We initially need to get the PSU information from Entity Manager right?  To get the I2C bus, address, configuration, etc.\n\nThen given that information we need to find the corresponding Inventory Manager object path in order to get information like presence, availability, etc.",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6883f131_be35d372",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3ba0528b_32b1df66",
       "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -149,6 +269,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa23096_8d4e98ea",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "106b795d_896996b4",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b7a9686_cdddb58a",
@@ -162,6 +300,24 @@
       "writtenOn": "2025-05-01T14:39:23Z",
       "side": 1,
       "message": "What paths does the PSU app publish?  I know it publishes some PSU sensors, but are there others?",
+      "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a511718_75c37b46",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-06T17:45:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3b7a9686_cdddb58a",
       "revId": "d812f5745609ecca9e640f2d7ca2d7c5064e8c81",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
