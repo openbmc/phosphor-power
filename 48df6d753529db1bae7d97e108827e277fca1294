@@ -88,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3e79178_aa6622f2",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "please update the sentence above to match then thanks",
+      "parentUuid": "7d1ec7d2_e218acbc",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1511a493_8fd35d69",
@@ -224,6 +242,42 @@
       "side": 1,
       "message": "I don\u0027t know the offset at this time, I\u0027m hoping to use the current logic as is and add some offset to I2C Bus/Addr based on the chassis number.",
       "parentUuid": "dbc9d053_0c6b664a",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c6433f7_76f89e55",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "Yep thats fine if you don\u0027t know yet exactly how it will work, my question is will it be documented here when you do so it can be reviewed?",
+      "parentUuid": "816ff778_a1b2193e",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00142cc6_af7382ab",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "So you will get the psu list from PIM after we\u0027ve already done the present detection and sent info to PIM? Or using the psu list that we\u0027ve gotten ourselves in psu-monitor?",
+      "parentUuid": "55beed65_110d001a",
       "revId": "48df6d753529db1bae7d97e108827e277fca1294",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },

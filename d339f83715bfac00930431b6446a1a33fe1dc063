@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619cf484_a7939dca",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "nit: missing space",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56b42fb1_c5b43912",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "please update the sentence above for correctness",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f71262_89c66cde",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T22:28:54Z",
+      "side": 1,
+      "message": "sorry I\u0027m not sure what this means.",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
