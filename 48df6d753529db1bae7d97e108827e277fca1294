@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb69a01e_a61d7e73",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Modified to: - It gets the PSUs device access information and allowed PSU configurations (such as PSU I2CBus and I2CAddress)using interfaces hosted by **entity manager**",
+      "parentUuid": "994bbb14_de3ccb1a",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3eb653c9_4c29d583",
@@ -48,6 +66,24 @@
       "writtenOn": "2025-05-07T15:02:07Z",
       "side": 1,
       "message": "does the app get the object path FROM inventory manager, or does it use the object path TO ACCESS inventory manager?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d1ec7d2_e218acbc",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Uses the object path to access inventory manager",
+      "parentUuid": "3eb653c9_4c29d583",
       "revId": "48df6d753529db1bae7d97e108827e277fca1294",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -69,6 +105,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c5b3732_e658ef0b",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1511a493_8fd35d69",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c986843_92edbf87",
@@ -82,6 +136,24 @@
       "writtenOn": "2025-05-07T15:02:07Z",
       "side": 1,
       "message": "can you please add a little more information on GetSubTree so we can see if/how it fits in?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a3c5b91_060ccef3",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Added link to getSubTree and description",
+      "parentUuid": "9c986843_92edbf87",
       "revId": "48df6d753529db1bae7d97e108827e277fca1294",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -120,6 +192,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55beed65_110d001a",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Not planning to change the existing logic of detecting PSUs, planning to get a vector of present PSUs from the current code.",
+      "parentUuid": "e0cd9ff2_7c308b72",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "816ff778_a1b2193e",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "I don\u0027t know the offset at this time, I\u0027m hoping to use the current logic as is and add some offset to I2C Bus/Addr based on the chassis number.",
+      "parentUuid": "dbc9d053_0c6b664a",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6352355d_68243185",
@@ -137,6 +245,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb4b44dd_bde4df1b",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Added comment to bullet #2 to add PGOOD Chassis to the chassis vector",
+      "parentUuid": "6352355d_68243185",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6c67d5e_3df67cb8",
@@ -150,6 +276,24 @@
       "writtenOn": "2025-05-07T15:02:07Z",
       "side": 1,
       "message": "I assume by this you mean the journal entries, or is it something else?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92cac83a_ef698c6d",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-07T20:26:53Z",
+      "side": 1,
+      "message": "Modified log to journal",
+      "parentUuid": "d6c67d5e_3df67cb8",
       "revId": "48df6d753529db1bae7d97e108827e277fca1294",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
