@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24df50e2_6c9f5a57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "Looks good, couple of questions/comments",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "994bbb14_de3ccb1a",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "I guess to be explicit, \"It gets the PSUs device access information and allowed PSU configurations using interfaces hosted by entity manager\".  \n\nThe psu information such as ccin and status_word it gets directly from the psu itself.",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eb653c9_4c29d583",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "does the app get the object path FROM inventory manager, or does it use the object path TO ACCESS inventory manager?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1511a493_8fd35d69",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "Thanks for putting an example in there, that helps (me at least) understand it.  Should the example have 0 or 1 at the very end though, I believe the path includes the psu number?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c986843_92edbf87",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "can you please add a little more information on GetSubTree so we can see if/how it fits in?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc9d053_0c6b664a",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "I assume at some later time you\u0027ll add the details here how to get the i2c bus info from the EM file that is offset by the chassis number; ie the virtual bus number to get to the psus in the right sled?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0cd9ff2_7c308b72",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "for \"Find all present PSUs in chassis\", I believe psu-monitor does the gpio presence detection itself.  Are you wanting to get just the present psu\u0027s to add to the vector, or all potential psu\u0027s from the backplane EM file to add to the vector?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6c67d5e_3df67cb8",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-07T15:02:07Z",
+      "side": 1,
+      "message": "I assume by this you mean the journal entries, or is it something else?",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
