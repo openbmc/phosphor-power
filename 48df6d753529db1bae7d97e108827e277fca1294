@@ -122,6 +122,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6352355d_68243185",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-05-07T16:40:11Z",
+      "side": 1,
+      "message": "Another new thing that needs to be done is to associate the multiple PGOOD properties with their chassis, so the PSUs in a chassis only react to PGOOD changes of that chassis.",
+      "revId": "48df6d753529db1bae7d97e108827e277fca1294",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6c67d5e_3df67cb8",
         "filename": "phosphor-power-supply/docs/MultiChassis.md",
         "patchSetId": 13
