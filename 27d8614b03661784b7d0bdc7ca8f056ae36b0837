@@ -1,0 +1,232 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ea14056_5d29d86a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Please remove this line.  Review rework is part of the process, like doing builds, and is not normally mentioned in the commit message.\n\nThe commit message is intended to explain what the enhancement does if the commit is applied.",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c0f1a34_c9398486",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Nit: missing space",
+      "range": {
+        "startLine": 8,
+        "startChar": 39,
+        "endLine": 8,
+        "endChar": 45
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c237985_1c6789af",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Nit: using a **fixed path**",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a98465e_664992d2",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Nit: changes",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44f0450_bb4a15a9",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "to instantiate one Chassis class per physical chassis.",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2b7627c_6bd9b1b4",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "associated with each chassis",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "331d6c11_5af74080",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Having code here is fine, but the details will probably change as you start working on it.\n\nYou don\u0027t have to change it, but another option is to describe it at a higher level with sentences, like:\n* Constructor will take as input the chassis number and inventory manager (?) object path\n* Will contain a list of PowerSupply instances\n* Will track the power good state of the chassis",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67f7fcf0_8fb105a2",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Should this be a chassis number instead?",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 56
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdaa9d3f_94c8957c",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "I think you should add them all, and each Chassis object should listen for D-Bus events to track the pgood status of that specific chassis.\n\nAt standby all will have a false pgood value.  Also, if something is fixed or starts working again, a chassis that had a false pgood value at runtime might be OK after the next boot.",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69fc55b4_866547d5",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Currently the code gets all possible power supplies from EntityManager.  I think we need to continue to do this?\n\nPSUs can be hot plugged, so we don\u0027t want to just get the ones that are present at the time phosphor-psu-monitor starts.\n\nAlso, on some systems it might be valid to add or remove a chassis while the BMC is running.  So the presence of chassis and PSUs is going to be dynamic.",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86eb26ee_8c65f800",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "Nit: add",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 10
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e4882b9_38e9953e",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-08T14:59:36Z",
+      "side": 1,
+      "message": "@derekh@us.ibm.com What is the list of conditions the PSU app should check for before monitoring PSUs and reporting errors?\n* Chassis is present\n* Chassis has power good\n* Chassis is not de-configured/garded?\n\nMaybe the second one automatically handles the third one?  Any others?",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
