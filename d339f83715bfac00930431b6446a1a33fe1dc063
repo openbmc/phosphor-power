@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1fa68bb_afd04c3f",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "619cf484_a7939dca",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56b42fb1_c5b43912",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e92327a9_346ca3f7",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56b42fb1_c5b43912",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8f71262_89c66cde",
@@ -48,6 +84,24 @@
       "writtenOn": "2025-05-07T22:28:54Z",
       "side": 1,
       "message": "sorry I\u0027m not sure what this means.",
+      "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e3eccac_6187ee0d",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Derek, let me know if this still an issue.",
+      "parentUuid": "a8f71262_89c66cde",
       "revId": "d339f83715bfac00930431b6446a1a33fe1dc063",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

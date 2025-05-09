@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41310f9e_faf979c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ea14056_5d29d86a",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c0f1a34_c9398486",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-05-08T14:59:36Z",
       "side": 1,
       "message": "Nit: missing space",
+      "range": {
+        "startLine": 8,
+        "startChar": 39,
+        "endLine": 8,
+        "endChar": 45
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd60e596_d8dfeacf",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c0f1a34_c9398486",
       "range": {
         "startLine": 8,
         "startChar": 39,
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6e0732_464d1276",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c237985_1c6789af",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a98465e_664992d2",
@@ -71,6 +131,30 @@
       "writtenOn": "2025-05-08T14:59:36Z",
       "side": 1,
       "message": "Nit: changes",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1408f99_3200c3ee",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a98465e_664992d2",
       "range": {
         "startLine": 21,
         "startChar": 10,
@@ -98,6 +182,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ac27e02_959e617e",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b44f0450_bb4a15a9",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2b7627c_6bd9b1b4",
@@ -115,6 +217,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34645961_d141825f",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2b7627c_6bd9b1b4",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "331d6c11_5af74080",
@@ -128,6 +248,24 @@
       "writtenOn": "2025-05-08T14:59:36Z",
       "side": 1,
       "message": "Having code here is fine, but the details will probably change as you start working on it.\n\nYou don\u0027t have to change it, but another option is to describe it at a higher level with sentences, like:\n* Constructor will take as input the chassis number and inventory manager (?) object path\n* Will contain a list of PowerSupply instances\n* Will track the power good state of the chassis",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf82766_ff20ac41",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "331d6c11_5af74080",
       "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -155,6 +293,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d49f1acc_362cf1cb",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67f7fcf0_8fb105a2",
+      "range": {
+        "startLine": 39,
+        "startChar": 33,
+        "endLine": 39,
+        "endChar": 56
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdaa9d3f_94c8957c",
@@ -168,6 +330,24 @@
       "writtenOn": "2025-05-08T14:59:36Z",
       "side": 1,
       "message": "I think you should add them all, and each Chassis object should listen for D-Bus events to track the pgood status of that specific chassis.\n\nAt standby all will have a false pgood value.  Also, if something is fixed or starts working again, a chassis that had a false pgood value at runtime might be OK after the next boot.",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e746cbb_886e2ec9",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdaa9d3f_94c8957c",
       "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -189,6 +369,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab80a58f_220d3fa9",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69fc55b4_866547d5",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86eb26ee_8c65f800",
@@ -202,6 +400,30 @@
       "writtenOn": "2025-05-08T14:59:36Z",
       "side": 1,
       "message": "Nit: add",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 10
+      },
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c11487c_220279d4",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86eb26ee_8c65f800",
       "range": {
         "startLine": 57,
         "startChar": 6,
@@ -243,6 +465,24 @@
       "side": 1,
       "message": "chassis should be present to send any cmds.\nchassis should have standby power applied and not doing cfam card CCM to send any cmds - this is new for multi-chassis (for bmc code).\n\nchassis should have power good for most of the fault handling - eg to log an SRC.  we still poll and read sensors at standby I believe.\nchassis deconfigured/garded has no impact on this.  just matters if on or off.",
       "parentUuid": "9e4882b9_38e9953e",
+      "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91b9a26d_fc093d63",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-09T19:42:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c595cde_0f69ca54",
       "revId": "27d8614b03661784b7d0bdc7ca8f056ae36b0837",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
