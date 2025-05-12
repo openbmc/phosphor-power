@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c22179a_483c2d31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-12T21:47:07Z",
+      "side": 1,
+      "message": "looks close!",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2540df55_9543eabd",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-12T21:47:07Z",
+      "side": 1,
+      "message": "nit: still missing the space",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c157ad41_5b6c4638",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-12T21:47:07Z",
+      "side": 1,
+      "message": "see comments in patchset 16.  we still monitor the psu\u0027s at standby (at standby the chassis \"pgood\" isn\u0027t on, it\u0027s at standby), but we only create PELs for the fails if the system is on",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
