@@ -19,7 +19,6 @@
 #include "power_supply.hpp"
 
 #include <CLI/CLI.hpp>
-#include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
 
 #include <iostream>

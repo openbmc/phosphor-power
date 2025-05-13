@@ -21,7 +21,6 @@
 #include "ucd90160.hpp"
 
 #include <CLI/CLI.hpp>
-#include <phosphor-logging/log.hpp>
 #include <sdeventplus/event.hpp>
 
 #include <chrono>

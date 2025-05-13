@@ -25,7 +25,7 @@
 #include "utility.hpp"
 
 #include <org/open_power/Witherspoon/Fault/error.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <functional>
@@ -83,8 +83,8 @@ PowerSupply::PowerSupply(const std::string& name, size_t inst,
     }
     catch (const ReadFailure& e)
     {
-        log<level::INFO>("Unable to read the 2 byte STATUS_WORD value to check "
-                         "for power-supply input faults.");
+        lg2::info("Unable to read the 2 byte STATUS_WORD value to check "
+                  "for power-supply input faults.");
     }
     presentMatch = std::make_unique<match_t>(
         bus, match::rules::propertiesChanged(inventoryPath, INVENTORY_IFACE),
@@ -112,7 +112,7 @@ void PowerSupply::getAccessType()
     fruJson = loadJSONFromFile(PSU_JSON_PATH);
     if (fruJson == nullptr)
     {
-        log<level::ERR>("InternalFailure when parsing the JSON file");
+        lg2::error("InternalFailure when parsing the JSON file");
         return;
     }
     inventoryPMBusAccessType = getPMBusAccessType(fruJson);
@@ -130,8 +130,7 @@ void PowerSupply::captureCmd(util::NamesValues& nv, const std::string& cmd,
         }
         catch (const std::exception& e)
         {
-            log<level::INFO>("Unable to capture metadata",
-                             entry("CMD=%s", cmd.c_str()));
+            lg2::info("Unable to capture metadata, CMD={CMD}", "CMD", cmd);
         }
     }
 }
@@ -260,8 +259,8 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
     {
         if (inputFault == 0)
         {
-            log<level::INFO>("INPUT or VIN_UV fault",
-                             entry("STATUS_WORD=0x%04X", statusWord));
+            lg2::info("INPUT or VIN_UV fault, STATUS_WORD={STATUS_WORD}",
+                      "STATUS_WORD", lg2::hex | lg2::field16, statusWord);
         }
 
         inputFault++;
@@ -280,8 +279,8 @@ void PowerSupply::checkInputFault(const uint16_t statusWord)
             // the powerOnFault de-glitching.
             powerOnFault = 0;
 
-            log<level::INFO>("INPUT_FAULT_WARN cleared",
-                             entry("POWERSUPPLY=%s", inventoryPath.c_str()));
+            lg2::info("INPUT_FAULT_WARN cleared, POWERSUPPLY={POWERSUPPLY}",
+                      "POWERSUPPLY", inventoryPath);
 
             resolveError(inventoryPath,
                          std::string(PowerSupplyInputFault::errName));
@@ -329,15 +328,15 @@ void PowerSupply::checkPGOrUnitOffFault(const uint16_t statusWord)
         if ((statusWord & status_word::POWER_GOOD_NEGATED) ||
             (statusWord & status_word::UNIT_IS_OFF))
         {
-            log<level::INFO>("PGOOD or UNIT_IS_OFF bit bad",
-                             entry("STATUS_WORD=0x%04X", statusWord));
+            lg2::info("PGOOD or UNIT_IS_OFF bit bad, STATUS_WORD={STATUS_WORD}",
+                      "STATUS_WORD", lg2::hex | lg2::field16, statusWord);
             powerOnFault++;
         }
         else
         {
             if (powerOnFault > 0)
             {
-                log<level::INFO>("PGOOD and UNIT_IS_OFF bits good");
+                lg2::info("PGOOD and UNIT_IS_OFF bits good");
                 powerOnFault = 0;
             }
         }
@@ -605,9 +604,8 @@ void PowerSupply::resolveError(const std::string& callout,
     }
     catch (const std::exception& e)
     {
-        log<level::INFO>("Failed to resolve error",
-                         entry("CALLOUT=%s", callout.c_str()),
-                         entry("ERROR=%s", message.c_str()));
+        lg2::info("Failed to resolve error, CALLOUT={CALLOUT}, ERROR={ERROR}",
+                  "CALLOUT", callout, "ERROR", message);
     }
 }
 
@@ -665,7 +663,7 @@ void PowerSupply::updateInventory()
 
         if (service.empty())
         {
-            log<level::ERR>("Unable to get inventory manager service");
+            lg2::error("Unable to get inventory manager service");
             return;
         }
 
@@ -678,7 +676,8 @@ void PowerSupply::updateInventory()
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(e.what(), entry("PATH=%s", inventoryPath.c_str()));
+        lg2::error("Exception in updateInventory: {ERROR}, PATH={PATH}",
+                   "ERROR", e, "PATH", inventoryPath);
     }
 }
 

@@ -21,7 +21,7 @@
 #include "utility.hpp"
 
 #include <org/open_power/Witherspoon/Fault/error.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 namespace phosphor
 {
@@ -116,8 +116,8 @@ int PGOODMonitor::run()
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(e.what());
-        log<level::ERR>("Unexpected failure prevented PGOOD checking");
+        lg2::error("Unexpected failure prevented PGOOD checking: {ERROR}",
+                   "ERROR", e);
     }
 
     // Letting the service fail won't help anything, so don't do it.

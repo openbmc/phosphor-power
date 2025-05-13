@@ -17,7 +17,7 @@
 
 #include <math.h>
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <chrono>
 
@@ -27,8 +27,6 @@ namespace power
 {
 namespace history
 {
-
-using namespace phosphor::logging;
 
 bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
 {
@@ -69,11 +67,11 @@ bool RecordManager::add(const std::vector<uint8_t>& rawRecord)
                 {
                     if (id != FIRST_SEQUENCE_ID)
                     {
-                        log<level::INFO>(
+                        lg2::info(
                             "Noncontiguous INPUT_HISTORY sequence ID "
-                            "found. Clearing old entries",
-                            entry("OLD_ID=%ld", previousID),
-                            entry("NEW_ID=%ld", id));
+                            "found. Clearing old entries. OLD_ID={OLD_ID}, "
+                            "NEW_ID={NEW_ID}",
+                            "OLD_ID", previousID, "NEW_ID", id);
                     }
                     records.clear();
                 }
@@ -130,8 +128,7 @@ size_t RecordManager::getRawRecordID(const std::vector<uint8_t>& data) const
 {
     if (data.size() != RAW_RECORD_SIZE)
     {
-        log<level::ERR>("Invalid INPUT_HISTORY size",
-                        entry("SIZE=%d", data.size()));
+        lg2::error("Invalid INPUT_HISTORY size {SIZE}", "SIZE", data.size());
         throw InvalidRecordException{};
     }
 
