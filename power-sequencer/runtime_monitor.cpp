@@ -21,7 +21,7 @@
 #include "utility.hpp"
 
 #include <org/open_power/Witherspoon/Fault/error.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 namespace phosphor
 {
@@ -42,7 +42,7 @@ int RuntimeMonitor::run()
 
 void RuntimeMonitor::onPowerLost(sdbusplus::message_t&)
 {
-    log<level::INFO>("PGOOD failure detected.  Checking for faults.");
+    lg2::info("PGOOD failure detected.  Checking for faults.");
 
     try
     {
@@ -60,7 +60,9 @@ void RuntimeMonitor::onPowerLost(sdbusplus::message_t&)
     catch (const std::exception& e)
     {
         // No need to crash
-        log<level::ERR>(e.what());
+        lg2::error(
+            "Exception occurred while checking for PGOOD faults in onPowerLost: {ERROR}",
+            "ERROR", e);
     }
 }
 

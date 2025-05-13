@@ -21,7 +21,7 @@
 #include <elog-errors.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <map>
@@ -137,9 +137,9 @@ bool UCD90160::checkVOUTFaults()
         // warnings so they won't cause errors
         if (vout)
         {
-            log<level::INFO>("A voltage rail has bits on in STATUS_VOUT",
-                             entry("STATUS_VOUT=0x%X", vout),
-                             entry("PAGE=%d", page));
+            lg2::info("A voltage rail has bits on in STATUS_VOUT,"
+                      "STATUS_VOUT={STATUS_VOUT}. PAGE={PAGE}",
+                      "STATUS_VOUT", lg2::hex, vout, "PAGE", page);
         }
 
         // Log errors if any non-warning bits on
@@ -158,7 +158,7 @@ bool UCD90160::checkVOUTFaults()
             }
             catch (const device_error::ReadFailure& e)
             {
-                log<level::ERR>("ReadFailure when collecting metadata");
+                lg2::error("ReadFailure when collecting metadata");
                 commit<device_error::ReadFailure>();
             }
 
@@ -225,7 +225,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
         {
             if (!accessError)
             {
-                log<level::ERR>(e.what());
+                lg2::error("Access Error Exception: {ERROR}", "ERROR", e);
                 accessError = true;
             }
             continue;
@@ -256,7 +256,7 @@ bool UCD90160::checkPGOODFaults(bool polling)
             }
             catch (const device_error::ReadFailure& e)
             {
-                log<level::ERR>("ReadFailure when collecting metadata");
+                lg2::error("ReadFailure when collecting metadata");
                 commit<device_error::ReadFailure>();
             }
 
@@ -287,7 +287,7 @@ void UCD90160::createPowerFaultLog()
     }
     catch (const device_error::ReadFailure& e)
     {
-        log<level::ERR>("ReadFailure when collecting metadata");
+        lg2::error("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
     }
 
@@ -319,8 +319,8 @@ fs::path UCD90160::findGPIODevice(const fs::path& path)
 
     if (gpioDevicePath.empty())
     {
-        log<level::ERR>("Could not find GPIO device path",
-                        entry("BASE_PATH=%s", path.c_str()));
+        lg2::error("Could not find GPIO device path, BASE_PATH={BASE_PATH}",
+                   "BASE_PATH", path);
     }
 
     return gpioDevicePath;
@@ -359,9 +359,9 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
 
     if (device.empty())
     {
-        log<level::ERR>(
-            "Missing GPIO device - cannot do GPIO analysis of fault",
-            entry("ANALYSIS_TYPE=%d\n", type));
+        lg2::error(
+            "Missing GPIO device - cannot do GPIO analysis of fault, ANALYSIS_TYPE={ANALYSIS_TYPE}",
+            "ANALYSIS_TYPE", type);
         return errorFound;
     }
 
@@ -387,9 +387,9 @@ bool UCD90160::doGPIOAnalysis(ucd90160::extraAnalysisType type)
             if (!gpioAccessError)
             {
                 // GPIO only throws InternalErrors - not worth committing.
-                log<level::ERR>(
-                    "GPIO read failed while analyzing a power fault",
-                    entry("CHIP_PATH=%s", path.c_str()));
+                lg2::error(
+                    "GPIO read failed while analyzing a power fault, CHIP_PATH={CHIP_PATH}",
+                    "CHIP_PATH", path);
 
                 gpioAccessError = true;
             }
@@ -450,7 +450,7 @@ void UCD90160::gpuPGOODError(const std::string& callout)
     }
     catch (const device_error::ReadFailure& e)
     {
-        log<level::ERR>("ReadFailure when collecting metadata");
+        lg2::error("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
     }
 
@@ -472,7 +472,7 @@ void UCD90160::gpuOverTempError(const std::string& callout)
     }
     catch (const device_error::ReadFailure& e)
     {
-        log<level::ERR>("ReadFailure when collecting metadata");
+        lg2::error("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
     }
 
@@ -494,7 +494,7 @@ void UCD90160::memGoodError(const std::string& callout)
     }
     catch (const device_error::ReadFailure& e)
     {
-        log<level::ERR>("ReadFailure when collecting metadata");
+        lg2::error("ReadFailure when collecting metadata");
         commit<device_error::ReadFailure>();
     }
 

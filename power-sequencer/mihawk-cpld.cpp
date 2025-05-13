@@ -13,7 +13,6 @@
 #include <elog-errors.hpp>
 #include <org/open_power/Witherspoon/Fault/error.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/log.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <chrono>
