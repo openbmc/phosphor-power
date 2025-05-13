@@ -18,6 +18,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4b5bf9c_0e38c48d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "Making good progress",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2540df55_9543eabd",
@@ -36,6 +53,29 @@
         "startChar": 2,
         "endLine": 8,
         "endChar": 16
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad3dcba1_076b6a04",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "Is this a D-Bus bus object?  I don\u0027t think it would make sense for the Chassis constructor to take as input an I2C bus number.  While the PSUs on some systems might share the same I2C bus within a chassis, that is not guaranteed.",
+      "range": {
+        "startLine": 37,
+        "startChar": 44,
+        "endLine": 37,
+        "endChar": 47
       },
       "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -66,6 +106,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3cb4bfdc_6043a5ed",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "You should specify which service or object path you are using as input to the getSubTree call.  Are you calling this an EntityManager chassis object path, or on an Inventory Manager chassis object path?",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c157ad41_5b6c4638",
         "filename": "phosphor-power-supply/docs/MultiChassis.md",
         "patchSetId": 18
@@ -77,6 +134,74 @@
       "writtenOn": "2025-05-12T21:47:07Z",
       "side": 1,
       "message": "see comments in patchset 16.  we still monitor the psu\u0027s at standby (at standby the chassis \"pgood\" isn\u0027t on, it\u0027s at standby), but we only create PELs for the fails if the system is on",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c28bbd2_eea230d3",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "It might be implied here, but I think the Chassis object should be checking the state of the physical chassis and then looping through/monitoring its own PSUs.  \n\nThe PSUManager object should just loop over the Chassis objects and tell each one to monitor their PSUs.\n\nI think that will make the code easier to understand and test.  Let each object control their own stuff.",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81f96da1_5235e53e",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "The PSU app will still need to get the PSU presence and VPD and then update those on D-Bus indirectly using the InventoryManager Notify interface.  The VPD/presence logic should be the same as long as the correct InventoryManager PSU object path has been located in the multi-chassis environment.  Not sure if you want to mention that here.",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fd79dbc_ff9efb59",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "As discussed offline, there should probably be a section here on the PowerSystemInputs interface and how that will be affected by multi-chassis.  @derekh@us.ibm.com can help, and if this is not fully designed yet you could at least add a section for it with the details as \"TBD\" (To Be Determined).",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de356476_ac46be8f",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-05-13T16:21:59Z",
+      "side": 1,
+      "message": "Discover the state of each chassis and react accordingly",
       "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
