@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c33992b_40f4b691",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-14T17:53:23Z",
+      "side": 1,
+      "message": "Looks close.\n\nOne additional recommendation, for later when implementing the changes, would be to save the journal before and after making changes to compare the behavior and make sure any differences are accounted for.",
+      "revId": "08363c7e8d20513a5b0429bf5ed27068dfb47365",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39299138_b90efdc6",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-14T17:53:23Z",
+      "side": 1,
+      "message": "I think it\u0027s missing what specifically from DBus is a parameter - I don\u0027t think DBus as a whole is a parameter?",
+      "range": {
+        "startLine": 36,
+        "startChar": 44,
+        "endLine": 36,
+        "endChar": 49
+      },
+      "revId": "08363c7e8d20513a5b0429bf5ed27068dfb47365",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74059773_a0ee8409",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-14T17:53:23Z",
+      "side": 1,
+      "message": "probably should clean up this sentence",
+      "range": {
+        "startLine": 69,
+        "startChar": 31,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "08363c7e8d20513a5b0429bf5ed27068dfb47365",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}

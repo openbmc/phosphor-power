@@ -178,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddba0397_2d452d50",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-05-14T17:53:23Z",
+      "side": 1,
+      "message": "I\u0027ll let Matt respond here but I believe he\u0027s asking about chassis presence, not about whether it\u0027s powered on or not",
+      "parentUuid": "705c8f29_0ca00bea",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 57
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cb4bfdc_6043a5ed",
         "filename": "phosphor-power-supply/docs/MultiChassis.md",
         "patchSetId": 18
