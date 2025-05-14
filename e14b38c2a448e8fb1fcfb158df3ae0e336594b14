@@ -58,6 +58,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3d71109_549fb10c",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2540df55_9543eabd",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 16
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad3dcba1_076b6a04",
@@ -71,6 +95,30 @@
       "writtenOn": "2025-05-13T16:21:59Z",
       "side": 1,
       "message": "Is this a D-Bus bus object?  I don\u0027t think it would make sense for the Chassis constructor to take as input an I2C bus number.  While the PSUs on some systems might share the same I2C bus within a chassis, that is not guaranteed.",
+      "range": {
+        "startLine": 37,
+        "startChar": 44,
+        "endLine": 37,
+        "endChar": 47
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75071a72_c1eab9dd",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Modified to:\nChassis class constructor take parameters D-Bus, chassis number, and object path",
+      "parentUuid": "ad3dcba1_076b6a04",
       "range": {
         "startLine": 37,
         "startChar": 44,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "705c8f29_0ca00bea",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "The plan to have all the chassis added whether powered on/off as suggested in https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/79980/16..18/phosphor-power-supply/docs/MultiChassis.md#b53",
+      "parentUuid": "78c0f180_8be48696",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 57
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cb4bfdc_6043a5ed",
         "filename": "phosphor-power-supply/docs/MultiChassis.md",
         "patchSetId": 18
@@ -117,6 +189,24 @@
       "writtenOn": "2025-05-13T16:21:59Z",
       "side": 1,
       "message": "You should specify which service or object path you are using as input to the getSubTree call.  Are you calling this an EntityManager chassis object path, or on an Inventory Manager chassis object path?",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5941be4b_ad7664a0",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "modified to say:  ... from inventory manager using getSubTree ...",
+      "parentUuid": "3cb4bfdc_6043a5ed",
       "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -155,6 +245,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b588d087_a06b5cd0",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "modified to: - The PSUManager object loops over all **chassis** that are present and have standby power.The **phosphor-psu-monitor** app monitors all PSUs associated with the chassis to: ....",
+      "parentUuid": "1c28bbd2_eea230d3",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7310867_1380d864",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c157ad41_5b6c4638",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81f96da1_5235e53e",
@@ -168,6 +294,24 @@
       "writtenOn": "2025-05-13T16:21:59Z",
       "side": 1,
       "message": "The PSU app will still need to get the PSU presence and VPD and then update those on D-Bus indirectly using the InventoryManager Notify interface.  The VPD/presence logic should be the same as long as the correct InventoryManager PSU object path has been located in the multi-chassis environment.  Not sure if you want to mention that here.",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "540ff851_59ff9008",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81f96da1_5235e53e",
       "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -189,6 +333,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e207de_c4f181b1",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fd79dbc_ff9efb59",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de356476_ac46be8f",
@@ -202,6 +364,24 @@
       "writtenOn": "2025-05-13T16:21:59Z",
       "side": 1,
       "message": "Discover the state of each chassis and react accordingly",
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4fcd618_8cd95253",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T14:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de356476_ac46be8f",
       "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
