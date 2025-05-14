@@ -224,6 +224,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cbdd50_4c26e344",
+        "filename": "phosphor-power-supply/docs/MultiChassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-05-14T20:03:56Z",
+      "side": 1,
+      "message": "Only present chassis, not supporting missing chassis in a system.",
+      "parentUuid": "fd563cad_fff4566f",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 57
+      },
+      "revId": "e14b38c2a448e8fb1fcfb158df3ae0e336594b14",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cb4bfdc_6043a5ed",
