@@ -18,16 +18,13 @@
 
 #include "types.hpp"
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/exception.hpp>
 #include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server.hpp>
 
-#include <format>
 #include <string>
 #include <tuple>
-
-using namespace phosphor::logging;
 
 namespace phosphor::power::sequencer
 {
@@ -47,8 +44,7 @@ int PowerInterface::callbackGetPgood(
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
             int pgood = pwrObj->getPgood();
-            log<level::INFO>(
-                std::format("callbackGetPgood: {}", pgood).c_str());
+            lg2::debug("callbackGetPgood: {PGOOD}", "PGOOD", pgood);
 
             sdbusplus::message_t(msg).append(pgood);
         }
@@ -60,7 +56,7 @@ int PowerInterface::callbackGetPgood(
     else
     {
         // The message or context were null
-        log<level::ERR>("Unable to service get pgood property callback");
+        lg2::error("Unable to service get pgood property callback");
         return -1;
     }
 
@@ -78,8 +74,8 @@ int PowerInterface::callbackGetPgoodTimeout(
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
             int timeout = pwrObj->getPgoodTimeout();
-            log<level::INFO>(
-                std::format("callbackGetPgoodTimeout: {}", timeout).c_str());
+            lg2::debug("callbackGetPgoodTimeout: {TIMEOUT}", "TIMEOUT",
+                       timeout);
 
             sdbusplus::message_t(msg).append(timeout);
         }
@@ -91,8 +87,7 @@ int PowerInterface::callbackGetPgoodTimeout(
     else
     {
         // The message or context were null
-        log<level::ERR>(
-            "Unable to service get pgood timeout property callback");
+        lg2::error("Unable to service get pgood timeout property callback");
         return -1;
     }
 
@@ -110,8 +105,7 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
             // Return the current power state of the GPIO, rather than the last
             // requested power state change
             int pgood = pwrObj->getPgood();
-            log<level::INFO>(
-                std::format("callbackGetPowerState: {}", pgood).c_str());
+            lg2::debug("callbackGetPowerState: {PGOOD}", "PGOOD", pgood);
 
             auto reply = sdbusplus::message_t(msg).new_method_return();
             reply.append(pgood);
@@ -125,7 +119,7 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
     else
     {
         // The message or context were null
-        log<level::ERR>("Unable to service getPowerState method callback");
+        lg2::error("Unable to service getPowerState method callback");
         return -1;
     }
 
@@ -145,8 +139,7 @@ int PowerInterface::callbackSetPgoodTimeout(
 
             int timeout{};
             m.read(timeout);
-            log<level::INFO>(
-                std::format("callbackSetPgoodTimeout: {}", timeout).c_str());
+            lg2::info("callbackSetPgoodTimeout: {TIMEOUT}", "TIMEOUT", timeout);
 
             auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setPgoodTimeout(timeout);
@@ -159,8 +152,7 @@ int PowerInterface::callbackSetPgoodTimeout(
     else
     {
         // The message or context were null
-        log<level::ERR>(
-            "Unable to service set pgood timeout property callback");
+        lg2::error("Unable to service set pgood timeout property callback");
         return -1;
     }
 
@@ -178,8 +170,7 @@ int PowerInterface::callbackGetState(
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
             int state = pwrObj->getState();
-            log<level::INFO>(
-                std::format("callbackGetState: {}", state).c_str());
+            lg2::debug("callbackGetState: {STATE}", "STATE", state);
 
             sdbusplus::message_t(msg).append(state);
         }
@@ -191,7 +182,7 @@ int PowerInterface::callbackGetState(
     else
     {
         // The message or context were null
-        log<level::ERR>("Unable to service get state property callback");
+        lg2::error("Unable to service get state property callback");
         return -1;
     }
 
@@ -216,8 +207,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
                                         "org.openbmc.ControlPower.Error.Failed",
                                         "Invalid power state");
             }
-            log<level::INFO>(
-                std::format("callbackSetPowerState: {}", state).c_str());
+            lg2::info("callbackSetPowerState: {STATE}", "STATE", state);
 
             auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setState(state);
@@ -232,7 +222,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
     else
     {
         // The message or context were null
-        log<level::ERR>("Unable to service setPowerState method callback");
+        lg2::error("Unable to service setPowerState method callback");
         return -1;
     }
 
@@ -250,9 +240,8 @@ int PowerInterface::callbackSetPowerSupplyError(
 
             std::string psError{};
             m.read(psError);
-            log<level::INFO>(
-                std::format("callbackSetPowerSupplyError: {}", psError)
-                    .c_str());
+            lg2::info("callbackSetPowerSupplyError: {PSERROR}", "PSERROR",
+                      psError);
 
             auto pwrObj = static_cast<PowerInterface*>(context);
             pwrObj->setPowerSupplyError(psError);
@@ -267,8 +256,7 @@ int PowerInterface::callbackSetPowerSupplyError(
     else
     {
         // The message or context were null
-        log<level::ERR>(
-            "Unable to service setPowerSupplyError method callback");
+        lg2::error("Unable to service setPowerSupplyError method callback");
         return -1;
     }
 
@@ -277,20 +265,19 @@ int PowerInterface::callbackSetPowerSupplyError(
 
 void PowerInterface::emitPowerGoodSignal()
 {
-    log<level::INFO>("emitPowerGoodSignal");
+    lg2::info("emitPowerGoodSignal");
     serverInterface.new_signal("PowerGood").signal_send();
 }
 
 void PowerInterface::emitPowerLostSignal()
 {
-    log<level::INFO>("emitPowerLostSignal");
+    lg2::info("emitPowerLostSignal");
     serverInterface.new_signal("PowerLost").signal_send();
 }
 
 void PowerInterface::emitPropertyChangedSignal(const char* property)
 {
-    log<level::INFO>(
-        std::format("emitPropertyChangedSignal: {}", property).c_str());
+    lg2::info("emitPropertyChangedSignal: {PROPERTY}", "PROPERTY", property);
     serverInterface.property_changed(property);
 }
 
