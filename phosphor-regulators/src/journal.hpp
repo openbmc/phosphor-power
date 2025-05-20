@@ -17,7 +17,7 @@
 
 #include <systemd/sd-journal.h>
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <string>
 #include <vector>
@@ -126,8 +126,7 @@ class SystemdJournal : public Journal
     /** @copydoc Journal::logDebug(const std::string&) */
     virtual void logDebug(const std::string& message) override
     {
-        using namespace phosphor::logging;
-        log<level::DEBUG>(message.c_str());
+        lg2::debug(message.c_str());
     }
 
     /** @copydoc Journal::logDebug(const std::vector<std::string>&) */
@@ -142,8 +141,7 @@ class SystemdJournal : public Journal
     /** @copydoc Journal::logError(const std::string&) */
     virtual void logError(const std::string& message) override
     {
-        using namespace phosphor::logging;
-        log<level::ERR>(message.c_str());
+        lg2::error(message.c_str());
     }
 
     /** @copydoc Journal::logError(const std::vector<std::string>&) */
@@ -158,8 +156,7 @@ class SystemdJournal : public Journal
     /** @copydoc Journal::logInfo(const std::string&) */
     virtual void logInfo(const std::string& message) override
     {
-        using namespace phosphor::logging;
-        log<level::INFO>(message.c_str());
+        lg2::info(message.c_str());
     }
 
     /** @copydoc Journal::logInfo(const std::vector<std::string>&) */

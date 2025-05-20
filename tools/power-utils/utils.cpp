@@ -19,13 +19,12 @@
 
 #include "utility.hpp"
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 
 #include <cassert>
 #include <exception>
 #include <filesystem>
-#include <format>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -96,10 +95,8 @@ PsuI2cInfo getPsuI2c(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
                 }
                 catch (const std::exception& e)
                 {
-                    log<level::WARNING>(
-                        std::format("Error reading property {}: {}",
-                                    property.first, e.what())
-                            .c_str());
+                    lg2::warning("Error reading property {PROPERTY}: {ERROR}",
+                                 "PROPERTY", property.first, "ERROR", e);
                 }
             }
 
@@ -146,9 +143,8 @@ std::string readVPDValue(phosphor::pmbus::PMBusBase& pmbusIntf,
 
     if (vpdValue.size() != vpdSize)
     {
-        log<level::INFO>(
-            std::format(" {} resize needed. size: {}", vpdName, vpdValue.size())
-                .c_str());
+        lg2::info(" {VPDNAME} resize needed. size: {SIZE}", "VPDNAME", vpdName,
+                  "SIZE", vpdValue.size());
         vpdValue.resize(vpdSize, ' ');
     }
 
@@ -167,9 +163,8 @@ bool checkFileExists(const std::string& filePath)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(std::format("Unable to check for existence of {}: {}",
-                                    filePath, e.what())
-                            .c_str());
+        lg2::error("Unable to check for existence of {FILEPATH}: {ERROR}",
+                   "FILEPATH", filePath, "ERROR", e);
     }
     return false;
 }
@@ -202,7 +197,7 @@ std::string getDevicePath(sdbusplus::bus_t& bus,
             auto devicePath = data["psuDevices"][psuInventoryPath];
             if (devicePath.empty())
             {
-                log<level::WARNING>("Unable to find psu devices or path");
+                lg2::warning("Unable to find psu devices or path");
             }
             return devicePath;
         }
@@ -220,13 +215,12 @@ std::string getDevicePath(sdbusplus::bus_t& bus,
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(
-            std::format("Error in getDevicePath: {}", e.what()).c_str());
+        lg2::error("Error in getDevicePath: {ERROR}", "ERROR", e);
         return {};
     }
     catch (...)
     {
-        log<level::ERR>("Unknown error occurred in getDevicePath");
+        lg2::error("Unknown error occurred in getDevicePath");
         return {};
     }
 }

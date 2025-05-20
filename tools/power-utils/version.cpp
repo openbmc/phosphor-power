@@ -22,7 +22,7 @@
 #include "utils.hpp"
 
 #include <nlohmann/json.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <exception>
 #include <tuple>
@@ -62,14 +62,14 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
     auto devices = data.find("psuDevices");
     if (devices == data.end())
     {
-        log<level::WARNING>("Unable to find psuDevices");
+        lg2::warning("Unable to find psuDevices");
         return {};
     }
     auto devicePath = devices->find(psuInventoryPath);
     if (devicePath == devices->end())
     {
-        log<level::WARNING>("Unable to find path for PSU",
-                            entry("PATH=%s", psuInventoryPath.c_str()));
+        lg2::warning("Unable to find path for PSU PATH={PATH}", "PATH",
+                     psuInventoryPath);
         return {};
     }
 
@@ -87,7 +87,7 @@ PsuVersionInfo getVersionInfo(const std::string& psuInventoryPath)
     }
     if (fileName.empty())
     {
-        log<level::WARNING>("Unable to find Version file");
+        lg2::warning("Unable to find Version file");
         return {};
     }
     return std::make_tuple(*devicePath, type, fileName);
@@ -186,7 +186,7 @@ std::string getVersion(sdbusplus::bus_t& bus,
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(std::format("Error: {}", e.what()).c_str());
+        lg2::error("Error in getVersion: {ERROR}", "ERROR", e);
     }
     return version;
 }

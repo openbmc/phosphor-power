@@ -17,6 +17,7 @@
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Common/Device/error.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 
@@ -100,10 +101,8 @@ std::string PMBus::getDeviceName()
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>((std::string("Unable to read PMBus device name "
-                                     "PATH=") +
-                         path.string())
-                            .c_str());
+        lg2::error("Unable to read PMBus device name PATH={PATH}", "PATH",
+                   path);
     }
 
     return name;
@@ -129,7 +128,7 @@ bool PMBus::readBit(const std::string& name, Type type)
     try
     {
         char* err = nullptr;
-        std::string val{1, '\0'};
+        std::string val(1, '\0');
 
         file.open(path);
         file.read(&val[0], 1);
@@ -138,10 +137,9 @@ bool PMBus::readBit(const std::string& name, Type type)
 
         if (*err)
         {
-            log<level::ERR>((std::string("Invalid character in sysfs file"
-                                         " FILE=") +
-                             path.string() + std::string(" CONTENTS=") + val)
-                                .c_str());
+            lg2::error(
+                "Invalid character in sysfs file FILE={FILE} CONTENTS={CONTENTS}",
+                "FILE", path, "CONTENTS", val);
 
             // Catch below and handle as a read failure
             elog<InternalFailure>();
@@ -151,11 +149,9 @@ bool PMBus::readBit(const std::string& name, Type type)
     {
         auto rc = errno;
 
-        log<level::ERR>(
-            (std::string("Failed to read sysfs file "
-                         "errno=") +
-             std::to_string(rc) + std::string(" FILENAME=") + path.string())
-                .c_str());
+        lg2::error(
+            "Failed to read sysfs file errno={ERRNO} FILENAME={FILENAME}",
+            "ERRNO", rc, "FILENAME", path);
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -195,10 +191,9 @@ uint64_t PMBus::read(const std::string& name, Type type, bool errTrace)
 
         if (errTrace)
         {
-            log<level::ERR>((std::string("Failed to read sysfs file "
-                                         "errno=") +
-                             std::to_string(rc) + " FILENAME=" + path.string())
-                                .c_str());
+            lg2::error(
+                "Failed to read sysfs file errno={ERRNO} FILENAME={FILENAME}",
+                "ERRNO", rc, "FILENAME", path);
 
             using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -233,10 +228,9 @@ std::string PMBus::readString(const std::string& name, Type type)
     catch (const std::exception& e)
     {
         auto rc = errno;
-        log<level::ERR>((std::string("Failed to read sysfs file "
-                                     "errno=") +
-                         std::to_string(rc) + " FILENAME=" + path.string())
-                            .c_str());
+        lg2::error(
+            "Failed to read sysfs file errno={ERRNO} FILENAME={FILENAME}",
+            "ERRNO", rc, "FILENAME", path);
 
         using metadata = xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -274,11 +268,9 @@ std::vector<uint8_t> PMBus::readBinary(const std::string& name, Type type,
             else if (ferror(file.get()))
             {
                 auto rc = errno;
-                log<level::ERR>(
-                    (std::string("Failed to read sysfs file "
-                                 "errno=") +
-                     std::to_string(rc) + " FILENAME=" + path.string())
-                        .c_str());
+                lg2::error(
+                    "Failed to read sysfs file errno={ERRNO} FILENAME={FILENAME}",
+                    "ERRNO", rc, "FILENAME", path);
                 using metadata =
                     xyz::openbmc_project::Common::Device::ReadFailure;
 
@@ -311,10 +303,9 @@ void PMBus::write(const std::string& name, int value, Type type)
     catch (const std::exception& e)
     {
         auto rc = errno;
-        log<level::ERR>((std::string("Failed to write sysfs file "
-                                     "errno=") +
-                         std::to_string(rc) + " FILENAME=" + path.string())
-                            .c_str());
+        lg2::error(
+            "Failed to write sysfs file errno={ERRNO} FILENAME={FILENAME}",
+            "ERRNO", rc, "FILENAME", path);
 
         using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
 
@@ -339,20 +330,16 @@ void PMBus::writeBinary(const std::string& name, std::vector<uint8_t> data,
     {
         // I need to specify binary mode when I construct the ofstream
         file.open(path, std::ios::out | std::ios_base::binary);
-        log<level::DEBUG>(std::string("Write data to sysfs file "
-                                      "FILENAME=" +
-                                      path.string())
-                              .c_str());
+        lg2::debug("Write data to sysfs file FILENAME={FILENAME}", "FILENAME",
+                   path);
         file.write(reinterpret_cast<const char*>(&data[0]), data.size());
     }
     catch (const std::exception& e)
     {
         auto rc = errno;
-        log<level::ERR>(
-            (std::string("Failed to write binary data to sysfs file "
-                         "errno=") +
-             std::to_string(rc) + " FILENAME=" + path.string())
-                .c_str());
+        lg2::error(
+            "Failed to write binary data to sysfs file errno={ERRNO} FILENAME={FILENAME}",
+            "ERRNO", rc, "FILENAME", path);
 
         using metadata = xyz::openbmc_project::Common::Device::WriteFailure;
 
@@ -389,11 +376,9 @@ void PMBus::findHwmonDir()
     // and let accesses fail later
     if (hwmonDir.empty())
     {
-        log<level::INFO>(std::string("Unable to find hwmon directory "
-                                     "in device base path"
-                                     " DEVICE_PATH=" +
-                                     basePath.string())
-                             .c_str());
+        lg2::info("Unable to find hwmon directory in device base path "
+                  "DEVICE_PATH={DEVICE_PATH}",
+                  "DEVICE_PATH", basePath);
     }
 }
 
