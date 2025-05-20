@@ -22,7 +22,7 @@
 #include "utils.hpp"
 
 #include <nlohmann/json.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <exception>
 #include <format>
@@ -153,7 +153,7 @@ std::string getModel(sdbusplus::bus_t& bus, const std::string& psuInventoryPath)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(std::format("Error: {}", e.what()).c_str());
+        lg2::error("Error in getModel: {ERROR}", "ERROR", e);
     }
     return model;
 }

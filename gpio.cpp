@@ -20,7 +20,7 @@
 
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <xyz/openbmc_project/Common/error.hpp>
 
 #include <cassert>
@@ -48,7 +48,7 @@ Value GPIO::read()
     if (rc < 0)
     {
         auto e = errno;
-        log<level::ERR>("Failed GET_LINE_VALUES ioctl", entry("ERRNO=%d", e));
+        lg2::error("Failed GET_LINE_VALUES ioctl ERRNO={ERRNO}", "ERRNO", e);
         elog<InternalFailure>();
     }
 
@@ -68,7 +68,7 @@ void GPIO::set(Value value)
     if (rc == -1)
     {
         auto e = errno;
-        log<level::ERR>("Failed SET_LINE_VALUES ioctl", entry("ERRNO=%d", e));
+        lg2::error("Failed SET_LINE_VALUES ioctl ERRNO={ERRNO}", "ERRNO", e);
         elog<InternalFailure>();
     }
 }
@@ -85,9 +85,8 @@ void GPIO::requestLine(Value defaultValue)
     if (fd() == -1)
     {
         auto e = errno;
-        log<level::ERR>("Failed opening GPIO device",
-                        entry("DEVICE=%s", device.c_str()),
-                        entry("ERRNO=%d", e));
+        lg2::error("Failed opening GPIO device DEVICE={DEVICE} ERRNO={ERRNO}",
+                   "DEVICE", device, "ERRNO", e);
         elog<InternalFailure>();
     }
 
@@ -112,8 +111,8 @@ void GPIO::requestLine(Value defaultValue)
     if (rc == -1)
     {
         auto e = errno;
-        log<level::ERR>("Failed GET_LINEHANDLE ioctl", entry("GPIO=%d", gpio),
-                        entry("ERRNO=%d", e));
+        lg2::error("Failed GET_LINEHANDLE ioctl GPIO={GPIO} ERRNO={ERRNO}",
+                   "GPIO", gpio, "ERRNO", e);
         elog<InternalFailure>();
     }
 

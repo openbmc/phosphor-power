@@ -16,7 +16,7 @@
 
 #include "manager_interface.hpp"
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/exception.hpp>
 #include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server.hpp>
@@ -61,8 +61,7 @@ int ManagerInterface::callbackConfigure(sd_bus_message* msg, void* context,
     else
     {
         // The message or context were null
-        using namespace phosphor::logging;
-        log<level::ERR>("Unable to service Configure method callback");
+        lg2::error("Unable to service Configure method callback");
         return -1;
     }
 
@@ -96,8 +95,7 @@ int ManagerInterface::callbackMonitor(sd_bus_message* msg, void* context,
     else
     {
         // The message or context were null
-        using namespace phosphor::logging;
-        log<level::ERR>("Unable to service Monitor method callback");
+        lg2::error("Unable to service Monitor method callback");
         return -1;
     }
 

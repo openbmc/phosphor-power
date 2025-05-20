@@ -51,11 +51,9 @@ std::string getService(const std::string& path, const std::string& interface,
     {
         if (logError)
         {
-            log<level::ERR>(
-                std::string("Error in mapper response for getting service name "
-                            "PATH=" +
-                            path + " INTERFACE=" + interface)
-                    .c_str());
+            lg2::error("Error in mapper response for getting service name "
+                       "PATH={PATH} INTERFACE={INTERFACE}",
+                       "PATH", path, "INTERFACE", interface);
         }
         return std::string{};
     }
@@ -136,19 +134,13 @@ json loadJSONFromFile(const char* path)
     std::ifstream ifs(path);
     if (!ifs.good())
     {
-        log<level::ERR>(std::string("Unable to open file "
-                                    "PATH=" +
-                                    std::string(path))
-                            .c_str());
+        lg2::error("Unable to open file PATH={PATH}", "PATH", path);
         return nullptr;
     }
     auto data = json::parse(ifs, nullptr, false);
     if (data.is_discarded())
     {
-        log<level::ERR>(std::string("Failed to parse json "
-                                    "PATH=" +
-                                    std::string(path))
-                            .c_str());
+        lg2::error("Failed to parse json PATH={PATH}", "PATH", path);
         return nullptr;
     }
     return data;
@@ -197,7 +189,7 @@ bool isPoweredOn(sdbusplus::bus_t& bus, bool defaultState)
     }
     catch (const std::exception& e)
     {
-        log<level::INFO>("Failed to get power state.");
+        lg2::info("Failed to get power state.");
     }
     return state != 0;
 }
