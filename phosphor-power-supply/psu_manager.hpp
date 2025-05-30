@@ -4,7 +4,7 @@
 #include "types.hpp"
 #include "utility.hpp"
 
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/server/manager.hpp>
 #include <sdbusplus/server/object.hpp>

@@ -47,7 +47,7 @@ int GPIOInterface::read()
 
     if (!line)
     {
-        log<level::ERR>("Failed line");
+        lg2::error("Failed line in GPIOInterface::read()");
         throw std::runtime_error{std::string{"Failed to find line"}};
     }
 
@@ -61,9 +61,7 @@ int GPIOInterface::read()
         }
         catch (const std::exception& e)
         {
-            log<level::ERR>(
-                std::format("Failed to get_value of GPIO line: {}", e.what())
-                    .c_str());
+            lg2::error("Failed to get_value of GPIO line: {ERROR}", "ERROR", e);
             line.release();
             throw;
         }
@@ -72,8 +70,7 @@ int GPIOInterface::read()
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>("Failed to request GPIO line",
-                        entry("MSG=%s", e.what()));
+        lg2::error("Failed to request GPIO line: {MSG}", "MSG", e);
         throw;
     }
 
@@ -86,7 +83,7 @@ void GPIOInterface::write(int value, std::bitset<32> flags)
 
     if (!line)
     {
-        log<level::ERR>("Failed line");
+        lg2::error("Failed line in GPIOInterface::write");
         throw std::runtime_error{std::string{"Failed to find line"}};
     }
 
@@ -100,8 +97,8 @@ void GPIOInterface::write(int value, std::bitset<32> flags)
     }
     catch (std::exception& e)
     {
-        log<level::ERR>("Failed to set GPIO line", entry("MSG=%s", e.what()),
-                        entry("VALUE=%d", value));
+        lg2::error("Failed to set GPIO line, MSG={MSG}, VALUE={VALUE}", "MSG",
+                   e, "VALUE", value);
         throw;
     }
 }

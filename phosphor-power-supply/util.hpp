@@ -6,7 +6,7 @@
 #include <gpiod.hpp>
 #include <phosphor-logging/elog-errors.hpp>
 #include <phosphor-logging/elog.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 
 #include <bitset>
 #include <chrono>
@@ -42,10 +42,9 @@ class Util : public UtilBase
                      bool present, const std::string& name) const override
     {
         using namespace phosphor::logging;
-        log<level::INFO>(std::format("Updating inventory present property. "
-                                     "present:{} invpath:{} name:{}",
-                                     present, invpath, name)
-                             .c_str());
+        lg2::info("Updating inventory present property. "
+                  "present:{PRESENT} invpath:{INVPATH} name:{NAME}",
+                  "PRESENT", present, "INVPATH", invpath, "NAME", name);
 
         using InternalFailure =
             sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure;
@@ -79,11 +78,9 @@ class Util : public UtilBase
         }
         catch (const std::exception& e)
         {
-            log<level::ERR>(
-                std::format(
-                    "Error in inventory manager call to update inventory: {}",
-                    e.what())
-                    .c_str());
+            lg2::error(
+                "Error in inventory manager call to update inventory: {ERROR}",
+                "ERROR", e);
             elog<InternalFailure>();
         }
     }
@@ -114,11 +111,9 @@ class Util : public UtilBase
         catch (const sdbusplus::exception_t& e)
         {
             using namespace phosphor::logging;
-            log<level::ERR>(
-                std::format("Error in inventory manager call to update "
-                            "availability interface: {}",
-                            e.what())
-                    .c_str());
+            lg2::error("Error in inventory manager call to update "
+                       "availability interface: {ERROR}",
+                       "ERROR", e);
             throw;
         }
     }
@@ -187,10 +182,9 @@ class Util : public UtilBase
         catch (const sdbusplus::exception_t& e)
         {
             using namespace phosphor::logging;
-            log<level::INFO>(std::format("Error trying to handle health rollup "
-                                         "associations for {}: {}",
-                                         invpath, e.what())
-                                 .c_str());
+            lg2::info("Error trying to handle health rollup "
+                      "associations for {INVPATH}: {ERROR}",
+                      "INVPATH", invpath, "ERROR", e);
         }
     }
 

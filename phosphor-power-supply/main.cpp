@@ -16,7 +16,7 @@
 #include "psu_manager.hpp"
 
 #include <CLI/CLI.hpp>
-#include <phosphor-logging/log.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
 
@@ -45,12 +45,12 @@ int main(void)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(e.what());
+        lg2::error("Exception in main: {ERROR}", "ERROR", e);
         return -2;
     }
     catch (...)
     {
-        log<level::ERR>("Caught unexpected exception type");
+        lg2::error("Caught unexpected exception type");
         return -3;
     }
 }

@@ -124,11 +124,9 @@ void PSUManager::initialize()
     }
     catch (const std::exception& e)
     {
-        log<level::INFO>(
-            std::format(
-                "Failed to get power state, assuming it is off, error {}",
-                e.what())
-                .c_str());
+        lg2::info(
+            "Failed to get power state, assuming it is off, error {ERROR}",
+            "ERROR", e);
         powerOn = false;
         powerFaultOccurring = false;
         runValidateConfig = true;
@@ -139,10 +137,9 @@ void PSUManager::initialize()
     updateMissingPSUs();
     setPowerConfigGPIO();
 
-    log<level::INFO>(
-        std::format("initialize: power on: {}, power fault occurring: {}",
-                    powerOn, powerFaultOccurring)
-            .c_str());
+    lg2::info(
+        "initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
 
 void PSUManager::getPSUConfiguration()
@@ -177,7 +174,7 @@ void PSUManager::getPSUConfiguration()
     {
         // Interface or properties not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
-        log<level::INFO>(std::format("No power supplies to monitor").c_str());
+        lg2::info("No power supplies to monitor");
     }
 }
 
@@ -225,7 +222,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         invpath.push_back(psuname->back());
         std::string presline = "";
 
-        log<level::DEBUG>(std::format("Inventory Path: {}", invpath).c_str());
+        lg2::debug("Inventory Path: {INVPATH}", "INVPATH", invpath);
 
         if (nullptr != preslineptr)
         {
@@ -248,10 +245,9 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         }
 
         buildDriverName(*i2cbus, *i2caddr);
-        log<level::DEBUG>(
-            std::format("make PowerSupply bus: {} addr: {} presline: {}",
-                        *i2cbus, *i2caddr, presline)
-                .c_str());
+        lg2::debug(
+            "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
+            "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
         auto psu = std::make_unique<PowerSupply>(
             bus, invpath, *i2cbus, *i2caddr, driverName, presline,
             std::bind(
@@ -270,7 +266,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
 
     if (psus.empty())
     {
-        log<level::INFO>(std::format("No power supplies to monitor").c_str());
+        lg2::info("No power supplies to monitor");
     }
     else
     {
@@ -393,9 +389,8 @@ void PSUManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
         itIntf = interfaces.find(IBMCFFPSInterface);
         if (itIntf != interfaces.cend())
         {
-            log<level::INFO>(
-                std::format("InterfacesAdded for: {}", IBMCFFPSInterface)
-                    .c_str());
+            lg2::info("InterfacesAdded for: {IBMCFFPSINTERFACE}",
+                      "IBMCFFPSINTERFACE", IBMCFFPSInterface);
             getPSUProperties(itIntf->second);
             updateMissingPSUs();
         }
@@ -460,11 +455,9 @@ void PSUManager::powerStateChanged(sdbusplus::message_t& msg)
             }
         }
     }
-    log<level::INFO>(
-        std::format(
-            "powerStateChanged: power on: {}, power fault occurring: {}",
-            powerOn, powerFaultOccurring)
-            .c_str());
+    lg2::info(
+        "powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
 
 void PSUManager::presenceChanged(sdbusplus::message_t& msg)
@@ -501,10 +494,8 @@ void PSUManager::setPowerSupplyError(const std::string& psuErrorString)
     }
     catch (const std::exception& e)
     {
-        log<level::INFO>(
-            std::format("Failed calling setPowerSupplyError due to error {}",
-                        e.what())
-                .c_str());
+        lg2::info("Failed calling setPowerSupplyError due to error {ERROR}",
+                  "ERROR", e);
     }
 }
 
@@ -525,7 +516,7 @@ void PSUManager::createError(const std::string& faultName,
 
         if (service.empty())
         {
-            log<level::ERR>("Unable to get logging manager service");
+            lg2::error("Unable to get logging manager service");
             return;
         }
 
@@ -540,11 +531,9 @@ void PSUManager::createError(const std::string& faultName,
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(
-            std::format(
-                "Failed creating event log for fault {} due to error {}",
-                faultName, e.what())
-                .c_str());
+        lg2::error(
+            "Failed creating event log for fault {FAULT_NAME} due to error {ERROR}",
+            "FAULT_NAME", faultName, "ERROR", e);
     }
 }
 
@@ -561,16 +550,16 @@ void PSUManager::syncHistory()
             catch (const std::exception& e)
             {
                 // Not an error, system just hasn't implemented the synch gpio
-                log<level::INFO>("No synchronization GPIO found");
+                lg2::info("No synchronization GPIO found");
                 syncHistoryGPIO = nullptr;
             }
         }
         if (syncHistoryGPIO)
         {
             const std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
-            log<level::INFO>("Synchronize INPUT_HISTORY");
+            lg2::info("Synchronize INPUT_HISTORY");
             syncHistoryGPIO->toggleLowHigh(delay);
-            log<level::INFO>("Synchronize INPUT_HISTORY completed");
+            lg2::info("Synchronize INPUT_HISTORY completed");
         }
     }
 
@@ -842,11 +831,10 @@ void PSUManager::analyzeBrownout()
                                std::to_string(acFailedCount));
         additionalData.emplace("PGOOD_FAULT_COUNT",
                                std::to_string(pgoodFailedCount));
-        log<level::INFO>(
-            std::format(
-                "Brownout detected, not present count: {}, AC fault count {}, pgood fault count: {}",
-                notPresentCount, acFailedCount, pgoodFailedCount)
-                .c_str());
+        lg2::info(
+            "Brownout detected, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+            "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
+            acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
 
         createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
                     additionalData);
@@ -877,11 +865,10 @@ void PSUManager::analyzeBrownout()
                     // Indicate that the system is no longer in a brownout
                     // condition by setting the PowerSystemInputs status
                     // property to Good.
-                    log<level::INFO>(
-                        std::format(
-                            "Brownout cleared, not present count: {}, AC fault count {}, pgood fault count: {}",
-                            notPresentCount, acFailedCount, pgoodFailedCount)
-                            .c_str());
+                    lg2::info(
+                        "Brownout cleared, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+                        "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
+                        acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
                     powerSystemInputs.status(
                         sdbusplus::xyz::openbmc_project::State::Decorator::
                             server::PowerSystemInputs::Status::Good);
@@ -890,10 +877,8 @@ void PSUManager::analyzeBrownout()
             }
             catch (const std::exception& e)
             {
-                log<level::ERR>(
-                    std::format("Error trying to clear brownout, error: {}",
-                                e.what())
-                        .c_str());
+                lg2::error("Error trying to clear brownout, error: {ERROR}",
+                           "ERROR", e);
             }
         }
     }
@@ -940,10 +925,9 @@ void PSUManager::updateMissingPSUs()
                 propReadFail = true;
                 // Relying on property change or interface added to retry.
                 // Log an informational trace to the journal.
-                log<level::INFO>(
-                    std::format("D-Bus property {} access failure exception",
-                                psuInventoryPath)
-                        .c_str());
+                lg2::info(
+                    "D-Bus property {PSU_INVENTORY_PATH} access failure exception",
+                    "PSU_INVENTORY_PATH", psuInventoryPath);
             }
 
             if (psuModel.empty())
@@ -1325,9 +1309,9 @@ void PSUManager::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
     }
     catch (const std::exception& e)
     {
-        log<level::ERR>(std::format("Failed to find device driver {}, error {}",
-                                    symLinkPath, e.what())
-                            .c_str());
+        lg2::error(
+            "Failed to find device driver {SYM_LINK_PATH}, error {ERROR}",
+            "SYM_LINK_PATH", symLinkPath, "ERROR", e);
     }
 }
 
