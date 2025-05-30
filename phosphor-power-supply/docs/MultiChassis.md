@@ -10,9 +10,9 @@ Currently, **phosphor-psu-monitor** operates on a **single chassis**.
   number, to access **inventory manager**.
 - Example of current PSU path:
 
-```
-/xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0
-```
+"``` /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0
+
+`````"
 
 ## Goal: Support Multi-Chassis PSUs
 
@@ -25,9 +25,9 @@ following changes:
 - Find all PSUs associated with each chassis.
 - Update the PSUs status on DBus with appropriate path i.e.
 
-```
+"```
 /xyz/openbmc_project/inventory/system/chassis1/motherboard/powersupply1
-```
+```"
 
 ## Changes Required
 
@@ -92,3 +92,6 @@ for multi chassis.
 - Discover chassis, and maintain state of each chassis and react accordingly.
 - Monitor PSUs across all chassis
 - Update DBus and error logs accordingly.
+
+"````"
+`````
