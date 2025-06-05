@@ -31,7 +31,6 @@ namespace power
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
 constexpr auto POWER_INTERFACE = "org.openbmc.control.Power";
 
-using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 bool PGOODMonitor::pgoodPending()
@@ -70,7 +69,7 @@ void PGOODMonitor::analyze()
 #ifdef DEVICE_ACCESS
         device->onFailure();
 #endif
-        report<PowerOnFailure>();
+        phosphor::logging::report<PowerOnFailure>();
     }
 
     // The pgood-wait service (with a longer timeout)

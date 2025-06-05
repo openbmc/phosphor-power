@@ -22,7 +22,6 @@ namespace phosphor::power::psu
 // missing to present before running the bind command(s).
 constexpr auto bindDelay = 1000;
 
-using namespace phosphor::logging;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 
 PowerSupply::PowerSupply(

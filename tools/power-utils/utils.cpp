@@ -32,7 +32,6 @@
 #include <sstream>
 #include <stdexcept>
 
-using namespace phosphor::logging;
 using namespace phosphor::power::util;
 using namespace sdbusplus::xyz::openbmc_project::Common::Device::Error;
 namespace fs = std::filesystem;

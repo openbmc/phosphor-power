@@ -33,7 +33,6 @@
 #include <map>
 #include <string>
 
-using namespace phosphor::logging;
 namespace util = phosphor::power::util;
 
 namespace updater

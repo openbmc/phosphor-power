@@ -41,8 +41,6 @@ std::string GPIOInterface::getName() const
 
 int GPIOInterface::read()
 {
-    using namespace phosphor::logging;
-
     int value = -1;
 
     if (!line)
@@ -79,8 +77,6 @@ int GPIOInterface::read()
 
 void GPIOInterface::write(int value, std::bitset<32> flags)
 {
-    using namespace phosphor::logging;
-
     if (!line)
     {
         lg2::error("Failed line in GPIOInterface::write");

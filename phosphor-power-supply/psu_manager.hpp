@@ -20,7 +20,6 @@ struct sys_properties
 };
 
 using namespace phosphor::power::psu;
-using namespace phosphor::logging;
 
 namespace phosphor::power::manager
 {

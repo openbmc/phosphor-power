@@ -68,7 +68,6 @@ constexpr uint8_t B_ISP_MODE = 0x40;             // ISP mode
 constexpr uint8_t B_ISP_MODE_CHKSUM_GOOD = 0x41; // ISP mode  & good checksum.
 constexpr uint8_t SUCCESSFUL_ISP_REBOOT_STATUS = 0x0; // Successful ISP reboot
                                                       // status
-using namespace phosphor::logging;
 namespace util = phosphor::power::util;
 
 int AeiUpdater::doUpdate()

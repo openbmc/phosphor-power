@@ -1,7 +1,6 @@
 #pragma once
 #include "device.hpp"
 
-#include <phosphor-logging/log.hpp>
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/server.hpp>
 #include <sdeventplus/clock.hpp>
@@ -12,8 +11,6 @@ namespace phosphor
 {
 namespace power
 {
-
-using namespace phosphor::logging;
 
 /**
  * @class DeviceMonitor

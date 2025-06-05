@@ -32,7 +32,6 @@
 using json = nlohmann::json;
 
 using namespace utils;
-using namespace phosphor::logging;
 using namespace phosphor::power::util;
 
 namespace model

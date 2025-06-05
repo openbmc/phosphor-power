@@ -28,7 +28,6 @@ namespace phosphor
 namespace power
 {
 
-using namespace phosphor::logging;
 using namespace sdbusplus::org::open_power::Witherspoon::Fault::Error;
 
 int RuntimeMonitor::run()

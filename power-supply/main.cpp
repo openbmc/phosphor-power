@@ -24,7 +24,6 @@
 #include <iostream>
 
 using namespace phosphor::power;
-using namespace phosphor::logging;
 
 int main(int argc, char* argv[])
 {

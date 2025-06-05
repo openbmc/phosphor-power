@@ -28,8 +28,6 @@ int main(void)
 {
     try
     {
-        using namespace phosphor::logging;
-
         CLI::App app{"OpenBMC Power Supply Unit Monitor"};
 
         auto bus = sdbusplus::bus::new_default();

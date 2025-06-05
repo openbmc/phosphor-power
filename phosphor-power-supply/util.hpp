@@ -41,7 +41,6 @@ class Util : public UtilBase
     void setPresence(sdbusplus::bus_t& bus, const std::string& invpath,
                      bool present, const std::string& name) const override
     {
-        using namespace phosphor::logging;
         lg2::info("Updating inventory present property. "
                   "present:{PRESENT} invpath:{INVPATH} name:{NAME}",
                   "PRESENT", present, "INVPATH", invpath, "NAME", name);
@@ -81,7 +80,7 @@ class Util : public UtilBase
             lg2::error(
                 "Error in inventory manager call to update inventory: {ERROR}",
                 "ERROR", e);
-            elog<InternalFailure>();
+            phosphor::logging::elog<InternalFailure>();
         }
     }
 
@@ -110,7 +109,6 @@ class Util : public UtilBase
         }
         catch (const sdbusplus::exception_t& e)
         {
-            using namespace phosphor::logging;
             lg2::error("Error in inventory manager call to update "
                        "availability interface: {ERROR}",
                        "ERROR", e);
@@ -181,7 +179,6 @@ class Util : public UtilBase
         }
         catch (const sdbusplus::exception_t& e)
         {
-            using namespace phosphor::logging;
             lg2::info("Error trying to handle health rollup "
                       "associations for {INVPATH}: {ERROR}",
                       "INVPATH", invpath, "ERROR", e);

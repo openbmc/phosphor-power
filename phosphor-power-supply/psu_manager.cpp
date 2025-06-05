@@ -14,8 +14,6 @@
 #include <regex>
 #include <set>
 
-using namespace phosphor::logging;
-
 namespace phosphor::power::manager
 {
 constexpr auto managerBusName = "xyz.openbmc_project.Power.PSUMonitor";

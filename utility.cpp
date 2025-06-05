@@ -30,7 +30,6 @@ constexpr auto MAPPER_BUSNAME = "xyz.openbmc_project.ObjectMapper";
 constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
-using namespace phosphor::logging;
 using json = nlohmann::json;
 
 std::string getService(const std::string& path, const std::string& interface,
