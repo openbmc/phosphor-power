@@ -106,7 +106,7 @@ class MihawkCPLD : public Device
     /**
      * The D-Bus bus object
      */
-    sdbusplus::bus_t& bus;
+    [[maybe_unused]] sdbusplus::bus_t& bus;
 
     /**
      * Open CPLD_register via i2c.
