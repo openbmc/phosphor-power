@@ -149,8 +149,17 @@ TEST(TemporaryFileTests, MoveAssignmentOperator)
         // Save path to temporary file
         fs::path path = file.getPath();
 
+// This is undefined behavior in C++, butsuppress the warning
+// to observe how the class handles it
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wself-move"
+#endif
         // Try to move object into itself; should do nothing
         file = static_cast<TemporaryFile&&>(file);
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
         // Verify object still owns same temporary file and file exists
         EXPECT_EQ(file.getPath(), path);

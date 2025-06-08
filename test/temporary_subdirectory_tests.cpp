@@ -110,8 +110,17 @@ TEST(TemporarySubDirectoryTests, MoveAssignmentOperator)
         // Save path to subdirectory
         fs::path path = subdirectory.getPath();
 
+// This is undefined behavior in C++, but suppress the warning
+// to observe how the class handles it.
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wself-move"
+#endif
         // Try to move object into itself; should do nothing
         subdirectory = static_cast<TemporarySubDirectory&&>(subdirectory);
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
         // Verify object still owns same subdirectory and subdirectory exists
         EXPECT_EQ(subdirectory.getPath(), path);
