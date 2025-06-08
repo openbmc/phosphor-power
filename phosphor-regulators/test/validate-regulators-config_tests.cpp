@@ -162,7 +162,7 @@ int runToolForOutputWithCommand(std::string command,
     }
     while (!std::feof(pipe))
     {
-        if (fgets(buffer, sizeof buffer, pipe) != NULL)
+        if (fgets(buffer, sizeof buffer, pipe) != nullptr)
         {
             result += buffer;
         }
