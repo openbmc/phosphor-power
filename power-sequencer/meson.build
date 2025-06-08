@@ -14,7 +14,7 @@ if sequencer == 'ucd90160'
         input: [
             'gen-ucd90160-defs.py',
             get_option('ucd90160-yaml'),
-            'templates/ucd90160_defs.mako.cpp',
+            'templates/ucd90160_defs.cpp.mako',
         ],
         output: 'ucd90160_defs.cpp',
     )
