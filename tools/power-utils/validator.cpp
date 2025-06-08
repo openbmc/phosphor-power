@@ -11,8 +11,6 @@ namespace validator
 using namespace phosphor::power::util;
 constexpr auto supportedConfIntf =
     "xyz.openbmc_project.Configuration.SupportedConfiguration";
-const auto IBMCFFPSInterface =
-    "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
 const auto objectPath = "/";
 
 bool PSUUpdateValidator::areAllPsuSameModel()

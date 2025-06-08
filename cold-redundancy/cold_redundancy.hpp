@@ -64,7 +64,7 @@ class ColdRedundancy
     /**
      * @brief Indicates the dbus connction
      */
-    std::shared_ptr<sdbusplus::asio::connection>& systemBus;
+    [[maybe_unused]] std::shared_ptr<sdbusplus::asio::connection>& systemBus;
 
     /**
      * @brief Indicates the D-Bus matches
