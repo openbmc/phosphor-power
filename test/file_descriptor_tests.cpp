@@ -130,8 +130,17 @@ TEST(FileDescriptorTests, MoveAssignmentOperator)
         EXPECT_EQ(descriptor(), fd);
         EXPECT_TRUE(isValid(fd));
 
+// This is undefined behavior in C++, but suppress the warning
+// to observe how the class handles it.
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wself-move"
+#endif
         // Try to move object into itself
         descriptor = static_cast<FileDescriptor&&>(descriptor);
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
         // Verify object still contains file descriptor
         EXPECT_EQ(descriptor(), fd);
