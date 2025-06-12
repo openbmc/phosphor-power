@@ -10,7 +10,7 @@ Currently, **phosphor-psu-monitor** operates on a **single chassis**.
   number, to access **inventory manager**.
 - Example of current PSU path:
 
-```
+```text
 /xyz/openbmc_project/inventory/system/chassis/motherboard/powersupply0
 ```
 
@@ -25,7 +25,7 @@ following changes:
 - Find all PSUs associated with each chassis.
 - Update the PSUs status on DBus with appropriate path i.e.
 
-```
+```text
 /xyz/openbmc_project/inventory/system/chassis1/motherboard/powersupply1
 ```
 
@@ -46,11 +46,10 @@ following changes:
   for D-BUS events to track chassis PGOOD Status.
 - Retrieve the PSU configurations from **entity manager**
 - Find all PSUs associated with chassis from **inventory manager** (using
-  **[getSubTree]
-  (https://github.com/openbmc/phosphor-power/blob/master/utility.hpp)**) and add
-  them to vector in the chassis object. **getSubTree** is a function interacts
-  with the D-Bus object mapper to retrieve all objects under a specified path
-  that implement interface to certain depth.
+  **[getSubTree](https://github.com/openbmc/phosphor-power/blob/master/utility.hpp)**)
+  and add them to vector in the chassis object. **getSubTree** is a function
+  interacts with the D-Bus object mapper to retrieve all objects under a
+  specified path that implement interface to certain depth.
 
 ### 3. Update Monitoring Logic
 
@@ -85,7 +84,7 @@ for multi chassis.
 
 ---
 
-# Summary
+## Summary
 
 **phosphor-psu-monitor** must be enhanced to dynamically:
 
