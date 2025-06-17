@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "246bd276_00b60c9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-17T14:00:20Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this is necessary.  This header file is already being included by four.cpp files such as chassis_tests.cpp.  We shouldn\u0027t have to do artificial stuff like this just for clang-tidy.",
+      "revId": "2b8167d1273ec3cd400455a6925e45073649dac8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
