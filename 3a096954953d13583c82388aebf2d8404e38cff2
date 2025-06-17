@@ -16,6 +16,24 @@
       "message": "so how does this compile",
       "revId": "3a096954953d13583c82388aebf2d8404e38cff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64ab375b_a0b47479",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-17T13:44:00Z",
+      "side": 1,
+      "message": "The only file that includes this types.hpp is ucd90160.hpp, and that includes gpio.hpp first.  So while a bug, it does not occur during a real build.",
+      "parentUuid": "f468764d_2758ceaa",
+      "revId": "3a096954953d13583c82388aebf2d8404e38cff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
