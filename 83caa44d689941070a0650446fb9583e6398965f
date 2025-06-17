@@ -18,6 +18,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3a8ce29_e6bee082",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81b6e7b3_bad05429",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e6b9d87_fa8f747c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81b6e7b3_bad05429",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aaa9f363_2ff6535f",
@@ -31,6 +67,30 @@
       "writtenOn": "2025-06-12T14:58:14Z",
       "side": 1,
       "message": "Since this code has been removed, it should probably not be mentioned here.\n\nPlease summarize the testing you did with the code in this commit. e.g. Verified getPSUConfiguration() only found PSUs for current chassis.  Verified getSupportedConfiguration() only found supported PSU configurations for the current chassis.",
+      "range": {
+        "startLine": 31,
+        "startChar": 14,
+        "endLine": 31,
+        "endChar": 29
+      },
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05684449_66ba98ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Removed implementation of getSupportedConfiguration until design issue resolved.",
+      "parentUuid": "aaa9f363_2ff6535f",
       "range": {
         "startLine": 31,
         "startChar": 14,
@@ -93,6 +153,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef00267f_fafca124",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db87d6c9_81a894cb",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22029e98_17c27d3a",
@@ -106,6 +184,24 @@
       "writtenOn": "2025-06-12T14:58:14Z",
       "side": 1,
       "message": "Does baseChassisInvPath end up containing the same thing as the chassisPath data member?  If so, just use that directly?",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b3340dd_d3d9cf7f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22029e98_17c27d3a",
       "revId": "83caa44d689941070a0650446fb9583e6398965f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -127,6 +223,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac3e219_37b2e89a",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feafd8b5_22f7229f",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a5f5f1d_40cc5129",
@@ -144,6 +258,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "065c7bc7_b86b6592",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a5f5f1d_40cc5129",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84862cf6_f863bb7f",
@@ -157,6 +289,24 @@
       "writtenOn": "2025-06-12T14:58:14Z",
       "side": 1,
       "message": "This should probably be called populateSupportedConfiguration() so it matches getSupportedConfiguration() right?  They both deal with the psu configuration data.",
+      "revId": "83caa44d689941070a0650446fb9583e6398965f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61ebdaf6_817d4f6f",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-17T15:22:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84862cf6_f863bb7f",
       "revId": "83caa44d689941070a0650446fb9583e6398965f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
