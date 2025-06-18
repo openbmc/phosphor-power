@@ -16,6 +16,24 @@
       "message": "I don\u0027t understand why this is necessary.  This header file is already being included by four.cpp files such as chassis_tests.cpp.  We shouldn\u0027t have to do artificial stuff like this just for clang-tidy.",
       "revId": "2b8167d1273ec3cd400455a6925e45073649dac8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70d223b1_30d94ab5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000086
+      },
+      "writtenOn": "2025-06-18T16:32:57Z",
+      "side": 1,
+      "message": "clang-tidy relies on the compile_commands.json file to understand include paths, macros, and other compilation flags. The clang JSON file isn’t being generated, possibly due to missing context. We may need to debug the Meson configuration further. The  proposed workaround is a common and effective solution to a known clang-tidy limitation when analyzing header files directly.",
+      "parentUuid": "246bd276_00b60c9d",
+      "revId": "2b8167d1273ec3cd400455a6925e45073649dac8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
