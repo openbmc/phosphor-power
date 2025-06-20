@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b73ea31_c6714bca",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-20T21:00:09Z",
+      "side": 1,
+      "message": "Is this test code that was accidentally left in?  This is a specific system type that is not appropriate for upstream code.",
+      "revId": "9007d7b8c7c2685737b3c8944fb60f410518bd66",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb171f16_a81d8827",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-20T21:00:09Z",
+      "side": 1,
+      "message": "I\u0027m assuming the logic here is that the D-Bus object path for the chassis ends with a unique number.\n\nAs I mentioned in the previous commit, we need to support \u003e 9 chassis.  If the path ends with \u0027chassis10\u0027, chassisId would incorrectly be set to \"0\" here.\n\nSo should the logic be to set chassisId to one or more numbers at the end of the object path?",
+      "revId": "9007d7b8c7c2685737b3c8944fb60f410518bd66",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1622c14_08f656d7",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-20T21:00:09Z",
+      "side": 1,
+      "message": "My comment here in the previous commit is marked resolved with \"Done\", but I don\u0027t see any changes in the latest commit?",
+      "revId": "9007d7b8c7c2685737b3c8944fb60f410518bd66",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6f14fcc_ec984dcc",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-20T21:00:09Z",
+      "side": 1,
+      "message": "path?",
+      "range": {
+        "startLine": 200,
+        "startChar": 41,
+        "endLine": 200,
+        "endChar": 48
+      },
+      "revId": "9007d7b8c7c2685737b3c8944fb60f410518bd66",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ece98126_bb070561",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-20T21:00:09Z",
+      "side": 1,
+      "message": "Here is what the PSU and PSU configuration object paths might look like on a multi-chassis \u0027Foo\u0027 system with a \u0027Bar\u0027 backplane:\n\n```\n/xyz/openbmc_project/inventory/system/board/Bar_Backplane1/Power_Supply_Slot_0\n/xyz/openbmc_project/inventory/system/board/Bar_Backplane1/Power_Supply_Slot_1\n/xyz/openbmc_project/inventory/system/board/Bar_Backplane2/Power_Supply_Slot_0\n/xyz/openbmc_project/inventory/system/board/Bar_Backplane2/Power_Supply_Slot_1\n\n/xyz/openbmc_project/inventory/system/chassis/Foo_Chassis1/1000W_IBMCFFPS_Configuration\n/xyz/openbmc_project/inventory/system/chassis/Foo_Chassis1/2000W_IBMCFFPS_Configuration\n/xyz/openbmc_project/inventory/system/chassis/Foo_Chassis2/1000W_IBMCFFPS_Configuration\n/xyz/openbmc_project/inventory/system/chassis/Foo_Chassis2/2000W_IBMCFFPS_Configuration\n```\n\nIf the chassis number is 1, I don\u0027t think we can just search for \"1\" in the object path.  There would be a large chance of an incorrect match.  We obviously can\u0027t hardcode system or backplane type names in the application.  So I\u0027m not sure we can determine if this is a match based only on the object path.\n\nMatt Spinler had suggested that a chassis number would likely be added to the EntityManager chassis with syntax like the following:\n\n    \"xyz.openbmc_project.Inventory.Decorator.Slot\": {\n        \"SlotNumber\": \"1\"\n    }\nHe said that Slot might not be the final interface, but we\u0027d have one like that that has the chassis number.\n\nI\u0027d think we\u0027d need the same interface/data on the EM backplane object.\nmatch.\n\nI would suggest either marking this TBD or implementing a match based on the SlotNumber of the backplane/chassis that contains the PSU/PSU configuration.",
+      "revId": "9007d7b8c7c2685737b3c8944fb60f410518bd66",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
