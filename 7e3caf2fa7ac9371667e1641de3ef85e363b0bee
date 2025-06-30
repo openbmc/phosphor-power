@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f47e6d6_c9336f0d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "renamed to entityMgrService",
+      "parentUuid": "15e38863_7c012edb",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 26
+      },
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9358961_27c4571c",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-06-27T22:39:12Z",
       "side": 1,
       "message": "The interface might change in the future.  Slot is sort of a temporary measure.  So I think the interface should be named decoratorChassisNumber or something.",
+      "range": {
+        "startLine": 22,
+        "startChar": 11,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4499ac8_d06f7ee0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "Renaming the interface to decoratorChassisId so if the interface change will still be able to use ID.",
+      "parentUuid": "c9358961_27c4571c",
       "range": {
         "startLine": 22,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "409a662a_a2413bd5",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "renamed to chassisObjects",
+      "parentUuid": "43f873bd_644d42d0",
+      "range": {
+        "startLine": 35,
+        "startChar": 9,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48a2df96_5bfd9827",
@@ -83,6 +155,30 @@
       "writtenOn": "2025-06-27T22:39:12Z",
       "side": 1,
       "message": "Why does it need to be beneath \u0027board\u0027?  Is this really trying to find the EM objects that have the Slot interface?\n\nIf I am understanding the logic of the code below, it is trying to find both an EM chassis and an EM motherboard that have the correct chassis number.  I don\u0027t think it needs to be this complicated (I could be wrong).\n\nWe discussed with Matt that *both* the EM chassis and the EM motherboard would provide the Slot interface.\n\nIn the case of PSU properties, they are currently being stored as part of the EM motherboard info.  So you only need to find the motherboard that contains the PSU properties, and then determine if that has the correct chassis number.\n\n```\n$ busctl tree xyz.openbmc_project.EntityManager\n        │ └─ /xyz/openbmc_project/inventory/system/board/Nisqually_Backplane\n        │   ├─ /xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_0\n        │   ├─ /xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_1\n```\n\nSomeone could decide to put the PSU info in the EM chassis object instead.  So either way, we just want to find PSU info that is contained within an EM object path with the correct chassis number.\n\nI think the logic could just be the following right?\n* Find all objects that implement the IBMCFFPSInterface interface (as you are already doing)\n* Find all objects that provide a \"chassis number\" (by implementing the Slot interface)\n* Loop through \"chassis number\" providing objects\n  * If the object has the correct chassis number\n    * Loop through the IBMCFFPSInterface objects\n      * If the \"chassis number\" object path is a parent of the PS object path\n        * This PS belongs in the correct chassis\n        * Note: Keep looping to find more matching PS objects\n\nYou can check if a \"chassis number\" object is a parent of a PS object by checking if the PS object path starts with the \"chassis number\" object path.\n\nFor example:\n`/xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_0`\nstarts with\n`/xyz/openbmc_project/inventory/system/board/Nisqually_Backplane`\n\nI would recommend doing the \u0027starts with\u0027 test rather that assuming the PSU info is exactly one node below the parent.  That would provide protection in case EM changed their object path design and the PSU info was 2 or 3 levels below the parent.",
+      "range": {
+        "startLine": 36,
+        "startChar": 62,
+        "endLine": 36,
+        "endChar": 68
+      },
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b42bc80_842025f0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48a2df96_5bfd9827",
       "range": {
         "startLine": 36,
         "startChar": 62,
@@ -110,6 +206,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8b7457_702bdbcf",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "I wasn\u0027t able to use it",
+      "parentUuid": "c42a156f_7e3fbe2e",
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d63c5065_c932e16f",
@@ -123,6 +237,24 @@
       "writtenOn": "2025-06-27T22:39:12Z",
       "side": 1,
       "message": "After catching the exception and logging an error message, the code needs to exit from this method right?  The get_ifs() below would be acting on an uninitialized propValue().\n\nYou should probably define what happens if this fails in the doxygen, and then implement that in the code.\n\nFor example, does this return 0 if it fails?  If that is a possible chassis number, then you\u0027d have to define a different value for a failure.  It can\u0027t be -1 since this returns a uint64_t.\n\nYou could also let the caller handle the exception if that is easier.  That is what exceptions are for.",
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba6fddd_df1c3817",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d63c5065_c932e16f",
       "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -144,6 +276,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d58480a9_15b28bbf",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "renamed to chassisNumber",
+      "parentUuid": "9524b313_e4e6b4bd",
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7da2776b_d38afedb",
@@ -161,6 +311,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "144f0419_2bfc534c",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "Renamed to getObjectPathUniqueId",
+      "parentUuid": "7da2776b_d38afedb",
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4a7d3e3_e65128b1",
@@ -174,6 +342,24 @@
       "writtenOn": "2025-06-27T22:39:12Z",
       "side": 1,
       "message": "If this is the service, the comment should probably say \"D-Bus service name\" vs. \"Object interface\".  Those are two very different things.",
+      "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ba43c5_4438a5d3",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-06-30T17:00:55Z",
+      "side": 1,
+      "message": "Renamed to \"D-Bus service name\"",
+      "parentUuid": "a4a7d3e3_e65128b1",
       "revId": "7e3caf2fa7ac9371667e1641de3ef85e363b0bee",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
