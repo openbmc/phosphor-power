@@ -16,6 +16,132 @@
       "message": "Please review",
       "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23d8e01c_b6068415",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "Since this is mentioned in the .hpp file it should probably be moved there.",
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "421352e7_958e1195",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "chassis?  The goal is to find a chassis number (or unique id as you have termed it)",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 47
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9cce979_fd81bb1d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "This approach will only work if the PSU information is contained within a EM backplane object, and the backplane must have the string \"Backplane\" in the Name property (case-sensitive).\n\nI think this is too restrictive.  What if on another system the PSU information is contained in an EM chassis object, or they don\u0027t put \"Backplane\" in the name of a containing board?\n\nIn my comment in the previous review I suggested a generic solution.  We could just obtain all D-Bus objects that implement the Slot interface, loop through them, see if they have the right chassis number, and then loop through the PSU information D-Bus paths and find any that start with the Slot object D-Bus path.  That would allow the PSU information to be within an EM chassis or board, and it would not require a particular board naming scheme.  Would that work?",
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b116d1e8_42116380",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "This should probably be initialized to the invalid ID constant right?  Then you know if it has been successfully obtained?",
+      "range": {
+        "startLine": 145,
+        "startChar": 13,
+        "endLine": 145,
+        "endChar": 32
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e424bae7_84243bb4",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "Nit: spelling",
+      "range": {
+        "startLine": 204,
+        "startChar": 36,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00472313_3c6c8933",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-06-30T23:10:49Z",
+      "side": 1,
+      "message": "Nit: spelling does not match the constant in the .cpp file.  Also, since you mention the constant here it should probably be defined here in the .hpp file by the other one on line 42.",
+      "range": {
+        "startLine": 205,
+        "startChar": 18,
+        "endLine": 205,
+        "endChar": 37
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
