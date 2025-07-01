@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c3186d2_e201cabd",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-01T16:19:16Z",
+      "side": 1,
+      "message": "Isn\u0027t what you really want here just the parent of the config object path?\n\n/xyz/openbmc_project/inventory/system/board/Nisqually_Backplane/Power_Supply_Slot_0\n\nNo matter what the name is, you just want the path for the EM board object that the power supply slot configuration object is sitting on.",
+      "parentUuid": "e9cce979_fd81bb1d",
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b116d1e8_42116380",
         "filename": "phosphor-power-supply/chassis.hpp",
         "patchSetId": 8
