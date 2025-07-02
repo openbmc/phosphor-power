@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6e02d9d_b6ee458f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23d8e01c_b6068415",
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "421352e7_958e1195",
@@ -48,6 +66,30 @@
       "writtenOn": "2025-06-30T23:10:49Z",
       "side": 1,
       "message": "chassis?  The goal is to find a chassis number (or unique id as you have termed it)",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 47
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "176363f6_f5829cd8",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "421352e7_958e1195",
       "range": {
         "startLine": 41,
         "startChar": 42,
@@ -93,6 +135,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bade121_e8d29e13",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c3186d2_e201cabd",
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b116d1e8_42116380",
@@ -106,6 +166,30 @@
       "writtenOn": "2025-06-30T23:10:49Z",
       "side": 1,
       "message": "This should probably be initialized to the invalid ID constant right?  Then you know if it has been successfully obtained?",
+      "range": {
+        "startLine": 145,
+        "startChar": 13,
+        "endLine": 145,
+        "endChar": 32
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db775133_75c456f3",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b116d1e8_42116380",
       "range": {
         "startLine": 145,
         "startChar": 13,
@@ -139,6 +223,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "784d6ec3_6cc1f90d",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e424bae7_84243bb4",
+      "range": {
+        "startLine": 204,
+        "startChar": 36,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00472313_3c6c8933",
@@ -152,6 +260,30 @@
       "writtenOn": "2025-06-30T23:10:49Z",
       "side": 1,
       "message": "Nit: spelling does not match the constant in the .cpp file.  Also, since you mention the constant here it should probably be defined here in the .hpp file by the other one on line 42.",
+      "range": {
+        "startLine": 205,
+        "startChar": 18,
+        "endLine": 205,
+        "endChar": 37
+      },
+      "revId": "32c59d7c6a6994ff398b86a779592e96e076268f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2776d79d_a64c1adc",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-02T01:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00472313_3c6c8933",
       "range": {
         "startLine": 205,
         "startChar": 18,
