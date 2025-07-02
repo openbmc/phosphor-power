@@ -16,6 +16,63 @@
       "message": "Please review",
       "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e717a1c_ed69aa39",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-02T20:46:00Z",
+      "side": 1,
+      "message": "Should probably make \"SlotNumber\" a constant too in case the interface/property changes in the future.",
+      "range": {
+        "startLine": 35,
+        "startChar": 36,
+        "endLine": 35,
+        "endChar": 48
+      },
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b9cdc25_ce2656e9",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-02T20:46:00Z",
+      "side": 1,
+      "message": "Did you want to wrap the call to getProperty() within a try/catch.  It will throw an exception if the D-Bus call fails.  How do you want to handle it?",
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c629ffa_ab830ea0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-02T20:46:00Z",
+      "side": 1,
+      "message": "I think this algorithm below will add all the PSUs in the system to every chassis.\n\nFaisal and I talked offline about using the following algorithm instead:\n```\n* Get chassis number (slot number) for chassis path from PIM (same as current code)\n* Get all D-Bus paths that implement CFFPS interface (e.g. the PSU D-Bus paths)\n* Loop through PSU D-Bus paths\n  * Get parent D-Bus path\n  * Get chassis number (slot number) for parent D-Bus path\n  * If chassis number matches\n    * Get properties of PSU and add to current C++ Chassis object\n```",
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
