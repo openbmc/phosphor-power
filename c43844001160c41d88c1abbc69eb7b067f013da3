@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56fae5e9_72298cc1",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d8e9356_8a19ac77",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 27
+      },
+      "revId": "c43844001160c41d88c1abbc69eb7b067f013da3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1d14677_af563702",
@@ -54,6 +78,30 @@
       "writtenOn": "2025-07-03T14:54:53Z",
       "side": 1,
       "message": "I\u0027ve never seen a method call in a constructor init list.  I\u0027ve seen it within a variable initialization (e.g. chassisNumber{getChassisNumber}), but not a plain method call.\n\nSince it compiled it is probably fine.  Normally though plain method calls are in the body of the constructor like getPSUConfiguration().",
+      "range": {
+        "startLine": 29,
+        "startChar": 40,
+        "endLine": 29,
+        "endChar": 63
+      },
+      "revId": "c43844001160c41d88c1abbc69eb7b067f013da3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "627e0742_f913450f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1d14677_af563702",
       "range": {
         "startLine": 29,
         "startChar": 40,
@@ -87,6 +135,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8a6e2d_14e77ef4",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5e039cb_c18cb897",
+      "range": {
+        "startLine": 44,
+        "startChar": 46,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "c43844001160c41d88c1abbc69eb7b067f013da3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e620c19_2b7aa34c",
@@ -100,6 +172,24 @@
       "writtenOn": "2025-07-03T14:54:53Z",
       "side": 1,
       "message": "Seems like you are missing a verb here.  \"Failed to find chassis ID\"?",
+      "revId": "c43844001160c41d88c1abbc69eb7b067f013da3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1580f7_468d1033",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T16:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e620c19_2b7aa34c",
       "revId": "c43844001160c41d88c1abbc69eb7b067f013da3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
