@@ -18,6 +18,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adfd5864_621d479f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T00:40:14Z",
+      "side": 1,
+      "message": "Please review",
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e717a1c_ed69aa39",
@@ -58,6 +75,48 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5954eed0_cc79ad44",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T00:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b9cdc25_ce2656e9",
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d06a65_ee38680f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T00:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e717a1c_ed69aa39",
+      "range": {
+        "startLine": 35,
+        "startChar": 36,
+        "endLine": 35,
+        "endChar": 48
+      },
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c629ffa_ab830ea0",
@@ -71,6 +130,24 @@
       "writtenOn": "2025-07-02T20:46:00Z",
       "side": 1,
       "message": "I think this algorithm below will add all the PSUs in the system to every chassis.\n\nFaisal and I talked offline about using the following algorithm instead:\n```\n* Get chassis number (slot number) for chassis path from PIM (same as current code)\n* Get all D-Bus paths that implement CFFPS interface (e.g. the PSU D-Bus paths)\n* Loop through PSU D-Bus paths\n  * Get parent D-Bus path\n  * Get chassis number (slot number) for parent D-Bus path\n  * If chassis number matches\n    * Get properties of PSU and add to current C++ Chassis object\n```",
+      "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77582bb7_918e6284",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-03T00:40:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c629ffa_ab830ea0",
       "revId": "fd3e18d0fa58baccde51efe5db9dbd099dcdf7e2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
