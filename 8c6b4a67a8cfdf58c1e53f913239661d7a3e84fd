@@ -16,6 +16,178 @@
       "message": "Will defer to Shawn and Matts excellent reviews, fwiw looks good to me, thanks.",
       "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5919818f_7279c97d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "you already have this above, just one will suffice.",
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5541f4eb_ba7f43ba",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "nit,  maybe just leave out all the parentheses around the checks since they\u0027re all unary operations.",
+      "range": {
+        "startLine": 121,
+        "startChar": 8,
+        "endLine": 121,
+        "endChar": 9
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d661061_7baff81c",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "nit: no need to initialize to an empty string.",
+      "range": {
+        "startLine": 125,
+        "startChar": 28,
+        "endLine": 125,
+        "endChar": 33
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ecdc68a_5cd99db6",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "nit: mem_fn isn\u0027t needed anymore, can just use std::bind.  Also, since you\u0027re in this chassis namespace, you don\u0027t have to specify it.",
+      "range": {
+        "startLine": 156,
+        "startChar": 16,
+        "endLine": 156,
+        "endChar": 28
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebc41083_30d3455a",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "nit: to be consistent with line 296, maybe also just capture \u0026driverName.",
+      "range": {
+        "startLine": 304,
+        "startChar": 19,
+        "endLine": 304,
+        "endChar": 20
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd69bd56_72c44215",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "nit:  structure naming follows class naming, so it would be upper camel case",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 34
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8f7edc7_c85a5336",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "are these both necessary in this header?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 34
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f7f4722_ff6f90c3",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T18:48:21Z",
+      "side": 1,
+      "message": "I think a lot of these aren\u0027t used in this commit?  It\u0027d be better to leave them out until they are used.",
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
