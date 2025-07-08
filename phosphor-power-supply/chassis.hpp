@@ -29,7 +29,7 @@ using namespace phosphor::power::psu;
 namespace phosphor::power::chassis
 {
 
-constexpr uint32_t invalidObjectPathUniqueId = 9999;
+constexpr uint64_t invalidObjectPathUniqueId = 9999;
 using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
     Decorator::server::PowerSystemInputs;
 using PowerSystemInputsObject =
@@ -62,8 +62,26 @@ class Chassis
      *
      * @param[in] bus - D-Bus bus object
      * @param[in] chassisPath - Chassis path
+     * @param[in] event - Event loop object
      */
-    Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath);
+    Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
+            const sdeventplus::Event& e);
+
+    /**
+     * @brief Retrieves the unique identifier of the chassis.
+     *
+     * @return uint64_t The unique 64 bits identifier of the chassis.
+     */
+    uint64_t getChassisId()
+    {
+        return chassisPathUniqueId;
+    }
+
+    /**
+     * @brief Analyze the status of each of the power supplies. Log errors for
+     * faults, when and where appropriate.
+     */
+    void analyze();
 
     /**
      * @brief Get the status of Power on.
@@ -125,7 +143,13 @@ class Chassis
     /**
      * @brief The Chassis path unique ID
      */
-    uint32_t chassisPathUniqueId = invalidObjectPathUniqueId;
+    uint64_t chassisPathUniqueId = invalidObjectPathUniqueId;
+
+    /**
+     * @brief Declares a constant reference to an sdeventplus::Event to manage
+     * async processing.
+     */
+    const sdeventplus::Event& eventLoop;
 
     /**
      * @brief Get PSU properties from D-Bus, use that to build a power supply
@@ -181,9 +205,10 @@ class Chassis
     /**
      * @brief Get chassis path unique ID.
      *
-     * @return uint32_t - Chassis path unique ID.
+     * @param [in] path - Chassis path.
+     * @return uint64_t - Chassis path unique ID.
      */
-    uint32_t getChassisPathUniqueId();
+    uint64_t getChassisPathUniqueId(const std::string& path);
 };
 
 } // namespace phosphor::power::chassis
