@@ -164,6 +164,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e920c9b_631d491b",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T20:58:12Z",
+      "side": 1,
+      "message": "that\u0027s fine, but it still looks bad.",
+      "parentUuid": "99b3f6ab_62b12123",
+      "range": {
+        "startLine": 125,
+        "startChar": 28,
+        "endLine": 125,
+        "endChar": 33
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ecdc68a_5cd99db6",
@@ -319,6 +343,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "cd69bd56_72c44215",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 34
+      },
+      "revId": "8c6b4a67a8cfdf58c1e53f913239661d7a3e84fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b2caadf_1568d4bf",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-07-08T20:58:12Z",
+      "side": 1,
+      "message": "It would be:  SupportedPsuConfiguration",
+      "parentUuid": "c3077029_0dd58457",
       "range": {
         "startLine": 20,
         "startChar": 7,
