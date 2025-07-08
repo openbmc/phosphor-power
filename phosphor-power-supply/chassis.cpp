@@ -25,9 +25,10 @@ const auto driverDirName = "/driver";
 const auto entityMgrService = "xyz.openbmc_project.EntityManager";
 const auto decoratorChassisId = "xyz.openbmc_project.Inventory.Decorator.Slot";
 
-Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath) :
+Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
+                 const sdeventplus::Event& e) :
     bus(bus), chassisPath(chassisPath),
-    chassisPathUniqueId(getChassisPathUniqueId())
+    chassisPathUniqueId(getChassisPathUniqueId(chassisPath)), eventLoop(e)
 {
     getPSUConfiguration();
 }
@@ -149,9 +150,12 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
         lg2::debug(
             "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
             "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
+        // auto psu = std::make_unique<PowerSupply>(
+        //    bus, invpath, *i2cbus, *i2caddr, driverName, presline,
+        //   std::bind(&Chassis::isPowerOn, this), chassisPath);
         auto psu = std::make_unique<PowerSupply>(
             bus, invpath, *i2cbus, *i2caddr, driverName, presline,
-            std::bind(&Chassis::isPowerOn, this), chassisPath);
+            std::bind(&Chassis::isPowerOn, this));
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes
@@ -300,20 +304,22 @@ void Chassis::populateDriverName()
                   [&driverName](auto& psu) { psu->setDriverName(driverName); });
 }
 
-uint32_t Chassis::getChassisPathUniqueId()
+uint64_t Chassis::getChassisPathUniqueId(const std::string& path)
 {
     uint32_t chassisId = invalidObjectPathUniqueId;
     try
     {
-        getProperty(decoratorChassisId, chassisIdProp, chassisPath,
+        getProperty(decoratorChassisId, chassisIdProp, path,
                     INVENTORY_MGR_IFACE, bus, chassisId);
     }
     catch (const sdbusplus::exception_t& e)
     {
-        lg2::error("Failed to find chassis ID  - exception: {ERROR}", "ERROR",
-                   e);
+        lg2::error(
+            "Failed to find chassis chassis path {CHASSIS_PATH} ID - exception: {ERROR}",
+            "CHASSIS_PATH", path, "ERROR", e);
     }
-    return chassisId;
+    return static_cast<uint64_t>(chassisId);
 }
 
+void Chassis::analyze() {}
 } // namespace phosphor::power::chassis
