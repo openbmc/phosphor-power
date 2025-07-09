@@ -105,7 +105,7 @@ endif
 
 systemd = dependency('systemd')
 libsystemd_dep = dependency('libsystemd')
-servicedir = systemd.get_variable('systemdsystemunitdir')
+servicedir = systemd.get_variable('systemd_system_unit_dir')
 
 services = [
     ['supply-monitor', 'power-supply-monitor@.service'],
