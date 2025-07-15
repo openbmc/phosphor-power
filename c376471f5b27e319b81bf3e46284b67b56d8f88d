@@ -3,6 +3,125 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93fc13cb_e0eafe18",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "As mentioned in the .hpp file, this should probably be in the Chassis object.  Same comment on line 24 below.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b186f673_c16a6953",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Does this belong in this class?",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f7f5cf_c0732ec1",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Delete?",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c35c6b_fc2c7518",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "This is checking if the xyz.openbmc_project.Inventory.Item.PowerSupply interface is present in the message.\n\nBut EM does not publish that interface on either the Power_Supply_SlotX D-Bus path or the X_Configuration path.  So I\u0027d think this would never be true.\n\nThis should be checking if either the supportedConfIntf or IBMCFFPSInterface is present, right?  Note that it should not assume both are present; they may come in different EM events.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47297a0f_ea9ead4b",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "I don\u0027t think this would be true either, right?  The chassis path is the PIM path, like /xyz/openbmc_project/inventory/system/chassis2 right?\n\nThese are EM objects paths like:\n* /xyz/openbmc_project/inventory/system/boardX/Foo_Backplane/Power_Supply_Slot_0\n* /xyz/openbmc_project/inventory/system/chassisX/Foo/X_PSU_Configuration\n\nThe Chassis class currently has the code of how to determine if an EM path is related to the correct chassis ID.  That gets the parent object path and then looks for the Slot interface/property.\n\nWe definitely don\u0027t want to copy/paste that code, so maybe that should be moved to a chassis_utils.hpp/cpp file/namespace?  Then both the Chassis and ChassisManager could use common code to get the chassis ID associated with an EM path (if any).  Then the ChassisManager would know which Chassis to give this EM event info to.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21663e7b_49c941bd",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "It seems like the ChassisManager knows too much and is doing too much here, on line 79, and especially on line 84.  It is treating the Chassis class more like a struct, where it knows what the data structures are and what internal methods need to get called when data changes.\n\nThe Chassis class should be more of a black box, where it has a few public methods and then calls its own internal methods.\n\nI think lines 70, 79, and 84-88 should be inside the Chassis class.  When new PSU or PSU configuration information is added, then the Chassis class should internally call updateMissingPSUs() or restartValidationTimer() if appropriate.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56158c85_dac96ddc",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "I don\u0027t think these methods exist yet upstream or in this commit.  That suggests this code doesn\u0027t compile and hasn\u0027t been tested in this form.  Please only put code up for review that compiles and has been tested.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53341985_40da484b",
         "filename": "phosphor-power-supply/chassis_manager.cpp",
         "patchSetId": 2
@@ -14,6 +133,30 @@
       "writtenOn": "2025-07-09T18:27:10Z",
       "side": 1,
       "message": "Isn\u0027t objPath an entity-manager interface, since you read it from an entity-manager signal?  but then in addChassisIfNew you look for that path in inventory-manager?",
+      "range": {
+        "startLine": 95,
+        "startChar": 28,
+        "endLine": 95,
+        "endChar": 35
+      },
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e892d31_36eb1bef",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "I think you were planning to get the chassis paths from PIM right?  If so, there is no need to get \"new\" chassis from EM.",
+      "parentUuid": "53341985_40da484b",
       "range": {
         "startLine": 95,
         "startChar": 28,
@@ -49,6 +192,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cc1edcd_5f237e1b",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "The ObjectMapper D-Bus interface has a GetSubTreePaths method.  It works like GetSubTree, but it only returns the paths.\n\nThe getPSUInventoryPaths() method in utility.cpp uses this.  It returns all D-Bus object paths that implement the power supply interface.\n\nYou could add a getChassisPaths() to utility.cpp that does the same thing, only with the chassis interface.\n\nThen you could just iterate over the returned paths and create a Chassis object for each one.\n\nThis is not a requirement; just a more efficient way to do this.  Right now we are getting a bunch of additional information but only using the paths.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14e8043c_5fdc6d7a",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Will this method only be called once in the constructor?  If so, I don\u0027t think you\u0027d need to check if a Chassis object already exists with the given path.  You could just create a Chassis for each path you find.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "32502466_e3321d4b",
         "filename": "phosphor-power-supply/chassis_manager.cpp",
         "patchSetId": 2
@@ -60,6 +237,126 @@
       "writtenOn": "2025-07-10T18:52:47Z",
       "side": 1,
       "message": "Per offline discussion, please do not require the chassis to be present.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68957bdc_3b374645",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Based on this, I don\u0027t think this method is needed.  We are not going to get new chassis from EM events as mentioned in a previous comment.  We can get them all when the PSU app starts and calls initializeChassisList().\n\nThe Chassis class should get its presence in its constructor and also add a PropertyChanged listener so it knows when its presence changes.\n\nThen when Chassis methods are called, it can basically do\n```\nif (present)\n{\n  ... Do the thing\n}\n```",
+      "parentUuid": "32502466_e3321d4b",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11088bcb_c06b17be",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "I don\u0027t think this file exists?",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d3becc7_02b4cb6c",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Is this needed?  Anwaar changed the journal msg calls in psu_manager to lg2.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f8eeb5_052a33bb",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "Is this needed?  Anwaar changed the journal msg calls in psu_manager to lg2.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b21fa0ff_fb4039ee",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "These two using statements are not currently used in this file.  However, my understanding is that there will be a PowerSystemInput D-Bus object for each chassis.  So the Chassis class is probably where these belong.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a41cce0_2b220897",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "See comment above.  I think this needs to be in the Chassis class.",
+      "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be09716e_1f1edcef",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-15T20:30:01Z",
+      "side": 1,
+      "message": "You should update this comment to specify it only requests each chassis to analyze the PSUs that it contains, right?\n\nRight now the comment implies that this class does analysis and error logging.",
       "revId": "c376471f5b27e319b81bf3e46284b67b56d8f88d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
