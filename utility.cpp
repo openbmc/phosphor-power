@@ -30,6 +30,11 @@ constexpr auto MAPPER_BUSNAME = "xyz.openbmc_project.ObjectMapper";
 constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
+constexpr auto ENTITY_MGR_IFACE = "xyz.openbmc_project.EntityManager";
+constexpr auto DECORATOR_CHASSIS_ID =
+    "xyz.openbmc_project.Inventory.Decorator.Slot";
+constexpr auto CHASSIS_ID_PROPERTY = "SlotNumber";
+
 using json = nlohmann::json;
 
 std::string getService(const std::string& path, const std::string& interface,
@@ -205,6 +210,39 @@ std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus)
 
     reply.read(paths);
     return paths;
+}
+
+std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus)
+{
+    std::vector<std::string> paths;
+    auto method = bus.new_method_call(MAPPER_BUSNAME, MAPPER_PATH,
+                                      MAPPER_INTERFACE, "GetSubTreePaths");
+    method.append(INVENTORY_OBJ_PATH);
+    method.append(0); // Depth 0 to search all
+    method.append(std::vector<std::string>({CHASSIS_IFACE}));
+    auto reply = bus.call(method);
+
+    reply.read(paths);
+    return paths;
+}
+
+uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
+                                     const std::string& path)
+{
+    uint32_t chassisId;
+    getProperty(DECORATOR_CHASSIS_ID, CHASSIS_ID_PROPERTY, path,
+                INVENTORY_MGR_IFACE, bus, chassisId);
+    return static_cast<uint64_t>(chassisId);
+}
+
+uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path)
+{
+    namespace fs = std::filesystem;
+    uint64_t chassisId;
+    fs::path fspath(path);
+    getProperty(DECORATOR_CHASSIS_ID, CHASSIS_ID_PROPERTY, fspath.parent_path(),
+                ENTITY_MGR_IFACE, bus, chassisId);
+    return chassisId;
 }
 
 } // namespace util

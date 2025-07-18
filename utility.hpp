@@ -230,6 +230,42 @@ bool isPoweredOn(sdbusplus::bus_t& bus, bool defaultState = false);
  */
 std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus);
 
+/**
+ * @detail Get all chassis inventory paths from D-Bus
+ *
+ * @param[in] bus - D-Bus object
+ *
+ * @return The list of chassis inventory paths
+ */
+std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus);
+
+/**
+ * @brief Retrieve the unique inventory ID  from a given D-Bus path.
+ * Query the D-Bus interface for inventory object path and retrieve its unique
+ * ID (ID specified by SlotNumber)
+ *
+ * @param[in] bus - D-Bus object
+ * @param[in] path - The D-Bus object path who's unique ID needed.
+ *
+ * @return uint64_t - Chassis unique ID
+ */
+uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
+                                     const std::string& path);
+/**
+ * @brief Retrieve the parent chassis unique ID from the Entity Manager.
+ * Given a D-Bus object path, this function extracts the parent path (the
+ * chassis) and retrieve the chassis unique ID the Entity Manager.`
+ *
+ * @param[in] bus - D-Bus object
+ * @param[in] path - The D-Bus object path who's parent unique ID needed.
+ *
+ * @return uint64_t - Chassis unique ID
+ *
+ * @note This function assumes the parent object path contains property in
+ * Entity Manager.
+ */
+uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path);
+
 } // namespace util
 } // namespace power
 } // namespace phosphor
