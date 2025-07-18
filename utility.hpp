@@ -22,6 +22,7 @@ constexpr auto SYSTEMD_ROOT = "/org/freedesktop/systemd1";
 constexpr auto SYSTEMD_INTERFACE = "org.freedesktop.systemd1.Manager";
 constexpr auto POWEROFF_TARGET = "obmc-chassis-hard-poweroff@0.target";
 constexpr auto PROPERTY_INTF = "org.freedesktop.DBus.Properties";
+constexpr auto ENTITY_MGR_SERVICE = "xyz.openbmc_project.EntityManager";
 
 using DbusPath = std::string;
 using DbusProperty = std::string;
@@ -229,6 +230,43 @@ bool isPoweredOn(sdbusplus::bus_t& bus, bool defaultState = false);
  * @return The list of PSU inventory paths
  */
 std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus);
+
+/**
+ * @detail Get all chassis inventory paths from D-Bus
+ *
+ * @param[in] bus - D-Bus object
+ *
+ * @return The list of chassis inventory paths
+ */
+std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus);
+
+/**
+ * @brief Retrieve the chassis ID for the given D-Bus inventory path.
+ * Query the D-Bus interface for inventory object path and retrieve its unique
+ * ID (ID specified by SlotNumber)
+ *
+ * @param[in] bus - D-Bus object
+ * @param[in] path - The inventory manager D-Bus path for a chassis.
+ *
+ * @return uint64_t - Chassis unique ID
+ */
+uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
+                                     const std::string& path);
+/**
+ * @brief Retrieve the parent chassis unique ID from the Entity Manager.
+ * Given a D-Bus object path, this function extracts the parent path (board or
+ * chassis) and retrieve the chassis unique ID from Entity Manager.
+ *
+ * @param[in] bus - D-Bus object
+ * @param[in] path - The EntityManager D-Bus path for hardware within a chassis
+ * or board.
+ *
+ * @return uint64_t - Chassis unique ID
+ *
+ * @note This function assumes the parent object path contains property in
+ * Entity Manager.
+ */
+uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path);
 
 } // namespace util
 } // namespace power
