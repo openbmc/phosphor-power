@@ -51,6 +51,24 @@
       "message": "I did some research to try to understand why this wrapper work-around was required.\n\nI think I found two related problems:\n\nProblem #1\n----------\nMeson runs clang-tidy directly on both .hpp and .cpp files.  I think it is a bug that meson runs clang-tidy directly on .hpp files.\n\nAs Jayanth said, clang-tidy relies on the compile_commands.json \"database\" to get the include paths.  This JSON file only specifies the include paths for compilation units/.cpp files.  So when clang-tidy is run directly on a header file, there is no information for that file in the \"database\".  clang-tidy appears to do some guessing on which compilation target to use when processing that header file.  The guessing in the case of this header file, test_utils.hpp, was wrong.\n\nThe proposed .clang-tidy file specifies HeaderFilterRegex to check all header files except those in the subprojects subdirectory.  This means all the header files are going to be processed anyway, but they will be processed correctly within the context of a compilation unit.\n\nUnfortunately, I could not find a simple way to change the generated \u0027clang-tidy\u0027 meson target to only run on .cpp files.\n\nProblem #2\n----------\nThere is an unrelated file named test_utils.cpp at the path tools/power-utils/test/test_utils.cpp.  I believe clang-tidy thinks this is the \u0027matching\u0027 .cpp file for phosphor-regulators/test/test_utils.hpp.  So, clang-tidy uses the include info for that unrelated .cpp file.  That leads to a spurious error about not being able to find an included header file (action.hpp).\n\n\nI have not found a good solution for problem #1, so I reluctantly agree that a work-around is needed.  Can you please do the following?\n* Change the name from test_utils_wrapper.cpp to just test_utils.cpp\n* Put a comment in test_utils.cpp that this is a work-around for problem with the way meson runs clang-tidy.\n* Rebase your commit on https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/82154.  Code has merged since you started this sequence of clang-tidy commits, and 82154 is required to pass CI.",
       "revId": "2b8167d1273ec3cd400455a6925e45073649dac8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6cecda5_998113c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000086
+      },
+      "writtenOn": "2025-07-21T16:27:53Z",
+      "side": 1,
+      "message": "done.",
+      "parentUuid": "e45a8be1_68457270",
+      "revId": "2b8167d1273ec3cd400455a6925e45073649dac8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
