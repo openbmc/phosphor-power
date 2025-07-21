@@ -16,6 +16,24 @@
       "message": "The .clang-tidy-ignore file is not officially supported by clang-tidy( correct me incase you found any documenetion related to this ) . Instead, the recommended approach for excluding specific headers from analysis is to use the HeaderFilterRegex option in the .clang-tidy configuration file.  Or we may need to add support in build infrastructure to support this custom file .",
       "revId": "1c3148262982cfb46600cdb4ae98845b22ed0936",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f8e328b_24f7145a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-21T16:47:23Z",
+      "side": 1,
+      "message": "I have not found documentation; I just found references in internet searches.  It worked, so I thought perhaps the feature was very new.\n\nIf there is a better solution I\u0027m happy to change.  The issue with HeaderFilterRegex is that it only applies (I assume?) to header files.  In this cases there are a few .cpp files as well.  I\u0027m not sure how else to exclude them.\n\nI tried putting a .clang-tidy file in the phosphor-power-supply sub-directory to turn off all checks.  Unfortunately, meson does not specify the `--allow-no-checks` parameter to clang-tidy.  Without that parameter, a .clang-tidy file with all checks turned off results in an error, non-zero return code, and failed CI.\n\nI tried turning off specific checks in the .clang-tidy file instead, but the problems were of the clang-diagnostic-* variety.  It appears specifying them in the .clang-tidy file does not work because they are produced by other clang tooling that builds the symbol trees from the code.",
+      "parentUuid": "1f3c9cc1_c59a64f9",
+      "revId": "1c3148262982cfb46600cdb4ae98845b22ed0936",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
