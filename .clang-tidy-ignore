@@ -1,0 +1,6 @@
+phosphor-power-supply/chassis.cpp
+phosphor-power-supply/chassis.hpp
+phosphor-power-supply/chassis_manager.cpp
+phosphor-power-supply/chassis_manager.hpp
+phosphor-power-supply/power_supply.cpp
+phosphor-power-supply/power_supply.hpp
