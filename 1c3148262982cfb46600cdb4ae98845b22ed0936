@@ -34,6 +34,24 @@
       "parentUuid": "1f3c9cc1_c59a64f9",
       "revId": "1c3148262982cfb46600cdb4ae98845b22ed0936",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091d69e0_26a1c92b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-21T16:49:51Z",
+      "side": 1,
+      "message": "I have spent over a day trying to resolve this issue and the one with test_utils.hpp.  The lack of documentation on how the meson/clang-tidy integration works and how to modify its behavior is very frustrating and time consuming.",
+      "parentUuid": "0f8e328b_24f7145a",
+      "revId": "1c3148262982cfb46600cdb4ae98845b22ed0936",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
