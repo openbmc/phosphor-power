@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dc4661_9f08a1fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-21T16:34:45Z",
+      "side": 1,
+      "message": "Either this commit or \"clang-tidy: Initial commit\" will need to be rebased on top of https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/82154 to pass CI.",
+      "revId": "9e28f5923fbdb6f460e0b632d9940c122bfd9dce",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd9dc56a_28f51602",
+        "filename": "phosphor-regulators/test/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-21T16:34:45Z",
+      "side": 1,
+      "message": "I believe this needs to change to test_utils.cpp.",
+      "revId": "9e28f5923fbdb6f460e0b632d9940c122bfd9dce",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
