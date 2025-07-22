@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ef5b06_91c2f092",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "Nit: helper",
+      "range": {
+        "startLine": 15,
+        "startChar": 16,
+        "endLine": 15,
+        "endChar": 21
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "10b29c91_135caca6",
@@ -14,6 +37,178 @@
       "writtenOn": "2025-07-21T18:24:27Z",
       "side": 1,
       "message": "Please review",
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a7b7f1_51196855",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "Looks good.  Some minor comments.",
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4419638d_295c7fc3",
+        "filename": "utility.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "This should probably be ENTITY_MGR_SERVICE.  This is a D-Bus service name, not an interface name.\n\nI realize the constant used for the Inventory Manager service is called INVENTORY_IFACE.  That is a confusing special case, because it is both a service name and a D-Bus interface.  But I don\u0027t think we should copy that naming convention.\n\nAlso, it would be more helpful if this were moved to types.hpp.  That is included by this file, and it has a lot of the common service, interface, and property names.  That would make the constant reusable by other code that deals with EntityManager.\n\nThe Slot constants can stay here, as that is more internal detail and could change in the future.",
+      "range": {
+        "startLine": 33,
+        "startChar": 15,
+        "endLine": 33,
+        "endChar": 32
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21e6cb4a_05369be1",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "Looks good!",
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee1a290_8d2f17e7",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "This sentence is a little confusing.  It sounds like maybe all inventory items have a unique inventory ID.\n\nI\u0027d suggest something like \"Retrieve the chassis ID for the given D-Bus inventory path.\"",
+      "range": {
+        "startLine": 243,
+        "startChar": 10,
+        "endLine": 243,
+        "endChar": 68
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "741225de_d803fcf9",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "I think this needs to be an inventory manager chassis path, right?  They can\u0027t specify a PSU path, for example.  So I\u0027d suggest something like \"The inventory manager D-Bus path for a chassis\".",
+      "range": {
+        "startLine": 248,
+        "startChar": 31,
+        "endLine": 248,
+        "endChar": 65
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db6f07e4_728d0b39",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "from",
+      "range": {
+        "startLine": 257,
+        "startChar": 47,
+        "endLine": 257,
+        "endChar": 51
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fe7a818_84bad97e",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "(board or chassis)",
+      "range": {
+        "startLine": 256,
+        "startChar": 69,
+        "endLine": 257,
+        "endChar": 11
+      },
+      "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800af198_45d7e3ae",
+        "filename": "utility.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-22T20:52:24Z",
+      "side": 1,
+      "message": "This needs to be an EntityManager object path for hardware that is within a chassis or board, right?  So I\u0027d suggest something like \"The EntityManager D-Bus path for hardware within a chassis or board.\"",
+      "range": {
+        "startLine": 260,
+        "startChar": 21,
+        "endLine": 260,
+        "endChar": 73
+      },
       "revId": "b88cf0093572fefdaac08df439fc8f6d664b3d81",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
