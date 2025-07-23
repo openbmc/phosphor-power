@@ -16,6 +16,23 @@
       "message": "Thanks for your comments",
       "revId": "ad7c047339672dc60c525983a9f1e37429c7a428",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0afa6dc8_451137ab",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-07-23T15:00:36Z",
+      "side": 1,
+      "message": "will Decorator.Slot be used for this? Matt mentioned the Decorator Position interface in slack, but maybe that was just for the bmcs and not sleds?",
+      "revId": "ad7c047339672dc60c525983a9f1e37429c7a428",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
