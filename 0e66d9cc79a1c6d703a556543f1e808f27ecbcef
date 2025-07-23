@@ -16,6 +16,24 @@
       "message": "i assume this is a temporary comment, and the psu class will be modified later to accept the chassisPath, then this uncommented?",
       "revId": "0e66d9cc79a1c6d703a556543f1e808f27ecbcef",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "825c12a9_4d26f229",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-23T18:05:56Z",
+      "side": 1,
+      "message": "Yes, this is temporary comment as I mentioned in a note above:\n\nNote: There are some commented code indicates future implementation,\nplease ignore for now, as they will be implemented soon.",
+      "parentUuid": "bd767974_b93e7f69",
+      "revId": "0e66d9cc79a1c6d703a556543f1e808f27ecbcef",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
