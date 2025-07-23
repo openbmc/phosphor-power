@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6046eb6_ac417ab1",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-07-23T20:45:24Z",
+      "side": 0,
+      "message": "Why did you delete this?  It is used in this file.",
+      "revId": "b95e8dec85704099c98f42d60bfb7588281d4f22",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
