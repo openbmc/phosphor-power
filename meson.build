@@ -93,7 +93,11 @@ sdeventplus = dependency('sdeventplus')
 pthread = dependency('threads')
 stdplus = dependency('stdplus')
 boost = dependency('boost')
-libgpiodcxx = dependency('libgpiodcxx', default_options: ['bindings=cxx'])
+libgpiodcxx = dependency(
+    'libgpiodcxx',
+    default_options: ['bindings=cxx'],
+    version: '<1.7.0',
+)
 
 nlohmann_json_dep = dependency('nlohmann_json', include_type: 'system')
 
