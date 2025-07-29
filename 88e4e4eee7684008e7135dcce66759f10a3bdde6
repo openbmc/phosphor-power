@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "017d9b46_0e21f8d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-29T20:42:05Z",
+      "side": 1,
+      "message": "Added extra spaces to commit code with no change to force CI to restart. I will remove extra spaces",
+      "parentUuid": "14f66a76_5017205f",
+      "revId": "88e4e4eee7684008e7135dcce66759f10a3bdde6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d285ab9_f83ee504",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-07-29T18:41:07Z",
       "side": 1,
       "message": "I don\u0027t see the PowerSupply class referenced in this class.  Is this needed?",
+      "revId": "88e4e4eee7684008e7135dcce66759f10a3bdde6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55b69892_df8209b0",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-07-29T20:42:05Z",
+      "side": 1,
+      "message": "I will remove",
+      "parentUuid": "6d285ab9_f83ee504",
       "revId": "88e4e4eee7684008e7135dcce66759f10a3bdde6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
