@@ -122,6 +122,11 @@ class ChassisManager
      */
     phosphor::power::chassis::Chassis* getMatchingChassisPtr(
         uint64_t chassisId);
+
+    /**
+     * @brief Initialize chassis power monitoring.
+     */
+    void initChassisPowerMonitoring();
 };
 
 } // namespace phosphor::power::chassis_manager
