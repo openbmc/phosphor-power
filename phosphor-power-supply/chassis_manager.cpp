@@ -3,6 +3,7 @@
 #include "chassis_manager.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+
 using namespace phosphor::logging;
 
 namespace phosphor::power::chassis_manager
@@ -40,6 +41,7 @@ ChassisManager::ChassisManager(sdbusplus::bus_t& bus,
     auto interval = std::chrono::milliseconds(1000);
     timer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
         e, std::bind(&ChassisManager::analyze, this), interval);
+    initChassisPowerMonitoring();
 }
 
 void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
@@ -65,9 +67,8 @@ void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
             {
                 lg2::debug("InterfacesAdded for: {SUPPORTED_CONFIGURATION}",
                            "SUPPORTED_CONFIGURATION", supportedConfIntf);
-                // Future implementation
-                // chassisMatchPtr->supportedConfigurationInterfaceAdded(
-                //     itInterface->second);
+                chassisMatchPtr->supportedConfigurationInterfaceAdded(
+                    itInterface->second);
             }
         }
         itInterface = interfaces.find(IBMCFFPSInterface);
@@ -81,16 +82,14 @@ void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
             {
                 lg2::info("InterfacesAdded for: {IBMCFFPSINTERFACE}",
                           "IBMCFFPSINTERFACE", IBMCFFPSInterface);
-                // Future implementation
-                // chassisMatchPtr->psuInterfaceAdded(itInterface->second);
+                chassisMatchPtr->psuInterfaceAdded(itInterface->second);
             }
         }
         if (chassisMatchPtr != nullptr)
         {
             lg2::debug(
                 "InterfacesAdded validatePsuConfigAndInterfacesProcessed()");
-            // Future implementation
-            // chassisMatchPtr->validatePsuConfigAndInterfacesProcessed();
+            chassisMatchPtr->validatePsuConfigAndInterfacesProcessed();
         }
     }
     catch (const std::exception& e)
@@ -142,4 +141,13 @@ void ChassisManager::initializeChassisList()
                    e);
     }
 }
+
+void ChassisManager::initChassisPowerMonitoring()
+{
+    for (const auto& chassis : listOfChassis)
+    {
+        chassis->initPowerMonitoring();
+    }
+}
+
 } // namespace phosphor::power::chassis_manager
