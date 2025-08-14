@@ -2,14 +2,16 @@
 
 #include "chassis.hpp"
 
-#include <filesystem>
 #include <iostream>
 
 using namespace phosphor::logging;
 using namespace phosphor::power::util;
 namespace phosphor::power::chassis
 {
+using namespace phosphor::power::util;
 
+constexpr auto powerSystemsInputsObjPath =
+    "/xyz/openbmc_project/power/power_supplies/chassis{}/psus";
 constexpr auto IBMCFFPSInterface =
     "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
 constexpr auto chassisIdProp = "SlotNumber";
@@ -25,17 +27,23 @@ const auto driverDirName = "/driver";
 const auto entityMgrService = "xyz.openbmc_project.EntityManager";
 const auto decoratorChassisId = "xyz.openbmc_project.Inventory.Decorator.Slot";
 
+constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
+
 Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
                  const sdeventplus::Event& e) :
     bus(bus), chassisPath(chassisPath),
-    chassisPathUniqueId(getChassisPathUniqueId(chassisPath)), eventLoop(e)
+    chassisPathUniqueId(getChassisPathUniqueId(chassisPath)),
+    powerSystemInputs(
+        bus, std::format(powerSystemsInputsObjPath, chassisPathUniqueId)),
+    eventLoop(e)
 {
+    saveChassisName();
     getPSUConfiguration();
+    getSupportedConfiguration();
 }
 
 void Chassis::getPSUConfiguration()
 {
-    namespace fs = std::filesystem;
     auto depth = 0;
 
     try
@@ -49,12 +57,7 @@ void Chassis::getPSUConfiguration()
         auto connectorsSubTree = getSubTree(bus, "/", IBMCFFPSInterface, depth);
         for (const auto& [path, services] : connectorsSubTree)
         {
-            uint64_t id;
-            fs::path fspath(path);
-            getProperty(decoratorChassisId, chassisIdProp, fspath.parent_path(),
-                        entityMgrService, bus, id);
-            if (id == static_cast<uint64_t>(chassisPathUniqueId))
-
+            if (chassisPathUniqueId == getParentEMUniqueId(bus, path))
             {
                 // For each object in the array of objects, I want
                 // to get properties from the service, path, and
@@ -150,12 +153,10 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
         lg2::debug(
             "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
             "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
-        // auto psu = std::make_unique<PowerSupply>(
-        //    bus, invpath, *i2cbus, *i2caddr, driverName, presline,
-        //   std::bind(&Chassis::isPowerOn, this), chassisPath);
+
         auto psu = std::make_unique<PowerSupply>(
             bus, invpath, *i2cbus, *i2caddr, driverName, presline,
-            std::bind(&Chassis::isPowerOn, this));
+            std::bind(&Chassis::isPowerOn, this), chassisShortName);
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes
@@ -178,7 +179,40 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
 
 void Chassis::getSupportedConfiguration()
 {
-    // TBD
+    try
+    {
+        util::DbusSubtree subtree =
+            util::getSubTree(bus, INVENTORY_OBJ_PATH, supportedConfIntf, 0);
+        if (subtree.empty())
+        {
+            throw std::runtime_error("Supported Configuration Not Found");
+        }
+
+        for (const auto& [objPath, services] : subtree)
+        {
+            std::string service = services.begin()->first;
+            if (objPath.empty() || service.empty())
+            {
+                continue;
+            }
+
+            if (getSupportedChassisPathId(objPath) == chassisPathUniqueId)
+            {
+                auto properties = util::getAllProperties(
+                    bus, objPath, supportedConfIntf, service);
+                populateSupportedConfiguration(properties);
+                break;
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Interface or property not found. Let the Interfaces Added callback
+        // process the information once the interfaces are added to D-Bus.
+        lg2::info("Interface or Property not found, error {ERROR}", "ERROR", e);
+        lg2::debug("Supported configuration exception error {ERROR}", "ERROR",
+                   e);
+    }
 }
 
 void Chassis::populateSupportedConfiguration(
@@ -319,5 +353,632 @@ uint64_t Chassis::getChassisPathUniqueId(const std::string& path)
     return invalidObjectPathUniqueId;
 }
 
-void Chassis::analyze() {}
+void Chassis::initPowerMonitoring()
+{
+    using namespace sdeventplus;
+
+    validationTimer = std::make_unique<utility::Timer<ClockId::Monotonic>>(
+        eventLoop, std::bind(&Chassis::validateConfig, this));
+    attemptToCreatePowerConfigGPIO();
+
+    // Subscribe to power state changes
+    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                        POWER_IFACE),
+        [this](auto& msg) { this->powerStateChanged(msg); });
+    // TODO initialize the chassis
+}
+
+void Chassis::validateConfig()
+{
+    if (!runValidateConfig || supportedConfigs.empty() || psus.empty())
+    {
+        return;
+    }
+
+    for (const auto& psu : psus)
+    {
+        if ((psu->hasInputFault() || psu->hasVINUVFault()) && psu->isPresent())
+        {
+            // Do not try to validate if input voltage fault present.
+            validationTimer->restartOnce(validationTimeout);
+            return;
+        }
+    }
+
+    std::map<std::string, std::string> additionalData;
+    auto supported = hasRequiredPSUs(additionalData);
+    if (supported)
+    {
+        runValidateConfig = false;
+        double actualVoltage;
+        int inputVoltage;
+        int previousInputVoltage = 0;
+        bool voltageMismatch = false;
+
+        for (const auto& psu : psus)
+        {
+            if (!psu->isPresent())
+            {
+                // Only present PSUs report a valid input voltage
+                continue;
+            }
+            psu->getInputVoltage(actualVoltage, inputVoltage);
+            if (previousInputVoltage && inputVoltage &&
+                (previousInputVoltage != inputVoltage))
+            {
+                additionalData["EXPECTED_VOLTAGE"] =
+                    std::to_string(previousInputVoltage);
+                additionalData["ACTUAL_VOLTAGE"] =
+                    std::to_string(actualVoltage);
+                voltageMismatch = true;
+            }
+            if (!previousInputVoltage && inputVoltage)
+            {
+                previousInputVoltage = inputVoltage;
+            }
+        }
+        if (!voltageMismatch)
+        {
+            return;
+        }
+    }
+
+    // Validation failed, create an error log.
+    // Return without setting the runValidateConfig flag to false because
+    // it may be that an additional supported configuration interface is
+    // added and we need to validate it to see if it matches this system.
+    createError("xyz.openbmc_project.Power.PowerSupply.Error.NotSupported",
+                additionalData);
+}
+
+void Chassis::syncHistory()
+{
+    if (driverName != ACBEL_FSG032_DD_NAME)
+    {
+        if (!syncHistoryGPIO)
+        {
+            try
+            {
+                syncHistoryGPIO = createGPIO(INPUT_HISTORY_SYNC_GPIO);
+            }
+            catch (const std::exception& e)
+            {
+                // Not an error, system just hasn't implemented the synch gpio
+                lg2::info("No synchronization GPIO found");
+                syncHistoryGPIO = nullptr;
+            }
+        }
+        if (syncHistoryGPIO)
+        {
+            const std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
+            lg2::info("Synchronize INPUT_HISTORY");
+            syncHistoryGPIO->toggleLowHigh(delay);
+            lg2::info("Synchronize INPUT_HISTORY completed");
+        }
+    }
+
+    // Always clear synch history required after calling this function
+    for (auto& psu : psus)
+    {
+        psu->clearSyncHistoryRequired();
+    }
+}
+
+void Chassis::analyze()
+{
+    auto syncHistoryRequired =
+        std::any_of(psus.begin(), psus.end(), [](const auto& psu) {
+            return psu->isSyncHistoryRequired();
+        });
+    if (syncHistoryRequired)
+    {
+        syncHistory();
+    }
+
+    for (auto& psu : psus)
+    {
+        psu->analyze();
+    }
+
+    analyzeBrownout();
+
+    // Only perform individual PSU analysis if power is on and a brownout has
+    // not already been logged
+    if (powerOn && !brownoutLogged)
+    {
+        for (auto& psu : psus)
+        {
+            std::map<std::string, std::string> additionalData;
+
+            if (!psu->isFaultLogged() && !psu->isPresent() &&
+                !validationTimer->isEnabled())
+            {
+                std::map<std::string, std::string> requiredPSUsData;
+                auto requiredPSUsPresent = hasRequiredPSUs(requiredPSUsData);
+                // TODO check required PSU
+
+                if (!requiredPSUsPresent)
+                {
+                    additionalData.merge(requiredPSUsData);
+                    // Create error for power supply missing.
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+                    additionalData["CALLOUT_PRIORITY"] = "H";
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Missing",
+                        additionalData);
+                }
+                psu->setFaultLogged();
+            }
+            else if (!psu->isFaultLogged() && psu->isFaulted())
+            {
+                // Add STATUS_WORD and STATUS_MFR last response, in padded
+                // hexadecimal format.
+                additionalData["STATUS_WORD"] =
+                    std::format("{:#04x}", psu->getStatusWord());
+                additionalData["STATUS_MFR"] =
+                    std::format("{:#02x}", psu->getMFRFault());
+                // If there are faults being reported, they possibly could be
+                // related to a bug in the firmware version running on the power
+                // supply. Capture that data into the error as well.
+                additionalData["FW_VERSION"] = psu->getFWVersion();
+
+                if (psu->hasCommFault())
+                {
+                    additionalData["STATUS_CML"] =
+                        std::format("{:#02x}", psu->getStatusCML());
+                    /* Attempts to communicate with the power supply have
+                     * reached there limit. Create an error. */
+                    additionalData["CALLOUT_DEVICE_PATH"] =
+                        psu->getDevicePath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.CommFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if ((psu->hasInputFault() || psu->hasVINUVFault()))
+                {
+                    // Include STATUS_INPUT for input faults.
+                    additionalData["STATUS_INPUT"] =
+                        std::format("{:#02x}", psu->getStatusInput());
+
+                    /* The power supply location might be needed if the input
+                     * fault is due to a problem with the power supply itself.
+                     * Include the inventory path with a call out priority of
+                     * low.
+                     */
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+                    additionalData["CALLOUT_PRIORITY"] = "L";
+                    createError("xyz.openbmc_project.Power.PowerSupply.Error."
+                                "InputFault",
+                                additionalData);
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasPSKillFault())
+                {
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.PSKillFault",
+                        additionalData);
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasVoutOVFault())
+                {
+                    // Include STATUS_VOUT for Vout faults.
+                    additionalData["STATUS_VOUT"] =
+                        std::format("{:#02x}", psu->getStatusVout());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasIoutOCFault())
+                {
+                    // Include STATUS_IOUT for Iout faults.
+                    additionalData["STATUS_IOUT"] =
+                        std::format("{:#02x}", psu->getStatusIout());
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasVoutUVFault() || psu->hasPS12VcsFault() ||
+                         psu->hasPSCS12VFault())
+                {
+                    // Include STATUS_VOUT for Vout faults.
+                    additionalData["STATUS_VOUT"] =
+                        std::format("{:#02x}", psu->getStatusVout());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                // A fan fault should have priority over a temperature fault,
+                // since a failed fan may lead to a temperature problem.
+                // Only process if not in power fault window.
+                else if (psu->hasFanFault() && !powerFaultOccurring)
+                {
+                    // Include STATUS_TEMPERATURE and STATUS_FANS_1_2
+                    additionalData["STATUS_TEMPERATURE"] =
+                        std::format("{:#02x}", psu->getStatusTemperature());
+                    additionalData["STATUS_FANS_1_2"] =
+                        std::format("{:#02x}", psu->getStatusFans12());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.FanFault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasTempFault())
+                {
+                    // Include STATUS_TEMPERATURE for temperature faults.
+                    additionalData["STATUS_TEMPERATURE"] =
+                        std::format("{:#02x}", psu->getStatusTemperature());
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                else if (psu->hasMFRFault())
+                {
+                    /* This can represent a variety of faults that result in
+                     * calling out the power supply for replacement: Output
+                     * OverCurrent, Output Under Voltage, and potentially other
+                     * faults.
+                     *
+                     * Also plan on putting specific fault in AdditionalData,
+                     * along with register names and register values
+                     * (STATUS_WORD, STATUS_MFR, etc.).*/
+
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+                // Only process if not in power fault window.
+                else if (psu->hasPgoodFault() && !powerFaultOccurring)
+                {
+                    /* POWER_GOOD# is not low, or OFF is on */
+                    additionalData["CALLOUT_INVENTORY_PATH"] =
+                        psu->getInventoryPath();
+
+                    createError(
+                        "xyz.openbmc_project.Power.PowerSupply.Error.Fault",
+                        additionalData);
+
+                    psu->setFaultLogged();
+                }
+            }
+        }
+    }
+}
+
+uint64_t Chassis::getSupportedChassisPathId(const std::string_view& path)
+{
+    size_t lastSlashPos = path.rfind('/');
+    std::string_view pathBeforeLastSlash = path.substr(0, lastSlashPos);
+
+    size_t lastUnderscorePos = pathBeforeLastSlash.rfind('_');
+
+    if (lastUnderscorePos == std::string::npos ||
+        lastUnderscorePos == pathBeforeLastSlash.length() - 1)
+    {
+        throw std::runtime_error("No valid underscore found");
+    }
+
+    std::string_view numberStr =
+        pathBeforeLastSlash.substr(lastUnderscorePos + 1);
+
+    uint64_t value = 0;
+
+    auto [ptr, errCode] = std::from_chars(
+        numberStr.data(), numberStr.data() + numberStr.size(), value);
+
+    if (errCode != std::errc())
+    {
+        throw std::invalid_argument("Failed to parse number");
+    }
+    return value;
+}
+
+void Chassis::analyzeBrownout()
+{
+    // Count number of power supplies failing
+    size_t presentCount = 0;
+    size_t notPresentCount = 0;
+    size_t acFailedCount = 0;
+    size_t pgoodFailedCount = 0;
+    for (const auto& psu : psus)
+    {
+        if (psu->isPresent())
+        {
+            ++presentCount;
+            if (psu->hasACFault())
+            {
+                ++acFailedCount;
+            }
+            else if (psu->hasPgoodFault())
+            {
+                ++pgoodFailedCount;
+            }
+        }
+        else
+        {
+            ++notPresentCount;
+        }
+    }
+
+    // Only issue brownout failure if chassis pgood has failed, it has not
+    // already been logged, at least one PSU has seen an AC fail, and all
+    // present PSUs have an AC or pgood failure. Note an AC fail is only set if
+    // at least one PSU is present.
+    if (powerFaultOccurring && !brownoutLogged && acFailedCount &&
+        (presentCount == (acFailedCount + pgoodFailedCount)))
+    {
+        //  Indicate that the system is in a brownout condition by creating an
+        //  error log and setting the PowerSystemInputs status property to
+        //  Fault.
+        powerSystemInputs.status(
+            sdbusplus::xyz::openbmc_project::State::Decorator::server::
+                PowerSystemInputs::Status::Fault);
+
+        std::map<std::string, std::string> additionalData;
+        additionalData.emplace("NOT_PRESENT_COUNT",
+                               std::to_string(notPresentCount));
+        additionalData.emplace("VIN_FAULT_COUNT",
+                               std::to_string(acFailedCount));
+        additionalData.emplace("PGOOD_FAULT_COUNT",
+                               std::to_string(pgoodFailedCount));
+        lg2::info(
+            "Brownout detected, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+            "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
+            acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
+
+        createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
+                    additionalData);
+        brownoutLogged = true;
+    }
+    else
+    {
+        // If a brownout was previously logged but at least one PSU is not
+        // currently in AC fault, determine if the brownout condition can be
+        // cleared
+        if (brownoutLogged && (acFailedCount < presentCount))
+        {
+            // TODO Power State
+        }
+    }
+}
+
+void Chassis::createError(const std::string& faultName,
+                          std::map<std::string, std::string>& additionalData)
+{
+    using namespace sdbusplus::xyz::openbmc_project;
+    constexpr auto loggingObjectPath = "/xyz/openbmc_project/logging";
+    constexpr auto loggingCreateInterface =
+        "xyz.openbmc_project.Logging.Create";
+
+    try
+    {
+        additionalData["_PID"] = std::to_string(getpid());
+
+        auto service =
+            util::getService(loggingObjectPath, loggingCreateInterface, bus);
+
+        if (service.empty())
+        {
+            lg2::error("Unable to get logging manager service");
+            return;
+        }
+
+        auto method = bus.new_method_call(service.c_str(), loggingObjectPath,
+                                          loggingCreateInterface, "Create");
+
+        auto level = Logging::server::Entry::Level::Error;
+        method.append(faultName, level, additionalData);
+
+        auto reply = bus.call(method);
+        // TODO set power supply error
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed creating event log for fault {FAULT_NAME} due to error {ERROR}",
+            "FAULT_NAME", faultName, "ERROR", e);
+    }
+}
+void Chassis::attemptToCreatePowerConfigGPIO()
+{
+    try
+    {
+        powerConfigGPIO = createGPIO("power-config-full-load");
+    }
+    catch (const std::exception& e)
+    {
+        powerConfigGPIO = nullptr;
+        lg2::info("GPIO not implemented in this {CHASSIS}", "CHASSIS",
+                  chassisShortName);
+    }
+}
+
+void Chassis::supportedConfigurationInterfaceAdded(
+    const util::DbusPropertyMap& properties)
+{
+    populateSupportedConfiguration(properties);
+    updateMissingPSUs();
+}
+
+void Chassis::psuInterfaceAdded(util::DbusPropertyMap& properties)
+{
+    getPSUProperties(properties);
+    updateMissingPSUs();
+}
+
+bool Chassis::hasRequiredPSUs(
+    std::map<std::string, std::string>& additionalData)
+{
+    // ignore the following loop so code will compile
+    for (const auto& pair : additionalData)
+    {
+        std::cout << "Key = " << pair.first
+                  << " additionalData value = " << pair.second << "\n";
+    }
+    return true;
+
+    // TODO validate having the required PSUs
+}
+
+void Chassis::updateMissingPSUs()
+{
+    if (supportedConfigs.empty() || psus.empty())
+    {
+        return;
+    }
+
+    // Power supplies default to missing. If the power supply is present,
+    // the PowerSupply object will update the inventory Present property to
+    // true. If we have less than the required number of power supplies, and
+    // this power supply is missing, update the inventory Present property
+    // to false to indicate required power supply is missing. Avoid
+    // indicating power supply missing if not required.
+
+    auto presentCount =
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->isPresent(); });
+
+    for (const auto& config : supportedConfigs)
+    {
+        for (const auto& psu : psus)
+        {
+            auto psuModel = psu->getModelName();
+            auto psuShortName = psu->getShortName();
+            auto psuInventoryPath = psu->getInventoryPath();
+            auto relativeInvPath =
+                psuInventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
+            auto psuPresent = psu->isPresent();
+            auto presProperty = false;
+            auto propReadFail = false;
+
+            try
+            {
+                presProperty = getPresence(bus, psuInventoryPath);
+                propReadFail = false;
+            }
+            catch (const sdbusplus::exception_t& e)
+            {
+                propReadFail = true;
+                // Relying on property change or interface added to retry.
+                // Log an informational trace to the journal.
+                lg2::info(
+                    "D-Bus property {PSU_INVENTORY_PATH} access failure exception",
+                    "PSU_INVENTORY_PATH", psuInventoryPath);
+            }
+
+            if (psuModel.empty())
+            {
+                if (!propReadFail && (presProperty != psuPresent))
+                {
+                    // We already have this property, and it is not false
+                    // set Present to false
+                    setPresence(bus, relativeInvPath, psuPresent, psuShortName);
+                }
+                continue;
+            }
+
+            if (config.first != psuModel)
+            {
+                continue;
+            }
+
+            if ((presentCount < config.second.powerSupplyCount) && !psuPresent)
+            {
+                setPresence(bus, relativeInvPath, psuPresent, psuShortName);
+            }
+        }
+    }
+}
+
+void Chassis::powerStateChanged(sdbusplus::message_t& msg)
+{
+    std::string msgSensor;
+    std::map<std::string, std::variant<int>> msgData;
+    msg.read(msgSensor, msgData);
+
+    // Check if it was the state property that changed.
+    auto valPropMap = msgData.find("state");
+    if (valPropMap != msgData.end())
+    {
+        int state = std::get<int>(valPropMap->second);
+        if (state)
+        {
+            // Power on requested
+            powerOn = true;
+            powerFaultOccurring = false;
+            validationTimer->restartOnce(validationTimeout);
+            // TODO clear faults
+
+            syncHistory();
+            // TODO set power config
+
+            setInputVoltageRating();
+        }
+        else
+        {
+            // Power off requested
+            powerOn = false;
+            powerFaultOccurring = false;
+            runValidateConfig = true;
+        }
+    }
+
+    // Check if it was the pgood property that changed.
+    valPropMap = msgData.find("pgood");
+    if (valPropMap != msgData.end())
+    {
+        int pgood = std::get<int>(valPropMap->second);
+        if (!pgood)
+        {
+            // Chassis power good has turned off
+            if (powerOn)
+            {
+                // pgood is off but state is on, in power fault window
+                powerFaultOccurring = true;
+            }
+        }
+    }
+    lg2::info(
+        "powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+}
+
 } // namespace phosphor::power::chassis

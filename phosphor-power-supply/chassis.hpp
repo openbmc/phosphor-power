@@ -1,6 +1,5 @@
 #pragma once
-
-#include "power_supply.hpp"
+#include "new_power_supply.hpp"
 #include "types.hpp"
 #include "utility.hpp"
 
@@ -15,6 +14,7 @@
 
 #include <map>
 #include <string>
+#include <string_view>
 #include <vector>
 
 struct SupportedPsuConfiguration
@@ -25,6 +25,8 @@ struct SupportedPsuConfiguration
 };
 
 using namespace phosphor::power::psu;
+using namespace phosphor::power::util;
+using namespace sdeventplus;
 
 namespace phosphor::power::chassis
 {
@@ -40,6 +42,18 @@ using PowerSystemInputsObject =
 // Previously the timer was set to 10 seconds was too short, it results in
 // incorrect errors being logged, but no real consequence of longer timeout.
 constexpr auto validationTimeout = std::chrono::seconds(30);
+
+/**
+ * @class PowerSystemInputs
+ * @brief A concrete implementation for the PowerSystemInputs interface.
+ */
+class PowerSystemInputs : public PowerSystemInputsObject
+{
+  public:
+    PowerSystemInputs(sdbusplus::bus_t& bus, const std::string& path) :
+        PowerSystemInputsObject(bus, path.c_str())
+    {}
+};
 
 /**
  * @class Chassis
@@ -91,6 +105,47 @@ class Chassis
         return powerOn;
     }
 
+    /**
+     * @brief Initialize power monitoring infrastructure for Chassis.
+     * Sets up configuration validation timer, attempts to create GPIO,
+     * subscribe to D-Bus power state change events.
+     */
+    void initPowerMonitoring();
+
+    /**
+     * @brief Handles addition of the SupportedConfiguration interface.
+     * This function triggered when the SupportedConfiguration interface added
+     * to a D-Bus object. The function  calls populateSupportedConfiguration()
+     * and updateMissingPSUs() to processes the provided properties.
+     *
+     * @param properties A map of D-Bus properties associated with the
+     * SupportedConfiguration interface.
+     */
+    void supportedConfigurationInterfaceAdded(
+        const util::DbusPropertyMap& properties);
+
+    /**
+     * @brief Handle the addition of PSU interface added.
+     * This function is called when a Power Supply interface added to a D-Bus.
+     * This function calls getPSUProperties() and updateMissingPSUs().
+     *
+     * @param properties A map of D-Bus properties for the PSU interface.
+     */
+    void psuInterfaceAdded(util::DbusPropertyMap& properties);
+
+    /**
+     * @brief Call to validate the psu configuration if the power is on and both
+     * the IBMCFFPSConnector and SupportedConfiguration interfaces have been
+     * processed
+     */
+    void validatePsuConfigAndInterfacesProcessed()
+    {
+        if (powerOn && !psus.empty() && !supportedConfigs.empty())
+        {
+            validationTimer->restartOnce(validationTimeout);
+        }
+    };
+
   private:
     /**
      * @brief The D-Bus object
@@ -107,6 +162,20 @@ class Chassis
 
     /** @brief True if the power is on. */
     bool powerOn = false;
+
+    /** @brief True if power control is in the window between chassis pgood loss
+     * and power off.
+     */
+    bool powerFaultOccurring = false;
+
+    /** @brief True if an error for a brownout has already been logged. */
+    bool brownoutLogged = false;
+
+    /** @brief Used as part of subscribing to power on state changes*/
+    std::string powerService;
+
+    /** @brief Used to subscribe to D-Bus power on state changes */
+    std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
 
     /** @brief Used to subscribe to D-Bus power supply presence changes */
     std::vector<std::unique_ptr<sdbusplus::bus::match_t>> presenceMatches;
@@ -136,9 +205,19 @@ class Chassis
     std::string driverName;
 
     /**
+     * @brief The libgpiod object for setting the power supply config
+     */
+    std::unique_ptr<GPIOInterfaceBase> powerConfigGPIO = nullptr;
+
+    /**
      * @brief Chassis D-Bus object path
      */
     std::string chassisPath;
+
+    /**
+     * @brief Chassis name;
+     */
+    std::string chassisShortName;
 
     /**
      * @brief The Chassis path unique ID
@@ -146,10 +225,20 @@ class Chassis
     uint64_t chassisPathUniqueId = invalidObjectPathUniqueId;
 
     /**
+     * @brief PowerSystemInputs object
+     */
+    PowerSystemInputs powerSystemInputs;
+
+    /**
      * @brief Declares a constant reference to an sdeventplus::Event to manage
      * async processing.
      */
     const sdeventplus::Event& eventLoop;
+
+    /**
+     * @brief GPIO to toggle to 'sync' power supply input history.
+     */
+    std::unique_ptr<GPIOInterfaceBase> syncHistoryGPIO = nullptr;
 
     /**
      * @brief Get PSU properties from D-Bus, use that to build a power supply
@@ -165,9 +254,10 @@ class Chassis
     void getPSUConfiguration();
 
     /**
-     * @brief Initialize the chassis's supported configuration from the
-     * Supported Configuration D-Bus object provided by the Entity
-     * Manager.
+     * @brief getSupportedConfiguration() query D-Bus for chassis configuration
+     * provided by the Entity Manager. Matches the object against the current
+     * chassis unique ID. Upond finding a match calls
+     * populateSupportedConfiguration().
      */
     void getSupportedConfiguration();
 
@@ -209,6 +299,110 @@ class Chassis
      * @return uint64_t - Chassis path unique ID.
      */
     uint64_t getChassisPathUniqueId(const std::string& path);
+
+    /**
+     * @brief Initializes the chassis.
+     *
+     */
+    void initialize() {}; // TODO
+
+    /**
+     * @brief Perform power supply configuration validation.
+     * @details Validates if the existing power supply properties are a
+     * supported configuration, and acts on its findings such as logging
+     * errors.
+     */
+    void validateConfig();
+
+    /**
+     * @brief Analyze the set of the power supplies for a brownout failure. Log
+     * error when necessary, clear brownout condition when window has passed.
+     */
+    void analyzeBrownout();
+
+    /**
+     * @brief Toggles the GPIO to sync power supply input history readings
+     * @details This GPIO is connected to all supplies.  This will clear the
+     * previous readings out of the supplies and restart them both at the
+     * same time zero and at record ID 0.  The supplies will return 0
+     * bytes of data for the input history command right after this until
+     * a new entry shows up.
+     *
+     * This will cause the code to delete all previous history data and
+     * start fresh.
+     */
+    void syncHistory();
+
+    /**
+     * @brief Tells each PSU to set its power supply input
+     * voltage rating D-Bus property.
+     */
+    inline void setInputVoltageRating()
+    {
+        for (auto& psu : psus)
+        {
+            psu->setInputVoltageRating();
+        }
+    }
+
+    /**
+     * Create an error
+     *
+     * @param[in] faultName - 'name' message for the BMC error log entry
+     * @param[in,out] additionalData - The AdditionalData property for the error
+     */
+    void createError(const std::string& faultName,
+                     std::map<std::string, std::string>& additionalData);
+
+    /**
+     * @brief Check that all PSUs have the same model name and that the system
+     * has the required number of PSUs present as specified in the Supported
+     * Configuration interface.
+     *
+     * @param[out] additionalData - Contains debug information on why the check
+     *             might have failed. Can be used to fill in error logs.
+     * @return true if all the required PSUs are present, false otherwise.
+     */
+    bool hasRequiredPSUs(std::map<std::string, std::string>& additionalData);
+
+    /**
+     * @brief Update inventory for missing required power supplies
+     */
+    void updateMissingPSUs();
+
+    /**
+     * @brief Extract supported chassis ID from a given chassis path string.
+     * Parses the path contains an underscore-delimited numeric ID before the
+     * last slash. i.e. /xyz/openbmc_project/inventory/system/chassis/
+     * Rainier_2U1_Chassis_2/1000W_IBMCFFPS_Configuration the function will
+     * extract 2 as the chassis ID.
+     *
+     * @return The extracted numeric ID as uint64_t.
+     */
+    uint64_t getSupportedChassisPathId(const std::string_view& path);
+
+    /**
+     * @brief Assign chassis short name.
+     */
+    void saveChassisName()
+    {
+        std::filesystem::path path(chassisPath);
+        chassisShortName = path.filename();
+    }
+
+    /**
+     * @brief Callback for power state property changes
+     *
+     * Process changes to the powered on state property for the chassis.
+     *
+     * @param[in] msg - Data associated with the power state signal
+     */
+    void powerStateChanged(sdbusplus::message_t& msg);
+
+    /**
+     * @breif Attempt to create GPIO
+     */
+    void attemptToCreatePowerConfigGPIO();
 };
 
 } // namespace phosphor::power::chassis
