@@ -2,108 +2,83 @@
 
 ## Overview
 
-The phosphor-power-sequencer application powers the chassis on/off and monitors
-the power sequencer device.
+The `phosphor-power-sequencer` application powers all the chassis in the system
+on and off. It also monitors the power good (pgood) state in each chassis.
 
-If the chassis power good (pgood) status changes to false unexpectedly, the
-application uses information from the power sequencer device to determine the
-cause. Typically this is a voltage rail that shut down due to a fault.
+**Note:** Many changes have been made to this documentation to define how
+multiple chassis support will work. This support is not yet implemented in this
+application. The support is also dependent on changes to the existing
+`phosphor-chassis-state-manager` application and the planned new
+`phosphor-chassis-power` application. This disclaimer will be removed when this
+support is fully implemented.
 
 ## Application
 
-The application is a single-threaded C++ executable. It is a 'daemon' process
-that runs continually. The application is launched by systemd when the BMC
-reaches the Ready state and before the chassis is powered on.
+`phosphor-power-sequencer` is a single-threaded C++ executable. It is a daemon
+process that runs continually. It is launched by systemd when the BMC reaches
+the Ready state and before the system is powered on.
 
-The application is driven by an optional, system-specific JSON configuration
-file. The config file is found and parsed at runtime. The parsing process
-creates a collection of C++ objects. These objects represent the power sequencer
-device, voltage rails, GPIOs, and fault checks to perform.
+`phosphor-power-sequencer` is driven by an optional, system-specific JSON
+configuration file. The config file is found and parsed at runtime. The parsing
+process creates a collection of C++ objects. These objects represent the
+chassis, power sequencer devices, voltage rails, GPIOs, and fault checks to
+perform.
+
+See [Internal Design](internal_design.md) for more information.
 
 ## Power sequencer device
 
 A power sequencer device enables (turns on) the voltage rails in the correct
 order and monitors them for pgood faults.
 
-This application currently supports the following power sequencer device types:
+`phosphor-power-sequencer` currently supports the following power sequencer
+device types:
 
 - UCD90160
 - UCD90320
 
 Additional device types can be supported by creating a new sub-class within the
-PowerSequencerDevice class hierarchy.
+PowerSequencerDevice class hierarchy. See [Internal Design](internal_design.md)
+for more information.
 
-## Powering on the chassis
+If the power sequencer device type is not supported, `phosphor-power-sequencer`
+can still power the system on/off and detect chassis pgood faults. However, it
+will not be able to determine which voltage rail caused a pgood fault.
 
-- A BMC application or script sets the `state` property to 1 on the
-  `org.openbmc.control.Power` D-Bus interface.
-- The phosphor-power-sequencer application writes the value 1 to the named GPIO
-  `power-chassis-control`.
-  - This GPIO is defined in the device tree. The GPIO name is defined in the
-    [Device Tree GPIO Naming in OpenBMC document](https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md)
-- The power sequencer device powers on all the voltage rails in the correct
-  order.
-- When all rails have been successfully powered on, the power sequencer device
-  sets the named `power-chassis-good` GPIO to the value 1.
-  - This GPIO is defined in the device tree. The GPIO name is defined in the
-    [Device Tree GPIO Naming in OpenBMC document](https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md)
-- The phosphor-power-sequencer application sets the `pgood` property to 1 on the
-  `org.openbmc.control.Power` D-Bus interface.
-- The rest of the boot continues
+## Powering on the system
 
-## Powering off the chassis
+`phosphor-power-sequencer` uses the power sequencer device to power on all main
+(non-standby) voltage rails in each chassis.
 
-- A BMC application or script sets the `state` property to 0 on the
-  `org.openbmc.control.Power` D-Bus interface.
-- The phosphor-power-sequencer application writes the value 0 to the named GPIO
-  `power-chassis-control`.
-- The power sequencer device powers off all the voltage rails in the correct
-  order.
-- When all rails have been successfully powered off, the power sequencer device
-  sets the named `power-chassis-good` GPIO to the value 0.
-- The phosphor-power-sequencer application sets the `pgood` property to 0 on the
-  `org.openbmc.control.Power` D-Bus interface.
+See [Powering On](powering_on.md) for more information.
 
-## Pgood fault
+## Powering off the system
 
-A power good (pgood) fault occurs in two scenarios:
+`phosphor-power-sequencer` uses the power sequencer device to power off all main
+(non-standby) voltage rails in each chassis.
 
-- When attempting to power on the chassis:
-  - The power sequencer device is powering on all voltage rails in order, and
-    one of the rails does not turn on.
-- After the chassis was successfully powered on:
-  - A voltage rail suddenly turns off or stops providing the expected level of
-    voltage. This could occur if the voltage regulator stops working or if it
-    shuts itself off due to exceeding a temperature/voltage/current limit.
+See [Powering Off](powering_off.md) for more information.
 
-If the pgood fault occurs when attempting to power on the chassis, the chassis
-pgood signal never changes to true.
+## Monitoring chassis pgood
 
-If the pgood fault occurs after the chassis was successfully powered on, the
-chassis pgood signal changes from true to false. This application monitors the
-chassis power good status by reading the named GPIO `power-chassis-good`.
+`phosphor-power-sequencer` periodically reads the chassis pgood state from the
+power sequencer device. See
+[Monitoring Chassis Power Good](monitoring_chassis_pgood.md) for more
+information.
 
-## Identifying the cause of a pgood fault
+## Chassis pgood faults
 
-It is very helpful to identify which voltage rail caused the pgood fault. That
-determines what hardware potentially needs to be replaced.
+If the chassis pgood state is false when it should be true, a chassis pgood
+fault has occurred. `phosphor-power-sequencer` uses information from the power
+sequencer device to determine the cause.
 
-Determining the correct rail requires the following:
-
-- The power sequencer device type is supported by this application
-- A JSON config file is defined for the current system
-
-If those requirements are met, the application will attempt to determine which
-voltage rail caused the chassis pgood fault. If found, an error is logged
-against that specific rail.
-
-If those requirements are not met, a general pgood fault error is logged.
+See [Power Good Faults](pgood_faults.md) for more information.
 
 ## JSON configuration file
 
-This application is configured by an optional JSON configuration file. The
-configuration file defines the voltage rails in the system and how they should
-be monitored.
+`phosphor-power-sequencer` is configured by an optional JSON configuration file.
+The configuration file defines the voltage rails in the system and how they
+should be monitored.
 
 JSON configuration files are system-specific and are stored in the
 [config_files](../config_files/) sub-directory.
@@ -111,61 +86,34 @@ JSON configuration files are system-specific and are stored in the
 [Documentation](config_file/README.md) is available on the configuration file
 format.
 
-If no configuration file is found for the current system, this application can
-still power the chassis on/off and detect chassis pgood faults. However, it will
-not be able to determine which voltage rail caused a pgood fault.
-
-## Key Classes
-
-- PowerInterface
-  - Defines the `org.openbmc.control.Power` D-Bus interface.
-  - The `state` property is set to power the chassis on or off. This contains
-    the desired power state.
-  - The `pgood` property contains the actual power state of the chassis.
-- PowerControl
-  - Created in `main()`. Handles the event loop.
-  - Sub-class of PowerInterface that provides a concrete implementation of the
-    `org.openbmc.control.Power` D-Bus interface.
-  - Finds and loads the JSON configuration file.
-  - Finds power sequencer device information.
-  - Creates a sub-class of PowerSequencerDevice that matches power sequencer
-    device information.
-  - Powers the chassis on and off using the `power-chassis-control` named GPIO.
-  - Monitors the chassis pgood status every 3 seconds using the
-    `power-chassis-good` named GPIO.
-  - Enforces a minimum power off time of 15 seconds from cold start and 25
-    seconds from power off.
-- DeviceFinder
-  - Finds power sequencer device information on D-Bus published by
-    EntityManager.
-- Rail
-  - A voltage rail that is enabled or monitored by the power sequencer device.
-- PowerSequencerDevice
-  - Abstract base class for a power sequencer device.
-  - Defines virtual methods that must be implemented by all child classes.
-- StandardDevice
-  - Sub-class of PowerSequencerDevice that implements the standard pgood fault
-    detection algorithm.
-- PMBusDriverDevice
-  - Sub-class of StandardDevice for power sequencer devices that are bound to a
-    PMBus device driver.
-- UCD90xDevice
-  - Sub-class of PMBusDriverDevice for the UCD90X family of power sequencer
-    devices.
-- UCD90160Device
-  - Sub-class of UCD90xDevice representing a UCD90160 power sequencer device.
-- UCD90320Device
-  - Sub-class of UCD90xDevice representing a UCD90320 power sequencer device.
-- Services
-  - Abstract base class that provides an interface to system services like error
-    logging and the journal.
-- BMCServices
-  - Sub-class of Services with real implementation of methods.
-- MockServices
-  - Sub-class of Services with mock implementation of methods for automated
-    testing.
+If no configuration file is found for the current system,
+`phosphor-power-sequencer` can still power the system on/off and detect chassis
+pgood faults. However, it will not be able to determine which voltage rail
+caused a pgood fault.
 
 ## Testing
 
 Automated test cases exist for most of the code in this application. See
-[testing.md](testing.md) for more information.
+[Testing](testing.md) for more information.
+
+## Related applications
+
+### phosphor-chassis-state-manager
+
+The `phosphor-chassis-state-manager` application exists in the
+phosphor-state-manager repository. It supports user requests to power on and off
+the system hardware. It publishes the [`xyz.openbmc_project.State.Chassis`][1]
+D-Bus interface.
+
+### phosphor-chassis-power
+
+The `phosphor-chassis-power` application exists in the phosphor-power
+repository. It monitors the chassis input power state using GPIOs.
+
+### phosphor-power-supply
+
+The `phosphor-power-supply` application exists in the phosphor-power repository.
+It monitors the power supply devices within each chassis.
+
+[1]:
+  https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/State/Chassis.interface.yaml
