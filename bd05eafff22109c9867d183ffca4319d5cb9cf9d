@@ -1,0 +1,375 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "865f0a0c_5ca3855a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Nit: PSUs",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ada319e_e2bfe0bd",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "duplicate?  also on line 8.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd952d08_02318447",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Note: lines 35 and 36 work above, but you should be aware of a tricky dependency.\n\nIn C++ the data members in the constructor initialization list are initialized in the order in which they are declared in the class definition.  They are **not** (somewhat surprisingly) initialized in the order in the initialization list.\n\nSo in this case, chassisPathUniqueId is declared before powerSystemInputs in the class definition in chassis.hpp.  So the init list above works the way you want.  But if the order of those two is reversed in the class definition, the powerSystemInputs() constructor call will have an uninitialized chassisPathUniqueId parameter.\n\nThis seems like a tricky potential future bug that could happen.  I wonder if it would be safer to move the initialization of powerSystemInputs into the constructor body.  If that is not feasible, I guess you could put a comment in the header file that chassisPathUniqueId **must** be declared before powerSystemInputs.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbef126c_0d3afe8d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Should this be calling initPowerMonitoring()?",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c79f57c7_40dea428",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we be using getParentEMUniqueId() here?  I think we agreed to get the Slot value for the parent node vs. relying on naming conventions.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "decb82f7_f26dc8fa",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Why log this twice?",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377e5255_12e1d9b6",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Note: I don\u0027t have this implemented yet, but the phosphor-power-sequencer application is going to be publishing both the system power state and the individual chassis power states on D-Bus.\n\nAny place in the phosphor-power-supply code where it checks the power state, you\u0027ll need to determine whether you should be looking at the **system** power state, or the **chassis** power state.\n\nFor example, if this chassis is in hardware isolation (guarded), it will not be powered on when the system is powered on.  So the system power state would be on, but this chassis\u0027s power state would be off.\n\nYou don\u0027t have to make these changes now, but make a note that this work is **required** to support multi-chassis eventually.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5813200_abd7e78f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "I don\u0027t think this method is needed (maybe I\u0027m missing something?).  See my earlier comments.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b729077_5b59fa94",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Nit: Missing blank link between methods.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3507594a_9810009e",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Nit: You probably don\u0027t want the word \u0027this\u0027 here right?\n\nOtherwise it will be \"GPIO not implemented in this chassis3\"",
+      "range": {
+        "startLine": 829,
+        "startChar": 43,
+        "endLine": 829,
+        "endChar": 48
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc7b2a0a_6e5009f9",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Nit: Probably don\u0027t need \u0027added\u0027 at end since you also have \u0027addition of\u0027.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf83106b_7f658824",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to repeat the method name here.  Can probably just start with \u0027Queries D-Bus ...\u0027",
+      "range": {
+        "startLine": 257,
+        "startChar": 14,
+        "endLine": 257,
+        "endChar": 39
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a5960a3_0c0a1c1e",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Nit: Upon",
+      "range": {
+        "startLine": 259,
+        "startChar": 26,
+        "endLine": 259,
+        "endChar": 31
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ed18837_25844568",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Your example is kind of strange since it is a mixture of InventoryManager and EntityManager object paths, right?\n\nIf the convention of underscore followed by number is unique to EM, you might want to state this is an EM object path and use an EM example.\n\nAlso, I thought we were getting the chassis ID from both the EM and InventoryManager paths using the Slot interface, not a naming scheme?",
+      "range": {
+        "startLine": 374,
+        "startChar": 56,
+        "endLine": 374,
+        "endChar": 64
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b4239ce_349a8af5",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Since you are using std::filesystem, you need to add a #include at the top of the file.  It must be compiling because some other header includes it, but we don\u0027t want to rely on that.  Please explicitly include any headers you use.",
+      "range": {
+        "startLine": 389,
+        "startChar": 16,
+        "endLine": 389,
+        "endChar": 17
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ec450f_4caac113",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Is there a reason the Chassis constructors cannot do this?",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb37d062_ecb5751d",
+        "filename": "phosphor-power-supply/new_main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "This was previously included from sdeventplus/event.hpp\n\nWas this change intentional?",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 19
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c23531_2d839528",
+        "filename": "phosphor-power-supply/new_main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Was the app description changed to have \"Multi Chassis\" in it just as a temporary difference from main.cpp?\n\nLong term, I think all our apps will need to support multi chassis, so stating that is not necessary.",
+      "range": {
+        "startLine": 18,
+        "startChar": 30,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d95515fa_abf2d99d",
+        "filename": "phosphor-power-supply/new_power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-07T20:26:44Z",
+      "side": 1,
+      "message": "Typo?  The method called was setupVoltageRating()",
+      "range": {
+        "startLine": 98,
+        "startChar": 19,
+        "endLine": 98,
+        "endChar": 38
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
