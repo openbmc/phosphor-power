@@ -1,4 +1,4 @@
-# phosphor-power-sequencer testing
+# Testing
 
 ## Overview
 
@@ -22,7 +22,7 @@ scope function. For example, `Rail::isPresent()` is tested by
 ## Mock framework
 
 One of the primary challenges with automated testing is handling external
-interfaces. The phosphor-power-sequencer application depends on the following
+interfaces. The `phosphor-power-sequencer` application depends on the following
 external interfaces:
 
 - D-Bus
@@ -46,8 +46,7 @@ The mock framework typically relies on a class hierarchy of the following form:
     actual external interfaces
   - Mock sub-class that provides mock implementation of virtual methods
 
-The phosphor-power-sequencer application follows this pattern using the
-following classes:
+`phosphor-power-sequencer` follows this pattern using the following classes:
 
 - [Services](../src/services.hpp)
   - [BMCServices](../src/services.hpp)
