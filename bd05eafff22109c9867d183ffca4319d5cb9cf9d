@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "129b9c53_3cd70521",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "865f0a0c_5ca3855a",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ada319e_e2bfe0bd",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "duplicate?  also on line 8.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b193492a_06b1ea2a",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ada319e_e2bfe0bd",
       "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9022499_92163ad1",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "I\u0027m aware of the declaration order if declaring chassisPathUniqueId after powerSystemInputs the code will not compile.\n\nAnyway Added a note in the header",
+      "parentUuid": "dd952d08_02318447",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbef126c_0d3afe8d",
@@ -65,6 +119,24 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "Should this be calling initPowerMonitoring()?",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "904f4e8b_13156bbe",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Following the original code, the call to setup validation timer happens after bus name request and analyze timer (analyze event timer is set by ChassisManager).",
+      "parentUuid": "cbef126c_0d3afe8d",
       "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -86,6 +158,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccabf3a5_7a9912f8",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "I will use getParentEMUniqueId()",
+      "parentUuid": "c79f57c7_40dea428",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "decb82f7_f26dc8fa",
@@ -99,6 +189,24 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "Why log this twice?",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bcb24e1_c32fa1e7",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Removed debug line",
+      "parentUuid": "decb82f7_f26dc8fa",
       "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -120,6 +228,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01325543_c63ea1e0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Added comment in the code",
+      "parentUuid": "377e5255_12e1d9b6",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5813200_abd7e78f",
@@ -137,6 +263,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8098cef5_5848b538",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "c5813200_abd7e78f",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b729077_5b59fa94",
@@ -150,6 +294,42 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "Nit: Missing blank link between methods.",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bcafa39_8d55b744",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b729077_5b59fa94",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9d5cfa_682f07af",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b729077_5b59fa94",
       "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -177,6 +357,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e85a6c6_d7080255",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3507594a_9810009e",
+      "range": {
+        "startLine": 829,
+        "startChar": 43,
+        "endLine": 829,
+        "endChar": 48
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc7b2a0a_6e5009f9",
@@ -194,6 +398,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad978d3_bab70cfb",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc7b2a0a_6e5009f9",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf83106b_7f658824",
@@ -207,6 +429,30 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "I don\u0027t think you need to repeat the method name here.  Can probably just start with \u0027Queries D-Bus ...\u0027",
+      "range": {
+        "startLine": 257,
+        "startChar": 14,
+        "endLine": 257,
+        "endChar": 39
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6e4503_2405e495",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf83106b_7f658824",
       "range": {
         "startLine": 257,
         "startChar": 14,
@@ -240,6 +486,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db98579_84f920f3",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a5960a3_0c0a1c1e",
+      "range": {
+        "startLine": 259,
+        "startChar": 26,
+        "endLine": 259,
+        "endChar": 31
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ed18837_25844568",
@@ -253,6 +523,30 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "Your example is kind of strange since it is a mixture of InventoryManager and EntityManager object paths, right?\n\nIf the convention of underscore followed by number is unique to EM, you might want to state this is an EM object path and use an EM example.\n\nAlso, I thought we were getting the chassis ID from both the EM and InventoryManager paths using the Slot interface, not a naming scheme?",
+      "range": {
+        "startLine": 374,
+        "startChar": 56,
+        "endLine": 374,
+        "endChar": 64
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2119e3e_465b1079",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "9ed18837_25844568",
       "range": {
         "startLine": 374,
         "startChar": 56,
@@ -286,6 +580,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f65274a_432569a5",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b4239ce_349a8af5",
+      "range": {
+        "startLine": 389,
+        "startChar": 16,
+        "endLine": 389,
+        "endChar": 17
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24ec450f_4caac113",
@@ -303,6 +621,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac0bbdc_ad302261",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "See my previous comment https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/82970/comment/cbef126c_0d3afe8d/",
+      "parentUuid": "24ec450f_4caac113",
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb37d062_ecb5751d",
@@ -316,6 +652,30 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "This was previously included from sdeventplus/event.hpp\n\nWas this change intentional?",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 19
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a8983c5_a20602f8",
+        "filename": "phosphor-power-supply/new_main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb37d062_ecb5751d",
       "range": {
         "startLine": 6,
         "startChar": 10,
@@ -349,6 +709,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98527bd4_483745d6",
+        "filename": "phosphor-power-supply/new_main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "This description was temporary since we have the current monitor, removed \"Multi Chassis\"",
+      "parentUuid": "b0c23531_2d839528",
+      "range": {
+        "startLine": 18,
+        "startChar": 30,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d95515fa_abf2d99d",
@@ -362,6 +746,54 @@
       "writtenOn": "2025-09-07T20:26:44Z",
       "side": 1,
       "message": "Typo?  The method called was setupVoltageRating()",
+      "range": {
+        "startLine": 98,
+        "startChar": 19,
+        "endLine": 98,
+        "endChar": 38
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87687e68_63f6777f",
+        "filename": "phosphor-power-supply/new_power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d95515fa_abf2d99d",
+      "range": {
+        "startLine": 98,
+        "startChar": 19,
+        "endLine": 98,
+        "endChar": 38
+      },
+      "revId": "bd05eafff22109c9867d183ffca4319d5cb9cf9d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "939d52de_8e9c7ad4",
+        "filename": "phosphor-power-supply/new_power_supply.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-09-10T20:26:01Z",
+      "side": 1,
+      "message": "Corrected to \"setInputVoltageRating\"",
+      "parentUuid": "d95515fa_abf2d99d",
       "range": {
         "startLine": 98,
         "startChar": 19,
