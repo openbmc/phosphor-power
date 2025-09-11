@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab57f1a8_7000bd99",
+        "filename": "phosphor-power-supply/new_main.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-09-11T18:55:51Z",
+      "side": 1,
+      "message": "I would suggest that if an uncaught exception gets this far to just let it escape.  It will still print the .what() to the journal and you\u0027ll get a coredump in case you need a backtrace.",
+      "revId": "5079f40b0d565f53b838b52bc126e92ba22d4012",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
