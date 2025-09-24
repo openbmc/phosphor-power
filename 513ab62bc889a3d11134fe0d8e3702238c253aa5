@@ -100,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef4800a_6adaffc3",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-24T20:52:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "117f485e_24f56025",
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "157c98b6_2ba27150",
@@ -137,6 +155,30 @@
       "side": 1,
       "message": "Yes, this is the new app.  Good suggestion I\u0027ll add something for this.",
       "parentUuid": "157c98b6_2ba27150",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 185,
+        "endChar": 28
+      },
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8604ecab_4f98c934",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-24T20:52:27Z",
+      "side": 1,
+      "message": "Done.  Added list of related apps to the README.md file.",
+      "parentUuid": "fadabd86_f33c618a",
       "range": {
         "startLine": 185,
         "startChar": 4,
@@ -225,6 +267,24 @@
       "side": 1,
       "message": "I discussed this with my team lead, and he agrees with you.  This design had been intended to cover some corner cases.  But we can instead *not* power the drawer on and log an error so the customer knows why it wasn\u0027t powered on.",
       "parentUuid": "c19dc688_91d97954",
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3907136e_d613c0a0",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-09-24T20:52:27Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "61711fd9_27971044",
       "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
