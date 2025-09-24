@@ -31,6 +31,18 @@ is started. This runs the `regsctl` utility. This utility invokes the D-Bus
 `phosphor-regulators` will perform the configuration defined in the JSON config
 file.
 
+## Multiple chassis
+
+In a [multiple chassis](multiple_chassis.md) system, `phosphor-regulators` will
+only configure regulators in chassis with the proper status:
+
+- `Present` property is true
+- `Enabled` property is true (if interface exists)
+- `Available` property is true (if interface exists)
+
+See [Chassis Status](../phosphor-power-sequencer/docs/chassis_status.md) for
+more information on these properties.
+
 ## Error handling
 
 If an error occurs while executing actions to perform configuration:

@@ -11,11 +11,17 @@ performed by power sequencer hardware and the
 [`phosphor-power-sequencer`](../../phosphor-power-sequencer/docs/README.md)
 application.
 
+**Note:** Many changes have been made to this documentation to define
+enhancements to the multiple chassis support. These enhancements are not yet
+implemented in this application. The enhancements are also dependent on the
+planned new `phosphor-chassis-power` application. This disclaimer will be
+removed when this support is fully implemented.
+
 ## Application
 
 `phosphor-regulators` is a single-threaded C++ executable. It is a 'daemon'
 process that runs continually. The application is launched by systemd when the
-BMC reaches the Ready state and before the chassis is powered on.
+BMC reaches the Ready state and before the system is powered on.
 
 The application is driven by a system-specific JSON configuration file. The JSON
 file is found and parsed at runtime. The parsing process creates a collection of
@@ -55,6 +61,14 @@ directory.
 
 See the [configuration file documentation](docs/config_file/README.md) for
 information on the file format, validation tool, and installation directories.
+
+## Multiple chassis systems
+
+A BMC-based system can contain one or more chassis. A chassis is typically a
+physical enclosure that contains system components such as CPUs, fans, power
+supplies, and PCIe cards.
+
+See [Multiple Chassis](multiple_chassis.md) for more information.
 
 ## Testing
 

@@ -11,8 +11,7 @@
   - Represents the computer system being controlled and monitored by the BMC.
   - Contains one or more Chassis objects.
 - Chassis
-  - Represents an enclosure that can be independently powered off and on by the
-    BMC.
+  - Represents a physical enclosure that can be powered on and off by the BMC.
   - Small and mid-sized systems may contain a single Chassis.
   - In a large rack-mounted system, each drawer may correspond to a Chassis.
   - Contains one or more Device objects.
