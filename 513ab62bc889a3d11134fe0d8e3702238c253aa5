@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46333612_c04f6616",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-09-24T19:21:03Z",
+      "side": 1,
+      "message": "This isn\u0027t true today, are you going to change it across all current systems?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 45
+      },
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44751d61_c912402e",
         "filename": "phosphor-power-sequencer/docs/chassis_status.md",
         "patchSetId": 1
@@ -31,6 +54,52 @@
       "writtenOn": "2025-09-24T19:06:05Z",
       "side": 1,
       "message": "In the previous sections you listed some examples of how the property could be set to false, could you do that here? I think a lot of people are probably a bit overwhelmed by the number of properties we look at so the examples really help understand the use cases.",
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "157c98b6_2ba27150",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-09-24T19:21:03Z",
+      "side": 1,
+      "message": "is this the new one?  since there\u0027s lots of different places that refer to these apps that all have simliar names maybe in a high level spot you could just list all of the involved apps and a sentence or two of detail.  (or maybe i just missed it or haven\u0027t reviewed it yet)",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 185,
+        "endChar": 28
+      },
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40fdefdf_5fdd9170",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-09-24T19:21:03Z",
+      "side": 1,
+      "message": "are you already doing this in the polling that goes on?",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 42
+      },
       "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
