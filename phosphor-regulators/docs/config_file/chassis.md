@@ -4,9 +4,10 @@
 
 A chassis within the system.
 
-Chassis are large enclosures that can be independently powered off and on by the
-BMC. Small and mid-sized systems may contain a single chassis. In a large
-rack-mounted system, each drawer may correspond to a chassis.
+Chassis are typically a physical enclosure that contains system components such
+as CPUs, fans, power supplies, and PCIe cards. A chassis can be stand-alone,
+such as a tower or desktop. A chassis can also be designed to be mounted in an
+equipment rack.
 
 A chassis only needs to be defined in the config file if it contains regulators
 that need to be configured or monitored.

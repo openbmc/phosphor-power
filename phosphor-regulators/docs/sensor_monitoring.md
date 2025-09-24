@@ -40,6 +40,8 @@ values are read during monitoring. This can occur in the following cases:
 - The regulator has been removed from the system (no longer present).
 - The regulator was replaced, and the new regulator supports a different set of
   sensors values. For example, temperature_peak is no longer provided.
+- The chassis containing the regulator has an incorrect status, such as missing
+  or no input power.
 
 When regulator monitoring is disabled, the following changes will be made to all
 of the D-Bus sensor objects:

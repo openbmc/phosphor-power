@@ -40,3 +40,15 @@ is started. This runs the `regsctl` utility. This utility invokes the D-Bus
 
 `phosphor-regulators` will stop performing the monitoring defined in the JSON
 config file.
+
+## Multiple chassis
+
+In a [multiple chassis](multiple_chassis.md) system, `phosphor-regulators` will
+only monitor regulators in chassis with the proper status:
+
+- `Present` property is true
+- `pgood` property is 1
+- `Available` property is true (if interface exists)
+
+See [Chassis Status](../phosphor-power-sequencer/docs/chassis_status.md) for
+more information on these properties.
