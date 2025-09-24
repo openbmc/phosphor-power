@@ -16,6 +16,40 @@
       "message": "Looks great!",
       "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44751d61_c912402e",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2025-09-24T19:06:05Z",
+      "side": 1,
+      "message": "In the previous sections you listed some examples of how the property could be set to false, could you do that here? I think a lot of people are probably a bit overwhelmed by the number of properties we look at so the examples really help understand the use cases.",
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c19dc688_91d97954",
+        "filename": "phosphor-power-sequencer/docs/chassis_status.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000004
+      },
+      "writtenOn": "2025-09-24T19:06:05Z",
+      "side": 1,
+      "message": "This one is a bit surprising to me, that we actually try and power on during a brownout? I\u0027m not sure the PSM code will allow a power on if it sees an active brownout condition.",
+      "revId": "513ab62bc889a3d11134fe0d8e3702238c253aa5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
