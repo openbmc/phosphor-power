@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf157e97_1e51763f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-09-25T19:48:11Z",
+      "side": 1,
+      "message": "I feel like somewhere somehow a disclaimer is needed saying a lot of this code doesn\u0027t exist yet.  Because if someone outside of IBM were to read all of this, they would think it does a lot more than it does, and also that some applications like phosphor-chassis-power exist, even though they won\u0027t for quite a while.\n\nEither that, or don\u0027t submit this until the code is done.",
+      "revId": "5618b1b54fa54a38ec8eb1015b62ee2b0c253267",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
