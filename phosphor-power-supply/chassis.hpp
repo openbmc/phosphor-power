@@ -305,7 +305,7 @@ class Chassis
      * @brief Initializes the chassis.
      *
      */
-    void initialize() {}; // TODO
+    void initialize();
 
     /**
      * @brief Perform power supply configuration validation.
@@ -393,6 +393,76 @@ class Chassis
      * @breif Attempt to create GPIO
      */
     void attemptToCreatePowerConfigGPIO();
+
+    /**
+     * Write PMBus ON_OFF_CONFIG
+     *
+     * This function will be called to cause the PMBus device driver to send the
+     * ON_OFF_CONFIG command. Takes one byte of data.
+     */
+    void onOffConfig(const uint8_t data)
+    {
+        for (auto& psu : psus)
+        {
+            psu->onOffConfig(data);
+        }
+    }
+
+    /**
+     * This function will be called in various situations in order to clear
+     * any fault status bits that may have been set, in order to start over
+     * with a clean state. Presence changes and power state changes will want
+     * to clear any faults logged.
+     */
+    void clearFaults()
+    {
+        setPowerSupplyError("");
+        for (auto& psu : psus)
+        {
+            psu->clearFaults();
+        }
+    }
+
+    /**
+     * Let power control/sequencer application know of PSU error(s).
+     *
+     * @param[in] psuErrorString - string for power supply error
+     */
+    void setPowerSupplyError(const std::string& psuErrorString);
+
+    /**
+     * @brief Set the power-config-full-load GPIO depending on the EM full load
+     *        property value.
+     */
+    void setPowerConfigGPIO();
+
+    /**
+     * @brief Helper function to validate that all PSUs have the same model name
+     *
+     * @param[out] model - The model name. Empty if there is a mismatch.
+     * @param[out] additionalData - If there is a mismatch, it contains debug
+     *             information such as the mismatched model name.
+     * @return true if all the PSUs have the same model name, false otherwise.
+     */
+    bool validateModelName(std::string& model,
+                           std::map<std::string, std::string>& additionalData);
+
+    /**
+     * @brief Returns the number of PSUs that are required to be present.
+     */
+    unsigned int getRequiredPSUCount()
+    {
+        // TODO
+        return 1;
+    }
+
+    /**
+     * @brief Returns whether the specified PSU is required to be present.
+     *
+     * @param[in] psu - Power supply to check
+     * @return true if PSU is required, false otherwise.
+     */
+    bool isRequiredPSU(const PowerSupply& psu);
 };
 
 } // namespace phosphor::power::chassis

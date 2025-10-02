@@ -365,7 +365,7 @@ void Chassis::initPowerMonitoring()
         sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
                                                         POWER_IFACE),
         [this](auto& msg) { this->powerStateChanged(msg); });
-    // TODO initialize the chassis
+    initialize();
 }
 
 void Chassis::validateConfig()
@@ -498,9 +498,8 @@ void Chassis::analyze()
             {
                 std::map<std::string, std::string> requiredPSUsData;
                 auto requiredPSUsPresent = hasRequiredPSUs(requiredPSUsData);
-                // TODO check required PSU
 
-                if (!requiredPSUsPresent)
+                if (!requiredPSUsPresent && isRequiredPSU(*psu))
                 {
                     additionalData.merge(requiredPSUsData);
                     // Create error for power supply missing.
@@ -780,7 +779,7 @@ void Chassis::createError(const std::string& faultName,
         method.append(faultName, level, additionalData);
 
         auto reply = bus.call(method);
-        // TODO set power supply error
+        setPowerSupplyError(faultName);
     }
     catch (const std::exception& e)
     {
@@ -820,15 +819,81 @@ void Chassis::psuInterfaceAdded(util::DbusPropertyMap& properties)
 bool Chassis::hasRequiredPSUs(
     std::map<std::string, std::string>& additionalData)
 {
-    // ignore the following loop so code will compile
-    for (const auto& pair : additionalData)
+    std::string model{};
+    if (!validateModelName(model, additionalData))
     {
-        std::cout << "Key = " << pair.first
-                  << " additionalData value = " << pair.second << "\n";
+        return false;
     }
-    return true;
 
-    // TODO validate having the required PSUs
+    auto presentCount =
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->isPresent(); });
+
+    // Validate the supported configurations. A system may support more than one
+    // power supply model configuration. Since all configurations need to be
+    // checked, the additional data would contain only the information of the
+    // last configuration that did not match.
+    std::map<std::string, std::string> tmpAdditionalData;
+    for (const auto& config : supportedConfigs)
+    {
+        if (config.first != model)
+        {
+            continue;
+        }
+
+        // Number of power supplies present should equal or exceed the expected
+        // count
+        if (presentCount < config.second.powerSupplyCount)
+        {
+            tmpAdditionalData.clear();
+            tmpAdditionalData["EXPECTED_COUNT"] =
+                std::to_string(config.second.powerSupplyCount);
+            tmpAdditionalData["ACTUAL_COUNT"] = std::to_string(presentCount);
+            continue;
+        }
+
+        bool voltageValidated = true;
+        for (const auto& psu : psus)
+        {
+            if (!psu->isPresent())
+            {
+                // Only present PSUs report a valid input voltage
+                continue;
+            }
+
+            double actualInputVoltage;
+            int inputVoltage;
+            psu->getInputVoltage(actualInputVoltage, inputVoltage);
+
+            if (std::find(config.second.inputVoltage.begin(),
+                          config.second.inputVoltage.end(), inputVoltage) ==
+                config.second.inputVoltage.end())
+            {
+                tmpAdditionalData.clear();
+                tmpAdditionalData["ACTUAL_VOLTAGE"] =
+                    std::to_string(actualInputVoltage);
+                for (const auto& voltage : config.second.inputVoltage)
+                {
+                    tmpAdditionalData["EXPECTED_VOLTAGE"] +=
+                        std::to_string(voltage) + " ";
+                }
+                tmpAdditionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+
+                voltageValidated = false;
+                break;
+            }
+        }
+        if (!voltageValidated)
+        {
+            continue;
+        }
+
+        return true;
+    }
+
+    additionalData.insert(tmpAdditionalData.begin(), tmpAdditionalData.end());
+    return false;
 }
 
 void Chassis::updateMissingPSUs()
@@ -901,6 +966,106 @@ void Chassis::updateMissingPSUs()
     }
 }
 
+void Chassis::initialize()
+{
+    try
+    {
+        // pgood is the latest read of the chassis pgood
+        int pgood = 0;
+        util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
+                               powerService, bus, pgood);
+
+        // state is the latest requested power on / off transition
+        auto method = bus.new_method_call(powerService.c_str(), POWER_OBJ_PATH,
+                                          POWER_IFACE, "getPowerState");
+        auto reply = bus.call(method);
+        int state = 0;
+        reply.read(state);
+
+        if (state)
+        {
+            // Monitor PSUs anytime state is on
+            powerOn = true;
+            // In the power fault window if pgood is off
+            powerFaultOccurring = !pgood;
+            validationTimer->restartOnce(validationTimeout);
+        }
+        else
+        {
+            // Power is off
+            powerOn = false;
+            powerFaultOccurring = false;
+            runValidateConfig = true;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::info(
+            "Failed to get power state, assuming it is off, error {ERROR}",
+            "ERROR", e);
+        powerOn = false;
+        powerFaultOccurring = false;
+        runValidateConfig = true;
+    }
+
+    onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
+    clearFaults();
+    updateMissingPSUs();
+    setPowerConfigGPIO();
+
+    lg2::info(
+        "initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+}
+
+void Chassis::setPowerSupplyError(const std::string& psuErrorString)
+{
+    using namespace sdbusplus::xyz::openbmc_project;
+    constexpr auto method = "setPowerSupplyError";
+
+    try
+    {
+        // Call D-Bus method to inform pseq of PSU error
+        auto methodMsg = bus.new_method_call(
+            powerService.c_str(), POWER_OBJ_PATH, POWER_IFACE, method);
+        methodMsg.append(psuErrorString);
+        auto callReply = bus.call(methodMsg);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::info("Failed calling setPowerSupplyError due to error {ERROR}",
+                  "ERROR", e);
+    }
+}
+
+void Chassis::setPowerConfigGPIO()
+{
+    if (!powerConfigGPIO)
+    {
+        return;
+    }
+
+    std::string model{};
+    std::map<std::string, std::string> additionalData;
+    if (!validateModelName(model, additionalData))
+    {
+        return;
+    }
+
+    auto config = supportedConfigs.find(model);
+    if (config != supportedConfigs.end())
+    {
+        // The power-config-full-load is an open drain GPIO. Set it to low (0)
+        // if the supported configuration indicates that this system model
+        // expects the maximum number of power supplies (full load set to true).
+        // Else, set it to high (1), this is the default.
+        auto powerConfigValue =
+            (config->second.powerConfigFullLoad == true ? 0 : 1);
+        auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
+        powerConfigGPIO->write(powerConfigValue, flags);
+    }
+}
+
 void Chassis::powerStateChanged(sdbusplus::message_t& msg)
 {
     std::string msgSensor;
@@ -918,11 +1083,10 @@ void Chassis::powerStateChanged(sdbusplus::message_t& msg)
             powerOn = true;
             powerFaultOccurring = false;
             validationTimer->restartOnce(validationTimeout);
-            // TODO clear faults
 
+            clearFaults();
             syncHistory();
-            // TODO set power config
-
+            setPowerConfigGPIO();
             setInputVoltageRating();
         }
         else
@@ -952,6 +1116,145 @@ void Chassis::powerStateChanged(sdbusplus::message_t& msg)
     lg2::info(
         "powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
         "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+}
+
+bool Chassis::validateModelName(
+    std::string& model, std::map<std::string, std::string>& additionalData)
+{
+    // Check that all PSUs have the same model name. Initialize the model
+    // variable with the first PSU name found, then use it as a base to compare
+    // against the rest of the PSUs and get its inventory path to use as callout
+    // if needed.
+    model.clear();
+    std::string modelInventoryPath{};
+    for (const auto& psu : psus)
+    {
+        auto psuModel = psu->getModelName();
+        if (psuModel.empty())
+        {
+            continue;
+        }
+        if (model.empty())
+        {
+            model = psuModel;
+            modelInventoryPath = psu->getInventoryPath();
+            continue;
+        }
+        if (psuModel != model)
+        {
+            if (supportedConfigs.find(model) != supportedConfigs.end())
+            {
+                // The base model is supported, callout the mismatched PSU. The
+                // mismatched PSU may or may not be supported.
+                additionalData["EXPECTED_MODEL"] = model;
+                additionalData["ACTUAL_MODEL"] = psuModel;
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+            }
+            else if (supportedConfigs.find(psuModel) != supportedConfigs.end())
+            {
+                // The base model is not supported, but the mismatched PSU is,
+                // callout the base PSU.
+                additionalData["EXPECTED_MODEL"] = psuModel;
+                additionalData["ACTUAL_MODEL"] = model;
+                additionalData["CALLOUT_INVENTORY_PATH"] = modelInventoryPath;
+            }
+            else
+            {
+                // The base model and the mismatched PSU are not supported or
+                // could not be found in the supported configuration, callout
+                // the mismatched PSU.
+                additionalData["EXPECTED_MODEL"] = model;
+                additionalData["ACTUAL_MODEL"] = psuModel;
+                additionalData["CALLOUT_INVENTORY_PATH"] =
+                    psu->getInventoryPath();
+            }
+            model.clear();
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Chassis::isRequiredPSU(const PowerSupply& psu)
+{
+    // Get required number of PSUs; if not found, we don't know if PSU required
+    unsigned int requiredCount = getRequiredPSUCount();
+    if (requiredCount == 0)
+    {
+        return false;
+    }
+
+    // If total PSU count <= the required count, all PSUs are required
+    if (psus.size() <= requiredCount)
+    {
+        return true;
+    }
+
+    // We don't currently get information from EntityManager about which PSUs
+    // are required, so we have to do some guesswork.  First check if this PSU
+    // is present.  If so, assume it is required.
+    if (psu.isPresent())
+    {
+        return true;
+    }
+
+    // This PSU is not present.  Count the number of other PSUs that are
+    // present.  If enough other PSUs are present, assume the specified PSU is
+    // not required.
+    unsigned int psuCount =
+        std::count_if(psus.begin(), psus.end(),
+                      [](const auto& psu) { return psu->isPresent(); });
+    if (psuCount >= requiredCount)
+    {
+        return false;
+    }
+
+    // Check if this PSU was previously present.  If so, assume it is required.
+    // We know it was previously present if it has a non-empty model name.
+    if (!psu.getModelName().empty())
+    {
+        return true;
+    }
+
+    // This PSU was never present.  Count the number of other PSUs that were
+    // previously present.  If including those PSUs is enough, assume the
+    // specified PSU is not required.
+    psuCount += std::count_if(psus.begin(), psus.end(), [](const auto& psu) {
+        return (!psu->isPresent() && !psu->getModelName().empty());
+    });
+    if (psuCount >= requiredCount)
+    {
+        return false;
+    }
+
+    // We still haven't found enough PSUs.  Sort the inventory paths of PSUs
+    // that were never present.  PSU inventory paths typically end with the PSU
+    // number (0, 1, 2, ...).  Assume that lower-numbered PSUs are required.
+    std::vector<std::string> sortedPaths;
+    std::for_each(psus.begin(), psus.end(), [&sortedPaths](const auto& psu) {
+        if (!psu->isPresent() && psu->getModelName().empty())
+        {
+            sortedPaths.push_back(psu->getInventoryPath());
+        }
+    });
+    std::sort(sortedPaths.begin(), sortedPaths.end());
+
+    // Check if specified PSU is close enough to start of list to be required
+    for (const auto& path : sortedPaths)
+    {
+        if (path == psu.getInventoryPath())
+        {
+            return true;
+        }
+        if (++psuCount >= requiredCount)
+        {
+            break;
+        }
+    }
+
+    // PSU was not close to start of sorted list; assume not required
+    return false;
 }
 
 } // namespace phosphor::power::chassis
