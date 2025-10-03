@@ -16,6 +16,24 @@
       "message": "High level question - are there any design updates for multi-chassis, eg in the readme or somewhere?  I believe most of our other apps have updated the designs in the readme/doc files.\n\nAre these changes in this commit basically just moves of routines/function from the psu_manager files to the chassis files?  Any new code that we should focus the review on?\n\nIs the plan to remove the copied routines/function from the psu_manager files at some later point, when the chassis files are compiled in?  How are you keeping track of what will need to be removed from the psu_manager files?\n\nLine 8 of commit message ends with \u0027:\u0027 instead of \u0027.\u0027 like the rest.\n\nMinoe: In general, the commit message contains a mix of past and present tense... I\u0027d recommend being consistent.  Eg \"Read initial... and sets...\" - should be either \"Reads...sets\" or \"Read..set\".  Eg in Test section, \"Verified\" and \"validate\" mix tense - should probably be \"Verified\"/\"Validated\" since it looks like you are saying \"The following tests _were_ done in a simulated environment.\n\nThanks.",
       "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f64e13c0_d6a22fd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-10-03T14:38:47Z",
+      "side": 1,
+      "message": "I will investigate if the design I had needs any update.\n\nYes, some routines moved from psu_manager with minor changes to work with multi chassis.\n\nThe psu_manager code will not be used in the future. Keeping track of what\u0027s removed/needed by comparing the logic.\n\nWill change test section of the commit message.",
+      "parentUuid": "b17c2dff_8269377a",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
