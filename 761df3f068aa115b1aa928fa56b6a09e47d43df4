@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b17c2dff_8269377a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2025-10-03T14:14:43Z",
+      "side": 1,
+      "message": "High level question - are there any design updates for multi-chassis, eg in the readme or somewhere?  I believe most of our other apps have updated the designs in the readme/doc files.\n\nAre these changes in this commit basically just moves of routines/function from the psu_manager files to the chassis files?  Any new code that we should focus the review on?\n\nIs the plan to remove the copied routines/function from the psu_manager files at some later point, when the chassis files are compiled in?  How are you keeping track of what will need to be removed from the psu_manager files?\n\nLine 8 of commit message ends with \u0027:\u0027 instead of \u0027.\u0027 like the rest.\n\nMinoe: In general, the commit message contains a mix of past and present tense... I\u0027d recommend being consistent.  Eg \"Read initial... and sets...\" - should be either \"Reads...sets\" or \"Read..set\".  Eg in Test section, \"Verified\" and \"validate\" mix tense - should probably be \"Verified\"/\"Validated\" since it looks like you are saying \"The following tests _were_ done in a simulated environment.\n\nThanks.",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
