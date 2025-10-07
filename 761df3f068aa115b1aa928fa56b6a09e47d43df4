@@ -34,6 +34,57 @@
       "parentUuid": "b17c2dff_8269377a",
       "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcf7e0f2_e4ded383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-10-07T13:59:52Z",
+      "side": 1,
+      "message": "Looks good. I had two comments, but they are for larger changes that should probably done in future commits.",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed594cbc_2d89342e",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-10-07T13:59:52Z",
+      "side": 1,
+      "message": "There are many places in this file where it uses the D-Bus path constant POWER_OBJ_PATH, which corresponds to \"/org/openbmc/control/power0\". That path represents the state of the entire system and not a specific chassis. See phosphor-power-sequencer/docs/chassis_status.md for more information.\n\nI realize you copied this code from psu_manager.cpp, and that code only supported a single-chassis system. So you didn\u0027t make a mistake.\n\nBut this class will eventually need to change to use the chassis-specific D-Bus path. For chassis 1 the path will be \"/org/openbmc/control/power1\", for chassis 2 \"/org/openbmc/control/power2\", etc.\n\nIt is fine not to make the change yet. I haven\u0027t changed the phosphor-power-sequencer application to publish these new paths yet. Hopefully in the next month or two that will be supported.\n\nI would suggest in the future creating a commit that makes this change in all the appropriate places once the phosphor-power-sequencer enhancement is done. Please add that to your to do list.",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52031525_e92d0ed6",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-10-07T13:59:52Z",
+      "side": 1,
+      "message": "You will eventually need to add the chassis number to this message (e.g. \"Chassis 2: Failed to ...\"). We need to know which chassis hit the error. That is probably true for all or nearly all the journal messages in this class and the PowerSupply class.\n\nI would suggest creating a commit in the future that fixes all these at once in a consistent way. Please add this to your to do list.",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
