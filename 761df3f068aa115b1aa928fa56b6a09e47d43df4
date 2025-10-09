@@ -70,6 +70,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2212ccd6_de4294b6",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-10-09T19:41:39Z",
+      "side": 1,
+      "message": "Added a note to fix this when phosphor-power-sequencer change.",
+      "parentUuid": "ed594cbc_2d89342e",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52031525_e92d0ed6",
@@ -83,6 +101,24 @@
       "writtenOn": "2025-10-07T13:59:52Z",
       "side": 1,
       "message": "You will eventually need to add the chassis number to this message (e.g. \"Chassis 2: Failed to ...\"). We need to know which chassis hit the error. That is probably true for all or nearly all the journal messages in this class and the PowerSupply class.\n\nI would suggest creating a commit in the future that fixes all these at once in a consistent way. Please add this to your to do list.",
+      "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f06af5f2_e3591f42",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2025-10-09T19:41:39Z",
+      "side": 1,
+      "message": "The fix will be future fix",
+      "parentUuid": "52031525_e92d0ed6",
       "revId": "761df3f068aa115b1aa928fa56b6a09e47d43df4",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
