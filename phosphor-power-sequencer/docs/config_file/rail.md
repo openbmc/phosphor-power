@@ -2,7 +2,7 @@
 
 ## Description
 
-A voltage rail that is enabled or monitored by the power sequencer device.
+A voltage rail that is enabled or monitored by a power sequencer device.
 
 The "check_status_vout", "compare_voltage_to_limit", and "gpio" properties
 specify how to obtain the pgood status of the rail. You can specify more than
