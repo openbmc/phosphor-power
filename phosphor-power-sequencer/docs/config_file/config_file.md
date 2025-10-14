@@ -6,24 +6,55 @@ The root (outer-most) object in the configuration file.
 
 ## Properties
 
-| Name  | Required | Type                      | Description                                                                                                                 |
-| :---- | :------: | :------------------------ | :-------------------------------------------------------------------------------------------------------------------------- |
-| rails |   yes    | array of [rails](rail.md) | One or more voltage rails enabled or monitored by the power sequencer device. The rails must be in power on sequence order. |
+| Name              | Required | Type                                              | Description                                                                                            |
+| :---------------- | :------: | :------------------------------------------------ | :----------------------------------------------------------------------------------------------------- |
+| comments          |    no    | array of strings                                  | One or more comment lines describing this file.                                                        |
+| chassis_templates |    no    | array of [chassis_templates](chassis_template.md) | One or more chassis templates. Templates are used to avoid duplicate data in multiple chassis systems. |
+| chassis           |   yes    | array of [chassis](chassis.md)                    | One or more chassis in the system.                                                                     |
 
-## Example
+## Examples
 
 ```json
 {
-  "rails": [
+  "comments": [ "Config file for a FooBar one-chassis system" ],
+  "chassis": [
     {
-      "name": "VDD_CPU0",
-      "page": 11,
-      "check_status_vout": true
+      "number": 1,
+      "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+      "power_sequencers": [
+        ... details omitted ...
+      ]
+    }
+  ]
+}
+```
+
+```json
+{
+  "chassis_templates": [
+    {
+      "id": "standard_chassis_template",
+      "number": "${chassis_number}",
+      "inventory_path": "/xyz/openbmc_project/inventory/system/chassis{$chassis_number}",
+      "power_sequencers": [
+        ... details omitted ...
+      ]
+    }
+  ],
+  "chassis": [
+    {
+      "comments": ["Chassis 1"],
+      "template_id": "standard_chassis_template",
+      "template_variable_values": {
+        "chassis_number": "1"
+      }
     },
     {
-      "name": "VCS_CPU1",
-      "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
-      "gpio": { "line": 60 }
+      "comments": ["Chassis 2"],
+      "template_id": "standard_chassis_template",
+      "template_variable_values": {
+        "chassis_number": "2"
+      }
     }
   ]
 }

@@ -10,16 +10,22 @@
 
 ## Overview
 
-The `phosphor-power-sequencer` configuration file (config file) contains
-information about the power sequencer device within a system. This device is
-responsible for enabling the voltage rails in order and monitoring them for
-pgood faults.
+The `phosphor-power-sequencer` application is controlled by a configuration file
+(config file). The config file contains information about the chassis, power
+sequencer devices, GPIOs, and voltage rails within the system.
 
-The information in the config file is used to determine which voltage rail
-caused a pgood fault.
+This information is used to power the system on/off, detect
+[pgood faults](../pgood_faults.md), and identify the voltage rail that caused
+for a pgood fault.
 
-The config file is optional. If no file is found, the application will log a
-general error when a pgood fault occurs. No specific rail will be identified.
+The config file is optional. If no file is found, the application will do the
+following:
+
+- Assume this is a single chassis system.
+- Assume the standard [GPIO names](../named_gpios.md) are used to power the
+  system on/off and detect pgood faults.
+- Log a general error if a pgood fault occurs. No specific voltage rail will be
+  identified.
 
 ## Data Format
 
@@ -31,7 +37,7 @@ The config file is a text file in the
 The config file name is based on the system type that it supports.
 
 A config file is normally system-specific. Each system type usually has a
-different set of voltage rails and GPIOs.
+different set of chassis, power sequencer devices, GPIOs, and voltage rails.
 
 The system type is obtained from a D-Bus Chassis object created by the
 [Entity Manager](https://github.com/openbmc/entity-manager) application. The
@@ -66,6 +72,36 @@ Example:
 
 The config file contains a single JSON [config_file](config_file.md) object at
 the root level. That object contains arrays of other JSON objects.
+
+### Comments
+
+The JSON data format does not support comments. However, some of the JSON
+objects in the config file provide an optional "comments" property. The value of
+this property is an array of strings. Use this property to annotate the config
+file. The "comments" properties are ignored when the config file is read by the
+`phosphor-power-sequencer` application.
+
+Examples:
+
+```json
+"comments": ["Chassis 2: Standard hardware layout"],
+```
+
+```json
+"comments": ["The first of two UCD90320 power sequencers in the chassis.",
+             "Controls/monitors rails 0-15."]
+```
+
+### Hexadecimal Values
+
+The JSON number data type does not support the hexadecimal format. For this
+reason, properties with hexadecimal values use the string data type.
+
+Example:
+
+```json
+"address": "0x70"
+```
 
 ## Installation
 
