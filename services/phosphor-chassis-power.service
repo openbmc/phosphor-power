@@ -1,0 +1,9 @@
+[Unit]
+Description=Chassis Power Monitor
+
+[Service]
+Restart=always
+ExecStart=/usr/libexec/phosphor-power/phosphor-chassis-power
+
+[Install]
+WantedBy=multi-user.target
