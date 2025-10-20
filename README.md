@@ -9,6 +9,8 @@ Actively-maintained applications:
 
 - cold-redundancy: Application that makes power supplies work in Cold Redundancy
   mode and rotates them at intervals.
+- [phosphor-chassis-power](phosphor-chassis-power/README.md): JSON-driven
+  application that monitors chassis power on multi-chassis systems.
 - [phosphor-power-sequencer](phosphor-power-sequencer/README.md): JSON-driven
   application that powers the chassis on/off and monitors the power sequencer
   device.
