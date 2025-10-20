@@ -112,6 +112,7 @@ libsystemd_dep = dependency('libsystemd')
 servicedir = systemd.get_variable('systemd_system_unit_dir')
 
 services = [
+    ['chassis-monitor', 'phosphor-chassis-power.service'],
     ['supply-monitor', 'power-supply-monitor@.service'],
     ['sequencer-monitor', 'pseq-monitor-pgood.service'],
     ['sequencer-monitor', 'pseq-monitor.service'],
@@ -199,6 +200,9 @@ subdir('tools/i2c')
 
 if get_option('regulators')
     subdir('phosphor-regulators')
+endif
+if get_option('chassis-monitor')
+    subdir('phosphor-chassis-power')
 endif
 if get_option('sequencer-monitor')
     subdir('power-sequencer')

@@ -64,6 +64,11 @@ option(
     description: 'Enable support for cold redundancy',
 )
 option(
+    'chassis-monitor',
+    type: 'boolean',
+    description: 'Enable support for chassis power monitoring',
+)
+option(
     'supply-monitor',
     type: 'boolean',
     description: 'Enable support for power supply monitoring',
