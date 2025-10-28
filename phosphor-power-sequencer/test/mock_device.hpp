@@ -17,6 +17,8 @@
 
 #include "power_sequencer_device.hpp"
 
+#include <cstdint>
+
 #include <gmock/gmock.h>
 
 namespace phosphor::power::sequencer
@@ -39,6 +41,8 @@ class MockDevice : public PowerSequencerDevice
     virtual ~MockDevice() = default;
 
     MOCK_METHOD(const std::string&, getName, (), (const, override));
+    MOCK_METHOD(uint8_t, getBus, (), (const, override));
+    MOCK_METHOD(uint16_t, getAddress, (), (const, override));
     MOCK_METHOD(const std::vector<std::unique_ptr<Rail>>&, getRails, (),
                 (const, override));
     MOCK_METHOD(std::vector<int>, getGPIOValues, (Services & services),

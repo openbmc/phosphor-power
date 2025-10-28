@@ -19,6 +19,7 @@
 #include "rail.hpp"
 #include "services.hpp"
 
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <string>
@@ -53,17 +54,32 @@ class StandardDevice : public PowerSequencerDevice
      * Constructor.
      *
      * @param name device name
+     * @param bus I2C bus for the device
+     * @param address I2C address for the device
      * @param rails voltage rails that are enabled and monitored by this device
      */
-    explicit StandardDevice(const std::string& name,
+    explicit StandardDevice(const std::string& name, uint8_t bus,
+                            uint16_t address,
                             std::vector<std::unique_ptr<Rail>> rails) :
-        name{name}, rails{std::move(rails)}
+        name{name}, bus{bus}, address{address}, rails{std::move(rails)}
     {}
 
     /** @copydoc PowerSequencerDevice::getName() */
     virtual const std::string& getName() const override
     {
         return name;
+    }
+
+    /** @copydoc PowerSequencerDevice::getBus() */
+    virtual uint8_t getBus() const override
+    {
+        return bus;
+    }
+
+    /** @copydoc PowerSequencerDevice::getAddress() */
+    virtual uint16_t getAddress() const override
+    {
+        return address;
     }
 
     /** @copydoc PowerSequencerDevice::getRails() */
@@ -171,6 +187,16 @@ class StandardDevice : public PowerSequencerDevice
      * Device name.
      */
     std::string name{};
+
+    /**
+     * I2C bus for the device.
+     */
+    uint8_t bus;
+
+    /**
+     * I2C address for the device.
+     */
+    uint16_t address;
 
     /**
      * Voltage rails that are enabled and monitored by this device.

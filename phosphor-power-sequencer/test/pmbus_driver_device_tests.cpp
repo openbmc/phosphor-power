@@ -112,20 +112,20 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         MockServices services;
 
         std::string name{"XYZ_PSEQ"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
-        uint8_t bus{3};
-        uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getBus(), bus);
+        EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getRails().size(), 2);
         EXPECT_EQ(device.getRails()[0]->getName(), "VDD");
         EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
-        EXPECT_EQ(device.getBus(), bus);
-        EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getDriverName(), "");
         EXPECT_EQ(device.getInstance(), 0);
         EXPECT_NE(&(device.getPMBusInterface()), nullptr);
@@ -136,52 +136,27 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         MockServices services;
 
         std::string name{"XYZ_PSEQ"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
-        uint8_t bus{3};
-        uint16_t address{0x72};
         std::string driverName{"xyzdev"};
         size_t instance{3};
-        PMBusDriverDevice device{name,    std::move(rails), services, bus,
-                                 address, driverName,       instance};
+        PMBusDriverDevice device{
+            name,     bus,        address, std::move(rails),
+            services, driverName, instance};
 
         EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getBus(), bus);
+        EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getRails().size(), 2);
         EXPECT_EQ(device.getRails()[0]->getName(), "VDD");
         EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
-        EXPECT_EQ(device.getBus(), bus);
-        EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getDriverName(), driverName);
         EXPECT_EQ(device.getInstance(), instance);
         EXPECT_NE(&(device.getPMBusInterface()), nullptr);
     }
-}
-
-TEST_F(PMBusDriverDeviceTests, GetBus)
-{
-    MockServices services;
-
-    std::string name{"XYZ_PSEQ"};
-    std::vector<std::unique_ptr<Rail>> rails;
-    uint8_t bus{4};
-    uint16_t address{0x72};
-    PMBusDriverDevice device{name, std::move(rails), services, bus, address};
-
-    EXPECT_EQ(device.getBus(), bus);
-}
-
-TEST_F(PMBusDriverDeviceTests, GetAddress)
-{
-    MockServices services;
-
-    std::string name{"XYZ_PSEQ"};
-    std::vector<std::unique_ptr<Rail>> rails;
-    uint8_t bus{3};
-    uint16_t address{0xab};
-    PMBusDriverDevice device{name, std::move(rails), services, bus, address};
-
-    EXPECT_EQ(device.getAddress(), address);
 }
 
 TEST_F(PMBusDriverDeviceTests, GetDriverName)
@@ -189,12 +164,12 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
     MockServices services;
 
     std::string name{"XYZ_PSEQ"};
-    std::vector<std::unique_ptr<Rail>> rails;
     uint8_t bus{3};
     uint16_t address{0x72};
+    std::vector<std::unique_ptr<Rail>> rails;
     std::string driverName{"xyzdev"};
-    PMBusDriverDevice device{name, std::move(rails), services,
-                             bus,  address,          driverName};
+    PMBusDriverDevice device{name,     bus,       address, std::move(rails),
+                             services, driverName};
 
     EXPECT_EQ(device.getDriverName(), driverName);
 }
@@ -204,13 +179,13 @@ TEST_F(PMBusDriverDeviceTests, GetInstance)
     MockServices services;
 
     std::string name{"XYZ_PSEQ"};
-    std::vector<std::unique_ptr<Rail>> rails;
     uint8_t bus{3};
     uint16_t address{0x72};
+    std::vector<std::unique_ptr<Rail>> rails;
     std::string driverName{"xyzdev"};
     size_t instance{3};
-    PMBusDriverDevice device{name,    std::move(rails), services, bus,
-                             address, driverName,       instance};
+    PMBusDriverDevice device{name,     bus,        address, std::move(rails),
+                             services, driverName, instance};
 
     EXPECT_EQ(device.getInstance(), instance);
 }
@@ -220,10 +195,10 @@ TEST_F(PMBusDriverDeviceTests, GetPMBusInterface)
     MockServices services;
 
     std::string name{"XYZ_PSEQ"};
-    std::vector<std::unique_ptr<Rail>> rails;
     uint8_t bus{3};
     uint16_t address{0x72};
-    PMBusDriverDevice device{name, std::move(rails), services, bus, address};
+    std::vector<std::unique_ptr<Rail>> rails;
+    PMBusDriverDevice device{name, bus, address, std::move(rails), services};
 
     EXPECT_NE(&(device.getPMBusInterface()), nullptr);
 }
@@ -239,11 +214,11 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
             .WillOnce(Return(gpioValues));
 
         std::string name{"ABC_382%#, ZY"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         EXPECT_TRUE(device.getGPIOValues(services) == gpioValues);
     }
@@ -257,11 +232,11 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
                 Throw(std::runtime_error{"libgpiod: Unable to open chip"}));
 
         std::string name{"XYZ_PSEQ"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         try
         {
@@ -285,11 +260,11 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status13", Type::Debug, true))
@@ -305,11 +280,11 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status0", Type::Debug, true))
@@ -339,11 +314,11 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status13_vout", Type::Debug, true))
@@ -359,11 +334,11 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status0_vout", Type::Debug, true))
@@ -396,11 +371,11 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -425,11 +400,11 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -465,11 +440,11 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -494,11 +469,11 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -539,11 +514,11 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -572,11 +547,11 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -614,11 +589,11 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -636,11 +611,11 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -666,11 +641,11 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -704,11 +679,11 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -739,11 +714,11 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         MockServices services;
 
         std::string name{"xyz_pseq"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        PMBusDriverDevice device{name, std::move(rails), services, bus,
-                                 address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name, bus, address, std::move(rails),
+                                 services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -786,10 +761,10 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
         .WillOnce(Return(gpioValues));
 
     std::string name{"xyz_pseq"};
-    std::vector<std::unique_ptr<Rail>> rails;
     uint8_t bus{3};
     uint16_t address{0x72};
-    PMBusDriverDevice device{name, std::move(rails), services, bus, address};
+    std::vector<std::unique_ptr<Rail>> rails;
+    PMBusDriverDevice device{name, bus, address, std::move(rails), services};
 
     // Methods that get hwmon file info should be called twice
     MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());

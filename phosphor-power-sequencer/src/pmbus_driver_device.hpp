@@ -54,42 +54,22 @@ class PMBusDriverDevice : public StandardDevice
      * Constructor.
      *
      * @param name Device name
-     * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      * @param bus I2C bus for the device
      * @param address I2C address for the device
+     * @param rails Voltage rails that are enabled and monitored by this device
+     * @param services System services like hardware presence and the journal
      * @param driverName Device driver name
      * @param instance Chip instance number
      */
     explicit PMBusDriverDevice(
-        const std::string& name, std::vector<std::unique_ptr<Rail>> rails,
-        Services& services, uint8_t bus, uint16_t address,
+        const std::string& name, uint8_t bus, uint16_t address,
+        std::vector<std::unique_ptr<Rail>> rails, Services& services,
         const std::string& driverName = "", size_t instance = 0) :
-        StandardDevice(name, std::move(rails)), bus{bus}, address{address},
+        StandardDevice(name, bus, address, std::move(rails)),
         driverName{driverName}, instance{instance}
     {
         pmbusInterface =
             services.createPMBus(bus, address, driverName, instance);
-    }
-
-    /**
-     * Returns the I2C bus for the device.
-     *
-     * @return I2C bus
-     */
-    uint8_t getBus() const
-    {
-        return bus;
-    }
-
-    /**
-     * Returns the I2C address for the device.
-     *
-     * @return I2C address
-     */
-    uint16_t getAddress() const
-    {
-        return address;
     }
 
     /**
@@ -220,16 +200,6 @@ class PMBusDriverDevice : public StandardDevice
      */
     virtual std::optional<uint8_t> readPageFromLabelFile(
         const std::string& fileName);
-
-    /**
-     * I2C bus for the device.
-     */
-    uint8_t bus;
-
-    /**
-     * I2C address for the device.
-     */
-    uint16_t address;
 
     /**
      * Device driver name.
