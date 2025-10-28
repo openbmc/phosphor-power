@@ -62,19 +62,19 @@ TEST(UCD90320DeviceTests, Constructor)
 {
     MockServices services;
 
+    uint8_t bus{3};
+    uint16_t address{0x72};
     std::vector<std::unique_ptr<Rail>> rails;
     rails.emplace_back(createRail("VDD", 5));
     rails.emplace_back(createRail("VIO", 7));
-    uint8_t bus{3};
-    uint16_t address{0x72};
-    UCD90320Device device{std::move(rails), services, bus, address};
+    UCD90320Device device{bus, address, std::move(rails), services};
 
     EXPECT_EQ(device.getName(), "UCD90320");
+    EXPECT_EQ(device.getBus(), bus);
+    EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getRails().size(), 2);
     EXPECT_EQ(device.getRails()[0]->getName(), "VDD");
     EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
-    EXPECT_EQ(device.getBus(), bus);
-    EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getDriverName(), "ucd9000");
     EXPECT_EQ(device.getInstance(), 0);
     EXPECT_NE(&(device.getPMBusInterface()), nullptr);
@@ -140,11 +140,11 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        std::vector<std::unique_ptr<Rail>> rails;
-        rails.emplace_back(createRail("VDD", 2));
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90320Device device{std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        rails.emplace_back(createRail("VDD", 2));
+        UCD90320Device device{bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -228,11 +228,11 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        std::vector<std::unique_ptr<Rail>> rails;
-        rails.emplace_back(createRail("VDD", 2));
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90320Device device{std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        rails.emplace_back(createRail("VDD", 2));
+        UCD90320Device device{bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))

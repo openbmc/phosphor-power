@@ -52,6 +52,20 @@ class PowerSequencerDevice
     virtual const std::string& getName() const = 0;
 
     /**
+     * Returns the I2C bus for the device.
+     *
+     * @return I2C bus
+     */
+    virtual uint8_t getBus() const = 0;
+
+    /**
+     * Returns the I2C address for the device.
+     *
+     * @return I2C address
+     */
+    virtual uint16_t getAddress() const = 0;
+
+    /**
      * Returns the voltage rails that are enabled and monitored by this device.
      *
      * @return voltage rails

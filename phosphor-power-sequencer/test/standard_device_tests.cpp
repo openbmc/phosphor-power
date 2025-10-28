@@ -60,9 +60,10 @@ class StandardDeviceImpl : public StandardDevice
     virtual ~StandardDeviceImpl() = default;
 
     // Constructor just calls StandardDevice constructor
-    explicit StandardDeviceImpl(const std::string& name,
+    explicit StandardDeviceImpl(const std::string& name, uint8_t bus,
+                                uint16_t address,
                                 std::vector<std::unique_ptr<Rail>> rails) :
-        StandardDevice(name, std::move(rails))
+        StandardDevice(name, bus, address, std::move(rails))
     {}
 
     // Mock pure virtual methods
@@ -146,22 +147,32 @@ TEST(StandardDeviceTests, Constructor)
 {
     // Empty vector of rails
     {
+        std::string name{"xyz_pseq"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
         std::vector<std::unique_ptr<Rail>> rails{};
-        StandardDeviceImpl device{"xyz_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
-        EXPECT_EQ(device.getName(), "xyz_pseq");
+        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getBus(), bus);
+        EXPECT_EQ(device.getAddress(), address);
         EXPECT_TRUE(device.getRails().empty());
     }
 
     // Non-empty vector of rails
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
-        EXPECT_EQ(device.getName(), "abc_pseq");
+        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getBus(), bus);
+        EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getRails().size(), 3);
         EXPECT_EQ(device.getRails()[0]->getName(), "PSU");
         EXPECT_EQ(device.getRails()[1]->getName(), "VDD");
@@ -171,29 +182,60 @@ TEST(StandardDeviceTests, Constructor)
 
 TEST(StandardDeviceTests, GetName)
 {
+    std::string name{"xyz_pseq"};
+    uint8_t bus{0};
+    uint16_t address{0x23};
     std::vector<std::unique_ptr<Rail>> rails{};
-    StandardDeviceImpl device{"xyz_pseq", std::move(rails)};
+    StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
-    EXPECT_EQ(device.getName(), "xyz_pseq");
+    EXPECT_EQ(device.getName(), name);
+}
+
+TEST(StandardDeviceTests, GetBus)
+{
+    std::string name{"abc_pseq"};
+    uint8_t bus{1};
+    uint16_t address{0x23};
+    std::vector<std::unique_ptr<Rail>> rails{};
+    StandardDeviceImpl device{name, bus, address, std::move(rails)};
+
+    EXPECT_EQ(device.getBus(), bus);
+}
+
+TEST(StandardDeviceTests, GetAddress)
+{
+    std::string name{"abc_pseq"};
+    uint8_t bus{1};
+    uint16_t address{0x24};
+    std::vector<std::unique_ptr<Rail>> rails{};
+    StandardDeviceImpl device{name, bus, address, std::move(rails)};
+
+    EXPECT_EQ(device.getAddress(), address);
 }
 
 TEST(StandardDeviceTests, GetRails)
 {
     // Empty vector of rails
     {
+        std::string name{"xyz_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
-        StandardDeviceImpl device{"xyz_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_TRUE(device.getRails().empty());
     }
 
     // Non-empty vector of rails
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_EQ(device.getRails().size(), 3);
         EXPECT_EQ(device.getRails()[0]->getName(), "PSU");
@@ -206,11 +248,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
 {
     // No rail has a pgood fault
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -236,11 +281,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // First rail has a pgood fault detected via GPIO
     // Is a PSU rail: No PSU error specified
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -285,11 +333,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // First rail has a pgood fault detected via GPIO
     // Is a PSU rail: PSU error specified
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -333,11 +384,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Second rail has a pgood fault detected via output voltage
     // Not a PSU rail: PSU error specified
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -389,11 +443,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Device returns 0 GPIO values
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{};
@@ -438,11 +495,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Exception occurs trying to obtain GPIO values from device
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         EXPECT_CALL(device, getGPIOValues)
@@ -486,11 +546,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // selected, even though it is last in the power on sequence, because it is
     // checked using STATUS_VOUT.  That check happens before the other checks.
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailGPIO("VDD", false, 1));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{0, 0, 0};
@@ -536,11 +599,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // and one is found via a GPIO.  Verify the first rail in the sequence with
     // a fault is selected.
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailGPIO("PSU", true, 2));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -590,11 +656,14 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
     // Exception is thrown during pgood fault detection
     {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{"abc_pseq", std::move(rails)};
+        StandardDeviceImpl device{name, bus, address, std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};

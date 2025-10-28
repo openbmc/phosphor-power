@@ -51,15 +51,16 @@ class UCD90xDevice : public PMBusDriverDevice
      * Constructor.
      *
      * @param name Device name
-     * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      * @param bus I2C bus for the device
      * @param address I2C address for the device
+     * @param rails Voltage rails that are enabled and monitored by this device
+     * @param services System services like hardware presence and the journal
      */
-    explicit UCD90xDevice(const std::string& name,
+    explicit UCD90xDevice(const std::string& name, uint8_t bus,
+                          uint16_t address,
                           std::vector<std::unique_ptr<Rail>> rails,
-                          Services& services, uint8_t bus, uint16_t address) :
-        PMBusDriverDevice(name, std::move(rails), services, bus, address,
+                          Services& services) :
+        PMBusDriverDevice(name, bus, address, std::move(rails), services,
                           driverName)
     {}
 
