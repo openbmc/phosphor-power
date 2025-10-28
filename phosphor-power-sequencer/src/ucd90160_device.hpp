@@ -48,14 +48,15 @@ class UCD90160Device : public UCD90xDevice
     /**
      * Constructor.
      *
-     * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      * @param bus I2C bus for the device
      * @param address I2C address for the device
+     * @param rails Voltage rails that are enabled and monitored by this device
+     * @param services System services like hardware presence and the journal
      */
-    explicit UCD90160Device(std::vector<std::unique_ptr<Rail>> rails,
-                            Services& services, uint8_t bus, uint16_t address) :
-        UCD90xDevice(deviceName, std::move(rails), services, bus, address)
+    explicit UCD90160Device(uint8_t bus, uint16_t address,
+                            std::vector<std::unique_ptr<Rail>> rails,
+                            Services& services) :
+        UCD90xDevice(deviceName, bus, address, std::move(rails), services)
     {}
 
     constexpr static std::string deviceName{"UCD90160"};

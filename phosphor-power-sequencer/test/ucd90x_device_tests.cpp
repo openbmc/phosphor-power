@@ -65,19 +65,19 @@ TEST(UCD90xDeviceTests, Constructor)
     MockServices services;
 
     std::string name{"ucd90320"};
+    uint8_t bus{3};
+    uint16_t address{0x72};
     std::vector<std::unique_ptr<Rail>> rails;
     rails.emplace_back(createRail("VDD", 5));
     rails.emplace_back(createRail("VIO", 7));
-    uint8_t bus{3};
-    uint16_t address{0x72};
-    UCD90xDevice device{name, std::move(rails), services, bus, address};
+    UCD90xDevice device{name, bus, address, std::move(rails), services};
 
     EXPECT_EQ(device.getName(), name);
+    EXPECT_EQ(device.getBus(), bus);
+    EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getRails().size(), 2);
     EXPECT_EQ(device.getRails()[0]->getName(), "VDD");
     EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
-    EXPECT_EQ(device.getBus(), bus);
-    EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getDriverName(), "ucd9000");
     EXPECT_EQ(device.getInstance(), 0);
     EXPECT_NE(&(device.getPMBusInterface()), nullptr);
@@ -90,10 +90,10 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
         MockServices services;
 
         std::string name{"ucd90320"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90xDevice device{name, std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        UCD90xDevice device{name, bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         uint64_t mfrStatus{0x123456789abcull};
@@ -109,10 +109,10 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
         MockServices services;
 
         std::string name{"ucd90320"};
-        std::vector<std::unique_ptr<Rail>> rails;
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90xDevice device{name, std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        UCD90xDevice device{name, bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("mfr_status", Type::HwmonDeviceDebug, true))
@@ -165,11 +165,11 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
             .Times(1);
 
         std::string name{"ucd90320"};
-        std::vector<std::unique_ptr<Rail>> rails;
-        rails.emplace_back(createRail("VDD", 2));
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90xDevice device{name, std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        rails.emplace_back(createRail("VDD", 2));
+        UCD90xDevice device{name, bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -219,11 +219,11 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
             .Times(1);
 
         std::string name{"ucd90320"};
-        std::vector<std::unique_ptr<Rail>> rails;
-        rails.emplace_back(createRail("VDD", 2));
         uint8_t bus{3};
         uint16_t address{0x72};
-        UCD90xDevice device{name, std::move(rails), services, bus, address};
+        std::vector<std::unique_ptr<Rail>> rails;
+        rails.emplace_back(createRail("VDD", 2));
+        UCD90xDevice device{name, bus, address, std::move(rails), services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
