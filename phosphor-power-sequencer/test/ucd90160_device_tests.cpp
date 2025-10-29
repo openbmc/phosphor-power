@@ -64,14 +64,23 @@ TEST(UCD90160DeviceTests, Constructor)
 
     uint8_t bus{3};
     uint16_t address{0x72};
+    std::string powerControlGPIOName{"power-chassis-control"};
+    std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
     rails.emplace_back(createRail("VDD", 5));
     rails.emplace_back(createRail("VIO", 7));
-    UCD90160Device device{bus, address, std::move(rails), services};
+    UCD90160Device device{bus,
+                          address,
+                          powerControlGPIOName,
+                          powerGoodGPIOName,
+                          std::move(rails),
+                          services};
 
     EXPECT_EQ(device.getName(), "UCD90160");
     EXPECT_EQ(device.getBus(), bus);
     EXPECT_EQ(device.getAddress(), address);
+    EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
+    EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
     EXPECT_EQ(device.getRails().size(), 2);
     EXPECT_EQ(device.getRails()[0]->getName(), "VDD");
     EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
@@ -150,9 +159,16 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
 
         uint8_t bus{3};
         uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 2));
-        UCD90160Device device{bus, address, std::move(rails), services};
+        UCD90160Device device{bus,
+                              address,
+                              powerControlGPIOName,
+                              powerGoodGPIOName,
+                              std::move(rails),
+                              services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
@@ -247,9 +263,16 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
 
         uint8_t bus{3};
         uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 2));
-        UCD90160Device device{bus, address, std::move(rails), services};
+        UCD90160Device device{bus,
+                              address,
+                              powerControlGPIOName,
+                              powerGoodGPIOName,
+                              std::move(rails),
+                              services};
 
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))

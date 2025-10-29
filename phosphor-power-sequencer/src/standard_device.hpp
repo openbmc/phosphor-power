@@ -56,12 +56,20 @@ class StandardDevice : public PowerSequencerDevice
      * @param name device name
      * @param bus I2C bus for the device
      * @param address I2C address for the device
+     * @param powerControlGPIOName name of the GPIO that turns this device on
+     *                             and off
+     * @param powerGoodGPIOName name of the GPIO that reads the power good
+     *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
      */
     explicit StandardDevice(const std::string& name, uint8_t bus,
                             uint16_t address,
+                            const std::string& powerControlGPIOName,
+                            const std::string& powerGoodGPIOName,
                             std::vector<std::unique_ptr<Rail>> rails) :
-        name{name}, bus{bus}, address{address}, rails{std::move(rails)}
+        name{name}, bus{bus}, address{address},
+        powerControlGPIOName{powerControlGPIOName},
+        powerGoodGPIOName{powerGoodGPIOName}, rails{std::move(rails)}
     {}
 
     /** @copydoc PowerSequencerDevice::getName() */
@@ -80,6 +88,18 @@ class StandardDevice : public PowerSequencerDevice
     virtual uint16_t getAddress() const override
     {
         return address;
+    }
+
+    /** @copydoc PowerSequencerDevice::getPowerControlGPIOName() */
+    virtual const std::string& getPowerControlGPIOName() const override
+    {
+        return powerControlGPIOName;
+    }
+
+    /** @copydoc PowerSequencerDevice::getPowerGoodGPIOName() */
+    virtual const std::string& getPowerGoodGPIOName() const override
+    {
+        return powerGoodGPIOName;
     }
 
     /** @copydoc PowerSequencerDevice::getRails() */
@@ -197,6 +217,16 @@ class StandardDevice : public PowerSequencerDevice
      * I2C address for the device.
      */
     uint16_t address;
+
+    /**
+     * Name of the GPIO that turns this device on and off.
+     */
+    std::string powerControlGPIOName{};
+
+    /**
+     * Name of the GPIO that reads the power good signal from this device.
+     */
+    std::string powerGoodGPIOName{};
 
     /**
      * Voltage rails that are enabled and monitored by this device.

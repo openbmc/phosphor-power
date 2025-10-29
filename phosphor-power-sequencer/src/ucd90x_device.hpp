@@ -53,14 +53,20 @@ class UCD90xDevice : public PMBusDriverDevice
      * @param name Device name
      * @param bus I2C bus for the device
      * @param address I2C address for the device
+     * @param powerControlGPIOName Name of the GPIO that turns this device on
+     *                             and off
+     * @param powerGoodGPIOName Name of the GPIO that reads the power good
+     *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
      * @param services System services like hardware presence and the journal
      */
-    explicit UCD90xDevice(const std::string& name, uint8_t bus,
-                          uint16_t address,
-                          std::vector<std::unique_ptr<Rail>> rails,
-                          Services& services) :
-        PMBusDriverDevice(name, bus, address, std::move(rails), services,
+    explicit UCD90xDevice(
+        const std::string& name, uint8_t bus, uint16_t address,
+        const std::string& powerControlGPIOName,
+        const std::string& powerGoodGPIOName,
+        std::vector<std::unique_ptr<Rail>> rails, Services& services) :
+        PMBusDriverDevice(name, bus, address, powerControlGPIOName,
+                          powerGoodGPIOName, std::move(rails), services,
                           driverName)
     {}
 
