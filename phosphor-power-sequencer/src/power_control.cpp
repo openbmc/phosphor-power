@@ -399,12 +399,14 @@ void PowerControl::createDevice(std::vector<std::unique_ptr<Rail>> rails)
             {
                 device = std::make_unique<UCD90160Device>(
                     deviceProperties->bus, deviceProperties->address,
+                    "power-chassis-control", "power-chassis-good",
                     std::move(rails), services);
             }
             else if (deviceProperties->type == UCD90320Device::deviceName)
             {
                 device = std::make_unique<UCD90320Device>(
                     deviceProperties->bus, deviceProperties->address,
+                    "power-chassis-control", "power-chassis-good",
                     std::move(rails), services);
             }
             else

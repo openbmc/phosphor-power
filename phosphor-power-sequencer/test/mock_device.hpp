@@ -43,6 +43,10 @@ class MockDevice : public PowerSequencerDevice
     MOCK_METHOD(const std::string&, getName, (), (const, override));
     MOCK_METHOD(uint8_t, getBus, (), (const, override));
     MOCK_METHOD(uint16_t, getAddress, (), (const, override));
+    MOCK_METHOD(const std::string&, getPowerControlGPIOName, (),
+                (const, override));
+    MOCK_METHOD(const std::string&, getPowerGoodGPIOName, (),
+                (const, override));
     MOCK_METHOD(const std::vector<std::unique_ptr<Rail>>&, getRails, (),
                 (const, override));
     MOCK_METHOD(std::vector<int>, getGPIOValues, (Services & services),
