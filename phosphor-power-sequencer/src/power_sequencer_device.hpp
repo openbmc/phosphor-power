@@ -66,6 +66,21 @@ class PowerSequencerDevice
     virtual uint16_t getAddress() const = 0;
 
     /**
+     * Returns the name of the GPIO that turns this device on and off.
+     *
+     * @return GPIO name
+     */
+    virtual const std::string& getPowerControlGPIOName() const = 0;
+
+    /**
+     * Returns the name of the GPIO that reads the power good signal from this
+     * device.
+     *
+     * @return GPIO name
+     */
+    virtual const std::string& getPowerGoodGPIOName() const = 0;
+
+    /**
      * Returns the voltage rails that are enabled and monitored by this device.
      *
      * @return voltage rails

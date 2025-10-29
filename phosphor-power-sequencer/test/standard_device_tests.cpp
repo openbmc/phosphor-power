@@ -62,8 +62,11 @@ class StandardDeviceImpl : public StandardDevice
     // Constructor just calls StandardDevice constructor
     explicit StandardDeviceImpl(const std::string& name, uint8_t bus,
                                 uint16_t address,
+                                const std::string& powerControlGPIOName,
+                                const std::string& powerGoodGPIOName,
                                 std::vector<std::unique_ptr<Rail>> rails) :
-        StandardDevice(name, bus, address, std::move(rails))
+        StandardDevice(name, bus, address, powerControlGPIOName,
+                       powerGoodGPIOName, std::move(rails))
     {}
 
     // Mock pure virtual methods
@@ -150,12 +153,22 @@ TEST(StandardDeviceTests, Constructor)
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_EQ(device.getName(), name);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
+        EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
+        EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
         EXPECT_TRUE(device.getRails().empty());
     }
 
@@ -164,15 +177,25 @@ TEST(StandardDeviceTests, Constructor)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_EQ(device.getName(), name);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
+        EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
+        EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
         EXPECT_EQ(device.getRails().size(), 3);
         EXPECT_EQ(device.getRails()[0]->getName(), "PSU");
         EXPECT_EQ(device.getRails()[1]->getName(), "VDD");
@@ -185,8 +208,16 @@ TEST(StandardDeviceTests, GetName)
     std::string name{"xyz_pseq"};
     uint8_t bus{0};
     uint16_t address{0x23};
+    std::string powerControlGPIOName{"power-chassis-control"};
+    std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    StandardDeviceImpl device{name, bus, address, std::move(rails)};
+    StandardDeviceImpl device{
+        name,
+        bus,
+        address,
+        powerControlGPIOName,
+        powerGoodGPIOName,
+        std::move(rails)};
 
     EXPECT_EQ(device.getName(), name);
 }
@@ -196,8 +227,16 @@ TEST(StandardDeviceTests, GetBus)
     std::string name{"abc_pseq"};
     uint8_t bus{1};
     uint16_t address{0x23};
+    std::string powerControlGPIOName{"power-chassis-control"};
+    std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    StandardDeviceImpl device{name, bus, address, std::move(rails)};
+    StandardDeviceImpl device{
+        name,
+        bus,
+        address,
+        powerControlGPIOName,
+        powerGoodGPIOName,
+        std::move(rails)};
 
     EXPECT_EQ(device.getBus(), bus);
 }
@@ -207,10 +246,56 @@ TEST(StandardDeviceTests, GetAddress)
     std::string name{"abc_pseq"};
     uint8_t bus{1};
     uint16_t address{0x24};
+    std::string powerControlGPIOName{"power-chassis-control"};
+    std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    StandardDeviceImpl device{name, bus, address, std::move(rails)};
+    StandardDeviceImpl device{
+        name,
+        bus,
+        address,
+        powerControlGPIOName,
+        powerGoodGPIOName,
+        std::move(rails)};
 
     EXPECT_EQ(device.getAddress(), address);
+}
+
+TEST(StandardDeviceTests, GetPowerControlGPIOName)
+{
+    std::string name{"xyz_pseq"};
+    uint8_t bus{0};
+    uint16_t address{0x23};
+    std::string powerControlGPIOName{"power-on"};
+    std::string powerGoodGPIOName{"chassis-pgood"};
+    std::vector<std::unique_ptr<Rail>> rails{};
+    StandardDeviceImpl device{
+        name,
+        bus,
+        address,
+        powerControlGPIOName,
+        powerGoodGPIOName,
+        std::move(rails)};
+
+    EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
+}
+
+TEST(StandardDeviceTests, GetPowerGoodGPIOName)
+{
+    std::string name{"xyz_pseq"};
+    uint8_t bus{0};
+    uint16_t address{0x23};
+    std::string powerControlGPIOName{"power-on"};
+    std::string powerGoodGPIOName{"chassis-pgood"};
+    std::vector<std::unique_ptr<Rail>> rails{};
+    StandardDeviceImpl device{
+        name,
+        bus,
+        address,
+        powerControlGPIOName,
+        powerGoodGPIOName,
+        std::move(rails)};
+
+    EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
 }
 
 TEST(StandardDeviceTests, GetRails)
@@ -220,8 +305,16 @@ TEST(StandardDeviceTests, GetRails)
         std::string name{"xyz_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_TRUE(device.getRails().empty());
     }
@@ -231,11 +324,19 @@ TEST(StandardDeviceTests, GetRails)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_EQ(device.getRails().size(), 3);
         EXPECT_EQ(device.getRails()[0]->getName(), "PSU");
@@ -251,11 +352,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -284,11 +393,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -336,11 +453,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -387,11 +512,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -446,11 +579,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{};
@@ -498,11 +639,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         EXPECT_CALL(device, getGPIOValues)
@@ -549,11 +698,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailGPIO("VDD", false, 1));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{0, 0, 0};
@@ -602,11 +759,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailGPIO("PSU", true, 2));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -659,11 +824,19 @@ TEST(StandardDeviceTests, FindPgoodFault)
         std::string name{"abc_pseq"};
         uint8_t bus{0};
         uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        StandardDeviceImpl device{name, bus, address, std::move(rails)};
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
