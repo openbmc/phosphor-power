@@ -17,11 +17,16 @@
 #include "config_file_parser.hpp"
 
 #include "config_file_parser_error.hpp"
+#include "json_parser_utils.hpp"
 
+#include <cstdint>
 #include <exception>
 #include <fstream>
 #include <optional>
+#include <stdexcept>
 
+using namespace phosphor::power::json_parser_utils;
+using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
 using json = nlohmann::json;
 namespace fs = std::filesystem;
 

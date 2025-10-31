@@ -27,6 +27,8 @@
 
 #include <vector>
 
+using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
+
 namespace phosphor::power::regulators::error_logging_utils
 {
 

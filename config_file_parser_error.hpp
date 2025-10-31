@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 IBM Corporation
+ * Copyright © 2025 IBM Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 #include <filesystem>
 #include <string>
 
-namespace phosphor::power::sequencer
+namespace phosphor::power::util
 {
 
 /**
@@ -82,4 +82,4 @@ class ConfigFileParserError : public std::exception
     const std::string error{};
 };
 
-} // namespace phosphor::power::sequencer
+} // namespace phosphor::power::util

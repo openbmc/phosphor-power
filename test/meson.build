@@ -2,8 +2,10 @@ test(
     'common-code-tests',
     executable(
         'common-code-tests',
+        'config_file_parser_error_tests.cpp',
         'file_descriptor_tests.cpp',
         'format_utils_tests.cpp',
+        'json_parser_utils_tests.cpp',
         'nvtest.cpp',
         'temporary_file_tests.cpp',
         'temporary_subdirectory_tests.cpp',

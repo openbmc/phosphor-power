@@ -38,6 +38,7 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::regulators;
+using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
 
 namespace fs = std::filesystem;
 

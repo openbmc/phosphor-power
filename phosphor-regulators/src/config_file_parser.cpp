@@ -18,14 +18,19 @@
 
 #include "config_file_parser_error.hpp"
 #include "i2c_interface.hpp"
+#include "json_parser_utils.hpp"
 #include "pmbus_utils.hpp"
 
+#include <cstdint>
 #include <exception>
 #include <fstream>
 #include <optional>
+#include <stdexcept>
 #include <utility>
 
 using json = nlohmann::json;
+using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
+using namespace phosphor::power::json_parser_utils;
 
 namespace phosphor::power::regulators::config_file_parser
 {
@@ -437,17 +442,6 @@ std::vector<std::unique_ptr<Device>> parseDeviceArray(const json& element)
         devices.emplace_back(parseDevice(deviceElement));
     }
     return devices;
-}
-
-std::vector<uint8_t> parseHexByteArray(const json& element)
-{
-    verifyIsArray(element);
-    std::vector<uint8_t> values;
-    for (auto& valueElement : element)
-    {
-        values.emplace_back(parseHexByte(valueElement));
-    }
-    return values;
 }
 
 std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(const json& element)

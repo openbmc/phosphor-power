@@ -1,5 +1,5 @@
 /**
- * Copyright © 2024 IBM Corporation
+ * Copyright © 2025 IBM Corporation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,35 +19,30 @@
 
 #include <gtest/gtest.h>
 
-using namespace phosphor::power::sequencer;
+using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
 
 TEST(ConfigFileParserErrorTests, Constructor)
 {
-    std::filesystem::path pathName{
-        "/usr/share/phosphor-power-sequencer/foo.json"};
+    std::filesystem::path pathName{"/etc/phosphor-regulators/foo.json"};
     ConfigFileParserError error{pathName, "Required property missing"};
     EXPECT_EQ(error.getPathName(), pathName);
-    EXPECT_STREQ(
-        error.what(),
-        "ConfigFileParserError: /usr/share/phosphor-power-sequencer/foo.json: "
-        "Required property missing");
+    EXPECT_STREQ(error.what(),
+                 "ConfigFileParserError: /etc/phosphor-regulators/foo.json: "
+                 "Required property missing");
 }
 
 TEST(ConfigFileParserErrorTests, GetPathName)
 {
-    std::filesystem::path pathName{
-        "/usr/share/phosphor-power-sequencer/bar.json"};
+    std::filesystem::path pathName{"/usr/share/phosphor-regulators/foo.json"};
     ConfigFileParserError error{pathName, "Required property missing"};
     EXPECT_EQ(error.getPathName(), pathName);
 }
 
 TEST(ConfigFileParserErrorTests, What)
 {
-    std::filesystem::path pathName{
-        "/usr/share/phosphor-power-sequencer/bar.json"};
+    std::filesystem::path pathName{"/etc/phosphor-regulators/foo.json"};
     ConfigFileParserError error{pathName, "Required property missing"};
-    EXPECT_STREQ(
-        error.what(),
-        "ConfigFileParserError: /usr/share/phosphor-power-sequencer/bar.json: "
-        "Required property missing");
+    EXPECT_STREQ(error.what(),
+                 "ConfigFileParserError: /etc/phosphor-regulators/foo.json: "
+                 "Required property missing");
 }
