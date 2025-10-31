@@ -179,6 +179,7 @@ libpower = static_library(
     'compatible_system_types_finder.cpp',
     'dbus_interfaces_finder.cpp',
     'gpio.cpp',
+    'json_parser_utils.cpp',
     'pmbus.cpp',
     'temporary_file.cpp',
     'temporary_subdirectory.cpp',
