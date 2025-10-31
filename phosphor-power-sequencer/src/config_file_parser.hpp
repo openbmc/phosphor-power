@@ -19,10 +19,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include <cstdint>
 #include <filesystem>
 #include <memory>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -78,50 +76,6 @@ namespace internal
 {
 
 /**
- * Returns the specified property of the specified JSON element.
- *
- * Throws an invalid_argument exception if the property does not exist.
- *
- * @param element JSON element
- * @param property property name
- */
-#pragma GCC diagnostic push
-#if __GNUC__ >= 13
-#pragma GCC diagnostic ignored "-Wdangling-reference"
-#endif
-inline const nlohmann::json& getRequiredProperty(const nlohmann::json& element,
-                                                 const std::string& property)
-{
-    auto it = element.find(property);
-    if (it == element.end())
-    {
-        throw std::invalid_argument{"Required property missing: " + property};
-    }
-    return *it;
-}
-#pragma GCC diagnostic pop
-
-/**
- * Parses a JSON element containing a boolean.
- *
- * Returns the corresponding C++ boolean value.
- *
- * Throws an exception if parsing fails.
- *
- * @param element JSON element
- * @return boolean value
- */
-inline bool parseBoolean(const nlohmann::json& element)
-{
-    // Verify element contains a boolean
-    if (!element.is_boolean())
-    {
-        throw std::invalid_argument{"Element is not a boolean"};
-    }
-    return element.get<bool>();
-}
-
-/**
  * Parses a JSON element containing a GPIO.
  *
  * Returns the corresponding C++ GPIO object.
@@ -169,127 +123,6 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
  * @return vector of Rail objects
  */
 std::vector<std::unique_ptr<Rail>> parseRoot(const nlohmann::json& element);
-
-/**
- * Parses a JSON element containing a string.
- *
- * Returns the corresponding C++ string.
- *
- * Throws an exception if parsing fails.
- *
- * @param element JSON element
- * @param isEmptyValid indicates whether an empty string value is valid
- * @return string value
- */
-inline std::string parseString(const nlohmann::json& element,
-                               bool isEmptyValid = false)
-{
-    if (!element.is_string())
-    {
-        throw std::invalid_argument{"Element is not a string"};
-    }
-    std::string value = element.get<std::string>();
-    if (value.empty() && !isEmptyValid)
-    {
-        throw std::invalid_argument{"Element contains an empty string"};
-    }
-    return value;
-}
-
-/**
- * Parses a JSON element containing an 8-bit unsigned integer.
- *
- * Returns the corresponding C++ uint8_t value.
- *
- * Throws an exception if parsing fails.
- *
- * @param element JSON element
- * @return uint8_t value
- */
-inline uint8_t parseUint8(const nlohmann::json& element)
-{
-    // Verify element contains an integer
-    if (!element.is_number_integer())
-    {
-        throw std::invalid_argument{"Element is not an integer"};
-    }
-    int value = element.get<int>();
-    if ((value < 0) || (value > UINT8_MAX))
-    {
-        throw std::invalid_argument{"Element is not an 8-bit unsigned integer"};
-    }
-    return static_cast<uint8_t>(value);
-}
-
-/**
- * Parses a JSON element containing an unsigned integer.
- *
- * Returns the corresponding C++ unsigned int value.
- *
- * Throws an exception if parsing fails.
- *
- * @param element JSON element
- * @return unsigned int value
- */
-inline unsigned int parseUnsignedInteger(const nlohmann::json& element)
-{
-    // Verify element contains an unsigned integer
-    if (!element.is_number_unsigned())
-    {
-        throw std::invalid_argument{"Element is not an unsigned integer"};
-    }
-    return element.get<unsigned int>();
-}
-
-/**
- * Verifies that the specified JSON element is a JSON array.
- *
- * Throws an invalid_argument exception if the element is not an array.
- *
- * @param element JSON element
- */
-inline void verifyIsArray(const nlohmann::json& element)
-{
-    if (!element.is_array())
-    {
-        throw std::invalid_argument{"Element is not an array"};
-    }
-}
-
-/**
- * Verifies that the specified JSON element is a JSON object.
- *
- * Throws an invalid_argument exception if the element is not an object.
- *
- * @param element JSON element
- */
-inline void verifyIsObject(const nlohmann::json& element)
-{
-    if (!element.is_object())
-    {
-        throw std::invalid_argument{"Element is not an object"};
-    }
-}
-
-/**
- * Verifies that the specified JSON element contains the expected number of
- * properties.
- *
- * Throws an invalid_argument exception if the element contains a different
- * number of properties.  This indicates the element contains an invalid
- * property.
- *
- * @param element JSON element
- * @param expectedCount expected number of properties in element
- */
-inline void verifyPropertyCount(const nlohmann::json& element,
-                                unsigned int expectedCount)
-{
-    if (element.size() != expectedCount)
-    {
-        throw std::invalid_argument{"Element contains an invalid property"};
-    }
-}
 
 } // namespace internal
 
