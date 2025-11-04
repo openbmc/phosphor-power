@@ -40,7 +40,6 @@ namespace phosphor::power::sequencer
 class Chassis
 {
   public:
-    // Specify which compiler-generated methods we want
     Chassis() = delete;
     Chassis(const Chassis&) = delete;
     Chassis(Chassis&&) = delete;

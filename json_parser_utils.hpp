@@ -18,6 +18,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstdint>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -26,9 +27,26 @@
  * @namespace json_parser_utils
  *
  * Contains utility functions for parsing JSON data.
+ *
+ * ## Variables
+ * The parsing functions support optional usage of variables. JSON string values
+ * can contain one or more variables. A variable is specified using the format
+ * `${variable_name}`. A variables map is specified to parsing functions that
+ * provides the variable values. Any variable in a JSON string value will be
+ * replaced by the variable value.
+ *
+ * Variables can only appear in a JSON string value. The parsing functions for
+ * other data types, such as integer and double, support a string value if it
+ * contains a variable. After variable expansion, the string is converted to the
+ * expected data type.
  */
 namespace phosphor::power::json_parser_utils
 {
+
+/**
+ * Empty variables map used as a default value for parsing functions.
+ */
+extern const std::map<std::string, std::string> NO_VARIABLES;
 
 /**
  * Returns the specified property of the specified JSON element.
@@ -62,22 +80,12 @@ inline const nlohmann::json& getRequiredProperty(const nlohmann::json& element,
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return uint8_t value
  */
-inline uint8_t parseBitPosition(const nlohmann::json& element)
-{
-    // Verify element contains an integer
-    if (!element.is_number_integer())
-    {
-        throw std::invalid_argument{"Element is not an integer"};
-    }
-    int value = element.get<int>();
-    if ((value < 0) || (value > 7))
-    {
-        throw std::invalid_argument{"Element is not a bit position"};
-    }
-    return static_cast<uint8_t>(value);
-}
+uint8_t parseBitPosition(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing a bit value (0 or 1).
@@ -87,22 +95,12 @@ inline uint8_t parseBitPosition(const nlohmann::json& element)
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return uint8_t value
  */
-inline uint8_t parseBitValue(const nlohmann::json& element)
-{
-    // Verify element contains an integer
-    if (!element.is_number_integer())
-    {
-        throw std::invalid_argument{"Element is not an integer"};
-    }
-    int value = element.get<int>();
-    if ((value < 0) || (value > 1))
-    {
-        throw std::invalid_argument{"Element is not a bit value"};
-    }
-    return static_cast<uint8_t>(value);
-}
+uint8_t parseBitValue(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing a boolean.
@@ -112,17 +110,12 @@ inline uint8_t parseBitValue(const nlohmann::json& element)
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return boolean value
  */
-inline bool parseBoolean(const nlohmann::json& element)
-{
-    // Verify element contains a boolean
-    if (!element.is_boolean())
-    {
-        throw std::invalid_argument{"Element is not a boolean"};
-    }
-    return element.get<bool>();
-}
+bool parseBoolean(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing a double (floating point number).
@@ -132,51 +125,31 @@ inline bool parseBoolean(const nlohmann::json& element)
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return double value
  */
-inline double parseDouble(const nlohmann::json& element)
-{
-    // Verify element contains a number (integer or floating point)
-    if (!element.is_number())
-    {
-        throw std::invalid_argument{"Element is not a number"};
-    }
-    return element.get<double>();
-}
+double parseDouble(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing a byte value expressed as a hexadecimal
  * string.
  *
  * The JSON number data type does not support the hexadecimal format.  For this
- * reason, hexadecimal byte values are stored as strings in the configuration
- * file.
+ * reason, a hexadecimal byte value is stored in a JSON string.
  *
  * Returns the corresponding C++ uint8_t value.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return uint8_t value
  */
-inline uint8_t parseHexByte(const nlohmann::json& element)
-{
-    if (!element.is_string())
-    {
-        throw std::invalid_argument{"Element is not a string"};
-    }
-    std::string value = element.get<std::string>();
-
-    bool isHex = (value.compare(0, 2, "0x") == 0) && (value.size() > 2) &&
-                 (value.size() < 5) &&
-                 (value.find_first_not_of("0123456789abcdefABCDEF", 2) ==
-                  std::string::npos);
-    if (!isHex)
-    {
-        throw std::invalid_argument{"Element is not hexadecimal string"};
-    }
-    return static_cast<uint8_t>(std::stoul(value, nullptr, 0));
-}
+uint8_t parseHexByte(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing an array of byte values expressed as a
@@ -187,9 +160,12 @@ inline uint8_t parseHexByte(const nlohmann::json& element)
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of uint8_t
  */
-std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
+std::vector<uint8_t> parseHexByteArray(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing an 8-bit signed integer.
@@ -199,22 +175,27 @@ std::vector<uint8_t> parseHexByteArray(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return int8_t value
  */
-inline int8_t parseInt8(const nlohmann::json& element)
-{
-    // Verify element contains an integer
-    if (!element.is_number_integer())
-    {
-        throw std::invalid_argument{"Element is not an integer"};
-    }
-    int value = element.get<int>();
-    if ((value < INT8_MIN) || (value > INT8_MAX))
-    {
-        throw std::invalid_argument{"Element is not an 8-bit signed integer"};
-    }
-    return static_cast<int8_t>(value);
-}
+int8_t parseInt8(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
+
+/**
+ * Parses a JSON element containing an integer.
+ *
+ * Returns the corresponding C++ int value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return integer value
+ */
+int parseInteger(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing a string.
@@ -225,22 +206,12 @@ inline int8_t parseInt8(const nlohmann::json& element)
  *
  * @param element JSON element
  * @param isEmptyValid indicates whether an empty string value is valid
+ * @param variables variables map used to expand variables in element value
  * @return string value
  */
-inline std::string parseString(const nlohmann::json& element,
-                               bool isEmptyValid = false)
-{
-    if (!element.is_string())
-    {
-        throw std::invalid_argument{"Element is not a string"};
-    }
-    std::string value = element.get<std::string>();
-    if (value.empty() && !isEmptyValid)
-    {
-        throw std::invalid_argument{"Element contains an empty string"};
-    }
-    return value;
-}
+std::string parseString(
+    const nlohmann::json& element, bool isEmptyValid = false,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing an 8-bit unsigned integer.
@@ -250,22 +221,12 @@ inline std::string parseString(const nlohmann::json& element,
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return uint8_t value
  */
-inline uint8_t parseUint8(const nlohmann::json& element)
-{
-    // Verify element contains an integer
-    if (!element.is_number_integer())
-    {
-        throw std::invalid_argument{"Element is not an integer"};
-    }
-    int value = element.get<int>();
-    if ((value < 0) || (value > UINT8_MAX))
-    {
-        throw std::invalid_argument{"Element is not an 8-bit unsigned integer"};
-    }
-    return static_cast<uint8_t>(value);
-}
+uint8_t parseUint8(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Parses a JSON element containing an unsigned integer.
@@ -275,17 +236,12 @@ inline uint8_t parseUint8(const nlohmann::json& element)
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return unsigned int value
  */
-inline unsigned int parseUnsignedInteger(const nlohmann::json& element)
-{
-    // Verify element contains an unsigned integer
-    if (!element.is_number_unsigned())
-    {
-        throw std::invalid_argument{"Element is not an unsigned integer"};
-    }
-    return element.get<unsigned int>();
-}
+unsigned int parseUnsignedInteger(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
  * Verifies that the specified JSON element is a JSON array.
@@ -336,5 +292,25 @@ inline void verifyPropertyCount(const nlohmann::json& element,
         throw std::invalid_argument{"Element contains an invalid property"};
     }
 }
+
+namespace internal
+{
+
+/**
+ * Expands any variables that appear in the specified string value.
+ *
+ * Does nothing if the variables map is empty or the value contains no
+ * variables.
+ *
+ * Throws an invalid_argument exception if a variable occurs in the value that
+ * does not exist in the variables map.
+ *
+ * @param value string value in which to perform variable expansion
+ * @param variables variables map containing variable values
+ */
+void expandVariables(std::string& value,
+                     const std::map<std::string, std::string>& variables);
+
+} // namespace internal
 
 } // namespace phosphor::power::json_parser_utils
