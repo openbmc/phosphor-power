@@ -34,7 +34,6 @@ namespace phosphor::power::sequencer
 class System
 {
   public:
-    // Specify which compiler-generated methods we want
     System() = delete;
     System(const System&) = delete;
     System(System&&) = delete;

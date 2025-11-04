@@ -693,7 +693,7 @@ TEST(ConfigFileParserTests, ParseChassis)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not an unsigned integer");
+        EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 
     // Test where fails: inventory_path is invalid: Not a string
@@ -1303,7 +1303,7 @@ TEST(ConfigFileParserTests, ParseConfiguration)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not a number");
+        EXPECT_STREQ(e.what(), "Element is not a double");
     }
 
     // Test where fails: actions object is invalid
@@ -3664,7 +3664,7 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not a number");
+        EXPECT_STREQ(e.what(), "Element is not a double");
     }
 
     // Test where fails: Required format property not specified
