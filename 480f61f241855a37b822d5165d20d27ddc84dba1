@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d73257_1105976e",
+        "filename": "phosphor-power-sequencer/src/standard_device.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-04T15:10:45Z",
+      "side": 1,
+      "message": "Why would this need to be virtual?",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 12
+      },
+      "revId": "480f61f241855a37b822d5165d20d27ddc84dba1",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
