@@ -47,8 +47,8 @@ std::string getService(const std::string& path, const std::string& interface,
 
     auto reply = bus.call(method);
 
-    std::map<std::string, std::vector<std::string>> response;
-    reply.read(response);
+    auto response =
+        reply.unpack<std::map<std::string, std::vector<std::string>>>();
 
     if (response.empty())
     {
@@ -106,8 +106,8 @@ DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
 
     auto reply = bus.call(mapperCall);
 
-    DbusSubtree response;
-    reply.read(response);
+    auto response = reply.unpack<DbusSubtree>();
+
     return response;
 }
 
@@ -127,8 +127,8 @@ std::vector<DbusPath> getAssociatedSubTreePaths(
 
     auto reply = bus.call(mapperCall);
 
-    std::vector<DbusPath> response;
-    reply.read(response);
+    auto response = reply.unpack<std::vector<DbusPath>>();
+
     return response;
 }
 

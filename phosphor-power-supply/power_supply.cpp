@@ -833,8 +833,8 @@ void PowerSupply::inventoryChanged(sdbusplus::message_t& msg)
 
 void PowerSupply::inventoryAdded(sdbusplus::message_t& msg)
 {
-    sdbusplus::message::object_path path;
-    msg.read(path);
+    auto path = msg.unpack<sdbusplus::message::object_path>();
+
     // Make sure the signal is for the PSU inventory path
     if (path == inventoryPath)
     {
