@@ -22,6 +22,30 @@
       },
       "revId": "cbec737744f722975997b4f5094bbbfafa3d3f8e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a870e693_bb7caf5a",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-05T16:45:21Z",
+      "side": 1,
+      "message": "OK will do in a future commit since it is a minor issue.",
+      "parentUuid": "02380d72_262fd3fc",
+      "range": {
+        "startLine": 43,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 55
+      },
+      "revId": "cbec737744f722975997b4f5094bbbfafa3d3f8e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
