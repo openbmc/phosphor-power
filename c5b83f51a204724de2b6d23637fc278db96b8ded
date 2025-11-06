@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fa03ea6_d9f641cb",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-06T15:02:07Z",
+      "side": 1,
+      "message": "Can you change this to chassis-power?\n\nThere are several applications in this repo that are not consistent. The application source code directory is different from the executable name which is different from the service file name. It makes debugging and development more difficult than necessary.\n\nSo if we can keep the directory, service, and executable name basically the same that helps. It is OK to skip the \u0027phosphor\u0027 part in the meson option name since all the others do.",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "469fe1c6_f99daece",
+        "filename": "meson.options",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-06T15:02:07Z",
+      "side": 1,
+      "message": "See comment in meson.build file. Please change to chassis-power if that makes sense.",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 20
+      },
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29d87102_319e686f",
         "filename": "phosphor-chassis-power/src/main.cpp",
         "patchSetId": 1
