@@ -927,6 +927,80 @@ TEST(JSONParserUtilsTests, ParseUint8)
     }
 }
 
+TEST(JSONParserUtilsTests, ParseUint16)
+{
+    // Test where works: 0
+    {
+        const json element = R"( 0 )"_json;
+        uint16_t value = parseUint16(element);
+        EXPECT_EQ(value, 0);
+    }
+
+    // Test where works: UINT16_MAX
+    {
+        const json element = R"( 65535 )"_json;
+        uint16_t value = parseUint16(element);
+        EXPECT_EQ(value, 65535);
+    }
+
+    // Test where works: Variable specified
+    {
+        std::map<std::string, std::string> variables{{"var", "24699"}};
+        const json element = R"( "${var}" )"_json;
+        uint16_t value = parseUint16(element, variables);
+        EXPECT_EQ(value, 24699);
+    }
+
+    // Test where fails: Element is not an integer
+    try
+    {
+        const json element = R"( 1.03 )"_json;
+        parseUint16(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Value < 0
+    try
+    {
+        const json element = R"( -1 )"_json;
+        parseUint16(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a 16-bit unsigned integer");
+    }
+
+    // Test where fails: Value > UINT16_MAX
+    try
+    {
+        const json element = R"( 65536 )"_json;
+        parseUint16(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a 16-bit unsigned integer");
+    }
+
+    // Test where fails: Variable specified: Value > UINT16_MAX
+    try
+    {
+        std::map<std::string, std::string> variables{{"var", "65536"}};
+        const json element = R"( "${var}" )"_json;
+        parseUint16(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a 16-bit unsigned integer");
+    }
+}
+
 TEST(JSONParserUtilsTests, ParseUnsignedInteger)
 {
     // Test where works: 1

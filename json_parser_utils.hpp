@@ -229,6 +229,21 @@ uint8_t parseUint8(
     const std::map<std::string, std::string>& variables = NO_VARIABLES);
 
 /**
+ * Parses a JSON element containing a 16-bit unsigned integer.
+ *
+ * Returns the corresponding C++ uint16_t value.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return uint16_t value
+ */
+uint16_t parseUint16(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables = NO_VARIABLES);
+
+/**
  * Parses a JSON element containing an unsigned integer.
  *
  * Returns the corresponding C++ unsigned int value.
