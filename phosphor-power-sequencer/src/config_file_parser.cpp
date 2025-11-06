@@ -118,6 +118,29 @@ GPIO parseGPIO(const json& element)
     return GPIO(line, activeLow);
 }
 
+std::tuple<uint8_t, uint16_t> parseI2CInterface(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required bus property
+    const json& busElement = getRequiredProperty(element, "bus");
+    uint8_t bus = parseUint8(busElement, variables);
+    ++propertyCount;
+
+    // Required address property
+    const json& addressElement = getRequiredProperty(element, "address");
+    uint16_t address = parseHexByte(addressElement, variables);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return {bus, address};
+}
+
 std::unique_ptr<Rail> parseRail(const json& element)
 {
     verifyIsObject(element);
