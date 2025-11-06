@@ -18,6 +18,8 @@
 
 #include "config_file_parser_error.hpp"
 #include "json_parser_utils.hpp"
+#include "ucd90160_device.hpp"
+#include "ucd90320_device.hpp"
 
 #include <cstdint>
 #include <exception>
@@ -140,6 +142,82 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
     verifyPropertyCount(element, propertyCount);
 
     return {bus, address};
+}
+
+std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables, Services& services)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required type property
+    const json& typeElement = getRequiredProperty(element, "type");
+    std::string type = parseString(typeElement, false, variables);
+    ++propertyCount;
+
+    // Required i2c_interface property
+    const json& i2cInterfaceElement =
+        getRequiredProperty(element, "i2c_interface");
+    auto [bus, address] = parseI2CInterface(i2cInterfaceElement, variables);
+    ++propertyCount;
+
+    // Required power_control_gpio_name property
+    const json& powerControlGPIONameElement =
+        getRequiredProperty(element, "power_control_gpio_name");
+    std::string powerControlGPIOName =
+        parseString(powerControlGPIONameElement, false, variables);
+    ++propertyCount;
+
+    // Required power_good_gpio_name property
+    const json& powerGoodGPIONameElement =
+        getRequiredProperty(element, "power_good_gpio_name");
+    std::string powerGoodGPIOName =
+        parseString(powerGoodGPIONameElement, false, variables);
+    ++propertyCount;
+
+    // Required rails property
+    const json& railsElement = getRequiredProperty(element, "rails");
+    std::vector<std::unique_ptr<Rail>> rails =
+        parseRailArray(railsElement, variables);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    if (type == UCD90160Device::deviceName)
+    {
+        return std::make_unique<UCD90160Device>(
+            bus, address, powerControlGPIOName, powerGoodGPIOName,
+            std::move(rails), services);
+    }
+    else if (type == UCD90320Device::deviceName)
+    {
+        return std::make_unique<UCD90320Device>(
+            bus, address, powerControlGPIOName, powerGoodGPIOName,
+            std::move(rails), services);
+    }
+    throw std::invalid_argument{"Invalid power sequencer type: " + type};
+}
+
+std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables, Services& services)
+{
+    verifyIsArray(element);
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
+    for (auto& powerSequencerElement : element)
+    {
+        powerSequencers.emplace_back(
+            parsePowerSequencer(powerSequencerElement, variables, services));
+    }
+    return powerSequencers;
 }
 
 std::unique_ptr<Rail> parseRail(
