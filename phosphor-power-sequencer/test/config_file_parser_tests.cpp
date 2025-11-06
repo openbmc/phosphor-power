@@ -268,7 +268,7 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Rail>> rails = parse(pathName);
+        auto rails = parse(pathName);
 
         EXPECT_EQ(rails.size(), 2);
         EXPECT_EQ(rails[0]->getName(), "VDD_CPU0");
@@ -333,7 +333,8 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "line": 60
             }
         )"_json;
-        GPIO gpio = parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        auto gpio = parseGPIO(element, variables);
         EXPECT_EQ(gpio.line, 60);
         EXPECT_FALSE(gpio.activeLow);
     }
@@ -346,16 +347,33 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "active_low": true
             }
         )"_json;
-        GPIO gpio = parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        auto gpio = parseGPIO(element, variables);
         EXPECT_EQ(gpio.line, 131);
         EXPECT_TRUE(gpio.activeLow);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+                "line": "${line}",
+                "active_low": "${active_low}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"line", "54"},
+                                                     {"active_low", "false"}};
+        auto gpio = parseGPIO(element, variables);
+        EXPECT_EQ(gpio.line, 54);
+        EXPECT_FALSE(gpio.activeLow);
     }
 
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "vdda", "vddb" ] )"_json;
-        parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        parseGPIO(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -371,7 +389,8 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "active_low": true
             }
         )"_json;
-        parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        parseGPIO(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -388,7 +407,8 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "active_low": true
             }
         )"_json;
-        parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        parseGPIO(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -405,7 +425,8 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "active_low": "true"
             }
         )"_json;
-        parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        parseGPIO(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -422,12 +443,32 @@ TEST(ConfigFileParserTests, ParseGPIO)
                 "foo": "bar"
             }
         )"_json;
-        parseGPIO(element);
+        std::map<std::string, std::string> variables{};
+        parseGPIO(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+                "line": "${line}",
+                "active_low": "${active_low}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"line", "-1"},
+                                                     {"active_low", "false"}};
+        parseGPIO(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an unsigned integer");
     }
 }
 
@@ -593,7 +634,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "name": "VDD_CPU0"
             }
         )"_json;
-        std::unique_ptr<Rail> rail = parseRail(element);
+        std::map<std::string, std::string> variables{};
+        auto rail = parseRail(element, variables);
         EXPECT_EQ(rail->getName(), "VDD_CPU0");
         EXPECT_FALSE(rail->getPresence().has_value());
         EXPECT_FALSE(rail->getPage().has_value());
@@ -616,7 +658,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "gpio": { "line": 60, "active_low": true }
             }
         )"_json;
-        std::unique_ptr<Rail> rail = parseRail(element);
+        std::map<std::string, std::string> variables{};
+        auto rail = parseRail(element, variables);
         EXPECT_EQ(rail->getName(), "12.0VB");
         EXPECT_TRUE(rail->getPresence().has_value());
         EXPECT_EQ(rail->getPresence().value(),
@@ -631,11 +674,49 @@ TEST(ConfigFileParserTests, ParseRail)
         EXPECT_TRUE(rail->getGPIO().value().activeLow);
     }
 
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+                "name": "${name}",
+                "presence": "${presence}",
+                "page": "${page}",
+                "is_power_supply_rail": "${is_power_supply_rail}",
+                "check_status_vout": "${check_status_vout}",
+                "compare_voltage_to_limit": "${compare_voltage_to_limit}",
+                "gpio": { "line": "${line}", "active_low": true }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"name", "vdd"},
+            {"presence",
+             "/xyz/openbmc_project/inventory/system/chassis/powersupply2"},
+            {"page", "9"},
+            {"is_power_supply_rail", "true"},
+            {"check_status_vout", "false"},
+            {"compare_voltage_to_limit", "true"},
+            {"line", "72"}};
+        auto rail = parseRail(element, variables);
+        EXPECT_EQ(rail->getName(), "vdd");
+        EXPECT_TRUE(rail->getPresence().has_value());
+        EXPECT_EQ(rail->getPresence().value(),
+                  "/xyz/openbmc_project/inventory/system/chassis/powersupply2");
+        EXPECT_TRUE(rail->getPage().has_value());
+        EXPECT_EQ(rail->getPage().value(), 9);
+        EXPECT_TRUE(rail->isPowerSupplyRail());
+        EXPECT_FALSE(rail->getCheckStatusVout());
+        EXPECT_TRUE(rail->getCompareVoltageToLimit());
+        EXPECT_TRUE(rail->getGPIO().has_value());
+        EXPECT_EQ(rail->getGPIO().value().line, 72);
+        EXPECT_TRUE(rail->getGPIO().value().activeLow);
+    }
+
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "vdda", "vddb" ] )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -651,7 +732,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "page": 11
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -668,7 +750,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "page": 11
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -685,7 +768,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "presence": false
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -702,7 +786,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "page": 256
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -719,7 +804,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "is_power_supply_rail": "true"
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -736,7 +822,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "check_status_vout": "false"
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -753,7 +840,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "compare_voltage_to_limit": 23
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -770,7 +858,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "gpio": 131
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -787,7 +876,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "check_status_vout": true
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -805,7 +895,8 @@ TEST(ConfigFileParserTests, ParseRail)
                 "compare_voltage_to_limit": true
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -822,12 +913,31 @@ TEST(ConfigFileParserTests, ParseRail)
                 "foo": "bar"
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Undefined variable specified
+    try
+    {
+        const json element = R"(
+            {
+                "name": "12.0VB",
+                "presence": "/xyz/openbmc_project/inventory/system/chassis/powersupply${chassis}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseRail(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: chassis");
     }
 }
 
@@ -839,7 +949,8 @@ TEST(ConfigFileParserTests, ParseRailArray)
             [
             ]
         )"_json;
-        std::vector<std::unique_ptr<Rail>> rails = parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        auto rails = parseRailArray(element, variables);
         EXPECT_EQ(rails.size(), 0);
     }
 
@@ -851,10 +962,29 @@ TEST(ConfigFileParserTests, ParseRailArray)
                 { "name": "VCS_CPU1" }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Rail>> rails = parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        auto rails = parseRailArray(element, variables);
         EXPECT_EQ(rails.size(), 2);
         EXPECT_EQ(rails[0]->getName(), "VDD_CPU0");
         EXPECT_EQ(rails[1]->getName(), "VCS_CPU1");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            [
+                { "name": "${rail1}" },
+                { "name": "${rail2}" },
+                { "name": "${rail3}" }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"rail1", "foo"}, {"rail2", "bar"}, {"rail3", "baz"}};
+        auto rails = parseRailArray(element, variables);
+        EXPECT_EQ(rails.size(), 3);
+        EXPECT_EQ(rails[0]->getName(), "foo");
+        EXPECT_EQ(rails[1]->getName(), "bar");
+        EXPECT_EQ(rails[2]->getName(), "baz");
     }
 
     // Test where fails: Element is not an array
@@ -865,7 +995,8 @@ TEST(ConfigFileParserTests, ParseRailArray)
                 "foo": "bar"
             }
         )"_json;
-        parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        parseRailArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -882,12 +1013,32 @@ TEST(ConfigFileParserTests, ParseRailArray)
                 23
             ]
         )"_json;
-        parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        parseRailArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            [
+                { "name": "VDD_CPU0", "page": "${page1}" },
+                { "name": "VCS_CPU1", "page": "${page2}" }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"page1", "11"},
+                                                     {"page2", "-1"}};
+        parseRailArray(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an 8-bit unsigned integer");
     }
 }
 
@@ -911,7 +1062,7 @@ TEST(ConfigFileParserTests, ParseRoot)
                 ]
             }
         )"_json;
-        std::vector<std::unique_ptr<Rail>> rails = parseRoot(element);
+        auto rails = parseRoot(element);
         EXPECT_EQ(rails.size(), 2);
         EXPECT_EQ(rails[0]->getName(), "VDD_CPU0");
         EXPECT_EQ(rails[1]->getName(), "VCS_CPU1");
