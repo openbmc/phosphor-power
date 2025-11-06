@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29d87102_319e686f",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-06T14:45:27Z",
+      "side": 1,
+      "message": "SPDX license blurb?",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73326c03_2ad63432",
+        "filename": "phosphor-chassis-power/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-06T14:45:27Z",
+      "side": 1,
+      "message": "The \u0027new\u0027 place to install daemons used only by service files is in /usr/libexec/\u003crepo\u003e.  A \"get_option(\u0027libexecdir\u0027)\" would provide the base path.",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba73ba8_de15533c",
+        "filename": "services/phosphor-chassis-power.service",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-06T14:45:27Z",
+      "side": 1,
+      "message": "would need the new path",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 19
+      },
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
