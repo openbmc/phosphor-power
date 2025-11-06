@@ -36,11 +36,15 @@ owners:
 - spinler@us.ibm.com
 
 reviewers:
+- anwaar.hadi@ibm.com
 - liuxiwei@ieisystem.com
 
 matchers:
 
 openbmc:
+- name: Anwaar Hadi
+  email: anwaar.hadi@ibm.com
+  discord: anwaarhadi
 - name: George Liu
   email: liuxiwei@ieisystem.com
   discord: George Liu
