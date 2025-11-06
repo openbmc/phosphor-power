@@ -93,14 +93,15 @@ std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
 namespace internal
 {
 
-GPIO parseGPIO(const json& element)
+GPIO parseGPIO(const json& element,
+               const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required line property
     const json& lineElement = getRequiredProperty(element, "line");
-    unsigned int line = parseUnsignedInteger(lineElement);
+    unsigned int line = parseUnsignedInteger(lineElement, variables);
     ++propertyCount;
 
     // Optional active_low property
@@ -108,7 +109,7 @@ GPIO parseGPIO(const json& element)
     auto activeLowIt = element.find("active_low");
     if (activeLowIt != element.end())
     {
-        activeLow = parseBoolean(*activeLowIt);
+        activeLow = parseBoolean(*activeLowIt, variables);
         ++propertyCount;
     }
 
@@ -141,14 +142,15 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
     return {bus, address};
 }
 
-std::unique_ptr<Rail> parseRail(const json& element)
+std::unique_ptr<Rail> parseRail(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required name property
     const json& nameElement = getRequiredProperty(element, "name");
-    std::string name = parseString(nameElement);
+    std::string name = parseString(nameElement, false, variables);
     ++propertyCount;
 
     // Optional presence property
@@ -156,7 +158,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto presenceIt = element.find("presence");
     if (presenceIt != element.end())
     {
-        presence = parseString(*presenceIt);
+        presence = parseString(*presenceIt, false, variables);
         ++propertyCount;
     }
 
@@ -165,7 +167,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto pageIt = element.find("page");
     if (pageIt != element.end())
     {
-        page = parseUint8(*pageIt);
+        page = parseUint8(*pageIt, variables);
         ++propertyCount;
     }
 
@@ -174,7 +176,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto isPowerSupplyRailIt = element.find("is_power_supply_rail");
     if (isPowerSupplyRailIt != element.end())
     {
-        isPowerSupplyRail = parseBoolean(*isPowerSupplyRailIt);
+        isPowerSupplyRail = parseBoolean(*isPowerSupplyRailIt, variables);
         ++propertyCount;
     }
 
@@ -183,7 +185,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto checkStatusVoutIt = element.find("check_status_vout");
     if (checkStatusVoutIt != element.end())
     {
-        checkStatusVout = parseBoolean(*checkStatusVoutIt);
+        checkStatusVout = parseBoolean(*checkStatusVoutIt, variables);
         ++propertyCount;
     }
 
@@ -192,7 +194,8 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto compareVoltageToLimitIt = element.find("compare_voltage_to_limit");
     if (compareVoltageToLimitIt != element.end())
     {
-        compareVoltageToLimit = parseBoolean(*compareVoltageToLimitIt);
+        compareVoltageToLimit =
+            parseBoolean(*compareVoltageToLimitIt, variables);
         ++propertyCount;
     }
 
@@ -201,7 +204,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto gpioIt = element.find("gpio");
     if (gpioIt != element.end())
     {
-        gpio = parseGPIO(*gpioIt);
+        gpio = parseGPIO(*gpioIt, variables);
         ++propertyCount;
     }
 
@@ -219,25 +222,29 @@ std::unique_ptr<Rail> parseRail(const json& element)
                                   checkStatusVout, compareVoltageToLimit, gpio);
 }
 
-std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)
+std::vector<std::unique_ptr<Rail>> parseRailArray(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Rail>> rails;
     for (auto& railElement : element)
     {
-        rails.emplace_back(parseRail(railElement));
+        rails.emplace_back(parseRail(railElement, variables));
     }
     return rails;
 }
 
 std::vector<std::unique_ptr<Rail>> parseRoot(const json& element)
 {
+    std::map<std::string, std::string> variables{};
+
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required rails property
     const json& railsElement = getRequiredProperty(element, "rails");
-    std::vector<std::unique_ptr<Rail>> rails = parseRailArray(railsElement);
+    std::vector<std::unique_ptr<Rail>> rails =
+        parseRailArray(railsElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist

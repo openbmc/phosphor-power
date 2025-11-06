@@ -86,9 +86,11 @@ namespace internal
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return GPIO object
  */
-GPIO parseGPIO(const nlohmann::json& element);
+GPIO parseGPIO(const nlohmann::json& element,
+               const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_interface object.
@@ -113,9 +115,12 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return Rail object
  */
-std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
+std::unique_ptr<Rail> parseRail(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of rails.
@@ -125,10 +130,12 @@ std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of Rail objects
  */
 std::vector<std::unique_ptr<Rail>> parseRailArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses the JSON root element of the entire configuration file.
