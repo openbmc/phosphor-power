@@ -186,6 +186,17 @@ uint8_t parseUint8(const nlohmann::json& element,
     return static_cast<uint8_t>(value);
 }
 
+uint16_t parseUint16(const nlohmann::json& element,
+                     const std::map<std::string, std::string>& variables)
+{
+    int value = parseInteger(element, variables);
+    if ((value < 0) || (value > UINT16_MAX))
+    {
+        throw std::invalid_argument{"Element is not a 16-bit unsigned integer"};
+    }
+    return static_cast<uint16_t>(value);
+}
+
 unsigned int parseUnsignedInteger(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables)
