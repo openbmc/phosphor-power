@@ -15,6 +15,8 @@
  */
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
+#include "mock_services.hpp"
+#include "power_sequencer_device.hpp"
 #include "rail.hpp"
 #include "temporary_file.hpp"
 #include "temporary_subdirectory.hpp"
@@ -622,6 +624,520 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePowerSequencer)
+{
+    // Test where works: Has comments property: Type is "UCD90160"
+    {
+        const json element = R"(
+            {
+              "comments": [ "Power sequencer in chassis 1",
+                            "Controls VDD rails" ],
+              "type": "UCD90160",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": [ { "name": "VDD_CPU0" }, { "name": "VCS_CPU1" } ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        EXPECT_EQ(powerSequencer->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencer->getBus(), 3);
+        EXPECT_EQ(powerSequencer->getAddress(), 0x11);
+        EXPECT_EQ(powerSequencer->getPowerControlGPIOName(),
+                  "power-chassis-control");
+        EXPECT_EQ(powerSequencer->getPowerGoodGPIOName(), "power-chassis-good");
+        EXPECT_EQ(powerSequencer->getRails().size(), 2);
+        EXPECT_EQ(powerSequencer->getRails()[0]->getName(), "VDD_CPU0");
+        EXPECT_EQ(powerSequencer->getRails()[1]->getName(), "VCS_CPU1");
+    }
+
+    // Test where works: No comments property: Variables specified: Type is
+    // "UCD90320"
+    {
+        const json element = R"(
+            {
+              "type": "${type}",
+              "i2c_interface": { "bus": "${bus}", "address": "${address}" },
+              "power_control_gpio_name": "${power_control_gpio_name}",
+              "power_good_gpio_name": "${power_good_gpio_name}",
+              "rails": [ { "name": "${rail1}" }, { "name": "${rail2}" } ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"type", "UCD90320"},
+            {"bus", "4"},
+            {"address", "0x24"},
+            {"power_control_gpio_name", "power_on"},
+            {"power_good_gpio_name", "pgood"},
+            {"rail1", "cpu1"},
+            {"rail2", "cpu2"}};
+        MockServices services{};
+        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        EXPECT_EQ(powerSequencer->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencer->getBus(), 4);
+        EXPECT_EQ(powerSequencer->getAddress(), 0x24);
+        EXPECT_EQ(powerSequencer->getPowerControlGPIOName(), "power_on");
+        EXPECT_EQ(powerSequencer->getPowerGoodGPIOName(), "pgood");
+        EXPECT_EQ(powerSequencer->getRails().size(), 2);
+        EXPECT_EQ(powerSequencer->getRails()[0]->getName(), "cpu1");
+        EXPECT_EQ(powerSequencer->getRails()[1]->getName(), "cpu2");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required type property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: type");
+    }
+
+    // Test where fails: Required i2c_interface property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: i2c_interface");
+    }
+
+    // Test where fails: Required power_control_gpio_name property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(),
+                     "Required property missing: power_control_gpio_name");
+    }
+
+    // Test where fails: Required power_good_gpio_name property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(),
+                     "Required property missing: power_good_gpio_name");
+    }
+
+    // Test where fails: Required rails property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: rails");
+    }
+
+    // Test where fails: type value is invalid: Not a string
+    try
+    {
+        const json element = R"(
+            {
+              "type": true,
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: type value is invalid: Not a supported type
+    try
+    {
+        const json element = R"(
+            {
+              "type": "foo_bar",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid power sequencer type: foo_bar");
+    }
+
+    // Test where fails: i2c_interface value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": 3,
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: power_control_gpio_name value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": [],
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: power_good_gpio_name value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": 12,
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: rails value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": [ { "name": 33 } ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "driver_name": "foo",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": "${bus}", "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "two"}};
+        MockServices services{};
+        parsePowerSequencer(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+}
+
+TEST(ConfigFileParserTests, ParsePowerSequencerArray)
+{
+    // Test where works: Array is empty
+    {
+        const json element = R"(
+            [
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        auto powerSequencers =
+            parsePowerSequencerArray(element, variables, services);
+        EXPECT_EQ(powerSequencers.size(), 0);
+    }
+
+    // Test where works: Array is not empty
+    {
+        const json element = R"(
+            [
+              {
+                "type": "UCD90160",
+                "i2c_interface": { "bus": 3, "address": "0x11" },
+                "power_control_gpio_name": "power-chassis-control1",
+                "power_good_gpio_name": "power-chassis-good1",
+                "rails": []
+              },
+              {
+                "type": "UCD90320",
+                "i2c_interface": { "bus": 4, "address": "0x70" },
+                "power_control_gpio_name": "power-chassis-control2",
+                "power_good_gpio_name": "power-chassis-good2",
+                "rails": []
+              }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        auto powerSequencers =
+            parsePowerSequencerArray(element, variables, services);
+        EXPECT_EQ(powerSequencers.size(), 2);
+        EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getBus(), 3);
+        EXPECT_EQ(powerSequencers[0]->getAddress(), 0x11);
+        EXPECT_EQ(powerSequencers[1]->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getBus(), 4);
+        EXPECT_EQ(powerSequencers[1]->getAddress(), 0x70);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            [
+              {
+                "type": "UCD90160",
+                "i2c_interface": { "bus": "${bus1}", "address": "${address1}" },
+                "power_control_gpio_name": "power-chassis-control1",
+                "power_good_gpio_name": "power-chassis-good1",
+                "rails": []
+              },
+              {
+                "type": "UCD90320",
+                "i2c_interface": { "bus": "${bus2}", "address": "${address2}" },
+                "power_control_gpio_name": "power-chassis-control2",
+                "power_good_gpio_name": "power-chassis-good2",
+                "rails": []
+              }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"bus1", "5"},
+            {"address1", "0x22"},
+            {"bus2", "7"},
+            {"address2", "0x49"}};
+        MockServices services{};
+        auto powerSequencers =
+            parsePowerSequencerArray(element, variables, services);
+        EXPECT_EQ(powerSequencers.size(), 2);
+        EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getBus(), 5);
+        EXPECT_EQ(powerSequencers[0]->getAddress(), 0x22);
+        EXPECT_EQ(powerSequencers[1]->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getBus(), 7);
+        EXPECT_EQ(powerSequencers[1]->getAddress(), 0x49);
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+                "foo": "bar"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencerArray(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Element within array is invalid
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "type": "UCD90160",
+                "i2c_interface": { "bus": 3, "address": "0x11" },
+                "power_control_gpio_name": "power-chassis-control1",
+                "power_good_gpio_name": "power-chassis-good1",
+                "rails": []
+              },
+              true
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parsePowerSequencerArray(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "type": "UCD90320",
+                "i2c_interface": { "bus": "${bus}", "address": "${address}" },
+                "power_control_gpio_name": "power-chassis-control",
+                "power_good_gpio_name": "power-chassis-good",
+                "rails": []
+              }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "7"},
+                                                     {"address", "70"}};
+        MockServices services{};
+        parsePowerSequencerArray(element, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 

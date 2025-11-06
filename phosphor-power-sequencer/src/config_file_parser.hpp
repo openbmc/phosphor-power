@@ -15,7 +15,9 @@
  */
 #pragma once
 
+#include "power_sequencer_device.hpp"
 #include "rail.hpp"
+#include "services.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -106,6 +108,38 @@ GPIO parseGPIO(const nlohmann::json& element,
 std::tuple<uint8_t, uint16_t> parseI2CInterface(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing a power_sequencer object.
+ *
+ * Returns the corresponding C++ PowerSequencerDevice object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @param services System services like hardware presence and the journal
+ * @return PowerSequencerDevice object
+ */
+std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables, Services& services);
+
+/**
+ * Parses a JSON element containing an array of power_sequencer objects.
+ *
+ * Returns the corresponding C++ PowerSequencerDevice objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @param services System services like hardware presence and the journal
+ * @return vector of PowerSequencerDevice objects
+ */
+std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables, Services& services);
 
 /**
  * Parses a JSON element containing a rail.
