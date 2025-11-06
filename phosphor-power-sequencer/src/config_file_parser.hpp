@@ -19,9 +19,12 @@
 
 #include <nlohmann/json.hpp>
 
+#include <cstdint>
 #include <filesystem>
+#include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace phosphor::power::sequencer::config_file_parser
@@ -86,6 +89,21 @@ namespace internal
  * @return GPIO object
  */
 GPIO parseGPIO(const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an i2c_interface object.
+ *
+ * Returns the corresponding I2C bus and address.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return tuple containing bus and address
+ */
+std::tuple<uint8_t, uint16_t> parseI2CInterface(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a rail.

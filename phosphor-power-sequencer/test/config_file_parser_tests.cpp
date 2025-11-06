@@ -23,13 +23,16 @@
 
 #include <nlohmann/json.hpp>
 
+#include <cstdint>
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <map>
 #include <memory>
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -425,6 +428,159 @@ TEST(ConfigFileParserTests, ParseGPIO)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseI2CInterface)
+{
+    // Test where works: No variables
+    {
+        const json element = R"(
+            {
+                "bus": 2,
+                "address": "0x70"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        auto [bus, address] = parseI2CInterface(element, variables);
+        EXPECT_EQ(bus, 2);
+        EXPECT_EQ(address, 0x70);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+                "bus": "${bus}",
+                "address": "${address}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "3"},
+                                                     {"address", "0x23"}};
+        auto [bus, address] = parseI2CInterface(element, variables);
+        EXPECT_EQ(bus, 3);
+        EXPECT_EQ(address, 0x23);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ 1, "0x70" ] )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required bus property not specified
+    try
+    {
+        const json element = R"(
+            {
+                "address": "0x70"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: bus");
+    }
+
+    // Test where fails: Required address property not specified
+    try
+    {
+        const json element = R"(
+            {
+                "bus": 2
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: address");
+    }
+
+    // Test where fails: bus value is invalid
+    try
+    {
+        const json element = R"(
+            {
+                "bus": 1.1,
+                "address": "0x70"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: address value is invalid
+    try
+    {
+        const json element = R"(
+            {
+                "bus": 2,
+                "address": 70
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+                "bus": 2,
+                "address": "0x70",
+                "foo": "bar"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+                "bus": "${bus}",
+                "address": "${address}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "foo"},
+                                                     {"address", "0x23"}};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 }
 
