@@ -326,6 +326,178 @@ TEST(ConfigFileParserTests, Parse)
     }
 }
 
+TEST(ConfigFileParserTests, ParseChassisTemplate)
+{
+    // Test where works: comments specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "This is a template for the foo chassis type",
+                            "Chassis contains a UCD90320 power sequencer" ],
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": [
+                {
+                  "type": "UCD90320",
+                  "i2c_interface": { "bus": "${bus}", "address": "0x11" },
+                  "power_control_gpio_name": "power-chassis${chassis_number}-control",
+                  "power_good_gpio_name": "power-chassis${chassis_number}-good",
+                  "rails": [ { "name": "VDD_CPU0" }, { "name": "VCS_CPU1" } ]
+                }
+              ]
+            }
+        )"_json;
+        auto [id, jsonRef] = parseChassisTemplate(element);
+        EXPECT_EQ(id, "foo_chassis");
+        EXPECT_EQ(jsonRef.get()["number"], "${chassis_number}");
+        EXPECT_EQ(jsonRef.get()["power_sequencers"].size(), 1);
+        EXPECT_EQ(jsonRef.get()["power_sequencers"][0]["type"], "UCD90320");
+    }
+
+    // Test where works: comments not specified
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        auto [id, jsonRef] = parseChassisTemplate(element);
+        EXPECT_EQ(id, "foo_chassis");
+        EXPECT_EQ(jsonRef.get()["number"], "${chassis_number}");
+        EXPECT_EQ(
+            jsonRef.get()["inventory_path"],
+            "/xyz/openbmc_project/inventory/system/chassis${chassis_number}");
+        EXPECT_EQ(jsonRef.get()["power_sequencers"].size(), 0);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+
+    // Test where fails: Required number property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+
+    // Test where fails: Required inventory_path property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: inventory_path");
+    }
+
+    // Test where fails: Required power_sequencers property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}"
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: power_sequencers");
+    }
+
+    // Test where fails: id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": 13,
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": [],
+              "foo": "bar"
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseGPIO)
 {
     // Test where works: Only required properties specified
