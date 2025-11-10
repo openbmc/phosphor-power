@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b586b1f_07cbebe3",
+        "filename": "meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-10T19:32:08Z",
+      "side": 1,
+      "message": "Done. Makes sense, agree that it\u0027s easier to understand if we keep the naming consistent.",
+      "parentUuid": "6fa03ea6_d9f641cb",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "469fe1c6_f99daece",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-11-06T15:02:07Z",
       "side": 1,
       "message": "See comment in meson.build file. Please change to chassis-power if that makes sense.",
+      "range": {
+        "startLine": 67,
+        "startChar": 13,
+        "endLine": 67,
+        "endChar": 20
+      },
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc9b475_0bed0e8d",
+        "filename": "meson.options",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-10T19:32:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "469fe1c6_f99daece",
       "range": {
         "startLine": 67,
         "startChar": 13,
@@ -60,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28b4056b_951b9f63",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-10T19:32:08Z",
+      "side": 1,
+      "message": "I just realized the Copyright licenses are being replaced with a shorter SPDX one. Will update.",
+      "parentUuid": "29d87102_319e686f",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73326c03_2ad63432",
         "filename": "phosphor-chassis-power/src/meson.build",
         "patchSetId": 1
@@ -71,6 +131,24 @@
       "writtenOn": "2025-11-06T14:45:27Z",
       "side": 1,
       "message": "The \u0027new\u0027 place to install daemons used only by service files is in /usr/libexec/\u003crepo\u003e.  A \"get_option(\u0027libexecdir\u0027)\" would provide the base path.",
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95ca3271_45a769b2",
+        "filename": "phosphor-chassis-power/src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-10T19:32:08Z",
+      "side": 1,
+      "message": "Done. Thanks for pointing it out.",
+      "parentUuid": "73326c03_2ad63432",
       "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -88,6 +166,30 @@
       "writtenOn": "2025-11-06T14:45:27Z",
       "side": 1,
       "message": "would need the new path",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 19
+      },
+      "revId": "c5b83f51a204724de2b6d23637fc278db96b8ded",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10eccbb_65d1a527",
+        "filename": "services/phosphor-chassis-power.service",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-10T19:32:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ba73ba8_de15533c",
       "range": {
         "startLine": 6,
         "startChar": 10,
