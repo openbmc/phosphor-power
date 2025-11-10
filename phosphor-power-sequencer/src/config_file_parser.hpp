@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "chassis.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
 #include "services.hpp"
@@ -84,6 +85,57 @@ namespace internal
 {
 
 using JSONRefWrapper = std::reference_wrapper<const json>;
+
+/**
+ * Parses a JSON element containing a chassis object.
+ *
+ * Returns the corresponding C++ Chassis object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param chassisTemplates chassis templates map
+ * @param services system services like hardware presence and the journal
+ * @return Chassis object
+ */
+std::unique_ptr<Chassis> parseChassis(
+    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    Services& services);
+
+/**
+ * Parses a JSON element containing an array of chassis objects.
+ *
+ * Returns the corresponding C++ Chassis objects.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param chassisTemplates chassis templates map
+ * @param services system services like hardware presence and the journal
+ * @return vector of Chassis objects
+ */
+std::vector<std::unique_ptr<Chassis>> parseChassisArray(
+    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    Services& services);
+
+/**
+ * Parses a JSON element containing the properties of a chassis.
+ *
+ * The JSON element may be a chassis object or chassis_template object.
+ *
+ * Returns the corresponding C++ Chassis object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param isChassisTemplate specifies whether element is a chassis_template
+ * @param variables variables map used to expand variables in element value
+ * @param services system services like hardware presence and the journal
+ * @return Chassis object
+ */
+std::unique_ptr<Chassis> parseChassisProperties(
+    const json& element, bool isChassisTemplate,
+    const std::map<std::string, std::string>& variables, Services& services);
 
 /**
  * Parses a JSON element containing a chassis_template object.
@@ -197,6 +249,18 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
  * @return vector of Rail objects
  */
 std::vector<std::unique_ptr<Rail>> parseRoot(const json& element);
+
+/**
+ * Parses a JSON element containing an object with variable names and values.
+ *
+ * Returns the corresponding C++ map of variable names and values.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return map of variable names and values
+ */
+std::map<std::string, std::string> parseVariables(const json& element);
 
 } // namespace internal
 

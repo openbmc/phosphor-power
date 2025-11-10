@@ -94,6 +94,125 @@ std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
 namespace internal
 {
 
+std::unique_ptr<Chassis> parseChassis(
+    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    Services& services)
+{
+    verifyIsObject(element);
+
+    // If chassis object is not using a template, parse properties normally
+    if (!element.contains("template_id"))
+    {
+        bool isChassisTemplate{false};
+        return parseChassisProperties(element, isChassisTemplate, NO_VARIABLES,
+                                      services);
+    }
+
+    // Parse chassis object that is using a template
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required template_id property
+    const json& templateIDElement = getRequiredProperty(element, "template_id");
+    std::string templateID = parseString(templateIDElement);
+    ++propertyCount;
+
+    // Required template_variable_values property
+    const json& variablesElement =
+        getRequiredProperty(element, "template_variable_values");
+    std::map<std::string, std::string> variables =
+        parseVariables(variablesElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    // Get reference to chassis template JSON
+    auto it = chassisTemplates.find(templateID);
+    if (it == chassisTemplates.end())
+    {
+        throw std::invalid_argument{
+            "Invalid chassis template id: " + templateID};
+    }
+    const json& templateElement = it->second.get();
+
+    // Parse properties in template using variable values for this chassis
+    bool isChassisTemplate{true};
+    return parseChassisProperties(templateElement, isChassisTemplate, variables,
+                                  services);
+}
+
+std::vector<std::unique_ptr<Chassis>> parseChassisArray(
+    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    Services& services)
+{
+    verifyIsArray(element);
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    for (auto& chassisElement : element)
+    {
+        chassis.emplace_back(
+            parseChassis(chassisElement, chassisTemplates, services));
+    }
+    return chassis;
+}
+
+std::unique_ptr<Chassis> parseChassisProperties(
+    const json& element, bool isChassisTemplate,
+    const std::map<std::string, std::string>& variables, Services& services)
+
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required id property if this is a chassis template
+    // Don't parse again; this was already parsed by parseChassisTemplate()
+    if (isChassisTemplate)
+    {
+        getRequiredProperty(element, "id");
+        ++propertyCount;
+    }
+
+    // Required number property
+    const json& numberElement = getRequiredProperty(element, "number");
+    unsigned int number = parseUnsignedInteger(numberElement, variables);
+    if (number < 1)
+    {
+        throw std::invalid_argument{"Invalid chassis number: Must be > 0"};
+    }
+    ++propertyCount;
+
+    // Required inventory_path property
+    const json& inventoryPathElement =
+        getRequiredProperty(element, "inventory_path");
+    std::string inventoryPath =
+        parseString(inventoryPathElement, false, variables);
+    ++propertyCount;
+
+    // Required power_sequencers property
+    const json& powerSequencersElement =
+        getRequiredProperty(element, "power_sequencers");
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers =
+        parsePowerSequencerArray(powerSequencersElement, variables, services);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<Chassis>(number, inventoryPath,
+                                     std::move(powerSequencers));
+}
+
 std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
     const json& element)
 {
@@ -366,6 +485,21 @@ std::vector<std::unique_ptr<Rail>> parseRoot(const json& element)
     verifyPropertyCount(element, propertyCount);
 
     return rails;
+}
+
+std::map<std::string, std::string> parseVariables(const json& element)
+{
+    verifyIsObject(element);
+
+    std::map<std::string, std::string> variables;
+    std::string name, value;
+    for (const auto& [nameElement, valueElement] : element.items())
+    {
+        name = parseString(nameElement);
+        value = parseString(valueElement);
+        variables.emplace(name, value);
+    }
+    return variables;
 }
 
 } // namespace internal
