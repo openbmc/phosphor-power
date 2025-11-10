@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
 #include "mock_services.hpp"
@@ -323,6 +324,705 @@ TEST(ConfigFileParserTests, Parse)
         writeConfigFile(pathName, configFileContents);
 
         EXPECT_THROW(parse(pathName), ConfigFileParserError);
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassis)
+{
+    // Constants used by multiple tests
+    const json templateElement = R"(
+        {
+          "id": "foo_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+          "power_sequencers": [
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": "${bus}", "address": "${address}" },
+              "power_control_gpio_name": "power-chassis${chassis_number}-control",
+              "power_good_gpio_name": "power-chassis${chassis_number}-good",
+              "rails": []
+            }
+          ]
+        }
+    )"_json;
+    const std::map<std::string, JSONRefWrapper> chassisTemplates{
+        {"foo_chassis", templateElement}};
+
+    // Test where works: Does not use a template
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": [
+                {
+                  "type": "UCD90320",
+                  "i2c_interface": { "bus": 3, "address": "0x11" },
+                  "power_control_gpio_name": "power-chassis-control",
+                  "power_good_gpio_name": "power-chassis-good",
+                  "rails": []
+                }
+              ]
+            }
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassis(element, chassisTemplates, services);
+        EXPECT_EQ(chassis->getNumber(), 1);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis");
+        EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
+    }
+
+    // Test where works: Uses template: No comments specified
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": {
+                "chassis_number": "2",
+                "bus": "13",
+                "address": "0x70"
+              }
+            }
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassis(element, chassisTemplates, services);
+        EXPECT_EQ(chassis->getNumber(), 2);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 13);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x70);
+    }
+
+    // Test where works: Uses template: Comments specified
+    {
+        const json element = R"(
+            {
+              "comments": ["Chassis 3: Standard hardware layout"],
+              "template_id": "foo_chassis",
+              "template_variable_values": {
+                "chassis_number": "3",
+                "bus": "23",
+                "address": "0x54"
+              }
+            }
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassis(element, chassisTemplates, services);
+        EXPECT_EQ(chassis->getNumber(), 3);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis3");
+        EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 23);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x54);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Does not use a template: Cannot parse properties
+    try
+    {
+        const json element = R"(
+            {
+              "number": "one",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": []
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Uses template: Required template_variable_values
+    // property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis"
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(),
+                     "Required property missing: template_variable_values");
+    }
+
+    // Test where fails: Uses template: template_id value is invalid: Not a
+    // string
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": 23,
+              "template_variable_values": { "chassis_number": "2" }
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Uses template: template_id value is invalid: No
+    // matching template
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "does_not_exist",
+              "template_variable_values": { "chassis_number": "2" }
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis template id: does_not_exist");
+    }
+
+    // Test where fails: Uses template: template_variable_values value is
+    // invalid
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": 2 }
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Uses template: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": "2" },
+              "foo": "bar"
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Uses template: Cannot parse properties in template
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": "0" }
+            }
+        )"_json;
+        MockServices services{};
+        parseChassis(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis number: Must be > 0");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassisArray)
+{
+    // Constants used by multiple tests
+    const json fooTemplateElement = R"(
+        {
+          "id": "foo_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+          "power_sequencers": []
+        }
+    )"_json;
+    const json barTemplateElement = R"(
+        {
+          "id": "bar_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "/xyz/openbmc_project/inventory/system/bar_chassis${chassis_number}",
+          "power_sequencers": []
+        }
+    )"_json;
+    const std::map<std::string, JSONRefWrapper> chassisTemplates{
+        {"foo_chassis", fooTemplateElement},
+        {"bar_chassis", barTemplateElement}};
+
+    // Test where works: Array is empty
+    {
+        const json element = R"(
+            [
+            ]
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        EXPECT_EQ(chassis.size(), 0);
+    }
+
+    // Test where works: Template not used
+    {
+        const json element = R"(
+            [
+              {
+                "number": 1,
+                "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                "power_sequencers": []
+              },
+              {
+                "number": 2,
+                "inventory_path": "/xyz/openbmc_project/inventory/system/chassis2",
+                "power_sequencers": []
+              }
+            ]
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
+        EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+    }
+
+    // Test where works: Template used
+    {
+        const json element = R"(
+            [
+              {
+                "template_id": "foo_chassis",
+                "template_variable_values": { "chassis_number": "2" }
+              },
+              {
+                "template_id": "bar_chassis",
+                "template_variable_values": { "chassis_number": "3" }
+              }
+            ]
+        )"_json;
+        MockServices services{};
+        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 2);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis[1]->getNumber(), 3);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/bar_chassis3");
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+                "foo": "bar"
+            }
+        )"_json;
+        MockServices services{};
+        parseChassisArray(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Element within array is invalid
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "number": true,
+                "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+                "power_sequencers": []
+              }
+            ]
+        )"_json;
+        MockServices services{};
+        parseChassisArray(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            [
+                {
+                  "template_id": "foo_chassis",
+                  "template_variable_values": { "chassis_number": "two" }
+                }
+            ]
+        )"_json;
+        MockServices services{};
+        parseChassisArray(element, chassisTemplates, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassisProperties)
+{
+    // Test where works: Parse chassis object without template/variables: Has
+    // comments property
+    {
+        const json element = R"(
+            {
+              "comments": [ "Chassis 1: Has all CPUs, fans, and PSUs" ],
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": [
+                {
+                  "type": "UCD90160",
+                  "i2c_interface": { "bus": 3, "address": "0x11" },
+                  "power_control_gpio_name": "power-chassis-control",
+                  "power_good_gpio_name": "power-chassis-good",
+                  "rails": [ { "name": "VDD_CPU0" }, { "name": "VCS_CPU1" } ]
+                }
+              ]
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        auto chassis = parseChassisProperties(element, isChassisTemplate,
+                                              variables, services);
+        EXPECT_EQ(chassis->getNumber(), 1);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis");
+        EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90160");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
+                  "power-chassis-control");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerGoodGPIOName(),
+                  "power-chassis-good");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails().size(), 2);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails()[0]->getName(),
+                  "VDD_CPU0");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails()[1]->getName(),
+                  "VCS_CPU1");
+    }
+
+    // Test where works: Parse chassis_template object with variables: No
+    // comments property
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": [
+                {
+                  "type": "UCD90320",
+                  "i2c_interface": { "bus": "${bus}", "address": "${address}" },
+                  "power_control_gpio_name": "power-chassis${chassis_number}-control",
+                  "power_good_gpio_name": "power-chassis${chassis_number}-good",
+                  "rails": [ { "name": "vio${chassis_number}" } ]
+                }
+              ]
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{
+            {"chassis_number", "2"}, {"bus", "12"}, {"address", "0x71"}};
+        MockServices services{};
+        auto chassis = parseChassisProperties(element, isChassisTemplate,
+                                              variables, services);
+        EXPECT_EQ(chassis->getNumber(), 2);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 12);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x71);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
+                  "power-chassis2-control");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerGoodGPIOName(),
+                  "power-chassis2-good");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails().size(), 1);
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails()[0]->getName(),
+                  "vio2");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( true )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required id property not specified in chassis template
+    try
+    {
+        const json element = R"(
+            {
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "2"}};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+
+    // Test where fails: Required number property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+
+    // Test where fails: Required inventory_path property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "2"}};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: inventory_path");
+    }
+
+    // Test where fails: Required power_sequencers property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis"
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: power_sequencers");
+    }
+
+    // Test where fails: number value is invalid: Not an integer
+    try
+    {
+        const json element = R"(
+            {
+              "number": "two",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: number value is invalid: Equal to 0
+    try
+    {
+        const json element = R"(
+            {
+              "number": 0,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis number: Must be > 0");
+    }
+
+    // Test where fails: inventory_path value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: power_sequencers value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": { "name": "foo" }
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar",
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+              "power_sequencers": []
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "two"}};
+        MockServices services{};
+        parseChassisProperties(element, isChassisTemplate, variables, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 }
 
@@ -1820,5 +2520,115 @@ TEST(ConfigFileParserTests, ParseRoot)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseVariables)
+{
+    // Test where works: No variables specified
+    {
+        const json element = R"(
+            {
+            }
+        )"_json;
+        auto variables = parseVariables(element);
+        EXPECT_EQ(variables.size(), 0);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "chassis_number": "2",
+              "bus_number": "13"
+            }
+        )"_json;
+        auto variables = parseVariables(element);
+        EXPECT_EQ(variables.size(), 2);
+        EXPECT_EQ(variables["chassis_number"], "2");
+        EXPECT_EQ(variables["bus_number"], "13");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"(
+            [
+              "chassis_number", "2",
+              "bus_number", "13"
+            ]
+        )"_json;
+        parseVariables(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Key is not a string
+    try
+    {
+        const json element = R"(
+            {
+              chassis_number: "2",
+              "bus_number": "13"
+            }
+        )"_json;
+        parseVariables(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const json::parse_error& e)
+    {}
+
+    // Test where fails: Value is not a string
+    try
+    {
+        const json element = R"(
+            {
+              "chassis_number": "2",
+              "bus_number": 13
+            }
+        )"_json;
+        parseVariables(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Key is an empty string
+    try
+    {
+        const json element = R"(
+            {
+              "chassis_number": "2",
+              "": "13"
+            }
+        )"_json;
+        parseVariables(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Value is an empty string
+    try
+    {
+        const json element = R"(
+            {
+              "chassis_number": "",
+              "bus_number": "13"
+            }
+        )"_json;
+        parseVariables(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
