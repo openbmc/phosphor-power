@@ -29,7 +29,6 @@
 
 using namespace phosphor::power::json_parser_utils;
 using ConfigFileParserError = phosphor::power::util::ConfigFileParserError;
-using json = nlohmann::json;
 namespace fs = std::filesystem;
 
 namespace phosphor::power::sequencer::config_file_parser
@@ -94,6 +93,44 @@ std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
 
 namespace internal
 {
+
+std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
+    const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required id property
+    const json& idElement = getRequiredProperty(element, "id");
+    std::string id = parseString(idElement);
+    ++propertyCount;
+
+    // Required number property
+    // Just verify it exists; cannot be parsed without variable values
+    getRequiredProperty(element, "number");
+    ++propertyCount;
+
+    // Required inventory_path property
+    // Just verify it exists; cannot be parsed without variable values
+    getRequiredProperty(element, "inventory_path");
+    ++propertyCount;
+
+    // Required power_sequencers property
+    // Just verify it exists; cannot be parsed without variable values
+    getRequiredProperty(element, "power_sequencers");
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return {id, JSONRefWrapper{element}};
+}
 
 GPIO parseGPIO(const json& element,
                const std::map<std::string, std::string>& variables)

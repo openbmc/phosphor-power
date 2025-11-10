@@ -23,11 +23,14 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <functional> // for reference_wrapper
 #include <map>
 #include <memory>
 #include <string>
 #include <tuple>
 #include <vector>
+
+using json = nlohmann::json;
 
 namespace phosphor::power::sequencer::config_file_parser
 {
@@ -80,6 +83,21 @@ std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName);
 namespace internal
 {
 
+using JSONRefWrapper = std::reference_wrapper<const json>;
+
+/**
+ * Parses a JSON element containing a chassis_template object.
+ *
+ * Returns the template ID and a C++ reference_wrapper to the JSON element.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return template ID and reference_wrapper to JSON element
+ */
+std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
+    const json& element);
+
 /**
  * Parses a JSON element containing a GPIO.
  *
@@ -91,7 +109,7 @@ namespace internal
  * @param variables variables map used to expand variables in element value
  * @return GPIO object
  */
-GPIO parseGPIO(const nlohmann::json& element,
+GPIO parseGPIO(const json& element,
                const std::map<std::string, std::string>& variables);
 
 /**
@@ -106,8 +124,7 @@ GPIO parseGPIO(const nlohmann::json& element,
  * @return tuple containing bus and address
  */
 std::tuple<uint8_t, uint16_t> parseI2CInterface(
-    const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables);
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a power_sequencer object.
@@ -118,12 +135,12 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
  *
  * @param element JSON element
  * @param variables variables map used to expand variables in element value
- * @param services System services like hardware presence and the journal
+ * @param services system services like hardware presence and the journal
  * @return PowerSequencerDevice object
  */
 std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
-    const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables, Services& services);
+    const json& element, const std::map<std::string, std::string>& variables,
+    Services& services);
 
 /**
  * Parses a JSON element containing an array of power_sequencer objects.
@@ -134,12 +151,12 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
  *
  * @param element JSON element
  * @param variables variables map used to expand variables in element value
- * @param services System services like hardware presence and the journal
+ * @param services system services like hardware presence and the journal
  * @return vector of PowerSequencerDevice objects
  */
 std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
-    const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables, Services& services);
+    const json& element, const std::map<std::string, std::string>& variables,
+    Services& services);
 
 /**
  * Parses a JSON element containing a rail.
@@ -153,8 +170,7 @@ std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
  * @return Rail object
  */
 std::unique_ptr<Rail> parseRail(
-    const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables);
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of rails.
@@ -168,8 +184,7 @@ std::unique_ptr<Rail> parseRail(
  * @return vector of Rail objects
  */
 std::vector<std::unique_ptr<Rail>> parseRailArray(
-    const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables);
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses the JSON root element of the entire configuration file.
@@ -181,7 +196,7 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
  * @param element JSON element
  * @return vector of Rail objects
  */
-std::vector<std::unique_ptr<Rail>> parseRoot(const nlohmann::json& element);
+std::vector<std::unique_ptr<Rail>> parseRoot(const json& element);
 
 } // namespace internal
 
