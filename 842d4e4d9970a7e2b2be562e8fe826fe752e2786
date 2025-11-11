@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123cdf1c_1c4b525a",
+        "filename": "json_parser_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-11T22:21:36Z",
+      "side": 1,
+      "message": "C++ regex is known for being slow.  What if you just skipped this call and let it get to the first regex_search below and not even get into the while loop?",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 5
+      },
+      "revId": "842d4e4d9970a7e2b2be562e8fe826fe752e2786",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
