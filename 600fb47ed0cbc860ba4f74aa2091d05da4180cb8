@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "357777d8_8aa61451",
+        "filename": "phosphor-power-sequencer/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-11T22:28:07Z",
+      "side": 1,
+      "message": "nit: I\u0027m all for comments, but you have a good function name so not strictly necessary here.",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 41
+      },
+      "revId": "600fb47ed0cbc860ba4f74aa2091d05da4180cb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
