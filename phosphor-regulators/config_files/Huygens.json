@@ -1,0 +1,105 @@
+{
+    "comments": [
+        "phosphor-regulators configuration file for IBM Huygens systems"
+    ],
+
+    "rules": [
+        {
+            "comments": ["Rule to set PMBus PAGE to 0"],
+            "id": "set_page0_rule",
+            "actions": [
+                { "i2c_write_byte": { "register": "0x00", "value": "0x00" } }
+            ]
+        },
+
+        {
+            "comments": ["Rule to set PMBus PAGE to 1"],
+            "id": "set_page1_rule",
+            "actions": [
+                { "i2c_write_byte": { "register": "0x00", "value": "0x01" } }
+            ]
+        },
+
+        {
+            "comments": ["Rule to set output voltage of a PMBus regulator"],
+            "id": "set_voltage_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Write volts value to VOUT_COMMAND in linear format.",
+                        "Get volts value from configuration.  Get exponent",
+                        "from VOUT_MODE.  Verify write was successful."
+                    ],
+                    "pmbus_write_vout_command": {
+                        "format": "linear",
+                        "is_verified": true
+                    }
+                }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of PAGE 0 of a PMBus regulator"
+            ],
+            "id": "set_voltage_page0_rule",
+            "actions": [
+                { "run_rule": "set_page0_rule" },
+                { "run_rule": "set_voltage_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of PAGE 1 of a PMBus regulator"
+            ],
+            "id": "set_voltage_page1_rule",
+            "actions": [
+                { "run_rule": "set_page1_rule" },
+                { "run_rule": "set_voltage_rule" }
+            ]
+        },
+
+        {
+            "comments": [
+                "Rule to set output voltage of a PMBus regulator using",
+                "PMBus OPERATION and VOUT_COMMAND"
+            ],
+            "id": "set_operation_and_voltage_rule",
+            "actions": [
+                {
+                    "comments": [
+                        "Set PMBus OPERATION to 0x80 indicating output voltage",
+                        "is set by the PMBus VOUT_COMMAND"
+                    ],
+                    "i2c_write_byte": { "register": "0x01", "value": "0x80" }
+                },
+
+                {
+                    "comments": [
+                        "Set the output voltage using the PMBus VOUT_COMMAND"
+                    ],
+                    "run_rule": "set_voltage_rule"
+                },
+
+                {
+                    "comments": [
+                        "Set PMBus OPERATION to 0xB0 indicating output voltage",
+                        "will now be set by AVSBus (AVS_VOUT_COMMAND).",
+                        "Hardware settings cause the VOUT_COMMAND value to be",
+                        "the initial voltage value for AVSBus."
+                    ],
+                    "i2c_write_byte": { "register": "0x01", "value": "0xB0" }
+                }
+            ]
+        }
+    ],
+
+    "chassis": [
+        {
+            "comments": ["Chassis (drawer) 1", "Note: Devices not defined yet"],
+            "number": 1,
+            "inventory_path": "system/chassis"
+        }
+    ]
+}
