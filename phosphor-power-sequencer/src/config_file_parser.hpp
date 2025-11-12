@@ -99,7 +99,8 @@ using JSONRefWrapper = std::reference_wrapper<const json>;
  * @return Chassis object
  */
 std::unique_ptr<Chassis> parseChassis(
-    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
     Services& services);
 
 /**
@@ -115,7 +116,8 @@ std::unique_ptr<Chassis> parseChassis(
  * @return vector of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
-    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
     Services& services);
 
 /**
@@ -142,12 +144,39 @@ std::unique_ptr<Chassis> parseChassisProperties(
  *
  * Returns the template ID and a C++ reference_wrapper to the JSON element.
  *
+ * A chassis_template object cannot be fully parsed in isolation. It is a
+ * template that contains variables.
+ *
+ * The chassis_template object is used by one or more chassis objects to avoid
+ * duplicate JSON. The chassis objects define chassis-specific values for the
+ * template variables.
+ *
+ * When the chassis object is parsed, the chassis_template JSON will be
+ * re-parsed, and the template variables will be replaced with the
+ * chassis-specific values.
+ *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
  * @return template ID and reference_wrapper to JSON element
  */
 std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
+    const json& element);
+
+/**
+ * Parses a JSON element containing an array of chassis_template objects.
+ *
+ * Returns a map of template IDs to chassis_template JSON elements.
+ *
+ * Note that chassis_template objects cannot be fully parsed in isolation. See
+ * parseChassisTemplate() for more information.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return chassis templates map
+ */
+std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     const json& element);
 
 /**

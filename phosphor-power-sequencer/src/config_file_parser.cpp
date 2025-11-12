@@ -95,7 +95,8 @@ namespace internal
 {
 
 std::unique_ptr<Chassis> parseChassis(
-    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
     Services& services)
 {
     verifyIsObject(element);
@@ -148,7 +149,8 @@ std::unique_ptr<Chassis> parseChassis(
 }
 
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
-    const json& element, std::map<std::string, JSONRefWrapper> chassisTemplates,
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
     Services& services)
 {
     verifyIsArray(element);
@@ -249,6 +251,18 @@ std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
     verifyPropertyCount(element, propertyCount);
 
     return {id, JSONRefWrapper{element}};
+}
+
+std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
+    const json& element)
+{
+    verifyIsArray(element);
+    std::map<std::string, JSONRefWrapper> chassisTemplates;
+    for (auto& chassisTemplateElement : element)
+    {
+        chassisTemplates.emplace(parseChassisTemplate(chassisTemplateElement));
+    }
+    return chassisTemplates;
 }
 
 GPIO parseGPIO(const json& element,
