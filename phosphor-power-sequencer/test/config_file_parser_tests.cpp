@@ -1198,6 +1198,90 @@ TEST(ConfigFileParserTests, ParseChassisTemplate)
     }
 }
 
+TEST(ConfigFileParserTests, ParseChassisTemplateArray)
+{
+    // Test where works: Array is empty
+    {
+        const json element = R"(
+            [
+            ]
+        )"_json;
+        auto chassisTemplates = parseChassisTemplateArray(element);
+        EXPECT_EQ(chassisTemplates.size(), 0);
+    }
+
+    // Test where works: Array is not empty
+    {
+        const json element = R"(
+            [
+              {
+                "id": "foo_chassis",
+                "number": "${chassis_number}",
+                "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+                "power_sequencers": []
+              },
+              {
+                "id": "bar_chassis",
+                "number": "${number}",
+                "inventory_path": "/xyz/openbmc_project/inventory/system/bar_chassis${number}",
+                "power_sequencers": []
+              }
+            ]
+        )"_json;
+        auto chassisTemplates = parseChassisTemplateArray(element);
+        EXPECT_EQ(chassisTemplates.size(), 2);
+        EXPECT_EQ(chassisTemplates.at("foo_chassis").get()["number"],
+                  "${chassis_number}");
+        EXPECT_EQ(
+            chassisTemplates.at("foo_chassis").get()["inventory_path"],
+            "/xyz/openbmc_project/inventory/system/chassis${chassis_number}");
+        EXPECT_EQ(chassisTemplates.at("bar_chassis").get()["number"],
+                  "${number}");
+        EXPECT_EQ(chassisTemplates.at("bar_chassis").get()["inventory_path"],
+                  "/xyz/openbmc_project/inventory/system/bar_chassis${number}");
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+                "foo": "bar"
+            }
+        )"_json;
+        parseChassisTemplateArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Element within array is invalid
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "id": "foo_chassis",
+                "number": "${chassis_number}",
+                "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+                "power_sequencers": []
+              },
+              {
+                "id": "bar_chassis"
+              }
+            ]
+        )"_json;
+        parseChassisTemplateArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseGPIO)
 {
     // Test where works: Only required properties specified
