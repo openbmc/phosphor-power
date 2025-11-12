@@ -252,18 +252,18 @@ TEST(ConfigFileParserTests, Parse)
     {
         const json configFileContents = R"(
             {
-                "rails": [
-                    {
-                        "name": "VDD_CPU0",
-                        "page": 11,
-                        "check_status_vout": true
-                    },
-                    {
-                        "name": "VCS_CPU1",
-                        "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
-                        "gpio": { "line": 60 }
-                    }
-                ]
+              "chassis": [
+                {
+                  "number": 1,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                },
+                {
+                  "number": 2,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis2",
+                  "power_sequencers": []
+                }
+              ]
             }
         )"_json;
 
@@ -271,28 +271,36 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        auto rails = parse(pathName);
+        MockServices services{};
+        auto chassis = parse(pathName, services);
 
-        EXPECT_EQ(rails.size(), 2);
-        EXPECT_EQ(rails[0]->getName(), "VDD_CPU0");
-        EXPECT_EQ(rails[1]->getName(), "VCS_CPU1");
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
+        EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
     }
 
     // Test where fails: File does not exist
     {
         fs::path pathName{"/tmp/non_existent_file"};
-        EXPECT_THROW(parse(pathName), ConfigFileParserError);
+        MockServices services{};
+        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
     }
 
     // Test where fails: File is not readable
     {
         const json configFileContents = R"(
             {
-                "rails": [
-                    {
-                        "name": "VDD_CPU0"
-                    }
-                ]
+              "chassis": [
+                {
+                  "number": 1,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                }
+              ]
             }
         )"_json;
 
@@ -301,7 +309,8 @@ TEST(ConfigFileParserTests, Parse)
         writeConfigFile(pathName, configFileContents);
 
         chmod(pathName.c_str(), 0222);
-        EXPECT_THROW(parse(pathName), ConfigFileParserError);
+        MockServices services{};
+        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
     }
 
     // Test where fails: File is not valid JSON
@@ -312,7 +321,8 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        EXPECT_THROW(parse(pathName), ConfigFileParserError);
+        MockServices services{};
+        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
     }
 
     // Test where fails: JSON does not conform to config file format
@@ -323,7 +333,8 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        EXPECT_THROW(parse(pathName), ConfigFileParserError);
+        MockServices services{};
+        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
     }
 }
 
@@ -2516,35 +2527,83 @@ TEST(ConfigFileParserTests, ParseRailArray)
 
 TEST(ConfigFileParserTests, ParseRoot)
 {
-    // Test where works
+    // Test where works: Only required properties specified
     {
         const json element = R"(
             {
-                "rails": [
-                    {
-                        "name": "VDD_CPU0",
-                        "page": 11,
-                        "check_status_vout": true
-                    },
-                    {
-                        "name": "VCS_CPU1",
-                        "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1",
-                        "gpio": { "line": 60 }
-                    }
-                ]
+              "chassis": [
+                {
+                  "number": 1,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                },
+                {
+                  "number": 2,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis2",
+                  "power_sequencers": []
+                }
+              ]
             }
         )"_json;
-        auto rails = parseRoot(element);
-        EXPECT_EQ(rails.size(), 2);
-        EXPECT_EQ(rails[0]->getName(), "VDD_CPU0");
-        EXPECT_EQ(rails[1]->getName(), "VCS_CPU1");
+        MockServices services{};
+        auto chassis = parseRoot(element, services);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
+        EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "Config file for a FooBar one-chassis system" ],
+              "chassis_templates": [
+                {
+                  "id": "foo_chassis",
+                  "number": "${chassis_number}",
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+                  "power_sequencers": []
+                },
+                {
+                  "id": "bar_chassis",
+                  "number": "${chassis_number}",
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/bar_chassis${chassis_number}",
+                  "power_sequencers": []
+                }
+              ],
+              "chassis": [
+                {
+                  "template_id": "foo_chassis",
+                  "template_variable_values": { "chassis_number": "2" }
+                },
+                {
+                  "template_id": "bar_chassis",
+                  "template_variable_values": { "chassis_number": "3" }
+                }
+              ]
+            }
+        )"_json;
+        MockServices services{};
+        auto chassis = parseRoot(element, services);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 2);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis[1]->getNumber(), 3);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/bar_chassis3");
     }
 
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "VDD_CPU0", "VCS_CPU1" ] )"_json;
-        parseRoot(element);
+        MockServices services{};
+        parseRoot(element, services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2552,30 +2611,48 @@ TEST(ConfigFileParserTests, ParseRoot)
         EXPECT_STREQ(e.what(), "Element is not an object");
     }
 
-    // Test where fails: Required rails property not specified
+    // Test where fails: Required chassis property not specified
     try
     {
         const json element = R"(
             {
+              "comments": [ "Config file for a FooBar one-chassis system" ],
+              "chassis_templates": [
+                {
+                  "id": "foo_chassis",
+                  "number": "${chassis_number}",
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
+                  "power_sequencers": []
+                }
+              ]
             }
         )"_json;
-        parseRoot(element);
+        MockServices services{};
+        parseRoot(element, services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Required property missing: rails");
+        EXPECT_STREQ(e.what(), "Required property missing: chassis");
     }
 
-    // Test where fails: rails value is invalid
+    // Test where fails: chassis_templates value is invalid
     try
     {
         const json element = R"(
             {
-                "rails": 31
+              "chassis_templates": true,
+              "chassis": [
+                {
+                  "number": 1,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                }
+              ]
             }
         )"_json;
-        parseRoot(element);
+        MockServices services{};
+        parseRoot(element, services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2583,22 +2660,46 @@ TEST(ConfigFileParserTests, ParseRoot)
         EXPECT_STREQ(e.what(), "Element is not an array");
     }
 
+    // Test where fails: chassis value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "chassis": [
+                {
+                  "number": "one",
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                }
+              ]
+            }
+        )"_json;
+        MockServices services{};
+        parseRoot(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
     // Test where fails: Invalid property specified
     try
     {
         const json element = R"(
             {
-                "rails": [
-                    {
-                        "name": "VDD_CPU0",
-                        "page": 11,
-                        "check_status_vout": true
-                    }
-                ],
-                "foo": true
+              "chassis": [
+                {
+                  "number": 1,
+                  "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+                  "power_sequencers": []
+                }
+              ],
+              "foo": true
             }
         )"_json;
-        parseRoot(element);
+        MockServices services{};
+        parseRoot(element, services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)

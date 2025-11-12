@@ -371,14 +371,14 @@ std::filesystem::path PowerControl::findConfigFile()
 }
 
 bool PowerControl::parseConfigFile(const std::filesystem::path& configFile,
-                                   std::vector<std::unique_ptr<Rail>>& rails)
+                                   std::vector<std::unique_ptr<Rail>>&)
 {
     // Parse JSON configuration file
     bool wasParsed{false};
     try
     {
-        rails = config_file_parser::parse(configFile);
-        wasParsed = true;
+        config_file_parser::parse(configFile, services);
+        // wasParsed = true;
     }
     catch (const std::exception& e)
     {
