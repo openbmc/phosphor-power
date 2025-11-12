@@ -22,6 +22,30 @@
       },
       "revId": "3d799dd7162b813568c60052585596f41b97e0eb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65b8f513_fc8986ce",
+        "filename": "phosphor-power-sequencer/src/config_file_parser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-12T16:57:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff06ccba_b0393bae",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 8
+      },
+      "revId": "3d799dd7162b813568c60052585596f41b97e0eb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
