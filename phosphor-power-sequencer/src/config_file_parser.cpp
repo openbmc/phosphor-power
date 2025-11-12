@@ -74,7 +74,8 @@ std::filesystem::path find(
     return pathName;
 }
 
-std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
+std::vector<std::unique_ptr<Chassis>> parse(
+    const std::filesystem::path& pathName, Services& services)
 {
     try
     {
@@ -83,7 +84,7 @@ std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName)
         json rootElement = json::parse(file);
 
         // Parse tree of JSON elements and return corresponding C++ objects
-        return internal::parseRoot(rootElement);
+        return internal::parseRoot(rootElement, services);
     }
     catch (const std::exception& e)
     {
@@ -482,23 +483,37 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
     return rails;
 }
 
-std::vector<std::unique_ptr<Rail>> parseRoot(const json& element)
+std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
+                                                Services& services)
 {
-    std::map<std::string, std::string> variables{};
-
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
-    // Required rails property
-    const json& railsElement = getRequiredProperty(element, "rails");
-    std::vector<std::unique_ptr<Rail>> rails =
-        parseRailArray(railsElement, variables);
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Optional chassis_templates property
+    std::map<std::string, JSONRefWrapper> chassisTemplates{};
+    auto chassisTemplatesIt = element.find("chassis_templates");
+    if (chassisTemplatesIt != element.end())
+    {
+        chassisTemplates = parseChassisTemplateArray(*chassisTemplatesIt);
+        ++propertyCount;
+    }
+
+    // Required chassis property
+    const json& chassisElement = getRequiredProperty(element, "chassis");
+    std::vector<std::unique_ptr<Chassis>> chassis =
+        parseChassisArray(chassisElement, chassisTemplates, services);
     ++propertyCount;
 
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return rails;
+    return chassis;
 }
 
 std::map<std::string, std::string> parseVariables(const json& element)

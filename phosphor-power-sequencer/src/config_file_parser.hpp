@@ -69,14 +69,16 @@ std::filesystem::path find(
 /**
  * Parses the specified JSON configuration file.
  *
- * Returns the corresponding C++ Rail objects.
+ * Returns the corresponding C++ Chassis objects.
  *
  * Throws a ConfigFileParserError if an error occurs.
  *
  * @param pathName configuration file path name
- * @return vector of Rail objects
+ * @param services system services like hardware presence and the journal
+ * @return vector of Chassis objects
  */
-std::vector<std::unique_ptr<Rail>> parse(const std::filesystem::path& pathName);
+std::vector<std::unique_ptr<Chassis>> parse(
+    const std::filesystem::path& pathName, Services& services);
 
 /*
  * Internal implementation details for parse()
@@ -270,14 +272,16 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
 /**
  * Parses the JSON root element of the entire configuration file.
  *
- * Returns the corresponding C++ Rail objects.
+ * Returns the corresponding C++ Chassis objects.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
- * @return vector of Rail objects
+ * @param services system services like hardware presence and the journal
+ * @return vector of Chassis objects
  */
-std::vector<std::unique_ptr<Rail>> parseRoot(const json& element);
+std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
+                                                Services& services);
 
 /**
  * Parses a JSON element containing an object with variable names and values.
