@@ -3,11 +3,9 @@
 #include "config.h"
 
 #include "compatible_system_types_finder.hpp"
-#include "device_finder.hpp"
 #include "power_interface.hpp"
-#include "power_sequencer_device.hpp"
-#include "rail.hpp"
 #include "services.hpp"
+#include "system.hpp"
 
 #include <gpiod.hpp>
 #include <sdbusplus/bus.hpp>
@@ -18,8 +16,8 @@
 
 #include <chrono>
 #include <filesystem>
+#include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -76,13 +74,6 @@ class PowerControl : public PowerObject
      */
     void compatibleSystemTypesFound(const std::vector<std::string>& types);
 
-    /**
-     * Callback that is called when a power sequencer device is found.
-     *
-     * @param properties Properties of device that was found
-     */
-    void deviceFound(const DeviceProperties& properties);
-
   private:
     /**
      * The D-Bus bus object
@@ -106,19 +97,12 @@ class PowerControl : public PowerObject
     std::vector<std::string> compatibleSystemTypes;
 
     /**
-     * Object that finds the power sequencer device in the system.
+     * Computer system being controlled and monitored by the BMC.
+     *
+     * Contains the information loaded from the JSON configuration file.
+     * Contains nullptr if the configuration file has not been loaded.
      */
-    std::unique_ptr<DeviceFinder> deviceFinder;
-
-    /**
-     * Power sequencer device properties.
-     */
-    std::optional<DeviceProperties> deviceProperties;
-
-    /**
-     * Power sequencer device that enables and monitors the voltage rails.
-     */
-    std::unique_ptr<PowerSequencerDevice> device;
+    std::unique_ptr<System> system;
 
     /**
      * Indicates if a failure has already been found. Cleared at power on.
@@ -215,6 +199,22 @@ class PowerControl : public PowerObject
     void onFailure(bool wasTimeOut);
 
     /**
+     * Checks whether a pgood fault has occurred on one of the rails being
+     * monitored.
+     *
+     * If a pgood fault was found, this method returns a string containing the
+     * error that should be logged.  If no fault was found, an empty string is
+     * returned.
+     *
+     * @param additionalData Additional data to include in the error log if
+     *                       a pgood fault was found
+     * @return error that should be logged if a pgood fault was found, or an
+     *         empty string if no pgood fault was found
+     */
+    std::string findPgoodFault(
+        std::map<std::string, std::string>& additionalData);
+
+    /**
      * Polling method for monitoring the system power good
      */
     void pollPgood();
@@ -225,14 +225,14 @@ class PowerControl : public PowerObject
     void setUpGpio();
 
     /**
-     * Loads the JSON configuration file and creates the power sequencer device
-     * object.
+     * Loads the JSON configuration file.
      *
-     * Does nothing if the compatible system types or device properties have not
-     * been found yet.  These are obtained from D-Bus.  The order in which they
-     * are found and the time to find them varies.
+     * Looks for the config file using findConfigFile().
+     *
+     * If the config file is found, it is parsed and the resulting information
+     * is stored in the system data member.
      */
-    void loadConfigFileAndCreateDevice();
+    void loadConfigFile();
 
     /**
      * Finds the JSON configuration file for the current system based on the
@@ -243,27 +243,6 @@ class PowerControl : public PowerObject
      * @return absolute path to the config file, or empty path if file not found
      */
     std::filesystem::path findConfigFile();
-
-    /**
-     * Parses the specified JSON configuration file.
-     *
-     * Returns the resulting vector of Rail objects in the output parameter.
-     *
-     * @param configFile Absolute path to the config file
-     * @param rails Rail objects within the config file
-     * @return true if file was parsed successfully, false otherwise
-     */
-    bool parseConfigFile(const std::filesystem::path& configFile,
-                         std::vector<std::unique_ptr<Rail>>& rails);
-
-    /**
-     * Creates the power sequencer device object based on the device properties.
-     *
-     * Does nothing if the device properties have not been found yet.
-     *
-     * @param rails Voltage rails that are enabled and monitored by the device
-     */
-    void createDevice(std::vector<std::unique_ptr<Rail>> rails);
 };
 
 } // namespace phosphor::power::sequencer
