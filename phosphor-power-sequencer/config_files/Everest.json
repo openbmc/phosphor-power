@@ -1,205 +1,222 @@
 {
-    "rails": [
+    "comments": [
+        "phosphor-power-sequencer configuration file for IBM Everest systems"
+    ],
+    "chassis": [
         {
-            "name": "12.0V",
-            "page": 0,
-            "is_power_supply_rail": true
-        },
-        {
-            "name": "3V3IO",
-            "page": 1,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP03_AVDD",
-            "page": 18,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP12_AVDD",
-            "page": 19,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP0_VDN",
-            "page": 20,
-            "check_status_vout": true,
-            "gpio": { "line": 72 }
-        },
-        {
-            "name": "CP1_VDN",
-            "page": 21,
-            "check_status_vout": true,
-            "gpio": { "line": 73 }
-        },
-        {
-            "name": "CP2_VDN",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 22,
-            "check_status_vout": true,
-            "gpio": { "line": 74 }
-        },
-        {
-            "name": "CP3_VDN",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 23,
-            "check_status_vout": true,
-            "gpio": { "line": 75 }
-        },
-        {
-            "name": "CP0_VDD0",
-            "page": 2,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP1_VDD0",
-            "page": 4,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP2_VDD0",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 6,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP3_VDD0",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 8,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP0_VDD1",
-            "page": 3,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP1_VDD1",
-            "page": 5,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP2_VDD1",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 7,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP3_VDD1",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 9,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP0_VCS0",
-            "page": 10,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP1_VCS0",
-            "page": 12,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP2_VCS0",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 14,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP3_VCS0",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 16,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP0_VCS1",
-            "page": 11,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP1_VCS1",
-            "page": 13,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP2_VCS1",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 15,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP3_VCS1",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 17,
-            "check_status_vout": true,
-            "compare_voltage_to_limit": true
-        },
-        {
-            "name": "CP0_VIO",
-            "page": 24,
-            "check_status_vout": true,
-            "gpio": { "line": 76 }
-        },
-        {
-            "name": "CP1_VIO",
-            "page": 25,
-            "check_status_vout": true,
-            "gpio": { "line": 77 }
-        },
-        {
-            "name": "CP2_VIO",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 26,
-            "check_status_vout": true,
-            "gpio": { "line": 78 }
-        },
-        {
-            "name": "CP3_VIO",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 27,
-            "check_status_vout": true,
-            "gpio": { "line": 79 }
-        },
-        {
-            "name": "CP0_VPCIE",
-            "page": 28,
-            "gpio": { "line": 59 }
-        },
-        {
-            "name": "CP1_VPCIE",
-            "page": 29,
-            "gpio": { "line": 60 }
-        },
-        {
-            "name": "CP2_VPCIE",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
-            "page": 30,
-            "gpio": { "line": 61 }
-        },
-        {
-            "name": "CP3_VPCIE",
-            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
-            "page": 31,
-            "gpio": { "line": 62 }
+            "number": 1,
+            "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+            "power_sequencers": [
+                {
+                    "type": "UCD90320",
+                    "i2c_interface": { "bus": 8, "address": "0x11" },
+                    "power_control_gpio_name": "power-chassis-control",
+                    "power_good_gpio_name": "power-chassis-good",
+                    "rails": [
+                        {
+                            "name": "12.0V",
+                            "page": 0,
+                            "is_power_supply_rail": true
+                        },
+                        {
+                            "name": "3V3IO",
+                            "page": 1,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP03_AVDD",
+                            "page": 18,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP12_AVDD",
+                            "page": 19,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP0_VDN",
+                            "page": 20,
+                            "check_status_vout": true,
+                            "gpio": { "line": 72 }
+                        },
+                        {
+                            "name": "CP1_VDN",
+                            "page": 21,
+                            "check_status_vout": true,
+                            "gpio": { "line": 73 }
+                        },
+                        {
+                            "name": "CP2_VDN",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 22,
+                            "check_status_vout": true,
+                            "gpio": { "line": 74 }
+                        },
+                        {
+                            "name": "CP3_VDN",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 23,
+                            "check_status_vout": true,
+                            "gpio": { "line": 75 }
+                        },
+                        {
+                            "name": "CP0_VDD0",
+                            "page": 2,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP1_VDD0",
+                            "page": 4,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP2_VDD0",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 6,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP3_VDD0",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 8,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP0_VDD1",
+                            "page": 3,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP1_VDD1",
+                            "page": 5,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP2_VDD1",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 7,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP3_VDD1",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 9,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP0_VCS0",
+                            "page": 10,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP1_VCS0",
+                            "page": 12,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP2_VCS0",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 14,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP3_VCS0",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 16,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP0_VCS1",
+                            "page": 11,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP1_VCS1",
+                            "page": 13,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP2_VCS1",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 15,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP3_VCS1",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 17,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "CP0_VIO",
+                            "page": 24,
+                            "check_status_vout": true,
+                            "gpio": { "line": 76 }
+                        },
+                        {
+                            "name": "CP1_VIO",
+                            "page": 25,
+                            "check_status_vout": true,
+                            "gpio": { "line": 77 }
+                        },
+                        {
+                            "name": "CP2_VIO",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 26,
+                            "check_status_vout": true,
+                            "gpio": { "line": 78 }
+                        },
+                        {
+                            "name": "CP3_VIO",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 27,
+                            "check_status_vout": true,
+                            "gpio": { "line": 79 }
+                        },
+                        {
+                            "name": "CP0_VPCIE",
+                            "page": 28,
+                            "gpio": { "line": 59 }
+                        },
+                        {
+                            "name": "CP1_VPCIE",
+                            "page": 29,
+                            "gpio": { "line": 60 }
+                        },
+                        {
+                            "name": "CP2_VPCIE",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm2/cpu0",
+                            "page": 30,
+                            "gpio": { "line": 61 }
+                        },
+                        {
+                            "name": "CP3_VPCIE",
+                            "presence": "/xyz/openbmc_project/inventory/system/chassis/motherboard/dcm3/cpu0",
+                            "page": 31,
+                            "gpio": { "line": 62 }
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
