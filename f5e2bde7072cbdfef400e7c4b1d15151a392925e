@@ -46,6 +46,30 @@
       },
       "revId": "f5e2bde7072cbdfef400e7c4b1d15151a392925e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6225b84_d6cbcc07",
+        "filename": "services/phosphor-chassis-power.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-13T21:30:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3f2f83e7_f1cdafde",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 14
+      },
+      "revId": "f5e2bde7072cbdfef400e7c4b1d15151a392925e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
