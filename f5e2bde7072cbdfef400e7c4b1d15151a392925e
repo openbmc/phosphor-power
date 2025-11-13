@@ -22,6 +22,30 @@
       },
       "revId": "f5e2bde7072cbdfef400e7c4b1d15151a392925e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f2f83e7_f1cdafde",
+        "filename": "services/phosphor-chassis-power.service",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2025-11-13T18:27:27Z",
+      "side": 1,
+      "message": "I talked with Shawn and Derek about restart policy. Some of the power services such as the regulators one have a restart policy set to \u0027on-failure\u0027, which only differs from \u0027always\u0027 in that it doesn\u0027t restart on good path - https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html#Restart\u003d\n\nWe discussed setting a restart policy is probably ok since we want these power apps to always be running, and openbmc has a rate limiting policy where if a service restarts multiple times in a certain amount of time it gets disabled.",
+      "parentUuid": "787404e1_b04035b4",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 14
+      },
+      "revId": "f5e2bde7072cbdfef400e7c4b1d15151a392925e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
