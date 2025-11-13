@@ -16,17 +16,15 @@
 
 #include "power_control.hpp"
 
+#include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "format_utils.hpp"
 #include "types.hpp"
-#include "ucd90160_device.hpp"
-#include "ucd90320_device.hpp"
 #include "utility.hpp"
 
 #include <exception>
 #include <format>
 #include <functional>
-#include <map>
 #include <span>
 #include <stdexcept>
 #include <thread>
@@ -56,9 +54,6 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
 
     compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
         bus, std::bind_front(&PowerControl::compatibleSystemTypesFound, this));
-
-    deviceFinder = std::make_unique<DeviceFinder>(
-        bus, std::bind_front(&PowerControl::deviceFound, this));
 
     setUpGpio();
 }
@@ -97,20 +92,8 @@ void PowerControl::onFailure(bool wasTimeOut)
     std::string error;
     std::map<std::string, std::string> additionalData{};
 
-    // Check if pgood fault occurred on rail monitored by power sequencer device
-    if (device)
-    {
-        try
-        {
-            error = device->findPgoodFault(services, powerSupplyError,
-                                           additionalData);
-        }
-        catch (const std::exception& e)
-        {
-            services.logErrorMsg(e.what());
-            additionalData.emplace("ERROR", e.what());
-        }
-    }
+    // Check if pgood fault occurred on one of the rails being monitored
+    error = findPgoodFault(additionalData);
 
     // If fault was not isolated to a voltage rail, select a more generic error
     if (error.empty())
@@ -135,6 +118,38 @@ void PowerControl::onFailure(bool wasTimeOut)
     {
         services.createBMCDump();
     }
+}
+
+std::string PowerControl::findPgoodFault(
+    std::map<std::string, std::string>& additionalData)
+{
+    // Note: This code is temporary. It will be replaced when additional
+    // multi-chassis support is implementated in this application.
+    std::string error{};
+    if (system)
+    {
+        try
+        {
+            for (auto& chassis : system->getChassis())
+            {
+                for (auto& powerSequencer : chassis->getPowerSequencers())
+                {
+                    error = powerSequencer->findPgoodFault(
+                        services, powerSupplyError, additionalData);
+                    if (!error.empty())
+                    {
+                        return error;
+                    }
+                }
+            }
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(e.what());
+            additionalData.emplace("ERROR", e.what());
+        }
+    }
+    return error;
 }
 
 void PowerControl::pollPgood()
@@ -274,26 +289,8 @@ void PowerControl::compatibleSystemTypesFound(
         // Store compatible system types
         compatibleSystemTypes = types;
 
-        // Load config file and create device object if possible
-        loadConfigFileAndCreateDevice();
-    }
-}
-
-void PowerControl::deviceFound(const DeviceProperties& properties)
-{
-    // If we don't already have device properties
-    if (!deviceProperties)
-    {
-        services.logInfoMsg(std::format(
-            "Power sequencer device found: type={}, name={}, bus={:d}, address={:#02x}",
-            properties.type, properties.name, properties.bus,
-            properties.address));
-
-        // Store device properties
-        deviceProperties = properties;
-
-        // Load config file and create device object if possible
-        loadConfigFileAndCreateDevice();
+        // Load config file that matches one of the compatible system types
+        loadConfigFile();
     }
 }
 
@@ -326,23 +323,22 @@ void PowerControl::setUpGpio()
     services.logInfoMsg(std::format("Pgood state: {}", pgoodState));
 }
 
-void PowerControl::loadConfigFileAndCreateDevice()
+void PowerControl::loadConfigFile()
 {
-    // If compatible system types and device properties have been found
-    if (!compatibleSystemTypes.empty() && deviceProperties)
+    try
     {
-        // Find the JSON configuration file
         std::filesystem::path configFile = findConfigFile();
         if (!configFile.empty())
         {
-            // Parse the JSON configuration file
-            std::vector<std::unique_ptr<Rail>> rails;
-            if (parseConfigFile(configFile, rails))
-            {
-                // Create the power sequencer device object
-                createDevice(std::move(rails));
-            }
+            std::vector<std::unique_ptr<Chassis>> chassis =
+                config_file_parser::parse(configFile, services);
+            system = std::make_unique<System>(std::move(chassis));
         }
+    }
+    catch (const std::exception& e)
+    {
+        services.logErrorMsg(std::format(
+            "Unable to parse JSON configuration file: {}", e.what()));
     }
 }
 
@@ -368,61 +364,6 @@ std::filesystem::path PowerControl::findConfigFile()
         }
     }
     return configFile;
-}
-
-bool PowerControl::parseConfigFile(const std::filesystem::path& configFile,
-                                   std::vector<std::unique_ptr<Rail>>&)
-{
-    // Parse JSON configuration file
-    bool wasParsed{false};
-    try
-    {
-        config_file_parser::parse(configFile, services);
-        // wasParsed = true;
-    }
-    catch (const std::exception& e)
-    {
-        services.logErrorMsg(std::format(
-            "Unable to parse JSON configuration file: {}", e.what()));
-    }
-    return wasParsed;
-}
-
-void PowerControl::createDevice(std::vector<std::unique_ptr<Rail>> rails)
-{
-    // Create power sequencer device based on device properties
-    if (deviceProperties)
-    {
-        try
-        {
-            if (deviceProperties->type == UCD90160Device::deviceName)
-            {
-                device = std::make_unique<UCD90160Device>(
-                    deviceProperties->bus, deviceProperties->address,
-                    "power-chassis-control", "power-chassis-good",
-                    std::move(rails), services);
-            }
-            else if (deviceProperties->type == UCD90320Device::deviceName)
-            {
-                device = std::make_unique<UCD90320Device>(
-                    deviceProperties->bus, deviceProperties->address,
-                    "power-chassis-control", "power-chassis-good",
-                    std::move(rails), services);
-            }
-            else
-            {
-                throw std::runtime_error{std::format(
-                    "Unsupported device type: {}", deviceProperties->type)};
-            }
-            services.logInfoMsg(std::format(
-                "Power sequencer device created: {}", device->getName()));
-        }
-        catch (const std::exception& e)
-        {
-            services.logErrorMsg(
-                std::format("Unable to create device object: {}", e.what()));
-        }
-    }
 }
 
 } // namespace phosphor::power::sequencer
