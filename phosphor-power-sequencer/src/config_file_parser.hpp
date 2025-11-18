@@ -182,18 +182,18 @@ std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     const json& element);
 
 /**
- * Parses a JSON element containing a GPIO.
+ * Parses a JSON element containing a gpio object.
  *
- * Returns the corresponding C++ GPIO object.
+ * Returns the corresponding C++ PgoodGPIO object.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
  * @param variables variables map used to expand variables in element value
- * @return GPIO object
+ * @return PgoodGPIO object
  */
-GPIO parseGPIO(const json& element,
-               const std::map<std::string, std::string>& variables);
+PgoodGPIO parseGPIO(const json& element,
+                    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_interface object.

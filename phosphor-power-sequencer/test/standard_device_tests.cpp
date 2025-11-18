@@ -98,7 +98,7 @@ std::unique_ptr<Rail> createRailStatusVout(
     std::optional<uint8_t> page{pageNum};
     bool checkStatusVout{true};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
                                   checkStatusVout, compareVoltageToLimit, gpio);
 }
@@ -120,7 +120,7 @@ std::unique_ptr<Rail> createRailGPIO(
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
     bool activeLow{false};
-    std::optional<GPIO> gpio{GPIO{gpioLine, activeLow}};
+    std::optional<PgoodGPIO> gpio{PgoodGPIO{gpioLine, activeLow}};
     return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
                                   checkStatusVout, compareVoltageToLimit, gpio);
 }
@@ -141,7 +141,7 @@ std::unique_ptr<Rail> createRailOutputVoltage(
     std::optional<uint8_t> page{pageNum};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{true};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
                                   checkStatusVout, compareVoltageToLimit, gpio);
 }

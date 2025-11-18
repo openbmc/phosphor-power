@@ -266,8 +266,8 @@ std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     return chassisTemplates;
 }
 
-GPIO parseGPIO(const json& element,
-               const std::map<std::string, std::string>& variables)
+PgoodGPIO parseGPIO(const json& element,
+                    const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -289,7 +289,7 @@ GPIO parseGPIO(const json& element,
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return GPIO(line, activeLow);
+    return PgoodGPIO(line, activeLow);
 }
 
 std::tuple<uint8_t, uint16_t> parseI2CInterface(
@@ -449,7 +449,7 @@ std::unique_ptr<Rail> parseRail(
     }
 
     // Optional gpio property
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     auto gpioIt = element.find("gpio");
     if (gpioIt != element.end())
     {

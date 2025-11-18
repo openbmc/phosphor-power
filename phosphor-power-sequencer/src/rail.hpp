@@ -31,12 +31,12 @@ namespace phosphor::power::sequencer
 class PowerSequencerDevice;
 
 /**
- * @struct GPIO
+ * @struct PgoodGPIO
  *
  * General Purpose Input/Output (GPIO) that can be read to obtain the pgood
  * status of a voltage rail.
  */
-struct GPIO
+struct PgoodGPIO
 {
     /**
      * The libgpiod line offset of the GPIO.
@@ -93,7 +93,7 @@ class Rail
                   const std::optional<std::string>& presence,
                   const std::optional<uint8_t>& page, bool isPowerSupplyRail,
                   bool checkStatusVout, bool compareVoltageToLimit,
-                  const std::optional<GPIO>& gpio) :
+                  const std::optional<PgoodGPIO>& gpio) :
         name{name}, presence{presence}, page{page},
         isPsuRail{isPowerSupplyRail}, checkStatusVout{checkStatusVout},
         compareVoltageToLimit{compareVoltageToLimit}, gpio{gpio}
@@ -173,7 +173,7 @@ class Rail
      *
      * @return GPIO
      */
-    const std::optional<GPIO>& getGPIO() const
+    const std::optional<PgoodGPIO>& getGPIO() const
     {
         return gpio;
     }
@@ -376,7 +376,7 @@ class Rail
     /**
      * GPIO to read to determine the pgood status of the rail.
      */
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 };
 
 } // namespace phosphor::power::sequencer

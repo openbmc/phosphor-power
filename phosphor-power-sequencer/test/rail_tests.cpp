@@ -32,18 +32,18 @@ using namespace phosphor::power::sequencer;
 using ::testing::Return;
 using ::testing::Throw;
 
-TEST(GPIOTests, Initialization)
+TEST(PgoodGPIOTests, Initialization)
 {
     // Default initialization
     {
-        GPIO gpio;
+        PgoodGPIO gpio;
         EXPECT_EQ(gpio.line, 0);
         EXPECT_FALSE(gpio.activeLow);
     }
 
     // Explicit initialization
     {
-        GPIO gpio{48, true};
+        PgoodGPIO gpio{48, true};
         EXPECT_EQ(gpio.line, 48);
         EXPECT_TRUE(gpio.activeLow);
     }
@@ -59,7 +59,7 @@ TEST(RailTests, Constructor)
         bool isPowerSupplyRail{true};
         bool checkStatusVout{false};
         bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
@@ -86,7 +86,7 @@ TEST(RailTests, Constructor)
         bool isPowerSupplyRail{false};
         bool checkStatusVout{true};
         bool compareVoltageToLimit{true};
-        std::optional<GPIO> gpio{GPIO(60, true)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(60, true)};
         Rail rail{name,
                   presence,
                   page,
@@ -118,7 +118,7 @@ TEST(RailTests, Constructor)
         bool isPowerSupplyRail{false};
         bool checkStatusVout{true};
         bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         EXPECT_THROW((Rail{name, presence, page, isPowerSupplyRail,
                            checkStatusVout, compareVoltageToLimit, gpio}),
                      std::invalid_argument);
@@ -132,7 +132,7 @@ TEST(RailTests, Constructor)
         bool isPowerSupplyRail{false};
         bool checkStatusVout{false};
         bool compareVoltageToLimit{true};
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         EXPECT_THROW((Rail{name, presence, page, isPowerSupplyRail,
                            checkStatusVout, compareVoltageToLimit, gpio}),
                      std::invalid_argument);
@@ -147,7 +147,7 @@ TEST(RailTests, GetName)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     Rail rail{name,
               presence,
               page,
@@ -166,7 +166,7 @@ TEST(RailTests, GetPresence)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where presence has no value
     {
@@ -206,7 +206,7 @@ TEST(RailTests, GetPage)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where page has no value
     {
@@ -244,7 +244,7 @@ TEST(RailTests, IsPowerSupplyRail)
     bool isPowerSupplyRail{true};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     Rail rail{name,
               presence,
               page,
@@ -264,7 +264,7 @@ TEST(RailTests, GetCheckStatusVout)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     Rail rail{name,
               presence,
               page,
@@ -284,7 +284,7 @@ TEST(RailTests, GetCompareVoltageToLimit)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{true};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
     Rail rail{name,
               presence,
               page,
@@ -307,7 +307,7 @@ TEST(RailTests, GetGPIO)
 
     // Test where gpio has no value
     {
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
@@ -320,7 +320,7 @@ TEST(RailTests, GetGPIO)
 
     // Test where gpio has a value
     {
-        std::optional<GPIO> gpio{GPIO(12, false)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(12, false)};
         Rail rail{name,
                   presence,
                   page,
@@ -341,7 +341,7 @@ TEST(RailTests, IsPresent)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where inventory path not specified; always returns true
     {
@@ -441,7 +441,7 @@ TEST(RailTests, GetStatusWord)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where page was not specified: Throws exception
     {
@@ -524,7 +524,7 @@ TEST(RailTests, GetStatusVout)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where page was not specified: Throws exception
     {
@@ -607,7 +607,7 @@ TEST(RailTests, GetReadVout)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where page was not specified: Throws exception
     {
@@ -690,7 +690,7 @@ TEST(RailTests, GetVoutUVFaultLimit)
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where page was not specified: Throws exception
     {
@@ -779,7 +779,7 @@ TEST(RailTests, HasPgoodFault)
     bool checkStatusVout{true};
     bool compareVoltageToLimit{true};
     bool activeLow{true};
-    std::optional<GPIO> gpio{GPIO(3, activeLow)};
+    std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
     Rail rail{name,
               presence,
               page,
@@ -901,7 +901,7 @@ TEST(RailTests, HasPgoodFaultStatusVout)
     std::optional<uint8_t> page{3};
     bool isPowerSupplyRail{false};
     bool compareVoltageToLimit{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where presence check defined: Rail is not present
     {
@@ -1114,7 +1114,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
         std::optional<uint8_t> page{3};
         bool activeLow{false};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1143,7 +1143,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu2"};
         std::optional<uint8_t> page{3};
         bool activeLow{false};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1170,7 +1170,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
     {
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{3};
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         Rail rail{name,
                   presence,
                   page,
@@ -1196,7 +1196,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
         bool activeLow{false};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1223,7 +1223,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
         bool activeLow{false};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1259,7 +1259,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{2};
         bool activeLow{true};
-        std::optional<GPIO> gpio{GPIO(3, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(3, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1298,7 +1298,7 @@ TEST(RailTests, HasPgoodFaultGPIO)
         std::optional<std::string> presence{};
         std::optional<uint8_t> page{};
         bool activeLow{false};
-        std::optional<GPIO> gpio{GPIO(6, activeLow)};
+        std::optional<PgoodGPIO> gpio{PgoodGPIO(6, activeLow)};
         Rail rail{name,
                   presence,
                   page,
@@ -1333,7 +1333,7 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
     std::optional<uint8_t> page{2};
     bool isPowerSupplyRail{false};
     bool checkStatusVout{false};
-    std::optional<GPIO> gpio{};
+    std::optional<PgoodGPIO> gpio{};
 
     // Test where presence check defined: Rail is not present
     {

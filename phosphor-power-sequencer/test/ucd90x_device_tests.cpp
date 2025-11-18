@@ -55,7 +55,7 @@ static std::unique_ptr<Rail> createRail(const std::string& name,
     bool checkStatusVout{false};
     bool compareVoltageToLimit{false};
     bool activeLow{false};
-    std::optional<GPIO> gpio{GPIO{gpioLine, activeLow}};
+    std::optional<PgoodGPIO> gpio{PgoodGPIO{gpioLine, activeLow}};
     return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
                                   checkStatusVout, compareVoltageToLimit, gpio);
 }

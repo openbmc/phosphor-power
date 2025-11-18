@@ -73,7 +73,7 @@ class PMBusDriverDeviceTests : public ::testing::Test
         bool isPowerSupplyRail{false};
         bool checkStatusVout{true};
         bool compareVoltageToLimit{false};
-        std::optional<GPIO> gpio{};
+        std::optional<PgoodGPIO> gpio{};
         return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
                                       checkStatusVout, compareVoltageToLimit,
                                       gpio);
