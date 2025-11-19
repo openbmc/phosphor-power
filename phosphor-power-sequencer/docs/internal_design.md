@@ -29,6 +29,9 @@
 - PowerSequencerDevice
   - Abstract base class for a power sequencer device.
   - Defines virtual methods that must be implemented by all child classes.
+- GPIOsOnlyDevice
+  - Sub-class of PowerSequencerDevice that only uses the named GPIOs and does
+    not otherwise communicate with the device.
 - StandardDevice
   - Sub-class of PowerSequencerDevice that implements the standard pgood fault
     detection algorithm.

@@ -17,6 +17,7 @@
 #include "config_file_parser.hpp"
 
 #include "config_file_parser_error.hpp"
+#include "gpios_only_device.hpp"
 #include "json_parser_utils.hpp"
 #include "ucd90160_device.hpp"
 #include "ucd90320_device.hpp"
@@ -333,11 +334,19 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     std::string type = parseString(typeElement, false, variables);
     ++propertyCount;
 
-    // Required i2c_interface property
-    const json& i2cInterfaceElement =
-        getRequiredProperty(element, "i2c_interface");
-    auto [bus, address] = parseI2CInterface(i2cInterfaceElement, variables);
-    ++propertyCount;
+    // i2c_interface property is required for some device types
+    uint8_t bus{0};
+    uint16_t address{0};
+    auto i2cInterfaceIt = element.find("i2c_interface");
+    if (i2cInterfaceIt != element.end())
+    {
+        std::tie(bus, address) = parseI2CInterface(*i2cInterfaceIt, variables);
+        ++propertyCount;
+    }
+    else if (type != GPIOsOnlyDevice::deviceName)
+    {
+        throw std::invalid_argument{"Required property missing: i2c_interface"};
+    }
 
     // Required power_control_gpio_name property
     const json& powerControlGPIONameElement =
@@ -353,11 +362,18 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
         parseString(powerGoodGPIONameElement, false, variables);
     ++propertyCount;
 
-    // Required rails property
-    const json& railsElement = getRequiredProperty(element, "rails");
-    std::vector<std::unique_ptr<Rail>> rails =
-        parseRailArray(railsElement, variables);
-    ++propertyCount;
+    // rails property is required for some device types
+    std::vector<std::unique_ptr<Rail>> rails{};
+    auto railsIt = element.find("rails");
+    if (railsIt != element.end())
+    {
+        rails = parseRailArray(*railsIt, variables);
+        ++propertyCount;
+    }
+    else if (type != GPIOsOnlyDevice::deviceName)
+    {
+        throw std::invalid_argument{"Required property missing: rails"};
+    }
 
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
@@ -373,6 +389,11 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
         return std::make_unique<UCD90320Device>(
             bus, address, powerControlGPIOName, powerGoodGPIOName,
             std::move(rails), services);
+    }
+    else if (type == GPIOsOnlyDevice::deviceName)
+    {
+        return std::make_unique<GPIOsOnlyDevice>(powerControlGPIOName,
+                                                 powerGoodGPIOName);
     }
     throw std::invalid_argument{"Invalid power sequencer type: " + type};
 }
