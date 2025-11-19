@@ -4,6 +4,7 @@ test(
         'phosphor-power-sequencer-tests',
         'chassis_tests.cpp',
         'config_file_parser_tests.cpp',
+        'gpios_only_device_tests.cpp',
         'pmbus_driver_device_tests.cpp',
         'rail_tests.cpp',
         'standard_device_tests.cpp',

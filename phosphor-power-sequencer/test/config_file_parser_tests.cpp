@@ -1655,6 +1655,27 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         EXPECT_EQ(powerSequencer->getRails()[1]->getName(), "cpu2");
     }
 
+    // Test where works: Type is "gpios_only_device"
+    {
+        const json element = R"(
+            {
+              "type": "gpios_only_device",
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        MockServices services{};
+        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        EXPECT_EQ(powerSequencer->getName(), "gpios_only_device");
+        EXPECT_EQ(powerSequencer->getBus(), 0);
+        EXPECT_EQ(powerSequencer->getAddress(), 0);
+        EXPECT_EQ(powerSequencer->getPowerControlGPIOName(),
+                  "power-chassis-control");
+        EXPECT_EQ(powerSequencer->getPowerGoodGPIOName(), "power-chassis-good");
+        EXPECT_EQ(powerSequencer->getRails().size(), 0);
+    }
+
     // Test where fails: Element is not an object
     try
     {

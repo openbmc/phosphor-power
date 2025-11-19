@@ -22,14 +22,20 @@ sequencer, but they might still be monitored for pgood faults.
 
 ## Properties
 
-| Name                    | Required | Type                              | Description                                                                                                                   |
-| :---------------------- | :------: | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
-| comments                |    no    | array of strings                  | One or more comment lines describing this power sequencer.                                                                    |
-| type                    |   yes    | string                            | Power sequencer type. Specify one of the following supported types: "UCD90160", "UCD90320".                                   |
-| i2c_interface           |   yes    | [i2c_interface](i2c_interface.md) | I2C interface to this power sequencer.                                                                                        |
-| power_control_gpio_name |   yes    | string                            | Named GPIO for turning this power sequencer on and off.                                                                       |
-| power_good_gpio_name    |   yes    | string                            | Named GPIO for reading the power good signal from this power sequencer.                                                       |
-| rails                   |   yes    | array of [rails](rail.md)         | One or more voltage rails powered on/off and monitored by this power sequencer. The rails must be in power on sequence order. |
+| Name                    |      Required       | Type                              | Description                                                                                                                   |
+| :---------------------- | :-----------------: | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
+| comments                |         no          | array of strings                  | One or more comment lines describing this power sequencer.                                                                    |
+| type                    |         yes         | string                            | Power sequencer type. Specify one of the following supported types: "UCD90160", "UCD90320", "gpios_only_device".              |
+| i2c_interface           | see [notes](#notes) | [i2c_interface](i2c_interface.md) | I2C interface to this power sequencer.                                                                                        |
+| power_control_gpio_name |         yes         | string                            | Named GPIO for turning this power sequencer on and off.                                                                       |
+| power_good_gpio_name    |         yes         | string                            | Named GPIO for reading the power good signal from this power sequencer.                                                       |
+| rails                   | see [notes](#notes) | array of [rails](rail.md)         | One or more voltage rails powered on/off and monitored by this power sequencer. The rails must be in power on sequence order. |
+
+### Notes
+
+- The "i2c_interface" and "rails" properties are required if the "type" is
+  "UCD90160" or "UCD90320". They are ignored if the "type" is
+  "gpios_only_device".
 
 ## Example
 
