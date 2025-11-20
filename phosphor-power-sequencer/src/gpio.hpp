@@ -37,22 +37,25 @@ class GPIO
     GPIO& operator=(GPIO&&) = delete;
     virtual ~GPIO() = default;
 
-    enum class RequestType
-    {
-        Read,
-        Write
-    };
-
     /**
-     * Request ownership of the GPIO.
+     * Request ownership of the GPIO for reading.
      *
      * Throws an exception if an error occurs.
      *
-     * This is required before getting or setting the GPIO value.
-     *
-     * @param type specifies whether requesting to read or write the GPIO
+     * This is required before getting the GPIO value.
      */
-    virtual void request(RequestType type) = 0;
+    virtual void requestRead() = 0;
+
+    /**
+     * Request ownership of the GPIO for writing.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * This is required before setting the GPIO value.
+     *
+     * @param initialValue initial value GPIO will be set to
+     */
+    virtual void requestWrite(int initialValue) = 0;
 
     /**
      * Gets the value of the GPIO.
@@ -93,7 +96,6 @@ class BMCGPIO : public GPIO
     BMCGPIO(BMCGPIO&&) = delete;
     BMCGPIO& operator=(const BMCGPIO&) = delete;
     BMCGPIO& operator=(BMCGPIO&&) = delete;
-    virtual ~BMCGPIO() = default;
 
     /**
      * Constructor.
@@ -111,36 +113,52 @@ class BMCGPIO : public GPIO
         }
     }
 
-    virtual void request(RequestType type) override
+    /**
+     * Destructor.
+     *
+     * If requestRead() or requestWrite() was called to claim ownership of the
+     * GPIO, ownership will be automatically released due to the gpiod::line
+     * destructor.
+     */
+    virtual ~BMCGPIO() = default;
+
+    /** @copydoc GPIO::requestRead() */
+    virtual void requestRead() override
     {
-        int lineRequestType;
-        if (type == RequestType::Read)
-        {
-            lineRequestType = gpiod::line_request::DIRECTION_INPUT;
-        }
-        else
-        {
-            lineRequestType = gpiod::line_request::DIRECTION_OUTPUT;
-        }
-        line.request({"phosphor-power-control", lineRequestType, 0});
+        line.request({consumer, gpiod::line_request::DIRECTION_INPUT, 0});
     }
 
+    /** @copydoc GPIO::requestWrite() */
+    virtual void requestWrite(int initialValue) override
+    {
+        line.request({consumer, gpiod::line_request::DIRECTION_OUTPUT, 0},
+                     initialValue);
+    }
+
+    /** @copydoc GPIO::getValue() */
     virtual int getValue() override
     {
         return line.get_value();
     }
 
+    /** @copydoc GPIO::setValue() */
     virtual void setValue(int value) override
     {
         line.set_value(value);
     }
 
+    /** @copydoc GPIO::release() */
     virtual void release() override
     {
         line.release();
     }
 
   private:
+    /**
+     * Consumer value specified when requesting the GPIO line.
+     */
+    inline static const std::string consumer{"phosphor-power-control"};
+
     /**
      * GPIO line to access the pin.
      */

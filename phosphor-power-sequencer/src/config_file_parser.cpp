@@ -393,7 +393,7 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     else if (type == GPIOsOnlyDevice::deviceName)
     {
         return std::make_unique<GPIOsOnlyDevice>(powerControlGPIOName,
-                                                 powerGoodGPIOName);
+                                                 powerGoodGPIOName, services);
     }
     throw std::invalid_argument{"Invalid power sequencer type: " + type};
 }

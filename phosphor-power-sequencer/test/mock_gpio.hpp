@@ -37,7 +37,8 @@ class MockGPIO : public GPIO
     MockGPIO& operator=(MockGPIO&&) = delete;
     virtual ~MockGPIO() = default;
 
-    MOCK_METHOD(void, request, (RequestType type), (override));
+    MOCK_METHOD(void, requestRead, (), (override));
+    MOCK_METHOD(void, requestWrite, (int initialValue), (override));
     MOCK_METHOD(int, getValue, (), (override));
     MOCK_METHOD(void, setValue, (int value), (override));
     MOCK_METHOD(void, release, (), (override));

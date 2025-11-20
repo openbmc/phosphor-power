@@ -72,7 +72,7 @@ class PMBusDriverDevice : public StandardDevice
         std::vector<std::unique_ptr<Rail>> rails, Services& services,
         const std::string& driverName = "", size_t instance = 0) :
         StandardDevice(name, bus, address, powerControlGPIOName,
-                       powerGoodGPIOName, std::move(rails)),
+                       powerGoodGPIOName, std::move(rails), services),
         driverName{driverName}, instance{instance}
     {
         pmbusInterface =

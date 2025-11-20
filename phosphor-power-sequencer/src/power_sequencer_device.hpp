@@ -15,11 +15,13 @@
  */
 #pragma once
 
+#include "gpio.hpp"
 #include "rail.hpp"
 #include "services.hpp"
 
 #include <cstdint>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -86,6 +88,63 @@ class PowerSequencerDevice
      * @return voltage rails
      */
     virtual const std::vector<std::unique_ptr<Rail>>& getRails() const = 0;
+
+    /**
+     * Returns the GPIO that turns this device on and off.
+     *
+     * @return GPIO object
+     */
+    virtual GPIO& getPowerControlGPIO() = 0;
+
+    /**
+     * Returns the GPIO that reads the power good signal from this device.
+     *
+     * @return GPIO object
+     */
+    virtual GPIO& getPowerGoodGPIO() = 0;
+
+    /**
+     * Power on this device.
+     *
+     * Normally this means the device will power on the individual voltage rails
+     * in the correct order, verifying each rail asserts power good before
+     * moving to the next.
+     *
+     * When the power on is complete, the device will normally set the
+     * device-level power good signal to true.
+     *
+     * Throws an exception if an error occurs powering on the device.
+     */
+    virtual void powerOn() = 0;
+
+    /**
+     * Power off this device.
+     *
+     * Normally this means the device will power off the individual voltage
+     * rails in the correct order.
+     *
+     * When the power off is complete, the device will normally set the
+     * device-level power good signal to false.
+     *
+     * Throws an exception if an error occurs powering off the device.
+     */
+    virtual void powerOff() = 0;
+
+    /**
+     * Returns the power good signal for this device.
+     *
+     * A return value of true normally indicates that all voltage rails being
+     * monitored by this device are asserting power good.
+     *
+     * A return value of false normally indicates that at least one voltage rail
+     * being monitored by this device is not asserting power good.
+     *
+     * Throws an exception if an error occurs obtaining the power good signal
+     * from the device.
+     *
+     * @return power good signal for this device
+     */
+    virtual bool getPowerGood() = 0;
 
     /**
      * Returns the GPIO values that can be read from the device.
