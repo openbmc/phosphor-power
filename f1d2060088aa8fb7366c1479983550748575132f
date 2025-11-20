@@ -22,6 +22,30 @@
       },
       "revId": "f1d2060088aa8fb7366c1479983550748575132f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418813e1_93658881",
+        "filename": "phosphor-power-sequencer/src/power_control.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-20T17:26:08Z",
+      "side": 1,
+      "message": "Yes, this was a temporary change. The results of the parsing are being discarded in this commit, so wasParsed should stay false.\n\nA subsequent commit in this chain fixes this method to truly use the parsing results.\n\nI broke the changes into multiple commits just due to the amount of code change. This at least let the code compile.",
+      "parentUuid": "744e048b_442a2352",
+      "range": {
+        "startLine": 381,
+        "startChar": 7,
+        "endLine": 381,
+        "endChar": 28
+      },
+      "revId": "f1d2060088aa8fb7366c1479983550748575132f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
