@@ -24,6 +24,7 @@
 namespace phosphor::power::sequencer
 {
 
+using ::testing::NiceMock;
 using MockPMBus = phosphor::pmbus::MockPMBus;
 
 /**
@@ -54,7 +55,7 @@ class MockServices : public Services
 
     virtual std::unique_ptr<GPIO> createGPIO(const std::string&) override
     {
-        return std::make_unique<MockGPIO>();
+        return std::make_unique<NiceMock<MockGPIO>>();
     }
 
     MOCK_METHOD(std::vector<int>, getGPIOValues, (const std::string& chipLabel),

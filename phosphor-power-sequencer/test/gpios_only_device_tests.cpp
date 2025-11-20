@@ -15,6 +15,7 @@
  */
 
 #include "gpios_only_device.hpp"
+#include "mock_gpio.hpp"
 #include "mock_services.hpp"
 #include "rail.hpp"
 #include "services.hpp"
@@ -30,11 +31,15 @@
 
 using namespace phosphor::power::sequencer;
 
+using ::testing::Return;
+using ::testing::Throw;
+
 TEST(GPIOsOnlyDeviceTests, Constructor)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
     EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
@@ -44,7 +49,8 @@ TEST(GPIOsOnlyDeviceTests, GetName)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getName(), GPIOsOnlyDevice::deviceName);
 }
@@ -53,7 +59,8 @@ TEST(GPIOsOnlyDeviceTests, GetBus)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getBus(), 0);
 }
@@ -62,7 +69,8 @@ TEST(GPIOsOnlyDeviceTests, GetAddress)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getAddress(), 0);
 }
@@ -71,7 +79,8 @@ TEST(GPIOsOnlyDeviceTests, GetPowerControlGPIOName)
 {
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
 }
@@ -80,7 +89,8 @@ TEST(GPIOsOnlyDeviceTests, GetPowerGoodGPIOName)
 {
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_EQ(device.getPowerGoodGPIOName(), powerGoodGPIOName);
 }
@@ -89,9 +99,163 @@ TEST(GPIOsOnlyDeviceTests, GetRails)
 {
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
 
     EXPECT_TRUE(device.getRails().empty());
+}
+
+TEST(GPIOsOnlyDeviceTests, GetPowerControlGPIO)
+{
+    std::string powerControlGPIOName{"power-on"};
+    std::string powerGoodGPIOName{"chassis-pgood"};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
+
+    MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+    EXPECT_CALL(gpio, setValue(1)).Times(1);
+    device.powerOn();
+}
+
+TEST(GPIOsOnlyDeviceTests, GetPowerGoodGPIO)
+{
+    std::string powerControlGPIOName{"power-on"};
+    std::string powerGoodGPIOName{"chassis-pgood"};
+    MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
+
+    MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+    EXPECT_CALL(gpio, getValue()).Times(1).WillOnce(Return(0));
+    EXPECT_FALSE(device.getPowerGood());
+}
+
+TEST(GPIOsOnlyDeviceTests, PowerOn)
+{
+    // Test where works
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+        EXPECT_CALL(gpio, request(GPIO::RequestType::Write)).Times(1);
+        EXPECT_CALL(gpio, setValue(1)).Times(1);
+        EXPECT_CALL(gpio, release()).Times(1);
+        device.powerOn();
+    }
+
+    // Test where fails with exception
+    try
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+        EXPECT_CALL(gpio, request(GPIO::RequestType::Write))
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
+        device.powerOn();
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Unable to write GPIO");
+    }
+}
+
+TEST(GPIOsOnlyDeviceTests, PowerOff)
+{
+    // Test where works
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+        EXPECT_CALL(gpio, request(GPIO::RequestType::Write)).Times(1);
+        EXPECT_CALL(gpio, setValue(0)).Times(1);
+        EXPECT_CALL(gpio, release()).Times(1);
+        device.powerOff();
+    }
+
+    // Test where fails with exception
+    try
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+        EXPECT_CALL(gpio, request(GPIO::RequestType::Write)).Times(1);
+        EXPECT_CALL(gpio, setValue(0))
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
+        device.powerOff();
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Unable to write GPIO");
+    }
+}
+
+TEST(GPIOsOnlyDeviceTests, GetPowerGood)
+{
+    // Test where works: Value is false
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+        EXPECT_CALL(gpio, getValue()).Times(1).WillOnce(Return(0));
+        EXPECT_FALSE(device.getPowerGood());
+    }
+
+    // Test where works: Value is true
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+        EXPECT_CALL(gpio, getValue()).Times(1).WillOnce(Return(1));
+        EXPECT_TRUE(device.getPowerGood());
+    }
+
+    // Test where fails with exception
+    try
+    {
+        std::string powerControlGPIOName{"power-on"};
+        std::string powerGoodGPIOName{"chassis-pgood"};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+        EXPECT_CALL(gpio, getValue())
+            .Times(1)
+            .WillOnce(Throw(std::runtime_error{"Unable to read GPIO"}));
+        device.getPowerGood();
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Unable to read GPIO");
+    }
 }
 
 TEST(GPIOsOnlyDeviceTests, GetGPIOValues)
@@ -100,9 +264,10 @@ TEST(GPIOsOnlyDeviceTests, GetGPIOValues)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
-
         MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
+
         device.getGPIOValues(services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -118,7 +283,9 @@ TEST(GPIOsOnlyDeviceTests, GetStatusWord)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
 
         device.getStatusWord(0);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -135,7 +302,9 @@ TEST(GPIOsOnlyDeviceTests, GetStatusVout)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
 
         device.getStatusVout(0);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -152,7 +321,9 @@ TEST(GPIOsOnlyDeviceTests, GetReadVout)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
 
         device.getReadVout(0);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -169,7 +340,9 @@ TEST(GPIOsOnlyDeviceTests, GetVoutUVFaultLimit)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        MockServices services{};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
+                               services};
 
         device.getVoutUVFaultLimit(0);
         ADD_FAILURE() << "Should not have reached this line.";
@@ -184,9 +357,9 @@ TEST(GPIOsOnlyDeviceTests, FindPgoodFault)
 {
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
-
     MockServices services{};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
+
     std::string powerSupplyError{};
     std::map<std::string, std::string> additionalData{};
     std::string error =

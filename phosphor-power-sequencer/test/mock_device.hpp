@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "gpio.hpp"
 #include "power_sequencer_device.hpp"
 
 #include <cstdint>
@@ -49,6 +50,11 @@ class MockDevice : public PowerSequencerDevice
                 (const, override));
     MOCK_METHOD(const std::vector<std::unique_ptr<Rail>>&, getRails, (),
                 (const, override));
+    MOCK_METHOD(GPIO&, getPowerControlGPIO, (), (override));
+    MOCK_METHOD(GPIO&, getPowerGoodGPIO, (), (override));
+    MOCK_METHOD(void, powerOn, (), (override));
+    MOCK_METHOD(void, powerOff, (), (override));
+    MOCK_METHOD(bool, getPowerGood, (), (override));
     MOCK_METHOD(std::vector<int>, getGPIOValues, (Services & services),
                 (override));
     MOCK_METHOD(uint16_t, getStatusWord, (uint8_t page), (override));
