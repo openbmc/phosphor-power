@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "gpio.hpp"
 #include "pmbus.hpp"
 #include "xyz/openbmc_project/Logging/Entry/server.hpp"
 
@@ -99,6 +100,16 @@ class Services
      * @return true if hardware is present, false otherwise
      */
     virtual bool isPresent(const std::string& inventoryPath) = 0;
+
+    /**
+     * Creates a GPIO object for getting/setting the value of a GPIO.
+     *
+     * Throws an exception if a GPIO with the specified name cannot be found.
+     *
+     * @param name GPIO name
+     * @return GPIO object
+     */
+    virtual std::unique_ptr<GPIO> createGPIO(const std::string& name) = 0;
 
     /**
      * Reads all the GPIO values on the chip with the specified label.
@@ -189,6 +200,12 @@ class BMCServices : public Services
 
     /** @copydoc Services::isPresent() */
     virtual bool isPresent(const std::string& inventoryPath) override;
+
+    /** @copydoc Services::createGPIO() */
+    virtual std::unique_ptr<GPIO> createGPIO(const std::string& name) override
+    {
+        return std::make_unique<BMCGPIO>(name);
+    }
 
     /** @copydoc Services::getGPIOValues() */
     virtual std::vector<int> getGPIOValues(
