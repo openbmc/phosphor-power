@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "mock_gpio.hpp"
 #include "mock_pmbus.hpp"
 #include "services.hpp"
 
@@ -50,6 +51,12 @@ class MockServices : public Services
                 (override));
     MOCK_METHOD(bool, isPresent, (const std::string& inventoryPath),
                 (override));
+
+    virtual std::unique_ptr<GPIO> createGPIO(const std::string&) override
+    {
+        return std::make_unique<MockGPIO>();
+    }
+
     MOCK_METHOD(std::vector<int>, getGPIOValues, (const std::string& chipLabel),
                 (override));
 
