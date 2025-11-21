@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dced02af_2207ea98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-21T15:54:48Z",
+      "side": 1,
+      "message": "needs testing in simulation?",
+      "revId": "7e1a55c6c1e3ca12a33ce089fb831a2b78a5c99a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a892029_85d58a11",
+        "filename": "phosphor-power-sequencer/src/gpios_only_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2025-11-21T15:54:48Z",
+      "side": 1,
+      "message": "I can\u0027t find a release() in the gpio_line destructor. Will the GPIO get implicitly released in the kernel when this app goes away?  Or am I missing a release() somewhere else in your code for this GPIO?  If not, it should probably go in the destructor.",
+      "revId": "7e1a55c6c1e3ca12a33ce089fb831a2b78a5c99a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
