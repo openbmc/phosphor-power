@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d470b1_db56187f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-25T15:46:42Z",
+      "side": 1,
+      "message": "I did additional testing in simulation based on your comment and some changes I made in patch set 2.",
+      "parentUuid": "dced02af_2207ea98",
+      "revId": "7e1a55c6c1e3ca12a33ce089fb831a2b78a5c99a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a892029_85d58a11",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-11-21T15:54:48Z",
       "side": 1,
       "message": "I can\u0027t find a release() in the gpio_line destructor. Will the GPIO get implicitly released in the kernel when this app goes away?  Or am I missing a release() somewhere else in your code for this GPIO?  If not, it should probably go in the destructor.",
+      "revId": "7e1a55c6c1e3ca12a33ce089fb831a2b78a5c99a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfe446d3_a804d5ae",
+        "filename": "phosphor-power-sequencer/src/gpios_only_device.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-11-25T15:46:42Z",
+      "side": 1,
+      "message": "Good question.\n\nThe GPIO object contains a gpiod::line. The gpiod::line destructor releases the line. So this will happen automatically. I tested this to confirm.\n\nHowever, I\u0027ll add a comment to document this.",
+      "parentUuid": "0a892029_85d58a11",
       "revId": "7e1a55c6c1e3ca12a33ce089fb831a2b78a5c99a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
