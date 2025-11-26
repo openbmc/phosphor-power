@@ -1266,8 +1266,8 @@ void PowerSupply::setInputVoltageRating()
     if (!inputVoltageRatingIface)
     {
         auto path = std::format(
-            "/xyz/openbmc_project/sensors/voltage/ps{}_input_voltage_rating",
-            shortName.back());
+            "/xyz/openbmc_project/sensors/voltage/{}_ps{}_input_voltage_rating",
+            chassisName, shortName.back());
 
         inputVoltageRatingIface = std::make_unique<SensorObject>(
             bus, path.c_str(), SensorObject::action::defer_emit);
@@ -1336,9 +1336,21 @@ std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
     std::vector<AssociationTuple> associations;
 
     associations.emplace_back("inventory", "sensors", inventoryPath);
-
-    auto chassis = getChassis(bus, inventoryPath);
-    associations.emplace_back("chassis", "all_sensors", std::move(chassis));
+    try
+    {
+        auto chassis = getChassis(bus, inventoryPath);
+        if (!chassis.empty())
+        {
+            associations.emplace_back("chassis", "all_sensors",
+                                      std::move(chassis));
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::info(
+            "getSensorAssociations - Failed to get Chassis association for {PATH} : {ERR}",
+            "PATH", inventoryPath, "ERR", e);
+    }
 
     return associations;
 }
