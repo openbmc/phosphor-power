@@ -76,10 +76,11 @@ class Chassis
      *
      * @param[in] bus - D-Bus bus object
      * @param[in] chassisPath - Chassis path
+     * @param[in] chassisName - Chassis name
      * @param[in] event - Event loop object
      */
     Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
-            const sdeventplus::Event& e);
+            const std::string& chassisName, const sdeventplus::Event& e);
 
     /**
      * @brief Retrieves the unique identifier of the chassis.
@@ -232,6 +233,30 @@ class Chassis
     PowerSystemInputs powerSystemInputs;
 
     /**
+     * @brief Object manage path
+     */
+    std::string objectManagerPath;
+
+    /**
+     * @brief Implement the objectManager for PowerSystemInputs object.
+     *
+     * Implements the org.freedesktop.DBus.ObjectManager interface used to
+     * communicate updates to the PowerSystemInputs object on the
+     * /xyz/openbmc_project/power/power_supplies/{}/psus (where {} is
+     * replaced with chassisX) root D-Bus path.
+     */
+    sdbusplus::server::manager_t objectManager;
+
+    /**
+     * @brief Implement the ObjectManager for the input voltage rating.
+     *
+     * Implements the org.freedesktop.DBus.ObjectManager interface used to
+     * communicate updates to the input voltage ratings on the
+     * /xyz/openbmc_project/sensors root D-Bus path.
+     */
+    sdbusplus::server::manager_t sensorsObjManager;
+
+    /**
      * @brief Declares a constant reference to an sdeventplus::Event to manage
      * async processing.
      */
@@ -372,15 +397,6 @@ class Chassis
     void updateMissingPSUs();
 
     /**
-     * @brief Assign chassis short name.
-     */
-    void saveChassisName()
-    {
-        std::filesystem::path path(chassisPath);
-        chassisShortName = path.filename();
-    }
-
-    /**
      * @brief Callback for power state property changes
      *
      * Process changes to the powered on state property for the chassis.
@@ -449,12 +465,11 @@ class Chassis
 
     /**
      * @brief Returns the number of PSUs that are required to be present.
+     *
+     * @return required number of PSUs, or 0 if the number could not be
+     *         determined.
      */
-    unsigned int getRequiredPSUCount()
-    {
-        // TODO
-        return 1;
-    }
+    unsigned int getRequiredPSUCount();
 
     /**
      * @brief Returns whether the specified PSU is required to be present.
