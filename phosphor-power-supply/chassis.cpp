@@ -2,6 +2,10 @@
 
 #include "chassis.hpp"
 
+#include <unistd.h>
+
+#include <xyz/openbmc_project/State/Chassis/server.hpp>
+
 #include <iostream>
 
 using namespace phosphor::logging;
@@ -11,6 +15,10 @@ namespace phosphor::power::chassis
 
 constexpr auto powerSystemsInputsObjPath =
     "/xyz/openbmc_project/power/power_supplies/chassis{}/psus";
+
+constexpr auto objectManagerObjPath =
+    "/xyz/openbmc_project/power/power_supplies/{}/psus";
+constexpr auto sensorsObjPath = "/xyz/openbmc_project/sensors";
 constexpr auto IBMCFFPSInterface =
     "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
 constexpr auto chassisIdProp = "SlotNumber";
@@ -29,14 +37,15 @@ const auto decoratorChassisId = "xyz.openbmc_project.Inventory.Decorator.Slot";
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
 Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
-                 const sdeventplus::Event& e) :
-    bus(bus), chassisPath(chassisPath),
+                 const std::string& chassisName, const sdeventplus::Event& e) :
+    bus(bus), chassisPath(chassisPath), chassisShortName(chassisName),
     chassisPathUniqueId(getChassisPathUniqueId(chassisPath)),
     powerSystemInputs(
         bus, std::format(powerSystemsInputsObjPath, chassisPathUniqueId)),
-    eventLoop(e)
+    objectManagerPath(std::format(objectManagerObjPath, chassisShortName)),
+    objectManager(bus, objectManagerPath.c_str()),
+    sensorsObjManager(bus, sensorsObjPath), eventLoop(e)
 {
-    saveChassisName();
     getPSUConfiguration();
     getSupportedConfiguration();
 }
@@ -746,7 +755,40 @@ void Chassis::analyzeBrownout()
         // cleared
         if (brownoutLogged && (acFailedCount < presentCount))
         {
-            // TODO Power State
+            // Chassis only recognizes the PowerSystemInputs change when it is
+            // off
+            try
+            {
+                using PowerState = sdbusplus::xyz::openbmc_project::State::
+                    server::Chassis::PowerState;
+                PowerState currentPowerState;
+                util::getProperty<PowerState>(
+                    "xyz.openbmc_project.State.Chassis", "CurrentPowerState",
+                    "/xyz/openbmc_project/state/chassis0",
+                    "xyz.openbmc_project.State.Chassis0", bus,
+                    currentPowerState);
+
+                if (currentPowerState == PowerState::Off)
+                {
+                    // Indicate that the system is no longer in a brownout
+                    // condition by setting the PowerSystemInputs status
+                    // property to Good.
+                    lg2::info(
+                        "Brownout cleared, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+                        "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
+                        acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
+
+                    powerSystemInputs.status(
+                        sdbusplus::xyz::openbmc_project::State::Decorator::
+                            server::PowerSystemInputs::Status::Good);
+                    brownoutLogged = false;
+                }
+            }
+            catch (const std::exception& e)
+            {
+                lg2::error("Error trying to clear brownout, error: {ERR}",
+                           "ERR", e);
+            }
         }
     }
 }
@@ -1255,6 +1297,37 @@ bool Chassis::isRequiredPSU(const PowerSupply& psu)
 
     // PSU was not close to start of sorted list; assume not required
     return false;
+}
+
+unsigned int Chassis::getRequiredPSUCount()
+{
+    unsigned int requiredCount{0};
+
+    // Verify we have the supported configuration and PSU information
+    if (!supportedConfigs.empty() && !psus.empty())
+    {
+        // Find PSU models.  They should all be the same.
+        std::set<std::string> models{};
+        std::for_each(psus.begin(), psus.end(), [&models](const auto& psu) {
+            if (!psu->getModelName().empty())
+            {
+                models.insert(psu->getModelName());
+            }
+        });
+
+        // If exactly one model was found, find corresponding configuration
+        if (models.size() == 1)
+        {
+            const std::string& model = *(models.begin());
+            auto it = supportedConfigs.find(model);
+            if (it != supportedConfigs.end())
+            {
+                requiredCount = it->second.powerSupplyCount;
+            }
+        }
+    }
+
+    return requiredCount;
 }
 
 } // namespace phosphor::power::chassis

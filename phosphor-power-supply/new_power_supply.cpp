@@ -1,7 +1,6 @@
 #include "config.h"
 
 #include "new_power_supply.hpp"
-
 #include "types.hpp"
 #include "util.hpp"
 
@@ -1266,8 +1265,8 @@ void PowerSupply::setInputVoltageRating()
     if (!inputVoltageRatingIface)
     {
         auto path = std::format(
-            "/xyz/openbmc_project/sensors/voltage/ps{}_input_voltage_rating",
-            shortName.back());
+            "/xyz/openbmc_project/sensors/voltage/{}_ps{}_input_voltage_rating",
+            chassisName, shortName.back());
 
         inputVoltageRatingIface = std::make_unique<SensorObject>(
             bus, path.c_str(), SensorObject::action::defer_emit);
@@ -1336,8 +1335,12 @@ std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
     std::vector<AssociationTuple> associations;
 
     associations.emplace_back("inventory", "sensors", inventoryPath);
-
     auto chassis = getChassis(bus, inventoryPath);
+    if (chassis.empty())
+    {
+        lg2::info("getSensorAssociations -  chassis empty");
+        throw std::runtime_error("No Chassis found");
+    }
     associations.emplace_back("chassis", "all_sensors", std::move(chassis));
 
     return associations;
