@@ -2,6 +2,7 @@ test(
     'phosphor-power-sequencer-tests',
     executable(
         'phosphor-power-sequencer-tests',
+        'basic_device_tests.cpp',
         'chassis_tests.cpp',
         'config_file_parser_tests.cpp',
         'gpios_only_device_tests.cpp',
