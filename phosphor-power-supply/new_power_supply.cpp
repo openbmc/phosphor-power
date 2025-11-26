@@ -1,7 +1,6 @@
 #include "config.h"
 
 #include "new_power_supply.hpp"
-
 #include "types.hpp"
 #include "util.hpp"
 
@@ -1336,8 +1335,11 @@ std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
     std::vector<AssociationTuple> associations;
 
     associations.emplace_back("inventory", "sensors", inventoryPath);
-
     auto chassis = getChassis(bus, inventoryPath);
+    if (chassis.empty())
+    {
+        lg2::info("getSensorAssociations -  chassis empty");
+    }
     associations.emplace_back("chassis", "all_sensors", std::move(chassis));
 
     return associations;
