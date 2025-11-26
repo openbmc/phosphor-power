@@ -192,18 +192,28 @@ class Util : public UtilBase
         sdbusplus::message::object_path basePath{"/"};
         std::vector<std::string> interfaces{CHASSIS_IFACE};
 
-        // Find the object path that implements the chassis interface
-        // and also shows up in the endpoints list of the powering assoc.
-        auto chassisPaths = phosphor::power::util::getAssociatedSubTreePaths(
-            bus, assocPath, basePath, interfaces, 0);
-
-        if (chassisPaths.empty())
+        try
         {
-            throw std::runtime_error(std::format(
-                "No association to a chassis found for {}", invpath));
-        }
+            // Find the object path that implements the chassis interface
+            // and also shows up in the endpoints list of the powering assoc.
+            auto chassisPaths =
+                phosphor::power::util::getAssociatedSubTreePaths(
+                    bus, assocPath, basePath, interfaces, 0);
 
-        return chassisPaths[0];
+            if (chassisPaths.empty())
+            {
+                throw std::runtime_error(std::format(
+                    "No association to a chassis found for {}", invpath));
+            }
+            return chassisPaths[0];
+        }
+        catch (const sdbusplus::exception_t& e)
+        {
+            lg2::error(
+                "Failed to get associated subtree paths - exception: {ERROR}",
+                "ERROR", e);
+            return "";
+        }
     }
 };
 
