@@ -127,11 +127,14 @@ void ChassisManager::initializeChassisList()
         auto chassisPathList = getChassisInventoryPaths(bus);
         for (const auto& chassisPath : chassisPathList)
         {
+            std::filesystem::path path(chassisPath);
+            const std::string chassisName = path.filename();
+
             lg2::info(
                 "ChassisManager::initializeChassisList chassisPath= {CHASSIS_PATH}",
                 "CHASSIS_PATH", chassisPath);
             auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
-                bus, chassisPath, eventLoop);
+                bus, chassisPath, chassisName, eventLoop);
             listOfChassis.push_back(std::move(chassis));
         }
     }
