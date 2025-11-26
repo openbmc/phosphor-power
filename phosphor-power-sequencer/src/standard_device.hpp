@@ -15,8 +15,8 @@
  */
 #pragma once
 
+#include "basic_device.hpp"
 #include "gpio.hpp"
-#include "power_sequencer_device.hpp"
 #include "rail.hpp"
 #include "services.hpp"
 
@@ -33,14 +33,14 @@ namespace phosphor::power::sequencer
 /**
  * @class StandardDevice
  *
- * PowerSequencerDevice sub-class that implements the standard pgood fault
- * detection algorithm.
+ * BasicDevice sub-class that implements the standard pgood fault detection
+ * algorithm.
  *
  * When adding support for a new power sequencer device type, create a sub-class
  * of StandardDevice if possible.  This will ensure that pgood fault detection
  * works consistently across device types.
  */
-class StandardDevice : public PowerSequencerDevice
+class StandardDevice : public BasicDevice
 {
   public:
     // Specify which compiler-generated methods we want
@@ -71,85 +71,9 @@ class StandardDevice : public PowerSequencerDevice
         const std::string& powerControlGPIOName,
         const std::string& powerGoodGPIOName,
         std::vector<std::unique_ptr<Rail>> rails, Services& services) :
-        name{name}, bus{bus}, address{address},
-        powerControlGPIOName{powerControlGPIOName},
-        powerGoodGPIOName{powerGoodGPIOName}, rails{std::move(rails)}
-    {
-        powerControlGPIO = services.createGPIO(powerControlGPIOName);
-
-        powerGoodGPIO = services.createGPIO(powerGoodGPIOName);
-        powerGoodGPIO->requestRead();
-    }
-
-    /** @copydoc PowerSequencerDevice::getName() */
-    virtual const std::string& getName() const override
-    {
-        return name;
-    }
-
-    /** @copydoc PowerSequencerDevice::getBus() */
-    virtual uint8_t getBus() const override
-    {
-        return bus;
-    }
-
-    /** @copydoc PowerSequencerDevice::getAddress() */
-    virtual uint16_t getAddress() const override
-    {
-        return address;
-    }
-
-    /** @copydoc PowerSequencerDevice::getPowerControlGPIOName() */
-    virtual const std::string& getPowerControlGPIOName() const override
-    {
-        return powerControlGPIOName;
-    }
-
-    /** @copydoc PowerSequencerDevice::getPowerGoodGPIOName() */
-    virtual const std::string& getPowerGoodGPIOName() const override
-    {
-        return powerGoodGPIOName;
-    }
-
-    /** @copydoc PowerSequencerDevice::getRails() */
-    virtual const std::vector<std::unique_ptr<Rail>>& getRails() const override
-    {
-        return rails;
-    }
-
-    /** @copydoc PowerSequencerDevice::getPowerControlGPIO() */
-    virtual GPIO& getPowerControlGPIO() override
-    {
-        return *powerControlGPIO;
-    }
-
-    /** @copydoc PowerSequencerDevice::getPowerGoodGPIO() */
-    virtual GPIO& getPowerGoodGPIO() override
-    {
-        return *powerGoodGPIO;
-    }
-
-    /** @copydoc PowerSequencerDevice::powerOn() */
-    virtual void powerOn() override
-    {
-        powerControlGPIO->requestWrite(1);
-        powerControlGPIO->setValue(1);
-        powerControlGPIO->release();
-    }
-
-    /** @copydoc PowerSequencerDevice::powerOff() */
-    virtual void powerOff() override
-    {
-        powerControlGPIO->requestWrite(0);
-        powerControlGPIO->setValue(0);
-        powerControlGPIO->release();
-    }
-
-    /** @copydoc PowerSequencerDevice::getPowerGood() */
-    virtual bool getPowerGood() override
-    {
-        return (powerGoodGPIO->getValue() == 1);
-    }
+        BasicDevice(name, bus, address, powerControlGPIOName, powerGoodGPIOName,
+                    std::move(rails), services)
+    {}
 
     /** @copydoc PowerSequencerDevice::findPgoodFault()
      *
@@ -245,46 +169,6 @@ class StandardDevice : public PowerSequencerDevice
     virtual void storeGPIOValues(
         Services& services, const std::vector<int>& values,
         std::map<std::string, std::string>& additionalData);
-
-    /**
-     * Device name.
-     */
-    std::string name{};
-
-    /**
-     * I2C bus for the device.
-     */
-    uint8_t bus;
-
-    /**
-     * I2C address for the device.
-     */
-    uint16_t address;
-
-    /**
-     * Name of the GPIO that turns this device on and off.
-     */
-    std::string powerControlGPIOName{};
-
-    /**
-     * Name of the GPIO that reads the power good signal from this device.
-     */
-    std::string powerGoodGPIOName{};
-
-    /**
-     * Voltage rails that are enabled and monitored by this device.
-     */
-    std::vector<std::unique_ptr<Rail>> rails{};
-
-    /**
-     * GPIO that turns this device on and off.
-     */
-    std::unique_ptr<GPIO> powerControlGPIO{};
-
-    /**
-     * GPIO that reads the power good signal from this device.
-     */
-    std::unique_ptr<GPIO> powerGoodGPIO{};
 };
 
 } // namespace phosphor::power::sequencer
