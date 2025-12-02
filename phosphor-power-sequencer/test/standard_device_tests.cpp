@@ -61,13 +61,13 @@ class StandardDeviceImpl : public StandardDevice
     virtual ~StandardDeviceImpl() = default;
 
     // Constructor just calls StandardDevice constructor
-    explicit StandardDeviceImpl(
-        const std::string& name, uint8_t bus, uint16_t address,
-        const std::string& powerControlGPIOName,
-        const std::string& powerGoodGPIOName,
-        std::vector<std::unique_ptr<Rail>> rails, Services& services) :
+    explicit StandardDeviceImpl(const std::string& name, uint8_t bus,
+                                uint16_t address,
+                                const std::string& powerControlGPIOName,
+                                const std::string& powerGoodGPIOName,
+                                std::vector<std::unique_ptr<Rail>> rails) :
         StandardDevice(name, bus, address, powerControlGPIOName,
-                       powerGoodGPIOName, std::move(rails), services)
+                       powerGoodGPIOName, std::move(rails))
     {}
 
     // Mock pure virtual methods
@@ -157,15 +157,13 @@ TEST(StandardDeviceTests, Constructor)
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_EQ(device.getName(), name);
         EXPECT_EQ(device.getBus(), bus);
@@ -186,15 +184,13 @@ TEST(StandardDeviceTests, Constructor)
         rails.emplace_back(createRailGPIO("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_EQ(device.getName(), name);
         EXPECT_EQ(device.getBus(), bus);
@@ -210,7 +206,7 @@ TEST(StandardDeviceTests, Constructor)
 
 TEST(StandardDeviceTests, FindPgoodFault)
 {
-    // No rail has a pgood fault
+    // Test where works: No rail has a pgood fault
     {
         std::string name{"abc_pseq"};
         uint8_t bus{0};
@@ -221,15 +217,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -242,6 +236,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
             .WillOnce(Return(1.1));
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x00));
 
+        MockServices services;
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -250,7 +246,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData.size(), 0);
     }
 
-    // First rail has a pgood fault detected via GPIO
+    // Test where works: First rail has a pgood fault detected via GPIO
     // Is a PSU rail: No PSU error specified
     {
         std::string name{"abc_pseq"};
@@ -262,15 +258,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -281,6 +275,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getVoutUVFaultLimit(5)).Times(0);
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x00));
 
+        MockServices services;
         EXPECT_CALL(services,
                     logInfoMsg("Device abc_pseq GPIO values: [1, 1, 0]"))
             .Times(1);
@@ -297,6 +292,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
                 "Rail PSU pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -311,7 +307,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["GPIO_VALUE"], "0");
     }
 
-    // First rail has a pgood fault detected via GPIO
+    // Test where works: First rail has a pgood fault detected via GPIO
     // Is a PSU rail: PSU error specified
     {
         std::string name{"abc_pseq"};
@@ -323,15 +319,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -342,6 +336,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getVoutUVFaultLimit(5)).Times(0);
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x00));
 
+        MockServices services;
         EXPECT_CALL(services,
                     logInfoMsg("Device abc_pseq GPIO values: [1, 1, 0]"))
             .Times(1);
@@ -358,6 +353,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
                 "Rail PSU pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{"Undervoltage fault: PSU1"};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -371,7 +367,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["GPIO_VALUE"], "0");
     }
 
-    // Second rail has a pgood fault detected via output voltage
+    // Test where works: Second rail has pgood fault detected via output voltage
     // Not a PSU rail: PSU error specified
     {
         std::string name{"abc_pseq"};
@@ -383,15 +379,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -405,6 +399,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x00));
         EXPECT_CALL(device, getStatusWord(5)).Times(1).WillOnce(Return(0xbeef));
 
+        MockServices services;
         EXPECT_CALL(services,
                     logInfoMsg("Device abc_pseq GPIO values: [1, 1, 1]"))
             .Times(1);
@@ -423,6 +418,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
                 "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{"Undervoltage fault: PSU1"};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -438,7 +434,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // Third rail has a pgood fault detected via STATUS_VOUT
+    // Test where works: Third rail has a pgood fault detected via STATUS_VOUT
     // Device returns 0 GPIO values
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
@@ -451,15 +447,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{};
@@ -472,6 +466,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x11));
         EXPECT_CALL(device, getStatusWord(7)).Times(1).WillOnce(Return(0xbeef));
 
+        MockServices services;
         EXPECT_CALL(
             services,
             logErrorMsg(
@@ -486,6 +481,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -499,7 +495,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // Third rail has a pgood fault detected via STATUS_VOUT
+    // Test where works: Third rail has a pgood fault detected via STATUS_VOUT
     // Exception occurs trying to obtain GPIO values from device
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
@@ -512,15 +508,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailStatusVout("PSU", true, 3));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         EXPECT_CALL(device, getGPIOValues)
@@ -532,6 +526,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x11));
         EXPECT_CALL(device, getStatusWord(7)).Times(1).WillOnce(Return(0xbeef));
 
+        MockServices services;
         EXPECT_CALL(
             services,
             logErrorMsg(
@@ -546,6 +541,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -559,9 +555,10 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // All three rails appear to have a pgood fault.  Verify third rail is
-    // selected, even though it is last in the power on sequence, because it is
-    // checked using STATUS_VOUT.  That check happens before the other checks.
+    // Test where works: All three rails appear to have a pgood fault.  Verify
+    // third rail is selected, even though it is last in the power on sequence,
+    // because it is checked using STATUS_VOUT.  That check happens before the
+    // other checks.
     {
         std::string name{"abc_pseq"};
         uint8_t bus{0};
@@ -572,15 +569,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailGPIO("VDD", false, 1));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{0, 0, 0};
@@ -590,6 +585,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_CALL(device, getStatusVout(7)).Times(1).WillOnce(Return(0x11));
         EXPECT_CALL(device, getStatusWord(7)).Times(1).WillOnce(Return(0xbeef));
 
+        MockServices services;
         EXPECT_CALL(services,
                     logInfoMsg("Device abc_pseq GPIO values: [0, 0, 0]"))
             .Times(1);
@@ -607,6 +603,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -621,9 +618,9 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // Two rails appear to have a pgood fault.  One is found via output voltage
-    // and one is found via a GPIO.  Verify the first rail in the sequence with
-    // a fault is selected.
+    // Test where works: Two rails appear to have a pgood fault.  One is found
+    // via output voltage and one is found via a GPIO.  Verify the first rail in
+    // the sequence with a fault is selected.
     {
         std::string name{"abc_pseq"};
         uint8_t bus{0};
@@ -634,15 +631,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailGPIO("PSU", true, 2));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 0};
@@ -656,6 +651,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             .WillOnce(Return(1.2));
         EXPECT_CALL(device, getStatusWord(5)).Times(1).WillOnce(Return(0xbeef));
 
+        MockServices services;
         EXPECT_CALL(services,
                     logInfoMsg("Device abc_pseq GPIO values: [1, 1, 0]"))
             .Times(1);
@@ -674,6 +670,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
                 "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V"))
             .Times(1);
 
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         std::string error =
@@ -689,7 +686,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
     }
 
-    // Exception is thrown during pgood fault detection
+    // Test where fails: Device is not open
     {
         std::string name{"abc_pseq"};
         uint8_t bus{0};
@@ -700,15 +697,46 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
-        MockServices services;
         StandardDeviceImpl device{
             name,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
-            std::move(rails),
-            services};
+            std::move(rails)};
+
+        MockServices services;
+        std::string powerSupplyError{};
+        std::map<std::string, std::string> additionalData{};
+        try
+        {
+            device.findPgoodFault(services, powerSupplyError, additionalData);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: abc_pseq");
+        }
+    }
+
+    // Test where fails: Exception is thrown during pgood fault detection
+    {
+        std::string name{"abc_pseq"};
+        uint8_t bus{0};
+        uint16_t address{0x23};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails{};
+        rails.emplace_back(createRailGPIO("PSU", true, 2));
+        rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
+        rails.emplace_back(createRailStatusVout("VIO", false, 7));
+        StandardDeviceImpl device{
+            name,
+            bus,
+            address,
+            powerControlGPIOName,
+            powerGoodGPIOName,
+            std::move(rails)};
 
         EXPECT_CALL(device, prepareForPgoodFaultDetection).Times(1);
         std::vector<int> gpioValues{1, 1, 1};
@@ -721,6 +749,8 @@ TEST(StandardDeviceTests, FindPgoodFault)
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
 
+        MockServices services;
+        device.open(services);
         std::string powerSupplyError{};
         std::map<std::string, std::string> additionalData{};
         try

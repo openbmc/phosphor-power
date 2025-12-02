@@ -65,14 +65,11 @@ class GPIOsOnlyDevice : public BasicDevice
      *                             and off
      * @param powerGoodGPIOName name of the GPIO that reads the power good
      *                          signal from this device
-     * @param services System services like hardware presence and the journal
      */
     explicit GPIOsOnlyDevice(const std::string& powerControlGPIOName,
-                             const std::string& powerGoodGPIOName,
-                             Services& services) :
+                             const std::string& powerGoodGPIOName) :
         BasicDevice(deviceName, 0, 0x00, powerControlGPIOName,
-                    powerGoodGPIOName, std::vector<std::unique_ptr<Rail>>{},
-                    services)
+                    powerGoodGPIOName, std::vector<std::unique_ptr<Rail>>{})
     {}
 
     /** @copydoc PowerSequencerDevice::getGPIOValues() */
@@ -113,6 +110,7 @@ class GPIOsOnlyDevice : public BasicDevice
         [[maybe_unused]] std::map<std::string, std::string>& additionalData)
         override
     {
+        verifyIsOpen();
         return std::string{};
     }
 

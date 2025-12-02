@@ -58,16 +58,14 @@ class UCD90xDevice : public PMBusDriverDevice
      * @param powerGoodGPIOName Name of the GPIO that reads the power good
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      */
-    explicit UCD90xDevice(
-        const std::string& name, uint8_t bus, uint16_t address,
-        const std::string& powerControlGPIOName,
-        const std::string& powerGoodGPIOName,
-        std::vector<std::unique_ptr<Rail>> rails, Services& services) :
+    explicit UCD90xDevice(const std::string& name, uint8_t bus,
+                          uint16_t address,
+                          const std::string& powerControlGPIOName,
+                          const std::string& powerGoodGPIOName,
+                          std::vector<std::unique_ptr<Rail>> rails) :
         PMBusDriverDevice(name, bus, address, powerControlGPIOName,
-                          powerGoodGPIOName, std::move(rails), services,
-                          driverName)
+                          powerGoodGPIOName, std::move(rails), driverName)
     {}
 
     /**
@@ -85,7 +83,8 @@ class UCD90xDevice : public PMBusDriverDevice
      * 0.  Thus, the bits that are page-specific in the returned value are
      * always for PAGE 0.
      *
-     * Throws an exception if the value could not be obtained.
+     * Throws an exception if the device is not open or the value could not be
+     * obtained.
      *
      * @return MFR_STATUS value
      */

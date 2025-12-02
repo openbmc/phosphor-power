@@ -18,7 +18,6 @@
 #include "chassis.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
-#include "services.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -74,11 +73,10 @@ std::filesystem::path find(
  * Throws a ConfigFileParserError if an error occurs.
  *
  * @param pathName configuration file path name
- * @param services system services like hardware presence and the journal
  * @return vector of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services);
+    const std::filesystem::path& pathName);
 
 /*
  * Internal implementation details for parse()
@@ -97,13 +95,11 @@ using JSONRefWrapper = std::reference_wrapper<const json>;
  *
  * @param element JSON element
  * @param chassisTemplates chassis templates map
- * @param services system services like hardware presence and the journal
  * @return Chassis object
  */
 std::unique_ptr<Chassis> parseChassis(
     const json& element,
-    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
-    Services& services);
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates);
 
 /**
  * Parses a JSON element containing an array of chassis objects.
@@ -114,13 +110,11 @@ std::unique_ptr<Chassis> parseChassis(
  *
  * @param element JSON element
  * @param chassisTemplates chassis templates map
- * @param services system services like hardware presence and the journal
  * @return vector of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
     const json& element,
-    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
-    Services& services);
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates);
 
 /**
  * Parses a JSON element containing the properties of a chassis.
@@ -134,12 +128,11 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(
  * @param element JSON element
  * @param isChassisTemplate specifies whether element is a chassis_template
  * @param variables variables map used to expand variables in element value
- * @param services system services like hardware presence and the journal
  * @return Chassis object
  */
 std::unique_ptr<Chassis> parseChassisProperties(
     const json& element, bool isChassisTemplate,
-    const std::map<std::string, std::string>& variables, Services& services);
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a chassis_template object.
@@ -218,12 +211,10 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
  *
  * @param element JSON element
  * @param variables variables map used to expand variables in element value
- * @param services system services like hardware presence and the journal
  * @return PowerSequencerDevice object
  */
 std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
-    const json& element, const std::map<std::string, std::string>& variables,
-    Services& services);
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of power_sequencer objects.
@@ -234,12 +225,10 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
  *
  * @param element JSON element
  * @param variables variables map used to expand variables in element value
- * @param services system services like hardware presence and the journal
  * @return vector of PowerSequencerDevice objects
  */
 std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
-    const json& element, const std::map<std::string, std::string>& variables,
-    Services& services);
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a rail.
@@ -277,11 +266,9 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
- * @param services system services like hardware presence and the journal
  * @return vector of Chassis objects
  */
-std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
-                                                Services& services);
+std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element);
 
 /**
  * Parses a JSON element containing an object with variable names and values.

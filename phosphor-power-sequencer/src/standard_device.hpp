@@ -64,15 +64,14 @@ class StandardDevice : public BasicDevice
      * @param powerGoodGPIOName name of the GPIO that reads the power good
      *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      */
-    explicit StandardDevice(
-        const std::string& name, uint8_t bus, uint16_t address,
-        const std::string& powerControlGPIOName,
-        const std::string& powerGoodGPIOName,
-        std::vector<std::unique_ptr<Rail>> rails, Services& services) :
+    explicit StandardDevice(const std::string& name, uint8_t bus,
+                            uint16_t address,
+                            const std::string& powerControlGPIOName,
+                            const std::string& powerGoodGPIOName,
+                            std::vector<std::unique_ptr<Rail>> rails) :
         BasicDevice(name, bus, address, powerControlGPIOName, powerGoodGPIOName,
-                    std::move(rails), services)
+                    std::move(rails))
     {}
 
     /** @copydoc PowerSequencerDevice::findPgoodFault()

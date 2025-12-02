@@ -30,6 +30,7 @@ std::string StandardDevice::findPgoodFault(
     Services& services, const std::string& powerSupplyError,
     std::map<std::string, std::string>& additionalData)
 {
+    verifyIsOpen();
     std::string error{};
     try
     {

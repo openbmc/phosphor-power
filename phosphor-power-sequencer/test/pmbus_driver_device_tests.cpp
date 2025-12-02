@@ -19,7 +19,6 @@
 #include "pmbus.hpp"
 #include "pmbus_driver_device.hpp"
 #include "rail.hpp"
-#include "services.hpp"
 #include "temporary_subdirectory.hpp"
 
 #include <cstdint>
@@ -109,8 +108,6 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
 {
     // Test where works; optional parameters not specified
     {
-        MockServices services;
-
         std::string name{"XYZ_PSEQ"};
         uint8_t bus{3};
         uint16_t address{0x72};
@@ -119,14 +116,12 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
         EXPECT_EQ(device.getName(), name);
         EXPECT_EQ(device.getBus(), bus);
@@ -138,13 +133,10 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
         EXPECT_EQ(device.getDriverName(), "");
         EXPECT_EQ(device.getInstance(), 0);
-        EXPECT_NE(&(device.getPMBusInterface()), nullptr);
     }
 
     // Test where works; optional parameters specified
     {
-        MockServices services;
-
         std::string name{"XYZ_PSEQ"};
         uint8_t bus{3};
         uint16_t address{0x72};
@@ -162,7 +154,6 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
             powerControlGPIOName,
             powerGoodGPIOName,
             std::move(rails),
-            services,
             driverName,
             instance};
 
@@ -176,14 +167,11 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
         EXPECT_EQ(device.getDriverName(), driverName);
         EXPECT_EQ(device.getInstance(), instance);
-        EXPECT_NE(&(device.getPMBusInterface()), nullptr);
     }
 }
 
 TEST_F(PMBusDriverDeviceTests, GetDriverName)
 {
-    MockServices services;
-
     std::string name{"XYZ_PSEQ"};
     uint8_t bus{3};
     uint16_t address{0x72};
@@ -198,7 +186,6 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
         powerControlGPIOName,
         powerGoodGPIOName,
         std::move(rails),
-        services,
         driverName};
 
     EXPECT_EQ(device.getDriverName(), driverName);
@@ -206,8 +193,6 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
 
 TEST_F(PMBusDriverDeviceTests, GetInstance)
 {
-    MockServices services;
-
     std::string name{"XYZ_PSEQ"};
     uint8_t bus{3};
     uint16_t address{0x72};
@@ -223,88 +208,215 @@ TEST_F(PMBusDriverDeviceTests, GetInstance)
         powerControlGPIOName,
         powerGoodGPIOName,
         std::move(rails),
-        services,
         driverName,
         instance};
 
     EXPECT_EQ(device.getInstance(), instance);
 }
 
-TEST_F(PMBusDriverDeviceTests, GetPMBusInterface)
+TEST_F(PMBusDriverDeviceTests, Open)
 {
-    MockServices services;
-
     std::string name{"XYZ_PSEQ"};
     uint8_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
-    PMBusDriverDevice device{
-        name,
-        bus,
-        address,
-        powerControlGPIOName,
-        powerGoodGPIOName,
-        std::move(rails),
-        services};
+    PMBusDriverDevice device{name,
+                             bus,
+                             address,
+                             powerControlGPIOName,
+                             powerGoodGPIOName,
+                             std::move(rails)};
 
-    EXPECT_NE(&(device.getPMBusInterface()), nullptr);
+    // Test where works
+    EXPECT_FALSE(device.isOpen());
+    MockServices services;
+    device.open(services);
+    EXPECT_TRUE(device.isOpen());
+
+    MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
+    EXPECT_CALL(pmbus, read("status13_vout", Type::Debug, true))
+        .Times(1)
+        .WillOnce(Return(0xde));
+    uint8_t page{13};
+    EXPECT_EQ(device.getStatusVout(page), 0xde);
+
+    MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerControlGPIO());
+    EXPECT_CALL(gpio, setValue(1)).Times(1);
+    device.powerOn();
+
+    // Test where does nothing because device is already open
+    device.open(services);
+    EXPECT_TRUE(device.isOpen());
 }
 
-TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
+TEST_F(PMBusDriverDeviceTests, Close)
 {
     // Test where works
     {
-        MockServices services;
-        std::vector<int> gpioValues{1, 1, 1};
-        EXPECT_CALL(services, getGPIOValues("abc_382%#, zy"))
-            .Times(1)
-            .WillOnce(Return(gpioValues));
-
-        std::string name{"ABC_382%#, ZY"};
-        uint8_t bus{3};
-        uint16_t address{0x72};
-        std::string powerControlGPIOName{"power-chassis-control"};
-        std::string powerGoodGPIOName{"power-chassis-good"};
-        std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
-
-        EXPECT_TRUE(device.getGPIOValues(services) == gpioValues);
-    }
-
-    // Test where fails with exception
-    {
-        MockServices services;
-        EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
-            .Times(1)
-            .WillOnce(
-                Throw(std::runtime_error{"libgpiod: Unable to open chip"}));
-
         std::string name{"XYZ_PSEQ"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
+        EXPECT_TRUE(device.isOpen());
+
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+        EXPECT_CALL(gpio, release).Times(1);
+        device.close();
+        EXPECT_FALSE(device.isOpen());
+
+        // Test where does nothing because device already closed
+        device.close();
+        EXPECT_FALSE(device.isOpen());
+    }
+
+    // Test where fails: Exception thrown
+    try
+    {
+        std::string name{"XYZ_PSEQ"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
+
+        MockServices services;
+        device.open(services);
+        EXPECT_TRUE(device.isOpen());
+        MockGPIO& gpio = static_cast<MockGPIO&>(device.getPowerGoodGPIO());
+        // Note: release() called twice. Once directly and once by destructor.
+        EXPECT_CALL(gpio, release)
+            .Times(2)
+            .WillOnce(Throw(std::runtime_error{"Unable to release GPIO"}))
+            .WillOnce(Return());
+        device.close();
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Unable to release GPIO");
+    }
+}
+
+TEST_F(PMBusDriverDeviceTests, GetPMBusInterface)
+{
+    std::string name{"XYZ_PSEQ"};
+    uint8_t bus{3};
+    uint16_t address{0x72};
+    std::string powerControlGPIOName{"power-chassis-control"};
+    std::string powerGoodGPIOName{"power-chassis-good"};
+    std::vector<std::unique_ptr<Rail>> rails;
+    PMBusDriverDevice device{name,
+                             bus,
+                             address,
+                             powerControlGPIOName,
+                             powerGoodGPIOName,
+                             std::move(rails)};
+
+    // Test where works
+    MockServices services;
+    device.open(services);
+    MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
+    EXPECT_CALL(pmbus, read("status13_vout", Type::Debug, true))
+        .Times(1)
+        .WillOnce(Return(0xde));
+    uint8_t page{13};
+    EXPECT_EQ(device.getStatusVout(page), 0xde);
+
+    // Test where fails: Device not open
+    try
+    {
+        device.close();
+        device.getPMBusInterface();
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Device not open: XYZ_PSEQ");
+    }
+}
+
+TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
+{
+    // Test where works
+    {
+        std::string name{"ABC_382%#, ZY"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
+
+        MockServices services;
+        std::vector<int> gpioValues{1, 1, 1};
+        EXPECT_CALL(services, getGPIOValues("abc_382%#, zy"))
+            .Times(1)
+            .WillOnce(Return(gpioValues));
+
+        device.open(services);
+        EXPECT_TRUE(device.getGPIOValues(services) == gpioValues);
+    }
+
+    // Test where fails
+    {
+        std::string name{"XYZ_PSEQ"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
+
+        MockServices services;
+        EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
+            .Times(1)
+            .WillOnce(
+                Throw(std::runtime_error{"libgpiod: Unable to open chip"}));
+
+        // Device not open
         try
         {
+            device.getGPIOValues(services);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: XYZ_PSEQ");
+        }
+
+        // Exception thrown
+        try
+        {
+            device.open(services);
             device.getGPIOValues(services);
             ADD_FAILURE() << "Should not have reached this line.";
         }
@@ -322,23 +434,21 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
 {
     // Test where works
     {
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status13", Type::Debug, true))
             .Times(1)
@@ -348,30 +458,40 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
         EXPECT_EQ(device.getStatusWord(page), 0x1234);
     }
 
-    // Test where fails with exception
+    // Test where fails
     {
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        // Device not open
+        try
+        {
+            uint8_t page{0};
+            device.getStatusWord(page);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+
+        // Exception thrown
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status0", Type::Debug, true))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
-
         try
         {
             uint8_t page{0};
@@ -392,23 +512,21 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
 {
     // Test where works
     {
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status13_vout", Type::Debug, true))
             .Times(1)
@@ -418,30 +536,40 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
         EXPECT_EQ(device.getStatusVout(page), 0xde);
     }
 
-    // Test where fails with exception
+    // Test where fails
     {
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        // Device not open
+        try
+        {
+            uint8_t page{0};
+            device.getStatusVout(page);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+
+        // Exception thrown
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("status0_vout", Type::Debug, true))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
-
         try
         {
             uint8_t page{0};
@@ -465,23 +593,21 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         // Create simulated hwmon voltage label file
         createFile("in13_label"); // PAGE 9 -> file number 13
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -502,23 +628,34 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         // Create simulated hwmon voltage label file
         createFile("in13_label"); // PAGE 8 -> file number 13
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        // Device not open
+        try
+        {
+            uint8_t page{9};
+            device.getReadVout(page);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+
+        // Exception thrown
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -526,7 +663,6 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         EXPECT_CALL(pmbus, readString("in13_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout9")); // PAGE number 8 + 1
-
         try
         {
             uint8_t page{9};
@@ -550,23 +686,21 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         // Create simulated hwmon voltage label file
         createFile("in1_label"); // PAGE 6 -> file number 1
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -587,23 +721,34 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         // Create simulated hwmon voltage label file
         createFile("in1_label"); // PAGE 7 -> file number 1
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        // Device not open
+        try
+        {
+            uint8_t page{6};
+            device.getVoutUVFaultLimit(page);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+
+        // Exception thrown
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -611,7 +756,6 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         EXPECT_CALL(pmbus, readString("in1_label", Type::Hwmon))
             .Times(1)
             .WillOnce(Return("vout8")); // PAGE number 7 + 1
-
         try
         {
             uint8_t page{6};
@@ -640,23 +784,21 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("fan3_label");  // Not a voltage label file
         createFile("temp8_label"); // Not a voltage label file
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -681,23 +823,21 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("fan3_label");  // Not a voltage label file
         createFile("temp8_label"); // Not a voltage label file
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -726,12 +866,36 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         EXPECT_EQ(map.at(uint8_t{12}), 0);
     }
 
+    // Test where fails: Device not open
+    {
+        std::string name{"xyz_pseq"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
+
+        try
+        {
+            device.getPageToFileNumberMap();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+    }
+
     // Test where fails: hwmon directory path is actually a file
     {
         // Create file that will be returned as the hwmon directory path
         createFile("in9_label");
-
-        MockServices services;
 
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
@@ -739,15 +903,15 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -761,23 +925,21 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
 
     // Test where fails: hwmon directory path does not exist
     {
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -799,23 +961,21 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         // Change temporary directory to be unreadable
         fs::permissions(tempDirPath, fs::perms::none);
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -845,23 +1005,21 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         createFile("in0_label");  // PAGE 6 -> file number 0
         createFile("in13_label"); // PAGE 9 -> file number 13
 
-        MockServices services;
-
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -882,13 +1040,38 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         EXPECT_EQ(device.getFileNumber(page), 13);
     }
 
+    // Test where fails: Device not open
+    {
+        std::string name{"xyz_pseq"};
+        uint8_t bus{3};
+        uint16_t address{0x72};
+        std::string powerControlGPIOName{"power-chassis-control"};
+        std::string powerGoodGPIOName{"power-chassis-good"};
+        std::vector<std::unique_ptr<Rail>> rails;
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
+
+        try
+        {
+            uint8_t page{13};
+            device.getFileNumber(page);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: xyz_pseq");
+        }
+    }
+
     // Test where fails: No mapping for specified PMBus PAGE
     {
         // Create simulated hwmon voltage label files
         createFile("in0_label");  // PAGE 6 -> file number 0
         createFile("in13_label"); // PAGE 9 -> file number 13
-
-        MockServices services;
 
         std::string name{"xyz_pseq"};
         uint8_t bus{3};
@@ -896,15 +1079,15 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{
-            name,
-            bus,
-            address,
-            powerControlGPIOName,
-            powerGoodGPIOName,
-            std::move(rails),
-            services};
+        PMBusDriverDevice device{name,
+                                 bus,
+                                 address,
+                                 powerControlGPIOName,
+                                 powerGoodGPIOName,
+                                 std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -939,26 +1122,26 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     // Create simulated hwmon voltage label file
     createFile("in1_label"); // PAGE 6 -> file number 1
 
-    MockServices services;
-    std::vector<int> gpioValues{1, 1, 1};
-    EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
-        .Times(1)
-        .WillOnce(Return(gpioValues));
-
     std::string name{"xyz_pseq"};
     uint8_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
-    PMBusDriverDevice device{
-        name,
-        bus,
-        address,
-        powerControlGPIOName,
-        powerGoodGPIOName,
-        std::move(rails),
-        services};
+    PMBusDriverDevice device{name,
+                             bus,
+                             address,
+                             powerControlGPIOName,
+                             powerGoodGPIOName,
+                             std::move(rails)};
+
+    MockServices services;
+    std::vector<int> gpioValues{1, 1, 1};
+    EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
+        .Times(1)
+        .WillOnce(Return(gpioValues));
+
+    device.open(services);
 
     // Methods that get hwmon file info should be called twice
     MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
