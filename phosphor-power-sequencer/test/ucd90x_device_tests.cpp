@@ -18,7 +18,6 @@
 #include "mock_services.hpp"
 #include "pmbus.hpp"
 #include "rail.hpp"
-#include "services.hpp"
 #include "ucd90x_device.hpp"
 
 #include <cstdint>
@@ -62,8 +61,6 @@ static std::unique_ptr<Rail> createRail(const std::string& name,
 
 TEST(UCD90xDeviceTests, Constructor)
 {
-    MockServices services;
-
     std::string name{"ucd90320"};
     uint8_t bus{3};
     uint16_t address{0x72};
@@ -77,8 +74,7 @@ TEST(UCD90xDeviceTests, Constructor)
                         address,
                         powerControlGPIOName,
                         powerGoodGPIOName,
-                        std::move(rails),
-                        services};
+                        std::move(rails)};
 
     EXPECT_EQ(device.getName(), name);
     EXPECT_EQ(device.getBus(), bus);
@@ -90,15 +86,12 @@ TEST(UCD90xDeviceTests, Constructor)
     EXPECT_EQ(device.getRails()[1]->getName(), "VIO");
     EXPECT_EQ(device.getDriverName(), "ucd9000");
     EXPECT_EQ(device.getInstance(), 0);
-    EXPECT_NE(&(device.getPMBusInterface()), nullptr);
 }
 
 TEST(UCD90xDeviceTests, GetMfrStatus)
 {
     // Test where works
     {
-        MockServices services;
-
         std::string name{"ucd90320"};
         uint8_t bus{3};
         uint16_t address{0x72};
@@ -110,9 +103,10 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
                             address,
                             powerControlGPIOName,
                             powerGoodGPIOName,
-                            std::move(rails),
-                            services};
+                            std::move(rails)};
 
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         uint64_t mfrStatus{0x123456789abcull};
         EXPECT_CALL(pmbus, read("mfr_status", Type::HwmonDeviceDebug, true))
@@ -122,10 +116,8 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
         EXPECT_EQ(device.getMfrStatus(), mfrStatus);
     }
 
-    // Test where fails with exception
+    // Test where fails
     {
-        MockServices services;
-
         std::string name{"ucd90320"};
         uint8_t bus{3};
         uint16_t address{0x72};
@@ -137,14 +129,26 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
                             address,
                             powerControlGPIOName,
                             powerGoodGPIOName,
-                            std::move(rails),
-                            services};
+                            std::move(rails)};
 
+        // Device not open
+        try
+        {
+            device.getMfrStatus();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::exception& e)
+        {
+            EXPECT_STREQ(e.what(), "Device not open: ucd90320");
+        }
+
+        // Exception thrown
+        MockServices services;
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, read("mfr_status", Type::HwmonDeviceDebug, true))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
-
         try
         {
             device.getMfrStatus();
@@ -202,9 +206,9 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
                             address,
                             powerControlGPIOName,
                             powerGoodGPIOName,
-                            std::move(rails),
-                            services};
+                            std::move(rails)};
 
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
@@ -264,9 +268,9 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
                             address,
                             powerControlGPIOName,
                             powerGoodGPIOName,
-                            std::move(rails),
-                            services};
+                            std::move(rails)};
 
+        device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)

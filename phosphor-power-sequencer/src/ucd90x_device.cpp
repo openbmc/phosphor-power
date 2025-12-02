@@ -29,6 +29,7 @@ using namespace pmbus;
 
 uint64_t UCD90xDevice::getMfrStatus()
 {
+    verifyIsOpen();
     uint64_t value{0};
     try
     {

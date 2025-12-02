@@ -33,6 +33,8 @@ namespace fs = std::filesystem;
 
 std::vector<int> PMBusDriverDevice::getGPIOValues(Services& services)
 {
+    verifyIsOpen();
+
     // Get lower case version of device name to use as chip label
     std::string label{name};
     std::transform(label.begin(), label.end(), label.begin(), ::tolower);
@@ -54,6 +56,7 @@ std::vector<int> PMBusDriverDevice::getGPIOValues(Services& services)
 
 uint16_t PMBusDriverDevice::getStatusWord(uint8_t page)
 {
+    verifyIsOpen();
     uint16_t value{0};
     try
     {
@@ -71,6 +74,7 @@ uint16_t PMBusDriverDevice::getStatusWord(uint8_t page)
 
 uint8_t PMBusDriverDevice::getStatusVout(uint8_t page)
 {
+    verifyIsOpen();
     uint8_t value{0};
     try
     {
@@ -88,6 +92,7 @@ uint8_t PMBusDriverDevice::getStatusVout(uint8_t page)
 
 double PMBusDriverDevice::getReadVout(uint8_t page)
 {
+    verifyIsOpen();
     double volts{0.0};
     try
     {
@@ -109,6 +114,7 @@ double PMBusDriverDevice::getReadVout(uint8_t page)
 
 double PMBusDriverDevice::getVoutUVFaultLimit(uint8_t page)
 {
+    verifyIsOpen();
     double volts{0.0};
     try
     {
@@ -130,6 +136,7 @@ double PMBusDriverDevice::getVoutUVFaultLimit(uint8_t page)
 
 unsigned int PMBusDriverDevice::getFileNumber(uint8_t page)
 {
+    verifyIsOpen();
     if (pageToFileNumber.empty())
     {
         buildPageToFileNumberMap();

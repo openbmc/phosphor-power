@@ -76,7 +76,7 @@ std::filesystem::path find(
 }
 
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services)
+    const std::filesystem::path& pathName)
 {
     try
     {
@@ -85,7 +85,7 @@ std::vector<std::unique_ptr<Chassis>> parse(
         json rootElement = json::parse(file);
 
         // Parse tree of JSON elements and return corresponding C++ objects
-        return internal::parseRoot(rootElement, services);
+        return internal::parseRoot(rootElement);
     }
     catch (const std::exception& e)
     {
@@ -98,8 +98,7 @@ namespace internal
 
 std::unique_ptr<Chassis> parseChassis(
     const json& element,
-    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
-    Services& services)
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates)
 {
     verifyIsObject(element);
 
@@ -107,8 +106,7 @@ std::unique_ptr<Chassis> parseChassis(
     if (!element.contains("template_id"))
     {
         bool isChassisTemplate{false};
-        return parseChassisProperties(element, isChassisTemplate, NO_VARIABLES,
-                                      services);
+        return parseChassisProperties(element, isChassisTemplate, NO_VARIABLES);
     }
 
     // Parse chassis object that is using a template
@@ -146,28 +144,26 @@ std::unique_ptr<Chassis> parseChassis(
 
     // Parse properties in template using variable values for this chassis
     bool isChassisTemplate{true};
-    return parseChassisProperties(templateElement, isChassisTemplate, variables,
-                                  services);
+    return parseChassisProperties(templateElement, isChassisTemplate,
+                                  variables);
 }
 
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
     const json& element,
-    const std::map<std::string, JSONRefWrapper>& chassisTemplates,
-    Services& services)
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Chassis>> chassis;
     for (auto& chassisElement : element)
     {
-        chassis.emplace_back(
-            parseChassis(chassisElement, chassisTemplates, services));
+        chassis.emplace_back(parseChassis(chassisElement, chassisTemplates));
     }
     return chassis;
 }
 
 std::unique_ptr<Chassis> parseChassisProperties(
     const json& element, bool isChassisTemplate,
-    const std::map<std::string, std::string>& variables, Services& services)
+    const std::map<std::string, std::string>& variables)
 
 {
     verifyIsObject(element);
@@ -207,7 +203,7 @@ std::unique_ptr<Chassis> parseChassisProperties(
     const json& powerSequencersElement =
         getRequiredProperty(element, "power_sequencers");
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers =
-        parsePowerSequencerArray(powerSequencersElement, variables, services);
+        parsePowerSequencerArray(powerSequencersElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -318,7 +314,7 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
 
 std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables, Services& services)
+    const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -382,32 +378,32 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     {
         return std::make_unique<UCD90160Device>(
             bus, address, powerControlGPIOName, powerGoodGPIOName,
-            std::move(rails), services);
+            std::move(rails));
     }
     else if (type == UCD90320Device::deviceName)
     {
         return std::make_unique<UCD90320Device>(
             bus, address, powerControlGPIOName, powerGoodGPIOName,
-            std::move(rails), services);
+            std::move(rails));
     }
     else if (type == GPIOsOnlyDevice::deviceName)
     {
         return std::make_unique<GPIOsOnlyDevice>(powerControlGPIOName,
-                                                 powerGoodGPIOName, services);
+                                                 powerGoodGPIOName);
     }
     throw std::invalid_argument{"Invalid power sequencer type: " + type};
 }
 
 std::vector<std::unique_ptr<PowerSequencerDevice>> parsePowerSequencerArray(
     const nlohmann::json& element,
-    const std::map<std::string, std::string>& variables, Services& services)
+    const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
     for (auto& powerSequencerElement : element)
     {
         powerSequencers.emplace_back(
-            parsePowerSequencer(powerSequencerElement, variables, services));
+            parsePowerSequencer(powerSequencerElement, variables));
     }
     return powerSequencers;
 }
@@ -504,8 +500,7 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
     return rails;
 }
 
-std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
-                                                Services& services)
+std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -528,7 +523,7 @@ std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
     // Required chassis property
     const json& chassisElement = getRequiredProperty(element, "chassis");
     std::vector<std::unique_ptr<Chassis>> chassis =
-        parseChassisArray(chassisElement, chassisTemplates, services);
+        parseChassisArray(chassisElement, chassisTemplates);
     ++propertyCount;
 
     // Verify no invalid properties exist

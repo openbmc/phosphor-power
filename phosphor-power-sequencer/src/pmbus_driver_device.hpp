@@ -61,7 +61,6 @@ class PMBusDriverDevice : public StandardDevice
      * @param powerGoodGPIOName Name of the GPIO that reads the power good
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      * @param driverName Device driver name
      * @param instance Chip instance number
      */
@@ -69,15 +68,12 @@ class PMBusDriverDevice : public StandardDevice
         const std::string& name, uint8_t bus, uint16_t address,
         const std::string& powerControlGPIOName,
         const std::string& powerGoodGPIOName,
-        std::vector<std::unique_ptr<Rail>> rails, Services& services,
+        std::vector<std::unique_ptr<Rail>> rails,
         const std::string& driverName = "", size_t instance = 0) :
         StandardDevice(name, bus, address, powerControlGPIOName,
-                       powerGoodGPIOName, std::move(rails), services),
+                       powerGoodGPIOName, std::move(rails)),
         driverName{driverName}, instance{instance}
-    {
-        pmbusInterface =
-            services.createPMBus(bus, address, driverName, instance);
-    }
+    {}
 
     /**
      * Returns the device driver name.
@@ -99,14 +95,39 @@ class PMBusDriverDevice : public StandardDevice
         return instance;
     }
 
+    /** @copydoc PowerSequencerDevice::open() */
+    virtual void open(Services& services) override
+    {
+        if (!isOpen())
+        {
+            pmbusInterface =
+                services.createPMBus(bus, address, driverName, instance);
+            StandardDevice::open(services);
+        }
+    }
+
+    /** @copydoc PowerSequencerDevice::close() */
+    virtual void close() override
+    {
+        if (isOpen())
+        {
+            pmbusInterface.reset();
+            pageToFileNumber.clear();
+            StandardDevice::close();
+        }
+    }
+
     /**
      * Returns interface to the PMBus information that is provided by the device
      * driver in sysfs.
+     *
+     * Throws an exception if the device is not open.
      *
      * @return PMBus interface object
      */
     pmbus::PMBusBase& getPMBusInterface()
     {
+        verifyIsOpen();
         return *pmbusInterface;
     }
 
@@ -128,12 +149,14 @@ class PMBusDriverDevice : public StandardDevice
     /**
      * Returns map from PMBus PAGE numbers to sysfs hwmon file numbers.
      *
-     * Throws an exception if an error occurs trying to build the map.
+     * Throws an exception if the device is not open or an error occurs trying
+     * to build the map.
      *
      * @return page to file number map
      */
     const std::map<uint8_t, unsigned int>& getPageToFileNumberMap()
     {
+        verifyIsOpen();
         if (pageToFileNumber.empty())
         {
             buildPageToFileNumberMap();
@@ -145,8 +168,8 @@ class PMBusDriverDevice : public StandardDevice
      * Returns the hwmon file number that corresponds to the specified PMBus
      * PAGE number.
      *
-     * Throws an exception if a file number was not found for the specified PAGE
-     * number.
+     * Throws an exception if the device is not open or a file number was not
+     * found for the specified PAGE number.
      *
      * @param page PMBus PAGE number
      * @return hwmon file number
