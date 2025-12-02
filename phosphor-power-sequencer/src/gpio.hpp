@@ -116,11 +116,21 @@ class BMCGPIO : public GPIO
     /**
      * Destructor.
      *
-     * If requestRead() or requestWrite() was called to claim ownership of the
-     * GPIO, ownership will be automatically released due to the gpiod::line
-     * destructor.
+     * Releases ownership of the GPIO if it had been previously requested.
      */
-    virtual ~BMCGPIO() = default;
+    virtual ~BMCGPIO()
+    {
+        // Destructors must not throw exceptions
+        try
+        {
+            if (line.is_requested())
+            {
+                release();
+            }
+        }
+        catch (...)
+        {}
+    }
 
     /** @copydoc GPIO::requestRead() */
     virtual void requestRead() override

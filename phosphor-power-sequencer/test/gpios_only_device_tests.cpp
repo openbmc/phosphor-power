@@ -18,7 +18,6 @@
 #include "mock_gpio.hpp"
 #include "mock_services.hpp"
 #include "rail.hpp"
-#include "services.hpp"
 
 #include <cstdint>
 #include <map>
@@ -38,8 +37,7 @@ TEST(GPIOsOnlyDeviceTests, Constructor)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    MockServices services{};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
     EXPECT_EQ(device.getName(), GPIOsOnlyDevice::deviceName);
     EXPECT_EQ(device.getBus(), 0);
@@ -55,10 +53,10 @@ TEST(GPIOsOnlyDeviceTests, GetGPIOValues)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        MockServices services{};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
-                               services};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+        MockServices services{};
+        device.open(services);
         device.getGPIOValues(services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -74,10 +72,10 @@ TEST(GPIOsOnlyDeviceTests, GetStatusWord)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        MockServices services{};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
-                               services};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+        MockServices services{};
+        device.open(services);
         device.getStatusWord(0);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -93,10 +91,10 @@ TEST(GPIOsOnlyDeviceTests, GetStatusVout)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        MockServices services{};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
-                               services};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+        MockServices services{};
+        device.open(services);
         device.getStatusVout(0);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -112,10 +110,10 @@ TEST(GPIOsOnlyDeviceTests, GetReadVout)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        MockServices services{};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
-                               services};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+        MockServices services{};
+        device.open(services);
         device.getReadVout(0);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -131,10 +129,10 @@ TEST(GPIOsOnlyDeviceTests, GetVoutUVFaultLimit)
     {
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        MockServices services{};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName,
-                               services};
+        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+        MockServices services{};
+        device.open(services);
         device.getVoutUVFaultLimit(0);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -148,13 +146,29 @@ TEST(GPIOsOnlyDeviceTests, FindPgoodFault)
 {
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    MockServices services{};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName, services};
+    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
+    MockServices services{};
     std::string powerSupplyError{};
     std::map<std::string, std::string> additionalData{};
-    std::string error =
+
+    // Test where fails: Device not open
+    try
+    {
         device.findPgoodFault(services, powerSupplyError, additionalData);
-    EXPECT_TRUE(error.empty());
-    EXPECT_EQ(additionalData.size(), 0);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::exception& e)
+    {
+        EXPECT_STREQ(e.what(), "Device not open: gpios_only_device");
+    }
+
+    // Test where works
+    {
+        device.open(services);
+        std::string error =
+            device.findPgoodFault(services, powerSupplyError, additionalData);
+        EXPECT_TRUE(error.empty());
+        EXPECT_EQ(additionalData.size(), 0);
+    }
 }

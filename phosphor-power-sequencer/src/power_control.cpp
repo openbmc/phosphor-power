@@ -134,6 +134,10 @@ std::string PowerControl::findPgoodFault(
             {
                 for (auto& powerSequencer : chassis->getPowerSequencers())
                 {
+                    if (!powerSequencer->isOpen())
+                    {
+                        powerSequencer->open(services);
+                    }
                     error = powerSequencer->findPgoodFault(
                         services, powerSupplyError, additionalData);
                     if (!error.empty())
@@ -331,7 +335,7 @@ void PowerControl::loadConfigFile()
         if (!configFile.empty())
         {
             std::vector<std::unique_ptr<Chassis>> chassis =
-                config_file_parser::parse(configFile, services);
+                config_file_parser::parse(configFile);
             system = std::make_unique<System>(std::move(chassis));
         }
     }

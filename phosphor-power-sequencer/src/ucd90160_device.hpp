@@ -55,14 +55,13 @@ class UCD90160Device : public UCD90xDevice
      * @param powerGoodGPIOName Name of the GPIO that reads the power good
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      */
-    explicit UCD90160Device(
-        uint8_t bus, uint16_t address, const std::string& powerControlGPIOName,
-        const std::string& powerGoodGPIOName,
-        std::vector<std::unique_ptr<Rail>> rails, Services& services) :
+    explicit UCD90160Device(uint8_t bus, uint16_t address,
+                            const std::string& powerControlGPIOName,
+                            const std::string& powerGoodGPIOName,
+                            std::vector<std::unique_ptr<Rail>> rails) :
         UCD90xDevice(deviceName, bus, address, powerControlGPIOName,
-                     powerGoodGPIOName, std::move(rails), services)
+                     powerGoodGPIOName, std::move(rails))
     {}
 
     constexpr static std::string deviceName{"UCD90160"};

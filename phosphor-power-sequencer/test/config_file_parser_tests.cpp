@@ -16,7 +16,6 @@
 #include "chassis.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
-#include "mock_services.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
 #include "temporary_file.hpp"
@@ -271,8 +270,7 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        MockServices services{};
-        auto chassis = parse(pathName, services);
+        auto chassis = parse(pathName);
 
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
@@ -286,8 +284,7 @@ TEST(ConfigFileParserTests, Parse)
     // Test where fails: File does not exist
     {
         fs::path pathName{"/tmp/non_existent_file"};
-        MockServices services{};
-        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
+        EXPECT_THROW(parse(pathName), ConfigFileParserError);
     }
 
     // Test where fails: File is not readable
@@ -309,8 +306,7 @@ TEST(ConfigFileParserTests, Parse)
         writeConfigFile(pathName, configFileContents);
 
         chmod(pathName.c_str(), 0222);
-        MockServices services{};
-        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
+        EXPECT_THROW(parse(pathName), ConfigFileParserError);
     }
 
     // Test where fails: File is not valid JSON
@@ -321,8 +317,7 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        MockServices services{};
-        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
+        EXPECT_THROW(parse(pathName), ConfigFileParserError);
     }
 
     // Test where fails: JSON does not conform to config file format
@@ -333,8 +328,7 @@ TEST(ConfigFileParserTests, Parse)
         fs::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        MockServices services{};
-        EXPECT_THROW(parse(pathName, services), ConfigFileParserError);
+        EXPECT_THROW(parse(pathName), ConfigFileParserError);
     }
 }
 
@@ -377,8 +371,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               ]
             }
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassis(element, chassisTemplates, services);
+        auto chassis = parseChassis(element, chassisTemplates);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
@@ -400,8 +393,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               }
             }
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassis(element, chassisTemplates, services);
+        auto chassis = parseChassis(element, chassisTemplates);
         EXPECT_EQ(chassis->getNumber(), 2);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
@@ -424,8 +416,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               }
             }
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassis(element, chassisTemplates, services);
+        auto chassis = parseChassis(element, chassisTemplates);
         EXPECT_EQ(chassis->getNumber(), 3);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis3");
@@ -439,8 +430,7 @@ TEST(ConfigFileParserTests, ParseChassis)
     try
     {
         const json element = R"( [ "vdda", "vddb" ] )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -458,8 +448,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "power_sequencers": []
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -476,8 +465,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_id": "foo_chassis"
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -496,8 +484,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": { "chassis_number": "2" }
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -515,8 +502,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": { "chassis_number": "2" }
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -534,8 +520,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": { "chassis_number": 2 }
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -553,8 +538,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "foo": "bar"
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -571,8 +555,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": { "chassis_number": "0" }
             }
         )"_json;
-        MockServices services{};
-        parseChassis(element, chassisTemplates, services);
+        parseChassis(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -610,8 +593,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
             [
             ]
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        auto chassis = parseChassisArray(element, chassisTemplates);
         EXPECT_EQ(chassis.size(), 0);
     }
 
@@ -631,8 +613,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
               }
             ]
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        auto chassis = parseChassisArray(element, chassisTemplates);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[0]->getInventoryPath(),
@@ -656,8 +637,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
               }
             ]
         )"_json;
-        MockServices services{};
-        auto chassis = parseChassisArray(element, chassisTemplates, services);
+        auto chassis = parseChassisArray(element, chassisTemplates);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 2);
         EXPECT_EQ(chassis[0]->getInventoryPath(),
@@ -675,8 +655,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
                 "foo": "bar"
             }
         )"_json;
-        MockServices services{};
-        parseChassisArray(element, chassisTemplates, services);
+        parseChassisArray(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -696,8 +675,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
               }
             ]
         )"_json;
-        MockServices services{};
-        parseChassisArray(element, chassisTemplates, services);
+        parseChassisArray(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -716,8 +694,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
                 }
             ]
         )"_json;
-        MockServices services{};
-        parseChassisArray(element, chassisTemplates, services);
+        parseChassisArray(element, chassisTemplates);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -749,9 +726,8 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        auto chassis = parseChassisProperties(element, isChassisTemplate,
-                                              variables, services);
+        auto chassis =
+            parseChassisProperties(element, isChassisTemplate, variables);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
@@ -792,9 +768,8 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         bool isChassisTemplate{true};
         std::map<std::string, std::string> variables{
             {"chassis_number", "2"}, {"bus", "12"}, {"address", "0x71"}};
-        MockServices services{};
-        auto chassis = parseChassisProperties(element, isChassisTemplate,
-                                              variables, services);
+        auto chassis =
+            parseChassisProperties(element, isChassisTemplate, variables);
         EXPECT_EQ(chassis->getNumber(), 2);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
@@ -817,8 +792,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         const json element = R"( true )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -838,8 +812,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{true};
         std::map<std::string, std::string> variables{{"chassis_number", "2"}};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -858,8 +831,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -879,8 +851,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{true};
         std::map<std::string, std::string> variables{{"chassis_number", "2"}};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -899,8 +870,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -920,8 +890,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -941,8 +910,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -962,8 +930,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -983,8 +950,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1005,8 +971,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{false};
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1027,8 +992,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         )"_json;
         bool isChassisTemplate{true};
         std::map<std::string, std::string> variables{{"chassis_number", "two"}};
-        MockServices services{};
-        parseChassisProperties(element, isChassisTemplate, variables, services);
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1610,8 +1574,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        auto powerSequencer = parsePowerSequencer(element, variables);
         EXPECT_EQ(powerSequencer->getName(), "UCD90160");
         EXPECT_EQ(powerSequencer->getBus(), 3);
         EXPECT_EQ(powerSequencer->getAddress(), 0x11);
@@ -1643,8 +1606,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             {"power_good_gpio_name", "pgood"},
             {"rail1", "cpu1"},
             {"rail2", "cpu2"}};
-        MockServices services{};
-        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        auto powerSequencer = parsePowerSequencer(element, variables);
         EXPECT_EQ(powerSequencer->getName(), "UCD90320");
         EXPECT_EQ(powerSequencer->getBus(), 4);
         EXPECT_EQ(powerSequencer->getAddress(), 0x24);
@@ -1665,8 +1627,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        auto powerSequencer = parsePowerSequencer(element, variables, services);
+        auto powerSequencer = parsePowerSequencer(element, variables);
         EXPECT_EQ(powerSequencer->getName(), "gpios_only_device");
         EXPECT_EQ(powerSequencer->getBus(), 0);
         EXPECT_EQ(powerSequencer->getAddress(), 0);
@@ -1681,8 +1642,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"( [ "vdda", "vddb" ] )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1702,8 +1662,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1723,8 +1682,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1744,8 +1702,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1766,8 +1723,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1788,8 +1744,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1810,8 +1765,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1832,8 +1786,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1854,8 +1807,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1876,8 +1828,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1898,8 +1849,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1920,8 +1870,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1943,8 +1892,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1965,8 +1913,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{{"bus", "two"}};
-        MockServices services{};
-        parsePowerSequencer(element, variables, services);
+        parsePowerSequencer(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1984,9 +1931,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             ]
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        auto powerSequencers =
-            parsePowerSequencerArray(element, variables, services);
+        auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 0);
     }
 
@@ -2011,9 +1956,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             ]
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        auto powerSequencers =
-            parsePowerSequencerArray(element, variables, services);
+        auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
         EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 3);
@@ -2048,9 +1991,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             {"address1", "0x22"},
             {"bus2", "7"},
             {"address2", "0x49"}};
-        MockServices services{};
-        auto powerSequencers =
-            parsePowerSequencerArray(element, variables, services);
+        auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
         EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 5);
@@ -2069,8 +2010,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             }
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencerArray(element, variables, services);
+        parsePowerSequencerArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2094,8 +2034,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             ]
         )"_json;
         std::map<std::string, std::string> variables{};
-        MockServices services{};
-        parsePowerSequencerArray(element, variables, services);
+        parsePowerSequencerArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2119,8 +2058,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         )"_json;
         std::map<std::string, std::string> variables{{"bus", "7"},
                                                      {"address", "70"}};
-        MockServices services{};
-        parsePowerSequencerArray(element, variables, services);
+        parsePowerSequencerArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2566,8 +2504,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               ]
             }
         )"_json;
-        MockServices services{};
-        auto chassis = parseRoot(element, services);
+        auto chassis = parseRoot(element);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[0]->getInventoryPath(),
@@ -2608,8 +2545,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               ]
             }
         )"_json;
-        MockServices services{};
-        auto chassis = parseRoot(element, services);
+        auto chassis = parseRoot(element);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 2);
         EXPECT_EQ(chassis[0]->getInventoryPath(),
@@ -2623,8 +2559,7 @@ TEST(ConfigFileParserTests, ParseRoot)
     try
     {
         const json element = R"( [ "VDD_CPU0", "VCS_CPU1" ] )"_json;
-        MockServices services{};
-        parseRoot(element, services);
+        parseRoot(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2648,8 +2583,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               ]
             }
         )"_json;
-        MockServices services{};
-        parseRoot(element, services);
+        parseRoot(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2672,8 +2606,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               ]
             }
         )"_json;
-        MockServices services{};
-        parseRoot(element, services);
+        parseRoot(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2695,8 +2628,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               ]
             }
         )"_json;
-        MockServices services{};
-        parseRoot(element, services);
+        parseRoot(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2719,8 +2651,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               "foo": true
             }
         )"_json;
-        MockServices services{};
-        parseRoot(element, services);
+        parseRoot(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)

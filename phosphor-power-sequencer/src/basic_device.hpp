@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -47,7 +48,6 @@ class BasicDevice : public PowerSequencerDevice
     BasicDevice(BasicDevice&&) = delete;
     BasicDevice& operator=(const BasicDevice&) = delete;
     BasicDevice& operator=(BasicDevice&&) = delete;
-    virtual ~BasicDevice() = default;
 
     /**
      * Constructor.
@@ -62,21 +62,28 @@ class BasicDevice : public PowerSequencerDevice
      * @param powerGoodGPIOName name of the GPIO that reads the power good
      *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
-     * @param services System services like hardware presence and the journal
      */
     explicit BasicDevice(const std::string& name, uint8_t bus, uint16_t address,
                          const std::string& powerControlGPIOName,
                          const std::string& powerGoodGPIOName,
-                         std::vector<std::unique_ptr<Rail>> rails,
-                         Services& services) :
+                         std::vector<std::unique_ptr<Rail>> rails) :
         name{name}, bus{bus}, address{address},
         powerControlGPIOName{powerControlGPIOName},
         powerGoodGPIOName{powerGoodGPIOName}, rails{std::move(rails)}
-    {
-        powerControlGPIO = services.createGPIO(powerControlGPIOName);
+    {}
 
-        powerGoodGPIO = services.createGPIO(powerGoodGPIOName);
-        powerGoodGPIO->requestRead();
+    /**
+     * Destructor.
+     *
+     * Closes the device if it is open.
+     */
+    virtual ~BasicDevice()
+    {
+        if (isOpen())
+        {
+            // Destructors must not throw exceptions
+            closeWithoutException();
+        }
     }
 
     /** @copydoc PowerSequencerDevice::getName() */
@@ -115,21 +122,73 @@ class BasicDevice : public PowerSequencerDevice
         return rails;
     }
 
+    /** @copydoc PowerSequencerDevice::open() */
+    virtual void open(Services& services) override
+    {
+        if (!isOpen())
+        {
+            powerControlGPIO = services.createGPIO(powerControlGPIOName);
+
+            powerGoodGPIO = services.createGPIO(powerGoodGPIOName);
+            powerGoodGPIO->requestRead();
+
+            isDeviceOpen = true;
+        }
+    }
+
+    /** @copydoc PowerSequencerDevice::isOpen() */
+    virtual bool isOpen() const override
+    {
+        return isDeviceOpen;
+    }
+
+    /** @copydoc PowerSequencerDevice::close() */
+    virtual void close() override
+    {
+        if (isOpen())
+        {
+            powerControlGPIO.reset();
+
+            // Verify pointer valid in case close() threw exception previously
+            if (powerGoodGPIO)
+            {
+                powerGoodGPIO->release();
+            }
+            powerGoodGPIO.reset();
+
+            isDeviceOpen = false;
+        }
+    }
+
+    /** @copydoc PowerSequencerDevice::closeWithoutException() */
+    virtual void closeWithoutException() noexcept override
+    {
+        try
+        {
+            close();
+        }
+        catch (...)
+        {}
+    }
+
     /** @copydoc PowerSequencerDevice::getPowerControlGPIO() */
     virtual GPIO& getPowerControlGPIO() override
     {
+        verifyIsOpen();
         return *powerControlGPIO;
     }
 
     /** @copydoc PowerSequencerDevice::getPowerGoodGPIO() */
     virtual GPIO& getPowerGoodGPIO() override
     {
+        verifyIsOpen();
         return *powerGoodGPIO;
     }
 
     /** @copydoc PowerSequencerDevice::powerOn() */
     virtual void powerOn() override
     {
+        verifyIsOpen();
         powerControlGPIO->requestWrite(1);
         powerControlGPIO->setValue(1);
         powerControlGPIO->release();
@@ -138,6 +197,7 @@ class BasicDevice : public PowerSequencerDevice
     /** @copydoc PowerSequencerDevice::powerOff() */
     virtual void powerOff() override
     {
+        verifyIsOpen();
         powerControlGPIO->requestWrite(0);
         powerControlGPIO->setValue(0);
         powerControlGPIO->release();
@@ -146,10 +206,24 @@ class BasicDevice : public PowerSequencerDevice
     /** @copydoc PowerSequencerDevice::getPowerGood() */
     virtual bool getPowerGood() override
     {
+        verifyIsOpen();
         return (powerGoodGPIO->getValue() == 1);
     }
 
   protected:
+    /**
+     * Verifies that this device is open.
+     *
+     * Throws an exception if device is not open.
+     */
+    virtual void verifyIsOpen()
+    {
+        if (!isOpen())
+        {
+            throw std::runtime_error{"Device not open: " + name};
+        }
+    }
+
     /**
      * Device name.
      */
@@ -179,6 +253,11 @@ class BasicDevice : public PowerSequencerDevice
      * Voltage rails that are enabled and monitored by this device.
      */
     std::vector<std::unique_ptr<Rail>> rails{};
+
+    /**
+     * Specifies whether this device is open.
+     */
+    bool isDeviceOpen{false};
 
     /**
      * GPIO that turns this device on and off.

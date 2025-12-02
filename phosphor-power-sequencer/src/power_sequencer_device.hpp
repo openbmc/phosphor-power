@@ -90,7 +90,46 @@ class PowerSequencerDevice
     virtual const std::vector<std::unique_ptr<Rail>>& getRails() const = 0;
 
     /**
+     * Open this device.
+     *
+     * This method must be called before any methods that access the device or
+     * the named GPIOs.
+     *
+     * Does nothing if the device is already open.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    virtual void open(Services& services) = 0;
+
+    /**
+     * Returns whether this device is open.
+     *
+     * @return true if device is open, false otherwise
+     */
+    virtual bool isOpen() const = 0;
+
+    /**
+     * Close this device.
+     *
+     * Does nothing if the device is not open.
+     *
+     * Throws an exception if an error occurs.
+     */
+    virtual void close() = 0;
+
+    /**
+     * Close this device, ignoring any errors that occur.
+     *
+     * Does nothing if the device is not open.
+     */
+    virtual void closeWithoutException() noexcept = 0;
+
+    /**
      * Returns the GPIO that turns this device on and off.
+     *
+     * Throws an exception if the device is not open.
      *
      * @return GPIO object
      */
@@ -98,6 +137,8 @@ class PowerSequencerDevice
 
     /**
      * Returns the GPIO that reads the power good signal from this device.
+     *
+     * Throws an exception if the device is not open.
      *
      * @return GPIO object
      */
@@ -113,7 +154,8 @@ class PowerSequencerDevice
      * When the power on is complete, the device will normally set the
      * device-level power good signal to true.
      *
-     * Throws an exception if an error occurs powering on the device.
+     * Throws an exception if the device is not open or an error occurs powering
+     * on the device.
      */
     virtual void powerOn() = 0;
 
@@ -126,7 +168,8 @@ class PowerSequencerDevice
      * When the power off is complete, the device will normally set the
      * device-level power good signal to false.
      *
-     * Throws an exception if an error occurs powering off the device.
+     * Throws an exception if the device is not open or an error occurs powering
+     * off the device.
      */
     virtual void powerOff() = 0;
 
@@ -139,8 +182,8 @@ class PowerSequencerDevice
      * A return value of false normally indicates that at least one voltage rail
      * being monitored by this device is not asserting power good.
      *
-     * Throws an exception if an error occurs obtaining the power good signal
-     * from the device.
+     * Throws an exception if the device is not open or an error occurs
+     * obtaining the power good signal from the device.
      *
      * @return power good signal for this device
      */
@@ -155,8 +198,8 @@ class PowerSequencerDevice
      * different from the physical pin numbers on the device.  Consult the
      * device documentation for more information.
      *
-     * Throws an exception if the values could not be read or the device does
-     * not support GPIO values.
+     * Throws an exception if the device is not open, the values could not be
+     * read, or the device does not support GPIO values.
      *
      * @param services System services like hardware presence and the journal
      * @return GPIO values
@@ -169,8 +212,8 @@ class PowerSequencerDevice
      *
      * The returned value is in host-endian order.
      *
-     * Throws an exception if the value could not be obtained or the device does
-     * not support the STATUS_WORD command.
+     * Throws an exception if the device is not open, the value could not be
+     * obtained, or the device does not support the STATUS_WORD command.
      *
      * @param page PMBus page
      * @return STATUS_WORD value
@@ -181,8 +224,8 @@ class PowerSequencerDevice
      * Returns the value of the PMBus STATUS_VOUT command for the specified
      * PMBus page.
      *
-     * Throws an exception if the value could not be obtained or the device does
-     * not support the STATUS_VOUT command.
+     * Throws an exception if the device is not open, the value could not be
+     * obtained, or the device does not support the STATUS_VOUT command.
      *
      * @param page PMBus page
      * @return STATUS_VOUT value
@@ -195,8 +238,8 @@ class PowerSequencerDevice
      *
      * The returned value is in Volts.
      *
-     * Throws an exception if the value could not be obtained or the device does
-     * not support the READ_VOUT command.
+     * Throws an exception if the device is not open, the value could not be
+     * obtained, or the device does not support the READ_VOUT command.
      *
      * @param page PMBus page
      * @return READ_VOUT value in volts
@@ -209,8 +252,8 @@ class PowerSequencerDevice
      *
      * The returned value is in Volts.
      *
-     * Throws an exception if the value could not be obtained or the device does
-     * not support the VOUT_UV_FAULT_LIMIT command.
+     * Throws an exception if the device is not open, the value could not be
+     * obtained, or the device does not support the VOUT_UV_FAULT_LIMIT command.
      *
      * @param page PMBus page
      * @return VOUT_UV_FAULT_LIMIT value in volts
@@ -225,8 +268,8 @@ class PowerSequencerDevice
      * error that should be logged.  If no fault was found, an empty string is
      * returned.
      *
-     * Throws an exception if an error occurs while trying to obtain the status
-     * of the rails.
+     * Throws an exception if the device is not open or an error occurs while
+     * trying to obtain the status of the rails.
      *
      * @param services System services like hardware presence and the journal
      * @param powerSupplyError Power supply error that occurred before the pgood

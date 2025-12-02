@@ -15,10 +15,8 @@
  */
 
 #include "chassis.hpp"
-#include "mock_services.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
-#include "services.hpp"
 #include "ucd90160_device.hpp"
 
 #include <stddef.h> // for size_t
@@ -41,28 +39,25 @@ using namespace phosphor::power::sequencer;
  *
  * @param bus I2C bus for the device
  * @param address I2C address for the device
- * @param services System services like hardware presence and the journal
  * @return PowerSequencerDevice instance
  */
-std::unique_ptr<PowerSequencerDevice> createPowerSequencer(
-    uint8_t bus, uint16_t address, Services& services)
+std::unique_ptr<PowerSequencerDevice> createPowerSequencer(uint8_t bus,
+                                                           uint16_t address)
 {
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
     return std::make_unique<UCD90160Device>(
-        bus, address, powerControlGPIOName, powerGoodGPIOName, std::move(rails),
-        services);
+        bus, address, powerControlGPIOName, powerGoodGPIOName,
+        std::move(rails));
 }
 
 TEST(ChassisTests, Constructor)
 {
-    MockServices services;
-
     size_t number{1};
     std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
-    powerSequencers.emplace_back(createPowerSequencer(3, 0x70, services));
+    powerSequencers.emplace_back(createPowerSequencer(3, 0x70));
     Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
 
     EXPECT_EQ(chassis.getNumber(), number);
@@ -74,8 +69,6 @@ TEST(ChassisTests, Constructor)
 
 TEST(ChassisTests, GetNumber)
 {
-    MockServices services;
-
     size_t number{2};
     std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis2"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
@@ -86,8 +79,6 @@ TEST(ChassisTests, GetNumber)
 
 TEST(ChassisTests, GetInventoryPath)
 {
-    MockServices services;
-
     size_t number{3};
     std::string inventoryPath{
         "/xyz/openbmc_project/inventory/system/chassis_3"};
@@ -99,14 +90,12 @@ TEST(ChassisTests, GetInventoryPath)
 
 TEST(ChassisTests, GetPowerSequencers)
 {
-    MockServices services;
-
     size_t number{2};
     std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis2"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
-    powerSequencers.emplace_back(createPowerSequencer(3, 0x70, services));
-    powerSequencers.emplace_back(createPowerSequencer(4, 0x32, services));
-    powerSequencers.emplace_back(createPowerSequencer(10, 0x16, services));
+    powerSequencers.emplace_back(createPowerSequencer(3, 0x70));
+    powerSequencers.emplace_back(createPowerSequencer(4, 0x32));
+    powerSequencers.emplace_back(createPowerSequencer(10, 0x16));
     Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
 
     EXPECT_EQ(chassis.getPowerSequencers().size(), 3);
