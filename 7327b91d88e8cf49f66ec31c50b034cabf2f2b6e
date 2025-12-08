@@ -1,0 +1,283 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5acc47df_1c8813d6",
+        "filename": "OWNERS",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "This change is unrelated to the rest of the commit, so it should be in a separate commit/review.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a1717f_d58988fd",
+        "filename": "OWNERS",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Faisal do you have a Discord account? If so you should add it to this list.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276c3073_e51bfdce",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "See my comments in chassis.hpp.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e91d852_ea486e6a",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "See my comments in chassis.hpp",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "637073ae_3ee60abb",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "As noted in chassis.hpp, we shouldn\u0027t have variables named \u0027tmp\u0027. Also, I think we want to pass in a chassis number rather than a chassis name. That number can be used to build the D-Bus paths.\n\nFor example, in one D-Bus path we might need \u0027.../chassis1/...\u0027.  In another path we might need \u0027.../c1_...\u0027. The chassis information in a D-Bus path will probably vary.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc1ba143_6db08a8d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "You should use lg2 here like it is in psu_manager.cpp. Anwaar coverted all our calls to the new API.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4c8b25b_5061e265",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Should add new parameter to doxygen",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1281340_4a6cd782",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Do we want a name or a number? Or both?\n\nWe need the chassis number to build D-Bus object paths. We will probably also need it for logging errors and other things.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8053bd00_6ba7ffea",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Should this be removed?  No doxygen, and we shouldn\u0027t have variables named \u0027tmp*\u0027.",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 37
+      },
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1952543f_b63cefad",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "I think this should just be ObjectManager. I don\u0027t think there is a ChassisObjectManager interface.",
+      "range": {
+        "startLine": 236,
+        "startChar": 28,
+        "endLine": 236,
+        "endChar": 49
+      },
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "095d7c1b_82020260",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "phosphor-chassis-state-manager is the primary user of this D-Bus interface. It is expecting the path `/xyz/openbmc_project/power/power_supplies/chassis{}/psus` (where {} is replaced with the chassis number).\n\nhttps://github.com/openbmc/phosphor-state-manager/blob/master/chassis_state_manager.cpp#L100\n\nWe should probably not change this unless the owner of chassis state manager wants it to change too. It already supports multiple chassis.\n\nThe ObjectManager interface is used to obtain all the D-Bus objects from an application. The D-Bus path for the ObjectManager interface needs to be the parent/root of all the D-Bus object paths.\n\nIf you really want to have one of these ObjectManager interfaces for each chassis, the root path should probably be `/xyz/openbmc_project/power/power_supplies/chassis{}` (where {} is replaced with the chassis number).\n\nHowever, given that ObjectManager normally gives you all the D-Bus objects for an application, this ObjectManager should probably be moved to the system level (not chassis level).  Then it can keep the path `/xyz/openbmc_project/power/power_supplies` that is currently used in psu_manager.*. I think this is what other applications that use the ObjectManager interface would expect.",
+      "range": {
+        "startLine": 240,
+        "startChar": 7,
+        "endLine": 240,
+        "endChar": 57
+      },
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80dcb7a1_f8a05c64",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Should this be removed?  No doxygen, and we shouldn\u0027t have variables named \u0027tmp*\u0027.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4057e104_1bc32c6c",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "The D-Bus path to sensors is defined here:\n\nhttps://github.com/openbmc/docs/blob/master/architecture/sensor-architecture.md\n\nThe individual sensors must have the path `/xyz/openbmc_project/sensors/\u003ctype\u003e/\u003clabel\u003e`.\n\nCurrently the input voltage sensors have the path `/xyz/openbmc_project/sensors/voltage/ps{}_input_voltage_rating`. So this should probably change to something like `/xyz/openbmc_project/sensors/voltage/c{}_ps{}_input_voltage_rating`.\n\nThe ObjectManager interface is used to obtain all the D-Bus objects from an application. The D-Bus path for the ObjectManager interface needs to be the parent/root of all the D-Bus object paths. So this should stay at `/xyz/openbmc_project/sensors` like it is currently in psu_manager.*.\n\nGiven that all the chassis will have the same root object path, this ObjectManager interface should probably be moved to the system level. Otherwise we\u0027d have another instance of this, with the same root D-Bus path, for each chassis. I\u0027m not sure if it is valid to have multiple ObjectManager interfaces on the same path and in the same application.",
+      "range": {
+        "startLine": 250,
+        "startChar": 7,
+        "endLine": 250,
+        "endChar": 44
+      },
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57dc4cd0_10577bb5",
+        "filename": "phosphor-power-supply/new_power_supply.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "If the chassis is unknown, shouldn\u0027t it skip line 1344? I don\u0027t think it is valid to make an association where the chassis is empty.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14fdedc7_7e309730",
+        "filename": "phosphor-power-supply/util.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2025-12-08T16:15:22Z",
+      "side": 1,
+      "message": "Delete. This line will never be executed since you throw an exception above.",
+      "revId": "7327b91d88e8cf49f66ec31c50b034cabf2f2b6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
