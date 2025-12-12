@@ -32,7 +32,7 @@ using DbusInterfaceList = std::vector<DbusInterface>;
 using DbusSubtree =
     std::map<DbusPath, std::map<DbusService, DbusInterfaceList>>;
 using DbusVariant =
-    std::variant<bool, uint64_t, std::string, std::vector<uint64_t>,
+    std::variant<bool, int, uint64_t, std::string, std::vector<uint64_t>,
                  std::vector<std::string>>;
 using DbusPropertyMap = std::map<DbusProperty, DbusVariant>;
 /**
