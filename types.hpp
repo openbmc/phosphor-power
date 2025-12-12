@@ -15,6 +15,9 @@ constexpr auto OPERATIONAL_STATE_IFACE =
 constexpr auto VERSION_IFACE = "xyz.openbmc_project.Software.Version";
 constexpr auto AVAILABILITY_IFACE =
     "xyz.openbmc_project.State.Decorator.Availability";
+constexpr auto ENABLE_IFACE = "xyz.openbmc_project.Object.Enable";
+constexpr auto POWER_SYSTEM_INPUTS_IFACE =
+    "xyz.openbmc_project.State.Decorator.PowerSystemInputs";
 constexpr auto ASSOC_DEF_IFACE = "xyz.openbmc_project.Association.Definitions";
 constexpr auto CHASSIS_IFACE = "xyz.openbmc_project.Inventory.Item.Chassis";
 #ifdef IBM_VPD
@@ -28,6 +31,10 @@ constexpr auto RESOLVED_PROP = "Resolved";
 constexpr auto PRESENT_PROP = "Present";
 constexpr auto FUNCTIONAL_PROP = "Functional";
 constexpr auto AVAILABLE_PROP = "Available";
+constexpr auto ENABLED_PROP = "Enabled";
+constexpr auto STATUS_PROP = "Status";
+constexpr auto POWER_STATE_PROP = "state";
+constexpr auto POWER_GOOD_PROP = "pgood";
 constexpr auto ASSOC_PROP = "Associations";
 
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";

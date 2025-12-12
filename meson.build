@@ -176,6 +176,7 @@ libpower = static_library(
     'power',
     error_cpp,
     error_hpp,
+    'chassis_status_monitor.cpp',
     'compatible_system_types_finder.cpp',
     'dbus_interfaces_finder.cpp',
     'gpio.cpp',
