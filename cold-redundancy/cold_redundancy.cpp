@@ -49,11 +49,6 @@ ColdRedundancy::ColdRedundancy(
     post(io, [this, &systemBus]() { createPSU(systemBus); });
     std::function<void(sdbusplus::message_t&)> eventHandler =
         [this, &systemBus](sdbusplus::message_t& message) {
-            if (message.is_method_error())
-            {
-                std::cerr << "callback method error\n";
-                return;
-            }
             filterTimer.expires_after(std::chrono::seconds(1));
             filterTimer.async_wait(
                 [this, &systemBus](const boost::system::error_code& ec) {
