@@ -149,6 +149,10 @@ class ChassisStatusMonitor
     /**
      * Returns whether the chassis is available.
      *
+     * If the Available property is false, it means that communication to the
+     * chassis is not possible. For example, the chassis does not have any input
+     * power or communication cables to the BMC are disconnected.
+     *
      * Returns true if monitoring this property is not enabled.
      *
      * Throws an exception if the property value could not be obtained.
