@@ -17,10 +17,13 @@
 
 #include "chassis_status_monitor.hpp"
 #include "power_sequencer_device.hpp"
+#include "services.hpp"
 
 #include <stddef.h> // for size_t
 
+#include <format>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -66,7 +69,11 @@ class Chassis
         number{number}, inventoryPath{inventoryPath},
         powerSequencers{std::move(powerSequencers)},
         monitorOptions{monitorOptions}
-    {}
+    {
+        // Disable monitoring for D-Bus properties owned by this application
+        this->monitorOptions.isPowerStateMonitored = false;
+        this->monitorOptions.isPowerGoodMonitored = false;
+    }
 
     /**
      * Returns the chassis number within the system.
@@ -109,7 +116,139 @@ class Chassis
         return monitorOptions;
     }
 
+    /**
+     * Initializes chassis monitoring.
+     *
+     * Creates a ChassisStatusMonitor object based on the monitoring options
+     * specified in the constructor.
+     *
+     * This method must be called before any methods that return chassis status
+     * or return the ChassisStatusMonitor object.
+     *
+     * Normally this method is only called once. However, it can be called
+     * multiple times if required, such as for automated testing.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void initializeMonitoring(Services& services)
+    {
+        // Note: replaces/deletes any previous monitor object
+        statusMonitor = services.createChassisStatusMonitor(
+            number, inventoryPath, monitorOptions);
+    }
+
+    /**
+     * Returns the ChassisStatusMonitor object that is monitoring D-Bus
+     * properties for the chassis.
+     *
+     * Throws an exception if the ChassisStatusMonitor object does not exist.
+     *
+     * @return reference to ChassisStatusMonitor object
+     */
+    ChassisStatusMonitor& getStatusMonitor()
+    {
+        verifyMonitoringInitialized();
+        return *statusMonitor;
+    }
+
+    /**
+     * Returns whether the chassis is present.
+     *
+     * Throws an exception if:
+     * - Chassis monitoring has not been initialized
+     * - D-Bus property value could not be obtained
+     *
+     * @return true is chassis is present, false otherwise
+     */
+    bool isPresent()
+    {
+        verifyMonitoringInitialized();
+        return statusMonitor->isPresent();
+    }
+
+    /**
+     * Returns whether the chassis is available.
+     *
+     * If the D-Bus Available property is false, it means that communication to
+     * the chassis is not possible. For example, the chassis does not have any
+     * input power or communication cables to the BMC are disconnected.
+     *
+     * Throws an exception if:
+     * - Chassis monitoring has not been initialized
+     * - D-Bus property value could not be obtained
+     *
+     * @return true is chassis is available, false otherwise
+     */
+    bool isAvailable()
+    {
+        verifyMonitoringInitialized();
+        return statusMonitor->isAvailable();
+    }
+
+    /**
+     * Returns whether the chassis is enabled.
+     *
+     * If the D-Bus Enabled property is false, it means that the chassis has
+     * been put in hardware isolation (guarded).
+     *
+     * Throws an exception if:
+     * - Chassis monitoring has not been initialized
+     * - D-Bus property value could not be obtained
+     *
+     * @return true is chassis is enabled, false otherwise
+     */
+    bool isEnabled()
+    {
+        verifyMonitoringInitialized();
+        return statusMonitor->isEnabled();
+    }
+
+    /**
+     * Returns whether the chassis input power status is good.
+     *
+     * Throws an exception if:
+     * - Chassis monitoring has not been initialized
+     * - D-Bus property value could not be obtained
+     *
+     * @return true if chassis input power is good, false otherwise
+     */
+    bool isInputPowerGood()
+    {
+        verifyMonitoringInitialized();
+        return statusMonitor->isInputPowerGood();
+    }
+
+    /**
+     * Returns whether the power supplies power status is good.
+     *
+     * Throws an exception if:
+     * - Chassis monitoring has not been initialized
+     * - D-Bus property value could not be obtained
+     *
+     * @return true if power supplies power is good, false otherwise
+     */
+    bool isPowerSuppliesPowerGood()
+    {
+        verifyMonitoringInitialized();
+        return statusMonitor->isPowerSuppliesPowerGood();
+    }
+
   private:
+    /**
+     * Verifies that chassis monitoring has been initialized and a
+     * ChassisStatusMonitor object has been created.
+     *
+     * Throws an exception if monitoring has not been initialized.
+     */
+    void verifyMonitoringInitialized()
+    {
+        if (!statusMonitor)
+        {
+            throw std::runtime_error{std::format(
+                "Monitoring not initialized for chassis {}", number)};
+        }
+    }
+
     /**
      * Chassis number within the system.
      *
@@ -132,6 +271,11 @@ class Chassis
      * Types of chassis status monitoring to perform.
      */
     ChassisStatusMonitorOptions monitorOptions{};
+
+    /**
+     * Monitors the chassis status using D-Bus properties.
+     */
+    std::unique_ptr<ChassisStatusMonitor> statusMonitor{};
 };
 
 } // namespace phosphor::power::sequencer
