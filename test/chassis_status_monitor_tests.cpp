@@ -43,6 +43,18 @@ bool operator==(const ChassisStatusMonitorOptions& lhs,
 
 using namespace phosphor::power::util;
 
+TEST(ChassisStatusMonitorOptionsTests, DefaultConstructor)
+{
+    ChassisStatusMonitorOptions options;
+    EXPECT_FALSE(options.isPresentMonitored);
+    EXPECT_FALSE(options.isAvailableMonitored);
+    EXPECT_FALSE(options.isEnabledMonitored);
+    EXPECT_FALSE(options.isPowerStateMonitored);
+    EXPECT_FALSE(options.isPowerGoodMonitored);
+    EXPECT_FALSE(options.isInputPowerStatusMonitored);
+    EXPECT_FALSE(options.isPowerSuppliesStatusMonitored);
+}
+
 TEST(BMCChassisStatusMonitorTests, Constructor)
 {
     auto bus = sdbusplus::bus::new_default();

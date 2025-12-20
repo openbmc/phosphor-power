@@ -15,6 +15,7 @@
  */
 
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
 #include "ucd90160_device.hpp"
@@ -58,13 +59,25 @@ TEST(ChassisTests, Constructor)
     std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
     powerSequencers.emplace_back(createPowerSequencer(3, 0x70));
-    Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
+    ChassisStatusMonitorOptions monitorOptions;
+    monitorOptions.isPresentMonitored = true;
+    monitorOptions.isAvailableMonitored = false;
+    monitorOptions.isEnabledMonitored = true;
+    monitorOptions.isInputPowerStatusMonitored = false;
+    monitorOptions.isPowerSuppliesStatusMonitored = true;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
 
     EXPECT_EQ(chassis.getNumber(), number);
     EXPECT_EQ(chassis.getInventoryPath(), inventoryPath);
     EXPECT_EQ(chassis.getPowerSequencers().size(), 1);
     EXPECT_EQ(chassis.getPowerSequencers()[0]->getBus(), 3);
     EXPECT_EQ(chassis.getPowerSequencers()[0]->getAddress(), 0x70);
+    EXPECT_TRUE(chassis.getMonitorOptions().isPresentMonitored);
+    EXPECT_FALSE(chassis.getMonitorOptions().isAvailableMonitored);
+    EXPECT_TRUE(chassis.getMonitorOptions().isEnabledMonitored);
+    EXPECT_FALSE(chassis.getMonitorOptions().isInputPowerStatusMonitored);
+    EXPECT_TRUE(chassis.getMonitorOptions().isPowerSuppliesStatusMonitored);
 }
 
 TEST(ChassisTests, GetNumber)
@@ -72,7 +85,9 @@ TEST(ChassisTests, GetNumber)
     size_t number{2};
     std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis2"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
-    Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
 
     EXPECT_EQ(chassis.getNumber(), number);
 }
@@ -83,7 +98,9 @@ TEST(ChassisTests, GetInventoryPath)
     std::string inventoryPath{
         "/xyz/openbmc_project/inventory/system/chassis_3"};
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
-    Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
 
     EXPECT_EQ(chassis.getInventoryPath(), inventoryPath);
 }
@@ -96,7 +113,9 @@ TEST(ChassisTests, GetPowerSequencers)
     powerSequencers.emplace_back(createPowerSequencer(3, 0x70));
     powerSequencers.emplace_back(createPowerSequencer(4, 0x32));
     powerSequencers.emplace_back(createPowerSequencer(10, 0x16));
-    Chassis chassis{number, inventoryPath, std::move(powerSequencers)};
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
 
     EXPECT_EQ(chassis.getPowerSequencers().size(), 3);
     EXPECT_EQ(chassis.getPowerSequencers()[0]->getBus(), 3);
@@ -105,4 +124,26 @@ TEST(ChassisTests, GetPowerSequencers)
     EXPECT_EQ(chassis.getPowerSequencers()[1]->getAddress(), 0x32);
     EXPECT_EQ(chassis.getPowerSequencers()[2]->getBus(), 10);
     EXPECT_EQ(chassis.getPowerSequencers()[2]->getAddress(), 0x16);
+}
+
+TEST(ChassisTests, GetMonitorOptions)
+{
+    size_t number{3};
+    std::string inventoryPath{
+        "/xyz/openbmc_project/inventory/system/chassis_3"};
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
+    ChassisStatusMonitorOptions monitorOptions;
+    monitorOptions.isPresentMonitored = false;
+    monitorOptions.isAvailableMonitored = true;
+    monitorOptions.isEnabledMonitored = false;
+    monitorOptions.isInputPowerStatusMonitored = true;
+    monitorOptions.isPowerSuppliesStatusMonitored = false;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
+
+    EXPECT_FALSE(chassis.getMonitorOptions().isPresentMonitored);
+    EXPECT_TRUE(chassis.getMonitorOptions().isAvailableMonitored);
+    EXPECT_FALSE(chassis.getMonitorOptions().isEnabledMonitored);
+    EXPECT_TRUE(chassis.getMonitorOptions().isInputPowerStatusMonitored);
+    EXPECT_FALSE(chassis.getMonitorOptions().isPowerSuppliesStatusMonitored);
 }
