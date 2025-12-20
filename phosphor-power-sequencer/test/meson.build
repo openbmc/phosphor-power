@@ -18,6 +18,6 @@ test(
         build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         link_with: [phosphor_power_sequencer_library, libpower],
         implicit_include_directories: false,
-        include_directories: ['.', '../src', '../..'],
+        include_directories: ['.', '../src', '../..', '../../test'],
     ),
 )
