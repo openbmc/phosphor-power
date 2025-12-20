@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "mock_chassis_status_monitor.hpp"
 #include "mock_gpio.hpp"
 #include "mock_pmbus.hpp"
 #include "services.hpp"
@@ -26,6 +27,10 @@ namespace phosphor::power::sequencer
 
 using ::testing::NiceMock;
 using MockPMBus = phosphor::pmbus::MockPMBus;
+using MockChassisStatusMonitor =
+    phosphor::power::util::MockChassisStatusMonitor;
+using ChassisStatusMonitorOptions =
+    phosphor::power::util::ChassisStatusMonitorOptions;
 
 /**
  * @class MockServices
@@ -65,6 +70,12 @@ class MockServices : public Services
         uint8_t, uint16_t, const std::string&, size_t) override
     {
         return std::make_unique<MockPMBus>();
+    }
+
+    virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t, const std::string&, const ChassisStatusMonitorOptions&) override
+    {
+        return std::make_unique<MockChassisStatusMonitor>();
     }
 
     MOCK_METHOD(void, createBMCDump, (), (override));
