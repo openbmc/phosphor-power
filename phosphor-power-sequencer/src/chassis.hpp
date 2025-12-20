@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "chassis_status_monitor.hpp"
 #include "power_sequencer_device.hpp"
 
 #include <stddef.h> // for size_t
@@ -26,6 +27,9 @@
 
 namespace phosphor::power::sequencer
 {
+
+using ChassisStatusMonitorOptions =
+    phosphor::power::util::ChassisStatusMonitorOptions;
 
 /**
  * @class Chassis
@@ -53,12 +57,15 @@ class Chassis
      * @param number Chassis number within the system. Must be >= 1.
      * @param inventoryPath D-Bus inventory path of the chassis
      * @param powerSequencers Power sequencer devices within the chassis
+     * @param monitorOptions Types of chassis status monitoring to perform.
      */
     explicit Chassis(
         size_t number, const std::string& inventoryPath,
-        std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers) :
+        std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers,
+        const ChassisStatusMonitorOptions& monitorOptions) :
         number{number}, inventoryPath{inventoryPath},
-        powerSequencers{std::move(powerSequencers)}
+        powerSequencers{std::move(powerSequencers)},
+        monitorOptions{monitorOptions}
     {}
 
     /**
@@ -92,6 +99,16 @@ class Chassis
         return powerSequencers;
     }
 
+    /**
+     * Returns the types of chassis status monitoring to perform.
+     *
+     * @return chassis status monitoring options
+     */
+    const ChassisStatusMonitorOptions& getMonitorOptions() const
+    {
+        return monitorOptions;
+    }
+
   private:
     /**
      * Chassis number within the system.
@@ -110,6 +127,11 @@ class Chassis
      * Power sequencer devices within the chassis.
      */
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers{};
+
+    /**
+     * Types of chassis status monitoring to perform.
+     */
+    ChassisStatusMonitorOptions monitorOptions{};
 };
 
 } // namespace phosphor::power::sequencer

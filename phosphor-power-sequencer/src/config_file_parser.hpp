@@ -16,6 +16,7 @@
 #pragma once
 
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
 
@@ -173,6 +174,20 @@ std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
  */
 std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     const json& element);
+
+/**
+ * Parses a JSON element containing chassis status monitoring options.
+ *
+ * Returns the corresponding C++ ChassisStatusMonitorOptions object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return ChassisStatusMonitorOptions object
+ */
+ChassisStatusMonitorOptions parseStatusMonitoring(
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a gpio object.
