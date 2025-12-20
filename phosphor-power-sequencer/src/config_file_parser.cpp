@@ -206,11 +206,20 @@ std::unique_ptr<Chassis> parseChassisProperties(
         parsePowerSequencerArray(powerSequencersElement, variables);
     ++propertyCount;
 
+    // Optional status_monitoring property
+    ChassisStatusMonitorOptions monitorOptions{};
+    auto statusMonitoringIt = element.find("status_monitoring");
+    if (statusMonitoringIt != element.end())
+    {
+        monitorOptions = parseStatusMonitoring(*statusMonitoringIt, variables);
+        ++propertyCount;
+    }
+
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Chassis>(number, inventoryPath,
-                                     std::move(powerSequencers));
+    return std::make_unique<Chassis>(
+        number, inventoryPath, std::move(powerSequencers), monitorOptions);
 }
 
 std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
@@ -245,6 +254,13 @@ std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
     getRequiredProperty(element, "power_sequencers");
     ++propertyCount;
 
+    // Optional status_monitoring property
+    // Cannot be parsed without variable values
+    if (element.contains("status_monitoring"))
+    {
+        ++propertyCount;
+    }
+
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
@@ -261,6 +277,62 @@ std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
         chassisTemplates.emplace(parseChassisTemplate(chassisTemplateElement));
     }
     return chassisTemplates;
+}
+
+ChassisStatusMonitorOptions parseStatusMonitoring(
+    const json& element, const std::map<std::string, std::string>& variables)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Note: all ChassisStatusMonitorOptions fields default to false
+    ChassisStatusMonitorOptions options;
+
+    // Optional is_present_monitored property
+    auto propIt = element.find("is_present_monitored");
+    if (propIt != element.end())
+    {
+        options.isPresentMonitored = parseBoolean(*propIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_available_monitored property
+    propIt = element.find("is_available_monitored");
+    if (propIt != element.end())
+    {
+        options.isAvailableMonitored = parseBoolean(*propIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_enabled_monitored property
+    propIt = element.find("is_enabled_monitored");
+    if (propIt != element.end())
+    {
+        options.isEnabledMonitored = parseBoolean(*propIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_input_power_status_monitored property
+    propIt = element.find("is_input_power_status_monitored");
+    if (propIt != element.end())
+    {
+        options.isInputPowerStatusMonitored = parseBoolean(*propIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_power_supplies_status_monitored property
+    propIt = element.find("is_power_supplies_status_monitored");
+    if (propIt != element.end())
+    {
+        options.isPowerSuppliesStatusMonitored =
+            parseBoolean(*propIt, variables);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return options;
 }
 
 PgoodGPIO parseGPIO(const json& element,

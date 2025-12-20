@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "config_file_parser.hpp"
 #include "config_file_parser_error.hpp"
 #include "power_sequencer_device.hpp"
@@ -348,7 +349,8 @@ TEST(ConfigFileParserTests, ParseChassis)
               "power_good_gpio_name": "power-chassis${chassis_number}-good",
               "rails": []
             }
-          ]
+          ],
+          "status_monitoring": { "is_present_monitored": "${is_present_monitored}" }
         }
     )"_json;
     const std::map<std::string, JSONRefWrapper> chassisTemplates{
@@ -368,7 +370,8 @@ TEST(ConfigFileParserTests, ParseChassis)
                   "power_good_gpio_name": "power-chassis-good",
                   "rails": []
                 }
-              ]
+              ],
+              "status_monitoring": { "is_enabled_monitored": true }
             }
         )"_json;
         auto chassis = parseChassis(element, chassisTemplates);
@@ -379,6 +382,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
+        EXPECT_TRUE(chassis->getMonitorOptions().isEnabledMonitored);
     }
 
     // Test where works: Uses template: No comments specified
@@ -389,7 +393,8 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": {
                 "chassis_number": "2",
                 "bus": "13",
-                "address": "0x70"
+                "address": "0x70",
+                "is_present_monitored": "true"
               }
             }
         )"_json;
@@ -401,6 +406,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 13);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x70);
+        EXPECT_TRUE(chassis->getMonitorOptions().isPresentMonitored);
     }
 
     // Test where works: Uses template: Comments specified
@@ -412,7 +418,8 @@ TEST(ConfigFileParserTests, ParseChassis)
               "template_variable_values": {
                 "chassis_number": "3",
                 "bus": "23",
-                "address": "0x54"
+                "address": "0x54",
+                "is_present_monitored": "false"
               }
             }
         )"_json;
@@ -424,6 +431,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 23);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x54);
+        EXPECT_FALSE(chassis->getMonitorOptions().isPresentMonitored);
     }
 
     // Test where fails: Element is not an object
@@ -706,7 +714,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
 TEST(ConfigFileParserTests, ParseChassisProperties)
 {
     // Test where works: Parse chassis object without template/variables: Has
-    // comments property
+    // comments and status_monitoring properties
     {
         const json element = R"(
             {
@@ -721,7 +729,8 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
                   "power_good_gpio_name": "power-chassis-good",
                   "rails": [ { "name": "VDD_CPU0" }, { "name": "VCS_CPU1" } ]
                 }
-              ]
+              ],
+              "status_monitoring": { "is_present_monitored": true }
             }
         )"_json;
         bool isChassisTemplate{false};
@@ -744,10 +753,11 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
                   "VDD_CPU0");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails()[1]->getName(),
                   "VCS_CPU1");
+        EXPECT_TRUE(chassis->getMonitorOptions().isPresentMonitored);
     }
 
     // Test where works: Parse chassis_template object with variables: No
-    // comments property
+    // comments property. Has status_monitoring property.
     {
         const json element = R"(
             {
@@ -762,12 +772,16 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
                   "power_good_gpio_name": "power-chassis${chassis_number}-good",
                   "rails": [ { "name": "vio${chassis_number}" } ]
                 }
-              ]
+              ],
+              "status_monitoring": { "is_enabled_monitored": "${is_enabled_monitored}" }
             }
         )"_json;
         bool isChassisTemplate{true};
         std::map<std::string, std::string> variables{
-            {"chassis_number", "2"}, {"bus", "12"}, {"address", "0x71"}};
+            {"chassis_number", "2"},
+            {"bus", "12"},
+            {"address", "0x71"},
+            {"is_enabled_monitored", "true"}};
         auto chassis =
             parseChassisProperties(element, isChassisTemplate, variables);
         EXPECT_EQ(chassis->getNumber(), 2);
@@ -784,6 +798,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails().size(), 1);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getRails()[0]->getName(),
                   "vio2");
+        EXPECT_TRUE(chassis->getMonitorOptions().isEnabledMonitored);
     }
 
     // Test where fails: Element is not an object
@@ -958,6 +973,27 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_STREQ(e.what(), "Element is not an array");
     }
 
+    // Test where fails: status_monitoring value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
+              "power_sequencers": [],
+              "status_monitoring": [ "is_present_monitored", "true" ]
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
     // Test where fails: Invalid property specified
     try
     {
@@ -1003,7 +1039,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
 
 TEST(ConfigFileParserTests, ParseChassisTemplate)
 {
-    // Test where works: comments specified
+    // Test where works: comments and status_monitoring specified
     {
         const json element = R"(
             {
@@ -1020,7 +1056,8 @@ TEST(ConfigFileParserTests, ParseChassisTemplate)
                   "power_good_gpio_name": "power-chassis${chassis_number}-good",
                   "rails": [ { "name": "VDD_CPU0" }, { "name": "VCS_CPU1" } ]
                 }
-              ]
+              ],
+              "status_monitoring": { "is_enabled_monitored": "${is_enabled_monitored}" }
             }
         )"_json;
         auto [id, jsonRef] = parseChassisTemplate(element);
@@ -1028,9 +1065,11 @@ TEST(ConfigFileParserTests, ParseChassisTemplate)
         EXPECT_EQ(jsonRef.get()["number"], "${chassis_number}");
         EXPECT_EQ(jsonRef.get()["power_sequencers"].size(), 1);
         EXPECT_EQ(jsonRef.get()["power_sequencers"][0]["type"], "UCD90320");
+        EXPECT_EQ(jsonRef.get()["status_monitoring"]["is_enabled_monitored"],
+                  "${is_enabled_monitored}");
     }
 
-    // Test where works: comments not specified
+    // Test where works: comments and status_monitoring not specified
     {
         const json element = R"(
             {
@@ -1254,6 +1293,211 @@ TEST(ConfigFileParserTests, ParseChassisTemplateArray)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseStatusMonitoring)
+{
+    // Test where works: No properties specified
+    {
+        const json element = R"(
+            {
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        auto monitorOptions = parseStatusMonitoring(element, variables);
+        EXPECT_FALSE(monitorOptions.isPresentMonitored);
+        EXPECT_FALSE(monitorOptions.isAvailableMonitored);
+        EXPECT_FALSE(monitorOptions.isEnabledMonitored);
+        EXPECT_FALSE(monitorOptions.isInputPowerStatusMonitored);
+        EXPECT_FALSE(monitorOptions.isPowerSuppliesStatusMonitored);
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_available_monitored": false,
+              "is_enabled_monitored": true,
+              "is_input_power_status_monitored": false,
+              "is_power_supplies_status_monitored": true
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        auto monitorOptions = parseStatusMonitoring(element, variables);
+        EXPECT_TRUE(monitorOptions.isPresentMonitored);
+        EXPECT_FALSE(monitorOptions.isAvailableMonitored);
+        EXPECT_TRUE(monitorOptions.isEnabledMonitored);
+        EXPECT_FALSE(monitorOptions.isInputPowerStatusMonitored);
+        EXPECT_TRUE(monitorOptions.isPowerSuppliesStatusMonitored);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": "${is_present_monitored}",
+              "is_available_monitored": "${is_available_monitored}",
+              "is_enabled_monitored": "${is_enabled_monitored}",
+              "is_input_power_status_monitored": "${is_input_power_status_monitored}",
+              "is_power_supplies_status_monitored": "${is_power_supplies_status_monitored}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"is_present_monitored", "false"},
+            {"is_available_monitored", "true"},
+            {"is_enabled_monitored", "false"},
+            {"is_input_power_status_monitored", "true"},
+            {"is_power_supplies_status_monitored", "false"}};
+        auto monitorOptions = parseStatusMonitoring(element, variables);
+        EXPECT_FALSE(monitorOptions.isPresentMonitored);
+        EXPECT_TRUE(monitorOptions.isAvailableMonitored);
+        EXPECT_FALSE(monitorOptions.isEnabledMonitored);
+        EXPECT_TRUE(monitorOptions.isInputPowerStatusMonitored);
+        EXPECT_FALSE(monitorOptions.isPowerSuppliesStatusMonitored);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: is_present_monitored value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": 1,
+              "is_available_monitored": false
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: is_available_monitored value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_available_monitored": 13
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: is_enabled_monitored is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_enabled_monitored": "TRUE"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: is_input_power_status_monitored value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_input_power_status_monitored": -3
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: is_power_supplies_status_monitored value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_power_supplies_status_monitored": [ true ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": true,
+              "is_power_supplies_status_monitored": true,
+              "is_foo": true
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "is_present_monitored": "${is_present_monitored}",
+              "is_available_monitored": "${is_available_monitored}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"is_present_monitored", "false"},
+            {"is_available_monitored", "13"}};
+        parseStatusMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
     }
 }
 

@@ -43,13 +43,14 @@ required type.
 
 ## Properties
 
-| Name             | Required | Type                                            | Description                                                                                                   |
-| :--------------- | :------: | :---------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
-| comments         |    no    | array of strings                                | One or more comment lines describing this chassis template.                                                   |
-| id               |   yes    | string                                          | Unique ID for this chassis template. Can only contain letters (A-Z, a-z), numbers (0-9), and underscore (\_). |
-| number           |   yes    | number                                          | Chassis number within the system. Chassis numbers start at 1 because chassis 0 represents the entire system.  |
-| inventory_path   |   yes    | string                                          | D-Bus inventory path of the chassis, such as "/xyz/openbmc_project/inventory/system/chassis".                 |
-| power_sequencers |   yes    | array of [power_sequencers](power_sequencer.md) | One or more power sequencer devices within the chassis.                                                       |
+| Name              | Required | Type                                            | Description                                                                                                   |
+| :---------------- | :------: | :---------------------------------------------- | :------------------------------------------------------------------------------------------------------------ |
+| comments          |    no    | array of strings                                | One or more comment lines describing this chassis template.                                                   |
+| id                |   yes    | string                                          | Unique ID for this chassis template. Can only contain letters (A-Z, a-z), numbers (0-9), and underscore (\_). |
+| number            |   yes    | number                                          | Chassis number within the system. Chassis numbers start at 1 because chassis 0 represents the entire system.  |
+| inventory_path    |   yes    | string                                          | D-Bus inventory path of the chassis, such as "/xyz/openbmc_project/inventory/system/chassis".                 |
+| power_sequencers  |   yes    | array of [power_sequencers](power_sequencer.md) | One or more power sequencer devices within the chassis.                                                       |
+| status_monitoring |    no    | [status_monitoring](status_monitoring.md)       | Status monitoring to perform on this chassis, such as verifying it is present.                                |
 
 ## Example
 

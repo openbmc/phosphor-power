@@ -15,6 +15,7 @@
  */
 
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "power_sequencer_device.hpp"
 #include "system.hpp"
 
@@ -40,8 +41,9 @@ std::unique_ptr<Chassis> createChassis(size_t number,
                                        const std::string& inventoryPath)
 {
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
-    return std::make_unique<Chassis>(number, inventoryPath,
-                                     std::move(powerSequencers));
+    ChassisStatusMonitorOptions monitorOptions;
+    return std::make_unique<Chassis>(
+        number, inventoryPath, std::move(powerSequencers), monitorOptions);
 }
 
 TEST(SystemTests, Constructor)

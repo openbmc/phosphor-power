@@ -30,6 +30,7 @@ chassis template.
 | number                   | see [notes](#notes) | number                                                  | Chassis number within the system. Chassis numbers start at 1 because chassis 0 represents the entire system. |
 | inventory_path           | see [notes](#notes) | string                                                  | D-Bus inventory path of the chassis, such as "/xyz/openbmc_project/inventory/system/chassis".                |
 | power_sequencers         | see [notes](#notes) | array of [power_sequencers](power_sequencer.md)         | One or more power sequencer devices within the chassis.                                                      |
+| status_monitoring        |         no          | [status_monitoring](status_monitoring.md)               | Status monitoring to perform on this chassis, such as verifying it is present.                               |
 | template_id              | see [notes](#notes) | string                                                  | Unique ID of the [chassis template](chassis_template.md) to use for the contents of this chassis.            |
 | template_variable_values | see [notes](#notes) | [template_variable_values](template_variable_values.md) | Chassis-specific values for chassis template variables.                                                      |
 
@@ -38,6 +39,11 @@ chassis template.
 - You must specify exactly one of the following two groups of properties:
   - "number", "inventory_path", and "power_sequencers"
   - "template_id" and "template_variable_values"
+- "status_monitoring" is optional
+  - If specified, it should be in the same property group as "number",
+    "inventory_path", and "power_sequencers"
+  - If not specified, the [chassis status](../chassis_status.md) will be assumed
+    good (present, available, valid input power, etc.)
 
 ## Examples
 
