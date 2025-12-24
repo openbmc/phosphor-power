@@ -16,6 +16,7 @@
 #pragma once
 
 #include "chassis_status_monitor.hpp"
+#include "power_interface.hpp"
 #include "power_sequencer_device.hpp"
 #include "services.hpp"
 
@@ -23,8 +24,10 @@
 
 #include <format>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -33,6 +36,8 @@ namespace phosphor::power::sequencer
 
 using ChassisStatusMonitorOptions =
     phosphor::power::util::ChassisStatusMonitorOptions;
+using PowerState = PowerInterface::PowerState;
+using PowerGood = PowerInterface::PowerGood;
 
 /**
  * @class Chassis
@@ -122,8 +127,8 @@ class Chassis
      * Creates a ChassisStatusMonitor object based on the monitoring options
      * specified in the constructor.
      *
-     * This method must be called before any methods that return chassis status
-     * or return the ChassisStatusMonitor object.
+     * This method must be called before any methods that return or check the
+     * chassis status.
      *
      * Normally this method is only called once. However, it can be called
      * multiple times if required, such as for automated testing.
@@ -141,10 +146,7 @@ class Chassis
      * Returns the ChassisStatusMonitor object that is monitoring D-Bus
      * properties for the chassis.
      *
-     * You must call initializeStatusMonitoring() before calling this method in
-     * order to create the ChassisStatusMonitor object.
-     *
-     * Throws an exception if the ChassisStatusMonitor object does not exist.
+     * Throws an exception if status monitoring has not been initialized.
      *
      * @return reference to ChassisStatusMonitor object
      */
@@ -236,6 +238,106 @@ class Chassis
         return statusMonitor->isPowerSuppliesPowerGood();
     }
 
+    /**
+     * Returns the last requested chassis power state.
+     *
+     * The initial power state is obtained by the monitor() method. That method
+     * must be called before calling getPowerState().
+     *
+     * Throws an exception if the power state could not be obtained.
+     *
+     * @return last requested power state
+     */
+    PowerState getPowerState()
+    {
+        if (!powerState)
+        {
+            throw std::runtime_error{std::format(
+                "Power state could not be obtained for chassis {}", number)};
+        }
+        return *powerState;
+    }
+
+    /**
+     * Returns whether the chassis can be set to the specified power state.
+     *
+     * Determined based on the current chassis status. For example, the chassis
+     * cannot be powered on if it is not present.
+     *
+     * Throws an exception if status monitoring has not been initialized.
+     *
+     * @param newPowerState New chassis power state
+     * @return If the state can be set, returns true and an empty string. If the
+     *         state cannot be set, returns false and a string containing the
+     *         reason.
+     */
+    std::tuple<bool, std::string> canSetPowerState(PowerState newPowerState);
+
+    /**
+     * Sets the requested chassis power state.
+     *
+     * Powers the chassis on or off based on the specified state.
+     *
+     * Throws an exception if one of the following occurs:
+     * - Status monitoring has not been initialized.
+     * - Chassis D-Bus status cannot be obtained.
+     * - State change is not possible based on the chassis status.
+     * - Error occurs powering on the power sequencer devices.
+     *
+     * @param newPowerState New chassis power state
+     * @param services System services like hardware presence and the journal
+     */
+    void setPowerState(PowerState newPowerState, Services& services);
+
+    /**
+     * Returns the chassis power good value.
+     *
+     * The power good value is read by the monitor() method. That method must be
+     * called before calling getPowerGood().
+     *
+     * Throws an exception if the power good value could not be obtained.
+     *
+     * @return chassis power good
+     */
+    PowerGood getPowerGood()
+    {
+        if (!powerGood)
+        {
+            throw std::runtime_error{std::format(
+                "Power good could not be obtained for chassis {}", number)};
+        }
+        return *powerGood;
+    }
+
+    /**
+     * Monitors the status of the chassis.
+     *
+     * Sets the chassis power good value by reading the power good value from
+     * each power sequencer device.
+     *
+     * Reacts to any changes to chassis D-Bus properties.
+     *
+     * This method must be called periodically (such as once per second) to
+     * ensure the chassis power state and power good values are correct.
+     *
+     * Throws an exception if one of the following occurs:
+     * - Status monitoring has not been initialized.
+     * - Chassis D-Bus status cannot be obtained.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void monitor(Services& services);
+
+    /**
+     * Closes all power sequencer devices that are open.
+     *
+     * Does not throw exceptions. This method may be called because a chassis is
+     * no longer present or no longer has input power. In those scenarios
+     * closing the device may fail. However, closing the devices is still
+     * necessary in order to clean up resources like file handles.
+     */
+    void closeDevices();
+
   private:
     /**
      * Verifies that status monitoring has been initialized and a
@@ -251,6 +353,65 @@ class Chassis
                 "Status monitoring not initialized for chassis {}", number)};
         }
     }
+
+    /**
+     * Opens the specified power sequencer device if it is not already open.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param device power sequencer device
+     * @param services System services like hardware presence and the journal
+     */
+    void openDeviceIfNeeded(PowerSequencerDevice& device, Services& services)
+    {
+        if (!device.isOpen())
+        {
+            device.open(services);
+        }
+    }
+
+    /**
+     * Reads the power good value from all power sequencer devices.
+     *
+     * Determines the combined power good value for the entire chassis.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void readPowerGood(Services& services);
+
+    /**
+     * Sets the initial power state value if it currently has no value.
+     *
+     * This is necessary when the application first starts or when a previously
+     * unavailable chassis becomes available.
+     *
+     * The initial power state value is based on the current power good value.
+     * We assume that the last requested power state matches the power good
+     * value. For example, if the chassis power good is on, then we assume the
+     * last requested chassis power state was on.
+     *
+     * The power state value will be set explicitly next time the chassis is
+     * powered on or off by setPowerState().
+     */
+    void setInitialPowerStateIfNeeded();
+
+    /**
+     * Powers on all the power sequencer devices in the chassis.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void powerOn(Services& services);
+
+    /**
+     * Powers off all the power sequencer devices in the chassis.
+     *
+     * Throws an exception if an error occurs.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void powerOff(Services& services);
 
     /**
      * Chassis number within the system.
@@ -279,6 +440,16 @@ class Chassis
      * Monitors the chassis status using D-Bus properties.
      */
     std::unique_ptr<ChassisStatusMonitor> statusMonitor{};
+
+    /**
+     * Last requested chassis power state.
+     */
+    std::optional<PowerState> powerState{};
+
+    /**
+     * Chassis power good.
+     */
+    std::optional<PowerGood> powerGood{};
 };
 
 } // namespace phosphor::power::sequencer
