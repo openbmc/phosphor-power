@@ -33,6 +33,60 @@ class PowerInterface
     PowerInterface(sdbusplus::bus_t& bus, const char* path);
 
     /**
+     * Valid values for the 'state' property.
+     */
+    enum class PowerState : int
+    {
+        off = 0,
+        on = 1
+    };
+
+    /**
+     * Valid values for the 'pgood' property.
+     */
+    enum class PowerGood : int
+    {
+        off = 0,
+        on = 1
+    };
+
+    /**
+     * Converts the specified PowerState enumeration value to a string.
+     *
+     * @param powerState value in PowerState enumeration
+     * @return string representation of value
+     */
+    static std::string toString(PowerState powerState)
+    {
+        if (powerState == PowerState::off)
+        {
+            return "off";
+        }
+        else
+        {
+            return "on";
+        }
+    }
+
+    /**
+     * Converts the specified PowerGood enumeration value to a string.
+     *
+     * @param powerGood value in PowerGood enumeration
+     * @return string representation of value
+     */
+    static std::string toString(PowerGood powerGood)
+    {
+        if (powerGood == PowerGood::off)
+        {
+            return "off";
+        }
+        else
+        {
+            return "on";
+        }
+    }
+
+    /**
      * Emit the power good signal
      */
     void emitPowerGoodSignal();
