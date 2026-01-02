@@ -7,6 +7,7 @@ phosphor_power_sequencer_library = static_library(
     'pmbus_driver_device.cpp',
     'rail.cpp',
     'services.cpp',
+    'system.cpp',
     'standard_device.cpp',
     'ucd90160_device.cpp',
     'ucd90320_device.cpp',
