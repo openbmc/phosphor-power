@@ -48,6 +48,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "870a3296_9d3a55b3",
+        "filename": "chassis_status_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-05T23:45:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5e0f708_879532bf",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 34
+      },
+      "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1b5668a_35c4c935",
