@@ -121,6 +121,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3249db55_da07300a",
+        "filename": "chassis_status_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-05T23:51:50Z",
+      "side": 1,
+      "message": "I do define constants for the integer values in the subsequent commit https://gerrit.openbmc.org/c/openbmc/phosphor-power/+/86320.\n\nSo users of this property can compare to ON and OFF vs. hardcoding that 1 \u003d\u003d ON.",
+      "parentUuid": "8afc89e1_1f725532",
+      "range": {
+        "startLine": 184,
+        "startChar": 12,
+        "endLine": 184,
+        "endChar": 16
+      },
+      "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "44269b68_b8a5cc0c",
         "filename": "meson.build",
         "patchSetId": 3
