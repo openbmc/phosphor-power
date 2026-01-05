@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5e0f708_879532bf",
+        "filename": "chassis_status_monitor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-05T23:32:47Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "1b0cb839_be5f72ee",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 34
+      },
+      "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1b5668a_35c4c935",
         "filename": "chassis_status_monitor.hpp",
         "patchSetId": 3
@@ -49,6 +73,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "8afc89e1_1f725532",
+        "filename": "chassis_status_monitor.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-05T23:32:47Z",
+      "side": 1,
+      "message": "I thought about this. The complicating factor is that there are applications outside of the phosphor-power repository that use those two D-Bus properties.\n\nIt is also possible that a third or fourth state could be defined at some point, like PoweringOff/PoweringOn.\n\nFor that reason, I decided to keep it the same for now to avoid scope creep. It could be changed later as a separate effort.",
+      "parentUuid": "e1b5668a_35c4c935",
+      "range": {
+        "startLine": 184,
+        "startChar": 12,
+        "endLine": 184,
+        "endChar": 16
+      },
+      "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "44269b68_b8a5cc0c",
         "filename": "meson.build",
         "patchSetId": 3
@@ -60,6 +108,24 @@
       "writtenOn": "2026-01-05T22:20:53Z",
       "side": 1,
       "message": "these are almost in alphabetical order...",
+      "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8490d4d9_a2c2b031",
+        "filename": "meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-05T23:32:47Z",
+      "side": 1,
+      "message": "Are you referring to the generated error_*pp files? I hadn\u0027t moved them since the name is a variable.",
+      "parentUuid": "44269b68_b8a5cc0c",
       "revId": "3d882a3566b428d06131f472bd3f07e3b9345cf3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
