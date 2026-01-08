@@ -56,6 +56,11 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
         bus, std::bind_front(&PowerControl::compatibleSystemTypesFound, this));
 
     setUpGpio();
+
+    int pgoodState = pgoodLine.get_value();
+    pgood = pgoodState;
+    state = pgoodState;
+    services.logInfoMsg(std::format("Pgood state: {}", pgoodState));
 }
 
 int PowerControl::getPgood() const
@@ -186,7 +191,18 @@ void PowerControl::pollPgood()
         }
     }
 
-    int pgoodState = pgoodLine.get_value();
+    int pgoodState;
+    try
+    {
+        pgoodState = pgoodLine.get_value();
+    }
+    catch (const std::exception& e)
+    {
+        services.logErrorMsg(std::format("Unable to read pgood: {}", e.what()));
+        setUpGpio();
+        return;
+    }
+
     if (pgoodState != pgood)
     {
         // Power good has changed since last read
@@ -303,12 +319,21 @@ void PowerControl::setUpGpio()
     const std::string powerControlLineName = "power-chassis-control";
     const std::string pgoodLineName = "power-chassis-good";
 
+    if (pgoodLine && pgoodLine.is_requested())
+    {
+        pgoodLine.release();
+    }
     pgoodLine = gpiod::find_line(pgoodLineName);
     if (!pgoodLine)
     {
         std::string errorString{"GPIO line name not found: " + pgoodLineName};
         services.logErrorMsg(errorString);
         throw std::runtime_error(errorString);
+    }
+
+    if (powerControlLine && powerControlLine.is_requested())
+    {
+        powerControlLine.release();
     }
     powerControlLine = gpiod::find_line(powerControlLineName);
     if (!powerControlLine)
@@ -321,10 +346,6 @@ void PowerControl::setUpGpio()
 
     pgoodLine.request(
         {"phosphor-power-control", gpiod::line_request::DIRECTION_INPUT, 0});
-    int pgoodState = pgoodLine.get_value();
-    pgood = pgoodState;
-    state = pgoodState;
-    services.logInfoMsg(std::format("Pgood state: {}", pgoodState));
 }
 
 void PowerControl::loadConfigFile()
