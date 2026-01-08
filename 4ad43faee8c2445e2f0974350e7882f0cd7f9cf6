@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f641ac3_1bf8c7ac",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-01-08T21:47:24Z",
+      "side": 1,
+      "message": "std::expected\u003cbool, string\u003e seems to also be a good option here.  Just mentioning it in case you are interested.",
+      "range": {
+        "startLine": 274,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "4ad43faee8c2445e2f0974350e7882f0cd7f9cf6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9db05ea_f9390a85",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-01-08T21:47:24Z",
+      "side": 1,
+      "message": "I usually see enums as camelCase.  But, I don\u0027t care that much.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 11
+      },
+      "revId": "4ad43faee8c2445e2f0974350e7882f0cd7f9cf6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
