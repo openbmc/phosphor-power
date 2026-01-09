@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c1c54b77_c1c52dc6",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-09T16:34:15Z",
+      "side": 1,
+      "message": "Thank you for telling me about this; I didn\u0027t know about the std::expected class.\n\nI think in this case it would be a little confusing. The intent of this method is to return a boolean indicating if the chassis can be set to the specified power state.\n\nIf the answer is true, I would set to value to true and there would be no reason why. So std::expected would work well.\n\nIf the answer is false, then I think I would set the unexpected value to the reason.\n\nSo the caller would have a strange case where false could never be returned, or it would be unclear what to do if false were returned.\n\nI could change it to have a void return value with a string unexpected value, but then the method would probably need to be called verifyCanSetPowerState() or something. That seems less clear.\n\nI\u0027ll definitely find uses for std::expected in the future though.",
+      "parentUuid": "2f641ac3_1bf8c7ac",
+      "range": {
+        "startLine": 274,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "4ad43faee8c2445e2f0974350e7882f0cd7f9cf6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e9db05ea_f9390a85",
         "filename": "phosphor-power-sequencer/src/power_interface.hpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2026-01-08T21:47:24Z",
       "side": 1,
       "message": "I usually see enums as camelCase.  But, I don\u0027t care that much.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 11
+      },
+      "revId": "4ad43faee8c2445e2f0974350e7882f0cd7f9cf6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "634db490_3cc33350",
+        "filename": "phosphor-power-sequencer/src/power_interface.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-09T16:34:15Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e9db05ea_f9390a85",
       "range": {
         "startLine": 40,
         "startChar": 8,
