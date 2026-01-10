@@ -1,0 +1,20 @@
+{
+    "comments": [
+        "phosphor-power-sequencer configuration file for IBM Huygens systems.",
+        "Currently only contains one chassis and the power control/good GPIOs.",
+        "Additional chassis, power sequencers, and rails will be added later."
+    ],
+    "chassis": [
+        {
+            "number": 1,
+            "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+            "power_sequencers": [
+                {
+                    "type": "gpios_only_device",
+                    "power_control_gpio_name": "power-chassis-control",
+                    "power_good_gpio_name": "power-chassis-good"
+                }
+            ]
+        }
+    ]
+}
