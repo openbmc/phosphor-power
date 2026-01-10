@@ -107,3 +107,10 @@ option(
     description: '''The amount of time the power-sequencer will wait for pgood
                     to turn on or off before timing out''',
 )
+option(
+    'sequencer-use-default-config-file',
+    type: 'boolean',
+    value: true,
+    description: '''Specifies whether the phosphor-power-control application
+                    should use the default config file named Default.json''',
+)

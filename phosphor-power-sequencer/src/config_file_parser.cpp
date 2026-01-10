@@ -38,6 +38,13 @@ namespace phosphor::power::sequencer::config_file_parser
 const std::filesystem::path standardConfigFileDirectory{
     "/usr/share/phosphor-power-sequencer"};
 
+const std::string defaultConfigFileName{"Default.json"};
+
+std::filesystem::path getDefaultConfigFilePath()
+{
+    return standardConfigFileDirectory / defaultConfigFileName;
+}
+
 std::filesystem::path find(
     const std::vector<std::string>& compatibleSystemTypes,
     const std::filesystem::path& configFileDir)

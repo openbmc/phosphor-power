@@ -59,6 +59,13 @@ void writeConfigFile(const fs::path& pathName, const json& contents)
     file << contents;
 }
 
+TEST(ConfigFileParserTests, GetDefaultConfigFilePath)
+{
+    fs::path defaultConfigFilePath = getDefaultConfigFilePath();
+    fs::path expectedPath{"/usr/share/phosphor-power-sequencer/Default.json"};
+    EXPECT_EQ(defaultConfigFilePath, expectedPath);
+}
+
 TEST(ConfigFileParserTests, Find)
 {
     std::vector<std::string> compatibleSystemTypes{

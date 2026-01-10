@@ -161,6 +161,10 @@ conf.set('SEQUENCER', sequencer_class)
 conf.set10('DEVICE_ACCESS', get_option('device-access'))
 conf.set10('IBM_VPD', get_option('ibm-vpd'))
 conf.set('PGOOD_TIMEOUT', get_option('pgood-timeout-value'))
+conf.set10(
+    'SEQUENCER_USE_DEFAULT_CONFIG_FILE',
+    get_option('sequencer-use-default-config-file'),
+)
 
 configure_file(output: 'config.h', configuration: conf)
 

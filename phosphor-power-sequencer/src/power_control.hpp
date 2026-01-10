@@ -86,15 +86,14 @@ class PowerControl : public PowerObject
     BMCServices services;
 
     /**
+     * JSON configuration file path.
+     */
+    std::filesystem::path configFilePath;
+
+    /**
      * Object that finds the compatible system types for the current system.
      */
     std::unique_ptr<util::CompatibleSystemTypesFinder> compatSysTypesFinder;
-
-    /**
-     * Compatible system types for the current system ordered from most to least
-     * specific.
-     */
-    std::vector<std::string> compatibleSystemTypes;
 
     /**
      * Computer system being controlled and monitored by the BMC.
@@ -227,22 +226,22 @@ class PowerControl : public PowerObject
     /**
      * Loads the JSON configuration file.
      *
-     * Looks for the config file using findConfigFile().
-     *
-     * If the config file is found, it is parsed and the resulting information
-     * is stored in the system data member.
+     * The file is parsed, and the resulting information is stored in the system
+     * data member.
      */
     void loadConfigFile();
 
     /**
-     * Finds the JSON configuration file for the current system based on the
-     * compatible system types.
+     * Finds the JSON configuration file.
      *
-     * Does nothing if the compatible system types have not been found yet.
+     * If the default config file is being used, the path is found, and the file
+     * is loaded.
      *
-     * @return absolute path to the config file, or empty path if file not found
+     * If a system-specific file is being used, the D-Bus Compatible interface
+     * will be found. The compatible names from the interface will be used to
+     * find the system-specific config file path and load it.
      */
-    std::filesystem::path findConfigFile();
+    void findConfigFile();
 };
 
 } // namespace phosphor::power::sequencer

@@ -3,10 +3,12 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Location](#location)
+- [Default Configuration File](#default-configuration-file)
+- [System-Specific Configuration Files](#system-specific-configuration-files)
+- [Selecting Configuration File To Use](#selecting-configuration-file-to-use)
 - [Data Format](#data-format)
-- [Name](#name)
 - [Contents](#contents)
-- [Installation](#installation)
 
 ## Overview
 
@@ -18,31 +20,49 @@ This information is used to power the system on/off, detect
 [pgood faults](../pgood_faults.md), and identify the voltage rail that caused a
 pgood fault.
 
-The config file is optional. If no file is found, the application will do the
-following:
+## Location
 
-- Assume this is a single chassis system.
-- Assume the standard [GPIO names](../named_gpios.md) are used to power the
-  system on/off and detect pgood faults.
-- Log a general error if a pgood fault occurs. No specific voltage rail will be
-  identified.
+Config files are stored in the [config_files](../../config_files) directory of
+this repository.
 
-## Data Format
+The config files are installed in the `/usr/share/phosphor-power-sequencer`
+directory on the BMC.
 
-The config file is a text file in the
-[JSON (JavaScript Object Notation)](https://www.json.org/) data format.
+## Default Configuration File
 
-## Name
+The default config file is [Default.json](../../config_files/Default.json). This
+simple file contains one chassis, one power sequencer device, and no voltage
+rails.
 
-The config file name is based on the system type that it supports.
+the default config file can be used if the following are all true:
 
-A config file is normally system-specific. Each system type usually has a
-different set of chassis, power sequencer devices, GPIOs, and voltage rails.
+- The system uses the default names for the power control and power good GPIOs.
+- No isolation is required to determine which rail caused a power good fault.
 
-The system type is obtained from a D-Bus Chassis object created by the
-[Entity Manager](https://github.com/openbmc/entity-manager) application. The
-object must implement the `xyz.openbmc_project.Inventory.Decorator.Compatible`
-interface.
+## System-Specific Configuration Files
+
+Config files are often system-specific. Each system type usually has a different
+set of chassis, power sequencer devices, GPIOs, and voltage rails.
+
+System-specific config files can support isolating which rail caused a power
+good fault.
+
+## Selecting Configuration File To Use
+
+The meson build option `sequencer-use-default-config-file` determines which
+config file is used:
+
+- If the option is true, the default config file is used.
+- If the option is false, a system-specific config file is used.
+
+The option is true by default. See [meson.options](../../../meson.options).
+
+System-specific config files are found using the
+[`xyz.openbmc_project.Inventory.Decorator.Compatible`][1] D-Bus interface.
+
+The `phosphor-power-sequencer` application searches for a D-Bus Chassis object
+created by [Entity Manager](https://github.com/openbmc/entity-manager) that
+implements the `Compatible` interface.
 
 The `Names` property of this interface contains a list of one or more compatible
 system types. The types are ordered from most specific to least specific.
@@ -53,9 +73,9 @@ Example:
 - `com.acme.Hardware.Chassis.Model.MegaServer`
 - `com.acme.Hardware.Chassis.Model.Server`
 
-The `phosphor-power-sequencer` application searches for a config file name that
-matches one of these compatible system types. It searches from most specific to
-least specific. The first config file found, if any, will be used.
+The application searches for a config file name that matches one of these
+compatible system types. It searches from most specific to least specific. The
+first config file found will be used.
 
 For each compatible system type, the application will look for two config file
 names:
@@ -67,6 +87,11 @@ Example:
 
 - `com.acme.Hardware.Chassis.Model.MegaServer4CPU.json`
 - `MegaServer4CPU.json`
+
+## Data Format
+
+The config file is a text file in the
+[JSON (JavaScript Object Notation)](https://www.json.org/) data format.
 
 ## Contents
 
@@ -103,7 +128,5 @@ Example:
 "address": "0x70"
 ```
 
-## Installation
-
-The config file is installed in the `/usr/share/phosphor-power-sequencer`
-directory on the BMC.
+[1]:
+  https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/Inventory/Decorator/Compatible.interface.yaml

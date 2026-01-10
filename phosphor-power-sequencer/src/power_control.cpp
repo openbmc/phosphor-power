@@ -52,8 +52,7 @@ PowerControl::PowerControl(sdbusplus::bus_t& bus,
     // Obtain dbus service name
     bus.request_name(POWER_IFACE);
 
-    compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
-        bus, std::bind_front(&PowerControl::compatibleSystemTypesFound, this));
+    findConfigFile();
 
     setUpGpio();
 
@@ -299,18 +298,29 @@ void PowerControl::setState(int s)
 void PowerControl::compatibleSystemTypesFound(
     const std::vector<std::string>& types)
 {
-    // If we don't already have compatible system types
-    if (compatibleSystemTypes.empty())
+    // Exit if we already found a config file or list of system types is empty
+    if (!configFilePath.empty() || types.empty())
     {
-        std::string typesStr = format_utils::toString(std::span{types});
-        services.logInfoMsg(
-            std::format("Compatible system types found: {}", typesStr));
+        return;
+    }
 
-        // Store compatible system types
-        compatibleSystemTypes = types;
+    std::string typesStr = format_utils::toString(std::span{types});
+    services.logInfoMsg(
+        std::format("Compatible system types found: {}", typesStr));
 
-        // Load config file that matches one of the compatible system types
-        loadConfigFile();
+    // Try to find a config file that matches one of the compatible system types
+    try
+    {
+        configFilePath = config_file_parser::find(types);
+        if (!configFilePath.empty())
+        {
+            loadConfigFile();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        services.logErrorMsg(std::format(
+            "Unable to find JSON configuration file: {}", e.what()));
     }
 }
 
@@ -352,13 +362,11 @@ void PowerControl::loadConfigFile()
 {
     try
     {
-        std::filesystem::path configFile = findConfigFile();
-        if (!configFile.empty())
-        {
-            std::vector<std::unique_ptr<Chassis>> chassis =
-                config_file_parser::parse(configFile);
-            system = std::make_unique<System>(std::move(chassis));
-        }
+        services.logInfoMsg(std::format("Loading JSON configuration file: {}",
+                                        configFilePath.string()));
+        std::vector<std::unique_ptr<Chassis>> chassis =
+            config_file_parser::parse(configFilePath);
+        system = std::make_unique<System>(std::move(chassis));
     }
     catch (const std::exception& e)
     {
@@ -367,28 +375,22 @@ void PowerControl::loadConfigFile()
     }
 }
 
-std::filesystem::path PowerControl::findConfigFile()
+void PowerControl::findConfigFile()
 {
-    // Find config file for current system based on compatible system types
-    std::filesystem::path configFile;
-    if (!compatibleSystemTypes.empty())
+    if (SEQUENCER_USE_DEFAULT_CONFIG_FILE)
     {
-        try
-        {
-            configFile = config_file_parser::find(compatibleSystemTypes);
-            if (!configFile.empty())
-            {
-                services.logInfoMsg(std::format(
-                    "JSON configuration file found: {}", configFile.string()));
-            }
-        }
-        catch (const std::exception& e)
-        {
-            services.logErrorMsg(std::format(
-                "Unable to find JSON configuration file: {}", e.what()));
-        }
+        // Load default config file
+        configFilePath = config_file_parser::getDefaultConfigFilePath();
+        loadConfigFile();
     }
-    return configFile;
+    else
+    {
+        // Find D-Bus Compatible interface. Use that data to find config file.
+        compatSysTypesFinder =
+            std::make_unique<util::CompatibleSystemTypesFinder>(
+                bus, std::bind_front(&PowerControl::compatibleSystemTypesFound,
+                                     this));
+    }
 }
 
 } // namespace phosphor::power::sequencer
