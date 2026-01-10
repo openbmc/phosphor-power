@@ -42,6 +42,18 @@ namespace phosphor::power::sequencer::config_file_parser
 extern const std::filesystem::path standardConfigFileDirectory;
 
 /**
+ * Default JSON configuration file name.
+ */
+extern const std::string defaultConfigFileName;
+
+/**
+ * Returns the path to the default JSON configuration file.
+ *
+ * @return default config file path
+ */
+std::filesystem::path getDefaultConfigFilePath();
+
+/**
  * Finds the JSON configuration file for the current system based on the
  * specified compatible system types.
  *
