@@ -15,6 +15,8 @@
  */
 #pragma once
 
+#include "config.h"
+
 #include "chassis_status_monitor.hpp"
 #include "power_interface.hpp"
 #include "power_sequencer_device.hpp"
@@ -22,6 +24,7 @@
 
 #include <stddef.h> // for size_t
 
+#include <chrono>
 #include <format>
 #include <memory>
 #include <optional>
@@ -338,6 +341,35 @@ class Chassis
      */
     void closeDevices();
 
+    /**
+     * Returns the power good timeout.
+     *
+     * This timeout indicates a power state change has taken too much time and
+     * has failed.
+     *
+     * @return timeout in milliseconds
+     */
+    std::chrono::milliseconds getPowerGoodTimeOut() const
+    {
+        return powerGoodTimeOut;
+    }
+
+    /**
+     * Sets the power good timeout.
+     *
+     * This timeout indicates a power state change has taken too much time and
+     * has failed.
+     *
+     * If a power state change is already occurring, the new value will not be
+     * used until the next power state change.
+     *
+     * @param newTimeOut New timeout value
+     */
+    void setPowerGoodTimeOut(std::chrono::milliseconds newTimeOut)
+    {
+        powerGoodTimeOut = newTimeOut;
+    }
+
   private:
     /**
      * Verifies that chassis monitoring has been initialized and a
@@ -450,6 +482,20 @@ class Chassis
      * Chassis power good.
      */
     std::optional<PowerGood> powerGood{};
+
+    /**
+     * Timeout that indicates a power state change has taken too much time and
+     * has failed.
+     *
+     * The timeout is expressed in milliseconds. Normally the timeout will be
+     * some number of seconds, but milliseconds are used to enable fast timeouts
+     * during automated testing.
+     *
+     * The default value is defined by a build option that is expressed in
+     * seconds.
+     */
+    std::chrono::milliseconds powerGoodTimeOut =
+        std::chrono::seconds{PGOOD_TIMEOUT};
 };
 
 } // namespace phosphor::power::sequencer
