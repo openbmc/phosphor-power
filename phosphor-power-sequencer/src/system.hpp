@@ -21,6 +21,7 @@
 
 #include <stddef.h> // for size_t
 
+#include <chrono>
 #include <memory>
 #include <optional>
 #include <set>
@@ -159,6 +160,25 @@ class System
      * @param services System services like hardware presence and the journal
      */
     void monitor(Services& services);
+
+    /**
+     * Sets the power good timeout for all chassis.
+     *
+     * This timeout indicates a power state change has taken too much time and
+     * has failed.
+     *
+     * If a power state change is already occurring, the new value will not be
+     * used until the next power state change.
+     *
+     * @param newTimeout New timeout value
+     */
+    void setPowerGoodTimeout(std::chrono::milliseconds newTimeout)
+    {
+        for (auto& curChassis : chassis)
+        {
+            curChassis->setPowerGoodTimeout(newTimeout);
+        }
+    }
 
   private:
     /**

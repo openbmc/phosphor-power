@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "config.h"
+
 #include "chassis.hpp"
 #include "chassis_status_monitor.hpp"
 #include "mock_chassis_status_monitor.hpp"
@@ -25,6 +27,7 @@
 
 #include <stddef.h> // for size_t
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <stdexcept>
@@ -136,6 +139,8 @@ TEST(ChassisTests, Constructor)
     EXPECT_THROW(chassis.getStatusMonitor(), std::runtime_error);
     EXPECT_THROW(chassis.getPowerState(), std::runtime_error);
     EXPECT_THROW(chassis.getPowerGood(), std::runtime_error);
+    EXPECT_EQ(chassis.getPowerGoodTimeout(),
+              std::chrono::seconds{PGOOD_TIMEOUT});
 }
 
 TEST(ChassisTests, GetNumber)
@@ -1750,4 +1755,36 @@ TEST(ChassisTests, CloseDevices)
 
         chassis.closeDevices();
     }
+}
+
+TEST(ChassisTests, GetPowerGoodTimeout_SetPowerGoodTimeout)
+{
+    // This testcase covers both getPowerGoodTimeout() and setPowerGoodTimeout()
+    // Separate testcases would have been virtual identical.
+
+    size_t number{1};
+    std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis"};
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
+
+    // Verify the default timeout value, which is a meson option expressed in
+    // seconds. getPowerGoodTimeout() returns duration expressed in
+    // milliseconds. std::chrono classes are able to handle conversion.
+    std::chrono::seconds defaultValueInSecs{PGOOD_TIMEOUT};
+    EXPECT_EQ(chassis.getPowerGoodTimeout(), defaultValueInSecs);
+    EXPECT_EQ(chassis.getPowerGoodTimeout().count(), (PGOOD_TIMEOUT * 1000));
+
+    // Set to new value in seconds
+    std::chrono::seconds newValueInSecs{5};
+    chassis.setPowerGoodTimeout(newValueInSecs);
+    EXPECT_EQ(chassis.getPowerGoodTimeout(), newValueInSecs);
+    EXPECT_EQ(chassis.getPowerGoodTimeout().count(), 5000);
+
+    // Set to new value in milliseconds
+    std::chrono::milliseconds newValueInMillis{400};
+    chassis.setPowerGoodTimeout(newValueInMillis);
+    EXPECT_EQ(chassis.getPowerGoodTimeout(), newValueInMillis);
+    EXPECT_EQ(chassis.getPowerGoodTimeout().count(), 400);
 }
