@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include "config.h"
+
 #include "chassis.hpp"
 #include "chassis_status_monitor.hpp"
 #include "mock_chassis_status_monitor.hpp"
@@ -25,6 +27,7 @@
 
 #include <stddef.h> // for size_t
 
+#include <chrono>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -1378,5 +1381,45 @@ TEST(SystemTests, Monitor_SetInitialPowerStateIfNeeded)
         system.monitor(services);
         EXPECT_EQ(system.getPowerGood(), PowerGood::off);
         EXPECT_EQ(system.getPowerState(), PowerState::off);
+    }
+}
+
+TEST(SystemTests, SetPowerGoodTimeout)
+{
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    chassis.emplace_back(
+        createChassis(1, "/xyz/openbmc_project/inventory/system/chassis1"));
+    chassis.emplace_back(
+        createChassis(2, "/xyz/openbmc_project/inventory/system/chassis2"));
+    System system{std::move(chassis)};
+
+    // Verify the default chassis timeout values, which are set by a meson
+    // option expressed in seconds. Chassis::getPowerGoodTimeout() returns
+    // duration expressed in milliseconds. std::chrono classes are able to
+    // handle conversion.
+    std::chrono::seconds defaultValueInSecs{PGOOD_TIMEOUT};
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_EQ(chassis->getPowerGoodTimeout(), defaultValueInSecs);
+        EXPECT_EQ(chassis->getPowerGoodTimeout().count(),
+                  (PGOOD_TIMEOUT * 1000));
+    }
+
+    // Set to new value in seconds
+    std::chrono::seconds newValueInSecs{5};
+    system.setPowerGoodTimeout(newValueInSecs);
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_EQ(chassis->getPowerGoodTimeout(), newValueInSecs);
+        EXPECT_EQ(chassis->getPowerGoodTimeout().count(), 5000);
+    }
+
+    // Set to new value in milliseconds
+    std::chrono::milliseconds newValueInMillis{400};
+    system.setPowerGoodTimeout(newValueInMillis);
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_EQ(chassis->getPowerGoodTimeout(), newValueInMillis);
+        EXPECT_EQ(chassis->getPowerGoodTimeout().count(), 400);
     }
 }
