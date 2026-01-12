@@ -180,6 +180,19 @@ class System
         }
     }
 
+    /**
+     * Sets the power supply error occurring in all chassis, if any.
+     *
+     * @param error Power supply error or empty string if no error occurring
+     */
+    void setPowerSupplyError(const std::string& error)
+    {
+        for (auto& curChassis : chassis)
+        {
+            curChassis->setPowerSupplyError(error);
+        }
+    }
+
   private:
     /**
      * Verifies that system monitoring has been initialized.
