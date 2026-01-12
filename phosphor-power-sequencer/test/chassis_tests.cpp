@@ -141,6 +141,7 @@ TEST(ChassisTests, Constructor)
     EXPECT_THROW(chassis.getPowerGood(), std::runtime_error);
     EXPECT_EQ(chassis.getPowerGoodTimeOut(),
               std::chrono::seconds{PGOOD_TIMEOUT});
+    EXPECT_TRUE(chassis.getPowerSupplyError().empty());
 }
 
 TEST(ChassisTests, GetNumber)
@@ -1787,4 +1788,30 @@ TEST(ChassisTests, GetPowerGoodTimeOut_SetPowerGoodTimeOut)
     chassis.setPowerGoodTimeOut(newValueInMillis);
     EXPECT_EQ(chassis.getPowerGoodTimeOut(), newValueInMillis);
     EXPECT_EQ(chassis.getPowerGoodTimeOut().count(), 400);
+}
+
+TEST(ChassisTests, GetPowerSupplyError_SetPowerSupplyError)
+{
+    // This testcase covers both getPowerSupplyError() and setPowerSupplyError()
+    // Separate testcases would have been virtual identical.
+
+    size_t number{1};
+    std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis"};
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
+
+    // Verify default value is the empty string
+    EXPECT_TRUE(chassis.getPowerSupplyError().empty());
+
+    // Set to error string
+    std::string error{
+        "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault"};
+    chassis.setPowerSupplyError(error);
+    EXPECT_EQ(chassis.getPowerSupplyError(), error);
+
+    // Set to empty string
+    chassis.setPowerSupplyError("");
+    EXPECT_TRUE(chassis.getPowerSupplyError().empty());
 }
