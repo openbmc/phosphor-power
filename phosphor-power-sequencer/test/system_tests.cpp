@@ -1423,3 +1423,35 @@ TEST(SystemTests, SetPowerGoodTimeout)
         EXPECT_EQ(chassis->getPowerGoodTimeout().count(), 400);
     }
 }
+
+TEST(SystemTests, SetPowerSupplyError)
+{
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    chassis.emplace_back(
+        createChassis(1, "/xyz/openbmc_project/inventory/system/chassis1"));
+    chassis.emplace_back(
+        createChassis(2, "/xyz/openbmc_project/inventory/system/chassis2"));
+    System system{std::move(chassis)};
+
+    // Verify default value is the empty string
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_TRUE(chassis->getPowerSupplyError().empty());
+    }
+
+    // Set to error string
+    std::string error{
+        "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault"};
+    system.setPowerSupplyError(error);
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_EQ(chassis->getPowerSupplyError(), error);
+    }
+
+    // Set to empty string
+    system.setPowerSupplyError("");
+    for (auto& chassis : system.getChassis())
+    {
+        EXPECT_TRUE(chassis->getPowerSupplyError().empty());
+    }
+}

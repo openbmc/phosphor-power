@@ -370,6 +370,26 @@ class Chassis
         powerGoodTimeout = newTimeout;
     }
 
+    /**
+     * Returns the power supply error occurring within this chassis, if any.
+     *
+     * @return power supply error or empty string if no error occurring
+     */
+    const std::string& getPowerSupplyError()
+    {
+        return powerSupplyError;
+    }
+
+    /**
+     * Sets the power supply error occurring within this chassis, if any.
+     *
+     * @param error Power supply error or empty string if no error occurring
+     */
+    void setPowerSupplyError(const std::string& error)
+    {
+        powerSupplyError = error;
+    }
+
   private:
     /**
      * Verifies that chassis monitoring has been initialized and a
@@ -496,6 +516,20 @@ class Chassis
      */
     std::chrono::milliseconds powerGoodTimeout =
         std::chrono::seconds{PGOOD_TIMEOUT};
+
+    /**
+     * Power supply error occurring in this chassis, if any.
+     *
+     * If a power supply error is occurring, it could cause a power good fault.
+     *
+     * The power supply monitoring application will notify the power sequencer
+     * application using a D-Bus interface. The error string will be stored in
+     * this data member.
+     *
+     * If no power supply error is occurring, this data member is set to the
+     * empty string.
+     */
+    std::string powerSupplyError{};
 };
 
 } // namespace phosphor::power::sequencer
