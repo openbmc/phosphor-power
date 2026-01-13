@@ -22,6 +22,30 @@
       },
       "revId": "17548670386a9115fc006939f58d1b2b5d495d88",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e5b0e4_5b7cca82",
+        "filename": "phosphor-power-sequencer/config_files/Huygens.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-01-13T21:43:22Z",
+      "side": 1,
+      "message": "Good catch. Done.",
+      "parentUuid": "576f3368_c1e1b9b7",
+      "range": {
+        "startLine": 10,
+        "startChar": 69,
+        "endLine": 10,
+        "endChar": 76
+      },
+      "revId": "17548670386a9115fc006939f58d1b2b5d495d88",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
