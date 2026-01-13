@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "576f3368_c1e1b9b7",
+        "filename": "phosphor-power-sequencer/config_files/Huygens.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-01-13T21:29:38Z",
+      "side": 1,
+      "message": "Is this the right chassis name for huygens?",
+      "range": {
+        "startLine": 10,
+        "startChar": 69,
+        "endLine": 10,
+        "endChar": 76
+      },
+      "revId": "17548670386a9115fc006939f58d1b2b5d495d88",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
