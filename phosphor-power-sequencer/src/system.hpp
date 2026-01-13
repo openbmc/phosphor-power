@@ -152,8 +152,8 @@ class System
      * Sets the system power good value by obtaining the power good value from
      * each chassis selected for the current power on/off attempt.
      *
-     * This method must be called periodically (such as once per second) to
-     * ensure the system power state and power good values are correct.
+     * This method must be called once per second to update the power good value
+     * and to detect power errors.
      *
      * Throws an exception if system monitoring has not been initialized.
      *
