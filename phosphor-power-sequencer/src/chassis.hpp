@@ -26,6 +26,7 @@
 
 #include <chrono>
 #include <format>
+#include <map>
 #include <memory>
 #include <optional>
 #include <stdexcept>
@@ -41,6 +42,36 @@ using ChassisStatusMonitorOptions =
     phosphor::power::util::ChassisStatusMonitorOptions;
 using PowerState = PowerInterface::PowerState;
 using PowerGood = PowerInterface::PowerGood;
+
+/**
+ * @struct PowerGoodFault
+ *
+ * Power good fault that was detected in the chassis for the current power on
+ * attempt.
+ */
+struct PowerGoodFault
+{
+    /**
+     * Specifies whether the fault was due to a timeout during power on attempt.
+     */
+    bool wasTimeout{false};
+
+    /**
+     * Specifies whether an error has been logged for the fault.
+     *
+     * For some faults, an error is not logged until a delay time has elapsed.
+     *
+     * The chassis should not be powered off until an error has been logged.
+     */
+    bool wasLogged{false};
+
+    /**
+     * Specifies the time when an error should be logged.
+     *
+     * Only used when an error is not logged until a delay time has elapsed.
+     */
+    std::chrono::time_point<std::chrono::steady_clock> logTime;
+};
 
 /**
  * @class Chassis
@@ -313,6 +344,21 @@ class Chassis
     }
 
     /**
+     * Returns whether the chassis is in transition to a new requested power
+     * state.
+     *
+     * A new power state has been requested using setPowerState(), but the power
+     * good value does not yet match that state. For example, the power state
+     * has been set to on, but the power good value is not yet on.
+     *
+     * @return true if chassis is in a power state transition, false otherwise
+     */
+    bool isInPowerStateTransition()
+    {
+        return isInStateTransition;
+    }
+
+    /**
      * Monitors the status of the chassis.
      *
      * Sets the chassis power good value by reading the power good value from
@@ -320,8 +366,8 @@ class Chassis
      *
      * Reacts to any changes to chassis D-Bus properties.
      *
-     * This method must be called periodically (such as once per second) to
-     * ensure the chassis power state and power good values are correct.
+     * This method must be called once per second to update the power good value
+     * and to detect power errors.
      *
      * Throws an exception if one of the following occurs:
      * - Chassis monitoring has not been initialized.
@@ -332,6 +378,42 @@ class Chassis
     void monitor(Services& services);
 
     /**
+     * Returns whether a power good fault has been detected.
+     *
+     * A power good fault occurs in the following situations:
+     * - A power on attempt times out and is unsuccessful.
+     * - The chassis is successfully powered on, but later the power good value
+     *   changes to off unexpectedly.
+     *
+     * Power good fault history is cleared when a new power on attempt occurs.
+     *
+     * @return true if a power good fault was found, false otherwise
+     */
+    bool hasPowerGoodFault()
+    {
+        return powerGoodFault.has_value();
+    }
+
+    /**
+     * Returns the power good fault that was detected.
+     *
+     * See hasPowerGoodFault() for more information on power good faults.
+     *
+     * Throws an exception if no power good fault was detected.
+     *
+     * @return power good fault
+     */
+    const PowerGoodFault& getPowerGoodFault()
+    {
+        if (!powerGoodFault)
+        {
+            throw std::runtime_error{std::format(
+                "No power good fault detected in chassis {}", number)};
+        }
+        return *powerGoodFault;
+    }
+
+    /**
      * Closes all power sequencer devices that are open.
      *
      * Does not throw exceptions. This method may be called because a chassis is
@@ -340,6 +422,15 @@ class Chassis
      * necessary in order to clean up resources like file handles.
      */
     void closeDevices();
+
+    /**
+     * Clears the error history for the chassis.
+     */
+    void clearErrorHistory()
+    {
+        powerSupplyError.clear();
+        powerGoodFault.reset();
+    }
 
     /**
      * Returns the power good timeout.
@@ -368,6 +459,36 @@ class Chassis
     void setPowerGoodTimeout(std::chrono::milliseconds newTimeout)
     {
         powerGoodTimeout = newTimeout;
+    }
+
+    /**
+     * Returns the delay time between detecting a power good fault and logging
+     * an error.
+     *
+     * Error logging is delayed to allow the power supplies and other hardware
+     * time to complete failure processing.
+     *
+     * Error logging is not delayed if the power good fault was due to a
+     * timeout.
+     *
+     * @return delay time in milliseconds
+     */
+    std::chrono::milliseconds getPowerGoodFaultLogDelay()
+    {
+        return powerGoodFaultLogDelay;
+    }
+
+    /**
+     * Sets the delay time between detecting a power good fault and logging an
+     * error.
+     *
+     * See getPowerGoodFaultLogDelay() for more information.
+     *
+     * @param delay Delay time in milliseconds
+     */
+    void setPowerGoodFaultLogDelay(std::chrono::milliseconds delay)
+    {
+        powerGoodFaultLogDelay = delay;
     }
 
     /**
@@ -407,6 +528,16 @@ class Chassis
     }
 
     /**
+     * Returns the current system time.
+     *
+     * @return current time
+     */
+    std::chrono::time_point<std::chrono::steady_clock> getCurrentTime()
+    {
+        return std::chrono::steady_clock::now();
+    }
+
+    /**
      * Opens the specified power sequencer device if it is not already open.
      *
      * Throws an exception if an error occurs.
@@ -421,6 +552,19 @@ class Chassis
             device.open(services);
         }
     }
+
+    /**
+     * Updates the power good value.
+     *
+     * If the chassis status is valid, the power good value is read.
+     *
+     * If the chassis is not present or does not have input power, the power
+     * state and power good are set to off and all power sequencer devices are
+     * closed.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void updatePowerGood(Services& services);
 
     /**
      * Reads the power good value from all power sequencer devices.
@@ -466,6 +610,89 @@ class Chassis
     void powerOff(Services& services);
 
     /**
+     * Updates isInStateTransition based on the current power state and power
+     * good values.
+     *
+     * See isInPowerStateTransition() for more information.
+     */
+    void updateInPowerStateTransition();
+
+    /**
+     * Checks whether a power good error has occurred.
+     *
+     * Checks for the following:
+     * - Timeout has occurred during a power on attempt
+     * - Timeout has occurred during a power off attempt
+     * - Power on attempt worked, but power good suddenly changed to off
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void checkForPowerGoodError(Services& services);
+
+    /**
+     * Handles a timeout waiting for the power good value to change during a
+     * power on or power off attempt.
+     *
+     * This occurs when it takes too long for a power on/off attempt to succeed.
+     *
+     * Logs an error and sets isInStateTransition to false.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void handlePowerGoodTimeout(Services& services);
+
+    /**
+     * Handles a power good fault after the chassis had been powered on.
+     *
+     * Creates a PowerGoodFault object but does not log an error until a delay
+     * time has elapsed.
+     *
+     * See hasPowerGoodFault() and getPowerGoodFaultLogDelay() for more
+     * information.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void handlePowerGoodFault(Services& services);
+
+    /**
+     * Logs an error due to a power off attempt hitting a timeout.
+     *
+     * See getPowerGoodTimeout() for more information.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void logPowerOffTimeout(Services& services);
+
+    /**
+     * Logs an error due to a power good fault.
+     *
+     * Tries to find which voltage rail caused the power good fault. If no rail
+     * is found, a more general error is logged.
+     *
+     * See hasPowerGoodFault() for more information.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void logPowerGoodFault(Services& services);
+
+    /**
+     * Checks whether a power good fault has occurred on one of the voltage
+     * rails within the chassis.
+     *
+     * If a power good fault was found, this method returns a string containing
+     * the error that should be logged. If no fault was found, an empty string
+     * is returned.
+     *
+     * @param services System services like hardware presence and the journal
+     * @param additionalData Additional data to include in the error log if a
+     *                       power good fault was found
+     * @return error that should be logged if a power good fault was found, or
+     *         an empty string if no power good fault was found
+     */
+    std::string findPowerGoodFaultInRail(
+        std::map<std::string, std::string>& additionalData, Services& services);
+
+    /**
      * Chassis number within the system.
      *
      * Chassis numbers start at 1 because chassis 0 represents the entire
@@ -504,6 +731,21 @@ class Chassis
     std::optional<PowerGood> powerGood{};
 
     /**
+     * Indicates whether the chassis is in a power state transition.
+     *
+     * See isInPowerStateTransition() for more information.
+     */
+    bool isInStateTransition{false};
+
+    /**
+     * Power good fault that was detected during the current power on attempt,
+     * if any.
+     *
+     * See hasPowerGoodFault() for more information.
+     */
+    std::optional<PowerGoodFault> powerGoodFault{};
+
+    /**
      * Timeout that indicates a power state change has taken too much time and
      * has failed.
      *
@@ -516,6 +758,20 @@ class Chassis
      */
     std::chrono::milliseconds powerGoodTimeout =
         std::chrono::seconds{PGOOD_TIMEOUT};
+
+    /**
+     * System time when timeout will occur for the current power on/off attempt.
+     *
+     * See powerGoodTimeout for more information.
+     */
+    std::chrono::time_point<std::chrono::steady_clock> powerGoodTimeoutTime{};
+
+    /**
+     * Delay time between detecting a power good fault and logging an error.
+     *
+     * See getPowerGoodFaultLogDelay() for more information.
+     */
+    std::chrono::milliseconds powerGoodFaultLogDelay = std::chrono::seconds(7);
 
     /**
      * Power supply error occurring in this chassis, if any.

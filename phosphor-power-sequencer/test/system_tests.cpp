@@ -212,6 +212,8 @@ TEST(SystemTests, GetPowerState)
         EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, powerOn).Times(1);
 
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+
         system.setPowerState(PowerState::on, services);
         EXPECT_EQ(system.getPowerState(), PowerState::on);
     }
@@ -320,6 +322,8 @@ TEST(SystemTests, SetPowerState)
             EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, powerOn).Times(1);
         }
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
 
         system.setPowerState(PowerState::on, services);
         EXPECT_EQ(system.getPowerState(), PowerState::on);
@@ -411,6 +415,8 @@ TEST(SystemTests, SetPowerState)
             EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, powerOn).Times(1);
         }
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
@@ -460,6 +466,7 @@ TEST(SystemTests, SetPowerState)
             services,
             logInfoMsg(
                 "Unable to set chassis 1 to state off: Chassis is not available"));
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 2")).Times(1);
 
         system.monitor(services);
         EXPECT_EQ(system.getSelectedChassis().size(), 1);
@@ -715,6 +722,8 @@ TEST(SystemTests, Monitor_SetInitialSelectedChassisIfNeeded)
             EXPECT_CALL(device, powerOff).Times(1);
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
         }
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 2")).Times(1);
 
         system.setPowerState(PowerState::off, services);
         EXPECT_EQ(system.getSelectedChassis().size(), 2);
@@ -1151,6 +1160,8 @@ TEST(SystemTests, Monitor_SetPowerGood)
             EXPECT_CALL(device, powerOn).Times(1);
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
         }
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
 
         system.setPowerState(PowerState::on, services);
         EXPECT_EQ(system.getSelectedChassis().size(), 2);
@@ -1270,6 +1281,8 @@ TEST(SystemTests, Monitor_SetPowerGood)
             EXPECT_CALL(device, powerOn).Times(1);
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
         }
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
 
         system.setPowerState(PowerState::on, services);
         EXPECT_EQ(system.getSelectedChassis().size(), 2);
@@ -1305,6 +1318,8 @@ TEST(SystemTests, Monitor_SetInitialPowerStateIfNeeded)
         EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
+
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         system.setPowerState(PowerState::on, services);
         EXPECT_EQ(system.getPowerState(), PowerState::on);

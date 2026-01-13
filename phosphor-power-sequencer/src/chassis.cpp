@@ -19,6 +19,27 @@
 namespace phosphor::power::sequencer
 {
 
+/**
+ * General error logged when a timeout occurs during a power on attempt.
+ *
+ * Logged when no specific voltage rail was found that caused the timeout.
+ */
+const std::string powerOnTimeoutError =
+    "xyz.openbmc_project.Power.Error.PowerOnTimeout";
+
+/**
+ * General error logged when a timeout occurs during a power off attempt.
+ */
+const std::string powerOffTimeoutError =
+    "xyz.openbmc_project.Power.Error.PowerOffTimeout";
+
+/**
+ * General error logged when a power good fault occurs.
+ *
+ * Logged when no specific voltage rail was found that caused the fault.
+ */
+const std::string shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
+
 std::tuple<bool, std::string> Chassis::canSetPowerState(
     PowerState newPowerState)
 {
@@ -73,9 +94,17 @@ void Chassis::setPowerState(PowerState newPowerState, Services& services)
                         PowerInterface::toString(newPowerState), reason)};
     }
 
+    services.logInfoMsg(
+        std::format("Powering {} chassis {}",
+                    PowerInterface::toString(newPowerState), number));
+
     powerState = newPowerState;
+    isInStateTransition = true;
+    powerGoodTimeoutTime = getCurrentTime() + powerGoodTimeout;
+
     if (powerState == PowerState::on)
     {
+        clearErrorHistory();
         powerOn(services);
     }
     else
@@ -87,20 +116,9 @@ void Chassis::setPowerState(PowerState newPowerState, Services& services)
 void Chassis::monitor(Services& services)
 {
     verifyMonitoringInitialized();
-
-    if (!isPresent() || !isInputPowerGood())
-    {
-        powerState = PowerState::off;
-        powerGood = PowerGood::off;
-        closeDevices();
-        return;
-    }
-
-    if (isPresent() && isAvailable() && isInputPowerGood())
-    {
-        readPowerGood(services);
-        setInitialPowerStateIfNeeded();
-    }
+    updatePowerGood(services);
+    updateInPowerStateTransition();
+    checkForPowerGoodError(services);
 }
 
 void Chassis::closeDevices()
@@ -118,6 +136,21 @@ void Chassis::closeDevices()
         {
             // Ignore errors; often called when chassis goes missing/unavailable
         }
+    }
+}
+
+void Chassis::updatePowerGood(Services& services)
+{
+    if (!isPresent() || !isInputPowerGood())
+    {
+        powerState = PowerState::off;
+        powerGood = PowerGood::off;
+        closeDevices();
+    }
+    else if (isPresent() && isAvailable() && isInputPowerGood())
+    {
+        readPowerGood(services);
+        setInitialPowerStateIfNeeded();
     }
 }
 
@@ -151,6 +184,12 @@ void Chassis::readPowerGood(Services& services)
     else if (powerGoodOffCount == powerSequencers.size())
     {
         // All devices have power good off; set chassis power good to off
+        powerGood = PowerGood::off;
+    }
+    else if (!isInStateTransition && (powerGoodOffCount > 0))
+    {
+        // If we are not in a state transition and any devices are off, then set
+        // chassis power good to off
         powerGood = PowerGood::off;
     }
 }
@@ -221,6 +260,151 @@ void Chassis::powerOff(Services& services)
     {
         throw std::runtime_error{error};
     }
+}
+
+void Chassis::updateInPowerStateTransition()
+{
+    if (isInStateTransition && powerState && powerGood)
+    {
+        bool bothOff =
+            ((powerState == PowerState::off) && (powerGood == PowerGood::off));
+
+        bool bothOn =
+            ((powerState == PowerState::on) && (powerGood == PowerGood::on));
+
+        if (bothOff || bothOn)
+        {
+            isInStateTransition = false;
+        }
+    }
+}
+
+void Chassis::checkForPowerGoodError(Services& services)
+{
+    auto now = getCurrentTime();
+
+    // Log power good fault if one was detected, logging was delayed, and delay
+    // has now elapsed
+    if (powerGoodFault)
+    {
+        if (!powerGoodFault->wasLogged && (now >= powerGoodFault->logTime))
+        {
+            logPowerGoodFault(services);
+        }
+    }
+
+    // Log error if state transition did not succeed within timeout
+    if (isInStateTransition)
+    {
+        if (now >= powerGoodTimeoutTime)
+        {
+            handlePowerGoodTimeout(services);
+        }
+    }
+
+    // Detect power good fault if chassis has valid status to read power good,
+    // power state/power good have valid values, not in state transition, fault
+    // not previously detected, and power good is off when it should be on
+    if (isPresent() && isAvailable() && isInputPowerGood() && powerState &&
+        powerGood && !isInStateTransition && !powerGoodFault)
+    {
+        if ((powerState == PowerState::on) && (powerGood == PowerGood::off))
+        {
+            handlePowerGoodFault(services);
+        }
+    }
+}
+
+void Chassis::handlePowerGoodTimeout(Services& services)
+{
+    services.logErrorMsg(
+        std::format("Power {} failed in chassis {}: Timeout",
+                    PowerInterface::toString(*powerState), number));
+    isInStateTransition = false;
+
+    if (powerState == PowerState::on)
+    {
+        // Power on timeout is a type of power good fault; log power good fault
+        powerGoodFault = PowerGoodFault{};
+        powerGoodFault->wasTimeout = true;
+        logPowerGoodFault(services);
+    }
+    else
+    {
+        // Power off timeout is not a power good fault; log power off error
+        logPowerOffTimeout(services);
+    }
+}
+
+void Chassis::handlePowerGoodFault(Services& services)
+{
+    services.logErrorMsg(std::format("Power good fault in chassis {}", number));
+
+    // Create PowerGoodFault object. Delay logging error to allow the power
+    // supplies and other hardware time to complete failure processing.
+    powerGoodFault = PowerGoodFault{};
+    powerGoodFault->logTime = getCurrentTime() + powerGoodFaultLogDelay;
+}
+
+void Chassis::logPowerOffTimeout(Services& services)
+{
+    std::map<std::string, std::string> additionalData{};
+    services.logError(powerOffTimeoutError, Entry::Level::Critical,
+                      additionalData);
+}
+
+void Chassis::logPowerGoodFault(Services& services)
+{
+    // Try to find which voltage rail caused power good fault
+    std::map<std::string, std::string> additionalData{};
+    std::string error = findPowerGoodFaultInRail(additionalData, services);
+
+    // If voltage rail was not found, log a more general error
+    if (error.empty())
+    {
+        if (!powerSupplyError.empty())
+        {
+            error = powerSupplyError;
+        }
+        else if (powerGoodFault->wasTimeout)
+        {
+            error = powerOnTimeoutError;
+        }
+        else
+        {
+            error = shutdownError;
+        }
+    }
+
+    services.logError(error, Entry::Level::Critical, additionalData);
+    powerGoodFault->wasLogged = true;
+}
+
+std::string Chassis::findPowerGoodFaultInRail(
+    std::map<std::string, std::string>& additionalData, Services& services)
+{
+    std::string error{};
+    try
+    {
+        for (auto& powerSequencer : powerSequencers)
+        {
+            openDeviceIfNeeded(*powerSequencer, services);
+            error = powerSequencer->findPgoodFault(services, powerSupplyError,
+                                                   additionalData);
+            if (!error.empty())
+            {
+                break;
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        services.logErrorMsg(std::format(
+            "Unable to find rail that caused power good fault in chassis {}: {}",
+            number, e.what()));
+        additionalData.emplace("ERROR", e.what());
+    }
+    return error;
 }
 
 } // namespace phosphor::power::sequencer
