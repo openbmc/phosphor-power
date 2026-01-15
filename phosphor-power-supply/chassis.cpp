@@ -32,7 +32,6 @@ const auto deviceDirPath = "/sys/bus/i2c/devices/";
 const auto driverDirName = "/driver";
 
 const auto entityMgrService = "xyz.openbmc_project.EntityManager";
-const auto decoratorChassisId = "xyz.openbmc_project.Inventory.Decorator.Slot";
 
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
@@ -162,18 +161,26 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
             "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
             "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
 
-        auto psu = std::make_unique<PowerSupply>(
-            bus, invpath, *i2cbus, *i2caddr, driverName, presline,
-            std::bind(&Chassis::isPowerOn, this), chassisShortName);
-        psus.emplace_back(std::move(psu));
+        try
+        {
+            auto psu = std::make_unique<PowerSupply>(
+                bus, invpath, *i2cbus, *i2caddr, driverName, presline,
+                std::bind(&Chassis::isPowerOn, this), chassisShortName);
+            psus.emplace_back(std::move(psu));
 
-        // Subscribe to power supply presence changes
-        auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::propertiesChanged(invpath,
-                                                            INVENTORY_IFACE),
-            [this](auto& msg) { this->psuPresenceChanged(msg); });
-        presenceMatches.emplace_back(std::move(presenceMatch));
+            // Subscribe to power supply presence changes
+            auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+                bus,
+                sdbusplus::bus::match::rules::propertiesChanged(
+                    invpath, INVENTORY_IFACE),
+                [this](auto& msg) { this->psuPresenceChanged(msg); });
+            presenceMatches.emplace_back(std::move(presenceMatch));
+        }
+        catch (const std::exception& e)
+        {
+            lg2::error("Failed to create PowerSupply object for {PATH}: {ERR}",
+                       "PATH", invpath, "ERR", e);
+        }
     }
     if (psus.empty())
     {
