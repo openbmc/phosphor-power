@@ -32,7 +32,6 @@ const auto deviceDirPath = "/sys/bus/i2c/devices/";
 const auto driverDirName = "/driver";
 
 const auto entityMgrService = "xyz.openbmc_project.EntityManager";
-const auto decoratorChassisId = "xyz.openbmc_project.Inventory.Decorator.Slot";
 
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
@@ -162,18 +161,26 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
             "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
             "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
 
-        auto psu = std::make_unique<PowerSupply>(
-            bus, invpath, *i2cbus, *i2caddr, driverName, presline,
-            std::bind(&Chassis::isPowerOn, this), chassisShortName);
-        psus.emplace_back(std::move(psu));
+        try
+        {
+            auto psu = std::make_unique<PowerSupply>(
+                bus, invpath, *i2cbus, *i2caddr, driverName, presline,
+                std::bind(&Chassis::isPowerOn, this), chassisShortName);
+            psus.emplace_back(std::move(psu));
 
-        // Subscribe to power supply presence changes
-        auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
-            sdbusplus::bus::match::rules::propertiesChanged(invpath,
-                                                            INVENTORY_IFACE),
-            [this](auto& msg) { this->psuPresenceChanged(msg); });
-        presenceMatches.emplace_back(std::move(presenceMatch));
+            // Subscribe to power supply presence changes
+            auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+                bus,
+                sdbusplus::bus::match::rules::propertiesChanged(
+                    invpath, INVENTORY_IFACE),
+                [this](auto& msg) { this->psuPresenceChanged(msg); });
+            presenceMatches.emplace_back(std::move(presenceMatch));
+        }
+        catch (const std::exception& e)
+        {
+            lg2::error("Failed to create PowerSupply object for {PATH}: {ERR}",
+                       "PATH", invpath, "ERR", e);
+        }
     }
     if (psus.empty())
     {
@@ -492,11 +499,9 @@ void Chassis::analyze()
     analyzeBrownout();
 
     // Only perform individual PSU analysis if power is on and a brownout has
-    // not already been logged
-    //
-    // Note: TODO Check the chassis state when the power sequencer publishes
-    // chassis power on and system power on
-    if (powerOn && !brownoutLogged)
+    // not already been logged and the chassis powered on
+    bool chassisPowerOn = isThisChassisPowerOn();
+    if (powerOn && chassisPowerOn && !brownoutLogged)
     {
         for (auto& psu : psus)
         {
@@ -1330,4 +1335,32 @@ unsigned int Chassis::getRequiredPSUCount()
     return requiredCount;
 }
 
+bool Chassis::isThisChassisPowerOn()
+{
+    try
+    {
+        constexpr auto service = "xyz.openbmc_project.State.Chassis";
+        constexpr auto path = "/xyz/openbmc_project/state/chassis{}";
+        constexpr auto interface = "xyz.openbmc_project.State.Chassis";
+        constexpr auto property = "CurrentPowerState";
+        auto chassisPath = std::format(path, chassisPathUniqueId);
+
+        auto method =
+            bus.new_method_call(service, chassisPath.c_str(),
+                                "Org.freedesktop.DBus.Properties", "Get");
+        method.append(interface, property);
+
+        std::variant<std::string> value;
+        auto reply = bus.call(method);
+        reply.read(value);
+
+        return std::get<std::string>(value) ==
+               "xyz.openbmc_project.State.Chassis.PowerState.On";
+    }
+    catch (std::exception& e)
+    {
+        lg2::error("Failed to read Chassis State: {ERR}", "ERR", e);
+        return false;
+    }
+}
 } // namespace phosphor::power::chassis

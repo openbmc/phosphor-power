@@ -478,6 +478,13 @@ class Chassis
      * @return true if PSU is required, false otherwise.
      */
     bool isRequiredPSU(const PowerSupply& psu);
+
+    /**
+     * @brief Helper to check if the chassis power truly on
+     *
+     * @return True or false
+     */
+    bool isThisChassisPowerOn();
 };
 
 } // namespace phosphor::power::chassis
