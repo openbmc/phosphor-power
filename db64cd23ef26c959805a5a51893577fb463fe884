@@ -16,6 +16,24 @@
       "message": "The try/catch looks fine to me.\n\nHowever, I disagree with the added D-Bus check.\n\nanalyze() is called every second, and D-Bus checks are expensive, so we definitely don\u0027t want to poll on a D-Bus property every second. We use property changed listeners instead.\n\nI think you may have misunderstood the TODO comment. The chassis class already has a state data member that is set initially and updated via a listener. This is supposed to (I believe) contain the chassis power state.\n\nI believe the Chassis code is based on the current PSUManager class. Since that class only supports single-chassis systems, it sets the state data member to the overall system power state. For the Chassis class, it needs to set it to the chassis power state.\n\nThe chassis power state will be available on D-Bus soon. The paths that will be published are documented here: https://github.com/openbmc/phosphor-power/blob/master/phosphor-power-sequencer/docs/chassis_status.md#state-and-pgood-properties\n\nHowever, the phosphor-power-sequencer application is not publishing those paths yet. Hopefully I\u0027ll have that done in the next week or so.\n\nSo I think you want to just leave that TODO for now. When the phosphor-power-sequencer application starts publishing the chassis power state on D-Bus, then you\u0027ll want to change the D-Bus path that the chassis uses to get this property.\n\nCurrently types.hpp has the following:\n```\nconstexpr auto POWER_OBJ_PATH \u003d \"/org/openbmc/control/power0\";\n```\n\nI can add a constant like the following in one of my commits:\n```\nconstexpr auto CHASSIS_POWER_OBJ_PATH \u003d \"/org/openbmc/control/power{}\";\n```",
       "revId": "db64cd23ef26c959805a5a51893577fb463fe884",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae12db6f_4ed6971c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-01-23T21:01:06Z",
+      "side": 1,
+      "message": "Restored the TODO section until phosphor-power-sequencer code is ready",
+      "parentUuid": "fa52b423_1983ce1c",
+      "revId": "db64cd23ef26c959805a5a51893577fb463fe884",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
