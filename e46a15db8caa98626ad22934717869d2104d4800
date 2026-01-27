@@ -34,6 +34,24 @@
       "parentUuid": "5a05326d_1376ccb5",
       "revId": "e46a15db8caa98626ad22934717869d2104d4800",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352caaa1_2ef70986",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-01-27T21:01:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bc1365dc_c2b0c059",
+      "revId": "e46a15db8caa98626ad22934717869d2104d4800",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
