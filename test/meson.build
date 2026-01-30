@@ -18,3 +18,21 @@ test(
         include_directories: '..',
     ),
 )
+test(
+    'chassis_log_test',
+    executable(
+        'chassis_log_test',
+        dependencies: [
+            gmock,
+            gtest,
+            libgpiodcxx,
+            nlohmann_json_dep,
+            phosphor_logging,
+        ],
+        implicit_include_directories: false,
+        include_directories: '..',
+        link_args: dynamic_linker,
+        link_with: [libpower],
+        build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
+    ),
+)
