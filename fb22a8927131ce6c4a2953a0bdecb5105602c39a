@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aa066ca_ca52af07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "Thanks for making this common code. Some small comments.",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc93687_18b4b384",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "The file name should match the class name, with the minor difference that file names are snake-case (foo_bar.hpp) vs. class names are camel-case (FooBar).\n\nSo I think this file should be named chassis_log_context.hpp, and the test case should be chassis_log_context_tests.cpp.",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d44df348_69537e6a",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "Normally this would be a `const std::string\u0026`, and the `std::move()` below would not be necessary. I\u0027d suggest changing it unless it is needed for some reason.",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d32159d7_37789471",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "chassisName is not used anywhere outside the constructor and is private. Is it being kept as a data member in case you want to add a getChassis() method in the future?",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87f2c57_e864f2d8",
+        "filename": "test/chassis_log_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "Isn\u0027t this identical to the test on line 20? I\u0027m surprised it compiles, because I thought the 2nd argument (test name) had to be unique.",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b42d04be_6dddd318",
+        "filename": "test/chassis_log_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-03T14:44:04Z",
+      "side": 1,
+      "message": "Usually \"perfect forwarding\" refers preserving the lvalue/rvalue category of the passed parameters. I don\u0027t think this test is checking that? I\u0027m not sure what variations this test is covering.",
+      "range": {
+        "startLine": 51,
+        "startChar": 28,
+        "endLine": 51,
+        "endChar": 50
+      },
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
