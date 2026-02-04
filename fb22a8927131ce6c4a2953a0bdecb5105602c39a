@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdd10aa1_051f41f1",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-04T19:35:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4bc93687_18b4b384",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d44df348_69537e6a",
@@ -48,6 +66,24 @@
       "writtenOn": "2026-02-03T14:44:04Z",
       "side": 1,
       "message": "Normally this would be a `const std::string\u0026`, and the `std::move()` below would not be necessary. I\u0027d suggest changing it unless it is needed for some reason.",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cb26420_0a0649cc",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-04T19:35:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d44df348_69537e6a",
       "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -69,6 +105,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da5c4837_3c9a554a",
+        "filename": "chassis_log.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-04T19:35:03Z",
+      "side": 1,
+      "message": "Removed chassisName",
+      "parentUuid": "d32159d7_37789471",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c87f2c57_e864f2d8",
@@ -86,6 +140,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94ace513_1d6e6c66",
+        "filename": "test/chassis_log_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-04T19:35:03Z",
+      "side": 1,
+      "message": "oops pasted same",
+      "parentUuid": "c87f2c57_e864f2d8",
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b42d04be_6dddd318",
@@ -99,6 +171,30 @@
       "writtenOn": "2026-02-03T14:44:04Z",
       "side": 1,
       "message": "Usually \"perfect forwarding\" refers preserving the lvalue/rvalue category of the passed parameters. I don\u0027t think this test is checking that? I\u0027m not sure what variations this test is covering.",
+      "range": {
+        "startLine": 51,
+        "startChar": 28,
+        "endLine": 51,
+        "endChar": 50
+      },
+      "revId": "fb22a8927131ce6c4a2953a0bdecb5105602c39a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80da7e70_af2f7aa7",
+        "filename": "test/chassis_log_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-04T19:35:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b42d04be_6dddd318",
       "range": {
         "startLine": 51,
         "startChar": 28,
