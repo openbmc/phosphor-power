@@ -1,0 +1,43 @@
+{
+    "ChassisPowerMonitor": {
+        "title": "Chassis Input Power Monitoring Definition",
+        "description": "A schema detailing the hardware used to monitor input power for a chassis. Currently implemented with gpios.",
+        "properties": {
+            "Name": {
+                "type": "string"
+            },
+            "Type": {
+                "enum": ["ChassisPowerMonitor"]
+            },
+            "PresenceGpio": {
+                "description": "The GPIO to monitor that indicates whether this chassis is present.",
+                "type": "Gpio"
+            },
+            "FaultUnlatchedGpio": {
+                "description": "The GPIO to monitor that indicates the current (live) state of the input power of this chassis.",
+                "type": "Gpio"
+            },
+            "FaultLatchedGpio": {
+                "description": "The GPIO to monitor that indicates if an input power fault was latched for this chassis (eg between reads of unlatched gpio).",
+                "type": "Gpio"
+            },
+            "FaultLatchResetGpio": {
+                "description": "The GPIO to disable (reset) the latched input power loss gpio for this chassis.",
+                "type": "Gpio"
+            },
+                "EnableSystemResetGpio": {
+                "description": "The GPIO to enable a full system reset if/when this chassis has a loss of input power.",
+                "type": "Gpio"
+            },
+            "FSILinkCheck": {
+                "description": "The device path to check existence of to verify the fsi link to this chassis is working. Eg UCD i2c bus.",
+                "type": "string"
+            },
+            "ChassisID": {
+                "description": "The ID of the chassis these GPIOs are for.",
+                "type": "number"
+            }
+        },
+        "required": ["Name", "Type", "ChassisID"]
+    }
+}
