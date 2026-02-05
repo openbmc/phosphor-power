@@ -1,0 +1,234 @@
+[
+    {
+        "ChassisNumber": 1,
+        "PresenceGpio": {
+            "Name": "presence-chassis1",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis1-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis1-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis1-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis1-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-159"
+    },
+    {
+        "ChassisNumber": 2,
+        "PresenceGpio": {
+            "Name": "presence-chassis2",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis2-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis2-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis2-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis2-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-259"
+    },
+    {
+        "ChassisNumber": 3,
+        "PresenceGpio": {
+            "Name": "presence-chassis3",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis3-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis3-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis3-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis3-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-359"
+    },
+    {
+        "ChassisNumber": 4,
+        "PresenceGpio": {
+            "Name": "presence-chassis4",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis4-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis4-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis4-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis4-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-459"
+    },
+    {
+        "ChassisNumber": 5,
+        "PresenceGpio": {
+            "Name": "presence-chassis5",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis5-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis5-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis5-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis5-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-559"
+    },
+    {
+        "ChassisNumber": 6,
+        "PresenceGpio": {
+            "Name": "presence-chassis6",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis6-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis6-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis6-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis6-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-659"
+    },
+    {
+        "ChassisNumber": 7,
+        "PresenceGpio": {
+            "Name": "presence-chassis7",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis7-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis7-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis7-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis7-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-759"
+    },
+    {
+        "ChassisNumber": 8,
+        "PresenceGpio": {
+            "Name": "presence-chassis8",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultUnlatchedGpio": {
+            "Name": "power-chassis8-standby-fault-unlatched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchedGpio": {
+            "Name": "power-chassis8-standby-fault-latched",
+            "Direction": "Input",
+            "Polarity": "Low"
+        },
+        "FaultLatchResetGpio": {
+            "Name": "power-chassis8-standby-fault-reset",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "EnableSystemResetGpio": {
+            "Name": "reset-enable-chassis8-standby-power",
+            "Direction": "Output",
+            "Polarity": "Low"
+        },
+        "PresencePath": "/dev/i2c-859"
+    }
+]
