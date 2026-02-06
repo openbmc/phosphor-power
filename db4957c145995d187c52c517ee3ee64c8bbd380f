@@ -73,6 +73,91 @@
       },
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ab8d85_5f7416c8",
+        "filename": "phosphor-chassis-power/config_files/chassis_power_monitor.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-06T20:51:42Z",
+      "side": 1,
+      "message": "like we discussed offline this file isn\u0027t needed, but it would be nice if the gpio descriptions were in the markdown or somewhere for helping understanding the design.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b160a87_a238272e",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-06T20:51:42Z",
+      "side": 1,
+      "message": "would recommend re-wording this.  PCP doesn\u0027t interface to power supplies, the gpios are more at a chassis-level. I\u0027ll forward some documentation that has more details.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df9e0d73_dbc1a75f",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-06T20:51:42Z",
+      "side": 1,
+      "message": "Suggest re-wording, PCP won\u0027t interface with the power sequencer.  it monitors the chassis\u0027 input power via gpios.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f9c63e_76279c48",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-06T20:51:42Z",
+      "side": 1,
+      "message": "we\u0027ll have to decide how to handle no config file.  I think we just don\u0027t monitor anything then, TBD.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9e9b02_ef5703a7",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-06T20:51:42Z",
+      "side": 1,
+      "message": "we\u0027ll need to discuss whether to have meson build option. this app will only be pulled into high-end images.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
