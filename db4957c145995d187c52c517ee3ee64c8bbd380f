@@ -111,6 +111,86 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64bbfd9d_97b164b5",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Delete optional. I believe you are making the JSON file required for this app.",
+      "range": {
+        "startLine": 14,
+        "startChar": 41,
+        "endLine": 14,
+        "endChar": 49
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a0f309b_85fb6404",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "That is the list for the pseq app.\n\nfor this app, it is chassis and GPIOs",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 72
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb2e7a03_6514bf18",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Delete if this file doesn\u0027t exist",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab1d7c1b_822dc5ff",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "I think you can delete this whole section. The first part is about the pseq app. It won\u0027t (I think?) have any Huygens-specific C++ code, so that can be removed.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "df9e0d73_dbc1a75f",
         "filename": "phosphor-chassis-power/docs/README.md",
         "patchSetId": 9
@@ -122,6 +202,23 @@
       "writtenOn": "2026-02-06T20:51:42Z",
       "side": 1,
       "message": "Suggest re-wording, PCP won\u0027t interface with the power sequencer.  it monitors the chassis\u0027 input power via gpios.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e46b3d84_50f715be",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Same comment as other file. You created a config_file subdir (no \u0027s\u0027). So either rename the subdir or change the text/link here.",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -145,6 +242,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b18c833a_488af745",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Agree. Maybe it will log a \"strong-worded journal message\" (lol) or intentionally core dump?",
+      "parentUuid": "18f9c63e_76279c48",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "208d3370_43ad7135",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "This is not currently true. I hope automated testing is added later. Can delete this section for now.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1151d0fd_5be65196",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Nit: If just two items need to use and instead of comma.",
+      "range": {
+        "startLine": 16,
+        "startChar": 69,
+        "endLine": 16,
+        "endChar": 70
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8084ee6d_5ebfb0bf",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "The checked in Huygens.json file is in a config_file (no \u0027s\u0027) directory. If you want the directory named that, you\u0027ll need to remove the \u0027s\u0027 here and in the link.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8944b0ee_cf047f4b",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "I think you can delete this section. As you mentioned, it doesn\u0027t make sense to have a default file.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdf4e3c_4719193a",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Nit: Same comments as above; replace comma with \u0027and\u0027.",
+      "range": {
+        "startLine": 37,
+        "startChar": 14,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af9e9b02_ef5703a7",
         "filename": "phosphor-chassis-power/docs/config_file/README.md",
         "patchSetId": 9
@@ -156,6 +368,160 @@
       "writtenOn": "2026-02-06T20:51:42Z",
       "side": 1,
       "message": "we\u0027ll need to discuss whether to have meson build option. this app will only be pulled into high-end images.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef9dcaa_ad9360b3",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "The phosphor-power-sequencer app had to support a default config file and a meson option due to backwards compatibility.\n\nWe don\u0027t have that here, so I think lines 41-44 should be deleted.",
+      "parentUuid": "af9e9b02_ef5703a7",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db665c38_ea558b47",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Since the schema file is being dropped, you should delete lines 84-90 here.\n\nIf I\u0027m understanding things correctly, the file format currently consists of two JSON object types: ChassisPowerMonitor and GPIO.\n\nYou might consider simplifying the first JSON object type name to just Chassis, since each one represents properties of a chassis.\n\nThe outermost part of the file format is an array of Chassis objects.\n```\n[\n  Chassis,\n  Chassis,\n  Chassis\n]\n```\n\nEach Chassis object has the properties you describe below. Most of them have a value of a GPIO object. That object type has properties too.\n\nYou can document both object types here + the overall config file format, but that might get a bit confusing. I would recommend creating chassis.md and gpio.md files that each cover one object type. You can give a description of the object, show the properties, and have an example at the bottom if you wish.\n\nThen in the README you could state the overall format is an array of Chassis objects and put in a link to the chassis.md file for more information. The chassis.md would have a link to the gpio.md file next to the gpio properties.\n\nSee the phosphor-regulators or phosphor-power-sequencer docs/config_file directories for examples you can copy/paste.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1ebba6c_6cb3eb2c",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Derek\u0027s comment from the other README probably applies here too. I think this app is looking at chassis-level GPIOs and not PSU GPIOs.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dab5f9a1_d3ed519d",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Recommend delete this property and line.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4d5f01_652e7c60",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Recommend changing name and description as we discussed offline to something more generic and reusable.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d041418_8c5303ee",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Recommend deleting.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d7ba6e_8ce3cec7",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "You can delete this section unless you think you need to support comments.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b80391_dbe910b9",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "I think you can delete this section. I didn\u0027t see any hex values in the Huygens.json file.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16595f76_09701247",
+        "filename": "phosphor-chassis-power/test",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T21:37:57Z",
+      "side": 1,
+      "message": "Looks like you accidentally created a file named test?\n\nFor the other apps there is a test directory that contains test cases.\n\nI think this file should be deleted.",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
