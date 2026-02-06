@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c225f739_2bb2f9e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T18:25:49Z",
+      "side": 1,
+      "message": "Nit: You have a trailing colon here instead of a period?",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b93f7a43_eedacc76",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T18:25:49Z",
+      "side": 1,
+      "message": "The [ ] syntax means that what is inside is an array of JSON objects.\n\nDo we need to support having multiple presence GPIOs within a single chassis? I have the same question for the other GPIOs.\n\nIf there will be only one of each of these GPIOs per chassis, then the [ ] should be removed for all the GPIOs.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c2b19e_16c02c46",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T18:25:49Z",
+      "side": 1,
+      "message": "I don\u0027t think the \u0027Type\u0027 property is needed for any of the JSON elements in this file. In the documentation it will state that properties like PresenceGpio and FaultUnlatchedGpio are GPIOs, and the code will enforce that. So I don\u0027t see a need for the Type property.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22544f3b_9c8075b6",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T18:25:49Z",
+      "side": 1,
+      "message": "This property name seems like it may be tied to a very specific system type and hardware architecture. We don\u0027t want that for upstream code.\n\nWe discussed this offline, and a name like PresencePath is more generic and reflective of its purpose. Also, the docs should indicate what happens if both PresencePath and PresenceGpio are specified.",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 21
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
