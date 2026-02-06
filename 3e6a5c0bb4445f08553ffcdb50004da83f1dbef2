@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a22739_9651fd1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T15:28:12Z",
+      "side": 1,
+      "message": "You have both the old and new file names in this commit. Please remove chassis_log.hpp and chassis_log_test.cpp.",
+      "revId": "3e6a5c0bb4445f08553ffcdb50004da83f1dbef2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ff6d17_cbe79ac8",
+        "filename": "test/meson.build",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-06T15:28:12Z",
+      "side": 1,
+      "message": "We don\u0027t need a new executable for each .cpp file. You can just add chassis_log_context_test.cpp to the \u0027common-code-tests\u0027 executable above. The source files are in alphabetical order, so just add it in the right spot.\n\nYou list more dependencies on line 25 than are on line 13. If you need a few more dependencies for your testcase, like phosphor_logging, just add those dependencies to line 13.",
+      "revId": "3e6a5c0bb4445f08553ffcdb50004da83f1dbef2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
