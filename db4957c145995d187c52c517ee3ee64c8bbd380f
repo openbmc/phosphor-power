@@ -223,6 +223,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac4a55eb_f8ef5f43",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-09T15:40:51Z",
+      "side": 1,
+      "message": "I was wrong here. Ignore this comment.",
+      "parentUuid": "e46b3d84_50f715be",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18f9c63e_76279c48",
@@ -311,6 +329,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "The checked in Huygens.json file is in a config_file (no \u0027s\u0027) directory. If you want the directory named that, you\u0027ll need to remove the \u0027s\u0027 here and in the link.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d33a747_ac000de1",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-09T15:40:51Z",
+      "side": 1,
+      "message": "This is my mistake. I was looking at the wrong file path (docs vs. Huygens.json).",
+      "parentUuid": "8084ee6d_5ebfb0bf",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
