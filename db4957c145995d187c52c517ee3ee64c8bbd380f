@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b9d6c03_bae6c05f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c225f739_2bb2f9e9",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93f7a43_eedacc76",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9215add0_b8fa8278",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b93f7a43_eedacc76",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39c2b19e_16c02c46",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-02-06T18:25:49Z",
       "side": 1,
       "message": "I don\u0027t think the \u0027Type\u0027 property is needed for any of the JSON elements in this file. In the documentation it will state that properties like PresenceGpio and FaultUnlatchedGpio are GPIOs, and the code will enforce that. So I don\u0027t see a need for the Type property.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d75b5d_086ba6ce",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Current technology is GPIO, I think it was thought that if we change to a new technology, or someone upstream want to change to different technology.\nI will remove if we want to. We should discuss next SCRUM.",
+      "parentUuid": "39c2b19e_16c02c46",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -75,6 +129,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e524090_acdeaab3",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22544f3b_9c8075b6",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 21
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32ab8d85_5f7416c8",
@@ -88,6 +166,24 @@
       "writtenOn": "2026-02-06T20:51:42Z",
       "side": 1,
       "message": "like we discussed offline this file isn\u0027t needed, but it would be nice if the gpio descriptions were in the markdown or somewhere for helping understanding the design.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "823716d7_0cd8cb86",
+        "filename": "phosphor-chassis-power/config_files/chassis_power_monitor.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32ab8d85_5f7416c8",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -109,6 +205,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "816dd060_ea82ffc5",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b160a87_a238272e",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64bbfd9d_97b164b5",
@@ -122,6 +236,30 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Delete optional. I believe you are making the JSON file required for this app.",
+      "range": {
+        "startLine": 14,
+        "startChar": 41,
+        "endLine": 14,
+        "endChar": 49
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdc0063f_36944021",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64bbfd9d_97b164b5",
       "range": {
         "startLine": 14,
         "startChar": 41,
@@ -155,6 +293,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "712f96a7_7189f683",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a0f309b_85fb6404",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 72
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb2e7a03_6514bf18",
@@ -168,6 +330,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Delete if this file doesn\u0027t exist",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03fc5790_749151a8",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb2e7a03_6514bf18",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -189,6 +369,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab958054_ad4ab560",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab1d7c1b_822dc5ff",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df9e0d73_dbc1a75f",
@@ -202,6 +400,24 @@
       "writtenOn": "2026-02-06T20:51:42Z",
       "side": 1,
       "message": "Suggest re-wording, PCP won\u0027t interface with the power sequencer.  it monitors the chassis\u0027 input power via gpios.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e596c950_f83a554a",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df9e0d73_dbc1a75f",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -236,6 +452,24 @@
       "writtenOn": "2026-02-09T15:40:51Z",
       "side": 1,
       "message": "I was wrong here. Ignore this comment.",
+      "parentUuid": "e46b3d84_50f715be",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cbc880c_f298a4d2",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "it is in config_files, copied the directory name from phosphor-power-sequencer. There will be a day where we have more than one config file.",
       "parentUuid": "e46b3d84_50f715be",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
@@ -276,6 +510,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94658797_1ebd9405",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b18c833a_488af745",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "208d3370_43ad7135",
@@ -293,6 +545,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b83334a_16524da4",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "208d3370_43ad7135",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1151d0fd_5be65196",
@@ -306,6 +576,30 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Nit: If just two items need to use and instead of comma.",
+      "range": {
+        "startLine": 16,
+        "startChar": 69,
+        "endLine": 16,
+        "endChar": 70
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3e6e8d3_788e6e5e",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1151d0fd_5be65196",
       "range": {
         "startLine": 16,
         "startChar": 69,
@@ -351,6 +645,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc33c5a_8216b83f",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "it is in config_files, copied the directory name from phosphor-power-sequencer.  There will be a day where we have more than one config file.",
+      "parentUuid": "8084ee6d_5ebfb0bf",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8944b0ee_cf047f4b",
@@ -368,6 +680,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b893e285_603050df",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8944b0ee_cf047f4b",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cdf4e3c_4719193a",
@@ -381,6 +711,30 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Nit: Same comments as above; replace comma with \u0027and\u0027.",
+      "range": {
+        "startLine": 37,
+        "startChar": 14,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4d6dc3_d1d5905f",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cdf4e3c_4719193a",
       "range": {
         "startLine": 37,
         "startChar": 14,
@@ -426,6 +780,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7425d93_91e4e08a",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fef9dcaa_ad9360b3",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db665c38_ea558b47",
@@ -439,6 +811,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Since the schema file is being dropped, you should delete lines 84-90 here.\n\nIf I\u0027m understanding things correctly, the file format currently consists of two JSON object types: ChassisPowerMonitor and GPIO.\n\nYou might consider simplifying the first JSON object type name to just Chassis, since each one represents properties of a chassis.\n\nThe outermost part of the file format is an array of Chassis objects.\n```\n[\n  Chassis,\n  Chassis,\n  Chassis\n]\n```\n\nEach Chassis object has the properties you describe below. Most of them have a value of a GPIO object. That object type has properties too.\n\nYou can document both object types here + the overall config file format, but that might get a bit confusing. I would recommend creating chassis.md and gpio.md files that each cover one object type. You can give a description of the object, show the properties, and have an example at the bottom if you wish.\n\nThen in the README you could state the overall format is an array of Chassis objects and put in a link to the chassis.md file for more information. The chassis.md would have a link to the gpio.md file next to the gpio properties.\n\nSee the phosphor-regulators or phosphor-power-sequencer docs/config_file directories for examples you can copy/paste.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dde00cc_99815776",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db665c38_ea558b47",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -460,6 +850,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "517d8c9b_a9574416",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1ebba6c_6cb3eb2c",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dab5f9a1_d3ed519d",
@@ -473,6 +881,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Recommend delete this property and line.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b309f3_53e9582d",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Waiting for Discussion.",
+      "parentUuid": "dab5f9a1_d3ed519d",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -494,6 +920,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eea77268_6916c9c8",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a4d5f01_652e7c60",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d041418_8c5303ee",
@@ -507,6 +951,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Recommend deleting.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec66ae1e_8f5e125f",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Waiting for Discusion.",
+      "parentUuid": "8d041418_8c5303ee",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -528,6 +990,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "172d0a99_3058db54",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33d7ba6e_8ce3cec7",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6b80391_dbe910b9",
@@ -545,6 +1025,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b057a1b6_4d89f8e5",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6b80391_dbe910b9",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16595f76_09701247",
@@ -558,6 +1056,24 @@
       "writtenOn": "2026-02-06T21:37:57Z",
       "side": 1,
       "message": "Looks like you accidentally created a file named test?\n\nFor the other apps there is a test directory that contains test cases.\n\nI think this file should be deleted.",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "975a34af_ec9bd36d",
+        "filename": "phosphor-chassis-power/test",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-09T20:55:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16595f76_09701247",
       "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
