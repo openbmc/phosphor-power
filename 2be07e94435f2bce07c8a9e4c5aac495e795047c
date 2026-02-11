@@ -158,6 +158,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "545d0dca_65a9bff8",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T15:49:35Z",
+      "side": 1,
+      "message": "We need some way to specify which chassis the gpios are for.  I agree if that is done some other way (eg with the ChassisID), the \"Name\" field is not needed.",
+      "parentUuid": "8c886cff_2d286ce8",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e36187d_3af02c83",
         "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
         "patchSetId": 18
@@ -169,6 +187,24 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "Is there a difference between the chassis ID and the chassis number? If not, should we just call this property ChassisNumber? Otherwise someone reading this is probably going to wonder where we get the \"ID\" from.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f057f39b_d14fc205",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T15:49:35Z",
+      "side": 1,
+      "message": "No difference as far as I know...",
+      "parentUuid": "6e36187d_3af02c83",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -255,6 +291,30 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "@derekh@us.ibm.com I\u0027m curious about the \"detected\" references in these sentences. If a GPIO property is defined in the JSON, then I assume being able to acquire and read the GPIO is required? And if we can\u0027t, then we\u0027d log some sort of error? Or is there a detection phase too?\n\nIf there is no detection phase, then I\u0027d think we could state it more like \"If the PresenceGpio property is defined, then ...  If the PresencePath property is defined, ...  If both properties are defined, then ...\"",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 35
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796b4095_31ef663d",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T15:49:35Z",
+      "side": 1,
+      "message": "Yes if we can\u0027t read the presence detect gpio, we should log an error.  Will likely be the generic i2c failure PEL. \n\nThe main point is we should treat a chassis as missing just because there is an i2c fail trying to read it\u0027s presence; we should just say to replace the FRU causing the i2c fail, not say the whole chassis is missing and stop using it.",
+      "parentUuid": "8844be7e_8cd8789a",
       "range": {
         "startLine": 27,
         "startChar": 27,
