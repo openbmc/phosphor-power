@@ -57,8 +57,10 @@ void Chassis::getPSUConfiguration()
     {
         if (chassisPathUniqueId == invalidObjectPathUniqueId)
         {
-            lg2::error("Chassis does not have chassis ID: {CHASSISPATH}",
-                       "CHASSISPATH", chassisPath);
+            lg2::error(
+                "{CHASSIS_SHORT_NAME}: Chassis does not have chassis ID: {CHASSISPATH}",
+                "CHASSIS_SHORT_NAME", chassisShortName, "CHASSISPATH",
+                chassisPath);
             return;
         }
         auto connectorsSubTree = getSubTree(bus, "/", IBMCFFPSInterface, depth);
@@ -77,15 +79,17 @@ void Chassis::getPSUConfiguration()
     }
     catch (const sdbusplus::exception_t& e)
     {
-        lg2::error("Failed while getting configuration - exception: {ERROR}",
-                   "ERROR", e);
+        lg2::error(
+            "{CHASSIS_SHORT_NAME}: Failed while getting configuration - exception: {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
     }
 
     if (psus.empty())
     {
         // Interface or properties not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
-        lg2::info("No power supplies to monitor");
+        lg2::info("{CHASSIS_SHORT_NAME}: No power supplies to monitor",
+                  "CHASSIS_SHORT_NAME", chassisShortName);
     }
 }
 
@@ -134,7 +138,8 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
         invpath.push_back(psuname->back());
         std::string presline = "";
 
-        lg2::debug("Inventory Path: {INVPATH}", "INVPATH", invpath);
+        lg2::debug("{CHASSIS_SHORT_NAME}: Inventory Path: {INVPATH}",
+                   "CHASSIS_SHORT_NAME", chassisShortName, "INVPATH", invpath);
 
         if (nullptr != preslineptr)
         {
@@ -158,8 +163,9 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
 
         buildDriverName(*i2cbus, *i2caddr);
         lg2::debug(
-            "make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
-            "I2CBUS", *i2cbus, "I2CADDR", *i2caddr, "PRESLINE", presline);
+            "{CHASSIS_SHORT_NAME}: make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "I2CBUS", *i2cbus,
+            "I2CADDR", *i2caddr, "PRESLINE", presline);
 
         try
         {
@@ -178,13 +184,16 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
         }
         catch (const std::exception& e)
         {
-            lg2::error("Failed to create PowerSupply object for {PATH}: {ERR}",
-                       "PATH", invpath, "ERR", e);
+            lg2::error(
+                "{CHASSIS_SHORT_NAME}: Failed to create PowerSupply object for {PATH}: {ERR}",
+                "CHASSIS_SHORT_NAME", chassisShortName, "PATH", invpath, "ERR",
+                e);
         }
     }
     if (psus.empty())
     {
-        lg2::info("No power supplies to monitor");
+        lg2::info("{CHASSIS_SHORT_NAME}: No power supplies to monitor",
+                  "CHASSIS_SHORT_NAME", chassisShortName);
     }
     else
     {
@@ -224,7 +233,9 @@ void Chassis::getSupportedConfiguration()
     {
         // Interface or property not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
-        lg2::info("Interface or Property not found, error {ERROR}", "ERROR", e);
+        lg2::info(
+            "{CHASSIS_SHORT_NAME}: Interface or Property not found, error {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
     }
 }
 
@@ -293,7 +304,9 @@ void Chassis::populateSupportedConfiguration(
     }
     catch (const std::exception& e)
     {
-        lg2::info("populateSupportedConfiguration error {ERR}", "ERR", e);
+        lg2::info(
+            "{CHASSIS_SHORT_NAME}: populateSupportedConfiguration error {ERR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERR", e);
     }
 }
 
@@ -331,8 +344,9 @@ void Chassis::buildDriverName(uint64_t i2cbus, uint64_t i2caddr)
     catch (const std::exception& e)
     {
         lg2::error(
-            "Failed to find device driver {SYM_LINK_PATH}, error {ERROR_STR}",
-            "SYM_LINK_PATH", symLinkPath, "ERROR_STR", e);
+            "{CHASSIS_SHORT_NAME}: Failed to find device driver {SYM_LINK_PATH}, error {ERROR_STR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "SYM_LINK_PATH",
+            symLinkPath, "ERROR_STR", e);
     }
 }
 
@@ -360,8 +374,9 @@ uint64_t Chassis::getChassisPathUniqueId(const std::string& path)
     catch (const sdbusplus::exception_t& e)
     {
         lg2::error(
-            "Failed to find chassis path {CHASSIS_PATH} ID - exception: {ERROR}",
-            "CHASSIS_PATH", path, "ERROR", e);
+            "{CHASSIS_SHORT_NAME}: Failed to find chassis path {CHASSIS_PATH} ID - exception: {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "CHASSIS_PATH", path,
+            "ERROR", e);
     }
     return invalidObjectPathUniqueId;
 }
@@ -460,16 +475,20 @@ void Chassis::syncHistory()
             catch (const std::exception& e)
             {
                 // Not an error, system just hasn't implemented the synch gpio
-                lg2::info("No synchronization GPIO found");
+                lg2::info("{CHASSIS_SHORT_NAME}: No synchronization GPIO found",
+                          "CHASSIS_SHORT_NAME", chassisShortName);
                 syncHistoryGPIO = nullptr;
             }
         }
         if (syncHistoryGPIO)
         {
             const std::chrono::milliseconds delay{INPUT_HISTORY_SYNC_DELAY};
-            lg2::info("Synchronize INPUT_HISTORY");
+            lg2::info("{CHASSIS_SHORT_NAME}: Synchronize INPUT_HISTORY",
+                      "CHASSIS_SHORT_NAME", chassisShortName);
             syncHistoryGPIO->toggleLowHigh(delay);
-            lg2::info("Synchronize INPUT_HISTORY completed");
+            lg2::info(
+                "{CHASSIS_SHORT_NAME}: Synchronize INPUT_HISTORY completed",
+                "CHASSIS_SHORT_NAME", chassisShortName);
         }
     }
 
@@ -747,9 +766,10 @@ void Chassis::analyzeBrownout()
         additionalData.emplace("PGOOD_FAULT_COUNT",
                                std::to_string(pgoodFailedCount));
         lg2::info(
-            "Brownout detected, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
-            "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
-            acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
+            "{CHASSIS_SHORT_NAME}: Brownout detected, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "NOT_PRESENT_COUNT",
+            notPresentCount, "AC_FAILED_COUNT", acFailedCount,
+            "PGOOD_FAILED_COUNT", pgoodFailedCount);
 
         createError("xyz.openbmc_project.State.Shutdown.Power.Error.Blackout",
                     additionalData);
@@ -781,7 +801,8 @@ void Chassis::analyzeBrownout()
                     // condition by setting the PowerSystemInputs status
                     // property to Good.
                     lg2::info(
-                        "Brownout cleared, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+                        "{CHASSIS_SHORT_NAME}: Brownout cleared, not present count: {NOT_PRESENT_COUNT}, AC fault count {AC_FAILED_COUNT}, pgood fault count: {PGOOD_FAILED_COUNT}",
+                        "CHASSIS_SHORT_NAME", chassisShortName,
                         "NOT_PRESENT_COUNT", notPresentCount, "AC_FAILED_COUNT",
                         acFailedCount, "PGOOD_FAILED_COUNT", pgoodFailedCount);
 
@@ -793,8 +814,9 @@ void Chassis::analyzeBrownout()
             }
             catch (const std::exception& e)
             {
-                lg2::error("Error trying to clear brownout, error: {ERR}",
-                           "ERR", e);
+                lg2::error(
+                    "{CHASSIS_SHORT_NAME}: Error trying to clear brownout, error: {ERR}",
+                    "CHASSIS_SHORT_NAME", chassisShortName, "ERR", e);
             }
         }
     }
@@ -817,7 +839,9 @@ void Chassis::createError(const std::string& faultName,
 
         if (service.empty())
         {
-            lg2::error("Unable to get logging manager service");
+            lg2::error(
+                "{CHASSIS_SHORT_NAME}: Unable to get logging manager service",
+                "CHASSIS_SHORT_NAME", chassisShortName);
             return;
         }
 
@@ -833,8 +857,9 @@ void Chassis::createError(const std::string& faultName,
     catch (const std::exception& e)
     {
         lg2::error(
-            "Failed creating event log for fault {FAULT_NAME} due to error {ERROR}",
-            "FAULT_NAME", faultName, "ERROR", e);
+            "{CHASSIS_SHORT_NAME}: Failed creating event log for fault {FAULT_NAME} due to error {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "FAULT_NAME", faultName,
+            "ERROR", e);
     }
 }
 
@@ -847,7 +872,8 @@ void Chassis::attemptToCreatePowerConfigGPIO()
     catch (const std::exception& e)
     {
         powerConfigGPIO = nullptr;
-        lg2::info("GPIO not implemented in {CHASSIS}", "CHASSIS",
+        lg2::info("{CHASSIS_SHORT_NAME}: GPIO not implemented in {CHASSIS}",
+                  "CHASSIS_SHORT_NAME", chassisShortName, "CHASSIS",
                   chassisShortName);
     }
 }
@@ -987,7 +1013,8 @@ void Chassis::updateMissingPSUs()
                 // Relying on property change or interface added to retry.
                 // Log an informational trace to the journal.
                 lg2::info(
-                    "D-Bus property {PSU_INVENTORY_PATH} access failure exception",
+                    "{CHASSIS_SHORT_NAME}: D-Bus property {PSU_INVENTORY_PATH} access failure exception",
+                    "CHASSIS_SHORT_NAME", chassisShortName,
                     "PSU_INVENTORY_PATH", psuInventoryPath);
             }
 
@@ -1050,8 +1077,8 @@ void Chassis::initialize()
     catch (const std::exception& e)
     {
         lg2::info(
-            "Failed to get power state, assuming it is off, error {ERROR}",
-            "ERROR", e);
+            "{CHASSIS_SHORT_NAME}: Failed to get power state, assuming it is off, error {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
         powerOn = false;
         powerFaultOccurring = false;
         runValidateConfig = true;
@@ -1063,8 +1090,9 @@ void Chassis::initialize()
     setPowerConfigGPIO();
 
     lg2::info(
-        "initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
-        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+        "{CHASSIS_SHORT_NAME}: initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "CHASSIS_SHORT_NAME", chassisShortName, "POWER_ON", powerOn,
+        "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
 
 void Chassis::setPowerSupplyError(const std::string& psuErrorString)
@@ -1082,8 +1110,9 @@ void Chassis::setPowerSupplyError(const std::string& psuErrorString)
     }
     catch (const std::exception& e)
     {
-        lg2::info("Failed calling setPowerSupplyError due to error {ERROR}",
-                  "ERROR", e);
+        lg2::info(
+            "{CHASSIS_SHORT_NAME}: Failed calling setPowerSupplyError due to error {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
     }
 }
 
@@ -1163,8 +1192,9 @@ void Chassis::powerStateChanged(sdbusplus::message_t& msg)
         }
     }
     lg2::info(
-        "powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
-        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+        "{CHASSIS_SHORT_NAME}: powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "CHASSIS_SHORT_NAME", chassisShortName, "POWER_ON", powerOn,
+        "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
 
 bool Chassis::validateModelName(
