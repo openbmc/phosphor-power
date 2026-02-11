@@ -580,6 +580,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf27fb1_77ea81fe",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3fb58c7_ec0c560c",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1151d0fd_5be65196",

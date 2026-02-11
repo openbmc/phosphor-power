@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0578b849_81a40011",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "531f692e_5156f727",
+      "range": {
+        "startLine": 5,
+        "startChar": 59,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0bbb637_89b7fdf6",
@@ -99,6 +123,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5726ab86_b623a25a",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80120a2e_453b27dc",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 9
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62fb40e5_a674a469",
@@ -122,6 +170,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a642c81_038fe66e",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62fb40e5_a674a469",
+      "range": {
+        "startLine": 73,
+        "startChar": 42,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc24cafb_c5a3dbc6",
@@ -135,6 +207,24 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "You could replace this line with some example JSON like in the other markdown files. That might be more helpful. You could just show 2 chassis in the example for brevity.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d5f048f_a471bd89",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc24cafb_c5a3dbc6",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -174,6 +264,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59e44c08_4beea111",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "545d0dca_65a9bff8",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e36187d_3af02c83",
@@ -209,6 +317,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac52785_16933ec1",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f057f39b_d14fc205",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e3c872d_e9d8cdfe",
@@ -232,6 +358,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2a35446_9bc62b4b",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e3c872d_e9d8cdfe",
+      "range": {
+        "startLine": 18,
+        "startChar": 37,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "608a4b5c_15fa4db8",
@@ -245,6 +395,30 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "Nit: is it clearer to delete disable and just say \"The GPIO to reset the ...\"? I\u0027m not sure what disable means here.",
+      "range": {
+        "startLine": 21,
+        "startChar": 58,
+        "endLine": 21,
+        "endChar": 66
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28f3f57_5ae9e70d",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "608a4b5c_15fa4db8",
       "range": {
         "startLine": 21,
         "startChar": 58,
@@ -325,6 +499,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "706bd853_786a14f3",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8844be7e_8cd8789a",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 35
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc08d733_5357a24f",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a990329_8b37c809",
+      "range": {
+        "startLine": 27,
+        "startChar": 50,
+        "endLine": 27,
+        "endChar": 72
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed6edd07_25387f8e",
@@ -377,6 +599,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "661fc1f1_9849c3ed",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "513973fc_179f6b99",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e173ee4_e59b307a",
@@ -394,6 +634,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4094b056_42623fc4",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e173ee4_e59b307a",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "352b359f_d97b55ca",
@@ -407,6 +665,24 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "You can delete this section I think. The README.md file states that the entire file is in JSON format.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f287263f_24cde5bb",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "352b359f_d97b55ca",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -434,6 +710,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2358919_a2c87e33",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3261e75a_5580aded",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 7
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f462e1c5_dc7945b8",
@@ -451,6 +751,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf6bad4_cddc0c78",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f462e1c5_dc7945b8",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d698139_e69372ba",
@@ -464,6 +782,24 @@
       "writtenOn": "2026-02-11T15:37:25Z",
       "side": 1,
       "message": "Since this markdown file is only defining what a GPIO object looks like, you could delete lines 27-33 and line 39 and just focus on the GPIO.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f033d57e_ac372d15",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T17:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d698139_e69372ba",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
