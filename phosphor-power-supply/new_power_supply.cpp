@@ -45,8 +45,9 @@ PowerSupply::PowerSupply(
 
     shortName = findShortName(inventoryPath);
 
-    lg2::debug("{SHORT_NAME} gpioLineName: {GPIO_LINE_NAME}", "SHORT_NAME",
-               shortName, "GPIO_LINE_NAME", gpioLineName);
+    lg2::debug("{CHASSIS_NAME}: {SHORT_NAME} gpioLineName: {GPIO_LINE_NAME}",
+               "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+               "GPIO_LINE_NAME", gpioLineName);
     presenceGPIO = createGPIO(gpioLineName);
 
     std::ostringstream ss;
@@ -95,7 +96,8 @@ PowerSupply::PowerSupply(
     }
     catch (const std::exception& e)
     {
-        lg2::info("setInputVoltageRating exception: {ERR}", "ERR", e);
+        lg2::info("{CHASSIS_NAME}: setInputVoltageRating exception: {ERR}",
+                  "CHASSIS_NAME", chassisName, "ERR", e);
     }
 }
 
@@ -119,7 +121,8 @@ void PowerSupply::bindOrUnbindDriver(bool present)
     // This case should not happen, if no device driver name return.
     if (driverName.empty())
     {
-        lg2::info("No device driver name found");
+        lg2::info("{CHASSIS_NAME}: No device driver name found", "CHASSIS_NAME",
+                  chassisName);
         return;
     }
     if (bindPath.string().find(driverName) != std::string::npos)
@@ -142,13 +145,17 @@ void PowerSupply::bindOrUnbindDriver(bool present)
     if (present)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(bindDelay));
-        lg2::info("Binding device driver. path: {PATH} device: {BIND_DEVICE}",
-                  "PATH", path, "BIND_DEVICE", bindDevice);
+        lg2::info(
+            "{CHASSIS_NAME}: Binding device driver. path: {PATH} device: {BIND_DEVICE}",
+            "CHASSIS_NAME", chassisName, "PATH", path, "BIND_DEVICE",
+            bindDevice);
     }
     else
     {
-        lg2::info("Unbinding device driver. path: {PATH} device: {BIND_DEVICE}",
-                  "PATH", path, "BIND_DEVICE", bindDevice);
+        lg2::info(
+            "{CHASSIS_NAME}: Unbinding device driver. path: {PATH} device: {BIND_DEVICE}",
+            "CHASSIS_NAME", chassisName, "PATH", path, "BIND_DEVICE",
+            bindDevice);
     }
 
     std::ofstream file;
@@ -166,8 +173,9 @@ void PowerSupply::bindOrUnbindDriver(bool present)
     {
         auto err = errno;
 
-        lg2::error("Failed binding or unbinding device. errno={ERRNO}", "ERRNO",
-                   err);
+        lg2::error(
+            "{CHASSIS_NAME}: Failed binding or unbinding device. errno={ERRNO}",
+            "CHASSIS_NAME", chassisName, "ERRNO", err);
     }
 }
 
@@ -181,8 +189,9 @@ void PowerSupply::updatePresence()
     {
         // Relying on property change or interface added to retry.
         // Log an informational trace to the journal.
-        lg2::info("D-Bus property {INVENTORY_PATH} access failure exception",
-                  "INVENTORY_PATH", inventoryPath);
+        lg2::info(
+            "{CHASSIS_NAME}: D-Bus property {INVENTORY_PATH} access failure exception",
+            "CHASSIS_NAME", chassisName, "INVENTORY_PATH", inventoryPath);
     }
 }
 
@@ -203,15 +212,17 @@ void PowerSupply::updatePresenceGPIO()
     }
     catch (const std::exception& e)
     {
-        lg2::error("presenceGPIO read fail: {ERROR}", "ERROR", e);
+        lg2::error("{CHASSIS_NAME}: presenceGPIO read fail: {ERROR}",
+                   "CHASSIS_NAME", chassisName, "ERROR", e);
         throw;
     }
 
     if (presentOld != present)
     {
-        lg2::debug("{SHORT_NAME} presentOld: {PRESENT_OLD} present: {PRESENT}",
-                   "SHORT_NAME", shortName, "PRESENT_OLD", presentOld,
-                   "PRESENT", present);
+        lg2::debug(
+            "{CHASSIS_NAME}: {SHORT_NAME} presentOld: {PRESENT_OLD} present: {PRESENT}",
+            "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "PRESENT_OLD",
+            presentOld, "PRESENT", present);
 
         auto invpath = inventoryPath.substr(strlen(INVENTORY_OBJ_PATH));
 
@@ -256,11 +267,11 @@ void PowerSupply::analyzeCMLFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} CML fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} CML fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_CML = {STATUS_CML}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_CML",
-                    lg2::hex | lg2::field8, statusCML);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_CML", lg2::hex | lg2::field8, statusCML);
             }
             cmlFault++;
         }
@@ -280,13 +291,13 @@ void PowerSupply::analyzeInputFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} INPUT fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} INPUT fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                     "STATUS_INPUT = {STATUS_INPUT}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
-                    lg2::hex | lg2::field8, statusMFR, "STATUS_INPUT",
-                    lg2::hex | lg2::field8, statusInput);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_INPUT", lg2::hex | lg2::field8, statusInput);
             }
             inputFault++;
         }
@@ -298,12 +309,13 @@ void PowerSupply::analyzeInputFault()
         !(statusWord & phosphor::pmbus::status_word::INPUT_FAULT_WARN))
     {
         lg2::info(
-            "{SHORT_NAME} INPUT fault cleared: STATUS_WORD = {STATUS_WORD}, "
+            "{CHASSIS_NAME}: {SHORT_NAME} INPUT fault cleared: STATUS_WORD = {STATUS_WORD}, "
             "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
             "STATUS_INPUT = {STATUS_INPUT}",
-            "SHORT_NAME", shortName, "STATUS_WORD", lg2::hex | lg2::field16,
-            statusWord, "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
-            statusMFR, "STATUS_INPUT", lg2::hex | lg2::field8, statusInput);
+            "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "STATUS_WORD",
+            lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
+            lg2::hex | lg2::field8, statusMFR, "STATUS_INPUT",
+            lg2::hex | lg2::field8, statusInput);
         inputFault = 0;
     }
 }
@@ -317,13 +329,13 @@ void PowerSupply::analyzeVoutOVFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} VOUT_OV_FAULT fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} VOUT_OV_FAULT fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                     "STATUS_VOUT = {STATUS_VOUT}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
-                    lg2::hex | lg2::field8, statusMFR, "STATUS_VOUT",
-                    lg2::hex | lg2::field8, statusVout);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_VOUT", lg2::hex | lg2::field8, statusVout);
             }
 
             voutOVFault++;
@@ -344,13 +356,13 @@ void PowerSupply::analyzeIoutOCFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} IOUT fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} IOUT fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                     "STATUS_IOUT = {STATUS_IOUT}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
-                    lg2::hex | lg2::field8, statusMFR, "STATUS_IOUT",
-                    lg2::hex | lg2::field8, statusIout);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_IOUT", lg2::hex | lg2::field8, statusIout);
             }
 
             ioutOCFault++;
@@ -372,13 +384,13 @@ void PowerSupply::analyzeVoutUVFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} VOUT_UV_FAULT fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} VOUT_UV_FAULT fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                     "STATUS_VOUT = {STATUS_VOUT}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
-                    lg2::hex | lg2::field8, statusMFR, "STATUS_VOUT",
-                    lg2::hex | lg2::field8, statusVout);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_VOUT", lg2::hex | lg2::field8, statusVout);
             }
             voutUVFault++;
         }
@@ -397,12 +409,12 @@ void PowerSupply::analyzeFanFault()
         {
             if (statusWord != statusWordOld)
             {
-                lg2::error("{SHORT_NAME} FANS fault/warning: "
+                lg2::error("{CHASSIS_NAME}: {SHORT_NAME} FANS fault/warning: "
                            "STATUS_WORD = {STATUS_WORD}, "
                            "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                            "STATUS_FANS_1_2 = {STATUS_FANS_1_2}",
-                           "SHORT_NAME", shortName, "STATUS_WORD",
-                           lg2::hex | lg2::field16, statusWord,
+                           "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                           "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
                            "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
                            statusMFR, "STATUS_FANS_1_2", lg2::hex | lg2::field8,
                            statusFans12);
@@ -424,15 +436,16 @@ void PowerSupply::analyzeTemperatureFault()
         {
             if (statusWord != statusWordOld)
             {
-                lg2::error("{SHORT_NAME} TEMPERATURE fault/warning: "
-                           "STATUS_WORD = {STATUS_WORD}, "
-                           "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
-                           "STATUS_TEMPERATURE = {STATUS_TEMPERATURE}",
-                           "SHORT_NAME", shortName, "STATUS_WORD",
-                           lg2::hex | lg2::field16, statusWord,
-                           "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
-                           statusMFR, "STATUS_TEMPERATURE",
-                           lg2::hex | lg2::field8, statusTemperature);
+                lg2::error(
+                    "{CHASSIS_NAME}: {SHORT_NAME} TEMPERATURE fault/warning: "
+                    "STATUS_WORD = {STATUS_WORD}, "
+                    "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
+                    "STATUS_TEMPERATURE = {STATUS_TEMPERATURE}",
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_TEMPERATURE", lg2::hex | lg2::field8,
+                    statusTemperature);
             }
             tempFault++;
         }
@@ -452,11 +465,11 @@ void PowerSupply::analyzePgoodFault()
         {
             if (statusWord != statusWordOld)
             {
-                lg2::error("{SHORT_NAME} PGOOD fault: "
+                lg2::error("{CHASSIS_NAME}: {SHORT_NAME} PGOOD fault: "
                            "STATUS_WORD = {STATUS_WORD}, "
                            "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}",
-                           "SHORT_NAME", shortName, "STATUS_WORD",
-                           lg2::hex | lg2::field16, statusWord,
+                           "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                           "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
                            "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
                            statusMFR);
             }
@@ -520,11 +533,11 @@ void PowerSupply::analyzeMFRFault()
         {
             if (statusWord != statusWordOld)
             {
-                lg2::error("{SHORT_NAME} MFR fault: "
+                lg2::error("{CHASSIS_NAME}: {SHORT_NAME} MFR fault: "
                            "STATUS_WORD = {STATUS_WORD} "
                            "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}",
-                           "SHORT_NAME", shortName, "STATUS_WORD",
-                           lg2::hex | lg2::field16, statusWord,
+                           "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                           "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
                            "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
                            statusMFR);
             }
@@ -548,13 +561,13 @@ void PowerSupply::analyzeVinUVFault()
             if (statusWord != statusWordOld)
             {
                 lg2::error(
-                    "{SHORT_NAME} VIN_UV fault: STATUS_WORD = {STATUS_WORD}, "
+                    "{CHASSIS_NAME}: {SHORT_NAME} VIN_UV fault: STATUS_WORD = {STATUS_WORD}, "
                     "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                     "STATUS_INPUT = {STATUS_INPUT}",
-                    "SHORT_NAME", shortName, "STATUS_WORD",
-                    lg2::hex | lg2::field16, statusWord, "STATUS_MFR_SPECIFIC",
-                    lg2::hex | lg2::field8, statusMFR, "STATUS_INPUT",
-                    lg2::hex | lg2::field8, statusInput);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                    "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                    "STATUS_INPUT", lg2::hex | lg2::field8, statusInput);
             }
             vinUVFault++;
         }
@@ -566,12 +579,13 @@ void PowerSupply::analyzeVinUVFault()
         if (vinUVFault != 0)
         {
             lg2::info(
-                "{SHORT_NAME} VIN_UV fault cleared: STATUS_WORD = {STATUS_WORD}, "
+                "{CHASSIS_NAME}: {SHORT_NAME} VIN_UV fault cleared: STATUS_WORD = {STATUS_WORD}, "
                 "STATUS_MFR_SPECIFIC = {STATUS_MFR_SPECIFIC}, "
                 "STATUS_INPUT = {STATUS_INPUT}",
-                "SHORT_NAME", shortName, "STATUS_WORD", lg2::hex | lg2::field16,
-                statusWord, "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8,
-                statusMFR, "STATUS_INPUT", lg2::hex | lg2::field8, statusInput);
+                "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                "STATUS_WORD", lg2::hex | lg2::field16, statusWord,
+                "STATUS_MFR_SPECIFIC", lg2::hex | lg2::field8, statusMFR,
+                "STATUS_INPUT", lg2::hex | lg2::field8, statusInput);
             vinUVFault = 0;
         }
         // No AC fail, decrement counter
@@ -641,31 +655,33 @@ void PowerSupply::analyze()
             {
                 if (statusWord != statusWordOld)
                 {
-                    lg2::info("{SHORT_NAME} STATUS_WORD = {STATUS_WORD}",
-                              "SHORT_NAME", shortName, "STATUS_WORD",
-                              lg2::hex | lg2::field16, statusWord);
+                    lg2::info(
+                        "{CHASSIS_NAME}: {SHORT_NAME} STATUS_WORD = {STATUS_WORD}",
+                        "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                        "STATUS_WORD", lg2::hex | lg2::field16, statusWord);
                 }
 
                 // if INPUT/VIN_UV fault was on, it cleared, trace it.
                 if (inputFault)
                 {
                     lg2::info(
-                        "{SHORT_NAME} INPUT fault cleared: STATUS_WORD = {STATUS_WORD}",
-                        "SHORT_NAME", shortName, "STATUS_WORD",
-                        lg2::hex | lg2::field16, statusWord);
+                        "{CHASSIS_NAME}: {SHORT_NAME} INPUT fault cleared: STATUS_WORD = {STATUS_WORD}",
+                        "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                        "STATUS_WORD", lg2::hex | lg2::field16, statusWord);
                 }
 
                 if (vinUVFault)
                 {
                     lg2::info(
-                        "{SHORT_NAME} VIN_UV cleared: STATUS_WORD = {STATUS_WORD}",
-                        "SHORT_NAME", shortName, "STATUS_WORD",
-                        lg2::hex | lg2::field16, statusWord);
+                        "{CHASSIS_NAME}: {SHORT_NAME} VIN_UV cleared: STATUS_WORD = {STATUS_WORD}",
+                        "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                        "STATUS_WORD", lg2::hex | lg2::field16, statusWord);
                 }
 
                 if (pgoodFault > 0)
                 {
-                    lg2::info("{SHORT_NAME} pgoodFault cleared", "SHORT_NAME",
+                    lg2::info("{CHASSIS_NAME}: {SHORT_NAME} pgoodFault cleared",
+                              "CHASSIS_NAME", chassisName, "SHORT_NAME",
                               shortName);
                 }
 
@@ -688,19 +704,20 @@ void PowerSupply::analyze()
                 (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
                 lg2::info(
-                    "{SHORT_NAME} READ_VIN back in range: actualInputVoltageOld = {ACTUAL_INPUT_VOLTAGE_OLD} "
+                    "{CHASSIS_NAME}: {SHORT_NAME} READ_VIN back in range: actualInputVoltageOld = {ACTUAL_INPUT_VOLTAGE_OLD} "
                     "actualInputVoltage = {ACTUAL_INPUT_VOLTAGE}",
-                    "SHORT_NAME", shortName, "ACTUAL_INPUT_VOLTAGE_OLD",
-                    actualInputVoltageOld, "ACTUAL_INPUT_VOLTAGE",
-                    actualInputVoltage);
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "ACTUAL_INPUT_VOLTAGE_OLD", actualInputVoltageOld,
+                    "ACTUAL_INPUT_VOLTAGE", actualInputVoltage);
                 clearVinUVFault();
             }
             else if (vinUVFault && (inputVoltage != in_input::VIN_VOLTAGE_0))
             {
                 lg2::info(
-                    "{SHORT_NAME} CLEAR_FAULTS: vinUVFault {VIN_UV_FAULT} actualInputVoltage {ACTUAL_INPUT_VOLTAGE}",
-                    "SHORT_NAME", shortName, "VIN_UV_FAULT", vinUVFault,
-                    "ACTUAL_INPUT_VOLTAGE", actualInputVoltage);
+                    "{CHASSIS_NAME}: {SHORT_NAME} CLEAR_FAULTS: vinUVFault {VIN_UV_FAULT} actualInputVoltage {ACTUAL_INPUT_VOLTAGE}",
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "VIN_UV_FAULT", vinUVFault, "ACTUAL_INPUT_VOLTAGE",
+                    actualInputVoltage);
                 // Do we have a VIN_UV fault latched that can now be cleared
                 // due to voltage back in range? Attempt to clear the
                 // fault(s), re-check faults on next call.
@@ -710,10 +727,10 @@ void PowerSupply::analyze()
                      10.0)
             {
                 lg2::info(
-                    "{SHORT_NAME} actualInputVoltageOld = {ACTUAL_INPUT_VOLTAGE_OLD} actualInputVoltage = {ACTUAL_INPUT_VOLTAGE}",
-                    "SHORT_NAME", shortName, "ACTUAL_INPUT_VOLTAGE_OLD",
-                    actualInputVoltageOld, "ACTUAL_INPUT_VOLTAGE",
-                    actualInputVoltage);
+                    "{CHASSIS_NAME}: {SHORT_NAME} actualInputVoltageOld = {ACTUAL_INPUT_VOLTAGE_OLD} actualInputVoltage = {ACTUAL_INPUT_VOLTAGE}",
+                    "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                    "ACTUAL_INPUT_VOLTAGE_OLD", actualInputVoltageOld,
+                    "ACTUAL_INPUT_VOLTAGE", actualInputVoltage);
             }
 
             monitorSensors();
@@ -740,8 +757,9 @@ void PowerSupply::onOffConfig(uint8_t data)
 
     if (present && driverName != ACBEL_FSG032_DD_NAME)
     {
-        lg2::info("ON_OFF_CONFIG write: DATA={DATA}", "DATA",
-                  lg2::hex | lg2::field8, data);
+        lg2::info("{CHASSIS_NAME}: ON_OFF_CONFIG write: DATA={DATA}",
+                  "CHASSIS_NAME", chassisName, "DATA", lg2::hex | lg2::field8,
+                  data);
         try
         {
             std::vector<uint8_t> configData{data};
@@ -782,8 +800,8 @@ void PowerSupply::clearVinUVFault()
 
 void PowerSupply::clearFaults()
 {
-    lg2::debug("clearFaults() inventoryPath: {INVENTORY_PATH}",
-               "INVENTORY_PATH", inventoryPath);
+    lg2::debug("{CHASSIS_NAME}: clearFaults() inventoryPath: {INVENTORY_PATH}",
+               "CHASSIS_NAME", chassisName, "INVENTORY_PATH", inventoryPath);
     faultLogged = false;
     // The PMBus device driver does not allow for writing CLEAR_FAULTS
     // directly. However, the pmbus hwmon device driver code will send a
@@ -866,8 +884,10 @@ void PowerSupply::inventoryAdded(sdbusplus::message_t& msg)
             {
                 present = std::get<bool>(property->second);
 
-                lg2::info("Power Supply {INVENTORY_PATH} Present {PRESENT}",
-                          "INVENTORY_PATH", inventoryPath, "PRESENT", present);
+                lg2::info(
+                    "{CHASSIS_NAME}: Power Supply {INVENTORY_PATH} Present {PRESENT}",
+                    "CHASSIS_NAME", chassisName, "INVENTORY_PATH",
+                    inventoryPath, "PRESENT", present);
 
                 updateInventory();
                 checkAvailability();
@@ -900,9 +920,10 @@ auto PowerSupply::readVPDValue(const std::string& vpdName,
 
     if (vpdValue.size() != vpdSize)
     {
-        lg2::info("{SHORT_NAME} {VPD_NAME} resize needed. size: {SIZE}",
-                  "SHORT_NAME", shortName, "VPD_NAME", vpdName, "SIZE",
-                  vpdValue.size());
+        lg2::info(
+            "{CHASSIS_NAME}: {SHORT_NAME} {VPD_NAME} resize needed. size: {SIZE}",
+            "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "VPD_NAME",
+            vpdName, "SIZE", vpdValue.size());
         vpdValue.resize(vpdSize, ' ');
     }
 
@@ -949,8 +970,9 @@ void PowerSupply::updateInventory()
     using ObjectMap = std::map<sdbusplus::message::object_path, InterfaceMap>;
     ObjectMap object;
 #endif
-    lg2::debug("updateInventory() inventoryPath: {INVENTORY_PATH}",
-               "INVENTORY_PATH", inventoryPath);
+    lg2::debug(
+        "{CHASSIS_NAME}: updateInventory() inventoryPath: {INVENTORY_PATH}",
+        "CHASSIS_NAME", chassisName, "INVENTORY_PATH", inventoryPath);
 
     if (present)
     {
@@ -1039,7 +1061,9 @@ void PowerSupply::updateInventory()
 
             if (service.empty())
             {
-                lg2::error("Unable to get inventory manager service");
+                lg2::error(
+                    "{CHASSIS_NAME}: Unable to get inventory manager service",
+                    "CHASSIS_NAME", chassisName);
                 return;
             }
 
@@ -1054,8 +1078,9 @@ void PowerSupply::updateInventory()
         catch (const std::exception& e)
         {
             lg2::error(
-                "Exception in updateInventory(): {ERROR}, PATH={INVENTORY_PATH}",
-                "ERROR", e, "INVENTORY_PATH", inventoryPath);
+                "{CHASSIS_NAME}: Exception in updateInventory(): {ERROR}, PATH={INVENTORY_PATH}",
+                "CHASSIS_NAME", chassisName, "ERROR", e, "INVENTORY_PATH",
+                inventoryPath);
         }
 #endif
     }
@@ -1074,15 +1099,18 @@ auto PowerSupply::getMaxPowerOut() const
             // Read max_power_out, should be direct format
             auto maxPowerOutStr =
                 pmbusIntf->readString(MFR_POUT_MAX, Type::HwmonDeviceDebug);
-            lg2::info("{SHORT_NAME} MFR_POUT_MAX read {MAX_POWER_OUT_STR}",
-                      "SHORT_NAME", shortName, "MAX_POWER_OUT_STR",
-                      maxPowerOutStr);
+            lg2::info(
+                "{CHASSIS_NAME}: {SHORT_NAME} MFR_POUT_MAX read {MAX_POWER_OUT_STR}",
+                "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                "MAX_POWER_OUT_STR", maxPowerOutStr);
             maxPowerOut = std::stod(maxPowerOutStr);
         }
         catch (const std::exception& e)
         {
-            lg2::error("{SHORT_NAME} MFR_POUT_MAX read error: {ERROR}",
-                       "SHORT_NAME", shortName, "ERROR", e);
+            lg2::error(
+                "{CHASSIS_NAME}: {SHORT_NAME} MFR_POUT_MAX read error: {ERROR}",
+                "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "ERROR",
+                e);
         }
     }
 
@@ -1170,8 +1198,8 @@ void PowerSupply::monitorPeakInputPowerSensor()
     if (data.size() != recordSize)
     {
         lg2::debug(
-            "Input history command returned {DATA_SIZE} bytes instead of 5",
-            "DATA_SIZE", data.size());
+            "{CHASSIS_NAME}: Input history command returned {DATA_SIZE} bytes instead of 5",
+            "CHASSIS_NAME", chassisName, "DATA_SIZE", data.size());
         peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
         peakInputPowerSensor->functional(false);
         return;
@@ -1223,8 +1251,10 @@ void PowerSupply::getInputVoltage(double& actualInputVoltage,
         }
         catch (const std::exception& e)
         {
-            lg2::error("{SHORT_NAME} READ_VIN read error: {ERROR}",
-                       "SHORT_NAME", shortName, "ERROR", e);
+            lg2::error(
+                "{CHASSIS_NAME}: {SHORT_NAME} READ_VIN read error: {ERROR}",
+                "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "ERROR",
+                e);
         }
     }
 }
@@ -1301,7 +1331,8 @@ void PowerSupply::getPsuVpdFromDbus(const std::string& keyword,
     }
     catch (const sdbusplus::exception_t& e)
     {
-        lg2::error("Failed getProperty error: {ERROR}", "ERROR", e);
+        lg2::error("{CHASSIS_NAME}: Failed getProperty error: {ERROR}",
+                   "CHASSIS_NAME", chassisName, "ERROR", e);
     }
 }
 
@@ -1348,8 +1379,8 @@ std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
     catch (const std::exception& e)
     {
         lg2::info(
-            "getSensorAssociations - Failed to get Chassis association for {PATH} : {ERR}",
-            "PATH", inventoryPath, "ERR", e);
+            "{CHASSIS_NAME}: getSensorAssociations - Failed to get Chassis association for {PATH} : {ERR}",
+            "CHASSIS_NAME", chassisName, "PATH", inventoryPath, "ERR", e);
     }
 
     return associations;
