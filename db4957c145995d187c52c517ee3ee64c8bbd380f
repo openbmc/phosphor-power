@@ -565,6 +565,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3fb58c7_ec0c560c",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "You still have a Contents section in the new file, right?",
+      "revId": "db4957c145995d187c52c517ee3ee64c8bbd380f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1151d0fd_5be65196",
         "filename": "phosphor-chassis-power/docs/config_file/README.md",
         "patchSetId": 9

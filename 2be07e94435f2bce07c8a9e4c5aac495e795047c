@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81af47f5_02e0d3d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Good progress.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "531f692e_5156f727",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Is this part correct? I thought it was more like \"monitors the GPIOs to determine the chassis input power status\"?",
+      "range": {
+        "startLine": 5,
+        "startChar": 59,
+        "endLine": 6,
+        "endChar": 21
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0bbb637_89b7fdf6",
@@ -38,6 +78,195 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80120a2e_453b27dc",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Nit: JSON (acronyms are capitalized)",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 9
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62fb40e5_a674a469",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Nit: outlined in",
+      "range": {
+        "startLine": 73,
+        "startChar": 42,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc24cafb_c5a3dbc6",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "You could replace this line with some example JSON like in the other markdown files. That might be more helpful. You could just show 2 chassis in the example for brevity.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c886cff_2d286ce8",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "@derekh@us.ibm.com What is the purpose of the Name property?\n\nDo you expect it to be used in error messages?\n\nIf we are going to say \"Chassis {ChassisID} is missing\", do we even need this Name property? I\u0027d think saying \"Chassis 1 power gpios: Chassis 1 is missing\" is kind of confusing.\n\nIt might be a copy/paste from how EntityManager does JSON. I think the Name there is often used to form the D-Bus object path. Not sure if that is relevant here.\n\nIf there is no clear need, I\u0027d vote for removing the property and just having the chassis number (ChassisID).",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e36187d_3af02c83",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Is there a difference between the chassis ID and the chassis number? If not, should we just call this property ChassisNumber? Otherwise someone reading this is probably going to wonder where we get the \"ID\" from.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e3c872d_e9d8cdfe",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "If you change `Gpio` to `[gpio](gpio.md)` then this will be a hyper-link to the markdown file that defines the GPIO object type. That is how we set up our other JSON docs. Then you don\u0027t need to discuss that later in the file; you can delete the \"GPIO Contents\" section.",
+      "range": {
+        "startLine": 18,
+        "startChar": 37,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "608a4b5c_15fa4db8",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Nit: is it clearer to delete disable and just say \"The GPIO to reset the ...\"? I\u0027m not sure what disable means here.",
+      "range": {
+        "startLine": 21,
+        "startChar": 58,
+        "endLine": 21,
+        "endChar": 66
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a990329_8b37c809",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Since the GPIOs have a polarity, we probably need to say something like \"If the GPIO value read from the chassis is 1 and the Polarity property is High, then it is present\"?",
+      "range": {
+        "startLine": 27,
+        "startChar": 50,
+        "endLine": 27,
+        "endChar": 72
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8844be7e_8cd8789a",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "@derekh@us.ibm.com I\u0027m curious about the \"detected\" references in these sentences. If a GPIO property is defined in the JSON, then I assume being able to acquire and read the GPIO is required? And if we can\u0027t, then we\u0027d log some sort of error? Or is there a detection phase too?\n\nIf there is no detection phase, then I\u0027d think we could state it more like \"If the PresenceGpio property is defined, then ...  If the PresencePath property is defined, ...  If both properties are defined, then ...\"",
+      "range": {
+        "startLine": 27,
+        "startChar": 27,
+        "endLine": 27,
+        "endChar": 35
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed6edd07_25387f8e",
         "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
         "patchSetId": 18
@@ -67,6 +296,114 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "ed6edd07_25387f8e",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "513973fc_179f6b99",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "You can delete this section I think. The README.md file states that the entire file is in JSON format.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e173ee4_e59b307a",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "I think you can delete this section if you make hyperlinks in the table as recommended above.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352b359f_d97b55ca",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "You can delete this section I think. The README.md file states that the entire file is in JSON format.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3261e75a_5580aded",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "You can delete this part I think. You are defining what a GPIO object is in this markdown. Where the object is used elsewhere in the JSON file can be omitted; it may change over time.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 7
+      },
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f462e1c5_dc7945b8",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Can you make this a table like the chassis.md file? Then you can state which ones are required, what their data type is, etc.",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d698139_e69372ba",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-11T15:37:25Z",
+      "side": 1,
+      "message": "Since this markdown file is only defining what a GPIO object looks like, you could delete lines 27-33 and line 39 and just focus on the GPIO.",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
