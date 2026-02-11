@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "326c46c4_4db02cf3",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 17
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T14:29:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1f47fdf_cefe056b",
+      "revId": "4852c6e3c50a0c8cbb923434e92ac614c173de99",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2694623e_aab9c82e",
@@ -52,6 +70,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc2932f6_069cd235",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 17
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T14:29:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2694623e_aab9c82e",
+      "revId": "4852c6e3c50a0c8cbb923434e92ac614c173de99",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd2482e_909993b6",
@@ -65,6 +101,24 @@
       "writtenOn": "2026-02-10T22:05:34Z",
       "side": 1,
       "message": "Just a nit, not worth re-doing the commit for just this, but in our systems the PresenceGpio will be \"detected\", and indicate true or false (0 or 1).  For other companies systems, if they don\u0027t even use that gpio, it won\u0027t be \"detected\".\n\nEg, if the PresenceGpio is detected but indicating \"False\", but the PresencePath is present/exists, then we should treat this as the chassis being present.",
+      "revId": "4852c6e3c50a0c8cbb923434e92ac614c173de99",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "491f85f5_69241fce",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 17
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T14:29:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fd2482e_909993b6",
       "revId": "4852c6e3c50a0c8cbb923434e92ac614c173de99",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
