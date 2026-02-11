@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16bafe1d_80214c89",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T15:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0bbb637_89b7fdf6",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed6edd07_25387f8e",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-02-11T14:46:20Z",
       "side": 1,
       "message": "Nit again, but the fragments are confusing - \n- first sentence says \"If\", but there is no \"then\"/follow-up text.  \n- Capitalization mixture starting the sentences\n- third sentence, \"then the this\"",
+      "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "610a12a5_ada34d21",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 18
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-11T15:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed6edd07_25387f8e",
       "revId": "2be07e94435f2bce07c8a9e4c5aac495e795047c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
