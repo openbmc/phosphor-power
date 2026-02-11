@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6cf4ed7_9c062526",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 22
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "ChassisNumber",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f114416_4af3f09d",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "chassis presence and input power fault status.",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdfed5e3_5cd1cb0a",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "nit on/off",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01165e63_54911500",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "nit ChassisNumber",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e64e0e_ca1b32c5",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "nit missing \u0027.\u0027",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d2fab27_9674bb55",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "nit. ChassisNumber",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1473e50_8066ba08",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 22
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-02-11T18:51:43Z",
+      "side": 1,
+      "message": "nit. ChassisNumber",
+      "revId": "8fff86121f4ee55e8bb5e716c7b164f3993e5a21",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
