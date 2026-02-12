@@ -52,6 +52,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c55ce59e_110c70ca",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-12T21:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173e55b0_11692e7d",
+      "revId": "d341283dbc2420bf5dc7abff8e15fb3ea04e6fb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "842a651d_50ad6fe8",
@@ -65,6 +83,30 @@
       "writtenOn": "2026-02-12T15:07:52Z",
       "side": 1,
       "message": "You should put a real path here since this is an example. It can be the one used on Huygens or just some random path. Same comment for the second chassis.",
+      "range": {
+        "startLine": 43,
+        "startChar": 21,
+        "endLine": 43,
+        "endChar": 26
+      },
+      "revId": "d341283dbc2420bf5dc7abff8e15fb3ea04e6fb8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aaad369_ce7e709a",
+        "filename": "phosphor-chassis-power/docs/config_file/chassis.md",
+        "patchSetId": 23
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-12T21:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "842a651d_50ad6fe8",
       "range": {
         "startLine": 43,
         "startChar": 21,
