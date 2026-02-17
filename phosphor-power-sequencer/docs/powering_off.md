@@ -22,13 +22,9 @@ power off the chassis.
 In a multiple chassis system, `phosphor-power-sequencer` will only attempt to
 power off chassis with the proper status:
 
+- `state` property is 1
 - `Present` property is true
 - `Available` property is true (if interface exists)
-
-`phosphor-power-sequencer` will set the `state` property to 0 for all chassis.
-
-`phosphor-power-sequencer` will set the `pgood` property to 0 for all chassis
-where `Present` or `Available` are false.
 
 See [Chassis Status](chassis_status.md) for more information on these
 properties.
