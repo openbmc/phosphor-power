@@ -25,6 +25,8 @@ signal from the named GPIO due to:
 - Hardware communication problems
   - Unable to read from named GPIO after multiple retries.
 - The `Available` property of the chassis changes to false.
+- The `Present` property of the chassis changes to false.
+- The chassis power `Status` property changes to `Fault` indicating a blackout.
 
 ### During power on
 
@@ -37,19 +39,24 @@ during a power on attempt, the application will do the following:
   - `phosphor-chassis-state-manager` will [power off](powering_off.md) the
     system.
 - If this is a multiple chassis system:
-  - If the chassis is experiencing a blackout:
-    - Log an error specifying an input power problem.
-  - If the chassis is not experiencing a blackout:
+  - If the read failure was due to hardware communication problems:
     - Log an error specifying the power on attempt failed due to an inability to
       read the chassis power good status.
-    - If the read failure was due to hardware communication problems, add the
-      inventory path of the chassis to the error log. This may result in
+    - Add the inventory path of the chassis to the error log. This may result in
       hardware isolation, which will cause the `Enabled` property of the chassis
       to be false.
+  - If the read failure was due to `Available` being false:
+    - Log an error specifying the power on attempt failed due to an inability to
+      read the chassis power good status.
+  - If `Present` was false:
+    - Log an error specifying the chassis is missing.
+  - If the chassis is experiencing a blackout:
+    - Log an error specifying an input power problem.
   - `phosphor-chassis-state-manager` will power the system
-    [off](powering_off.md) and then [on](powering_on.md) again. If the chassis's
-    `Available` or `Enabled` property is false, the chassis will not be powered
-    on.
+    [off](powering_off.md) and then [on](powering_on.md) again.
+    - In most cases the chassis will not be included in the power on attempt.
+    - The chassis will be included in the power on if the problem was hardware
+      communication and hardware isolation is not implemented.
 
 ### After power on
 
@@ -58,16 +65,24 @@ after the chassis powered on, the application will do the following:
 
 - If this is a single chassis system:
   - Log an error specifying an inability to read the chassis power good status.
-  - Do **not** power off the system.
-  - Leave the `pgood` property set to the value 1.
+  - Leave the `pgood` property of the system and chassis set to the value 1.
+  - `phosphor-chassis-state-manager` will **not** power off the system
 - If this is a multiple chassis system:
-  - If the chassis is experiencing a blackout:
-    - Set `pgood` value to 0.
-    - Log an error specifying an input power problem.
-    - Power the system off and then on again. If the chassis's `Available`
-      property is false, the chassis will not be powered on.
-  - If the chassis is not experiencing a blackout:
+  - If the read failure was due to hardware communication problems:
     - Log an error specifying an inability to read the chassis power good
       status.
-    - Do **not** power off the system.
-    - Leave the `pgood` property set to the value 1.
+    - Do not specify that hardware isolation should occur for the chassis.
+    - Leave the `pgood` property of the system and chassis set to the value 1.
+  - If the read failure was due to `Available` being false:
+    - Log an error specifying an inability to read the chassis power good
+      status.
+    - Leave the `pgood` property of the system and chassis set to the value 1.
+  - If `Present` was false:
+    - Log an error specifying the chassis is missing.
+    - Set `pgood` value to 0 for the chassis. Leave the `pgood` property of the
+      system set to the value 1.
+  - If the chassis is experiencing a blackout:
+    - Log an error specifying an input power problem.
+    - Set `pgood` value to 0 for the chassis. Leave the `pgood` property of the
+      system set to the value 1.
+  - `phosphor-chassis-state-manager` will **not** power off the system
