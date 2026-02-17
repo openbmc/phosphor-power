@@ -3,6 +3,115 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1d1224a_77db7242",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "It would probably be more accurate to say \"all relevant chassis status properties\".\n\nPresent and Enabled, for example, are not directly related to chassis power.",
+      "range": {
+        "startLine": 7,
+        "startChar": 45,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e3dd45_84e2c063",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "If you are going to mention a class, you should probably specify the class name (ChassisStatusMonitor) rather than the phrase \"chassis status monitor\".",
+      "range": {
+        "startLine": 9,
+        "startChar": 57,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3433c3cb_162996c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Nit: lower case d",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029615d9_e2245930",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Usually the Tested: line is following by a brief bullet list of tests.\n\n```\nTested:\n- Verified all monitored ...\n- Verified invalid chassis ...\n```",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7718ea4c_09e84448",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Nit: Spelling.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a43fc5b9_9d218a1b",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -32,6 +141,160 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "a43fc5b9_9d218a1b",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267dbd1e_d62a7f3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Good start Brendan.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee330ca_5e8da58f",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "The purpose of this struct is to configure which properties are monitored.\n\nThe default value for all of the struct fields is \"false\", meaning that property not monitored.\n\nIf you try to get the value of an unmonitored property, some return a logical default and others throw an exception. See the doxygen for details. But you aren\u0027t getting the real value for any of the properties if monitoring is not enabled.\n\nIn your case, I think you want to turn on all monitoring. Set all struct fields to true.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc30292_bb5908de",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "The first chassis is 1, not 0. The last chassis number is dependent on the system type. Some systems might have 1, 4, 8, or 12.\n\nFor now you could just let the ChassisStatusMonitor class throw exceptions if they specify an invalid chassis number.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4167cde3_92fe2da1",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "You probably don\u0027t want to call this twice. I\u0027d suggest putting the value in a local as a result of the first call to std::atoi.\n\nNote you can also have CLI verify an option value and print a command line parsing error if the chassis number was not valid (\u003c1, not an integer, etc.)",
+      "range": {
+        "startLine": 19,
+        "startChar": 13,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4816e5e7_dc5c3a48",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "The D-Bus chassis path is specific to the chassis. So for chassis 2 it will be `/xyz/openbmc_project/inventory/system/chassis2`.\n\nYou could use `std::format(\"/xyz/openbmc_project/inventory/system/chassis{}\", chassisNumber);`",
+      "range": {
+        "startLine": 20,
+        "startChar": 9,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8cbbcdf_da325e2e",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "You might want to print\n```\nChassis 2\n```\n\nat the top.\n\nThen for each property print the property name + a colon before the try catch. Then in the catch you can print something like \"Unknown\" as the value with the exception error message indented on a line below?\n\ne.g.\n\n```\nChassis 2\n  Present: true\n  Available: unknown\n    Error: Property does not exist\n  Enabled: false\n  ...\n```",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b3be378_2c763245",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Is this for future expansion? I don\u0027t see it getting set anywhere.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2d89ab_8514114d",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Chassis status tool. You can probably delete the \"for OpenBMC\" part, since all the code in this repo is for OpenBMC.",
+      "range": {
+        "startLine": 93,
+        "startChar": 18,
+        "endLine": 93,
+        "endChar": 25
+      },
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -67,6 +330,131 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "2d189315_8f961397",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6befc0_88a0d357",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "If you take Matt\u0027s suggestion and have the default behavior be dump all chassis, then perhaps this becomes an option with no argument?\n\nThen there is a separate option (-c or -n or something) for the \"chassis number\"?\n\nRegardless, you need to specify in the command help that the user should specify a chassis number from 1 to N, where N is the number of chassis.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc4ca115_5e88fefc",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "You might consider using the add_subcommand() method so that the command looks like `chassis-status-tool dump` rather than `chassis-status-tool -d`. A lot of the tools we use, like git/systemctl/busctl, have the pattern of a subcommand with options specific to it.  See phosphor-fan-presence/control/fanctl.cpp for an example.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3f2aa3f_d47cb30e",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "I think \"Dump chassis status\" would be more clear.",
+      "range": {
+        "startLine": 97,
+        "startChar": 29,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c02ccf4_665fd716",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Do you need a try/catch around the parse? Not sure if CLI throws if an invalid option is specified.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b82b2e44_86f60e47",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "I don\u0027t understand the usage of this variable. Did it previously contain a large returned string from dump(), and now it is just empty?",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "398bd078_eaec50cb",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "Use `std::cout \u003c\u003c std::endln` rather than printf.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60adb9d_37f06c4a",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T20:38:28Z",
+      "side": 1,
+      "message": "I don\u0027t think this works correctly?",
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
