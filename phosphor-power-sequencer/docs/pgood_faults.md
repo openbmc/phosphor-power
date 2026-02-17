@@ -79,7 +79,8 @@ determines what hardware potentially needs to be replaced.
 Determining the correct rail requires the following:
 
 - The power sequencer device type is supported by `phosphor-power-sequencer`.
-- A [JSON configuration file](config_file/README.md) is defined for the system.
+- A system-specific [JSON configuration file](config_file/README.md) is used
+  that defines the voltage rails.
 
 If those requirements are not met, a general pgood error will be logged.
 

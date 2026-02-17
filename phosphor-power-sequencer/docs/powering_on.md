@@ -22,14 +22,14 @@ power on the chassis.
 In a multiple chassis system, `phosphor-power-sequencer` will only attempt to
 power on chassis with the proper status:
 
+- `state` property is 0
 - `Present` property is true
 - `Enabled` property is true (if interface exists)
 - `Available` property is true (if interface exists)
 - `Status` property is `Good` (if interface exists)
 
 `phosphor-power-sequencer` will set the `state` property to 1 for each chassis
-that is being powered on. It will set `state` to 0 for each chassis not being
-powered on.
+that is being powered on.
 
 If no chassis are in the proper status to power on, `phosphor-power-sequencer`
 will log an error. `phosphor-chassis-state-manager` will
@@ -86,10 +86,7 @@ handled.
 ### Unable to read chassis power good signal
 
 `phosphor-power-sequencer` may become unable to read the chassis power good
-signal from the named GPIO due to:
-
-- Hardware communication problems.
-- The `Available` property of the chassis changes to false.
+signal from the named GPIO.
 
 See [Monitoring Chassis Power Good](monitoring_chassis_pgood.md) for more
 information on how the error is handled.

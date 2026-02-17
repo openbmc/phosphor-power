@@ -57,7 +57,11 @@ restored. It may then automatically power on again depending on the Auto Power
 Restart settings.
 
 If a multiple chassis system that was powered on experiences a blackout in one
-chassis, that chassis loses all power. The system will be powered off and then
-powered on again without that chassis.
+chassis, that chassis loses all power. The system may have hardware that resets
+the BMC, which will eventually result in the system being powered off and then
+powered on again without that chassis. If the system does not have that
+hardware, then an error will be logged but the system will remain running. That
+is to prevent a system shutdown when the input power indicator could be a faulty
+GPIO.
 
 See [Power Loss](power_loss.md) for more information.
