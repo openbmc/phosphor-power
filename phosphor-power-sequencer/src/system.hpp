@@ -147,6 +147,21 @@ class System
     }
 
     /**
+     * Returns whether the system is in transition to a new requested power
+     * state.
+     *
+     * A new power state has been requested using setPowerState(), but the power
+     * good value does not yet match that state. For example, the power state
+     * has been set to on, but the power good value is not yet on.
+     *
+     * @return true if system is in a power state transition, false otherwise
+     */
+    bool isInPowerStateTransition()
+    {
+        return isInStateTransition;
+    }
+
+    /**
      * Monitors the status of the system.
      *
      * Sets the system power good value by obtaining the power good value from
@@ -191,6 +206,15 @@ class System
         {
             curChassis->setPowerSupplyError(error);
         }
+    }
+
+    /**
+     * Clears the error history for the system.
+     */
+    void clearErrorHistory()
+    {
+        hasRequestedDump = false;
+        hasRequestedPowerOff = false;
     }
 
   private:
@@ -239,6 +263,24 @@ class System
                                                 Services& services);
 
     /**
+     * Sets the power state of all selected chassis.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void setChassisPowerState(Services& services);
+
+    /**
+     * Monitors the status of all chassis.
+     *
+     * Does not restrict monitoring to only chassis selected for power on/off.
+     * All chassis need to have their monitor method called in order to react to
+     * D-Bus status changes.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void monitorChassisStatus(Services& services);
+
+    /**
      * Defines the initial set of chassis selected for power on/off if needed.
      *
      * This is necessary when the application first starts.
@@ -255,9 +297,18 @@ class System
     void setInitialSelectedChassisIfNeeded();
 
     /**
-     * Sets the system power good value based on the chassis power good values.
+     * Sets the system power good value based on the selected chassis power good
+     * values.
      */
     void setPowerGood();
+
+    /**
+     * Returns whether the power good value from the specified chassis should be
+     * used in setting the system power good.
+     *
+     * @param aChassis The chassis to inspect
+     */
+    bool shouldUseChassisPowerGood(Chassis& aChassis);
 
     /**
      * Sets the initial power state value if it currently has no value.
@@ -273,6 +324,91 @@ class System
      * powered on or off by setPowerState().
      */
     void setInitialPowerStateIfNeeded();
+
+    /**
+     * Updates isInStateTransition based on the current power state and power
+     * good values.
+     *
+     * See isInPowerStateTransition() for more information.
+     */
+    void updateInPowerStateTransition();
+
+    /**
+     * Checks whether power good faults have been detected in any of the
+     * selected chassis.
+     *
+     * There are two types of power good faults:
+     * - Timeout power good faults: Occur during power on when a timeout expires
+     *   before the chassis power good changes to true. These are handled by the
+     *   state manager application, which does a power off/cycle and requests a
+     *   BMC dump.
+     * - Non-timeout power good faults: Occur after a chassis had been
+     *   successfully powered on. The power good unexpectedly changes from true
+     *   to false. These are handled by this application, which does a power
+     *   off/cycle and requests a BMC dump.
+     *
+     * The difference in which application handles the power off/cycle and dump
+     * request is due to complex service file dependencies during the power on
+     * attempt.
+     *
+     * A non-timeout power good fault can occur while the overall system power
+     * on is still occurring (in transition). One chassis might power on
+     * successfully and then almost immediately lose power good while other
+     * chassis have not yet powered on.
+     *
+     * A delay is implemented between when a non-timeout power good fault is
+     * detected and when an error is logged. The delay allows the power supplies
+     * and other hardware time to complete failure processing. As a result, the
+     * power off/cycle and dump request is not performed until after the error
+     * has been logged.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void checkForPowerGoodFaults(Services& services);
+
+    /**
+     * Checks if any of the selected chassis have an invalid status.
+     *
+     * When a power on starts, only chassis with a valid status are selected.
+     * However, during or after the power on the status of a selected chassis
+     * could change.
+     *
+     * Only checks the chassis status if the system is powering on and still in
+     * transition.
+     *
+     * Does not check the chassis status if the system has successfully powered
+     * on (not in transition). We don't want to power off a running system based
+     * on chassis status. The status could be incorrect (such as due to a bad
+     * GPIO), or the bad status could be transitory.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void checkForInvalidChassisStatus(Services& services);
+
+    /**
+     * Creates a BMC dump.
+     *
+     * Does nothing if a dump has already been requested.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void createBMCDump(Services& services);
+
+    /**
+     * Performs a hard power off of the system using systemd.
+     *
+     * The system is powered off without notifying the host and giving it time
+     * to shut itself down.
+     *
+     * If this is a multiple chassis system, after the power off is complete the
+     * system is powered back on again. The power cycle systemd target is used
+     * rather than the power off target.
+     *
+     * Does nothing if a hard power off has already been requested.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void hardPowerOff(Services& services);
 
     /**
      * Chassis in the system.
@@ -295,9 +431,26 @@ class System
     std::optional<PowerGood> powerGood{};
 
     /**
+     * Indicates whether the system is in a power state transition.
+     *
+     * See isInPowerStateTransition() for more information.
+     */
+    bool isInStateTransition{false};
+
+    /**
      * Chassis numbers that were selected for the current power on/off attempt.
      */
     std::set<size_t> selectedChassis;
+
+    /**
+     * Indicates whether a BMC dump has been requested.
+     */
+    bool hasRequestedDump{false};
+
+    /**
+     * Indicates whether a hard power off has been requested using systemd.
+     */
+    bool hasRequestedPowerOff{false};
 };
 
 } // namespace phosphor::power::sequencer

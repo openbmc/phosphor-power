@@ -119,6 +119,7 @@ void Chassis::monitor(Services& services)
     updatePowerGood(services);
     updateInPowerStateTransition();
     checkForPowerGoodError(services);
+    checkForInvalidStatus(services);
 }
 
 void Chassis::closeDevices()
@@ -143,7 +144,9 @@ void Chassis::updatePowerGood(Services& services)
 {
     if (!isPresent() || !isInputPowerGood())
     {
-        powerState = PowerState::off;
+        // Set power good to off, but do not change power state. Requested power
+        // state has not changed. Enables recovery if presence/input power
+        // source (such as a GPIO) experiences transitory hardware problem.
         powerGood = PowerGood::off;
         closeDevices();
     }
@@ -341,7 +344,9 @@ void Chassis::handlePowerGoodFault(Services& services)
     services.logErrorMsg(std::format("Power good fault in chassis {}", number));
 
     // Create PowerGoodFault object. Delay logging error to allow the power
-    // supplies and other hardware time to complete failure processing.
+    // supplies and other hardware time to complete failure processing. Need to
+    // give power supply monitoring application time to detect power supply
+    // problem and call setPowerSupplyError D-Bus method if applicable.
     powerGoodFault = PowerGoodFault{};
     powerGoodFault->logTime = getCurrentTime() + powerGoodFaultLogDelay;
 }
@@ -405,6 +410,69 @@ std::string Chassis::findPowerGoodFaultInRail(
         additionalData.emplace("ERROR", e.what());
     }
     return error;
+}
+
+void Chassis::checkForInvalidStatus(Services& services)
+{
+    // If the requested power state is on, check for invalid chassis status.
+    // Check Available last since it is based on some of the other properties.
+    if (powerState == PowerState::on)
+    {
+        if (!isPresent())
+        {
+            handleStateOnButNotPresent(services);
+        }
+        else if (!isInputPowerGood())
+        {
+            handleStateOnButNoInputPower(services);
+        }
+        else if (!isAvailable())
+        {
+            handleStateOnButNotAvailable(services);
+        }
+    }
+}
+
+void Chassis::handleStateOnButNotPresent(Services& services)
+{
+    if (!hasLoggedNotPresent)
+    {
+        services.logErrorMsg(std::format(
+            "Chassis {} requested power state is on, but chassis is not present",
+            number));
+
+        // TODO: Create error log
+
+        hasLoggedNotPresent = true;
+    }
+}
+
+void Chassis::handleStateOnButNoInputPower(Services& services)
+{
+    if (!hasLoggedNoInputPower)
+    {
+        services.logErrorMsg(std::format(
+            "Chassis {} requested power state is on, but chassis does not have input power",
+            number));
+
+        // TODO: Create error log
+
+        hasLoggedNoInputPower = true;
+    }
+}
+
+void Chassis::handleStateOnButNotAvailable(Services& services)
+{
+    if (!hasLoggedNotAvailable)
+    {
+        services.logErrorMsg(std::format(
+            "Chassis {} requested power state is on, but chassis is not available",
+            number));
+
+        // TODO: Create error log
+
+        hasLoggedNotAvailable = true;
+    }
 }
 
 } // namespace phosphor::power::sequencer

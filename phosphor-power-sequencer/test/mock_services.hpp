@@ -78,6 +78,8 @@ class MockServices : public Services
         return std::make_unique<MockChassisStatusMonitor>();
     }
 
+    MOCK_METHOD(void, hardPowerOff, (), (override));
+    MOCK_METHOD(void, hardPowerCycle, (), (override));
     MOCK_METHOD(void, createBMCDump, (), (override));
     MOCK_METHOD(void, clearCache, (), (override));
 };

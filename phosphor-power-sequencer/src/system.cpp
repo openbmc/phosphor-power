@@ -45,61 +45,43 @@ void System::setPowerState(PowerState newPowerState, Services& services)
             PowerInterface::toString(newPowerState))};
     }
 
-    // Set new power state
     powerState = newPowerState;
+    isInStateTransition = true;
 
     // Save list of chassis selected for current power on/off attempt
     selectedChassis = chassisToSet;
 
-    // Set power state for selected chassis
-    for (auto& curChassis : chassis)
+    if (powerState == PowerState::on)
     {
-        if (selectedChassis.contains(curChassis->getNumber()))
-        {
-            try
-            {
-                curChassis->setPowerState(newPowerState, services);
-            }
-            catch (const std::exception& e)
-            {
-                services.logErrorMsg(std::format(
-                    "Unable to set chassis {} to state {}: {}",
-                    curChassis->getNumber(),
-                    PowerInterface::toString(newPowerState), e.what()));
-            }
-        }
+        clearErrorHistory();
     }
+
+    // Set power state for selected chassis
+    setChassisPowerState(services);
 }
 
 void System::monitor(Services& services)
 {
     verifyMonitoringInitialized();
 
-    // Monitor the status of all chassis, including those not selected for
-    // current power on/off attempt. All chassis need to react to D-Bus status
-    // changes.
-    for (auto& curChassis : chassis)
-    {
-        try
-        {
-            curChassis->monitor(services);
-        }
-        catch (const std::exception& e)
-        {
-            services.logErrorMsg(
-                std::format("Unable to monitor chassis {}: {}",
-                            curChassis->getNumber(), e.what()));
-        }
-    }
+    // Monitor the status of all chassis
+    monitorChassisStatus(services);
 
     // Set initial set of chassis selected for power on/off if needed
     setInitialSelectedChassisIfNeeded();
 
-    // Set the system power good based on the chassis power good values
+    // Set the system power good based on the selected chassis power good values
     setPowerGood();
 
     // Set initial system power state based on system power good if needed
     setInitialPowerStateIfNeeded();
+
+    // Update whether system is still in a power state transition
+    updateInPowerStateTransition();
+
+    // Check selected chassis for power good faults or invalid chassis status
+    checkForPowerGoodFaults(services);
+    checkForInvalidChassisStatus(services);
 }
 
 std::set<size_t> System::getChassisForNewPowerState(PowerState newPowerState,
@@ -122,6 +104,44 @@ std::set<size_t> System::getChassisForNewPowerState(PowerState newPowerState,
         }
     }
     return chassisForState;
+}
+
+void System::setChassisPowerState(Services& services)
+{
+    for (auto& curChassis : chassis)
+    {
+        if (selectedChassis.contains(curChassis->getNumber()))
+        {
+            try
+            {
+                curChassis->setPowerState(*powerState, services);
+            }
+            catch (const std::exception& e)
+            {
+                services.logErrorMsg(std::format(
+                    "Unable to set chassis {} to state {}: {}",
+                    curChassis->getNumber(),
+                    PowerInterface::toString(*powerState), e.what()));
+            }
+        }
+    }
+}
+
+void System::monitorChassisStatus(Services& services)
+{
+    for (auto& curChassis : chassis)
+    {
+        try
+        {
+            curChassis->monitor(services);
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(
+                std::format("Unable to monitor chassis {}: {}",
+                            curChassis->getNumber(), e.what()));
+        }
+    }
 }
 
 void System::setInitialSelectedChassisIfNeeded()
@@ -186,7 +206,7 @@ void System::setPowerGood()
     size_t powerGoodOnCount{0}, powerGoodOffCount{0};
     for (auto& curChassis : chassis)
     {
-        if (selectedChassis.contains(curChassis->getNumber()))
+        if (shouldUseChassisPowerGood(*curChassis))
         {
             try
             {
@@ -216,6 +236,48 @@ void System::setPowerGood()
         // All selected chassis are off; set system power good to off
         powerGood = PowerGood::off;
     }
+    else if (!isInStateTransition && (powerGoodOffCount > 0))
+    {
+        // If we are not in a state transition and any chassis are off, then set
+        // system power good to off
+        powerGood = PowerGood::off;
+    }
+}
+
+bool System::shouldUseChassisPowerGood(Chassis& aChassis)
+{
+    try
+    {
+        // Do not use if chassis is not selected for current power on/off
+        if (!selectedChassis.contains(aChassis.getNumber()))
+        {
+            return false;
+        }
+
+        // If system has successfully powered on (not in transition)
+        if (powerState && (powerState == PowerState::on) &&
+            !isInStateTransition)
+        {
+            // Do not use if chassis is missing, not available, or has no input
+            // power. We don't want the system power good to change to false or
+            // the system to be powered off based on a chassis with a bad
+            // status. The status problem could be based on faulty hardware
+            // (such as a bad GPIO) or could be a transitory issue.
+            if (!aChassis.isPresent() || !aChassis.isAvailable() ||
+                !aChassis.isInputPowerGood())
+            {
+                return false;
+            }
+        }
+
+        // Use the chassis power good value
+        return true;
+    }
+    catch (...)
+    {
+        // Chassis status or power good might not be available
+    }
+    return false;
 }
 
 void System::setInitialPowerStateIfNeeded()
@@ -232,6 +294,117 @@ void System::setInitialPowerStateIfNeeded()
             {
                 powerState = PowerState::on;
             }
+        }
+    }
+}
+
+void System::updateInPowerStateTransition()
+{
+    if (isInStateTransition && powerState && powerGood)
+    {
+        bool bothOff =
+            ((powerState == PowerState::off) && (powerGood == PowerGood::off));
+
+        bool bothOn =
+            ((powerState == PowerState::on) && (powerGood == PowerGood::on));
+
+        if (bothOff || bothOn)
+        {
+            isInStateTransition = false;
+        }
+    }
+}
+
+void System::checkForPowerGoodFaults(Services& services)
+{
+    // If system is powering on (in transition) or has powered on
+    if (powerState && (powerState == PowerState::on))
+    {
+        // Check all selected chassis for a power good fault
+        for (auto& curChassis : chassis)
+        {
+            if (selectedChassis.contains(curChassis->getNumber()))
+            {
+                if (curChassis->hasPowerGoodFault())
+                {
+                    // If non-timeout power good fault that has been logged
+                    auto& fault = curChassis->getPowerGoodFault();
+                    if (!fault.wasTimeout && fault.wasLogged)
+                    {
+                        createBMCDump(services);
+                        hardPowerOff(services);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void System::checkForInvalidChassisStatus(Services& services)
+{
+    // If the system is powering on and still in transition, then verify all
+    // selected chassis still have a valid status
+    if (powerState && (powerState == PowerState::on) && isInStateTransition)
+    {
+        for (auto& curChassis : chassis)
+        {
+            if (selectedChassis.contains(curChassis->getNumber()))
+            {
+                try
+                {
+                    if (!curChassis->isPresent() ||
+                        !curChassis->isAvailable() ||
+                        !curChassis->isInputPowerGood())
+                    {
+                        createBMCDump(services);
+                        hardPowerOff(services);
+                        break;
+                    }
+                }
+                catch (...)
+                {
+                    // Chassis status might not be available
+                }
+            }
+        }
+    }
+}
+
+void System::createBMCDump(Services& services)
+{
+    if (!hasRequestedDump)
+    {
+        hasRequestedDump = true;
+        services.createBMCDump();
+    }
+}
+
+void System::hardPowerOff(Services& services)
+{
+    if (!hasRequestedPowerOff)
+    {
+        hasRequestedPowerOff = true;
+        std::string action;
+        try
+        {
+            if (chassis.size() > 1)
+            {
+                // Multiple chassis system: power cycle
+                action = "power cycle";
+                services.hardPowerCycle();
+            }
+            else
+            {
+                // Single chassis system: power off
+                action = "power off";
+                services.hardPowerOff();
+            }
+        }
+        catch (const std::exception& e)
+        {
+            services.logErrorMsg(std::format(
+                "Unable to {} system using systemd: {}", action, e.what()));
         }
     }
 }
