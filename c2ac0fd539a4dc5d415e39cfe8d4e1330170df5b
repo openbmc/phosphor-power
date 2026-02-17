@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "312682b3_6310cb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T19:32:40Z",
+      "side": 1,
+      "message": "Do you plan to update the messages from the new PowerSupply class as well?\n\nHere is one example journal message:\n```\ng2::info(\"No device driver name found\");\n```\n\nWe probably need to know which chassis that is from?",
+      "revId": "c2ac0fd539a4dc5d415e39cfe8d4e1330170df5b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69ec9837_ddde1d47",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T19:32:40Z",
+      "side": 1,
+      "message": "Do you need the chassis name in this message twice?",
+      "revId": "c2ac0fd539a4dc5d415e39cfe8d4e1330170df5b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
