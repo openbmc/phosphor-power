@@ -18,6 +18,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2622cf11_83ea24b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-17T21:11:47Z",
+      "side": 1,
+      "message": "Are you still planning on implementing this, or are you abandoning this commit/review?\n\nIf you are abandoning it, please use the ABANDON button in the top right corner so it no longer shows up in the active list.",
+      "revId": "3e6a5c0bb4445f08553ffcdb50004da83f1dbef2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70ff6d17_cbe79ac8",
