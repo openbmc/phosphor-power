@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "860a632a_0e24dace",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-17T20:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a43fc5b9_9d218a1b",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d189315_8f961397",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-02-17T18:17:31Z",
       "side": 1,
       "message": "I wouldn\u0027t mind it dumping every chassis by default, and then if you add a chassis arg it would only do that one.",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6fb0ccb_373662ac",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-17T20:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d189315_8f961397",
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
