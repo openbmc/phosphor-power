@@ -151,6 +151,25 @@ bool BMCServices::isExpectedException(const sdbusplus::exception_t& e)
     return isExpected;
 }
 
+void BMCServices::hardPowerOff()
+{
+    auto method = bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                      util::SYSTEMD_INTERFACE, "StartUnit");
+    method.append(util::POWEROFF_TARGET);
+    method.append("replace");
+    bus.call_noreply(method);
+}
+
+void BMCServices::hardPowerCycle()
+{
+    auto method = bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                      util::SYSTEMD_INTERFACE, "StartUnit");
+    // TODO: Change to the hard power cycle target when target is implemented
+    method.append(util::POWEROFF_TARGET);
+    method.append("replace");
+    bus.call_noreply(method);
+}
+
 void BMCServices::createBMCDump()
 {
     try

@@ -430,6 +430,9 @@ class Chassis
     {
         powerSupplyError.clear();
         powerGoodFault.reset();
+        hasLoggedNotPresent = false;
+        hasLoggedNoInputPower = false;
+        hasLoggedNotAvailable = false;
     }
 
     /**
@@ -693,6 +696,46 @@ class Chassis
         std::map<std::string, std::string>& additionalData, Services& services);
 
     /**
+     * Checks if the chassis has an invalid status for the current power state.
+     *
+     * If the requested power state is on, then the following statuses are not
+     * valid:
+     * - Not present
+     * - Input power is not good
+     * - Not available
+     *
+     * A power on is only attempted for a chassis if it has a valid status.
+     * However, the status can change during or after the power on attempt.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void checkForInvalidStatus(Services& services);
+
+    /**
+     * Handles error where requested power state is on but chassis is not
+     * present.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void handleStateOnButNotPresent(Services& services);
+
+    /**
+     * Handles error where requested power state is on but chassis does not have
+     * good input power.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void handleStateOnButNoInputPower(Services& services);
+
+    /**
+     * Handles error where requested power state is on but chassis is not
+     * available.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void handleStateOnButNotAvailable(Services& services);
+
+    /**
      * Chassis number within the system.
      *
      * Chassis numbers start at 1 because chassis 0 represents the entire
@@ -786,6 +829,24 @@ class Chassis
      * empty string.
      */
     std::string powerSupplyError{};
+
+    /**
+     * Indicates whether an error has been logged because the chassis state was
+     * on but the chassis was not present.
+     */
+    bool hasLoggedNotPresent{false};
+
+    /**
+     * Indicates whether an error has been logged because the chassis state was
+     * on but the chassis had no input power.
+     */
+    bool hasLoggedNoInputPower{false};
+
+    /**
+     * Indicates whether an error has been logged because the chassis state was
+     * on but the chassis was not available.
+     */
+    bool hasLoggedNotAvailable{false};
 };
 
 } // namespace phosphor::power::sequencer

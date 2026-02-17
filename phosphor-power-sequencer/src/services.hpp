@@ -158,6 +158,27 @@ class Services
         const ChassisStatusMonitorOptions& options) = 0;
 
     /**
+     * Performs a hard power off of the system using systemd.
+     *
+     * The system is powered off without notifying the host and giving it time
+     * to shut itself down.
+     *
+     * Throws an exception if an error occurs.
+     */
+    virtual void hardPowerOff() = 0;
+
+    /**
+     * Performs a hard power off of the system and then powers it back on again
+     * using systemd.
+     *
+     * The system is powered off without notifying the host and giving it time
+     * to shut itself down.
+     *
+     * Throws an exception if an error occurs.
+     */
+    virtual void hardPowerCycle() = 0;
+
+    /**
      * Creates a BMC dump.
      */
     virtual void createBMCDump() = 0;
@@ -249,6 +270,12 @@ class BMCServices : public Services
         return std::make_unique<BMCChassisStatusMonitor>(
             bus, number, inventoryPath, options);
     }
+
+    /** @copydoc Services::hardPowerOff() */
+    virtual void hardPowerOff() override;
+
+    /** @copydoc Services::hardPowerCycle() */
+    virtual void hardPowerCycle() override;
 
     /** @copydoc Services::createBMCDump() */
     virtual void createBMCDump() override;
