@@ -18,7 +18,17 @@ psutils = executable(
     install: true,
     link_with: [libpower],
 )
-
+chassisstatustool = executable(
+    'chassis-status-tool',
+    'chassis-status-tool.cpp',
+    dependencies: [
+        cli11_dep,
+        phosphor_dbus_interfaces,
+    ],
+    include_directories: [libpower_inc],
+    install: true,
+    link_with: [libpower],
+)
 if get_option('tests').allowed()
     subdir('test')
 endif
