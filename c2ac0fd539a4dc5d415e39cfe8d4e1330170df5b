@@ -33,6 +33,24 @@
       "message": "Do you need the chassis name in this message twice?",
       "revId": "c2ac0fd539a4dc5d415e39cfe8d4e1330170df5b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcc147fe_a171e24f",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-02-18T20:19:19Z",
+      "side": 1,
+      "message": "I\u0027m trying to be consistence with the messages to start with chassisX: \nbut if you want I can remove it.",
+      "parentUuid": "69ec9837_ddde1d47",
+      "revId": "c2ac0fd539a4dc5d415e39cfe8d4e1330170df5b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
