@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7be8ac06_0c897b51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1d1224a_77db7242",
+      "range": {
+        "startLine": 7,
+        "startChar": 45,
+        "endLine": 7,
+        "endChar": 51
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16e3dd45_84e2c063",
@@ -70,6 +94,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c8ce94e_1dc238ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16e3dd45_84e2c063",
+      "range": {
+        "startLine": 9,
+        "startChar": 57,
+        "endLine": 9,
+        "endChar": 64
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d62db0_c0a8d9c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3433c3cb_162996c6",
+      "range": {
+        "startLine": 9,
+        "startChar": 14,
+        "endLine": 9,
+        "endChar": 15
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "029615d9_e2245930",
@@ -87,6 +159,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "555c384a_8dfc20b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "029615d9_e2245930",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7718ea4c_09e84448",
@@ -100,6 +190,30 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "Nit: Spelling.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "868fee76_19d44870",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7718ea4c_09e84448",
       "range": {
         "startLine": 13,
         "startChar": 0,
@@ -179,6 +293,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ad9da98_ba18ed74",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ee330ca_5e8da58f",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bc30292_bb5908de",
@@ -196,6 +328,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f5c850e_fd3a0b66",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "In the documentation chassis 0 was called out as the \"global system designation for all sleds\", which is why I started there.",
+      "parentUuid": "9bc30292_bb5908de",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4167cde3_92fe2da1",
@@ -209,6 +359,30 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "You probably don\u0027t want to call this twice. I\u0027d suggest putting the value in a local as a result of the first call to std::atoi.\n\nNote you can also have CLI verify an option value and print a command line parsing error if the chassis number was not valid (\u003c1, not an integer, etc.)",
+      "range": {
+        "startLine": 19,
+        "startChar": 13,
+        "endLine": 19,
+        "endChar": 22
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59eabdac_d1546210",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4167cde3_92fe2da1",
       "range": {
         "startLine": 19,
         "startChar": 13,
@@ -242,6 +416,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a481d0a7_41c2003a",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4816e5e7_dc5c3a48",
+      "range": {
+        "startLine": 20,
+        "startChar": 9,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8cbbcdf_da325e2e",
@@ -255,6 +453,24 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "You might want to print\n```\nChassis 2\n```\n\nat the top.\n\nThen for each property print the property name + a colon before the try catch. Then in the catch you can print something like \"Unknown\" as the value with the exception error message indented on a line below?\n\ne.g.\n\n```\nChassis 2\n  Present: true\n  Available: unknown\n    Error: Property does not exist\n  Enabled: false\n  ...\n```",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c3b5be_fc36019a",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8cbbcdf_da325e2e",
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -276,6 +492,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e3d1409_a4c51d7b",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "I had brought it in from an example I used. I will remove it.",
+      "parentUuid": "3b3be378_2c763245",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c2d89ab_8514114d",
@@ -289,6 +523,30 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "Chassis status tool. You can probably delete the \"for OpenBMC\" part, since all the code in this repo is for OpenBMC.",
+      "range": {
+        "startLine": 93,
+        "startChar": 18,
+        "endLine": 93,
+        "endChar": 25
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c6dbf0a_5bbeae44",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c2d89ab_8514114d",
       "range": {
         "startLine": 93,
         "startChar": 18,
@@ -368,6 +626,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aff2cd1_2ce1fab6",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc4ca115_5e88fefc",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65115cc5_f64b7046",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b6befc0_88a0d357",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3f2aa3f_d47cb30e",
@@ -381,6 +675,30 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "I think \"Dump chassis status\" would be more clear.",
+      "range": {
+        "startLine": 97,
+        "startChar": 29,
+        "endLine": 97,
+        "endChar": 56
+      },
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db224716_5d5de751",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3f2aa3f_d47cb30e",
       "range": {
         "startLine": 97,
         "startChar": 29,
@@ -408,6 +726,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a3ae907_cd08ba6e",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "No, invalid options will throw an error message to the console \"The following argument was not expected: -arg\nRun with --help for more information\". A try catch is also not used around CLI11_PARSE in the other tools or apps in the phosphor power library.",
+      "parentUuid": "2c02ccf4_665fd716",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b82b2e44_86f60e47",
@@ -421,6 +757,24 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "I don\u0027t understand the usage of this variable. Did it previously contain a large returned string from dump(), and now it is just empty?",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e328482d_c534d9fd",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "I had brought it in from an example I used. I will remove it.",
+      "parentUuid": "b82b2e44_86f60e47",
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -442,6 +796,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb27144_55af4c56",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "398bd078_eaec50cb",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a60adb9d_37f06c4a",
@@ -455,6 +827,24 @@
       "writtenOn": "2026-02-17T20:38:28Z",
       "side": 1,
       "message": "I don\u0027t think this works correctly?",
+      "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "003d875d_29c061b6",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-19T15:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a60adb9d_37f06c4a",
       "revId": "22023a1791809e4f827e7ff50aa38aa4179dfe89",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
