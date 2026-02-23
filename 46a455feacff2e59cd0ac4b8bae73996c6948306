@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3cde335_30516c30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-23T15:45:46Z",
+      "side": 1,
+      "message": "Looking good. Some small comments.",
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4ae96a7_e9d82129",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-23T15:45:46Z",
+      "side": 1,
+      "message": "Could you remove the \" Requested\" part?\n\nYou are 100% correct. That is the true meaning of the property value.\n\nHowever, I think people will be confused. The reason is that even after a successful power on/off, it will still look like it was requested and has not yet completed. So we can probably avoid some future questions by making the description a little less accurate 😊",
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f41383_6d4ae86d",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-23T15:45:46Z",
+      "side": 1,
+      "message": "If this is just a chassis number now (which I think is good), the variable name should probably be chassisNumber.\n\nAlso, I think if you declare that local as an int, then CLI will give an error for non-ints and convert it for you.",
+      "range": {
+        "startLine": 124,
+        "startChar": 18,
+        "endLine": 124,
+        "endChar": 34
+      },
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e637ebf_59b95444",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-23T15:45:46Z",
+      "side": 1,
+      "message": "See comment above re: variable name and conversion.\n\nIf you decide to keep a string value initially, the new local should be chassisNumber. The OpenBMC coding convention is to use camelCase rather than snake_case for variables/functions/etc. It is a bit confusing since the standard libraries use snake_case, but we need to follow the convention.",
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
