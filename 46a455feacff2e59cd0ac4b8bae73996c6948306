@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4750ccf_54266ec2",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-23T20:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4ae96a7_e9d82129",
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7f41383_6d4ae86d",
@@ -58,6 +76,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f417ea97_ef66ae23",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-23T20:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7f41383_6d4ae86d",
+      "range": {
+        "startLine": 124,
+        "startChar": 18,
+        "endLine": 124,
+        "endChar": 34
+      },
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e637ebf_59b95444",
@@ -71,6 +113,24 @@
       "writtenOn": "2026-02-23T15:45:46Z",
       "side": 1,
       "message": "See comment above re: variable name and conversion.\n\nIf you decide to keep a string value initially, the new local should be chassisNumber. The OpenBMC coding convention is to use camelCase rather than snake_case for variables/functions/etc. It is a bit confusing since the standard libraries use snake_case, but we need to follow the convention.",
+      "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e460941_18d1d8b2",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-23T20:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e637ebf_59b95444",
       "revId": "46a455feacff2e59cd0ac4b8bae73996c6948306",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
