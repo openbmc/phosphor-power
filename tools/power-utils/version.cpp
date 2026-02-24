@@ -202,7 +202,7 @@ std::string getLatest(const std::vector<std::string>& versions)
     //                 ZZZZ is the communication version
     //
     // * XXXXYYYY:     XXXX is the primary version
-    //                 YYYY is the seconday version
+    //                 YYYY is the secondary version
     //
     // Inspur FP5280G2 PSU version is human readable text and a larger string
     // means a newer version.

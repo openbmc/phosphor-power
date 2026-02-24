@@ -353,7 +353,7 @@ bool Updater::isReadyToUpdate()
                 (voutStatus & status_vout::OV_FAULT))
             {
                 lg2::warning(
-                    "Unable to update PSU when other PSU has input/ouput fault PSU={PSU}, STATUS_WORD={STATUS}, VOUT_BYTE={VOUT}",
+                    "Unable to update PSU when other PSU has input/output fault PSU={PSU}, STATUS_WORD={STATUS}, VOUT_BYTE={VOUT}",
                     "PSU", p, "STATUS", lg2::hex, statusWord, "VOUT", lg2::hex,
                     voutStatus);
                 return false;

@@ -311,7 +311,7 @@ TEST_F(DeviceTests, ClearErrorHistory)
         EXPECT_CALL(errorLogging, logDBusError).Times(1);
         EXPECT_CALL(errorLogging, logPhaseFault).Times(1);
 
-        // Set Sensors service expections:
+        // Set Sensors service exceptions:
         // - startRail() and endRail() called 10 times
         MockSensors& sensors = services.getMockSensors();
         EXPECT_CALL(sensors, startRail).Times(10);

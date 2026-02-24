@@ -46,7 +46,7 @@ static constexpr auto CC_KW_SIZE = 4;
 constexpr auto LOG_LIMIT = 3;
 constexpr auto DEGLITCH_LIMIT = 3;
 constexpr auto PGOOD_DEGLITCH_LIMIT = 5;
-// Number of polls to remember that an AC fault occured. Should remain greater
+// Number of polls to remember that an AC fault occurred. Should remain greater
 // than PGOOD_DEGLITCH_LIMIT.
 constexpr auto AC_FAULT_LIMIT = 6;
 
@@ -387,7 +387,7 @@ class PowerSupply
     }
 
     /**
-     * @brief Returns true if there is a 12Vcs (standy power) fault.
+     * @brief Returns true if there is a 12Vcs (standby power) fault.
      */
     bool hasPS12VcsFault() const
     {

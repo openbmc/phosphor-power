@@ -128,7 +128,7 @@ std::string PowerControl::findPgoodFault(
     std::map<std::string, std::string>& additionalData)
 {
     // Note: This code is temporary. It will be replaced when additional
-    // multi-chassis support is implementated in this application.
+    // multi-chassis support is implemented in this application.
     std::string error{};
     if (system)
     {

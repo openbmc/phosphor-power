@@ -160,7 +160,7 @@ class PowerControl : public PowerObject
     gpiod::line powerControlLine;
 
     /**
-     * Point in time at which minumum power off time will have passed
+     * Point in time at which minimum power off time will have passed
      */
     std::chrono::time_point<std::chrono::steady_clock> powerOnAllowedTime;
 

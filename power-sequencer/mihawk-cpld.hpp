@@ -78,7 +78,7 @@ class MihawkCPLD : public Device
     /**
      * Checks for PoweronFault on Mihawk's
      * CPLD-power_on-error-interrupt-bit-register
-     * whether is transfered to "1".
+     * whether is transferred to "1".
      *
      * @return bool - true if power_on fail.
      */
@@ -92,7 +92,7 @@ class MihawkCPLD : public Device
     /**
      * Check for PowerreadyFault on Mihawk's
      * CPLD-power_ready-error-interrupt-bit-register
-     * whether is transfered to "1".
+     * whether is transferred to "1".
      *
      * @return bool - true if power_ready fail.
      */

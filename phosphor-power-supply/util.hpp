@@ -265,7 +265,7 @@ class GPIOInterface : public GPIOInterfaceBase
      *
      * Relies on write, so throws exception if line not found, etc.
      *
-     * @param[in] delay - Milliseconds to delay betwen low/high toggle.
+     * @param[in] delay - Milliseconds to delay between low/high toggle.
      */
     void toggleLowHigh(const std::chrono::milliseconds& delay) override;
 

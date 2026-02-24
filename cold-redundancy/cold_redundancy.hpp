@@ -62,7 +62,7 @@ class ColdRedundancy
     boost::asio::steady_timer filterTimer;
 
     /**
-     * @brief Indicates the dbus connction
+     * @brief Indicates the dbus connection
      */
     [[maybe_unused]] std::shared_ptr<sdbusplus::asio::connection>& systemBus;
 
