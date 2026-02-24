@@ -406,7 +406,7 @@ class Chassis
     void powerStateChanged(sdbusplus::message_t& msg);
 
     /**
-     * @breif Attempt to create GPIO
+     * @brief Attempt to create GPIO
      */
     void attemptToCreatePowerConfigGPIO();
 

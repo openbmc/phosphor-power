@@ -209,7 +209,7 @@ TEST(TemporaryFileTests, MoveAssignmentOperator)
         EXPECT_EQ(file2.getPath(), path2);
         EXPECT_TRUE(fs::exists(path2));
 
-        // Make second temporary file removeable so destructor can delete it
+        // Make second temporary file removable so destructor can delete it
         makeFileRemovable(path2);
     }
 }

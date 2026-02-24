@@ -119,7 +119,7 @@ void Manager::configure()
         services.getErrorLogging().logConfigFileError(Entry::Level::Critical,
                                                       services.getJournal());
 
-        // Throw InternalFailure to propogate error status to D-Bus client
+        // Throw InternalFailure to propagate error status to D-Bus client
         throw sdbusplus::xyz::openbmc_project::Common::Error::InternalFailure{};
     }
 }

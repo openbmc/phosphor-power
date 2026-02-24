@@ -6,7 +6,7 @@ A rule is a sequence of actions that can be shared by multiple regulators in the
 config file. Rules define a standard way to perform an operation. Rules are used
 to minimize duplication in the config file.
 
-For example, the following action sequences might be sharable using a rule:
+For example, the following action sequences might be shareable using a rule:
 
 - Actions that set the output voltage of a regulator rail
 - Actions that read all the sensors of a regulator rail

@@ -230,7 +230,7 @@ void DBusErrorLogging::logError(
         auto respMsg = bus.call(reqMsg);
 
         // Remove FFDC files.  If an exception occurs before this, the files
-        // will be deleted by FFDCFile desctructor but errors will be ignored.
+        // will be deleted by FFDCFile destructor but errors will be ignored.
         removeFFDCFiles(files, journal);
     }
     catch (const std::exception& e)

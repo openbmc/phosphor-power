@@ -731,7 +731,7 @@ TEST_F(PowerSupplyTests, OnOffConfig)
             .Times(1)
             .WillOnce(Return("205000"));
         psu.analyze();
-        // I definitely should be writting ON_OFF_CONFIG if I call the function
+        // I definitely should be writing ON_OFF_CONFIG if I call the function
         EXPECT_CALL(mockPMBus, writeBinary(ON_OFF_CONFIG, ElementsAre(0x15),
                                            Type::HwmonDeviceDebug))
             .Times(1);

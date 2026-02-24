@@ -132,7 +132,7 @@ constexpr auto OT_FAULT = 0x80;
 
 constexpr auto ON_OFF_CONFIG = "on_off_config";
 
-// From PMBus Specification Part II Revsion 1.2:
+// From PMBus Specification Part II Revision 1.2:
 // The ON_OFF_CONFIG command configures the combination of CONTROL pin input
 // and serial bus commands needed to turn the unit on and off. This includes how
 // the unit responds when power is applied.

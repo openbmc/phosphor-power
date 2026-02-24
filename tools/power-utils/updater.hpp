@@ -260,7 +260,7 @@ class Updater
     }
 
     /**
-     * @brief Accessor to retieve eventLoggedThisSession status
+     * @brief Accessor to retrieve eventLoggedThisSession status
      *
      * @return true or false
      */
@@ -341,7 +341,7 @@ std::unique_ptr<updater::Updater> getClassInstance(
  *
  * @param[in] directory - Path to FS directory
  *
- * @retun filename or null
+ * @return filename or null
  */
 const std::string getFWFilenamePath(const std::string& directory);
 

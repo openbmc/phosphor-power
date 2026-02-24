@@ -34,7 +34,7 @@ namespace phosphor::power::regulators
  * regulators.
  *
  * Rules define a standard way to perform an operation.  For example, the
- * following action sequences might be sharable using a rule:
+ * following action sequences might be shareable using a rule:
  * - Actions that set the output voltage of a regulator rail
  * - Actions that read all the sensors of a regulator rail
  * - Actions that detect down-level hardware using version registers
