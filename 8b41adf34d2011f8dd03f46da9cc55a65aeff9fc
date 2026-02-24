@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec0b8f42_8398568b",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-02-24T22:47:33Z",
+      "side": 1,
+      "message": "@Shawn to you want copyright headers?",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "044ee7b6_121a52cf",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-02-24T22:47:33Z",
+      "side": 1,
+      "message": "constexpr size_t numChassis \u003d 8;\nis preferred over defines in c++\n\ncould also use \u0027auto\u0027, \u0027int\u0027, or whatever",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c93faa_9ede1858",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-02-24T22:47:33Z",
+      "side": 1,
+      "message": "adding blank lines to logically separate parts is usually a good idea, though if Shawn was OK then I am.",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
