@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f60414bb_1dd232d6",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-25T15:42:06Z",
+      "side": 1,
+      "message": "Good point. To be consistent with the other files in this repo you should probably copy the comment block at the top of one of the existing files (like phosphor-power-sequencer/src/chassis.cpp). The year in the comment should be 2026 as it is the creation date.",
+      "parentUuid": "ec0b8f42_8398568b",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "044ee7b6_121a52cf",
         "filename": "tools/power-utils/chassis-status-tool.cpp",
         "patchSetId": 5
@@ -54,6 +72,41 @@
       "writtenOn": "2026-02-24T22:47:33Z",
       "side": 1,
       "message": "adding blank lines to logically separate parts is usually a good idea, though if Shawn was OK then I am.",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa994bbb_eef35def",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-25T15:42:06Z",
+      "side": 1,
+      "message": "Good point. This would be more readable if there was a blank line between the block that handles each property. Matt meant blank lines in the source code, not the tool output.",
+      "parentUuid": "80c93faa_9ede1858",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d56204b8_3f5bf2d4",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-25T15:42:06Z",
+      "side": 1,
+      "message": "Matt mentioned offline that a newer C++ method for printing output that is preferred is use of std::print and std::println. That supports substitution parameters like std::format, and the latter adds a newline to the end.\n\ne.g.\n\n```\nstd::println(\"\");\nstd::println(\"Chassis {}:\", chassisNumber);\nstd::print(\"    Present: \");\nstd::println(\"{}\", (chassis.isPresent() \u003d\u003d 1 ? \"True\" : \"False\"));\n...\nstd::println(stderr, \"       {}\", e.what());\n```",
       "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
