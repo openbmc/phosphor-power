@@ -36,6 +36,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "215cdee3_44172a27",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T16:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f60414bb_1dd232d6",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "044ee7b6_121a52cf",
@@ -49,6 +67,30 @@
       "writtenOn": "2026-02-24T22:47:33Z",
       "side": 1,
       "message": "constexpr size_t numChassis \u003d 8;\nis preferred over defines in c++\n\ncould also use \u0027auto\u0027, \u0027int\u0027, or whatever",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad49ef18_d4bd3425",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T16:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "044ee7b6_121a52cf",
       "range": {
         "startLine": 8,
         "startChar": 0,
@@ -107,6 +149,42 @@
       "writtenOn": "2026-02-25T15:42:06Z",
       "side": 1,
       "message": "Matt mentioned offline that a newer C++ method for printing output that is preferred is use of std::print and std::println. That supports substitution parameters like std::format, and the latter adds a newline to the end.\n\ne.g.\n\n```\nstd::println(\"\");\nstd::println(\"Chassis {}:\", chassisNumber);\nstd::print(\"    Present: \");\nstd::println(\"{}\", (chassis.isPresent() \u003d\u003d 1 ? \"True\" : \"False\"));\n...\nstd::println(stderr, \"       {}\", e.what());\n```",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1f73d5d_a13c6051",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T16:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa994bbb_eef35def",
+      "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d17862fb_2bb43c30",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T16:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d56204b8_3f5bf2d4",
       "revId": "8b41adf34d2011f8dd03f46da9cc55a65aeff9fc",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
