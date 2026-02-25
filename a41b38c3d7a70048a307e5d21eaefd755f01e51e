@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80b23598_cbf33e83",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T19:50:11Z",
+      "side": 1,
+      "message": "Had it in for a function when I first start this story, will remove.",
+      "parentUuid": "b9795877_0a6f561a",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 19
+      },
+      "revId": "a41b38c3d7a70048a307e5d21eaefd755f01e51e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d1cb34c_c4bdeb46",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-02-25T18:38:28Z",
       "side": 1,
       "message": "can be changed.",
+      "range": {
+        "startLine": 59,
+        "startChar": 3,
+        "endLine": 59,
+        "endChar": 14
+      },
+      "revId": "a41b38c3d7a70048a307e5d21eaefd755f01e51e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "268b9c11_a6e99b06",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-02-25T19:50:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d1cb34c_c4bdeb46",
       "range": {
         "startLine": 59,
         "startChar": 3,
