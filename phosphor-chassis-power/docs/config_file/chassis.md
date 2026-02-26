@@ -19,7 +19,7 @@ equipment rack.
 | FaultLatchedGpio      | No       | [GPIO](gpio.md) | The GPIO to monitor that indicates if an input power fault was latched for this chassis (eg between reads of unlatched gpio) |
 | FaultLatchResetGpio   | No       | [GPIO](gpio.md) | The GPIO to reset the latched input power loss gpio for this chassis                                                         |
 | EnableSystemResetGpio | No       | [GPIO](gpio.md) | The GPIO to enable a full system reset if/when this chassis has a loss of input power                                        |
-| PresencePath          | No       | [GPIO](gpio.md) | File path that indicates whether chassis is present. If file exists, chassis is present                                      |
+| PresencePath          | No       |  string         | File path that indicates whether chassis is present. If file exists, chassis is present                                      |
 
 ## Chassis Presence
 
