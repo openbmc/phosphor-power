@@ -3,6 +3,9 @@ phosphor_chassis_power_include_directories = include_directories('.', '../..')
 phosphor_chassis_power_library = static_library(
     'phosphor-power-chassis-library',
     'manager.cpp',
+    'chassis.cpp',
+    'gpio.cpp',
+    'config_file_parser.cpp',
     implicit_include_directories: false,
     dependencies: [
         phosphor_dbus_interfaces,
