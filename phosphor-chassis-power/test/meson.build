@@ -1,7 +1,11 @@
 # Test applications
 phosphor_chassis_power_tests_source_files = [
     'manager_tests.cpp',
+    'gpio_tests.cpp',
+    'chassis_tests.cpp',
+    'config_file_parser_tests.cpp',
 ]
+
 test(
     'phosphor-chassis-power-tests',
     executable(
@@ -9,6 +13,7 @@ test(
         phosphor_chassis_power_tests_source_files,
         dependencies: [
             gtest,
+            nlohmann_json_dep,
             phosphor_logging,
             sdbusplus,
             sdeventplus,
