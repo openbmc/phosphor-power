@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "699c7ac9_c266374a",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-26T14:42:31Z",
+      "side": 1,
+      "message": "This file I believe would be better named as manager_test.cpp.\nthe Chassis object would us this name of chassis_test.cpp.",
+      "revId": "f27a55e5cef6ebf0fe481a46f41dd5c5253e3e6f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
