@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e517c43c_e63bb2f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-02-26T22:12:07Z",
+      "side": 1,
+      "message": "Waiting for Downstream openbmc bump off Building block to be present.",
+      "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
