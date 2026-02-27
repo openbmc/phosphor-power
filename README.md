@@ -18,7 +18,7 @@ Actively-maintained applications:
   power supply monitoring application.
 - [phosphor-regulators](phosphor-regulators/README.md): JSON-driven application
   that configures and monitors voltage regulators.
-- tools/power-utils: Power supply utilities.
+- [tools](tools/README.md): Power supply and chassis utilities.
 
 Legacy applications:
 
