@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b02a595_2d091417",
+        "filename": "tools/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-27T23:34:41Z",
+      "side": 1,
+      "message": "displaying might be a better word here. Viewing may connotate a GUI or something fancier.",
+      "range": {
+        "startLine": 12,
+        "startChar": 68,
+        "endLine": 12,
+        "endChar": 75
+      },
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5747d09_058fe156",
+        "filename": "tools/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-27T23:34:41Z",
+      "side": 1,
+      "message": "The phosphor-regulators application uses this library extensively as well to communicate with voltage regulator devices. You could omit the sentence or say something like \"Used by multiple phosphor-power applications to communicate directly with hardware devices\".",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45bd3165_344ecc63",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-27T23:34:41Z",
+      "side": 1,
+      "message": "This sentence is a little confusing. Most of it is within parentheses, and the word \"poll\" here might imply something more than a one-time lookup of D-Bus properties.\n\nMaybe something like \"Dump the status of all chassis (0-8). Display status even if a chassis is not physically present\"?",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e22501d6_35095317",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-02-27T23:34:41Z",
+      "side": 1,
+      "message": "I think this would be more helpful if it didn\u0027t have all the errors. Maybe for both chassis 0 and chassis 8, show a valid value for all properties. Same comment for the single chassis example.",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
