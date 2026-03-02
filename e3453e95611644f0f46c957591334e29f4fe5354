@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c95dc4e5_9262d819",
+        "filename": "tools/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-02T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b02a595_2d091417",
+      "range": {
+        "startLine": 12,
+        "startChar": 68,
+        "endLine": 12,
+        "endChar": 75
+      },
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5747d09_058fe156",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-02-27T23:34:41Z",
       "side": 1,
       "message": "The phosphor-regulators application uses this library extensively as well to communicate with voltage regulator devices. You could omit the sentence or say something like \"Used by multiple phosphor-power applications to communicate directly with hardware devices\".",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2443934f_47898283",
+        "filename": "tools/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-02T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5747d09_058fe156",
       "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "097cf897_f10ac80f",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-02T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45bd3165_344ecc63",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e22501d6_35095317",
@@ -71,6 +131,24 @@
       "writtenOn": "2026-02-27T23:34:41Z",
       "side": 1,
       "message": "I think this would be more helpful if it didn\u0027t have all the errors. Maybe for both chassis 0 and chassis 8, show a valid value for all properties. Same comment for the single chassis example.",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a124b38e_e605116c",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-02T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e22501d6_35095317",
       "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
