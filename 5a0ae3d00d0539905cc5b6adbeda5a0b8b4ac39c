@@ -1,6 +1,415 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32556864_6c4b77a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Good start Brendan. Thanks again for writing some tests.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42f401b1_10f22065",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "I think you may have some unused headers. We try to be careful to add headers we use (not relying on indirect inclusion) and to remove headers we don\u0027t use.\n\nI don\u0027t think (?) you need async.hpp or either of the signal.hpp files?",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3989fee_8482326f",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "I don\u0027t think these two includes are used.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af5984a1_c180a080",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please put a blank line between constants.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91a76262_72dcf710",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Note that /tmp is cleared on a BMC reboot. I think putting the test file here is fine as long as you don\u0027t need it to survive a BMC reboot.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d74f76_29d9c7c0",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please put blank lines between blocks of code that are a new topic or algorithm step.\n\nIn this case, between the timer lines, finder lines, and bus name lines.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac2fd29_f92f91ec",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please put a blank line between method definitions and global functions.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b927d2a9_c375e906",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Nit: types",
+      "range": {
+        "startLine": 61,
+        "startChar": 34,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a44e1c5c_41569e0e",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "lg2 supports its own replacement syntax, so you don\u0027t need to use std::format.\n\nDocs are here: https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2\n\nThis line, for example, would be:\n```\nlg2::info(\"Compatible system types found: {TYPES}\", \"TYPES\", typesStr);\n```\n\nSame comment applies to other calls to lg2 in this file.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3a5a9f_de2f490c",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "I think you are going to get a duplicate replacement here. lg2 supports specifying exceptions as a replacement variable. And I would guess it just calls e.what(). So I think this can be simplified to:\n\n```\nlg2::error(\"Unable to load configuration file: {EXCEPTION}\", \"EXCEPTION\", e);\n```",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0d64f47_a035c662",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Should probably add a copyright to your files as we discussed with the tool.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d06f8a1_523c57cd",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "As mentioned in the previous file, make sure to remove headers you are not use. Do you need signal.hpp?",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42be2082_564a994e",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Need doxygen.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae77ca9_76d96cea",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please put a blank line between all method and data member declarations.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "698250f2_8a4cabd7",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "This sentence is not true, right? Please be careful when copy/pasting code. It is a good way to start, but you need to read through and modify content as appropriate.",
+      "range": {
+        "startLine": 58,
+        "startChar": 16,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7faa66c9_f5605866",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Thank you for writing automated tests!\n\nMinor suggestion. The file naming scheme for the tests in this repo is \u003cclass_name_lower_case\u003e_tests.cpp.\n\nSo can you rename this file to end with \u0027s\u0027? Remember to also update the meson.build file.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77b6bdf9_fc6996e3",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "I don\u0027t think you are currently using mocking? You can probably remove this header and add it back later if you start using mocks for testing this class.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c106b4_84623758",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "As mentioned earlier, please put a blank line between method declarations/definitions.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50fab723_44e6cd79",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "As mentioned earlier, please put a blank line between blocks of code or steps in algorithm. In general, when a comment precedes some code, that comment should be preceded by a blank line for readability.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5eb525e_7fe8d5f4",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please indent this like any other code.\n```\n        constexpr const char* configJson \u003d R\"([\n            {\n                \"ChassisNumber\": 1,\n                \"PresenceGpio\": {\n                    \"Name\": \"presence-chassis1\",\n                    \"Direction\": \"Input\",\n                    \"Polarity\": \"Low\"\n                }\n            }\n        ])\";\n```",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 0
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "387d4d74_e13a0890",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "The convention in this repository is to have one TEST or TEST_F for each method/function you are testing.\n\nSometimes the method is not public, so it has to be tested indirectly by calling public methods.\n\nBut please organize your tests so that each TEST or TEST_F covers all the variations for a single method/function.\n\nYou can put blocks of code around each variation so that you don\u0027t run into duplicate local variables.\n\ne.g.\n```\nTEST_F(ManagerTests, Method_Being_Tested)\n{\n    // Test where file is found\n    {\n       ...\n    }\n    \n    // Test where file is not found\n    {\n       ...\n    }\n}\n```",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9ee26db_3c009f08",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "I believe each TEST_F creates a new instance of the ManagerTests object. So if for each test case you want to clear all the files in the test dir or create a Manager object, you can do that in the ManagerTests constructor.\n\nNot a required change. Just a suggestion to reduce duplication.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d969d62f_384e86a7",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Please put a blank line between TEST functions",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3049ac96_a4c573bb",
@@ -20,6 +429,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d11103da_3426d3c4",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "Agree.",
+      "parentUuid": "3049ac96_a4c573bb",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f1265b2_836978c9",
         "filename": "phosphor-chassis-power/test/meson.build",
         "patchSetId": 3
@@ -31,6 +458,23 @@
       "writtenOn": "2026-03-02T23:15:30Z",
       "side": 1,
       "message": "to be consistent with other apps I suggest we use: phosphor-chassis-power-tests",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b86d6aa_c63caac8",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T15:53:27Z",
+      "side": 1,
+      "message": "This is fine for now. But as more tests are written, I\u0027d suggest putting the code that is used by both tests and the real executable into a static library. Then both can link with that library. See the phosphor-regulators or phosphor-power-sequencer executables/tests for an example.",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
