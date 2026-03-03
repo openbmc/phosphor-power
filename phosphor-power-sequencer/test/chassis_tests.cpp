@@ -256,6 +256,9 @@ TEST(ChassisTests, Constructor)
               std::chrono::seconds{PGOOD_TIMEOUT});
     EXPECT_EQ(chassis.getPowerGoodFaultLogDelay(), std::chrono::seconds{7});
     EXPECT_TRUE(chassis.getPowerSupplyError().empty());
+    EXPECT_EQ(chassis.getObjectPath(), "/org/openbmc/control/power1");
+    EXPECT_FALSE(chassis.hasDBusInterface());
+    EXPECT_THROW(chassis.getDBusInterface(), std::runtime_error);
 }
 
 TEST(ChassisTests, GetNumber)
@@ -660,6 +663,11 @@ TEST(ChassisTests, GetPowerState)
         EXPECT_CALL(device, open).Times(1);
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
         chassis->monitor(services);
 
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
@@ -729,6 +737,11 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_CALL(device, open).Times(1);
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
 
@@ -748,6 +761,11 @@ TEST(ChassisTests, CanSetPowerState)
         auto& device = getMockDevice(*chassis, 0);
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
@@ -965,6 +983,10 @@ TEST(ChassisTests, SetPowerState)
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
         EXPECT_CALL(device, powerOn).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         chassis->setPowerSupplyError(
@@ -996,6 +1018,10 @@ TEST(ChassisTests, SetPowerState)
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
         EXPECT_CALL(device, powerOff).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         chassis->setPowerSupplyError(
@@ -1043,6 +1069,11 @@ TEST(ChassisTests, GetPowerGood)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
     }
@@ -1058,6 +1089,11 @@ TEST(ChassisTests, GetPowerGood)
         auto& device = getMockDevice(*chassis, 0);
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
@@ -1084,6 +1120,11 @@ TEST(ChassisTests, IsInPowerStateTransition)
         EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
@@ -1101,6 +1142,11 @@ TEST(ChassisTests, IsInPowerStateTransition)
         auto& device = getMockDevice(*chassis, 0);
         EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
@@ -1121,6 +1167,10 @@ TEST(ChassisTests, IsInPowerStateTransition)
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(false));
         EXPECT_CALL(device, powerOn).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         // Monitor to set initial state to off
@@ -1155,6 +1205,10 @@ TEST(ChassisTests, IsInPowerStateTransition)
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
         EXPECT_CALL(device, powerOff).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Monitor to set initial state to on
@@ -1192,6 +1246,10 @@ TEST(ChassisTests, IsInPowerStateTransition)
             .WillOnce(Return(true));
         EXPECT_CALL(device, powerOn).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         // Monitor to set initial state
@@ -1235,6 +1293,10 @@ TEST(ChassisTests, IsInPowerStateTransition)
             .WillOnce(Return(false));
         EXPECT_CALL(device, powerOff).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Monitor to set initial state
@@ -1295,6 +1357,10 @@ TEST(ChassisTests, Monitor)
             .WillOnce(Return(true))
             .WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
 
@@ -1337,6 +1403,10 @@ TEST(ChassisTests, Monitor)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, close).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -1374,6 +1444,9 @@ TEST(ChassisTests, HasPowerGoodFault)
         .WillOnce(Return(true))
         .WillOnce(Return(false));
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
         .Times(1);
 
@@ -1404,6 +1477,9 @@ TEST(ChassisTests, GetPowerGoodFault)
         .WillOnce(Return(true))
         .WillOnce(Return(false));
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
         .Times(1);
 
@@ -1506,6 +1582,9 @@ TEST(ChassisTests, ClearErrorHistory)
         .WillOnce(Return(true))
         .WillOnce(Return(false));
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
         .Times(1);
 
@@ -1536,7 +1615,7 @@ TEST(ChassisTests, ClearErrorHistory)
 
 TEST(ChassisTests, GetPowerGoodTimeout)
 {
-    std::unique_ptr<Chassis> chassis = createChassis(0);
+    std::unique_ptr<Chassis> chassis = createChassis(1);
 
     // Verify the default timeout value, which is a meson option expressed in
     // seconds. getPowerGoodTimeout() returns duration expressed in
@@ -1556,6 +1635,31 @@ TEST(ChassisTests, GetPowerGoodTimeout)
     chassis->setPowerGoodTimeout(newValueInMillis);
     EXPECT_EQ(chassis->getPowerGoodTimeout(), newValueInMillis);
     EXPECT_EQ(chassis->getPowerGoodTimeout().count(), 400);
+
+    // Verify value is set in D-Bus interface
+    {
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        setChassisStatusToGood(*chassis);
+
+        auto& device = getMockDevice(*chassis, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
+        chassis->setPowerGoodTimeout(std::chrono::seconds{3});
+        chassis->monitor(services);
+        EXPECT_TRUE(chassis->hasDBusInterface());
+        EXPECT_EQ(chassis->getDBusInterface().getPgoodTimeoutProperty(), 3);
+
+        chassis->setPowerGoodTimeout(std::chrono::seconds{5});
+        EXPECT_EQ(chassis->getDBusInterface().getPgoodTimeoutProperty(), 5);
+    }
 }
 
 TEST(ChassisTests, SetPowerGoodTimeout)
@@ -1613,6 +1717,98 @@ TEST(ChassisTests, SetPowerSupplyError)
     // The test variations are covered by GetPowerSupplyError
 }
 
+TEST(ChassisTests, GetObjectPath)
+{
+    size_t number{3};
+    std::string inventoryPath{"/xyz/openbmc_project/inventory/system/chassis3"};
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers;
+    ChassisStatusMonitorOptions monitorOptions;
+    Chassis chassis{number, inventoryPath, std::move(powerSequencers),
+                    monitorOptions};
+
+    EXPECT_EQ(chassis.getObjectPath(), "/org/openbmc/control/power3");
+}
+
+TEST(ChassisTests, HasDBusInterface)
+{
+    // The test variations are covered by SetPowerGoodValue
+}
+
+TEST(ChassisTests, GetDBusInterface)
+{
+    // The test variations are covered by SetPowerGoodValue
+}
+
+TEST(ChassisTests, SetPowerStateValue)
+{
+    // The test variations are covered by SetPowerGoodValue
+}
+
+TEST(ChassisTests, SetPowerGoodValue)
+{
+    std::unique_ptr<Chassis> chassis = createChassis(1);
+    MockServices services;
+
+    chassis->initializeMonitoring(services);
+    setChassisStatusToGood(*chassis);
+
+    auto& device = getMockDevice(*chassis, 0);
+    EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+    EXPECT_CALL(device, powerOn).Times(1);
+    EXPECT_CALL(device, getPowerGood)
+        .WillOnce(Return(true))
+        .WillOnce(Return(false));
+    EXPECT_CALL(device, powerOff).Times(1);
+
+    EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
+    EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+
+    // Verify power state, power good, and D-Bus interface initially not valid
+    EXPECT_THROW(chassis->getPowerState(), std::runtime_error);
+    EXPECT_THROW(chassis->getPowerGood(), std::runtime_error);
+    EXPECT_FALSE(chassis->hasDBusInterface());
+    EXPECT_THROW(chassis->getDBusInterface(), std::runtime_error);
+
+    // Power on chassis. Power good and D-Bus interface not valid.
+    chassis->setPowerState(PowerState::on, services);
+    EXPECT_EQ(chassis->getPowerState(), PowerState::on);
+    EXPECT_THROW(chassis->getPowerGood(), std::runtime_error);
+    EXPECT_FALSE(chassis->hasDBusInterface());
+
+    // Monitor. Power good on. Creates D-Bus interface.
+    chassis->monitor(services);
+    EXPECT_EQ(chassis->getPowerState(), PowerState::on);
+    EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
+    EXPECT_TRUE(chassis->hasDBusInterface());
+    EXPECT_EQ(chassis->getDBusInterface().getChassisNumber(), 1);
+    EXPECT_EQ(chassis->getDBusInterface().getStateProperty(), 1);
+    EXPECT_EQ(chassis->getDBusInterface().getPgoodProperty(), 1);
+    EXPECT_EQ(chassis->getDBusInterface().getPgoodTimeoutProperty(),
+              chassis->getPowerGoodTimeout().count() / 1000);
+
+    // Power off chassis
+    chassis->setPowerState(PowerState::off, services);
+    EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+    EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
+    EXPECT_EQ(chassis->getDBusInterface().getStateProperty(), 0);
+    EXPECT_EQ(chassis->getDBusInterface().getPgoodProperty(), 1);
+
+    // Monitor. Power good off.
+    chassis->monitor(services);
+    EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+    EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
+    EXPECT_EQ(chassis->getDBusInterface().getStateProperty(), 0);
+    EXPECT_EQ(chassis->getDBusInterface().getPgoodProperty(), 0);
+}
+
+TEST(ChassisTests, CreateDBusInterfaceIfPossible)
+{
+    // The test variations are covered by SetPowerGoodValue
+}
+
 TEST(ChassisTests, VerifyMonitoringInitialized)
 {
     // The test variations are covered by GetStatusMonitor
@@ -1638,6 +1834,11 @@ TEST(ChassisTests, OpenDeviceIfNeeded)
         EXPECT_CALL(device, open).Times(1);
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
         chassis->monitor(services);
     }
 
@@ -1653,6 +1854,11 @@ TEST(ChassisTests, OpenDeviceIfNeeded)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, open).Times(0);
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
 
         chassis->monitor(services);
     }
@@ -1681,6 +1887,33 @@ TEST(ChassisTests, UpdatePowerGood)
         EXPECT_STREQ(e.what(), "Present property value could not be obtained.");
     }
 
+    // Test where not present: Sets power good and initial power state to off
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(*chassis);
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(false));
+
+        auto& device = getMockDevice(*chassis, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, getPowerGood).Times(0);
+        EXPECT_CALL(device, close).Times(1);
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
+        // Call monitor(). Chassis not present. Sets power good to off. Sets
+        // initial power state to off since it had no previous value.
+        chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+        EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
+    }
+
     // Test where not present: Sets power good to off: Closes devices
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
@@ -1703,6 +1936,10 @@ TEST(ChassisTests, UpdatePowerGood)
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
         EXPECT_CALL(device, close).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
@@ -1743,6 +1980,10 @@ TEST(ChassisTests, UpdatePowerGood)
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
         EXPECT_CALL(device, close).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
@@ -1812,6 +2053,11 @@ TEST(ChassisTests, UpdatePowerGood)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
@@ -1873,6 +2119,10 @@ TEST(ChassisTests, ReadPowerGood)
                 .WillOnce(Return(false));
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
 
@@ -1898,6 +2148,11 @@ TEST(ChassisTests, ReadPowerGood)
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
@@ -1915,6 +2170,11 @@ TEST(ChassisTests, ReadPowerGood)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
@@ -1931,6 +2191,11 @@ TEST(ChassisTests, ReadPowerGood)
         auto& device = getMockDevice(*chassis, 0);
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
@@ -1956,6 +2221,11 @@ TEST(ChassisTests, ReadPowerGood)
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
@@ -1979,6 +2249,11 @@ TEST(ChassisTests, ReadPowerGood)
             EXPECT_CALL(device, isOpen).WillOnce(Return(true));
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
         }
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
@@ -2004,6 +2279,11 @@ TEST(ChassisTests, ReadPowerGood)
             EXPECT_CALL(device, isOpen).WillOnce(Return(true));
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
         }
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
 
         chassis->monitor(services);
         EXPECT_FALSE(chassis->isInPowerStateTransition());
@@ -2037,6 +2317,10 @@ TEST(ChassisTests, ReadPowerGood)
             EXPECT_CALL(device, powerOff).Times(1);
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Monitor first time. Both devices are on. Sets powerState and
@@ -2078,6 +2362,10 @@ TEST(ChassisTests, SetInitialPowerStateIfNeeded)
             .WillOnce(Return(true))
             .WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
 
@@ -2106,6 +2394,11 @@ TEST(ChassisTests, SetInitialPowerStateIfNeeded)
         EXPECT_CALL(device, getPowerGood)
             .WillOnce(Return(false))
             .WillOnce(Return(true));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
 
         // Monitor first time: Power good is off: Sets power state to off
         chassis->monitor(services);
@@ -2238,6 +2531,10 @@ TEST(ChassisTests, PowerOn)
             EXPECT_CALL(device, powerOn).Times(1);
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         // Call monitor to set initial power state to off
@@ -2349,6 +2646,10 @@ TEST(ChassisTests, PowerOff)
             EXPECT_CALL(device, powerOff).Times(1);
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Call monitor to set initial power state to on
@@ -2377,6 +2678,11 @@ TEST(ChassisTests, UpdateInPowerStateTransition)
             .WillOnce(Return(false))
             .WillOnce(Return(true))
             .WillOnce(Return(false));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
 
         EXPECT_FALSE(chassis->isInPowerStateTransition());
 
@@ -2446,6 +2752,10 @@ TEST(ChassisTests, UpdateInPowerStateTransition)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         // Monitor: Not in transition: Power state and power good set to off
@@ -2481,6 +2791,10 @@ TEST(ChassisTests, UpdateInPowerStateTransition)
         EXPECT_CALL(device, powerOff).Times(1);
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Monitor: Not in transition: Power state and power good set to on
@@ -2518,6 +2832,10 @@ TEST(ChassisTests, UpdateInPowerStateTransition)
             .WillOnce(Return(true))
             .WillOnce(Return(false));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
         // Monitor: Not in transition: Power state and power good set to on
@@ -2554,6 +2872,10 @@ TEST(ChassisTests, UpdateInPowerStateTransition)
             .WillOnce(Return(false))
             .WillOnce(Return(true));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
         // Monitor: Not in transition: Power state and power good set to off
@@ -2593,6 +2915,10 @@ TEST(ChassisTests, CheckForPowerGoodError)
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is off"))
+            .Times(1);
         EXPECT_CALL(services,
                     logErrorMsg("Power on failed in chassis 1: Timeout"))
             .Times(1);
@@ -2661,6 +2987,10 @@ TEST(ChassisTests, CheckForPowerGoodError)
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
 
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is on"))
+            .Times(1);
         EXPECT_CALL(services,
                     logErrorMsg("Power off failed in chassis 1: Timeout"))
             .Times(1);
@@ -2730,6 +3060,10 @@ TEST(ChassisTests, CheckForPowerGoodError)
             .WillRepeatedly(Return(true));
 
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg).Times(0);
         EXPECT_CALL(services, logError).Times(0);
 
@@ -2791,6 +3125,10 @@ TEST(ChassisTests, CheckForPowerGoodError)
             .WillRepeatedly(Return(false));
 
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg).Times(0);
         EXPECT_CALL(services, logError).Times(0);
 
@@ -2842,6 +3180,10 @@ TEST(ChassisTests, CheckForPowerGoodError)
             .WillRepeatedly(Return(false));
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
@@ -2915,6 +3257,11 @@ TEST(ChassisTests, CheckForPowerGoodError)
 
             chassis->initializeMonitoring(services);
             setChassisStatusToGood(*chassis);
+
+            EXPECT_CALL(
+                services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+                .Times(1);
 
             chassis->monitor(services);
             EXPECT_EQ(chassis->getPowerState(), PowerState::on);
@@ -3072,6 +3419,10 @@ TEST(ChassisTests, LogPowerGoodFault)
         EXPECT_CALL(device, findPgoodFault(_, "", _))
             .WillOnce(DoAll(SetArgReferee<2>(additionalData), Return(error)));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
@@ -3124,6 +3475,10 @@ TEST(ChassisTests, LogPowerGoodFault)
             .WillRepeatedly(Return(false));
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
@@ -3177,6 +3532,10 @@ TEST(ChassisTests, LogPowerGoodFault)
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is off"))
+            .Times(1);
         EXPECT_CALL(services,
                     logErrorMsg("Power on failed in chassis 1: Timeout"))
             .Times(1);
@@ -3220,6 +3579,10 @@ TEST(ChassisTests, LogPowerGoodFault)
             .WillRepeatedly(Return(false));
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
@@ -3286,6 +3649,10 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             EXPECT_CALL(device, findPgoodFault).Times(0);
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
@@ -3350,6 +3717,10 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
                     DoAll(SetArgReferee<2>(additionalData), Return(error)));
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
@@ -3409,6 +3780,10 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
@@ -3471,6 +3846,10 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             EXPECT_CALL(device, findPgoodFault).Times(0);
         }
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is on and power good is on"))
+            .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(
@@ -3534,6 +3913,11 @@ TEST(ChassisTests, CheckForInvalidStatus)
         // No error messages should be logged since power state is off
         EXPECT_CALL(services, logErrorMsg).Times(0);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
         chassis->monitor(services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
         EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
@@ -3561,6 +3945,10 @@ TEST(ChassisTests, CheckForInvalidStatus)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, close).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -3606,6 +3994,10 @@ TEST(ChassisTests, CheckForInvalidStatus)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, close).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -3649,6 +4041,10 @@ TEST(ChassisTests, CheckForInvalidStatus)
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(false));
         EXPECT_CALL(device, powerOn).Times(1);
 
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -3693,6 +4089,9 @@ TEST(ChassisTests, HandleStateOnButNotPresent)
     EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
     EXPECT_CALL(device, close).Times(testing::AtLeast(1));
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(
         services,
         logErrorMsg(
@@ -3740,6 +4139,9 @@ TEST(ChassisTests, HandleStateOnButNoInputPower)
     EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
     EXPECT_CALL(device, close).Times(testing::AtLeast(1));
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(
         services,
         logErrorMsg(
@@ -3766,6 +4168,7 @@ TEST(ChassisTests, HandleStateOnButNoInputPower)
     // Monitor again. Error should be logged again.
     chassis->monitor(services);
 }
+
 TEST(ChassisTests, HandleStateOnButNotAvailable)
 {
     std::unique_ptr<Chassis> chassis = createChassis(1);
@@ -3785,6 +4188,9 @@ TEST(ChassisTests, HandleStateOnButNotAvailable)
     EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
     EXPECT_CALL(device, close).Times(0);
 
+    EXPECT_CALL(services,
+                logInfoMsg("Chassis 1 power state is on and power good is on"))
+        .Times(1);
     EXPECT_CALL(
         services,
         logErrorMsg(

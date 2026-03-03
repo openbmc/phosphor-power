@@ -18,16 +18,13 @@
 
 #include "types.hpp"
 
-#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/exception.hpp>
-#include <sdbusplus/sdbus.hpp>
 #include <sdbusplus/server.hpp>
-
-#include <string>
-#include <tuple>
 
 namespace phosphor::power::sequencer
 {
+constexpr auto powerInterfaceDBusErrorName =
+    "org.openbmc.ControlPower.Error.Failed";
 
 PowerInterface::PowerInterface(sdbusplus::bus_t& bus, const char* path) :
     serverInterface(bus, path, POWER_IFACE, vtable, this)
@@ -43,9 +40,7 @@ int PowerInterface::callbackGetPgood(
         try
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
-            int pgood = pwrObj->getPgood();
-            lg2::debug("callbackGetPgood: {PGOOD}", "PGOOD", pgood);
-
+            int pgood = pwrObj->getPgoodProperty();
             sdbusplus::message_t(msg).append(pgood);
         }
         catch (const sdbusplus::exception_t& e)
@@ -73,10 +68,7 @@ int PowerInterface::callbackGetPgoodTimeout(
         try
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
-            int timeout = pwrObj->getPgoodTimeout();
-            lg2::debug("callbackGetPgoodTimeout: {TIMEOUT}", "TIMEOUT",
-                       timeout);
-
+            int timeout = pwrObj->getPgoodTimeoutProperty();
             sdbusplus::message_t(msg).append(timeout);
         }
         catch (const sdbusplus::exception_t& e)
@@ -87,7 +79,7 @@ int PowerInterface::callbackGetPgoodTimeout(
     else
     {
         // The message or context were null
-        lg2::error("Unable to service get pgood timeout property callback");
+        lg2::error("Unable to service get pgood_timeout property callback");
         return -1;
     }
 
@@ -102,11 +94,9 @@ int PowerInterface::callbackGetPowerState(sd_bus_message* msg, void* context,
         try
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
-            // Return the current power state of the GPIO, rather than the last
+            // Return the current power good value, rather than the last
             // requested power state change
-            int pgood = pwrObj->getPgood();
-            lg2::debug("callbackGetPowerState: {PGOOD}", "PGOOD", pgood);
-
+            int pgood = pwrObj->getPgoodProperty();
             auto reply = sdbusplus::message_t(msg).new_method_return();
             reply.append(pgood);
             reply.method_return();
@@ -139,10 +129,17 @@ int PowerInterface::callbackSetPgoodTimeout(
 
             int timeout{};
             m.read(timeout);
-            lg2::info("callbackSetPgoodTimeout: {TIMEOUT}", "TIMEOUT", timeout);
-
+            if (timeout < 0)
+            {
+                return sd_bus_error_set(error, powerInterfaceDBusErrorName,
+                                        "Invalid pgood timeout");
+            }
             auto pwrObj = static_cast<PowerInterface*>(context);
-            pwrObj->setPgoodTimeout(timeout);
+            lg2::info(
+                "Chassis {CHASSIS_NUMBER}: D-Bus pgood_timeout property set to {TIMEOUT}",
+                "CHASSIS_NUMBER", pwrObj->getChassisNumber(), "TIMEOUT",
+                timeout);
+            pwrObj->setPowerGoodTimeout(timeout);
         }
         catch (const sdbusplus::exception_t& e)
         {
@@ -152,7 +149,7 @@ int PowerInterface::callbackSetPgoodTimeout(
     else
     {
         // The message or context were null
-        lg2::error("Unable to service set pgood timeout property callback");
+        lg2::error("Unable to service set pgood_timeout property callback");
         return -1;
     }
 
@@ -169,9 +166,7 @@ int PowerInterface::callbackGetState(
         try
         {
             auto pwrObj = static_cast<PowerInterface*>(context);
-            int state = pwrObj->getState();
-            lg2::debug("callbackGetState: {STATE}", "STATE", state);
-
+            int state = pwrObj->getStateProperty();
             sdbusplus::message_t(msg).append(state);
         }
         catch (const sdbusplus::exception_t& e)
@@ -203,20 +198,34 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
 
             if (state != 1 && state != 0)
             {
-                return sd_bus_error_set(error,
-                                        "org.openbmc.ControlPower.Error.Failed",
+                return sd_bus_error_set(error, powerInterfaceDBusErrorName,
                                         "Invalid power state");
             }
-            lg2::info("callbackSetPowerState: {STATE}", "STATE", state);
 
             auto pwrObj = static_cast<PowerInterface*>(context);
-            pwrObj->setState(state);
-
+            lg2::info(
+                "Chassis {CHASSIS_NUMBER}: D-Bus setPowerState method called with value {STATE}",
+                "CHASSIS_NUMBER", pwrObj->getChassisNumber(), "STATE", state);
+            if (state == pwrObj->getStateProperty())
+            {
+                lg2::info(
+                    "Chassis {CHASSIS_NUMBER} is already at the requested power state",
+                    "CHASSIS_NUMBER", pwrObj->getChassisNumber());
+            }
+            else
+            {
+                pwrObj->setPowerState(state);
+            }
             m.new_method_return().method_return();
         }
         catch (const sdbusplus::exception_t& e)
         {
             return sd_bus_error_set(error, e.name(), e.description());
+        }
+        catch (const std::exception& e)
+        {
+            return sd_bus_error_set(error, powerInterfaceDBusErrorName,
+                                    e.what());
         }
     }
     else
@@ -240,10 +249,12 @@ int PowerInterface::callbackSetPowerSupplyError(
 
             std::string psError{};
             m.read(psError);
-            lg2::info("callbackSetPowerSupplyError: {PSERROR}", "PSERROR",
-                      psError);
 
             auto pwrObj = static_cast<PowerInterface*>(context);
+            lg2::info(
+                "Chassis {CHASSIS_NUMBER}: D-Bus setPowerSupplyError method called with value \"{PSERROR}\"",
+                "CHASSIS_NUMBER", pwrObj->getChassisNumber(), "PSERROR",
+                psError);
             pwrObj->setPowerSupplyError(psError);
 
             m.new_method_return().method_return();
@@ -265,19 +276,16 @@ int PowerInterface::callbackSetPowerSupplyError(
 
 void PowerInterface::emitPowerGoodSignal()
 {
-    lg2::info("emitPowerGoodSignal");
     serverInterface.new_signal("PowerGood").signal_send();
 }
 
 void PowerInterface::emitPowerLostSignal()
 {
-    lg2::info("emitPowerLostSignal");
     serverInterface.new_signal("PowerLost").signal_send();
 }
 
 void PowerInterface::emitPropertyChangedSignal(const char* property)
 {
-    lg2::info("emitPropertyChangedSignal: {PROPERTY}", "PROPERTY", property);
     serverInterface.property_changed(property);
 }
 
@@ -298,7 +306,7 @@ const sdbusplus::vtable::vtable_t PowerInterface::vtable[] = {
     sdbusplus::vtable::property("state", "i", callbackGetState,
                                 sdbusplus::vtable::property_::emits_change),
     // Property pgood_timeout is type int, read write, and uses the emits_change
-    // flag
+    // flag. Unit is seconds.
     sdbusplus::vtable::property("pgood_timeout", "i", callbackGetPgoodTimeout,
                                 callbackSetPgoodTimeout,
                                 sdbusplus::vtable::property_::emits_change),

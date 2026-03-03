@@ -16,6 +16,8 @@
 
 #include "chassis.hpp"
 
+#include "types.hpp"
+
 namespace phosphor::power::sequencer
 {
 
@@ -39,6 +41,21 @@ const std::string powerOffTimeoutError =
  * Logged when no specific voltage rail was found that caused the fault.
  */
 const std::string shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
+
+Chassis::Chassis(
+    size_t number, const std::string& inventoryPath,
+    std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers,
+    const ChassisStatusMonitorOptions& monitorOptions) :
+    number{number}, inventoryPath{inventoryPath},
+    powerSequencers{std::move(powerSequencers)}, monitorOptions{monitorOptions}
+{
+    // Disable monitoring for D-Bus properties owned by this application
+    this->monitorOptions.isPowerStateMonitored = false;
+    this->monitorOptions.isPowerGoodMonitored = false;
+
+    // Define the D-Bus object path for this chassis
+    objectPath = std::format(CHASSIS_POWER_PATH, number);
+}
 
 std::tuple<bool, std::string> Chassis::canSetPowerState(
     PowerState newPowerState)
@@ -98,7 +115,7 @@ void Chassis::setPowerState(PowerState newPowerState, Services& services)
         std::format("Powering {} chassis {}",
                     PowerInterface::toString(newPowerState), number));
 
-    powerState = newPowerState;
+    setPowerStateValue(newPowerState, services);
     isInStateTransition = true;
     powerGoodTimeoutTime = getCurrentTime() + powerGoodTimeout;
 
@@ -140,6 +157,38 @@ void Chassis::closeDevices()
     }
 }
 
+void Chassis::createDBusInterfaceIfPossible(Services& services)
+{
+    // Do nothing if interface was already created
+    if (interface)
+    {
+        return;
+    }
+
+    // Do nothing if power state or power good is not defined
+    if (!powerState || !powerGood)
+    {
+        return;
+    }
+
+    // Create D-Bus interface for chassis
+    sdbusplus::bus_t& bus = services.getBus();
+    const char* path = objectPath.c_str();
+    int state = static_cast<int>(*powerState);
+    int pgood = static_cast<int>(*powerGood);
+    int pgoodTimeout =
+        std::chrono::duration_cast<std::chrono::seconds>(powerGoodTimeout)
+            .count();
+    interface = std::make_unique<ChassisPowerInterface>(bus, path, state, pgood,
+                                                        pgoodTimeout, *this);
+
+    // Log initial power state and power good
+    services.logInfoMsg(
+        std::format("Chassis {} power state is {} and power good is {}", number,
+                    PowerInterface::toString(*powerState),
+                    PowerInterface::toString(*powerGood)));
+}
+
 void Chassis::updatePowerGood(Services& services)
 {
     if (!isPresent() || !isInputPowerGood())
@@ -147,14 +196,14 @@ void Chassis::updatePowerGood(Services& services)
         // Set power good to off, but do not change power state. Requested power
         // state has not changed. Enables recovery if presence/input power
         // source (such as a GPIO) experiences transitory hardware problem.
-        powerGood = PowerGood::off;
+        setPowerGoodValue(PowerGood::off, services);
         closeDevices();
     }
     else if (isPresent() && isAvailable() && isInputPowerGood())
     {
         readPowerGood(services);
-        setInitialPowerStateIfNeeded();
     }
+    setInitialPowerStateIfNeeded(services);
 }
 
 void Chassis::readPowerGood(Services& services)
@@ -182,22 +231,22 @@ void Chassis::readPowerGood(Services& services)
     if (powerGoodOnCount == powerSequencers.size())
     {
         // All devices have power good on; set chassis power good to on
-        powerGood = PowerGood::on;
+        setPowerGoodValue(PowerGood::on, services);
     }
     else if (powerGoodOffCount == powerSequencers.size())
     {
         // All devices have power good off; set chassis power good to off
-        powerGood = PowerGood::off;
+        setPowerGoodValue(PowerGood::off, services);
     }
     else if (!isInStateTransition && (powerGoodOffCount > 0))
     {
         // If we are not in a state transition and any devices are off, then set
         // chassis power good to off
-        powerGood = PowerGood::off;
+        setPowerGoodValue(PowerGood::off, services);
     }
 }
 
-void Chassis::setInitialPowerStateIfNeeded()
+void Chassis::setInitialPowerStateIfNeeded(Services& services)
 {
     if (!powerState)
     {
@@ -205,11 +254,11 @@ void Chassis::setInitialPowerStateIfNeeded()
         {
             if (powerGood == PowerGood::off)
             {
-                powerState = PowerState::off;
+                setPowerStateValue(PowerState::off, services);
             }
             else
             {
-                powerState = PowerState::on;
+                setPowerStateValue(PowerState::on, services);
             }
         }
     }

@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
+#include "config.h"
+
 #include "system.hpp"
+
+#include "types.hpp"
 
 #include <exception>
 
@@ -45,7 +49,10 @@ void System::setPowerState(PowerState newPowerState, Services& services)
             PowerInterface::toString(newPowerState))};
     }
 
-    powerState = newPowerState;
+    services.logInfoMsg(std::format("Powering {} system",
+                                    PowerInterface::toString(newPowerState)));
+
+    setPowerStateValue(newPowerState, services);
     isInStateTransition = true;
 
     // Save list of chassis selected for current power on/off attempt
@@ -71,10 +78,10 @@ void System::monitor(Services& services)
     setInitialSelectedChassisIfNeeded();
 
     // Set the system power good based on the selected chassis power good values
-    setPowerGood();
+    setPowerGood(services);
 
     // Set initial system power state based on system power good if needed
-    setInitialPowerStateIfNeeded();
+    setInitialPowerStateIfNeeded(services);
 
     // Update whether system is still in a power state transition
     updateInPowerStateTransition();
@@ -82,6 +89,36 @@ void System::monitor(Services& services)
     // Check selected chassis for power good faults or invalid chassis status
     checkForPowerGoodFaults(services);
     checkForInvalidChassisStatus(services);
+}
+
+void System::createDBusInterfaceIfPossible(Services& services)
+{
+    // Do nothing if interface was already created
+    if (interface)
+    {
+        return;
+    }
+
+    // Do nothing if power state or power good is not defined
+    if (!powerState || !powerGood)
+    {
+        return;
+    }
+
+    // Create D-Bus interface for system
+    sdbusplus::bus_t& bus = services.getBus();
+    const char* path = SYSTEM_POWER_PATH;
+    int state = static_cast<int>(*powerState);
+    int pgood = static_cast<int>(*powerGood);
+    int pgoodTimeout = PGOOD_TIMEOUT;
+    interface = std::make_unique<SystemPowerInterface>(
+        bus, path, state, pgood, pgoodTimeout, *this, services);
+
+    // Log initial power state and power good
+    services.logInfoMsg(
+        std::format("System power state is {} and power good is {}",
+                    PowerInterface::toString(*powerState),
+                    PowerInterface::toString(*powerGood)));
 }
 
 std::set<size_t> System::getChassisForNewPowerState(PowerState newPowerState,
@@ -194,7 +231,7 @@ void System::setInitialSelectedChassisIfNeeded()
     }
 }
 
-void System::setPowerGood()
+void System::setPowerGood(Services& services)
 {
     // Return if there are no chassis selected for a power on/off attempt
     if (selectedChassis.empty())
@@ -229,18 +266,18 @@ void System::setPowerGood()
     if (powerGoodOnCount == selectedChassis.size())
     {
         // All selected chassis are on; set system power good to on
-        powerGood = PowerGood::on;
+        setPowerGoodValue(PowerGood::on, services);
     }
     else if (powerGoodOffCount == selectedChassis.size())
     {
         // All selected chassis are off; set system power good to off
-        powerGood = PowerGood::off;
+        setPowerGoodValue(PowerGood::off, services);
     }
     else if (!isInStateTransition && (powerGoodOffCount > 0))
     {
         // If we are not in a state transition and any chassis are off, then set
         // system power good to off
-        powerGood = PowerGood::off;
+        setPowerGoodValue(PowerGood::off, services);
     }
 }
 
@@ -280,7 +317,7 @@ bool System::shouldUseChassisPowerGood(Chassis& aChassis)
     return false;
 }
 
-void System::setInitialPowerStateIfNeeded()
+void System::setInitialPowerStateIfNeeded(Services& services)
 {
     if (!powerState)
     {
@@ -288,11 +325,11 @@ void System::setInitialPowerStateIfNeeded()
         {
             if (powerGood == PowerGood::off)
             {
-                powerState = PowerState::off;
+                setPowerStateValue(PowerState::off, services);
             }
             else
             {
-                powerState = PowerState::on;
+                setPowerStateValue(PowerState::on, services);
             }
         }
     }

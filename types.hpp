@@ -38,7 +38,15 @@ constexpr auto POWER_GOOD_PROP = "pgood";
 constexpr auto ASSOC_PROP = "Associations";
 
 constexpr auto INVENTORY_OBJ_PATH = "/xyz/openbmc_project/inventory";
+// TODO: Replace instances of POWER_OBJ_PATH with SYSTEM_POWER_PATH
 constexpr auto POWER_OBJ_PATH = "/org/openbmc/control/power0";
+
+constexpr auto SYSTEM_POWER_PATH = "/org/openbmc/control/power0";
+constexpr auto CHASSIS_POWER_PATH = "/org/openbmc/control/power{}";
+constexpr auto CHASSIS_INPUT_POWER_STATUS_PATH =
+    "/xyz/openbmc_project/power/chassis/chassis{}";
+constexpr auto POWER_SUPPLIES_STATUS_PATH =
+    "/xyz/openbmc_project/power/power_supplies/chassis{}/psus";
 
 constexpr auto INPUT_HISTORY = "input_history";
 
