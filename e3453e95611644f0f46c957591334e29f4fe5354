@@ -120,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6118d179_12b2ebcd",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-03T14:59:21Z",
+      "side": 1,
+      "message": "You marked this done, but you didn\u0027t change this sentence. You did change one in the Usage section?",
+      "parentUuid": "097cf897_f10ac80f",
+      "revId": "e3453e95611644f0f46c957591334e29f4fe5354",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e22501d6_35095317",
         "filename": "tools/docs/chassis-status-tool.md",
         "patchSetId": 1
