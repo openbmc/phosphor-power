@@ -48,7 +48,11 @@ class MockServices : public Services
     MockServices& operator=(MockServices&&) = delete;
     virtual ~MockServices() = default;
 
-    MOCK_METHOD(sdbusplus::bus_t&, getBus, (), (override));
+    virtual sdbusplus::bus_t& getBus() override
+    {
+        return bus;
+    }
+
     MOCK_METHOD(void, logErrorMsg, (const std::string& message), (override));
     MOCK_METHOD(void, logInfoMsg, (const std::string& message), (override));
     MOCK_METHOD(void, logError,
@@ -82,6 +86,12 @@ class MockServices : public Services
     MOCK_METHOD(void, hardPowerCycle, (), (override));
     MOCK_METHOD(void, createBMCDump, (), (override));
     MOCK_METHOD(void, clearCache, (), (override));
+
+  private:
+    /**
+     * D-Bus bus object.
+     */
+    sdbusplus::bus_t bus{sdbusplus::bus::new_default()};
 };
 
 } // namespace phosphor::power::sequencer

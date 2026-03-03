@@ -18,6 +18,7 @@
 #include "chassis.hpp"
 #include "power_interface.hpp"
 #include "services.hpp"
+#include "system_power_interface.hpp"
 
 #include <stddef.h> // for size_t
 
@@ -106,6 +107,8 @@ class System
      *
      * Powers the system on or off based on the specified state.
      *
+     * Updates the state property on the D-Bus power interface for the system.
+     *
      * Throws an exception if one of the following occurs:
      * - System monitoring has not been initialized
      * - System cannot be set to the specified power state
@@ -167,6 +170,8 @@ class System
      * Sets the system power good value by obtaining the power good value from
      * each chassis selected for the current power on/off attempt.
      *
+     * Updates the pgood property on the D-Bus power interface for the system.
+     *
      * This method must be called once per second to update the power good value
      * and to detect power errors.
      *
@@ -185,6 +190,9 @@ class System
      * If a power state change is already occurring, the new value will not be
      * used until the next power state change.
      *
+     * Updates the pgood_timeout property on the D-Bus power interface for the
+     * system.
+     *
      * @param newTimeout New timeout value
      */
     void setPowerGoodTimeout(std::chrono::milliseconds newTimeout)
@@ -192,6 +200,15 @@ class System
         for (auto& curChassis : chassis)
         {
             curChassis->setPowerGoodTimeout(newTimeout);
+        }
+
+        if (interface)
+        {
+            // Set pgood_timeout property to corresponding number of seconds
+            int timeoutInSecs =
+                std::chrono::duration_cast<std::chrono::seconds>(newTimeout)
+                    .count();
+            interface->setPgoodTimeoutProperty(timeoutInSecs);
         }
     }
 
@@ -217,7 +234,82 @@ class System
         hasRequestedPowerOff = false;
     }
 
+    /**
+     * Returns whether the D-Bus power interface has been created for the
+     * system.
+     *
+     * @return true if D-Bus interface exists, false otherwise
+     */
+    bool hasDBusInterface() const
+    {
+        return interface != nullptr;
+    }
+
+    /**
+     * Returns the D-Bus power interface for the system.
+     *
+     * Throws an exception if the D-Bus interface has not been created.
+     *
+     * @return reference to SystemPowerInterface object
+     */
+    const SystemPowerInterface& getDBusInterface() const
+    {
+        if (!interface)
+        {
+            throw std::runtime_error{"D-Bus interface not created for system"};
+        }
+        return *interface;
+    }
+
   private:
+    /**
+     * Sets the power state value for this system.
+     *
+     * Also updates the state value on the D-Bus power interface.
+     *
+     * @param newPowerState New power state value
+     * @param services System services like hardware presence and the journal
+     */
+    void setPowerStateValue(PowerState newPowerState, Services& services)
+    {
+        powerState = newPowerState;
+        createDBusInterfaceIfPossible(services);
+        if (interface)
+        {
+            interface->setStateProperty(static_cast<int>(*powerState));
+        }
+    }
+
+    /**
+     * Sets the power good value for this system.
+     *
+     * Also updates the pgood value on the D-Bus power interface.
+     *
+     * @param newPowerGood New power good value
+     * @param services System services like hardware presence and the journal
+     */
+    void setPowerGoodValue(PowerGood newPowerGood, Services& services)
+    {
+        powerGood = newPowerGood;
+        createDBusInterfaceIfPossible(services);
+        if (interface)
+        {
+            interface->setPgoodProperty(static_cast<int>(*powerGood));
+        }
+    }
+
+    /**
+     * Create the D-Bus power interface for this system if possible.
+     *
+     * The interface cannot be created unless the power state and power good
+     * values are defined.
+     *
+     * Does nothing if the interface has already been created.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void createDBusInterfaceIfPossible(Services& services);
+
     /**
      * Verifies that system monitoring has been initialized.
      *
@@ -299,8 +391,10 @@ class System
     /**
      * Sets the system power good value based on the selected chassis power good
      * values.
+     *
+     * @param services System services like hardware presence and the journal
      */
-    void setPowerGood();
+    void setPowerGood(Services& services);
 
     /**
      * Returns whether the power good value from the specified chassis should be
@@ -322,8 +416,10 @@ class System
      *
      * The power state value will be set explicitly next time the system is
      * powered on or off by setPowerState().
+     *
+     * @param services System services like hardware presence and the journal
      */
-    void setInitialPowerStateIfNeeded();
+    void setInitialPowerStateIfNeeded(Services& services);
 
     /**
      * Updates isInStateTransition based on the current power state and power
@@ -451,6 +547,14 @@ class System
      * Indicates whether a hard power off has been requested using systemd.
      */
     bool hasRequestedPowerOff{false};
+
+    /**
+     * D-Bus power interface for the system.
+     *
+     * Not created until the power state and power good values for the system
+     * have been determined.
+     */
+    std::unique_ptr<SystemPowerInterface> interface{};
 };
 
 } // namespace phosphor::power::sequencer

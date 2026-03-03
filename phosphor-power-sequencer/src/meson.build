@@ -3,12 +3,15 @@ phosphor_power_sequencer_include_directories = include_directories('.', '../..')
 phosphor_power_sequencer_library = static_library(
     'phosphor-power-sequencer',
     'chassis.cpp',
+    'chassis_power_interface.cpp',
     'config_file_parser.cpp',
     'pmbus_driver_device.cpp',
+    'power_interface.cpp',
     'rail.cpp',
     'services.cpp',
-    'system.cpp',
     'standard_device.cpp',
+    'system.cpp',
+    'system_power_interface.cpp',
     'ucd90160_device.cpp',
     'ucd90320_device.cpp',
     'ucd90x_device.cpp',
@@ -24,9 +27,8 @@ phosphor_power_sequencer_library = static_library(
 
 phosphor_power_sequencer = executable(
     'phosphor-power-control',
-    'power_control_main.cpp',
-    'power_control.cpp',
-    'power_interface.cpp',
+    'main.cpp',
+    'manager.cpp',
     dependencies: [
         libgpiodcxx,
         nlohmann_json_dep,

@@ -3,21 +3,23 @@
 ## Key classes
 
 - PowerInterface
-  - Defines the `org.openbmc.control.Power` D-Bus interface.
-  - The `state` property is set to power the chassis on or off. This contains
-    the desired power state.
-  - The `pgood` property contains the actual power state of the chassis.
-- PowerControl
+  - Abstract base class that defines the `org.openbmc.control.Power` D-Bus
+    interface.
+  - The `state` property is set to power the system/chassis on or off. This
+    contains the desired power state.
+  - The `pgood` property contains the actual power state of the system/chassis.
+- SystemPowerInterface
+  - Sub-class of PowerInterface that handles system level D-Bus methods and
+    properties.
+- ChassisPowerInterface
+  - Sub-class of PowerInterface that handles chassis level D-Bus methods and
+    properties.
+- Manager
   - Created in `main()`. Handles the event loop.
-  - Sub-class of PowerInterface that provides a concrete implementation of the
-    `org.openbmc.control.Power` D-Bus interface.
-  - Finds and loads the JSON configuration file. This creates an instance of the
-    System class.
-  - Powers the chassis on and off using the `power-chassis-control` named GPIO.
-  - Monitors the chassis pgood status every 3 seconds using the
-    `power-chassis-good` named GPIO.
-  - Enforces a minimum power off time of 15 seconds from cold start and 25
-    seconds from power off.
+  - Finds and loads the JSON configuration file for the system type. This
+    creates an instance of the System class.
+  - Provides a timer that monitors the system and chassis every second by
+    calling the System::monitor() method.
 - System
   - The computer system being controlled and monitored by the BMC.
 - Chassis

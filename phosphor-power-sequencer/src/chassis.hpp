@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "chassis_power_interface.hpp"
 #include "chassis_status_monitor.hpp"
 #include "power_interface.hpp"
 #include "power_sequencer_device.hpp"
@@ -104,15 +105,7 @@ class Chassis
     explicit Chassis(
         size_t number, const std::string& inventoryPath,
         std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers,
-        const ChassisStatusMonitorOptions& monitorOptions) :
-        number{number}, inventoryPath{inventoryPath},
-        powerSequencers{std::move(powerSequencers)},
-        monitorOptions{monitorOptions}
-    {
-        // Disable monitoring for D-Bus properties owned by this application
-        this->monitorOptions.isPowerStateMonitored = false;
-        this->monitorOptions.isPowerGoodMonitored = false;
-    }
+        const ChassisStatusMonitorOptions& monitorOptions);
 
     /**
      * Returns the chassis number within the system.
@@ -312,6 +305,8 @@ class Chassis
      *
      * Powers the chassis on or off based on the specified state.
      *
+     * Updates the state property on the D-Bus power interface for this chassis.
+     *
      * Throws an exception if one of the following occurs:
      * - Chassis monitoring has not been initialized.
      * - Chassis D-Bus status cannot be obtained.
@@ -364,7 +359,9 @@ class Chassis
      * Sets the chassis power good value by reading the power good value from
      * each power sequencer device.
      *
-     * Reacts to any changes to chassis D-Bus properties.
+     * Updates the pgood property on the D-Bus power interface for this chassis.
+     *
+     * Reacts to any changes to chassis status D-Bus properties.
      *
      * This method must be called once per second to update the power good value
      * and to detect power errors.
@@ -457,11 +454,24 @@ class Chassis
      * If a power state change is already occurring, the new value will not be
      * used until the next power state change.
      *
+     * Updates the pgood_timeout property on the D-Bus power interface for this
+     * chassis.
+     *
      * @param newTimeout New timeout value
      */
     void setPowerGoodTimeout(std::chrono::milliseconds newTimeout)
     {
         powerGoodTimeout = newTimeout;
+
+        if (interface)
+        {
+            // Set pgood_timeout property to corresponding number of seconds
+            int timeoutInSecs =
+                std::chrono::duration_cast<std::chrono::seconds>(
+                    powerGoodTimeout)
+                    .count();
+            interface->setPgoodTimeoutProperty(timeoutInSecs);
+        }
     }
 
     /**
@@ -514,7 +524,93 @@ class Chassis
         powerSupplyError = error;
     }
 
+    /**
+     * Returns the D-Bus object path for this chassis.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getObjectPath() const
+    {
+        return objectPath;
+    }
+
+    /**
+     * Returns whether the D-Bus power interface has been created for this
+     * chassis.
+     *
+     * @return true if D-Bus interface exists, false otherwise
+     */
+    bool hasDBusInterface() const
+    {
+        return interface != nullptr;
+    }
+
+    /**
+     * Returns the D-Bus power interface for this chassis.
+     *
+     * Throws an exception if the D-Bus interface has not been created.
+     *
+     * @return reference to ChassisPowerInterface object
+     */
+    const ChassisPowerInterface& getDBusInterface() const
+    {
+        if (!interface)
+        {
+            throw std::runtime_error{std::format(
+                "D-Bus interface not created for chassis {}", number)};
+        }
+        return *interface;
+    }
+
   private:
+    /**
+     * Sets the power state value for this chassis.
+     *
+     * Also updates the state value on the D-Bus power interface.
+     *
+     * @param newPowerState New power state value
+     * @param services System services like hardware presence and the journal
+     */
+    void setPowerStateValue(PowerState newPowerState, Services& services)
+    {
+        powerState = newPowerState;
+        createDBusInterfaceIfPossible(services);
+        if (interface)
+        {
+            interface->setStateProperty(static_cast<int>(*powerState));
+        }
+    }
+
+    /**
+     * Sets the power good value for this chassis.
+     *
+     * Also updates the pgood value on the D-Bus power interface.
+     *
+     * @param newPowerGood New power good value
+     * @param services System services like hardware presence and the journal
+     */
+    void setPowerGoodValue(PowerGood newPowerGood, Services& services)
+    {
+        powerGood = newPowerGood;
+        createDBusInterfaceIfPossible(services);
+        if (interface)
+        {
+            interface->setPgoodProperty(static_cast<int>(*powerGood));
+        }
+    }
+
+    /**
+     * Create the D-Bus power interface for this chassis if possible.
+     *
+     * The interface cannot be created unless the power state and power good
+     * values are defined.
+     *
+     * Does nothing if the interface has already been created.
+     *
+     * @param services System services like hardware presence and the journal
+     */
+    void createDBusInterfaceIfPossible(Services& services);
+
     /**
      * Verifies that chassis monitoring has been initialized and a
      * ChassisStatusMonitor object has been created.
@@ -591,8 +687,10 @@ class Chassis
      *
      * The power state value will be set explicitly next time the chassis is
      * powered on or off by setPowerState().
+     *
+     * @param services System services like hardware presence and the journal
      */
-    void setInitialPowerStateIfNeeded();
+    void setInitialPowerStateIfNeeded(Services& services);
 
     /**
      * Powers on all the power sequencer devices in the chassis.
@@ -847,6 +945,19 @@ class Chassis
      * on but the chassis was not available.
      */
     bool hasLoggedNotAvailable{false};
+
+    /**
+     * D-Bus object path for this chassis.
+     */
+    std::string objectPath{};
+
+    /**
+     * D-Bus power interface for this chassis.
+     *
+     * Not created until the power state and power good values for the chassis
+     * have been determined.
+     */
+    std::unique_ptr<ChassisPowerInterface> interface{};
 };
 
 } // namespace phosphor::power::sequencer

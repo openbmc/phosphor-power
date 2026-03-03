@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "power_control.hpp"
+#include "manager.hpp"
 
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
@@ -25,6 +25,6 @@ int main()
     auto event = sdeventplus::Event::get_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    phosphor::power::sequencer::PowerControl control{bus, event};
+    phosphor::power::sequencer::Manager manager{bus, event};
     return event.loop();
 }

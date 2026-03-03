@@ -29,12 +29,6 @@ constexpr auto CHASSIS_INPUT_POWER_SERVICE =
     "xyz.openbmc_project.Power.Chassis";
 constexpr auto POWER_SUPPLY_SERVICE = "xyz.openbmc_project.Power.PSUMonitor";
 
-constexpr auto CHASSIS_POWER_PATH = "/org/openbmc/control/power{}";
-constexpr auto CHASSIS_INPUT_POWER_STATUS_PATH =
-    "/xyz/openbmc_project/power/chassis/chassis{}";
-constexpr auto POWER_SUPPLIES_STATUS_PATH =
-    "/xyz/openbmc_project/power/power_supplies/chassis{}/psus";
-
 BMCChassisStatusMonitor::BMCChassisStatusMonitor(
     sdbusplus::bus_t& bus, size_t number, const std::string& inventoryPath,
     const ChassisStatusMonitorOptions& options) :
