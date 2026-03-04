@@ -35,6 +35,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4226d155_7eba3eae",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42f401b1_10f22065",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf9430a1_fd19b435",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42f401b1_10f22065",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3989fee_8482326f",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "I don\u0027t think these two includes are used.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fff260b_95b84f97",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3989fee_8482326f",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -69,6 +123,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93e14746_2222bed3",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af5984a1_c180a080",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91a76262_72dcf710",
@@ -82,6 +154,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Note that /tmp is cleared on a BMC reboot. I think putting the test file here is fine as long as you don\u0027t need it to survive a BMC reboot.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08daeef7_62d331a3",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "It does not when I was writing unit tests I was getting files errors for every other directory. This was only made to be used for unit tests.",
+      "parentUuid": "91a76262_72dcf710",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -103,6 +193,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "821b89a5_b70c1b76",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07d74f76_29d9c7c0",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ac2fd29_f92f91ec",
@@ -116,6 +224,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Please put a blank line between method definitions and global functions.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ea99e9f_e331d532",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac2fd29_f92f91ec",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -143,6 +269,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "904b8118_e2a4eddd",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b927d2a9_c375e906",
+      "range": {
+        "startLine": 61,
+        "startChar": 34,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a44e1c5c_41569e0e",
@@ -156,6 +306,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "lg2 supports its own replacement syntax, so you don\u0027t need to use std::format.\n\nDocs are here: https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2\n\nThis line, for example, would be:\n```\nlg2::info(\"Compatible system types found: {TYPES}\", \"TYPES\", typesStr);\n```\n\nSame comment applies to other calls to lg2 in this file.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ca553a5_44d73eb8",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a44e1c5c_41569e0e",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -177,6 +345,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "120ee693_47d1eac9",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b3a5a9f_de2f490c",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0d64f47_a035c662",
@@ -190,6 +376,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Should probably add a copyright to your files as we discussed with the tool.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5abdbc_7df5cb03",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "I was a little confused, over the library it wasn\u0027t consistent with the headers being in both the hpp and cpp files. Such as power control in the sequencer only has the header in the cpp file.",
+      "parentUuid": "d0d64f47_a035c662",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -211,6 +415,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec2df9e_91eb18b7",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d06f8a1_523c57cd",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e943e8_97d0b41f",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d06f8a1_523c57cd",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42be2082_564a994e",
@@ -228,6 +468,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "583c1b4e_b5f99ad5",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42be2082_564a994e",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a561f80_b5f51e3e",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42be2082_564a994e",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ae77ca9_76d96cea",
@@ -241,6 +517,42 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Please put a blank line between all method and data member declarations.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3994768_b3e8a5ba",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ae77ca9_76d96cea",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae644ae0_1db71272",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ae77ca9_76d96cea",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -268,6 +580,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5bc192e_6daf28dc",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "698250f2_8a4cabd7",
+      "range": {
+        "startLine": 58,
+        "startChar": 16,
+        "endLine": 58,
+        "endChar": 75
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7faa66c9_f5605866",
@@ -281,6 +617,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Thank you for writing automated tests!\n\nMinor suggestion. The file naming scheme for the tests in this repo is \u003cclass_name_lower_case\u003e_tests.cpp.\n\nSo can you rename this file to end with \u0027s\u0027? Remember to also update the meson.build file.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04aab1a6_bfef2dfa",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7faa66c9_f5605866",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -302,6 +656,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64736681_497661c1",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77b6bdf9_fc6996e3",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56c106b4_84623758",
@@ -319,6 +691,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b8c236_5143b3ed",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56c106b4_84623758",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50fab723_44e6cd79",
@@ -332,6 +722,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "As mentioned earlier, please put a blank line between blocks of code or steps in algorithm. In general, when a comment precedes some code, that comment should be preceded by a blank line for readability.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "683e9ff5_4f79b00f",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50fab723_44e6cd79",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -359,6 +767,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b97a353_699c3dab",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5eb525e_7fe8d5f4",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 0
+      },
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "387d4d74_e13a0890",
@@ -372,6 +804,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "The convention in this repository is to have one TEST or TEST_F for each method/function you are testing.\n\nSometimes the method is not public, so it has to be tested indirectly by calling public methods.\n\nBut please organize your tests so that each TEST or TEST_F covers all the variations for a single method/function.\n\nYou can put blocks of code around each variation so that you don\u0027t run into duplicate local variables.\n\ne.g.\n```\nTEST_F(ManagerTests, Method_Being_Tested)\n{\n    // Test where file is found\n    {\n       ...\n    }\n    \n    // Test where file is not found\n    {\n       ...\n    }\n}\n```",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5b6e0d4_62fd8efd",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "387d4d74_e13a0890",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -393,6 +843,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ea0349_933de644",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9ee26db_3c009f08",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d969d62f_384e86a7",
@@ -406,6 +874,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "Please put a blank line between TEST functions",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a57521_72eabb1f",
+        "filename": "phosphor-chassis-power/test/manager_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d969d62f_384e86a7",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -445,6 +931,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "513c74ce_ec95e96b",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d11103da_3426d3c4",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f1265b2_836978c9",
@@ -462,6 +966,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6660b88_64614bd1",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f1265b2_836978c9",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b86d6aa_c63caac8",
@@ -475,6 +997,24 @@
       "writtenOn": "2026-03-03T15:53:27Z",
       "side": 1,
       "message": "This is fine for now. But as more tests are written, I\u0027d suggest putting the code that is used by both tests and the real executable into a static library. Then both can link with that library. See the phosphor-regulators or phosphor-power-sequencer executables/tests for an example.",
+      "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d95b8c7b_87d057f4",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-04T19:59:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b86d6aa_c63caac8",
       "revId": "5a0ae3d00d0539905cc5b6adbeda5a0b8b4ac39c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
