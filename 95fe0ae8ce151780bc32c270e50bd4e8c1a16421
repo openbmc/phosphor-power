@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "139ced1b_5a4735c8",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-04T22:06:27Z",
+      "side": 1,
+      "message": "Nit: Do you want a colon here like you have for the single chassis example?",
+      "range": {
+        "startLine": 32,
+        "startChar": 20,
+        "endLine": 32,
+        "endChar": 21
+      },
+      "revId": "95fe0ae8ce151780bc32c270e50bd4e8c1a16421",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
