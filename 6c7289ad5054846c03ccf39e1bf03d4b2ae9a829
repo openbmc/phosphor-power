@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "766f7856_e755175f",
+        "filename": "phosphor-power-sequencer/src/system.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-03-04T20:01:14Z",
+      "side": 1,
+      "message": "need a break or return here?\n\nupdate: I can see below you\u0027ll just skip additional ones, but it is a bit confusing.",
+      "revId": "6c7289ad5054846c03ccf39e1bf03d4b2ae9a829",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "706b13af_b649f89b",
+        "filename": "phosphor-power-sequencer/src/system.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-03-04T20:01:14Z",
+      "side": 1,
+      "message": "there\u0027s probably some way to make your own iterator or view to just go through the selected chassis, but probably not really worth the effort.",
+      "range": {
+        "startLine": 349,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 66
+      },
+      "revId": "6c7289ad5054846c03ccf39e1bf03d4b2ae9a829",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08028904_55e4cc27",
+        "filename": "phosphor-power-sequencer/src/system.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-03-04T20:01:14Z",
+      "side": 1,
+      "message": "same comment as above.",
+      "revId": "6c7289ad5054846c03ccf39e1bf03d4b2ae9a829",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
