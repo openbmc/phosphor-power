@@ -22,6 +22,30 @@
       },
       "revId": "e658020c198298f564bb6f76e6e88d7c49cb0a27",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb1b914f_913a5fc1",
+        "filename": "phosphor-regulators/test/device_tests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000397
+      },
+      "writtenOn": "2026-03-04T00:32:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66b53d02_cc172668",
+      "range": {
+        "startLine": 314,
+        "startChar": 31,
+        "endLine": 314,
+        "endChar": 41
+      },
+      "revId": "e658020c198298f564bb6f76e6e88d7c49cb0a27",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
