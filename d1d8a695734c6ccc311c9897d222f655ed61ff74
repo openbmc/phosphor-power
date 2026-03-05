@@ -50,6 +50,24 @@
       "message": "The change looks good.\n\nDid you verify that a bitbake of the full firmware image built cleanly? Did you verify the file was installed on the BMC in simulation?\n\nJust want to make sure I don\u0027t break the build by merging.\n\nIt helps to have a \u0027Tested:\u0027 section at the bottom of your commit, where you have a bullet list of high level things that were tested.\n\ne.g.\n```\nTested:\n* Verified ...\n* Ran in simulation and checked ...\n```",
       "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2df74d48_e6b97434",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-05T21:40:42Z",
+      "side": 1,
+      "message": "I did not get onto simulation,, That is a todo task. \nFriday task will be to start SIMICs with this built in.",
+      "parentUuid": "e04463e8_f8a1d3d5",
+      "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
