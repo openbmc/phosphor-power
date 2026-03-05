@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2303c2d3_ef4de34a",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-05T17:55:57Z",
+      "side": 1,
+      "message": "Was this comment copied from one of the other apps? For this app I think the compatible systems information is currently required right?",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca0361e_f250183e",
+        "filename": "phosphor-chassis-power/test/manager_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-05T17:55:57Z",
+      "side": 1,
+      "message": "I think this method of using inheritance to gain access to protected/private members is not recommended in the OpenBMC community.\n\nI would suggest making public get methods for the data members that you need to inspect. For the methods that are not currently public, you could make them public or test them indirectly by calling a public method.",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9fc4c8_3a18fb04",
+        "filename": "phosphor-chassis-power/test/manager_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-05T17:55:57Z",
+      "side": 1,
+      "message": "You may want to add a test for the constructor to verify the initial object state.",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
