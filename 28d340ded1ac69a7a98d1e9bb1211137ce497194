@@ -16,6 +16,24 @@
       "message": "I did the same thing in my story and Shawn suggested to put code that is used by tests and the executable into a static library that bath can link to. As well to See the phosphor-regulators or phosphor-power-sequencer executables/tests for an example.",
       "revId": "28d340ded1ac69a7a98d1e9bb1211137ce497194",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef2f3f00_c9a7a01c",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T14:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de273fb9_b1764491",
+      "revId": "28d340ded1ac69a7a98d1e9bb1211137ce497194",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

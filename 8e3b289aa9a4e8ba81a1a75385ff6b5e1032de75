@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21a5199_674cda96",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T14:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed2a7316_c5d02057",
+      "revId": "8e3b289aa9a4e8ba81a1a75385ff6b5e1032de75",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e2dd5e8_f026a0fe",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-03-03T20:03:21Z",
       "side": 1,
       "message": "This comment is confusing, maybe a higher level view type comment.",
+      "range": {
+        "startLine": 33,
+        "startChar": 3,
+        "endLine": 33,
+        "endChar": 62
+      },
+      "revId": "8e3b289aa9a4e8ba81a1a75385ff6b5e1032de75",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ea5e3a3_d7604516",
+        "filename": "phosphor-chassis-power/src/device.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T14:57:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e2dd5e8_f026a0fe",
       "range": {
         "startLine": 33,
         "startChar": 3,
