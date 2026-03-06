@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "types.hpp"
 #include "utility.hpp"
 
 #include <stddef.h> // for size_t
@@ -450,6 +451,93 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
     virtual bool isPowerSuppliesPowerGood() override
     {
         return (getPowerSuppliesStatus() == PowerSystemInputs::Status::Good);
+    }
+
+    /**
+     * Returns the D-Bus interface for the Present property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPresentInterface() const
+    {
+        return INVENTORY_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus interface for the Available property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getAvailableInterface() const
+    {
+        return AVAILABILITY_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus interface for the Enabled property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getEnabledInterface() const
+    {
+        return ENABLE_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus chassis power path.
+     *
+     * This path is used for both PowerState and PowerGood properties.
+     *
+     * @return D-Bus chassis power path
+     */
+    const std::string& getChassisPowerPath() const
+    {
+        return chassisPowerPath;
+    }
+
+    /**
+     * Returns the D-Bus power interface.
+     *
+     * This interface is used for both PowerState and PowerGood properties.
+     *
+     * @return D-Bus power interface
+     */
+    const char* getPowerInterface() const
+    {
+        return POWER_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the InputPowerStatus property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getInputPowerStatusPath() const
+    {
+        return chassisInputPowerStatusPath;
+    }
+
+    /**
+     * Returns the D-Bus object path for the PowerSuppliesStatus property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getPowerSuppliesStatusPath() const
+    {
+        return powerSuppliesStatusPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the PowerSystemInputs properties.
+     *
+     * This interface is used for both InputPowerStatus and
+     * PowerSuppliesStatus properties.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPowerSystemInputsInterface() const
+    {
+        return POWER_SYSTEM_INPUTS_IFACE;
     }
 
   protected:
