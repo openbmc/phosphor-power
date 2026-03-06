@@ -22,8 +22,11 @@
 #include <print>
 
 constexpr auto numChassis = 8;
+constexpr auto SMALL_INDENT = "    ";
+constexpr auto NORMAL_INDENT = "       ";
+constexpr auto LARGE_INDENT = "           ";
 
-void dump(sdbusplus::bus_t& bus, int chassisNumber)
+void dump(sdbusplus::bus_t& bus, int chassisNumber, bool isVerbose)
 {
     phosphor::power::util::ChassisStatusMonitorOptions monitorOptions{};
 
@@ -44,40 +47,70 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber)
     std::println("");
     std::println("Chassis {}", chassisNumber);
 
-    std::print("    Present: ");
+    bool hadException = false;
+
+    std::print("{}Present: ", SMALL_INDENT);
     try
     {
         std::println("{}", chassis.isPresent() == 1 ? "True" : "False");
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent, chassis.getPresentPath());
+        std::println("{}Interface: {}", indent, chassis.getPresentInterface());
     }
 
-    std::print("    Available: ");
+    hadException = false;
+
+    std::print("{}Available: ", SMALL_INDENT);
     try
     {
         std::println("{}", chassis.isAvailable() == 1 ? "True" : "False");
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent, chassis.getAvailablePath());
+        std::println("{}Interface: {}", indent,
+                     chassis.getAvailableInterface());
     }
 
-    std::print("    Enabled: ");
+    hadException = false;
+
+    std::print("{}Enabled: ", SMALL_INDENT);
     try
     {
         std::println("{}", chassis.isEnabled() == 1 ? "True" : "False");
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent, chassis.getEnabledPath());
+        std::println("{}Interface: {}", indent, chassis.getEnabledInterface());
     }
 
-    std::print("    Power state: ");
+    hadException = false;
+
+    std::print("{}Power state: ", SMALL_INDENT);
     try
     {
         std::println("{}",
@@ -85,11 +118,21 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber)
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent, chassis.getPowerStatePath());
+        std::println("{}Interface: {}", indent,
+                     chassis.getPowerStateInterface());
     }
 
-    std::print("    Power Good: ");
+    hadException = false;
+
+    std::print("{}Power Good: ", SMALL_INDENT);
     try
     {
         std::println("{}", chassis.getPowerGood() == 1 ? "Powered On"
@@ -97,11 +140,21 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber)
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent, chassis.getPowerGoodPath());
+        std::println("{}Interface: {}", indent,
+                     chassis.getPowerGoodInterface());
     }
 
-    std::print("    Input Power Status: ");
+    hadException = false;
+
+    std::print("{}Input Power Status: ", SMALL_INDENT);
     try
     {
         std::println(
@@ -112,11 +165,22 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber)
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent,
+                     chassis.getInputPowerStatusPath());
+        std::println("{}Interface: {}", indent,
+                     chassis.getInputPowerStatusInterface());
     }
 
-    std::print("    Power Supply Status: ");
+    hadException = false;
+
+    std::print("{}Power Supply Status: ", SMALL_INDENT);
     try
     {
         std::println(
@@ -127,8 +191,17 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber)
     }
     catch (const std::exception& e)
     {
+        hadException = true;
         std::println("Unknown");
-        std::println(stderr, "       {}", e.what());
+        std::println(stderr, "{}{}", NORMAL_INDENT, e.what());
+    }
+    if (isVerbose)
+    {
+        std::string indent = hadException ? LARGE_INDENT : NORMAL_INDENT;
+        std::println("{}Object Path: {}", indent,
+                     chassis.getPowerSuppliesStatusPath());
+        std::println("{}Interface: {}", indent,
+                     chassis.getPowerSuppliesStatusInterface());
     }
 }
 
@@ -136,26 +209,31 @@ int main(int argc, char** argv)
 {
     int chassisNumber = -1;
     CLI::App app{"Chassis status tool"};
-    auto commands = app.add_option_group("Commands");
-    auto dump_cmd = commands->add_subcommand("dump", "Dump chassis status");
-    dump_cmd
+    app.require_subcommand(1);
+    auto dumpCmd = app.add_subcommand("dump", "Dump chassis status");
+    auto isVerbose = false;
+    dumpCmd
         ->add_option(
             "-c", chassisNumber,
             "Specify a number from 1 to n, where n is the number of the chassis")
         ->expected(1);
+    dumpCmd
+        ->add_flag("-v,--verbose", isVerbose,
+                   "Include object and interface paths in output")
+        ->expected(0);
     CLI11_PARSE(app, argc, argv);
     auto bus = sdbusplus::bus::new_default();
     if (app.got_subcommand("dump"))
     {
         if (chassisNumber > -1)
         {
-            dump(bus, chassisNumber);
+            dump(bus, chassisNumber, isVerbose);
         }
         else
         {
             for (int i = 0; i <= numChassis; i++)
             {
-                dump(bus, i);
+                dump(bus, i, isVerbose);
             }
         }
     }

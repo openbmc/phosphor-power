@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "types.hpp"
 #include "utility.hpp"
 
 #include <stddef.h> // for size_t
@@ -450,6 +451,146 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
     virtual bool isPowerSuppliesPowerGood() override
     {
         return (getPowerSuppliesStatus() == PowerSystemInputs::Status::Good);
+    }
+
+    /**
+     * Returns the D-Bus object path for the Present property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getPresentPath() const
+    {
+        return inventoryPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the Present property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPresentInterface() const
+    {
+        return INVENTORY_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the Available property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getAvailablePath() const
+    {
+        return inventoryPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the Available property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getAvailableInterface() const
+    {
+        return AVAILABILITY_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the Enabled property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getEnabledPath() const
+    {
+        return inventoryPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the Enabled property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getEnabledInterface() const
+    {
+        return ENABLE_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the PowerState property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getPowerStatePath() const
+    {
+        return chassisPowerPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the PowerState property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPowerStateInterface() const
+    {
+        return POWER_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the PowerGood property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getPowerGoodPath() const
+    {
+        return chassisPowerPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the PowerGood property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPowerGoodInterface() const
+    {
+        return POWER_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the InputPowerStatus property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getInputPowerStatusPath() const
+    {
+        return chassisInputPowerStatusPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the InputPowerStatus property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getInputPowerStatusInterface() const
+    {
+        return POWER_SYSTEM_INPUTS_IFACE;
+    }
+
+    /**
+     * Returns the D-Bus object path for the PowerSuppliesStatus property.
+     *
+     * @return D-Bus object path
+     */
+    const std::string& getPowerSuppliesStatusPath() const
+    {
+        return powerSuppliesStatusPath;
+    }
+
+    /**
+     * Returns the D-Bus interface for the PowerSuppliesStatus property.
+     *
+     * @return D-Bus interface
+     */
+    const char* getPowerSuppliesStatusInterface() const
+    {
+        return POWER_SYSTEM_INPUTS_IFACE;
     }
 
   protected:
