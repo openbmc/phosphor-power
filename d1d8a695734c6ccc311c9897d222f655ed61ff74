@@ -68,6 +68,23 @@
       "parentUuid": "e04463e8_f8a1d3d5",
       "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1fea766_239ca0d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T18:11:51Z",
+      "side": 1,
+      "message": "Going through debug, /usr/share/phosphor-chassis/power/  not present.",
+      "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
