@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d188a6b_08d2255e",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-06T14:09:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2303c2d3_ef4de34a",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ca0361e_f250183e",
@@ -35,6 +53,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74066771_269b8235",
+        "filename": "phosphor-chassis-power/test/manager_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-06T14:09:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ca0361e_f250183e",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c9fc4c8_3a18fb04",
@@ -48,6 +84,24 @@
       "writtenOn": "2026-03-05T17:55:57Z",
       "side": 1,
       "message": "You may want to add a test for the constructor to verify the initial object state.",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e3cd9d_a94abadc",
+        "filename": "phosphor-chassis-power/test/manager_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-06T14:09:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c9fc4c8_3a18fb04",
       "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
