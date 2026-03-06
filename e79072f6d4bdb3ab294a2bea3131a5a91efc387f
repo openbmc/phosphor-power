@@ -16,6 +16,24 @@
       "message": "Question: Missing something where the ../src/\u003cobject\u003e has to be in the /test/meson.build file.   other Apps do not have to do this?? Investigation.",
       "revId": "e79072f6d4bdb3ab294a2bea3131a5a91efc387f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31ec2eb8_f485970d",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T15:50:13Z",
+      "side": 1,
+      "message": "Looking at Brendan\u0027s commit,, I might see it now.",
+      "parentUuid": "de5ae891_d4e682a3",
+      "revId": "e79072f6d4bdb3ab294a2bea3131a5a91efc387f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
