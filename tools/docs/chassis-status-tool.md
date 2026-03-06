@@ -24,6 +24,8 @@ dump
       status properties for every possible chassis (0-8).
 dump -c <INT>
     - Dump the chassis status properties for a given chassis number.
+dump -v, --verbose
+    - Dump the interface and object paths for each of the chassis status properties.
 ```
 
 ## Examples
@@ -68,4 +70,33 @@ Chassis 8:
       Power Good: Powered On
       Input Power Status: Good
       Power Supply Status: Good
+  ```
+
+- Dump a single chassis with verbose output:
+
+  ```text
+  $ chassis-status-tool dump -c 1 -v
+
+  Chassis 1:
+      Present: True
+         Object Path: /xyz/openbmc_project/inventory/system/chassis1
+         Interface: xyz.openbmc_project.Inventory.Item
+      Available: True
+         Object Path: /xyz/openbmc_project/inventory/system/chassis1
+         Interface: xyz.openbmc_project.State.Decorator.Availability
+      Enabled: True
+         Object Path: /xyz/openbmc_project/inventory/system/chassis1
+         Interface: xyz.openbmc_project.Object.Enable
+      Power State: Power On
+         Object Path: /org/openbmc/control/power1
+         Interface: org.openbmc.control.Power
+      Power Good: Powered On
+         Object Path: /org/openbmc/control/power1
+         Interface: org.openbmc.control.Power
+      Input Power Status: Good
+         Object Path: /xyz/openbmc_project/power/chassis/chassis1
+         Interface: xyz.openbmc_project.State.Decorator.PowerSystemInputs
+      Power Supply Status: Good
+         Object Path: /xyz/openbmc_project/power/power_supplies/chassis1/psus
+         Interface: xyz.openbmc_project.State.Decorator.PowerSystemInputs
   ```
