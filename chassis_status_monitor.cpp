@@ -16,8 +16,6 @@
 
 #include "chassis_status_monitor.hpp"
 
-#include "types.hpp"
-
 #include <format>
 
 namespace phosphor::power::util
