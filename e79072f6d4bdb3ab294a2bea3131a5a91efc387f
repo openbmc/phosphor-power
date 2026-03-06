@@ -34,6 +34,24 @@
       "parentUuid": "de5ae891_d4e682a3",
       "revId": "e79072f6d4bdb3ab294a2bea3131a5a91efc387f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2806d09a_7baba6af",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-06T16:05:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31ec2eb8_f485970d",
+      "revId": "e79072f6d4bdb3ab294a2bea3131a5a91efc387f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
