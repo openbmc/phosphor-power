@@ -85,6 +85,24 @@
       "message": "Going through debug, /usr/share/phosphor-chassis/power/  not present.",
       "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a544ca1_aa8f4912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-10T15:58:38Z",
+      "side": 1,
+      "message": "Tested in SIMICs.\nroot@huygens:/usr/share/phosphor-chassis-power# pwd\n/usr/share/phosphor-chassis-power\nroot@huygens:/usr/share/phosphor-chassis-power# l\n-rw-r--r--    1 root     root          7147 Apr  5  2011 Huygens.json",
+      "parentUuid": "c1fea766_239ca0d4",
+      "revId": "d1d8a695734c6ccc311c9897d222f655ed61ff74",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
