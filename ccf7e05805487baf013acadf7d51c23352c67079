@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3f006f6_3b28b331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T14:53:52Z",
+      "side": 1,
+      "message": "Thanks for your changes. A few more comments.",
+      "revId": "ccf7e05805487baf013acadf7d51c23352c67079",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc61824e_80c7a0af",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T14:53:52Z",
+      "side": 1,
+      "message": "It would be better if this was a `const std::vector\u003cstd::string\u003e\u0026`. Then it would not have to make a copy of the vector, which is somewhat expensive. By returning it as a const\u0026, the caller cannot modify it (and mess up the Manager object).",
+      "revId": "ccf7e05805487baf013acadf7d51c23352c67079",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
