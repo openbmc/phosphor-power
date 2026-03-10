@@ -31,8 +31,8 @@ constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
 constexpr auto DECORATOR_CHASSIS_ID =
-    "xyz.openbmc_project.Inventory.Decorator.Slot";
-constexpr auto CHASSIS_ID_PROPERTY = "SlotNumber";
+    "xyz.openbmc_project.Inventory.Decorator.Position";
+constexpr auto CHASSIS_ID_PROPERTY = "Position";
 
 using json = nlohmann::json;
 
@@ -228,10 +228,10 @@ std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus)
 uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
                                      const std::string& path)
 {
-    uint32_t chassisId;
+    uint64_t chassisId;
     getProperty(DECORATOR_CHASSIS_ID, CHASSIS_ID_PROPERTY, path,
                 INVENTORY_MGR_IFACE, bus, chassisId);
-    return static_cast<uint64_t>(chassisId);
+    return chassisId;
 }
 
 uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path)
