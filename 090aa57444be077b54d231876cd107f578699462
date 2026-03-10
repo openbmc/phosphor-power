@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9314b4e_39a9e0cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T15:55:33Z",
+      "side": 1,
+      "message": "Nit: D-Bus",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b22c5e5f_3990cb7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T15:55:33Z",
+      "side": 1,
+      "message": "I think you are referring to the ChassisStatusMonitor class here? If so, I think it is clearer to just state the class name.",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9918ff86_263a4ad3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T15:55:33Z",
+      "side": 1,
+      "message": "Nit: spelling. Verified. Same comment on next line.\n\nThanks for adding a tested section.",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 9
+      },
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "634f6a39_a277a621",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T15:55:33Z",
+      "side": 1,
+      "message": "Thanks for putting some example output here.\n\nI think dumping one chassis is sufficient. Usually commit messages aren\u0027t quite this long. You could mention the variations you tested in one-liners in the tested statement above (e.g. tested with on chassis, tested with all chassis, tested with -v, tested with --verbose).\n\nAlso, could you make it an example where most of the properties were successfully obtained? It is harder to read/understand when most of them failed. One failure is good just to see what it looks like.",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae95f1e_9b14ad15",
+        "filename": "chassis_status_monitor.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-10T15:55:33Z",
+      "side": 1,
+      "message": "Please return `const std::string\u0026` rather than `const char*`. If the underlying constant is a const char*, the compiler will convert it. But we don\u0027t like to pass pointers around since it leads to issues (can it be nullptr? do I have to delete it?).",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
