@@ -121,6 +121,24 @@
       "message": "I think we still want to autotest as much of the code as we can. That means less manual testing, and it gets run thousands of times in the future. I\u0027d rather not see your tests below get deleted.\n\nWhile you cannot directly call findConfigFile, you can cause some/all of the variations by calling compatibleSystemTypesFound right?\n\nIf not, I think it is OK to make findConfigFile and/or loadConfigFile public. While we don\u0027t expect a user of this class to call them directly, it is also one of the main responsibilities of the class.",
       "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df1d8ed5_908b8dd4",
+        "filename": "phosphor-chassis-power/test/manager_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-10T19:33:54Z",
+      "side": 1,
+      "message": "I can make it work with findConfigFile and loadConfigFile private, if I have a function to clear the compatible system types that is public.",
+      "parentUuid": "a6316840_105449c7",
+      "revId": "a393a78764283ff63379579bcb044ae9777ba46c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
