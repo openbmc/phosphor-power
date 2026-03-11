@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "049345bc_d149da48",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-11T15:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9314b4e_39a9e0cb",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b22c5e5f_3990cb7e",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-03-10T15:55:33Z",
       "side": 1,
       "message": "I think you are referring to the ChassisStatusMonitor class here? If so, I think it is clearer to just state the class name.",
+      "range": {
+        "startLine": 9,
+        "startChar": 17,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e392226c_0ec6c87b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-11T15:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b22c5e5f_3990cb7e",
       "range": {
         "startLine": 9,
         "startChar": 17,
@@ -64,6 +106,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b293edf3_3d9e857b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-11T15:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9918ff86_263a4ad3",
+      "range": {
+        "startLine": 15,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 9
+      },
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "634f6a39_a277a621",
@@ -77,6 +143,24 @@
       "writtenOn": "2026-03-10T15:55:33Z",
       "side": 1,
       "message": "Thanks for putting some example output here.\n\nI think dumping one chassis is sufficient. Usually commit messages aren\u0027t quite this long. You could mention the variations you tested in one-liners in the tested statement above (e.g. tested with on chassis, tested with all chassis, tested with -v, tested with --verbose).\n\nAlso, could you make it an example where most of the properties were successfully obtained? It is harder to read/understand when most of them failed. One failure is good just to see what it looks like.",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99db8b23_0c7b4944",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-11T15:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "634f6a39_a277a621",
       "revId": "090aa57444be077b54d231876cd107f578699462",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -111,6 +195,24 @@
       "writtenOn": "2026-03-10T15:55:33Z",
       "side": 1,
       "message": "Please return `const std::string\u0026` rather than `const char*`. If the underlying constant is a const char*, the compiler will convert it. But we don\u0027t like to pass pointers around since it leads to issues (can it be nullptr? do I have to delete it?).",
+      "revId": "090aa57444be077b54d231876cd107f578699462",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2852531d_90c07cb4",
+        "filename": "chassis_status_monitor.hpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-11T15:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae95f1e_9b14ad15",
       "revId": "090aa57444be077b54d231876cd107f578699462",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
