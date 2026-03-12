@@ -1,20 +1,57 @@
 {
     "comments": [
         "phosphor-power-sequencer configuration file for IBM Huygens systems.",
-        "Currently only contains one chassis and the power control/good GPIOs.",
-        "Additional chassis, power sequencers, and rails will be added later."
+        "Huygens systems contain up to 8 chassis with host CPUs and memory.",
+        "This file currently only defines 4 chassis. More will be added later",
+        "when chassis 5-8 are added to phosphor-inventory-manager.",
+        "A chassis template is used to minimize duplicated data across chassis.",
+        "Power sequencer and rail information will be added later."
     ],
-    "chassis": [
+    "chassis_templates": [
         {
-            "number": 1,
-            "inventory_path": "/xyz/openbmc_project/inventory/system/chassis1",
+            "id": "huygens_chassis_template",
+            "number": "${chassis_number}",
+            "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
             "power_sequencers": [
                 {
                     "type": "gpios_only_device",
-                    "power_control_gpio_name": "power-control-chassis1",
-                    "power_good_gpio_name": "power-good-chassis1"
+                    "power_control_gpio_name": "power-control-chassis${chassis_number}",
+                    "power_good_gpio_name": "power-good-chassis${chassis_number}"
                 }
-            ]
+            ],
+            "status_monitoring": {
+                "is_present_monitored": true
+            }
+        }
+    ],
+    "chassis": [
+        {
+            "comments": ["Chassis 1"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "1"
+            }
+        },
+        {
+            "comments": ["Chassis 2"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "2"
+            }
+        },
+        {
+            "comments": ["Chassis 3"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "3"
+            }
+        },
+        {
+            "comments": ["Chassis 4"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "4"
+            }
         }
     ]
 }
