@@ -192,7 +192,7 @@ class PMBusBase
  *
  * @return PMBusBase pointer
  */
-std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus,
+std::unique_ptr<PMBusBase> createPMBus(std::uint16_t bus,
                                        const std::string& address);
 
 /**
@@ -250,7 +250,7 @@ class PMBus : public PMBusBase
      *
      * @return PMBusBase pointer
      */
-    static std::unique_ptr<PMBusBase> createPMBus(std::uint8_t bus,
+    static std::unique_ptr<PMBusBase> createPMBus(std::uint16_t bus,
                                                   const std::string& address);
 
     /**

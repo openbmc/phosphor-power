@@ -91,7 +91,7 @@ class PowerSupply
      * @param[in] callback - Get the power on status of the psu manager class
      */
     PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
-                std::uint8_t i2cbus, const std::uint16_t i2caddr,
+                std::uint16_t i2cbus, const std::uint16_t i2caddr,
                 const std::string& driver, const std::string& gpioLineName,
                 std::function<bool()>&& callback);
 
@@ -106,7 +106,7 @@ class PowerSupply
      * @param[in] chassisShortName - Chassis name
      */
     PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
-                std::uint8_t i2cbus, const std::uint16_t i2caddr,
+                std::uint16_t i2cbus, const std::uint16_t i2caddr,
                 const std::string& driver, const std::string& gpioLineName,
                 std::function<bool()>&& callback,
                 const std::string& chassisShortName);
