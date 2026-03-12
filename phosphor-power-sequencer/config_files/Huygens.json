@@ -2,8 +2,6 @@
     "comments": [
         "phosphor-power-sequencer configuration file for IBM Huygens systems.",
         "Huygens systems contain up to 8 chassis with host CPUs and memory.",
-        "This file currently only defines 4 chassis. More will be added later",
-        "when chassis 5-8 are added to phosphor-inventory-manager.",
         "A chassis template is used to minimize duplicated data across chassis.",
         "Power sequencer and rail information will be added later."
     ],
@@ -51,6 +49,34 @@
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
                 "chassis_number": "4"
+            }
+        },
+        {
+            "comments": ["Chassis 5"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "5"
+            }
+        },
+        {
+            "comments": ["Chassis 6"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "6"
+            }
+        },
+        {
+            "comments": ["Chassis 7"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "7"
+            }
+        },
+        {
+            "comments": ["Chassis 8"],
+            "template_id": "huygens_chassis_template",
+            "template_variable_values": {
+                "chassis_number": "8"
             }
         }
     ]
