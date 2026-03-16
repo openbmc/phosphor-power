@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a50aa89_060a6430",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-16T15:40:14Z",
+      "side": 1,
+      "message": "The chassis class shouldn\u0027t use the system class.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "5cc71e4f66e30655771c6691a6031c38c09d4914",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b818fa7_628223d2",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-16T15:40:14Z",
+      "side": 1,
+      "message": "The gpio class shouldn\u0027t know about the system or chassis classes.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 13
+      },
+      "revId": "5cc71e4f66e30655771c6691a6031c38c09d4914",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
