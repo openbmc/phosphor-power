@@ -203,8 +203,8 @@ class PSUManager
     /** @brief True if an error for a brownout has already been logged. */
     bool brownoutLogged = false;
 
-    /** @brief Used as part of subscribing to power on state changes*/
-    std::string powerService;
+    /** @brief Used to subscribe to Power interfaces added */
+    std::unique_ptr<sdbusplus::bus::match_t> powerIfacesAddedMatch;
 
     /** @brief Used to subscribe to D-Bus power on state changes */
     std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
@@ -214,6 +214,15 @@ class PSUManager
 
     /** @brief Used to subscribe to Entity Manager interfaces added */
     std::unique_ptr<sdbusplus::bus::match_t> entityManagerIfacesAddedMatch;
+
+    /**
+     * @brief Callback for Power interface added
+     *
+     * Process the state and pgood properties of the interface.
+     *
+     * @param[in] msg - Data associated with the interfaces added signal
+     */
+    void powerIfaceAdded(sdbusplus::message_t& msg);
 
     /**
      * @brief Callback for power state property changes
@@ -259,6 +268,11 @@ class PSUManager
             psu->updateInventory();
         }
     }
+
+    /**
+     * @brief Read initial power state and power good values from D-Bus.
+     */
+    void readInitialPowerState();
 
     /**
      * @brief Helper function to populate the system properties

@@ -389,13 +389,17 @@ void Chassis::initPowerMonitoring()
         eventLoop, std::bind(&Chassis::validateConfig, this));
     attemptToCreatePowerConfigGPIO();
 
-    // Subscribe to power state changes
-    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+    // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
+    powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAddedAtPath(POWER_OBJ_PATH),
+        std::bind(&Chassis::powerIfaceAdded, this, std::placeholders::_1));
     powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
         bus,
         sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
                                                         POWER_IFACE),
         [this](auto& msg) { this->powerStateChanged(msg); });
+
     initialize();
 }
 
@@ -1044,8 +1048,21 @@ void Chassis::updateMissingPSUs()
 
 void Chassis::initialize()
 {
+    readInitialPowerState();
+    onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
+    clearFaults();
+    updateMissingPSUs();
+    setPowerConfigGPIO();
+}
+
+void Chassis::readInitialPowerState()
+{
     try
     {
+        // Get service providing the chassis power interface
+        std::string powerService =
+            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+
         // pgood is the latest read of the chassis pgood
         int pgood = 0;
         util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
@@ -1084,13 +1101,8 @@ void Chassis::initialize()
         runValidateConfig = true;
     }
 
-    onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
-    clearFaults();
-    updateMissingPSUs();
-    setPowerConfigGPIO();
-
     lg2::info(
-        "{CHASSIS_SHORT_NAME}: initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "{CHASSIS_SHORT_NAME}: readInitialPowerState: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
         "CHASSIS_SHORT_NAME", chassisShortName, "POWER_ON", powerOn,
         "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
@@ -1102,6 +1114,10 @@ void Chassis::setPowerSupplyError(const std::string& psuErrorString)
 
     try
     {
+        // Get service providing the chassis power interface
+        std::string powerService =
+            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+
         // Call D-Bus method to inform pseq of PSU error
         auto methodMsg = bus.new_method_call(
             powerService.c_str(), POWER_OBJ_PATH, POWER_IFACE, method);
@@ -1141,6 +1157,28 @@ void Chassis::setPowerConfigGPIO()
             (config->second.powerConfigFullLoad == true ? 0 : 1);
         auto flags = gpiod::line_request::FLAG_OPEN_DRAIN;
         powerConfigGPIO->write(powerConfigValue, flags);
+    }
+}
+
+void Chassis::powerIfaceAdded(sdbusplus::message_t& msg)
+{
+    try
+    {
+        sdbusplus::message::object_path objPath;
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
+            interfaces;
+        msg.read(objPath, interfaces);
+
+        auto itIntf = interfaces.find(POWER_IFACE);
+        if (itIntf != interfaces.cend())
+        {
+            // Power interface has been added to D-Bus. Read power state/pgood.
+            readInitialPowerState();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Ignore, the property may be of a different type than expected.
     }
 }
 
