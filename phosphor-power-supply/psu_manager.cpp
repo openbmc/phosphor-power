@@ -42,6 +42,17 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     objectManager(bus, objectManagerObjPath),
     sensorsObjManager(bus, "/xyz/openbmc_project/sensors")
 {
+    // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
+    powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::interfacesAddedAtPath(POWER_OBJ_PATH),
+        std::bind(&PSUManager::powerIfaceAdded, this, std::placeholders::_1));
+    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
+                                                        POWER_IFACE),
+        [this](auto& msg) { this->powerStateChanged(msg); });
+
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
@@ -77,67 +88,16 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
         powerConfigGPIO = nullptr;
     }
 
-    // Subscribe to power state changes
-    powerService = util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
-    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
-                                                        POWER_IFACE),
-        [this](auto& msg) { this->powerStateChanged(msg); });
-
     initialize();
 }
 
 void PSUManager::initialize()
 {
-    try
-    {
-        // pgood is the latest read of the chassis pgood
-        int pgood = 0;
-        util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
-                               powerService, bus, pgood);
-
-        // state is the latest requested power on / off transition
-        auto method = bus.new_method_call(powerService.c_str(), POWER_OBJ_PATH,
-                                          POWER_IFACE, "getPowerState");
-        auto reply = bus.call(method);
-        int state = 0;
-        reply.read(state);
-
-        if (state)
-        {
-            // Monitor PSUs anytime state is on
-            powerOn = true;
-            // In the power fault window if pgood is off
-            powerFaultOccurring = !pgood;
-            validationTimer->restartOnce(validationTimeout);
-        }
-        else
-        {
-            // Power is off
-            powerOn = false;
-            powerFaultOccurring = false;
-            runValidateConfig = true;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        lg2::info(
-            "Failed to get power state, assuming it is off, error {ERROR}",
-            "ERROR", e);
-        powerOn = false;
-        powerFaultOccurring = false;
-        runValidateConfig = true;
-    }
-
+    readInitialPowerState();
     onOffConfig(phosphor::pmbus::ON_OFF_CONFIG_CONTROL_PIN_ONLY);
     clearFaults();
     updateMissingPSUs();
     setPowerConfigGPIO();
-
-    lg2::info(
-        "initialize: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
-        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
 }
 
 void PSUManager::getPSUConfiguration()
@@ -272,6 +232,57 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
     }
 }
 
+void PSUManager::readInitialPowerState()
+{
+    try
+    {
+        // Get service providing the chassis power interface
+        std::string powerService =
+            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+
+        // pgood is the latest read of the chassis pgood
+        int pgood = 0;
+        util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
+                               powerService, bus, pgood);
+
+        // state is the latest requested power on / off transition
+        auto method = bus.new_method_call(powerService.c_str(), POWER_OBJ_PATH,
+                                          POWER_IFACE, "getPowerState");
+        auto reply = bus.call(method);
+        int state = 0;
+        reply.read(state);
+
+        if (state)
+        {
+            // Monitor PSUs anytime state is on
+            powerOn = true;
+            // In the power fault window if pgood is off
+            powerFaultOccurring = !pgood;
+            validationTimer->restartOnce(validationTimeout);
+        }
+        else
+        {
+            // Power is off
+            powerOn = false;
+            powerFaultOccurring = false;
+            runValidateConfig = true;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::info(
+            "Failed to get power state, assuming it is off, error {ERROR}",
+            "ERROR", e);
+        powerOn = false;
+        powerFaultOccurring = false;
+        runValidateConfig = true;
+    }
+
+    lg2::info(
+        "readInitialPowerState: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
+        "POWER_ON", powerOn, "POWER_FAULT_OCCURRING", powerFaultOccurring);
+}
+
 void PSUManager::populateSysProperties(const util::DbusPropertyMap& properties)
 {
     try
@@ -365,6 +376,28 @@ void PSUManager::getSystemProperties()
     {
         // Interface or property not found. Let the Interfaces Added callback
         // process the information once the interfaces are added to D-Bus.
+    }
+}
+
+void PSUManager::powerIfaceAdded(sdbusplus::message_t& msg)
+{
+    try
+    {
+        sdbusplus::message::object_path objPath;
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
+            interfaces;
+        msg.read(objPath, interfaces);
+
+        auto itIntf = interfaces.find(POWER_IFACE);
+        if (itIntf != interfaces.cend())
+        {
+            // Power interface has been added to D-Bus. Read power state/pgood.
+            readInitialPowerState();
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Ignore, the property may be of a different type than expected.
     }
 }
 
@@ -484,6 +517,10 @@ void PSUManager::setPowerSupplyError(const std::string& psuErrorString)
 
     try
     {
+        // Get service providing the chassis power interface
+        std::string powerService =
+            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+
         // Call D-Bus method to inform pseq of PSU error
         auto methodMsg = bus.new_method_call(
             powerService.c_str(), POWER_OBJ_PATH, POWER_IFACE, method);
