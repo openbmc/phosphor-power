@@ -134,16 +134,12 @@ If `Available` is set to false for a chassis:
 
 - The chassis power good signal from the power sequencer will **not** be read.
   Since communication to the chassis is not possible, the value of the power
-  good signal is unknown. The following algorithm is used to set the value:
-  - If the chassis is experiencing a blackout, the chassis has no input power
-    and `pgood` will be set to 0.
-  - If all other chassis have a `pgood` value of 0, the `pgood` value will be
-    set to 0 for this chassis.
-  - If at least one other chassis has a `pgood` value of 1, the `pgood` value
-    will be set to 1 for this chassis.
+  good signal is unknown.
+- The `org.openbmc.control.Power` interface will not be published on the object
+  path for the chassis. The `state` and `pgood` property values are unknown.
 - The chassis will **not** be powered on when the system is being powered on.
-  The `state` property on the `org.openbmc.control.Power` interface for the
-  chassis will remain set to 0.
+- If the Available property later changes to true, the power good signal will be
+  read and the `org.openbmc.control.Power` interface will be published.
 
 ## Enabled property
 

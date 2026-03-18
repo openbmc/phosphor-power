@@ -5,8 +5,7 @@
 - PowerInterface
   - Abstract base class that defines the `org.openbmc.control.Power` D-Bus
     interface.
-  - The `state` property is set to power the system/chassis on or off. This
-    contains the desired power state.
+  - The `state` property contains the desired power state of the system/chassis.
   - The `pgood` property contains the actual power state of the system/chassis.
 - SystemPowerInterface
   - Sub-class of PowerInterface that handles system level D-Bus methods and
@@ -50,6 +49,9 @@
   - Sub-class of UCD90xDevice representing a UCD90160 power sequencer device.
 - UCD90320Device
   - Sub-class of UCD90xDevice representing a UCD90320 power sequencer device.
+- MockDevice
+  - Sub-class of PowerSequencerDevice with mock implementation of methods for
+    automated testing.
 - Services
   - Abstract base class that provides an interface to system services like error
     logging and the journal.
