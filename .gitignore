@@ -2,5 +2,11 @@ build*/
 subprojects/*
 !subprojects/*.wrap
 !subprojects/packagefiles
+
+# These subprojects are not used directly by this repository
+subprojects/fmt.wrap
+subprojects/function2.wrap
+subprojects/stdexec.wrap
+
 *.sw*
 tags
