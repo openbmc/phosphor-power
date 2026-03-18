@@ -89,8 +89,10 @@ determine which voltage rail caused the chassis pgood fault. The following
 methods are supported in the JSON configuration file:
 
 - Read a GPIO from the power sequencer device
-- Check the PMBus STATUS_VOUT command value
-- Compare the PMBus READ_VOUT value to the PMBus VOUT_UV_FAULT_LIMIT value
+- Check the PMBus STATUS_VOUT command value for the PMBus PAGE corresponding to
+  the rail.
+- Compare the PMBus READ_VOUT value to the PMBus VOUT_UV_FAULT_LIMIT value for
+  the PMBus PAGE corresponding to the rail.
 
 Multiple methods might need to be used on the same rail. For example, the PMBus
 STATUS_VOUT error bits might be set for a pgood fault after the system powered

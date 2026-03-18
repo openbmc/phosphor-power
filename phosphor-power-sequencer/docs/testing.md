@@ -39,6 +39,8 @@ The GoogleTest mock framework is used to implement mocking. This allows the
 behavior of the external interface to be simulated and controlled within the
 test case.
 
+### Class hierarchy used for mocking
+
 The mock framework typically relies on a class hierarchy of the following form:
 
 - Abstract base class with virtual methods for external interfaces
@@ -46,8 +48,17 @@ The mock framework typically relies on a class hierarchy of the following form:
     actual external interfaces
   - Mock sub-class that provides mock implementation of virtual methods
 
-`phosphor-power-sequencer` follows this pattern using the following classes:
+### Class hierarchies in this application that support mocking
 
 - [Services](../src/services.hpp)
   - [BMCServices](../src/services.hpp)
   - [MockServices](../test/mock_services.hpp)
+
+- [PowerSequencerDevice](../src/power_sequencer_device.hpp)
+  - [UCD90320Device](../src/ucd90320_device.hpp)
+    - This is just one example of a concrete sub-class
+  - [MockDevice](../test/mock_device.hpp)
+
+- [GPIO](../src/gpio.hpp)
+  - [BMCGPIO](../src/gpio.hpp)
+  - [MockGPIO](../test/mock_gpio.hpp)

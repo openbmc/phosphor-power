@@ -5,12 +5,12 @@
 The `phosphor-power-sequencer` application powers all the chassis in the system
 on and off. It also monitors the power good (pgood) state in each chassis.
 
-**Note:** Many changes have been made to this documentation to define how
-multiple chassis support will work. This support is not yet implemented in this
-application. The support is also dependent on changes to the existing
-`phosphor-chassis-state-manager` application and the planned new
-`phosphor-chassis-power` application. This disclaimer will be removed when this
-support is fully implemented.
+**Note:** Some of the features mentioned in this documentation have been
+designed but not yet implemented. For example, some error logging and brownout/
+blackout handling is not yet implemented. The support is also dependent on
+changes to the existing `phosphor-chassis-state-manager` application and the
+planned new `phosphor-chassis-power` application. This disclaimer will be
+removed when this support is fully implemented.
 
 ## Application
 
@@ -18,13 +18,10 @@ support is fully implemented.
 process that runs continually. It is launched by systemd when the BMC reaches
 the Ready state and before the system is powered on.
 
-`phosphor-power-sequencer` is driven by an optional, system-specific JSON
-configuration file. The config file is found and parsed at runtime. The parsing
-process creates a collection of C++ objects. These objects represent the
-chassis, power sequencer devices, voltage rails, GPIOs, and fault checks to
-perform.
-
-See [Internal Design](internal_design.md) for more information.
+`phosphor-power-sequencer` is driven by an a JSON configuration file. The config
+file is found and parsed at runtime. The parsing process creates a collection of
+C++ objects. These objects represent the chassis, power sequencer devices,
+voltage rails, GPIOs, and fault checks to perform.
 
 ## Power sequencer device
 
@@ -76,20 +73,15 @@ See [Power Good Faults](pgood_faults.md) for more information.
 
 ## JSON configuration file
 
-`phosphor-power-sequencer` is configured by an optional JSON configuration file.
-The configuration file defines the voltage rails in the system and how they
-should be monitored.
+`phosphor-power-sequencer` is controlled by an JSON configuration file. The
+config file defines the chassis, power sequencer devices, voltage rails, and
+GPIOs in the system.
 
-JSON configuration files are system-specific and are stored in the
-[config_files](../config_files/) sub-directory.
+JSON configuration files are stored in the [config_files](../config_files/)
+sub-directory.
 
 [Documentation](config_file/README.md) is available on the configuration file
 format.
-
-If no configuration file is found for the current system,
-`phosphor-power-sequencer` can still power the system on/off and detect chassis
-pgood faults. However, it will not be able to determine which voltage rail
-caused a pgood fault.
 
 ## Testing
 

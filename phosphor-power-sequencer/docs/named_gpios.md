@@ -10,9 +10,8 @@ the standard GPIO name is `power-chassis-control`. See
 [Device Tree GPIO Naming in OpenBMC](https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md)
 for more information.
 
-The GPIO name in each chassis is specified in the
-[JSON configuration file](config_file/README.md). If no configuration file is
-found for the current system, the standard GPIO name is used.
+The `phosphor-power-sequencer` application obtains the GPIO name for each
+chassis from the [JSON configuration file](config_file/README.md).
 
 ## Chassis power good (pgood)
 
@@ -27,6 +26,5 @@ the standard GPIO name is `power-chassis-good`. See
 [Device Tree GPIO Naming in OpenBMC](https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md)
 for more information.
 
-The GPIO name in each chassis is specified in the
-[JSON configuration file](config_file/README.md). If no configuration file is
-found for the current system, the standard GPIO name is used.
+The `phosphor-power-sequencer` application obtains the GPIO name for each
+chassis from the [JSON configuration file](config_file/README.md).
