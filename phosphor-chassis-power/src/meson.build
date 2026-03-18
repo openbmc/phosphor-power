@@ -8,6 +8,7 @@ phosphor_chassis_power_library = static_library(
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
+        sdeventplus,
     ],
     include_directories: [phosphor_chassis_power_include_directories],
 )
