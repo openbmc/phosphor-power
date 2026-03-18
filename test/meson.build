@@ -10,7 +10,7 @@ test(
         'nvtest.cpp',
         'temporary_file_tests.cpp',
         'temporary_subdirectory_tests.cpp',
-        dependencies: [gmock, gtest],
+        dependencies: [gmock, gtest, nlohmann_json_dep, phosphor_logging],
         link_args: dynamic_linker,
         build_rpath: get_option('oe-sdk').allowed() ? rpath : '',
         link_with: [libpower],
