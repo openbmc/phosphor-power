@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffca5481_f58df5cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "538ea9d5_6eeaaed3",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b31502b_015ede76",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "Extra objects?",
+      "range": {
+        "startLine": 13,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 55
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e09be06_513821d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b31502b_015ede76",
       "range": {
         "startLine": 13,
         "startChar": 48,
@@ -98,6 +140,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f9f0dfd_90716f54",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9f1a437_3db04a9f",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 32
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9677e754_6a3ea0b8",
@@ -111,6 +177,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "Nit: It might make it easier to maintain this (as properties are added) if you parse them in the same order that they are listed in the markdown docs.\n\nPresencePath is the last property in the table.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c2733b8_fb48d799",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9677e754_6a3ea0b8",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -138,6 +222,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d72e4603_6c13e830",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e09951db_16db7cfa",
+      "range": {
+        "startLine": 71,
+        "startChar": 2,
+        "endLine": 78,
+        "endChar": 5
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "048668c0_9b0821c6",
@@ -151,6 +259,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "The BMC coding conventations say that variable names are supposed to start with a lower case letter. So it should be presenceGpioIt, faultUnlatchedGpioIt, etc.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac8447e0_fa08e558",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "048668c0_9b0821c6",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -178,6 +304,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6048e4e9_579b39f5",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4436bc10_f07a696b",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 18
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5202a2e_00de8d58",
@@ -195,6 +345,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be820f23_5b9838d8",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5202a2e_00de8d58",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93905bb9_e0ac3a9e",
@@ -208,6 +376,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "This looks like an unused #include. Make sure you remove any you aren\u0027t using and add any you need.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea798489_d9cd91b2",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93905bb9_e0ac3a9e",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -235,6 +421,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68f7ebf9_687e2559",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3da54361_0af16fc2",
+      "range": {
+        "startLine": 101,
+        "startChar": 12,
+        "endLine": 101,
+        "endChar": 30
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b44d41de_1d5201e3",
@@ -248,6 +458,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "Can delete this comment.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b6ececd_b83e8232",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b44d41de_1d5201e3",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -269,6 +497,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a42afa25_4403f704",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0163a6e0_38e09128",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2daa0a0_b0fe3ef8",
@@ -282,6 +528,30 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "This part doesn\u0027t make sense.",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 64
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf86c86_54cd05bf",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2daa0a0_b0fe3ef8",
       "range": {
         "startLine": 52,
         "startChar": 18,
@@ -315,6 +585,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6fbafb_bd18921a",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69aeeded_7de50ae5",
+      "range": {
+        "startLine": 69,
+        "startChar": 37,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c95eca79_6c32ab9c",
@@ -328,6 +622,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "You should not use std::move on any of these parameters. The string is a const\u0026, e.g. you have read-only access. So you can\u0027t move (steal) the resources it contains. The other two are built-in types (ints under the covers).",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c306dc_09b4fcfd",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95eca79_6c32ab9c",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -349,6 +661,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0af3469_189c687f",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a8cc00a_9ee43b43",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "861206b8_0f701603",
@@ -366,6 +696,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "828f1007_0eb83a9a",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "861206b8_0f701603",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2a9ea31_97e8fe78",
@@ -379,6 +727,30 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "I think these parse functions should be part of the config_file_parser. You can probably just specify the enum values directly here when constructing the Gpio objects.",
+      "range": {
+        "startLine": 123,
+        "startChar": 26,
+        "endLine": 123,
+        "endChar": 40
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcbfb4f5_425398fe",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2a9ea31_97e8fe78",
       "range": {
         "startLine": 123,
         "startChar": 26,
@@ -412,6 +784,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "277ea37f_e79ac2b3",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a994026_ac350c31",
+      "range": {
+        "startLine": 206,
+        "startChar": 7,
+        "endLine": 209,
+        "endChar": 12
+      },
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1e618c1_e069f559",
@@ -425,6 +821,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "I think we want the result to just be \"/dev/i2c-259\". The inventory stuff was likely a copy/paste from the regulators config file parsing functions. Same comment for other tests that check the presence path.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73227e6e_c4e2dcdd",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1e618c1_e069f559",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -446,6 +860,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81f054c4_eb4e2ad3",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77dee443_caf622f4",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7911eba_d0f93dac",
@@ -459,6 +891,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "This all will likely need to change. See my other comments re: this parsing method.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a5918b4_aff7600f",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7911eba_d0f93dac",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -480,6 +930,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18eef771_d0d345de",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed5b01a_df425f72",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "528f2e3d_93e7169d",
@@ -493,6 +961,24 @@
       "writtenOn": "2026-03-18T20:54:49Z",
       "side": 1,
       "message": "I think it would be good if you moved parseDirection and parsePolarity to the config_file_parser namespace. Then create TEST functions for each of them on config_file_parser_tests.cpp that test the various combinations. It will be simpler to test, because you can just pass in various strings rather than constructing Gpio objects.\n\nIn this current class, GpioTests, you could test the Gpio class constructor and get methods. They would be trivial tests, but it is good to make sure things are getting copied and returned correctly.",
+      "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c2a4ed_e5dd41d3",
+        "filename": "phosphor-chassis-power/test/gpio_tests.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-20T14:56:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "528f2e3d_93e7169d",
       "revId": "a903d190c95de60b41a0630cd390e23c930cca4b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
