@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd8c0736_83d7ffeb",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee945e7d_df0e06dc",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d78038c1_15903a76",
@@ -54,6 +78,30 @@
       "writtenOn": "2026-03-23T14:42:35Z",
       "side": 1,
       "message": "The JSON property name is PresencePath.",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 30
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b7d0b45_8c088db5",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d78038c1_15903a76",
       "range": {
         "startLine": 113,
         "startChar": 16,
@@ -87,6 +135,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cfa9efa_72c7c666",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1425b26c_44e2fad4",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 178,
+        "endChar": 28
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "281c4be2_a4524c0a",
@@ -100,6 +172,30 @@
       "writtenOn": "2026-03-23T14:42:35Z",
       "side": 1,
       "message": "an absolute",
+      "range": {
+        "startLine": 87,
+        "startChar": 36,
+        "endLine": 87,
+        "endChar": 46
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d3e427_798082fe",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "281c4be2_a4524c0a",
       "range": {
         "startLine": 87,
         "startChar": 36,
@@ -133,6 +229,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "101de76b_c6134e99",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cab3175_24d5586a",
+      "range": {
+        "startLine": 91,
+        "startChar": 3,
+        "endLine": 92,
+        "endChar": 46
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "271ccbe0_d84b408e",
@@ -146,6 +266,30 @@
       "writtenOn": "2026-03-23T14:42:35Z",
       "side": 1,
       "message": "This is a file system path, not a D-Bus path.",
+      "range": {
+        "startLine": 97,
+        "startChar": 20,
+        "endLine": 97,
+        "endChar": 26
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "015d0664_b5ff32c2",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "271ccbe0_d84b408e",
       "range": {
         "startLine": 97,
         "startChar": 20,
@@ -179,6 +323,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0e116b_931eebbd",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08d909e0_518a6e74",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 27
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ad7b79a_f591241e",
@@ -202,6 +370,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edb7770f_ffb43d85",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ad7b79a_f591241e",
+      "range": {
+        "startLine": 580,
+        "startChar": 5,
+        "endLine": 585,
+        "endChar": 5
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82cac233_98060fbe",
@@ -215,6 +407,30 @@
       "writtenOn": "2026-03-23T14:42:35Z",
       "side": 1,
       "message": "Since this is a file path vs. a D-Bus path, we probably want this to be something like \"/dev/i2c-159\". People sometimes look at test cases to learn how to use something.",
+      "range": {
+        "startLine": 589,
+        "startChar": 34,
+        "endLine": 589,
+        "endChar": 50
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf5e3f4e_0f5f3530",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-03-23T21:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82cac233_98060fbe",
       "range": {
         "startLine": 589,
         "startChar": 34,
