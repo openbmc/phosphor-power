@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3624b451_e8383733",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "Good fixes. A few more comments.",
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee945e7d_df0e06dc",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "Nit: I think the comment is referring to the JSON property name. The property has a capital first letter.",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 28
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78038c1_15903a76",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "The JSON property name is PresencePath.",
+      "range": {
+        "startLine": 113,
+        "startChar": 16,
+        "endLine": 113,
+        "endChar": 30
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1425b26c_44e2fad4",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "The documentation on this property doesn\u0027t mention it being valid to specify a relative path. I think we could just require it to be absolute. This method could throw an exception if it is not absolute (doesn\u0027t have \u0027/\u0027 as first char).",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 178,
+        "endChar": 28
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "281c4be2_a4524c0a",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "an absolute",
+      "range": {
+        "startLine": 87,
+        "startChar": 36,
+        "endLine": 87,
+        "endChar": 46
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cab3175_24d5586a",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "This is not true right? Delete this paragraph.",
+      "range": {
+        "startLine": 91,
+        "startChar": 3,
+        "endLine": 92,
+        "endChar": 46
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271ccbe0_d84b408e",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "This is a file system path, not a D-Bus path.",
+      "range": {
+        "startLine": 97,
+        "startChar": 20,
+        "endLine": 97,
+        "endChar": 26
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d909e0_518a6e74",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "Looks like the parameter names and descriptions were deleted. Should be something like:\n```\n* @param direction GPIO direction\n```\n\nSame for next parameter.",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 27
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad7b79a_f591241e",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "As mentioned in an earlier file, I don\u0027t think based on the documentation this needs to be supported. In fact, I\u0027d change this to a failure case.",
+      "range": {
+        "startLine": 580,
+        "startChar": 5,
+        "endLine": 585,
+        "endChar": 5
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82cac233_98060fbe",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-03-23T14:42:35Z",
+      "side": 1,
+      "message": "Since this is a file path vs. a D-Bus path, we probably want this to be something like \"/dev/i2c-159\". People sometimes look at test cases to learn how to use something.",
+      "range": {
+        "startLine": 589,
+        "startChar": 34,
+        "endLine": 589,
+        "endChar": 50
+      },
+      "revId": "3a22e8e329548991e0d72aa9f1440accf25092ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
