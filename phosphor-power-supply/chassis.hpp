@@ -161,6 +161,11 @@ class Chassis
         sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
         validationTimer;
 
+    /**
+     * @brief Used to subscribe to D-Bus power state change
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> powerStateMatch;
+
     /** @brief True if the power is on. */
     bool powerOn = false;
 
@@ -492,6 +497,18 @@ class Chassis
      * @return true if PSU is required, false otherwise.
      */
     bool isRequiredPSU(const PowerSupply& psu);
+
+    /**
+     * @brief Update the chassis power state
+     *
+     * @param[in] state - The current power state string from D-Bus.
+     */
+    void updatePowerState(const std::string& state);
+
+    /**
+     * @brief Chassis power path
+     */
+    std::string chassisPowerPath;
 };
 
 } // namespace phosphor::power::chassis

@@ -21,7 +21,6 @@ constexpr auto objectManagerObjPath =
 constexpr auto sensorsObjPath = "/xyz/openbmc_project/sensors";
 constexpr auto IBMCFFPSInterface =
     "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
-constexpr auto chassisIdProp = "SlotNumber";
 constexpr auto i2cBusProp = "I2CBus";
 constexpr auto i2cAddressProp = "I2CAddress";
 constexpr auto psuNameProp = "Name";
@@ -31,6 +30,7 @@ constexpr auto supportedConfIntf =
 const auto deviceDirPath = "/sys/bus/i2c/devices/";
 const auto driverDirName = "/driver";
 
+constexpr auto stateObjPath = "/xyz/openbmc_project/state/{}";
 const auto entityMgrService = "xyz.openbmc_project.EntityManager";
 
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
@@ -45,6 +45,25 @@ Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
     objectManager(bus, objectManagerPath.c_str()),
     sensorsObjManager(bus, sensorsObjPath), eventLoop(e)
 {
+    // Subscribe to chassis propertiesChanged
+    powerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(
+            std::format(stateObjPath, chassisShortName),
+            "xyz.openbmc_project.State.Chassis"),
+        [this](sdbusplus::message_t& msg) {
+            std::string interface;
+            std::map<std::string, std::variant<std::string>> properties;
+            msg.read(interface, properties);
+            if (properties.contains("CurrentPowerState"))
+            {
+                auto state =
+                    std::get<std::string>(properties.at("CurrentPowerState"));
+                this->updatePowerState(state);
+            }
+        });
+
+    chassisPowerPath = std::format(CHASSIS_POWER_PATH, chassisPathUniqueId);
     getPSUConfiguration();
     getSupportedConfiguration();
 }
@@ -162,10 +181,10 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
         }
 
         buildDriverName(*i2cbus, *i2caddr);
-        lg2::debug(
-            "{CHASSIS_SHORT_NAME}: make PowerSupply bus: {I2CBUS} addr: {I2CADDR} presline: {PRESLINE}",
-            "CHASSIS_SHORT_NAME", chassisShortName, "I2CBUS", *i2cbus,
-            "I2CADDR", *i2caddr, "PRESLINE", presline);
+        lg2::debug("{CHASSIS_SHORT_NAME}: make PowerSupply bus: {I2CBUS} addr:"
+                   " {I2CADDR} presline: {PRESLINE}",
+                   "CHASSIS_SHORT_NAME", chassisShortName, "I2CBUS", *i2cbus,
+                   "I2CADDR", *i2caddr, "PRESLINE", presline);
 
         try
         {
@@ -392,12 +411,13 @@ void Chassis::initPowerMonitoring()
     // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
     powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
         bus,
-        sdbusplus::bus::match::rules::interfacesAddedAtPath(POWER_OBJ_PATH),
+        sdbusplus::bus::match::rules::interfacesAddedAtPath(
+            chassisPowerPath.c_str()),
         std::bind(&Chassis::powerIfaceAdded, this, std::placeholders::_1));
     powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
         bus,
-        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
-                                                        POWER_IFACE),
+        sdbusplus::bus::match::rules::propertiesChanged(
+            chassisPowerPath.c_str(), POWER_IFACE),
         [this](auto& msg) { this->powerStateChanged(msg); });
 
     initialize();
@@ -793,10 +813,13 @@ void Chassis::analyzeBrownout()
                 using PowerState = sdbusplus::xyz::openbmc_project::State::
                     server::Chassis::PowerState;
                 PowerState currentPowerState;
+                constexpr auto path = "/xyz/openbmc_project/state/chassis{}";
+                constexpr auto interface =
+                    "xyz.openbmc_project.State.Chassis{}";
                 util::getProperty<PowerState>(
                     "xyz.openbmc_project.State.Chassis", "CurrentPowerState",
-                    "/xyz/openbmc_project/state/chassis0",
-                    "xyz.openbmc_project.State.Chassis0", bus,
+                    std::format(path, chassisPathUniqueId),
+                    std::format(interface, chassisPathUniqueId), bus,
                     currentPowerState);
 
                 if (currentPowerState == PowerState::Off)
@@ -1061,16 +1084,17 @@ void Chassis::readInitialPowerState()
     {
         // Get service providing the chassis power interface
         std::string powerService =
-            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+            util::getService(chassisPowerPath.c_str(), POWER_IFACE, bus);
 
         // pgood is the latest read of the chassis pgood
         int pgood = 0;
-        util::getProperty<int>(POWER_IFACE, "pgood", POWER_OBJ_PATH,
+        util::getProperty<int>(POWER_IFACE, "pgood", chassisPowerPath.c_str(),
                                powerService, bus, pgood);
 
         // state is the latest requested power on / off transition
-        auto method = bus.new_method_call(powerService.c_str(), POWER_OBJ_PATH,
-                                          POWER_IFACE, "getPowerState");
+        auto method =
+            bus.new_method_call(powerService.c_str(), chassisPowerPath.c_str(),
+                                POWER_IFACE, "getPowerState");
         auto reply = bus.call(method);
         int state = 0;
         reply.read(state);
@@ -1116,11 +1140,12 @@ void Chassis::setPowerSupplyError(const std::string& psuErrorString)
     {
         // Get service providing the chassis power interface
         std::string powerService =
-            util::getService(POWER_OBJ_PATH, POWER_IFACE, bus);
+            util::getService(chassisPowerPath.c_str(), POWER_IFACE, bus);
 
         // Call D-Bus method to inform pseq of PSU error
-        auto methodMsg = bus.new_method_call(
-            powerService.c_str(), POWER_OBJ_PATH, POWER_IFACE, method);
+        auto methodMsg =
+            bus.new_method_call(powerService.c_str(), chassisPowerPath.c_str(),
+                                POWER_IFACE, method);
         methodMsg.append(psuErrorString);
         auto callReply = bus.call(methodMsg);
     }
@@ -1405,4 +1430,23 @@ unsigned int Chassis::getRequiredPSUCount()
     return requiredCount;
 }
 
+void Chassis::updatePowerState(const std::string& state)
+{
+    if (state == "xyz.openbmc_project.State.Chassis.PowerState.On")
+    {
+        powerOn = true;
+        if (validationTimer)
+        {
+            validationTimer->restartOnce(std::chrono::seconds(5));
+        }
+    }
+    else
+    {
+        powerOn = false;
+        for (auto& psu : psus)
+        {
+            psu->clearFaults();
+        }
+    }
+}
 } // namespace phosphor::power::chassis
