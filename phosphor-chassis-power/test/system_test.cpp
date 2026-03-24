@@ -1,0 +1,98 @@
+/**
+ * Copyright © 2026 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "chassis.hpp"
+#include "system.hpp"
+
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <gtest/gtest.h>
+
+using namespace phosphor::power::chassis;
+
+/**
+ * Creates a Chassis object with the specified parameters.
+ *
+ * @param number Chassis number within the system.
+ * @param presencePath Optional presence path for the chassis
+ * @return Chassis object
+ */
+std::unique_ptr<Chassis> createChassis(
+    unsigned int number, std::optional<std::string> presencePath = std::nullopt)
+{
+    std::vector<std::unique_ptr<Gpio>> gpios;
+    return std::make_unique<Chassis>(number, std::move(presencePath),
+                                     std::move(gpios));
+}
+
+TEST(SystemTests, Constructor)
+{
+    // Test with single chassis
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
+        System system{std::move(chassis)};
+
+        EXPECT_EQ(system.getChassis().size(), 1);
+        EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
+        EXPECT_EQ(system.getChassis()[0]->getPresencePath(), "/dev/i2c-159");
+    }
+
+    // Test with multiple chassis
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
+        chassis.emplace_back(createChassis(2, "/dev/i2c-160"));
+        chassis.emplace_back(createChassis(3, std::nullopt));
+        System system{std::move(chassis)};
+
+        EXPECT_EQ(system.getChassis().size(), 3);
+        EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
+        EXPECT_EQ(system.getChassis()[0]->getPresencePath(), "/dev/i2c-159");
+        EXPECT_EQ(system.getChassis()[1]->getNumber(), 2);
+        EXPECT_EQ(system.getChassis()[1]->getPresencePath(), "/dev/i2c-160");
+        EXPECT_EQ(system.getChassis()[2]->getNumber(), 3);
+        EXPECT_FALSE(system.getChassis()[2]->getPresencePath().has_value());
+    }
+
+    // Test with empty chassis vector
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        System system{std::move(chassis)};
+
+        EXPECT_EQ(system.getChassis().size(), 0);
+    }
+}
+
+TEST(SystemTests, GetChassis)
+{
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(3, "/dev/i2c-161"));
+    chassis.emplace_back(createChassis(7, std::nullopt));
+    System system{std::move(chassis)};
+
+    EXPECT_EQ(system.getChassis().size(), 3);
+    EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
+    EXPECT_EQ(system.getChassis()[0]->getPresencePath(), "/dev/i2c-159");
+    EXPECT_EQ(system.getChassis()[1]->getNumber(), 3);
+    EXPECT_EQ(system.getChassis()[1]->getPresencePath(), "/dev/i2c-161");
+    EXPECT_EQ(system.getChassis()[2]->getNumber(), 7);
+    EXPECT_FALSE(system.getChassis()[2]->getPresencePath().has_value());
+}
