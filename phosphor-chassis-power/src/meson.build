@@ -6,6 +6,7 @@ phosphor_chassis_power_library = static_library(
     'chassis.cpp',
     'gpio.cpp',
     'config_file_parser.cpp',
+    'system.cpp',
     implicit_include_directories: false,
     dependencies: [
         phosphor_dbus_interfaces,

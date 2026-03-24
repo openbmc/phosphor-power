@@ -16,6 +16,7 @@
 #pragma once
 
 #include "compatible_system_types_finder.hpp"
+#include "system.hpp"
 
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
@@ -44,7 +45,7 @@ class Manager
     Manager& operator=(Manager&&) = delete;
     ~Manager() = default;
 
-    /*
+    /**
      * Constructor to initialize the Manager object.
      *
      * @param bus - Dbus bus object.
@@ -69,7 +70,7 @@ class Manager
     bool isConfigFileLoaded() const
     {
         // If System object exists, the config file has been loaded
-        return (system);
+        return (system != nullptr);
     }
 
     /**
@@ -92,7 +93,7 @@ class Manager
     void clearCompatibleSystemTypes()
     {
         compatibleSystemTypes.clear();
-        system = false;
+        system.reset();
     }
 
   private:
@@ -159,11 +160,10 @@ class Manager
     /**
      * Computer system being controlled and monitored by the BMC.
      *
-     * Temporary set as bool, todo make system class for PCP
-     * Will contain the information loaded from the JSON configuration file.
-     * Will contain nullptr if the configuration file has not been loaded.
+     * Contains the information loaded from the JSON configuration file.
+     * Contains nullptr if the configuration file has not been loaded.
      */
-    bool system = false;
+    std::unique_ptr<System> system;
 };
 
 } // namespace phosphor::power::chassis
