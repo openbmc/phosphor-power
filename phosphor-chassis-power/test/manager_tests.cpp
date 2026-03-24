@@ -263,7 +263,7 @@ TEST_F(ManagerTests, LoadConfigFile)
 {
     Manager manager{bus, event};
 
-    // No config file found - system should remain false
+    // No config file found - system should fail to load
     {
         fs::remove_all(testConfigDir);
 
@@ -277,8 +277,138 @@ TEST_F(ManagerTests, LoadConfigFile)
         manager.clearCompatibleSystemTypes();
     }
 
-    // Config file found - system should be set to true
+    // Config file with invalid gpio property - system should fail to load
     {
+        fs::remove_all(testConfigDir);
+
+        fs::path configPath = testConfigDir / "Huygens.json";
+        fs::create_directories(testConfigDir);
+
+        const std::string configFileContents = R"(
+            [
+              {
+                "ChassisNumber": 1,
+                "PresencePath": "/dev/i2c-159",
+                "PresenceGpio": {
+                  "Name": "presence-chassis1",
+                  "Direction": "Input",
+                  "Polarity": "Invalid"
+                }
+              }
+            ]
+        )";
+        writeConfigFile(configPath, configFileContents);
+
+        std::vector<std::string> types{
+            "com.ibm.Hardware.Chassis.Model.Huygens"};
+        manager.compatibleSystemTypesFound(types);
+
+        EXPECT_FALSE(manager.isConfigFileLoaded());
+        EXPECT_EQ(manager.getCompatibleSystemTypes(), types);
+
+        manager.clearCompatibleSystemTypes();
+    }
+
+    // Config file with invalid chassis number - system should fail to load
+    {
+        fs::remove_all(testConfigDir);
+
+        fs::path configPath = testConfigDir / "Huygens.json";
+        fs::create_directories(testConfigDir);
+
+        const std::string configFileContents = R"(
+            [
+              {
+                "ChassisNumber": -1,
+                "PresencePath": "/dev/i2c-159",
+                "PresenceGpio": {
+                  "Name": "presence-chassis1",
+                  "Direction": "Input",
+                  "Polarity": "Invalid"
+                }
+              }
+            ]
+        )";
+        writeConfigFile(configPath, configFileContents);
+
+        std::vector<std::string> types{
+            "com.ibm.Hardware.Chassis.Model.Huygens"};
+        manager.compatibleSystemTypesFound(types);
+
+        EXPECT_FALSE(manager.isConfigFileLoaded());
+        EXPECT_EQ(manager.getCompatibleSystemTypes(), types);
+
+        manager.clearCompatibleSystemTypes();
+    }
+
+    // Config file with invalid presence path - system should fail to load
+    {
+        fs::remove_all(testConfigDir);
+
+        fs::path configPath = testConfigDir / "Huygens.json";
+        fs::create_directories(testConfigDir);
+
+        const std::string configFileContents = R"(
+            [
+              {
+                "ChassisNumber": 1,
+                "PresencePath": "dev/i2c-159",
+                "PresenceGpio": {
+                  "Name": "presence-chassis1",
+                  "Direction": "Input",
+                  "Polarity": "Invalid"
+                }
+              }
+            ]
+        )";
+        writeConfigFile(configPath, configFileContents);
+
+        std::vector<std::string> types{
+            "com.ibm.Hardware.Chassis.Model.Huygens"};
+        manager.compatibleSystemTypesFound(types);
+
+        EXPECT_FALSE(manager.isConfigFileLoaded());
+        EXPECT_EQ(manager.getCompatibleSystemTypes(), types);
+
+        manager.clearCompatibleSystemTypes();
+    }
+
+    // Config file with invalid json - system should fail to load
+    {
+        fs::remove_all(testConfigDir);
+
+        fs::path configPath = testConfigDir / "Huygens.json";
+        fs::create_directories(testConfigDir);
+
+        const std::string configFileContents = R"(
+            [
+              {
+                "ChassisNumber": 1,,
+                "PresencePath": "/dev/i2c-159",
+                "PresenceGpio": {
+                  "Name": "presence-chassis1",
+                  "Direction": "Input",
+                  "Polarity": "Low"
+                }
+              }
+            ]
+        )";
+        writeConfigFile(configPath, configFileContents);
+
+        std::vector<std::string> types{
+            "com.ibm.Hardware.Chassis.Model.Huygens"};
+        manager.compatibleSystemTypesFound(types);
+
+        EXPECT_FALSE(manager.isConfigFileLoaded());
+        EXPECT_EQ(manager.getCompatibleSystemTypes(), types);
+
+        manager.clearCompatibleSystemTypes();
+    }
+
+    // Config file found - system should succesfully load
+    {
+        fs::remove_all(testConfigDir);
+        
         createTestConfigFile("Huygens.json");
 
         std::vector<std::string> types{

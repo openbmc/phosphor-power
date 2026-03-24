@@ -4,6 +4,7 @@ phosphor_chassis_power_tests_source_files = [
     'gpio_tests.cpp',
     'chassis_tests.cpp',
     'config_file_parser_tests.cpp',
+    'system_tests.cpp',
 ]
 
 test(
