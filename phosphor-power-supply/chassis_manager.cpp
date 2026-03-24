@@ -9,8 +9,7 @@ using namespace phosphor::logging;
 namespace phosphor::power::chassis_manager
 {
 using namespace phosphor::power::util;
-constexpr auto managerBusName =
-    "xyz.openbmc_project.Power.MultiChassisPSUMonitor";
+constexpr auto managerBusName = "xyz.openbmc_project.Power.PSUMonitor";
 constexpr auto IBMCFFPSInterface =
     "xyz.openbmc_project.Configuration.IBMCFFPSConnector";
 constexpr auto supportedConfIntf =
