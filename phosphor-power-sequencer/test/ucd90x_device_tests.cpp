@@ -62,7 +62,7 @@ static std::unique_ptr<Rail> createRail(const std::string& name,
 TEST(UCD90xDeviceTests, Constructor)
 {
     std::string name{"ucd90320"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -93,7 +93,7 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
     // Test where works
     {
         std::string name{"ucd90320"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -119,7 +119,7 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
     // Test where fails
     {
         std::string name{"ucd90320"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -195,7 +195,7 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
             .Times(1);
 
         std::string name{"ucd90320"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -257,7 +257,7 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
             .Times(1);
 
         std::string name{"ucd90320"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};

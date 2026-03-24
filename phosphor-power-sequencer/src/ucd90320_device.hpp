@@ -56,7 +56,7 @@ class UCD90320Device : public UCD90xDevice
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
      */
-    explicit UCD90320Device(uint8_t bus, uint16_t address,
+    explicit UCD90320Device(uint16_t bus, uint16_t address,
                             const std::string& powerControlGPIOName,
                             const std::string& powerGoodGPIOName,
                             std::vector<std::unique_ptr<Rail>> rails) :

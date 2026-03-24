@@ -226,7 +226,7 @@ PgoodGPIO parseGPIO(const json& element,
  * @param variables variables map used to expand variables in element value
  * @return tuple containing bus and address
  */
-std::tuple<uint8_t, uint16_t> parseI2CInterface(
+std::tuple<uint16_t, uint16_t> parseI2CInterface(
     const json& element, const std::map<std::string, std::string>& variables);
 
 /**

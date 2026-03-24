@@ -61,7 +61,7 @@ class StandardDeviceImpl : public StandardDevice
     virtual ~StandardDeviceImpl() = default;
 
     // Constructor just calls StandardDevice constructor
-    explicit StandardDeviceImpl(const std::string& name, uint8_t bus,
+    explicit StandardDeviceImpl(const std::string& name, uint16_t bus,
                                 uint16_t address,
                                 const std::string& powerControlGPIOName,
                                 const std::string& powerGoodGPIOName,
@@ -152,7 +152,7 @@ TEST(StandardDeviceTests, Constructor)
     // Test where works: Empty vector of rails
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -176,7 +176,7 @@ TEST(StandardDeviceTests, Constructor)
     // Test where works: Non-empty vector of rails
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -209,7 +209,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where works: No rail has a pgood fault
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -250,7 +250,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Is a PSU rail: No PSU error specified
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -311,7 +311,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Is a PSU rail: PSU error specified
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -371,7 +371,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Not a PSU rail: PSU error specified
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -439,7 +439,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -500,7 +500,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -561,7 +561,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // other checks.
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -623,7 +623,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // the sequence with a fault is selected.
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -689,7 +689,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where fails: Device is not open
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -722,7 +722,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where fails: Exception is thrown during pgood fault detection
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};

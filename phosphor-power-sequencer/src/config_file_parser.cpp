@@ -368,7 +368,7 @@ PgoodGPIO parseGPIO(const json& element,
     return PgoodGPIO(line, activeLow);
 }
 
-std::tuple<uint8_t, uint16_t> parseI2CInterface(
+std::tuple<uint16_t, uint16_t> parseI2CInterface(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables)
 {
@@ -377,7 +377,7 @@ std::tuple<uint8_t, uint16_t> parseI2CInterface(
 
     // Required bus property
     const json& busElement = getRequiredProperty(element, "bus");
-    uint8_t bus = parseUint8(busElement, variables);
+    uint16_t bus = parseUint16(busElement, variables);
     ++propertyCount;
 
     // Required address property
@@ -410,7 +410,7 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     ++propertyCount;
 
     // i2c_interface property is required for some device types
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0};
     auto i2cInterfaceIt = element.find("i2c_interface");
     if (i2cInterfaceIt != element.end())

@@ -63,7 +63,8 @@ class BasicDevice : public PowerSequencerDevice
      *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
      */
-    explicit BasicDevice(const std::string& name, uint8_t bus, uint16_t address,
+    explicit BasicDevice(const std::string& name, uint16_t bus,
+                         uint16_t address,
                          const std::string& powerControlGPIOName,
                          const std::string& powerGoodGPIOName,
                          std::vector<std::unique_ptr<Rail>> rails) :
@@ -93,7 +94,7 @@ class BasicDevice : public PowerSequencerDevice
     }
 
     /** @copydoc PowerSequencerDevice::getBus() */
-    virtual uint8_t getBus() const override
+    virtual uint16_t getBus() const override
     {
         return bus;
     }
@@ -232,7 +233,7 @@ class BasicDevice : public PowerSequencerDevice
     /**
      * I2C bus for the device.
      */
-    uint8_t bus;
+    uint16_t bus;
 
     /**
      * I2C address for the device.

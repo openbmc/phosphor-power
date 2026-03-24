@@ -141,7 +141,7 @@ class Services
      * @return object for communicating with PMBus device
      */
     virtual std::unique_ptr<PMBusBase> createPMBus(
-        uint8_t bus, uint16_t address, const std::string& driverName = "",
+        uint16_t bus, uint16_t address, const std::string& driverName = "",
         size_t instance = 0) = 0;
 
     /**
@@ -254,7 +254,7 @@ class BMCServices : public Services
 
     /** @copydoc Services::createPMBus() */
     virtual std::unique_ptr<PMBusBase> createPMBus(
-        uint8_t bus, uint16_t address, const std::string& driverName = "",
+        uint16_t bus, uint16_t address, const std::string& driverName = "",
         size_t instance = 0) override
     {
         std::string path =

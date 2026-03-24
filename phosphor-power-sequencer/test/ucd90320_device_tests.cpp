@@ -59,7 +59,7 @@ static std::unique_ptr<Rail> createRail(const std::string& name,
 
 TEST(UCD90320DeviceTests, Constructor)
 {
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -141,7 +141,7 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -233,7 +233,7 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};

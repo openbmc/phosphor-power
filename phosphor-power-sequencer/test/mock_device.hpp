@@ -42,7 +42,7 @@ class MockDevice : public PowerSequencerDevice
     virtual ~MockDevice() = default;
 
     MOCK_METHOD(const std::string&, getName, (), (const, override));
-    MOCK_METHOD(uint8_t, getBus, (), (const, override));
+    MOCK_METHOD(uint16_t, getBus, (), (const, override));
     MOCK_METHOD(uint16_t, getAddress, (), (const, override));
     MOCK_METHOD(const std::string&, getPowerControlGPIOName, (),
                 (const, override));

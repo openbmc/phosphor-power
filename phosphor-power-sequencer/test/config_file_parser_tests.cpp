@@ -1658,18 +1658,32 @@ TEST(ConfigFileParserTests, ParseGPIO)
 
 TEST(ConfigFileParserTests, ParseI2CInterface)
 {
-    // Test where works: No variables
+    // Test where works: No variables: One byte bus: One digit address
     {
         const json element = R"(
             {
                 "bus": 2,
-                "address": "0x70"
+                "address": "0xe"
             }
         )"_json;
         std::map<std::string, std::string> variables{};
         auto [bus, address] = parseI2CInterface(element, variables);
         EXPECT_EQ(bus, 2);
-        EXPECT_EQ(address, 0x70);
+        EXPECT_EQ(address, 0x0E);
+    }
+
+    // Test where works: No variables: Two byte bus: Two digit address
+    {
+        const json element = R"(
+            {
+                "bus": 513,
+                "address": "0x2F"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        auto [bus, address] = parseI2CInterface(element, variables);
+        EXPECT_EQ(bus, 513);
+        EXPECT_EQ(address, 0x2F);
     }
 
     // Test where works: Variables specified

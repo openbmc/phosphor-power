@@ -59,7 +59,7 @@ using ::testing::Throw;
  * @param address I2C address for the device
  * @return real PowerSequencerDevice
  */
-std::unique_ptr<PowerSequencerDevice> createRealPowerSequencer(uint8_t bus,
+std::unique_ptr<PowerSequencerDevice> createRealPowerSequencer(uint16_t bus,
                                                                uint16_t address)
 {
     std::string powerControlGPIOName{"power-chassis-control"};

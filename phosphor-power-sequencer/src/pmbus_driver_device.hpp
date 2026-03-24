@@ -65,7 +65,7 @@ class PMBusDriverDevice : public StandardDevice
      * @param instance Chip instance number
      */
     explicit PMBusDriverDevice(
-        const std::string& name, uint8_t bus, uint16_t address,
+        const std::string& name, uint16_t bus, uint16_t address,
         const std::string& powerControlGPIOName,
         const std::string& powerGoodGPIOName,
         std::vector<std::unique_ptr<Rail>> rails,

@@ -58,7 +58,7 @@ class PowerSequencerDevice
      *
      * @return I2C bus
      */
-    virtual uint8_t getBus() const = 0;
+    virtual uint16_t getBus() const = 0;
 
     /**
      * Returns the I2C address for the device.

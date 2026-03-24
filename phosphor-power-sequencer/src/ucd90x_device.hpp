@@ -59,7 +59,7 @@ class UCD90xDevice : public PMBusDriverDevice
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
      */
-    explicit UCD90xDevice(const std::string& name, uint8_t bus,
+    explicit UCD90xDevice(const std::string& name, uint16_t bus,
                           uint16_t address,
                           const std::string& powerControlGPIOName,
                           const std::string& powerGoodGPIOName,

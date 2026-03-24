@@ -71,7 +71,7 @@ class MockServices : public Services
                 (override));
 
     virtual std::unique_ptr<PMBusBase> createPMBus(
-        uint8_t, uint16_t, const std::string&, size_t) override
+        uint16_t, uint16_t, const std::string&, size_t) override
     {
         return std::make_unique<MockPMBus>();
     }

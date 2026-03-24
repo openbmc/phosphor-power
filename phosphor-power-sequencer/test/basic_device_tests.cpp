@@ -58,7 +58,7 @@ class BasicDeviceImpl : public BasicDevice
     BasicDeviceImpl& operator=(BasicDeviceImpl&&) = delete;
     virtual ~BasicDeviceImpl() = default;
 
-    explicit BasicDeviceImpl(const std::string& name, uint8_t bus,
+    explicit BasicDeviceImpl(const std::string& name, uint16_t bus,
                              uint16_t address,
                              const std::string& powerControlGPIOName,
                              const std::string& powerGoodGPIOName,
@@ -106,7 +106,7 @@ TEST(BasicDeviceTests, Constructor)
     // Test where works: Empty vector of rails
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -130,7 +130,7 @@ TEST(BasicDeviceTests, Constructor)
     // Test where works: Non-empty vector of rails
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -161,7 +161,7 @@ TEST(BasicDeviceTests, Destructor)
     // Test where succeeds: No exception thrown
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -179,7 +179,7 @@ TEST(BasicDeviceTests, Destructor)
     // Test where succeeds: Exception caught
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -202,7 +202,7 @@ TEST(BasicDeviceTests, Destructor)
 TEST(BasicDeviceTests, GetName)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -220,7 +220,7 @@ TEST(BasicDeviceTests, GetName)
 TEST(BasicDeviceTests, GetBus)
 {
     std::string name{"abc_pseq"};
-    uint8_t bus{1};
+    uint16_t bus{1};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -238,7 +238,7 @@ TEST(BasicDeviceTests, GetBus)
 TEST(BasicDeviceTests, GetAddress)
 {
     std::string name{"abc_pseq"};
-    uint8_t bus{1};
+    uint16_t bus{1};
     uint16_t address{0x24};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -256,7 +256,7 @@ TEST(BasicDeviceTests, GetAddress)
 TEST(BasicDeviceTests, GetPowerControlGPIOName)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
@@ -274,7 +274,7 @@ TEST(BasicDeviceTests, GetPowerControlGPIOName)
 TEST(BasicDeviceTests, GetPowerGoodGPIOName)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
@@ -294,7 +294,7 @@ TEST(BasicDeviceTests, GetRails)
     // Empty vector of rails
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -312,7 +312,7 @@ TEST(BasicDeviceTests, GetRails)
     // Non-empty vector of rails
     {
         std::string name{"abc_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -337,7 +337,7 @@ TEST(BasicDeviceTests, GetRails)
 TEST(BasicDeviceTests, Open)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -367,7 +367,7 @@ TEST(BasicDeviceTests, Open)
 TEST(BasicDeviceTests, IsOpen)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -391,7 +391,7 @@ TEST(BasicDeviceTests, Close)
     // Test where works
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -421,7 +421,7 @@ TEST(BasicDeviceTests, Close)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -454,7 +454,7 @@ TEST(BasicDeviceTests, Close)
 TEST(BasicDeviceTests, CloseWithoutException)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -492,7 +492,7 @@ TEST(BasicDeviceTests, CloseWithoutException)
 TEST(BasicDeviceTests, GetPowerControlGPIO)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
@@ -529,7 +529,7 @@ TEST(BasicDeviceTests, GetPowerControlGPIO)
 TEST(BasicDeviceTests, GetPowerGoodGPIO)
 {
     std::string name{"xyz_pseq"};
-    uint8_t bus{0};
+    uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
@@ -569,7 +569,7 @@ TEST(BasicDeviceTests, PowerOn)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -592,7 +592,7 @@ TEST(BasicDeviceTests, PowerOn)
     // Test where works
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -617,7 +617,7 @@ TEST(BasicDeviceTests, PowerOn)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -650,7 +650,7 @@ TEST(BasicDeviceTests, PowerOff)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -673,7 +673,7 @@ TEST(BasicDeviceTests, PowerOff)
     // Test where works
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -698,7 +698,7 @@ TEST(BasicDeviceTests, PowerOff)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -732,7 +732,7 @@ TEST(BasicDeviceTests, GetPowerGood)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -755,7 +755,7 @@ TEST(BasicDeviceTests, GetPowerGood)
     // Test where works: Value is false
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -777,7 +777,7 @@ TEST(BasicDeviceTests, GetPowerGood)
     // Test where works: Value is true
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
@@ -800,7 +800,7 @@ TEST(BasicDeviceTests, GetPowerGood)
     try
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{0};
+        uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};

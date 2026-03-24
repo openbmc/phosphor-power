@@ -109,7 +109,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
     // Test where works; optional parameters not specified
     {
         std::string name{"XYZ_PSEQ"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -138,7 +138,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
     // Test where works; optional parameters specified
     {
         std::string name{"XYZ_PSEQ"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"pgood"};
@@ -173,7 +173,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
 TEST_F(PMBusDriverDeviceTests, GetDriverName)
 {
     std::string name{"XYZ_PSEQ"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -194,7 +194,7 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
 TEST_F(PMBusDriverDeviceTests, GetInstance)
 {
     std::string name{"XYZ_PSEQ"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -217,7 +217,7 @@ TEST_F(PMBusDriverDeviceTests, GetInstance)
 TEST_F(PMBusDriverDeviceTests, Open)
 {
     std::string name{"XYZ_PSEQ"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -256,7 +256,7 @@ TEST_F(PMBusDriverDeviceTests, Close)
     // Test where works
     {
         std::string name{"XYZ_PSEQ"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -286,7 +286,7 @@ TEST_F(PMBusDriverDeviceTests, Close)
     try
     {
         std::string name{"XYZ_PSEQ"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -319,7 +319,7 @@ TEST_F(PMBusDriverDeviceTests, Close)
 TEST_F(PMBusDriverDeviceTests, GetPMBusInterface)
 {
     std::string name{"XYZ_PSEQ"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
@@ -359,7 +359,7 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
     // Test where works
     {
         std::string name{"ABC_382%#, ZY"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -384,7 +384,7 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
     // Test where fails
     {
         std::string name{"XYZ_PSEQ"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -435,7 +435,7 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
     // Test where works
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -461,7 +461,7 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
     // Test where fails
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -513,7 +513,7 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
     // Test where works
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -539,7 +539,7 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
     // Test where fails
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -594,7 +594,7 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         createFile("in13_label"); // PAGE 9 -> file number 13
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -629,7 +629,7 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         createFile("in13_label"); // PAGE 8 -> file number 13
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -687,7 +687,7 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         createFile("in1_label"); // PAGE 6 -> file number 1
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -722,7 +722,7 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         createFile("in1_label"); // PAGE 7 -> file number 1
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -785,7 +785,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("temp8_label"); // Not a voltage label file
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -824,7 +824,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("temp8_label"); // Not a voltage label file
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -869,7 +869,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
     // Test where fails: Device not open
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -898,7 +898,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("in9_label");
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -926,7 +926,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
     // Test where fails: hwmon directory path does not exist
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -962,7 +962,7 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         fs::permissions(tempDirPath, fs::perms::none);
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -1006,7 +1006,7 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         createFile("in13_label"); // PAGE 9 -> file number 13
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -1043,7 +1043,7 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
     // Test where fails: Device not open
     {
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -1074,7 +1074,7 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         createFile("in13_label"); // PAGE 9 -> file number 13
 
         std::string name{"xyz_pseq"};
-        uint8_t bus{3};
+        uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
@@ -1123,7 +1123,7 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     createFile("in1_label"); // PAGE 6 -> file number 1
 
     std::string name{"xyz_pseq"};
-    uint8_t bus{3};
+    uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
