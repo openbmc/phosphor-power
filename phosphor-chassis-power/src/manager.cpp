@@ -15,6 +15,7 @@
  */
 #include "manager.hpp"
 
+#include "config_file_parser.hpp"
 #include "format_utils.hpp"
 
 #include <chrono>
@@ -134,11 +135,15 @@ void Manager::loadConfigFile()
             // Log info message in journal; config file path is important
             lg2::info("Loading configuration file {PATH}", "PATH",
                       pathName.string());
-            system = true;
 
             // Parse the config file
+            auto chassis = config_file_parser::parse(pathName);
 
-            // Store config file information
+            // Create System object with parsed chassis
+            system = std::make_unique<System>(std::move(chassis));
+
+            lg2::info("Parsed {NUMBER} chassis", "NUMBER",
+                      system->getChassis().size());
         }
         else
         {

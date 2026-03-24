@@ -22,17 +22,10 @@
 #include <utility>
 #include <vector>
 
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::chassis;
 /*using namespace phosphor::power::chassis::test_utils;*/
-
-using ::testing::A;
-using ::testing::Ref;
-using ::testing::Return;
-using ::testing::Throw;
-using ::testing::TypedEq;
 
 class GpioTests : public ::testing::Test
 {
