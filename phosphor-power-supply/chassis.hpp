@@ -492,6 +492,11 @@ class Chassis
      * @return true if PSU is required, false otherwise.
      */
     bool isRequiredPSU(const PowerSupply& psu);
+
+    /**
+     * @brief Chassis power path
+     */
+    std::string chassisPowerPath;
 };
 
 } // namespace phosphor::power::chassis
