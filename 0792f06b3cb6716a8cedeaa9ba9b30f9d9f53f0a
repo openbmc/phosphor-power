@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d98995d1_93ff1f02",
+        "filename": "phosphor-chassis-power/test/meson.build",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-03-24T20:38:57Z",
+      "side": 1,
+      "message": "will rename to system_tests.cpp",
+      "range": {
+        "startLine": 7,
+        "startChar": 5,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "0792f06b3cb6716a8cedeaa9ba9b30f9d9f53f0a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
