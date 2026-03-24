@@ -12,6 +12,22 @@ class MockedI2CInterface : public I2CInterface
   public:
     virtual ~MockedI2CInterface() = default;
 
+    MockedI2CInterface() {}
+
+    MockedI2CInterface(uint16_t busId, uint8_t devAddr) :
+        busId(busId), devAddr(devAddr)
+    {}
+
+    uint16_t getBusID() const override
+    {
+        return busId;
+    }
+
+    uint8_t getAddress() const override
+    {
+        return devAddr;
+    }
+
     MOCK_METHOD(void, open, (), (override));
     MOCK_METHOD(bool, isOpen, (), (const, override));
     MOCK_METHOD(void, close, (), (override));
@@ -37,6 +53,10 @@ class MockedI2CInterface : public I2CInterface
                 (uint8_t addr, uint8_t writeSize, const uint8_t* writeData,
                  uint8_t& readSize, uint8_t* readData),
                 (override));
+
+  private:
+    uint16_t busId{0};
+    uint8_t devAddr{0x00};
 };
 
 } // namespace i2c

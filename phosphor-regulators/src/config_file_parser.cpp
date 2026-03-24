@@ -572,7 +572,7 @@ std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
 
     // Required bus property
     const json& busElement = getRequiredProperty(element, "bus");
-    uint8_t bus = parseUint8(busElement);
+    uint16_t bus = parseUint16(busElement);
     ++propertyCount;
 
     // Required address property

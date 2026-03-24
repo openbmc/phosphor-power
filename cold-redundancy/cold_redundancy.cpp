@@ -222,7 +222,7 @@ void ColdRedundancy::createPSU(
                                 }
                                 for (auto& psu : powerSupplies)
                                 {
-                                    if ((static_cast<uint8_t>(*configBus) ==
+                                    if ((static_cast<uint16_t>(*configBus) ==
                                          psu->bus) &&
                                         (static_cast<uint8_t>(*configAddress) ==
                                          psu->address))
@@ -236,7 +236,7 @@ void ColdRedundancy::createPSU(
                                 powerSupplies.emplace_back(
                                     std::make_unique<PowerSupply>(
                                         *configName,
-                                        static_cast<uint8_t>(*configBus),
+                                        static_cast<uint16_t>(*configBus),
                                         static_cast<uint8_t>(*configAddress),
                                         order, conn));
 
@@ -261,7 +261,7 @@ void ColdRedundancy::createPSU(
 }
 
 PowerSupply::PowerSupply(
-    std::string& name, uint8_t bus, uint8_t address, uint8_t order,
+    std::string& name, uint16_t bus, uint8_t address, uint8_t order,
     const std::shared_ptr<sdbusplus::asio::connection>& dbusConnection) :
     name(name), bus(bus), address(address), order(order)
 {

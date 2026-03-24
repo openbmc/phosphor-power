@@ -224,13 +224,13 @@ std::string getDevicePath(sdbusplus::bus_t& bus,
     }
 }
 
-std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName)
+std::pair<uint16_t, uint8_t> parseDeviceName(const std::string& devName)
 {
     // Get I2C bus and device address, e.g. 3-0068
     // is parsed to bus 3, device address 0x68
     auto pos = devName.find('-');
     assert(pos != std::string::npos);
-    uint8_t busId = std::stoi(devName.substr(0, pos));
+    uint16_t busId = std::stoi(devName.substr(0, pos));
     uint8_t devAddr = std::stoi(devName.substr(pos + 1), nullptr, 16);
     return {busId, devAddr};
 }

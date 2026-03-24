@@ -94,7 +94,7 @@ class PowerSupply
      * @param[in] dbusConnection - D-Bus connection
      */
     PowerSupply(
-        std::string& name, uint8_t bus, uint8_t address, uint8_t order,
+        std::string& name, uint16_t bus, uint8_t address, uint8_t order,
         const std::shared_ptr<sdbusplus::asio::connection>& dbusConnection);
     ~PowerSupply() = default;
 
@@ -110,7 +110,7 @@ class PowerSupply
      *
      * @details The smbus number on the system
      */
-    uint8_t bus;
+    uint16_t bus;
 
     /**
      * @brief Indicates the smbus address of the device

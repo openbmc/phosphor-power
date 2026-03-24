@@ -22,7 +22,7 @@
 #include <string>
 
 // i2c bus & i2c slave address of Mihawk's CPLD_register
-static constexpr uint8_t busId = 11;
+static constexpr uint16_t busId = 11;
 static constexpr uint8_t slaveAddr = 0x40;
 
 // SMLink Status Register(PSU status Register)

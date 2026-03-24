@@ -21,10 +21,10 @@ class I2CDevice : public I2CInterface
      * @param[in] initialState - Initial state of the I2CDevice object
      * @param[in] maxRetries - Maximum number of times to retry an I2C operation
      */
-    explicit I2CDevice(uint8_t busId, uint8_t devAddr,
+    explicit I2CDevice(uint16_t busId, uint8_t devAddr,
                        InitialState initialState = InitialState::OPEN,
                        int maxRetries = 0) :
-        devAddr(devAddr), maxRetries(maxRetries),
+        busId(busId), devAddr(devAddr), maxRetries(maxRetries),
         busStr("/dev/i2c-" + std::to_string(busId))
     {
         if (initialState == InitialState::OPEN)
@@ -38,6 +38,9 @@ class I2CDevice : public I2CInterface
 
     /** @brief Empty adapter functionality value with no bit flags set */
     static constexpr unsigned long NO_FUNCS = 0;
+
+    /** @brief The bus ID (number) for the device */
+    uint16_t busId;
 
     /** @brief The i2c device address in the bus */
     uint8_t devAddr;
@@ -169,6 +172,18 @@ class I2CDevice : public I2CInterface
         }
     }
 
+    /** @copydoc I2CInterface::getBusID() */
+    uint16_t getBusID() const override
+    {
+        return busId;
+    }
+
+    /** @copydoc I2CInterface::getAddress() */
+    uint8_t getAddress() const override
+    {
+        return devAddr;
+    }
+
     /** @copydoc I2CInterface::open() */
     void open() override;
 
@@ -228,7 +243,7 @@ class I2CDevice : public I2CInterface
      * @return The unique_ptr holding the I2CInterface
      */
     static std::unique_ptr<I2CInterface> create(
-        uint8_t busId, uint8_t devAddr,
+        uint16_t busId, uint8_t devAddr,
         InitialState initialState = InitialState::OPEN, int maxRetries = 0);
 };
 

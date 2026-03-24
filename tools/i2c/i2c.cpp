@@ -523,14 +523,14 @@ void I2CDevice::processCall(uint8_t addr, uint8_t writeSize,
 }
 
 std::unique_ptr<I2CInterface> I2CDevice::create(
-    uint8_t busId, uint8_t devAddr, InitialState initialState, int maxRetries)
+    uint16_t busId, uint8_t devAddr, InitialState initialState, int maxRetries)
 {
     std::unique_ptr<I2CDevice> dev(
         new I2CDevice(busId, devAddr, initialState, maxRetries));
     return dev;
 }
 
-std::unique_ptr<I2CInterface> create(uint8_t busId, uint8_t devAddr,
+std::unique_ptr<I2CInterface> create(uint16_t busId, uint8_t devAddr,
                                      I2CInterface::InitialState initialState,
                                      int maxRetries)
 {

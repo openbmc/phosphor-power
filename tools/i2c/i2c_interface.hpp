@@ -64,6 +64,18 @@ class I2CInterface
         I2C,
     };
 
+    /** @brief Return the bus ID (number) for the device.
+     *
+     * @return bus id
+     */
+    virtual uint16_t getBusID() const = 0;
+
+    /** @brief Return the device address.
+     *
+     * @return device address
+     */
+    virtual uint8_t getAddress() const = 0;
+
     /** @brief Open the I2C interface to the device
      *
      * Throws an I2CException if the interface is already open.  See isOpen().
@@ -236,7 +248,7 @@ class I2CInterface
  * @return The unique_ptr holding the I2CInterface
  */
 std::unique_ptr<I2CInterface> create(
-    uint8_t busId, uint8_t devAddr,
+    uint16_t busId, uint8_t devAddr,
     I2CInterface::InitialState initialState = I2CInterface::InitialState::OPEN,
     int maxRetries = 0);
 

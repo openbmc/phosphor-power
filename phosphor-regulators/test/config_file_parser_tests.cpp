@@ -2392,6 +2392,133 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
     }
 }
 
+TEST(ConfigFileParserTests, ParseI2CInterface)
+{
+    // Test where works: One byte bus number: One digit address
+    {
+        const json element = R"(
+            {
+              "bus": 3,
+              "address": "0xd"
+            }
+        )"_json;
+        std::unique_ptr<i2c::I2CInterface> interface =
+            parseI2CInterface(element);
+        EXPECT_EQ(interface->getBusID(), 3);
+        EXPECT_EQ(interface->getAddress(), 0x0D);
+    }
+
+    // Test where works: Two byte bus number: Two digit address
+    {
+        const json element = R"(
+            {
+              "bus": 389,
+              "address": "0x7f"
+            }
+        )"_json;
+        std::unique_ptr<i2c::I2CInterface> interface =
+            parseI2CInterface(element);
+        EXPECT_EQ(interface->getBusID(), 389);
+        EXPECT_EQ(interface->getAddress(), 0x7F);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "0xFF", "0x01" ] )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "bus": 389,
+              "address": "0x7f",
+              "foo": 1
+            }
+        )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: bus value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "bus": "three",
+              "address": "0xd"
+            }
+        )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: address value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "bus": 3,
+              "address": "0xCCC"
+            }
+        )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+    }
+
+    // Test where fails: Required bus property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "address": "0xd"
+            }
+        )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: bus");
+    }
+
+    // Test where fails: Required address property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "bus": 3
+            }
+        )"_json;
+        parseI2CInterface(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: address");
+    }
+}
+
 TEST(ConfigFileParserTests, ParseI2CWriteBit)
 {
     // Test where works

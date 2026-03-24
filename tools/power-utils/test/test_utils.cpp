@@ -44,6 +44,10 @@ TEST(TestUtils, parseDeviceName)
     EXPECT_EQ(11, id);
     EXPECT_EQ(0x69, addr);
 
+    std::tie(id, addr) = parseDeviceName("610-001F");
+    EXPECT_EQ(610, id);
+    EXPECT_EQ(0x1F, addr);
+
     EXPECT_THROW(parseDeviceName("no-number"), std::invalid_argument);
 
     EXPECT_DEATH(parseDeviceName("invalid"), "");

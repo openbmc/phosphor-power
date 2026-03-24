@@ -114,7 +114,7 @@ std::string getDevicePath(sdbusplus::bus_t& bus,
  *
  * @return bus and device address
  */
-std::pair<uint8_t, uint8_t> parseDeviceName(const std::string& devName);
+std::pair<uint16_t, uint8_t> parseDeviceName(const std::string& devName);
 
 /**
  * @brief Wrapper to check existence of PSU JSON file
