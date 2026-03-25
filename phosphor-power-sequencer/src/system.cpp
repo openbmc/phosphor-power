@@ -21,6 +21,7 @@
 #include "types.hpp"
 
 #include <exception>
+#include <thread>
 
 namespace phosphor::power::sequencer
 {
@@ -48,6 +49,9 @@ void System::setPowerState(PowerState newPowerState, Services& services)
             "Unable to set system to state {}: No chassis can be set to that state",
             PowerInterface::toString(newPowerState))};
     }
+
+    // Handle power on/off delays
+    handleDelays(newPowerState, services);
 
     services.logInfoMsg(std::format("Powering {} system",
                                     PowerInterface::toString(newPowerState)));
@@ -89,6 +93,35 @@ void System::monitor(Services& services)
     // Check selected chassis for power good faults or invalid chassis status
     checkForPowerGoodFaults(services);
     checkForInvalidChassisStatus(services);
+}
+
+void System::handleDelays(PowerState newPowerState, Services& services)
+{
+    if (newPowerState == PowerState::off)
+    {
+        // Sleep for the required delay time
+        if (powerOffDelay.count() > 0)
+        {
+            std::this_thread::sleep_for(powerOffDelay);
+        }
+
+        // Set time when next power on is allowed
+        powerOnAllowedTime = getCurrentTime() + nextPowerOnDelay;
+    }
+    else if (newPowerState == PowerState::on)
+    {
+        // If necessary, sleep until a power on is allowed
+        auto currentTime = getCurrentTime();
+        if (currentTime < powerOnAllowedTime)
+        {
+            auto sleepDuration = powerOnAllowedTime - currentTime;
+            std::chrono::duration<double> sleepSecs = sleepDuration;
+            services.logInfoMsg(
+                std::format("Waiting {:.3f} seconds until power on allowed",
+                            sleepSecs.count()));
+            std::this_thread::sleep_until(powerOnAllowedTime);
+        }
+    }
 }
 
 void System::createDBusInterfaceIfPossible(Services& services)
