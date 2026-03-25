@@ -40,6 +40,7 @@
 using namespace phosphor::power::sequencer;
 
 using ::testing::_;
+using ::testing::MatchesRegex;
 using ::testing::Return;
 using ::testing::ReturnRef;
 using ::testing::Throw;
@@ -59,6 +60,21 @@ std::unique_ptr<Chassis> createChassis(size_t number,
     ChassisStatusMonitorOptions monitorOptions;
     return std::make_unique<Chassis>(
         number, inventoryPath, std::move(powerSequencers), monitorOptions);
+}
+
+/**
+ * Sets all power on/off delay data members in the System to zero.
+ *
+ * This ensures that automated tests run quickly without delays.
+ *
+ * @param system System object
+ */
+void setDelaysToZero(System& system)
+{
+    using namespace std::chrono_literals;
+    system.setFirstPowerOnDelay(0ms);
+    system.setNextPowerOnDelay(0ms);
+    system.setPowerOffDelay(0ms);
 }
 
 /**
@@ -202,6 +218,9 @@ TEST(SystemTests, Constructor)
     EXPECT_FALSE(system.isInPowerStateTransition());
     EXPECT_FALSE(system.hasDBusInterface());
     EXPECT_THROW(system.getDBusInterface(), std::runtime_error);
+    EXPECT_EQ(system.getFirstPowerOnDelay().count(), 15000);
+    EXPECT_EQ(system.getNextPowerOnDelay().count(), 25000);
+    EXPECT_EQ(system.getPowerOffDelay().count(), 2000);
 }
 
 TEST(SystemTests, GetChassis)
@@ -303,6 +322,7 @@ TEST(SystemTests, GetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -351,6 +371,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -405,6 +426,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -448,6 +470,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGoodExceptIsPresent(system, 0);
@@ -489,6 +512,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         std::string deviceName{"pseq0"};
         {
@@ -531,6 +555,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGoodExceptIsAvailable(system, 0);
@@ -584,6 +609,7 @@ TEST(SystemTests, SetPowerState)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -927,6 +953,7 @@ TEST(SystemTests, Monitor)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -1003,6 +1030,7 @@ TEST(SystemTests, Monitor)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGoodExceptIsPresent(system, 0);
         auto& monitor = getMockStatusMonitor(system, 0);
@@ -1186,6 +1214,75 @@ TEST(SystemTests, GetDBusInterface)
     // The test variations are covered by SetPowerGoodValue
 }
 
+TEST(SystemTests, GetFirstPowerOnDelay)
+{
+    using namespace std::chrono_literals;
+
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    System system{std::move(chassis)};
+    EXPECT_EQ(system.getFirstPowerOnDelay().count(), 15000);
+
+    system.setFirstPowerOnDelay(5000ms);
+    EXPECT_EQ(system.getFirstPowerOnDelay().count(), 5000);
+
+    system.setFirstPowerOnDelay(0ms);
+    EXPECT_EQ(system.getFirstPowerOnDelay().count(), 0);
+
+    system.setFirstPowerOnDelay(10s);
+    EXPECT_EQ(system.getFirstPowerOnDelay().count(), 10000);
+}
+
+TEST(SystemTests, SetFirstPowerOnDelay)
+{
+    // The test variations are covered by GetFirstPowerOnDelay
+}
+
+TEST(SystemTests, GetNextPowerOnDelay)
+{
+    using namespace std::chrono_literals;
+
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    System system{std::move(chassis)};
+    EXPECT_EQ(system.getNextPowerOnDelay().count(), 25000);
+
+    system.setNextPowerOnDelay(5000ms);
+    EXPECT_EQ(system.getNextPowerOnDelay().count(), 5000);
+
+    system.setNextPowerOnDelay(0ms);
+    EXPECT_EQ(system.getNextPowerOnDelay().count(), 0);
+
+    system.setNextPowerOnDelay(10s);
+    EXPECT_EQ(system.getNextPowerOnDelay().count(), 10000);
+}
+
+TEST(SystemTests, SetNextPowerOnDelay)
+{
+    // The test variations are covered by GetNextPowerOnDelay
+}
+
+TEST(SystemTests, GetPowerOffDelay)
+{
+    using namespace std::chrono_literals;
+
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    System system{std::move(chassis)};
+    EXPECT_EQ(system.getPowerOffDelay().count(), 2000);
+
+    system.setPowerOffDelay(600ms);
+    EXPECT_EQ(system.getPowerOffDelay().count(), 600);
+
+    system.setPowerOffDelay(0ms);
+    EXPECT_EQ(system.getPowerOffDelay().count(), 0);
+
+    system.setPowerOffDelay(5s);
+    EXPECT_EQ(system.getPowerOffDelay().count(), 5000);
+}
+
+TEST(SystemTests, SetPowerOffDelay)
+{
+    // The test variations are covered by GetPowerOffDelay
+}
+
 TEST(SystemTests, SetPowerStateValue)
 {
     // The test variations are covered by SetPowerGoodValue
@@ -1199,6 +1296,7 @@ TEST(SystemTests, SetPowerGoodValue)
     System system{std::move(chassis)};
     MockServices services;
 
+    setDelaysToZero(system);
     system.initializeMonitoring(services);
 
     setChassisStatusToGood(system, 0);
@@ -1260,6 +1358,163 @@ TEST(SystemTests, SetPowerGoodValue)
     EXPECT_EQ(system.getDBusInterface().getPgoodProperty(), 0);
 }
 
+TEST(SystemTests, HandleDelays)
+{
+    using namespace std::chrono_literals;
+
+    // Test power off with delay
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(
+            createChassis(1, "/xyz/openbmc_project/inventory/system/chassis"));
+        System system{std::move(chassis)};
+        MockServices services;
+
+        // Set power off delay to 10ms
+        system.setPowerOffDelay(10ms);
+
+        system.initializeMonitoring(services);
+        setChassisStatusToGood(system, 0);
+
+        auto& device = getMockDevice(system, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, powerOff).Times(1);
+
+        EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+
+        // Measure time for power off with delay
+        auto startTime = std::chrono::steady_clock::now();
+        system.setPowerState(PowerState::off, services);
+        auto endTime = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            endTime - startTime);
+
+        // Verify delay occurred (allow some tolerance for test execution)
+        EXPECT_GE(elapsed.count(), 10);
+        EXPECT_LE(elapsed.count(), 20);
+    }
+
+    // Test first power on with delay
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(
+            createChassis(1, "/xyz/openbmc_project/inventory/system/chassis"));
+        System system{std::move(chassis)};
+        MockServices services;
+
+        system.initializeMonitoring(services);
+        setChassisStatusToGood(system, 0);
+
+        auto& device = getMockDevice(system, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, powerOn).Times(1);
+
+        EXPECT_CALL(services, logInfoMsg("Powering on system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services,
+                    logInfoMsg(MatchesRegex(
+                        "Waiting [.0-9]+ seconds until power on allowed")))
+            .Times(1);
+
+        // Set first power on delay to 10ms
+        system.setFirstPowerOnDelay(10ms);
+
+        // Measure time for power on with delay
+        auto startTime = std::chrono::steady_clock::now();
+        system.setPowerState(PowerState::on, services);
+        auto endTime = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            endTime - startTime);
+
+        // Verify delay occurred (allow some tolerance for test execution)
+        EXPECT_GE(elapsed.count(), 10);
+        EXPECT_LE(elapsed.count(), 20);
+    }
+
+    // Test next power on with delay
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(
+            createChassis(1, "/xyz/openbmc_project/inventory/system/chassis"));
+        System system{std::move(chassis)};
+        MockServices services;
+
+        system.setFirstPowerOnDelay(0ms);
+        system.setNextPowerOnDelay(10ms);
+        system.setPowerOffDelay(0ms);
+
+        system.initializeMonitoring(services);
+        setChassisStatusToGood(system, 0);
+
+        auto& device = getMockDevice(system, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, powerOff).Times(1);
+        EXPECT_CALL(device, powerOn).Times(1);
+
+        EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services,
+                    logInfoMsg(MatchesRegex(
+                        "Waiting [.0-9]+ seconds until power on allowed")))
+            .Times(1);
+
+        // Power off (no delay since powerOffDelay is 0)
+        system.setPowerState(PowerState::off, services);
+
+        // Measure time for power on with delay
+        auto startTime = std::chrono::steady_clock::now();
+        system.setPowerState(PowerState::on, services);
+        auto endTime = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            endTime - startTime);
+
+        // Verify delay occurred (allow some tolerance for test execution)
+        EXPECT_GE(elapsed.count(), 10);
+        EXPECT_LE(elapsed.count(), 20);
+    }
+
+    // Test power on and off with no delays
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(
+            createChassis(1, "/xyz/openbmc_project/inventory/system/chassis"));
+        System system{std::move(chassis)};
+        MockServices services;
+
+        setDelaysToZero(system);
+        system.initializeMonitoring(services);
+        setChassisStatusToGood(system, 0);
+
+        auto& device = getMockDevice(system, 0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
+        EXPECT_CALL(device, powerOff).Times(1);
+        EXPECT_CALL(device, powerOn).Times(1);
+
+        EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on system")).Times(1);
+        EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
+        EXPECT_CALL(services,
+                    logInfoMsg(MatchesRegex(
+                        "Waiting [.0-9]+ seconds until power on allowed")))
+            .Times(0);
+
+        // Measure time for power on/off with no delays
+        auto startTime = std::chrono::steady_clock::now();
+        system.setPowerState(PowerState::off, services);
+        system.setPowerState(PowerState::on, services);
+        auto endTime = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            endTime - startTime);
+
+        // Verify no delay occurred (allow some tolerance for test execution)
+        EXPECT_LE(elapsed.count(), 2);
+    }
+}
+
 TEST(SystemTests, CreateDBusInterfaceIfPossible)
 {
     // The test variations are covered by SetPowerGoodValue
@@ -1302,6 +1557,7 @@ TEST(SystemTests, SetInitialSelectedChassisIfNeeded)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -1808,6 +2064,7 @@ TEST(SystemTests, SetPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -1940,6 +2197,7 @@ TEST(SystemTests, SetPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -2052,6 +2310,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -2445,6 +2704,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGoodExceptIsAvailable(system, 0);
         auto& monitor = getMockStatusMonitor(system, 0);
@@ -2494,6 +2754,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGoodExceptIsAvailable(system, 0);
         auto& monitor = getMockStatusMonitor(system, 0);
@@ -2549,6 +2810,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -2609,6 +2871,7 @@ TEST(SystemTests, SetInitialPowerStateIfNeeded)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -2722,6 +2985,7 @@ TEST(SystemTests, UpdateInPowerStateTransition)
     System system{std::move(chassis)};
     MockServices services;
 
+    setDelaysToZero(system);
     system.initializeMonitoring(services);
     setChassisStatusToGood(system, 0);
 
@@ -2833,6 +3097,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -3050,6 +3315,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -3159,6 +3425,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -3269,6 +3536,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -3520,6 +3788,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -3594,6 +3863,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGoodExceptIsPresent(system, 0);
@@ -3680,6 +3950,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);
@@ -3764,6 +4035,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGoodExceptIsInputPowerGood(system, 0);
@@ -3857,6 +4129,7 @@ TEST(SystemTests, HardPowerOff)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         setChassisStatusToGood(system, 0);
 
@@ -3950,6 +4223,7 @@ TEST(SystemTests, HardPowerOff)
         System system{std::move(chassis)};
         MockServices services;
 
+        setDelaysToZero(system);
         system.initializeMonitoring(services);
         {
             setChassisStatusToGood(system, 0);

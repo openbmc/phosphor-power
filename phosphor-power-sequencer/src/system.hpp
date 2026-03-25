@@ -57,7 +57,10 @@ class System
      */
     explicit System(std::vector<std::unique_ptr<Chassis>> chassis) :
         chassis{std::move(chassis)}
-    {}
+    {
+        // Set time when first power on is allowed
+        powerOnAllowedTime = getCurrentTime() + firstPowerOnDelay;
+    }
 
     /**
      * Returns the chassis in the system.
@@ -261,7 +264,102 @@ class System
         return *interface;
     }
 
+    /**
+     * Returns the minimum time until the first power on is allowed.
+     *
+     * @return first power on delay
+     */
+    std::chrono::milliseconds getFirstPowerOnDelay() const
+    {
+        return firstPowerOnDelay;
+    }
+
+    /**
+     * Sets the minimum time until the first power on is allowed.
+     *
+     * Note: This should only be used for automated testing.
+     *
+     * @param delay First power on delay
+     */
+    void setFirstPowerOnDelay(std::chrono::milliseconds delay)
+    {
+        firstPowerOnDelay = delay;
+
+        // Set powerOnAllowedTime since it was set in the constructor using the
+        // default value of firstPowerOnDelay
+        powerOnAllowedTime = getCurrentTime() + firstPowerOnDelay;
+    }
+
+    /**
+     * Returns the minimum time from a power off until the next power on is
+     * allowed.
+     *
+     * @return next power on delay
+     */
+    std::chrono::milliseconds getNextPowerOnDelay() const
+    {
+        return nextPowerOnDelay;
+    }
+
+    /**
+     * Sets the minimum time from a power off until the next power on is
+     * allowed.
+     *
+     * Note: This should only be used for automated testing.
+     *
+     * @param delay Next power on delay
+     */
+    void setNextPowerOnDelay(std::chrono::milliseconds delay)
+    {
+        nextPowerOnDelay = delay;
+    }
+
+    /**
+     * Returns the delay from the time a power off is requested until the power
+     * off begins.
+     *
+     * @return power off delay
+     */
+    std::chrono::milliseconds getPowerOffDelay() const
+    {
+        return powerOffDelay;
+    }
+
+    /**
+     * Sets the delay from the time a power off is requested until the power
+     * off begins.
+     *
+     * Note: This should only be used for automated testing.
+     *
+     * @param delay Power off delay
+     */
+    void setPowerOffDelay(std::chrono::milliseconds delay)
+    {
+        powerOffDelay = delay;
+    }
+
   private:
+    /**
+     * Returns the current system time.
+     *
+     * @return current time
+     */
+    std::chrono::time_point<std::chrono::steady_clock> getCurrentTime()
+    {
+        return std::chrono::steady_clock::now();
+    }
+
+    /**
+     * Handles power on/off delays.
+     *
+     * If powering off, sleeps for powerOffDelay and sets powerOnAllowedTime.
+     * If powering on, sleeps if current time is before powerOnAllowedTime.
+     *
+     * @param newPowerState New system power state
+     * @param services System services like hardware presence and the journal
+     */
+    void handleDelays(PowerState newPowerState, Services& services);
+
     /**
      * Sets the power state value for this system.
      *
@@ -547,6 +645,39 @@ class System
      * Indicates whether a hard power off has been requested using systemd.
      */
     bool hasRequestedPowerOff{false};
+
+    /**
+     * Minimum time until the first power on is allowed.
+     *
+     * The timeout is expressed in milliseconds to enable fast timeouts during
+     * automated testing.
+     */
+    std::chrono::milliseconds firstPowerOnDelay = std::chrono::seconds{15};
+
+    /**
+     * Minimum time from a power off until the next power on is allowed.
+     *
+     * The timeout is expressed in milliseconds to enable fast timeouts during
+     * automated testing.
+     */
+    std::chrono::milliseconds nextPowerOnDelay = std::chrono::seconds{25};
+
+    /**
+     * Delay from the time a power off is requested until the power off
+     * begins.
+     *
+     * This is to allow the host and other BMC applications time to complete
+     * power off processing.
+     *
+     * The timeout is expressed in milliseconds to enable fast timeouts during
+     * automated testing.
+     */
+    std::chrono::milliseconds powerOffDelay = std::chrono::seconds{2};
+
+    /**
+     * Earliest point in time when a power on is allowed.
+     */
+    std::chrono::time_point<std::chrono::steady_clock> powerOnAllowedTime{};
 
     /**
      * D-Bus power interface for the system.
