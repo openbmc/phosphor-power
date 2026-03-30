@@ -16,5 +16,38 @@
 
 #include "chassis.hpp"
 
+#include "types.hpp"
+
+#include <phosphor-logging/lg2.hpp>
+
 namespace phosphor::power::chassis
-{} // namespace phosphor::power::chassis
+{
+
+bool Chassis::setPowerSystemInputsInterface(sdbusplus::bus_t& bus)
+{
+    auto chassisInputPowerStatusPath =
+        std::format(CHASSIS_INPUT_POWER_STATUS_PATH, number);
+
+    // Create the D-Bus interface object for this chassis
+    try
+    {
+        // TODO: Update to set status to fault when gpio reads are
+        // implemented
+        auto interface = std::make_unique<ChassisPowerSystemInterface>(
+            bus, chassisInputPowerStatusPath.c_str(),
+            PowerSystemInputs::Status::Good, true);
+
+        // Store interface
+        powerSystemInputsInterface = std::move(interface);
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed to initialize PowerSystemInputs interface for chassis {CHASSIS}: {ERROR}",
+            "CHASSIS", number, "ERROR", e.what());
+        return false;
+    }
+}
+
+} // namespace phosphor::power::chassis
