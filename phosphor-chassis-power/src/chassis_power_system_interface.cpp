@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "system.hpp"
+
+#include "chassis_power_system_interface.hpp"
 
 namespace phosphor::power::chassis
 {
 
-void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
+ChassisPowerSystemInterface::ChassisPowerSystemInterface(
+    sdbusplus::bus_t& bus, const char* path,
+    PowerSystemInputs::Status initialStatus) :
+    PowerSystemInputsObject{bus, path,
+                            PowerSystemInputsObject::action::defer_emit}
 {
-    for (const auto& curChassis : chassis)
-    {
-        curChassis->initializePowerSystemInputsInterface(bus);
-    }
+    bool skipSignal{true};
+    status(initialStatus, skipSignal);
+    emit_object_added();
 }
 
 } // namespace phosphor::power::chassis

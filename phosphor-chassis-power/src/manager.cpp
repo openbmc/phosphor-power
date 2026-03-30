@@ -144,6 +144,9 @@ void Manager::loadConfigFile()
 
             lg2::info("Parsed {NUMBER} chassis", "NUMBER",
                       system->getChassis().size());
+
+            // Initialize power system inputs status for all chassis
+            system->initializePowerSystemInputs(bus);
         }
         else
         {
