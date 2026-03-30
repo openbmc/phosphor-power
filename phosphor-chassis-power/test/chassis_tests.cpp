@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 #include "chassis.hpp"
+#include "chassis_power_system_interface.hpp"
 #include "gpio.hpp"
+
+#include <sdbusplus/bus.hpp>
 
 #include <memory>
 #include <optional>
@@ -26,7 +29,8 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::chassis;
-/*using namespace phosphor::power::chassis::test_utils;*/
+using PowerSystemInputs = sdbusplus::server::xyz::openbmc_project::state::
+    decorator::PowerSystemInputs;
 
 class ChassisTests : public ::testing::Test
 {
@@ -34,11 +38,15 @@ class ChassisTests : public ::testing::Test
     /**
      * Constructor.
      *
-     * Creates the System object needed for calling some Chassis methods.
+     * Creates the D-Bus bus object needed for some Chassis methods.
      */
-    ChassisTests() : ::testing::Test{} {}
+    ChassisTests() : bus{sdbusplus::bus::new_default()} {}
 
   protected:
+    /**
+     * D-Bus bus object.
+     */
+    sdbusplus::bus_t bus;
 };
 
 TEST_F(ChassisTests, Constructor)
@@ -134,5 +142,46 @@ TEST_F(ChassisTests, getGpios)
         EXPECT_EQ(chassisGpios[2]->getName(), "GpioName_3");
         EXPECT_EQ(chassisGpios[2]->getDirection(), GpioDirection::Output);
         EXPECT_EQ(chassisGpios[2]->getPolarity(), GpioPolarity::High);
+    }
+}
+
+TEST_F(ChassisTests, getPowerSystemInputsInterface)
+{
+    // Test where interface has not been set
+    {
+        Chassis chassis{1};
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
+    }
+
+    // Test where interface has been set to Good
+    {
+        Chassis chassis{1};
+
+        chassis.initializePowerSystemInputsInterface(bus);
+
+        // Verify interface was set and has correct status
+        EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+}
+
+TEST_F(ChassisTests, initializePowerSystemInputsInterface)
+{
+    // Test setting interface successfully
+    {
+        Chassis chassis{1};
+
+        // Verify initial state
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
+
+        // Set interface using bus
+        bool result = chassis.initializePowerSystemInputsInterface(bus);
+
+        // Verify interface was created successfully
+        EXPECT_TRUE(result);
+        EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
     }
 }
