@@ -120,6 +120,7 @@ The following JSON object types are supported:
 - [action](action.md)
 - [and](and.md)
 - [chassis](chassis.md)
+- [chassis_template](chassis_template.md)
 - [compare_presence](compare_presence.md)
 - [compare_vpd](compare_vpd.md)
 - [config_file](config_file.md)
@@ -146,6 +147,7 @@ The following JSON object types are supported:
 - [run_rule](run_rule.md)
 - [sensor_monitoring](sensor_monitoring.md)
 - [set_device](set_device.md)
+- [template_variable_values](template_variable_values.md)
 
 ### Comments
 
@@ -188,7 +190,7 @@ The validation tool checks the config file for errors, such as:
 - Invalid JSON syntax (like a missing brace)
 - Unrecognized JSON object or property
 - Duplicate rule or device ID
-- Reference to a rule or device ID that does not exist
+- Reference to a rule ID, device ID, or chassis template ID that does not exist
 - Infinite loop, such as rule A runs rule B which runs rule A
 
 The tool requires two input files:
