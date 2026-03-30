@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "chassis_power_system_interface.hpp"
 #include "gpio.hpp"
 
 #include <memory>
@@ -107,6 +108,28 @@ class Chassis
         return gpios;
     }
 
+    /**
+     * Sets the PowerSystemInputs D-Bus interface for this chassis.
+     *
+     * @param interface PowerSystemInputs interface
+     */
+    void setPowerSystemInputsInterface(
+        std::unique_ptr<ChassisPowerSystemInterface> interface)
+    {
+        powerSystemInputsInterface = std::move(interface);
+    }
+
+    /**
+     * Returns the PowerSystemInputs D-Bus interface for this chassis.
+     *
+     * @return interface pointer (may be nullptr if not created)
+     */
+    const std::unique_ptr<ChassisPowerSystemInterface>&
+        getPowerSystemInputsInterface() const
+    {
+        return powerSystemInputsInterface;
+    }
+
   private:
     /**
      * Chassis number within the system.
@@ -127,6 +150,11 @@ class Chassis
      * The vector contains GPIO objects to perform operations.
      */
     std::vector<std::unique_ptr<Gpio>> gpios{};
+
+    /**
+     * D-Bus PowerSystemInputs interface for this chassis.
+     */
+    std::unique_ptr<ChassisPowerSystemInterface> powerSystemInputsInterface{};
 };
 
 } // namespace phosphor::power::chassis
