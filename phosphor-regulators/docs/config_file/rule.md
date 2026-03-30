@@ -13,6 +13,10 @@ For example, the following action sequences might be shareable using a rule:
 - Actions that detect down-level hardware using version registers
 - Actions that detect phase faults
 
+Note: Template variables are **not** allowed within a rule or the actions it
+contains. Template variables are only allowed within a
+[chassis template](chassis_template.md).
+
 ## Properties
 
 | Name     | Required | Type                          | Description                                                                                       |
