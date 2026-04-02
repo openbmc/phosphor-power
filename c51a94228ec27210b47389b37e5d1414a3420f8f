@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51992fe9_84ee319e",
+        "filename": "phosphor-chassis-power/src/chassis_power_system_interface.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-02T20:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3e65e0f_ae97924a",
+      "revId": "c51a94228ec27210b47389b37e5d1414a3420f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a74530fb_2fc57feb",
@@ -52,6 +70,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fd0448a_fbcbad18",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-02T20:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a74530fb_2fc57feb",
+      "revId": "c51a94228ec27210b47389b37e5d1414a3420f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4cc9f6e_1f6af0fd",
@@ -65,6 +101,24 @@
       "writtenOn": "2026-04-02T15:30:07Z",
       "side": 1,
       "message": "We are encouraged to minimize the amount of informational journal messages we write. The journal space is limited, and it wraps when it gets full.\n\nSo the journal should contain only high importance info messages along with key error messages.\n\nThis message should probably be removed. I\u0027ll leave it up to you whether you consider the one on line 30 to be highly important.\n\nAnother option is to use lg2::debug(). These are discarded by default, but you can modify a journal setting during testing to log the debug messages. I\u0027ve used this before. The only trick is that other apps have debug messages too, so the journal can get pretty noisy.",
+      "revId": "c51a94228ec27210b47389b37e5d1414a3420f8f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2b31cf_09645104",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-02T20:12:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4cc9f6e_1f6af0fd",
       "revId": "c51a94228ec27210b47389b37e5d1414a3420f8f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
