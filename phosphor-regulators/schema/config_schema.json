@@ -7,6 +7,7 @@
     "properties": {
         "comments": { "$ref": "#/definitions/comments" },
         "rules": { "$ref": "#/definitions/rules" },
+        "chassis_templates": { "$ref": "#/definitions/chassis_templates" },
         "chassis": { "$ref": "#/definitions/chassis" }
     },
     "required": ["chassis"],
@@ -36,8 +37,13 @@
         },
 
         "id": {
-            "type": "string",
-            "pattern": "^[A-Za-z0-9_]+$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9_]+$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "action": {
@@ -116,7 +122,15 @@
         },
 
         "boolean_value": {
-            "type": "boolean"
+            "oneOf": [
+                { "type": "boolean" },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
+        },
+
+        "string_with_variables": {
+            "type": "string",
+            "pattern": ".*\\$\\{[A-Za-z0-9_]+\\}.*"
         },
 
         "compare_vpd": {
@@ -136,8 +150,13 @@
         },
 
         "keyword": {
-            "type": "string",
-            "enum": ["CCIN", "Manufacturer", "Model", "PartNumber", "HW"]
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["CCIN", "Manufacturer", "Model", "PartNumber", "HW"]
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "string_value": {
@@ -166,20 +185,35 @@
         },
 
         "register": {
-            "type": "string",
-            "pattern": "^0x[0-9A-Fa-f]{2}$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^0x[0-9A-Fa-f]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "position": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 7
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 7
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "bit_value": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 1
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "i2c_byte": {
@@ -194,18 +228,33 @@
         },
 
         "byte_value": {
-            "type": "string",
-            "pattern": "^0x[0-9A-Fa-f]{2}$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^0x[0-9A-Fa-f]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "byte_mask": {
-            "type": "string",
-            "pattern": "^0x[0-9A-Fa-f]{2}$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^0x[0-9A-Fa-f]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "byte_count": {
-            "type": "integer",
-            "minimum": 1
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "i2c_bytes": {
@@ -258,8 +307,13 @@
         },
 
         "phase_fault_type": {
-            "type": "string",
-            "enum": ["n+1", "n"]
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["n+1", "n"]
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "pmbus_write_vout_command": {
@@ -275,20 +329,34 @@
         },
 
         "volts": {
-            "type": "number"
+            "oneOf": [
+                { "type": "number" },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "write_vout_format": {
-            "type": "string",
-            "enum": ["linear"]
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["linear"]
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "exponent": {
-            "type": "integer"
+            "oneOf": [
+                { "type": "integer" },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "is_verified": {
-            "type": "boolean"
+            "oneOf": [
+                { "type": "boolean" },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "pmbus_read_sensor": {
@@ -306,28 +374,62 @@
         },
 
         "pmbus_read_sensor_type": {
-            "type": "string",
-            "enum": [
-                "iout",
-                "iout_peak",
-                "iout_valley",
-                "pout",
-                "temperature",
-                "temperature_peak",
-                "vout",
-                "vout_peak",
-                "vout_valley"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": [
+                        "iout",
+                        "iout_peak",
+                        "iout_valley",
+                        "pout",
+                        "temperature",
+                        "temperature_peak",
+                        "vout",
+                        "vout_peak",
+                        "vout_valley"
+                    ]
+                },
+                { "$ref": "#/definitions/string_with_variables" }
             ]
         },
 
         "pmbus_read_sensor_command": {
-            "type": "string",
-            "pattern": "^0x[0-9a-fA-F]{2}$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "read_sensor_format": {
-            "type": "string",
-            "enum": ["linear_11", "linear_16"]
+            "oneOf": [
+                {
+                    "type": "string",
+                    "enum": ["linear_11", "linear_16"]
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
+        },
+
+        "chassis_template": {
+            "type": "object",
+            "properties": {
+                "comments": { "$ref": "#/definitions/comments" },
+                "id": { "$ref": "#/definitions/id" },
+                "number": { "$ref": "#/definitions/number" },
+                "inventory_path": { "$ref": "#/definitions/inventory_path" },
+                "devices": { "$ref": "#/definitions/devices" }
+            },
+            "required": ["id", "number", "inventory_path"],
+            "additionalProperties": false
+        },
+
+        "chassis_templates": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/chassis_template" },
+            "minItems": 1
         },
 
         "chassis_object": {
@@ -336,10 +438,27 @@
                 "comments": { "$ref": "#/definitions/comments" },
                 "number": { "$ref": "#/definitions/number" },
                 "inventory_path": { "$ref": "#/definitions/inventory_path" },
-                "devices": { "$ref": "#/definitions/devices" }
+                "devices": { "$ref": "#/definitions/devices" },
+                "template_id": { "$ref": "#/definitions/id" },
+                "template_variable_values": {
+                    "$ref": "#/definitions/template_variable_values"
+                }
             },
-            "required": ["number", "inventory_path"],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "oneOf": [
+                {
+                    "required": ["number", "inventory_path"],
+                    "not": {
+                        "required": ["devices"]
+                    }
+                },
+                {
+                    "required": ["number", "inventory_path", "devices"]
+                },
+                {
+                    "required": ["template_id", "template_variable_values"]
+                }
+            ]
         },
 
         "chassis": {
@@ -349,8 +468,13 @@
         },
 
         "number": {
-            "type": "integer",
-            "minimum": 1
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "device": {
@@ -391,8 +515,20 @@
             "minItems": 1
         },
 
+        "template_variable_values": {
+            "type": "object",
+            "patternProperties": {
+                "^[A-Za-z0-9_]+$": { "type": "string" }
+            },
+            "additionalProperties": false,
+            "minProperties": 1
+        },
+
         "is_regulator": {
-            "type": "boolean"
+            "oneOf": [
+                { "type": "boolean" },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "i2c_interface": {
@@ -406,13 +542,23 @@
         },
 
         "bus": {
-            "type": "integer",
-            "minimum": 0
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "address": {
-            "type": "string",
-            "pattern": "^0x[0-9A-Fa-f]{2}$"
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^0x[0-9A-Fa-f]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
         },
 
         "presence_detection": {
