@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b03ad58_ba1faa10",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-06T17:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30e07242_a6b65bed",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0ae898c_a68ca602",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-04-06T15:28:32Z",
       "side": 1,
       "message": "Doxygen comment has wrong description/parameter.",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81b21846_0e617ec8",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-06T17:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0ae898c_a68ca602",
       "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +94,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd36c841_8c6c39f9",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-06T17:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04749798_022eb00e",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "503ac6d5_41f1b30a",
@@ -75,6 +135,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a085dc_93687d3e",
+        "filename": "phosphor-chassis-power/src/chassis_power_system_interface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-06T17:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "503ac6d5_41f1b30a",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ff63191_3dac58b6",
@@ -88,6 +166,24 @@
       "writtenOn": "2026-04-06T15:28:32Z",
       "side": 1,
       "message": "Would it make sense to change this to initializePowerSystemInputs?\n\nFrom the name, it sounds like it might just be setting the Status property on an interface that already exists. But it is actually creating the interface.\n\nThat would also be consistent with the Chassis method name if you rename that one.\n\nBig picture, I would recommend the following pattern where it makes sense: System::foo() loops over all the Chassis objects and calls Chassis::foo() on each one.\n\nIf System is going to delegate something to the Chassis (which it often should), then it is easer to understand if the Chassis method has the same name.",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "718031a8_82a25acc",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-06T17:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ff63191_3dac58b6",
       "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
