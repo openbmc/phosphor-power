@@ -1,6 +1,97 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e07242_a6b65bed",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-06T15:28:32Z",
+      "side": 1,
+      "message": "Could just directly assign return value from std::make_unique() to the data member and skip the local var interface right?",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0ae898c_a68ca602",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-06T15:28:32Z",
+      "side": 1,
+      "message": "Doxygen comment has wrong description/parameter.",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04749798_022eb00e",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-06T15:28:32Z",
+      "side": 1,
+      "message": "Thank you for moving this functionality into the Chassis class.\n\nI think it would make more sense to call this method initializePowerSystemInputsInterface() or something similar now.\n\nUsually with a setX() method, it is setting the X data member to the passed in parameter value. That is no longer true here. We are asking the object to initialize/create this itself.",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "503ac6d5_41f1b30a",
+        "filename": "phosphor-chassis-power/src/chassis_power_system_interface.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-06T15:28:32Z",
+      "side": 1,
+      "message": "You can make this an input parameter if you want, but the rest of the code is on lines 26 and 29 are sort of hard-coding the behavior of deferring emitting signals until the object is created. So I think you can remove this constructor parameter. On line 28 you could do\n```\nbool skipSignal{true};\nstatus(initialStatus, skipSignal);\n```\n\nDeclaring a local in this case just makes the code more clear. Otherwise there is a hardcoded true second parameter, so the reader has to wonder what that does.",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ff63191_3dac58b6",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-06T15:28:32Z",
+      "side": 1,
+      "message": "Would it make sense to change this to initializePowerSystemInputs?\n\nFrom the name, it sounds like it might just be setting the Status property on an interface that already exists. But it is actually creating the interface.\n\nThat would also be consistent with the Chassis method name if you rename that one.\n\nBig picture, I would recommend the following pattern where it makes sense: System::foo() loops over all the Chassis objects and calls Chassis::foo() on each one.\n\nIf System is going to delegate something to the Chassis (which it often should), then it is easer to understand if the Chassis method has the same name.",
+      "revId": "35447f7a697c0beb45a899e2210311ea6a8147f3",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c844fac6_17fef8c8",
