@@ -44,7 +44,7 @@ TEST_F(GpioTests, Constructor)
 {
     // Test where GPIO is Input direction and Low polarity, no default value
     {
-        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
+        BMCGpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
         EXPECT_EQ(gpio.getName(), "GpioName");
         EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
@@ -55,7 +55,7 @@ TEST_F(GpioTests, Constructor)
 
     // Test where GPIO is Output direction and High polarity, no default value
     {
-        Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
+        BMCGpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
         EXPECT_EQ(gpio.getName(), "GpioName");
         EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
         EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
@@ -66,7 +66,7 @@ TEST_F(GpioTests, Constructor)
 
     // Test where default value Low
     {
-        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::High, 0};
+        BMCGpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::High, 0};
         EXPECT_EQ(gpio.getName(), "GpioName");
         EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
@@ -77,7 +77,7 @@ TEST_F(GpioTests, Constructor)
 
     // Test where default value High
     {
-        Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::Low, 1};
+        BMCGpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::Low, 1};
         EXPECT_EQ(gpio.getName(), "GpioName");
         EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
         EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
@@ -88,8 +88,8 @@ TEST_F(GpioTests, Constructor)
 
     // Test where default value with explicit std::nullopt
     {
-        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low,
-                  std::nullopt};
+        BMCGpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low,
+                     std::nullopt};
         EXPECT_EQ(gpio.getName(), "GpioName");
         EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);

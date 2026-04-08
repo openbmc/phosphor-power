@@ -16,6 +16,7 @@
 #include "chassis.hpp"
 #include "chassis_power_system_interface.hpp"
 #include "gpio.hpp"
+#include "mock_services.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -113,14 +114,15 @@ TEST_F(ChassisTests, getGpios)
     {
         // Create vector of Gpio objects
         std::vector<std::unique_ptr<Gpio>> gpios{};
+        MockServices services;
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(services.createGPIO(
             "GpioName_1", GpioDirection::Input, GpioPolarity::High));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(services.createGPIO(
             "GpioName_2", GpioDirection::Input, GpioPolarity::Low));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(services.createGPIO(
             "GpioName_3", GpioDirection::Output, GpioPolarity::High));
 
         // Create Chassis
@@ -151,15 +153,16 @@ TEST_F(ChassisTests, getGpios)
     {
         // Create vector of Gpio objects with default values
         std::vector<std::unique_ptr<Gpio>> gpios{};
+        MockServices services;
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low, 0));
 
         gpios.emplace_back(
-            std::make_unique<Gpio>("power-fault-unlatched",
-                                   GpioDirection::Input, GpioPolarity::Low, 1));
+            services.createGPIO("power-fault-unlatched", GpioDirection::Input,
+                                GpioPolarity::Low, 1));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(services.createGPIO(
             "power-fault-reset", GpioDirection::Output, GpioPolarity::Low));
 
         // Create Chassis
