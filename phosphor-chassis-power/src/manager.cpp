@@ -18,6 +18,8 @@
 #include "config_file_parser.hpp"
 #include "format_utils.hpp"
 
+#include <phosphor-logging/lg2.hpp>
+
 #include <chrono>
 #include <exception>
 #include <functional>
@@ -40,13 +42,22 @@ const fs::path standardConfigFileDir{"/usr/share/phosphor-chassis-power"};
 const fs::path testConfigFileDir{"/tmp/phosphor-chassis-power"};
 
 constexpr auto busName = "xyz.openbmc_project.Power.Chassis";
+constexpr auto chassisStatePath = "/xyz/openbmc_project/state/chassis0";
+constexpr auto chassisStateIntf = "xyz.openbmc_project.State.Chassis";
+constexpr auto chassisStateProp = "CurrentPowerState";
 
 constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{1};
 
-Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
+using PowerState =
+    sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
+
+Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
+                 Services& services) :
     bus(bus), eventLoop(event),
     compatibleSystemsTimer{
-        event, std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)}
+        event,
+        std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
+    services(services)
 {
     // Start a timer to wait for compatible types.
     compatibleSystemsTimer.restartOnce(maxTimeToWaitForCompatTypes);
@@ -54,6 +65,23 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
     // Create object to find compatible system types for current system.
     compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
         bus, std::bind_front(&Manager::compatibleSystemTypesFound, this));
+
+    // Subscribe to system power state changes
+    try
+    {
+        chassisPowerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus,
+            sdbusplus::bus::match::rules::propertiesChanged(chassisStatePath,
+                                                            chassisStateIntf),
+            std::bind_front(&Manager::chassisPowerStateChanged, this));
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed to create D-Bus match for chassis power state changes: {EXCEPTION}",
+            "EXCEPTION", e.what());
+        throw;
+    }
 
     // Obtain D-Bus service name
     bus.request_name(busName);
@@ -137,7 +165,7 @@ void Manager::loadConfigFile()
                       pathName.string());
 
             // Parse the config file
-            auto chassis = config_file_parser::parse(pathName);
+            auto chassis = config_file_parser::parse(pathName, services);
 
             // Create System object with parsed chassis
             system = std::make_unique<System>(std::move(chassis));
@@ -158,6 +186,38 @@ void Manager::loadConfigFile()
         // Log error messages in journal
         lg2::error("Unable to load configuration file: {EXCEPTION}",
                    "EXCEPTION", e.what());
+    }
+}
+void Manager::clearErrorHistory()
+{
+    if (system)
+    {
+        system->clearErrorHistory();
+    }
+}
+
+void Manager::chassisPowerStateChanged(sdbusplus::message_t& msg)
+{
+    std::string interface;
+    std::map<std::string, std::variant<std::string>> properties;
+    msg.read(interface, properties);
+
+    auto it = properties.find(chassisStateProp);
+
+    if (it != properties.end())
+    {
+        const auto* powerStateStr = std::get_if<std::string>(&it->second);
+        if (powerStateStr != nullptr)
+        {
+            // Convert string to PowerState enum
+            PowerState powerState = sdbusplus::xyz::openbmc_project::State::
+                server::Chassis::convertPowerStateFromString(*powerStateStr);
+
+            if (powerState == PowerState::TransitioningToOn)
+            {
+                clearErrorHistory();
+            }
+        }
     }
 }
 
