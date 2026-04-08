@@ -35,10 +35,11 @@ namespace phosphor::power::chassis::config_file_parser
  * Throws a ConfigFileParserError if an error occurs.
  *
  * @param pathName configuration file path name
+ * @param validateHardware if true, validate GPIO exists in hardware
  * @return vector of C++ Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName);
+    const std::filesystem::path& pathName, bool validateHardware = true);
 
 /*
  * Internal implementation details for parse()
@@ -54,9 +55,11 @@ namespace internal
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param validateHardware if true, validate GPIO exists in hardware
  * @return Chassis object
  */
-std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
+std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
+                                      bool validateHardware = true);
 
 /**
  * Parses a JSON element containing an array of chassis.
@@ -66,10 +69,11 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param validateHardware if true, validate GPIO exists in hardware
  * @return Returns vector of C++ Chassis objects.
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element, bool validateHardware = true);
 
 /**
  * Parses a JSON element containing a GPIO.
@@ -79,9 +83,11 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param validateHardware if true, validate GPIO exists in hardware
  * @return Gpio object
  */
-std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element);
+std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element,
+                                bool validateHardware = true);
 
 /**
  * Parses a JSON element containing an absolute presence path.
@@ -121,9 +127,11 @@ GpioPolarity parsePolarity(const std::string& polarityStr);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param validateHardware if true, validate GPIO exists in hardware
  * @return vectors of Chassis objects
  */
-std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element);
+std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element,
+                                                bool validateHardware = true);
 
 } // namespace internal
 

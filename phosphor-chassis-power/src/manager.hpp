@@ -164,6 +164,12 @@ class Manager
      * Contains nullptr if the configuration file has not been loaded.
      */
     std::unique_ptr<System> system;
+
+    /**
+     * If true, validate that GPIO hardware exists when loading config file.
+     * If false, skip hardware validation.
+     */
+    bool validateHardware{false};
 };
 
 } // namespace phosphor::power::chassis
