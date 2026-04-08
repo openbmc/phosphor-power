@@ -137,7 +137,8 @@ void Manager::loadConfigFile()
                       pathName.string());
 
             // Parse the config file
-            auto chassis = config_file_parser::parse(pathName);
+            auto chassis =
+                config_file_parser::parse(pathName, validateHardware);
 
             // Create System object with parsed chassis
             system = std::make_unique<System>(std::move(chassis));

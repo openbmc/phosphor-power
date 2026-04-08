@@ -115,13 +115,13 @@ TEST_F(ChassisTests, getGpios)
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_1", GpioDirection::Input, GpioPolarity::High));
+            "GpioName_1", GpioDirection::Input, GpioPolarity::High, false));
 
         gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_2", GpioDirection::Input, GpioPolarity::Low));
+            "GpioName_2", GpioDirection::Input, GpioPolarity::Low, false));
 
         gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_3", GpioDirection::Output, GpioPolarity::High));
+            "GpioName_3", GpioDirection::Output, GpioPolarity::High, false));
 
         // Create Chassis
         Chassis chassis{1, std::nullopt, std::move(gpios)};

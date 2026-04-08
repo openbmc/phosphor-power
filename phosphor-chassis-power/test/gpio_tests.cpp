@@ -42,7 +42,7 @@ class GpioTests : public ::testing::Test
 
 TEST_F(GpioTests, GpioInputLow)
 {
-    Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
+    Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low, false};
     EXPECT_EQ(gpio.getName(), "GpioName");
     EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
     EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
@@ -50,7 +50,7 @@ TEST_F(GpioTests, GpioInputLow)
 
 TEST_F(GpioTests, GpioOutputHigh)
 {
-    Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
+    Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High, false};
     EXPECT_EQ(gpio.getName(), "GpioName");
     EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
     EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
