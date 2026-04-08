@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: Copyright 2025 IBM Corporation
 
 #include "manager.hpp"
+#include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
 #include <sdeventplus/event.hpp>
@@ -14,7 +15,8 @@ int main()
     auto event = sdeventplus::Event::get_default();
     bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-    chassis::Manager manager(bus, event);
+    chassis::BMCServices services;
+    chassis::Manager manager(bus, event, services);
 
     return event.loop();
 }
