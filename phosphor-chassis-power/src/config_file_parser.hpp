@@ -17,6 +17,7 @@
 
 #include "chassis.hpp"
 #include "gpio.hpp"
+#include "services.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -38,7 +39,7 @@ namespace phosphor::power::chassis::config_file_parser
  * @return vector of C++ Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName);
+    const std::filesystem::path& pathName, Services& services);
 
 /*
  * Internal implementation details for parse()
@@ -56,7 +57,8 @@ namespace internal
  * @param element JSON element
  * @return Chassis object
  */
-std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
+std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
+                                      Services& services);
 
 /**
  * Parses a JSON element containing an array of chassis.
@@ -69,7 +71,7 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
  * @return Returns vector of C++ Chassis objects.
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element, Services& services);
 
 /**
  * Parses a JSON element containing a GPIO.
@@ -81,7 +83,8 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(
  * @param element JSON element
  * @return Gpio object
  */
-std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element);
+std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element,
+                                Services& services);
 
 /**
  * Parses a JSON element containing an absolute presence path.
@@ -123,7 +126,8 @@ GpioPolarity parsePolarity(const std::string& polarityStr);
  * @param element JSON element
  * @return vectors of Chassis objects
  */
-std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element);
+std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element,
+                                                Services& services);
 
 } // namespace internal
 
