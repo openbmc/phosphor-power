@@ -112,16 +112,16 @@ TEST_F(ChassisTests, getGpios)
     // Test where GPIOs were specified in constructor (without default values)
     {
         // Create vector of Gpio objects
-        std::vector<std::unique_ptr<Gpio>> gpios{};
+        std::vector<std::unique_ptr<GpioInterface>> gpios{};
 
-        gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_1", GpioDirection::Input, GpioPolarity::High));
+        gpios.emplace_back(
+            createGPIO("GpioName_1", GpioDirection::Input, GpioPolarity::High));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_2", GpioDirection::Input, GpioPolarity::Low));
+        gpios.emplace_back(
+            createGPIO("GpioName_2", GpioDirection::Input, GpioPolarity::Low));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
-            "GpioName_3", GpioDirection::Output, GpioPolarity::High));
+        gpios.emplace_back(createGPIO("GpioName_3", GpioDirection::Output,
+                                      GpioPolarity::High));
 
         // Create Chassis
         Chassis chassis{1, std::nullopt, std::move(gpios)};
@@ -150,16 +150,16 @@ TEST_F(ChassisTests, getGpios)
     // Test where GPIOs with default values were specified in constructor
     {
         // Create vector of Gpio objects with default values
-        std::vector<std::unique_ptr<Gpio>> gpios{};
+        std::vector<std::unique_ptr<GpioInterface>> gpios{};
 
-        gpios.emplace_back(std::make_unique<Gpio>(
-            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low, 0));
+        gpios.emplace_back(createGPIO("presence-chassis1", GpioDirection::Input,
+                                      GpioPolarity::Low, 0));
 
         gpios.emplace_back(
-            std::make_unique<Gpio>("power-fault-unlatched",
-                                   GpioDirection::Input, GpioPolarity::Low, 1));
+            createGPIO("power-fault-unlatched", GpioDirection::Input,
+                       GpioPolarity::Low, 1));
 
-        gpios.emplace_back(std::make_unique<Gpio>(
+        gpios.emplace_back(createGPIO(
             "power-fault-reset", GpioDirection::Output, GpioPolarity::Low));
 
         // Create Chassis

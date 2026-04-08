@@ -417,7 +417,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<GpioInterface> gpio = parseGpio(element);
         EXPECT_EQ(gpio->getName(), "presence-chassis1");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
@@ -433,7 +433,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "High"
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<GpioInterface> gpio = parseGpio(element);
         EXPECT_EQ(gpio->getName(), "power-chassis1-standby-fault-reset");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Output);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::High);
@@ -450,7 +450,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "DefaultValue": 0
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<GpioInterface> gpio = parseGpio(element);
         EXPECT_EQ(gpio->getName(), "presence-chassis1");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
@@ -468,7 +468,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "DefaultValue": 1
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<GpioInterface> gpio = parseGpio(element);
         EXPECT_EQ(gpio->getName(), "power-fault-unlatched");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
@@ -487,7 +487,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "DefaultValue": 1
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<GpioInterface> gpio = parseGpio(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)

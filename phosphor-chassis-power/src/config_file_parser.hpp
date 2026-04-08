@@ -74,14 +74,14 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(
 /**
  * Parses a JSON element containing a GPIO.
  *
- * Returns the corresponding C++ Gpio object.
+ * Returns the corresponding C++ GpioInterface object.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
- * @return Gpio object
+ * @return GpioInterface object
  */
-std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element);
+std::unique_ptr<GpioInterface> parseGpio(const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing an absolute presence path.
