@@ -34,7 +34,7 @@ namespace phosphor::power::chassis::config_file_parser
 {
 
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName)
+    const std::filesystem::path& pathName, bool validateHardware)
 {
     try
     {
@@ -43,7 +43,7 @@ std::vector<std::unique_ptr<Chassis>> parse(
         json rootElement = json::parse(file);
 
         // Parse tree of JSON elements and return corresponding C++ objects
-        return internal::parseRoot(rootElement);
+        return internal::parseRoot(rootElement, validateHardware);
     }
     catch (const std::exception& e)
     {
@@ -54,7 +54,8 @@ std::vector<std::unique_ptr<Chassis>> parse(
 namespace internal
 {
 
-std::unique_ptr<Chassis> parseChassis(const json& element)
+std::unique_ptr<Chassis> parseChassis(const json& element,
+                                      bool validateHardware)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -74,7 +75,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto presenceGpioIt = element.find("PresenceGpio");
     if (presenceGpioIt != element.end())
     {
-        gpios.emplace_back(parseGpio(*presenceGpioIt));
+        gpios.emplace_back(parseGpio(*presenceGpioIt, validateHardware));
         ++propertyCount;
     }
 
@@ -82,7 +83,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto faultUnlatchedGpioIt = element.find("FaultUnlatchedGpio");
     if (faultUnlatchedGpioIt != element.end())
     {
-        gpios.emplace_back(parseGpio(*faultUnlatchedGpioIt));
+        gpios.emplace_back(parseGpio(*faultUnlatchedGpioIt, validateHardware));
         ++propertyCount;
     }
 
@@ -90,7 +91,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto faultLatchedGpioIt = element.find("FaultLatchedGpio");
     if (faultLatchedGpioIt != element.end())
     {
-        gpios.emplace_back(parseGpio(*faultLatchedGpioIt));
+        gpios.emplace_back(parseGpio(*faultLatchedGpioIt, validateHardware));
         ++propertyCount;
     }
 
@@ -98,7 +99,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto faultLatchResetGpioIt = element.find("FaultLatchResetGpio");
     if (faultLatchResetGpioIt != element.end())
     {
-        gpios.emplace_back(parseGpio(*faultLatchResetGpioIt));
+        gpios.emplace_back(parseGpio(*faultLatchResetGpioIt, validateHardware));
         ++propertyCount;
     }
 
@@ -106,7 +107,8 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto enableSystemResetGpioIt = element.find("EnableSystemResetGpio");
     if (enableSystemResetGpioIt != element.end())
     {
-        gpios.emplace_back(parseGpio(*enableSystemResetGpioIt));
+        gpios.emplace_back(
+            parseGpio(*enableSystemResetGpioIt, validateHardware));
         ++propertyCount;
     }
 
@@ -126,18 +128,19 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
                                      std::move(gpios));
 }
 
-std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
+std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element,
+                                                        bool validateHardware)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Chassis>> chassis;
     for (auto& chassisElement : element)
     {
-        chassis.emplace_back(parseChassis(chassisElement));
+        chassis.emplace_back(parseChassis(chassisElement, validateHardware));
     }
     return chassis;
 }
 
-std::unique_ptr<Gpio> parseGpio(const json& element)
+std::unique_ptr<Gpio> parseGpio(const json& element, bool validateHardware)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -162,7 +165,7 @@ std::unique_ptr<Gpio> parseGpio(const json& element)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Gpio>(name, direction, polarity);
+    return std::make_unique<Gpio>(name, direction, polarity, validateHardware);
 }
 
 std::string parsePresencePath(const json& element)
@@ -212,12 +215,13 @@ GpioPolarity parsePolarity(const std::string& polarityStr)
     }
 }
 
-std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element)
+std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
+                                                bool validateHardware)
 {
     verifyIsArray(element);
 
     // Parse the array of chassis objects
-    return parseChassisArray(element);
+    return parseChassisArray(element, validateHardware);
 }
 
 } // namespace internal

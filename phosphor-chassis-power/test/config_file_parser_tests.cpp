@@ -73,7 +73,7 @@ TEST(ConfigFileParserTests, Parse)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName);
+        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName, false);
 
         EXPECT_EQ(chassis.size(), 3);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
@@ -121,7 +121,7 @@ TEST(ConfigFileParserTests, Parse)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName);
+        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName, false);
 
         EXPECT_EQ(chassis.size(), 1);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
@@ -208,7 +208,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         }
         )"_json;
 
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        std::unique_ptr<Chassis> chassis = parseChassis(element, false);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getGpios().size(), 0);
     }
@@ -221,7 +221,7 @@ TEST(ConfigFileParserTests, ParseChassis)
                 "PresencePath": "/dev/i2c-259"
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        std::unique_ptr<Chassis> chassis = parseChassis(element, false);
         EXPECT_EQ(chassis->getNumber(), 3);
         EXPECT_EQ(chassis->getGpios().size(), 0);
         EXPECT_EQ(chassis->getPresencePath(), "/dev/i2c-259");
@@ -261,7 +261,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         }
         )"_json;
 
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        std::unique_ptr<Chassis> chassis = parseChassis(element, false);
         EXPECT_EQ(chassis->getNumber(), 2);
         EXPECT_EQ(chassis->getPresencePath(), "/dev/i2c-259");
         EXPECT_EQ(chassis->getGpios().size(), 5);
@@ -288,7 +288,7 @@ TEST(ConfigFileParserTests, ParseChassis)
                 }
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        std::unique_ptr<Chassis> chassis = parseChassis(element, false);
         EXPECT_EQ(chassis->getNumber(), 3);
         EXPECT_EQ(chassis->getGpios().size(), 1);
         EXPECT_EQ(chassis->getGpios()[0]->getName(), "presence-chassis3");
@@ -383,7 +383,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
             ]
         )"_json;
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parseChassisArray(element);
+            parseChassisArray(element, false);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[1]->getNumber(), 2);
@@ -397,7 +397,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
               "foo": "bar"
             }
         )"_json;
-        parseChassisArray(element);
+        parseChassisArray(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -417,7 +417,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<Gpio> gpio = parseGpio(element, false);
         EXPECT_EQ(gpio->getName(), "presence-chassis1");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
@@ -432,7 +432,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "High"
             }
         )"_json;
-        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        std::unique_ptr<Gpio> gpio = parseGpio(element, false);
         EXPECT_EQ(gpio->getName(), "power-chassis1-standby-fault-reset");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Output);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::High);
@@ -442,7 +442,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -459,7 +459,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -476,7 +476,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -493,7 +493,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Direction": "Input"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -511,7 +511,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -529,7 +529,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": "Low"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -547,7 +547,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "Polarity": 1
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -566,7 +566,7 @@ TEST(ConfigFileParserTests, ParseGPIOs)
               "foo": "bar"
             }
         )"_json;
-        parseGpio(element);
+        parseGpio(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -630,7 +630,8 @@ TEST(ConfigFileParserTests, ParseRoot)
               { "ChassisNumber": 1 }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Chassis>> chassis = parseRoot(element);
+        std::vector<std::unique_ptr<Chassis>> chassis =
+            parseRoot(element, false);
         EXPECT_EQ(chassis.size(), 1);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
     }
@@ -644,7 +645,8 @@ TEST(ConfigFileParserTests, ParseRoot)
               { "ChassisNumber": 3 }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Chassis>> chassis = parseRoot(element);
+        std::vector<std::unique_ptr<Chassis>> chassis =
+            parseRoot(element, false);
         EXPECT_EQ(chassis.size(), 3);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[1]->getNumber(), 2);
@@ -659,7 +661,7 @@ TEST(ConfigFileParserTests, ParseRoot)
               "foo": "bar"
             }
         )"_json;
-        parseRoot(element);
+        parseRoot(element, false);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -917,7 +919,7 @@ TEST(ConfigFileParserTests, ParseRoot)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName);
+        std::vector<std::unique_ptr<Chassis>> chassis = parse(pathName, false);
 
         EXPECT_EQ(chassis.size(), 10);
 
