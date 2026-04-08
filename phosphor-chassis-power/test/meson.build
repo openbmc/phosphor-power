@@ -14,6 +14,8 @@ test(
         phosphor_chassis_power_tests_source_files,
         dependencies: [
             gtest,
+            gmock,
+            libgpiodcxx,
             nlohmann_json_dep,
             phosphor_logging,
             sdbusplus,
@@ -25,6 +27,7 @@ test(
         ],
         implicit_include_directories: false,
         include_directories: [
+            '../src',
             libpower_inc,
             phosphor_chassis_power_include_directories,
         ],

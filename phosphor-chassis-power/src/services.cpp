@@ -13,26 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "system.hpp"
+
+#include "services.hpp"
 
 namespace phosphor::power::chassis
 {
 
-void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
+std::unique_ptr<Gpio> BMCServices::createGPIO(
+    const std::string& name, GpioDirection direction, GpioPolarity polarity,
+    std::optional<uint8_t> defaultValue)
 {
-    for (const auto& curChassis : chassis)
-    {
-        curChassis->initializePowerSystemInputsInterface(bus);
-    }
-}
+    auto gpio =
+        std::make_unique<BMCGpio>(name, direction, polarity, defaultValue);
 
-void System::clearErrorHistory()
-{
-    // Clear error history for all chassis
-    for (const auto& curChassis : chassis)
-    {
-        curChassis->clearErrorHistory();
-    }
+    return gpio;
 }
 
 } // namespace phosphor::power::chassis

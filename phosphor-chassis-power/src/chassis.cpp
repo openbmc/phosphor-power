@@ -48,4 +48,12 @@ bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
     }
 }
 
+void Chassis::clearErrorHistory()
+{
+    for (const auto& gpio : gpios)
+    {
+        gpio->clearErrorHistory();
+    }
+}
+
 } // namespace phosphor::power::chassis
