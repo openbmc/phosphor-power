@@ -131,6 +131,13 @@ class Chassis
         return powerSystemInputsInterface;
     }
 
+    /**
+     * Clears the error history for all GPIOs in this chassis.
+     *
+     * This should be called when the system reboots.
+     */
+    void clearErrorHistory();
+
   private:
     /**
      * Chassis number within the system.

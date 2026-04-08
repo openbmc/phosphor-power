@@ -69,6 +69,13 @@ class System
      */
     void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
+    /**
+     * Clears the error history in all chassis.
+     *
+     * This should be called when the system reboots.
+     */
+    void clearErrorHistory();
+
   private:
     /**
      * Chassis in the system.

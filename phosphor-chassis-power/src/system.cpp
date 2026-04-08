@@ -26,4 +26,13 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
+void System::clearErrorHistory()
+{
+    // Clear error history for all chassis
+    for (const auto& curChassis : chassis)
+    {
+        curChassis->clearErrorHistory();
+    }
+}
+
 } // namespace phosphor::power::chassis
