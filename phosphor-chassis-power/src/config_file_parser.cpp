@@ -69,7 +69,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     ++propertyCount;
 
     // Optional GPIO
-    std::vector<std::unique_ptr<Gpio>> gpios{};
+    std::vector<std::unique_ptr<GpioInterface>> gpios{};
     // Optional PresenceGpio
     auto presenceGpioIt = element.find("PresenceGpio");
     if (presenceGpioIt != element.end())
@@ -137,7 +137,7 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
     return chassis;
 }
 
-std::unique_ptr<Gpio> parseGpio(const json& element)
+std::unique_ptr<GpioInterface> parseGpio(const json& element)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -180,7 +180,7 @@ std::unique_ptr<Gpio> parseGpio(const json& element)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Gpio>(name, direction, polarity, defaultValue);
+    return createGPIO(name, direction, polarity, defaultValue);
 }
 
 std::string parsePresencePath(const json& element)
