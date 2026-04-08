@@ -69,6 +69,14 @@ class System
      */
     void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
+    /**
+     * Clears the error history for all GPIOs in all chassis.
+     *
+     * This should be called when the system reIPLs (reboots) to reset
+     * the GPIO request failure counters.
+     */
+    void clearErrorHistory();
+
   private:
     /**
      * Chassis in the system.
