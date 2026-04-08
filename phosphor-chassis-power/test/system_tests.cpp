@@ -38,7 +38,7 @@ using namespace phosphor::power::chassis;
 std::unique_ptr<Chassis> createChassis(
     unsigned int number, std::optional<std::string> presencePath = std::nullopt)
 {
-    std::vector<std::unique_ptr<Gpio>> gpios;
+    std::vector<std::unique_ptr<GpioInterface>> gpios;
     return std::make_unique<Chassis>(number, std::move(presencePath),
                                      std::move(gpios));
 }
