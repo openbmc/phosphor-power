@@ -15,6 +15,7 @@
  */
 #include "chassis.hpp"
 #include "gpio.hpp"
+#include "services.hpp"
 
 #include <memory>
 #include <optional>

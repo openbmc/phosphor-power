@@ -67,8 +67,8 @@ class Chassis
      */
     explicit Chassis(unsigned int number,
                      std::optional<std::string> presencePath = std::nullopt,
-                     std::vector<std::unique_ptr<Gpio>> gpioPins =
-                         std::vector<std::unique_ptr<Gpio>>{}) :
+                     std::vector<std::unique_ptr<GpioInterface>> gpioPins =
+                         std::vector<std::unique_ptr<GpioInterface>>{}) :
         number{number}, presencePath{std::move(presencePath)},
         gpios{std::move(gpioPins)}
     {
@@ -106,7 +106,7 @@ class Chassis
      *
      * @return GPIO objects in chassis
      */
-    const std::vector<std::unique_ptr<Gpio>>& getGpios() const
+    const std::vector<std::unique_ptr<GpioInterface>>& getGpios() const
     {
         return gpios;
     }
@@ -131,6 +131,14 @@ class Chassis
         return powerSystemInputsInterface;
     }
 
+    /**
+     * Clears the error history for all GPIOs in this chassis.
+     *
+     * This should be called when the system reIPLs (reboots) to reset
+     * the GPIO request failure counters.
+     */
+    void clearErrorHistory();
+
   private:
     /**
      * Chassis number within the system.
@@ -150,7 +158,7 @@ class Chassis
      *
      * The vector contains GPIO objects to perform operations.
      */
-    std::vector<std::unique_ptr<Gpio>> gpios{};
+    std::vector<std::unique_ptr<GpioInterface>> gpios{};
 
     /**
      * D-Bus PowerSystemInputs interface for this chassis.

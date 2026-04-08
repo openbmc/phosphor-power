@@ -16,11 +16,15 @@
 #pragma once
 
 #include "compatible_system_types_finder.hpp"
+#include "services.hpp"
 #include "system.hpp"
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
+#include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/State/Chassis/server.hpp>
 
 #include <filesystem>
 #include <memory>
@@ -29,6 +33,7 @@
 
 namespace phosphor::power::chassis
 {
+
 /*
  * @class Manager
  *
@@ -50,9 +55,11 @@ class Manager
      *
      * @param bus - Dbus bus object.
      * @param event - Dbus event object.
+     * @param services - Platform services provider
      *
      */
-    Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event);
+    Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
+            Services& services);
 
     /**
      * Callback that is called when a list of compatible system types is found.
@@ -96,6 +103,13 @@ class Manager
         system.reset();
     }
 
+    /**
+     * @brief Implementation for the clearErrorHistory D-Bus method
+     *
+     * Clears hardware error history for all chassis.
+     */
+    void clearErrorHistory();
+
   private:
     /**
      * Callback to begin failure process after not finding a Compatible system.
@@ -129,9 +143,16 @@ class Manager
     void loadConfigFile();
 
     /**
+     * Callback function to handle chassis power state changes.
+     *
+     * @param msg D-Bus message containing the property change
+     */
+    void chassisPowerStateChanged(sdbusplus::message_t& msg);
+
+    /**
      * The D-Bus bus
      */
-    sdbusplus::bus_t& bus [[maybe_unused]];
+    sdbusplus::bus_t& bus;
 
     /**
      * Event to loop on
@@ -164,6 +185,16 @@ class Manager
      * Contains nullptr if the configuration file has not been loaded.
      */
     std::unique_ptr<System> system;
+
+    /**
+     * Platform services provider.
+     */
+    Services& services;
+
+    /**
+     * D-Bus match object for monitoring chassis 0 power state changes.
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> chassisPowerStateMatch;
 };
 
 } // namespace phosphor::power::chassis
