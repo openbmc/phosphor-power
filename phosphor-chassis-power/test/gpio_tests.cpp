@@ -42,16 +42,17 @@ class GpioTests : public ::testing::Test
 
 TEST_F(GpioTests, GpioInputLow)
 {
-    Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
-    EXPECT_EQ(gpio.getName(), "GpioName");
-    EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
-    EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
+    auto gpio = createGPIO("GpioName", GpioDirection::Input, GpioPolarity::Low);
+    EXPECT_EQ(gpio->getName(), "GpioName");
+    EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
+    EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
 }
 
 TEST_F(GpioTests, GpioOutputHigh)
 {
-    Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
-    EXPECT_EQ(gpio.getName(), "GpioName");
-    EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
-    EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
+    auto gpio =
+        createGPIO("GpioName", GpioDirection::Output, GpioPolarity::High);
+    EXPECT_EQ(gpio->getName(), "GpioName");
+    EXPECT_EQ(gpio->getDirection(), GpioDirection::Output);
+    EXPECT_EQ(gpio->getPolarity(), GpioPolarity::High);
 }

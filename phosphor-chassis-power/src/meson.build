@@ -5,11 +5,11 @@ phosphor_chassis_power_library = static_library(
     'manager.cpp',
     'chassis.cpp',
     'chassis_power_system_interface.cpp',
-    'gpio.cpp',
     'config_file_parser.cpp',
     'system.cpp',
     implicit_include_directories: false,
     dependencies: [
+        libgpiodcxx,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
@@ -21,6 +21,7 @@ phosphor_chassis_power_library = static_library(
 phosphor_chassis_power = executable(
     'phosphor-chassis-power',
     'main.cpp',
+    'gpio.cpp',
     dependencies: [
         phosphor_logging,
         sdbusplus,
