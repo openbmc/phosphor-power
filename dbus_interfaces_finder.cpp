@@ -50,7 +50,7 @@ void DBusInterfacesFinder::interfacesAddedCallback(
     try
     {
         // Read the D-Bus message
-        sdbusplus::message::object_path path;
+        sdbusplus::object_path path;
         std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         message.read(path, interfaces);

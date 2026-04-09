@@ -250,7 +250,7 @@ void BMCChassisStatusMonitor::interfacesAddedCallback(
 {
     try
     {
-        sdbusplus::message::object_path path;
+        sdbusplus::object_path path;
         std::map<std::string, DbusPropertyMap> interfaces;
         message.read(path, interfaces);
         for (const auto& [interface, properties] : interfaces)

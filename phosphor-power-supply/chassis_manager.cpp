@@ -49,7 +49,7 @@ void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
     try
     {
         phosphor::power::chassis::Chassis* chassisMatchPtr = nullptr;
-        sdbusplus::message::object_path objPath;
+        sdbusplus::object_path objPath;
         std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         msg.read(objPath, interfaces);

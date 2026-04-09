@@ -112,9 +112,8 @@ DbusSubtree getSubTree(sdbusplus::bus_t& bus, const std::string& path,
 }
 
 std::vector<DbusPath> getAssociatedSubTreePaths(
-    sdbusplus::bus_t& bus,
-    const sdbusplus::message::object_path& associationPath,
-    const sdbusplus::message::object_path& path,
+    sdbusplus::bus_t& bus, const sdbusplus::object_path& associationPath,
+    const sdbusplus::object_path& path,
     const std::vector<std::string>& interfaces, int32_t depth)
 {
     auto mapperCall =

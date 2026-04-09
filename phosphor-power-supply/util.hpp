@@ -20,7 +20,7 @@ using Value = std::variant<bool, std::string>;
 using PropertyMap = std::map<Property, Value>;
 using Interface = std::string;
 using InterfaceMap = std::map<Interface, PropertyMap>;
-using Object = sdbusplus::message::object_path;
+using Object = sdbusplus::object_path;
 using ObjectMap = std::map<Object, InterfaceMap>;
 
 class Util : public UtilBase
@@ -188,8 +188,8 @@ class Util : public UtilBase
     std::string getChassis(sdbusplus::bus_t& bus,
                            const std::string& invpath) const override
     {
-        sdbusplus::message::object_path assocPath = invpath + "/powering";
-        sdbusplus::message::object_path basePath{"/"};
+        sdbusplus::object_path assocPath = invpath + "/powering";
+        sdbusplus::object_path basePath{"/"};
         std::vector<std::string> interfaces{CHASSIS_IFACE};
 
         try
