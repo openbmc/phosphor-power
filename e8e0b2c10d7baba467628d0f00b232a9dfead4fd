@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd414209_984e7176",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-09T15:52:29Z",
+      "side": 1,
+      "message": "I don\u0027t understand what this means? The PSU inventory item shouldn\u0027t be affected by the chassis power state.",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 62
+      },
+      "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec81428_b9f98ff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-09T15:52:29Z",
+      "side": 1,
+      "message": "I\u0027m going to leave some more comments, but I\u0027m waiting for Andrew to answer a few questions offline about the chassis state manager.",
+      "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1c320d9_af9b97bc",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-09T15:52:29Z",
+      "side": 1,
+      "message": "This is not used any more I think? Should be deleted?",
+      "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
