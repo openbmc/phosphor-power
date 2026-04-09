@@ -57,7 +57,8 @@ std::tuple<std::vector<std::unique_ptr<Rule>>,
 namespace internal
 {
 
-std::unique_ptr<Action> parseAction(const json& element)
+std::unique_ptr<Action> parseAction(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -72,93 +73,93 @@ std::unique_ptr<Action> parseAction(const json& element)
     std::unique_ptr<Action> action{};
     if (element.contains("and"))
     {
-        action = parseAnd(element["and"]);
+        action = parseAnd(element["and"], variables);
         ++propertyCount;
     }
     else if (element.contains("compare_presence"))
     {
-        action = parseComparePresence(element["compare_presence"]);
+        action = parseComparePresence(element["compare_presence"], variables);
         ++propertyCount;
     }
     else if (element.contains("compare_vpd"))
     {
-        action = parseCompareVPD(element["compare_vpd"]);
+        action = parseCompareVPD(element["compare_vpd"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_capture_bytes"))
     {
-        action = parseI2CCaptureBytes(element["i2c_capture_bytes"]);
+        action = parseI2CCaptureBytes(element["i2c_capture_bytes"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_compare_bit"))
     {
-        action = parseI2CCompareBit(element["i2c_compare_bit"]);
+        action = parseI2CCompareBit(element["i2c_compare_bit"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_compare_byte"))
     {
-        action = parseI2CCompareByte(element["i2c_compare_byte"]);
+        action = parseI2CCompareByte(element["i2c_compare_byte"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_compare_bytes"))
     {
-        action = parseI2CCompareBytes(element["i2c_compare_bytes"]);
+        action = parseI2CCompareBytes(element["i2c_compare_bytes"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_write_bit"))
     {
-        action = parseI2CWriteBit(element["i2c_write_bit"]);
+        action = parseI2CWriteBit(element["i2c_write_bit"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_write_byte"))
     {
-        action = parseI2CWriteByte(element["i2c_write_byte"]);
+        action = parseI2CWriteByte(element["i2c_write_byte"], variables);
         ++propertyCount;
     }
     else if (element.contains("i2c_write_bytes"))
     {
-        action = parseI2CWriteBytes(element["i2c_write_bytes"]);
+        action = parseI2CWriteBytes(element["i2c_write_bytes"], variables);
         ++propertyCount;
     }
     else if (element.contains("if"))
     {
-        action = parseIf(element["if"]);
+        action = parseIf(element["if"], variables);
         ++propertyCount;
     }
     else if (element.contains("log_phase_fault"))
     {
-        action = parseLogPhaseFault(element["log_phase_fault"]);
+        action = parseLogPhaseFault(element["log_phase_fault"], variables);
         ++propertyCount;
     }
     else if (element.contains("not"))
     {
-        action = parseNot(element["not"]);
+        action = parseNot(element["not"], variables);
         ++propertyCount;
     }
     else if (element.contains("or"))
     {
-        action = parseOr(element["or"]);
+        action = parseOr(element["or"], variables);
         ++propertyCount;
     }
     else if (element.contains("pmbus_read_sensor"))
     {
-        action = parsePMBusReadSensor(element["pmbus_read_sensor"]);
+        action = parsePMBusReadSensor(element["pmbus_read_sensor"], variables);
         ++propertyCount;
     }
     else if (element.contains("pmbus_write_vout_command"))
     {
-        action =
-            parsePMBusWriteVoutCommand(element["pmbus_write_vout_command"]);
+        action = parsePMBusWriteVoutCommand(element["pmbus_write_vout_command"],
+                                            variables);
         ++propertyCount;
     }
     else if (element.contains("run_rule"))
     {
-        action = parseRunRule(element["run_rule"]);
+        action = parseRunRule(element["run_rule"], variables);
         ++propertyCount;
     }
     else if (element.contains("set_device"))
     {
-        action = parseSetDevice(element["set_device"]);
+        action = parseSetDevice(element["set_device"], variables);
         ++propertyCount;
     }
     else
@@ -172,18 +173,20 @@ std::unique_ptr<Action> parseAction(const json& element)
     return action;
 }
 
-std::vector<std::unique_ptr<Action>> parseActionArray(const json& element)
+std::vector<std::unique_ptr<Action>> parseActionArray(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Action>> actions;
     for (auto& actionElement : element)
     {
-        actions.emplace_back(parseAction(actionElement));
+        actions.emplace_back(parseAction(actionElement, variables));
     }
     return actions;
 }
 
-std::unique_ptr<AndAction> parseAnd(const json& element)
+std::unique_ptr<AndAction> parseAnd(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
 
@@ -193,12 +196,80 @@ std::unique_ptr<AndAction> parseAnd(const json& element)
         throw std::invalid_argument{"Array must contain two or more actions"};
     }
     // Array of two or more actions
-    std::vector<std::unique_ptr<Action>> actions = parseActionArray(element);
+    std::vector<std::unique_ptr<Action>> actions =
+        parseActionArray(element, variables);
 
     return std::make_unique<AndAction>(std::move(actions));
 }
 
-std::unique_ptr<Chassis> parseChassis(const json& element)
+std::unique_ptr<Chassis> parseChassis(
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates)
+{
+    verifyIsObject(element);
+
+    // If chassis object is not using a template, parse properties normally
+    if (!element.contains("template_id"))
+    {
+        bool isChassisTemplate{false};
+        return parseChassisProperties(element, isChassisTemplate, NO_VARIABLES);
+    }
+
+    // Parse chassis object that is using a template
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not stored
+    if (element.contains("comments"))
+    {
+        ++propertyCount;
+    }
+
+    // Required template_id property
+    const json& templateIDElement = getRequiredProperty(element, "template_id");
+    std::string templateID = parseString(templateIDElement);
+    ++propertyCount;
+
+    // Required template_variable_values property
+    const json& variablesElement =
+        getRequiredProperty(element, "template_variable_values");
+    std::map<std::string, std::string> variables =
+        parseVariables(variablesElement);
+    ++propertyCount;
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    // Get reference to chassis template JSON
+    auto it = chassisTemplates.find(templateID);
+    if (it == chassisTemplates.end())
+    {
+        throw std::invalid_argument{
+            "Invalid chassis template id: " + templateID};
+    }
+    const json& templateElement = it->second.get();
+
+    // Parse properties in template using variable values for this chassis
+    bool isChassisTemplate{true};
+    return parseChassisProperties(templateElement, isChassisTemplate,
+                                  variables);
+}
+
+std::vector<std::unique_ptr<Chassis>> parseChassisArray(
+    const json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates)
+{
+    verifyIsArray(element);
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    for (auto& chassisElement : element)
+    {
+        chassis.emplace_back(parseChassis(chassisElement, chassisTemplates));
+    }
+    return chassis;
+}
+
+std::unique_ptr<Chassis> parseChassisProperties(
+    const json& element, bool isChassisTemplate,
+    const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -209,9 +280,17 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
         ++propertyCount;
     }
 
+    // Required id property if this is a chassis template
+    // Don't parse again; this was already parsed by parseChassisTemplate()
+    if (isChassisTemplate)
+    {
+        getRequiredProperty(element, "id");
+        ++propertyCount;
+    }
+
     // Required number property
     const json& numberElement = getRequiredProperty(element, "number");
-    unsigned int number = parseUnsignedInteger(numberElement);
+    unsigned int number = parseUnsignedInteger(numberElement, variables);
     if (number < 1)
     {
         throw std::invalid_argument{"Invalid chassis number: Must be > 0"};
@@ -221,7 +300,8 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     // Required inventory_path property
     const json& inventoryPathElement =
         getRequiredProperty(element, "inventory_path");
-    std::string inventoryPath = parseInventoryPath(inventoryPathElement);
+    std::string inventoryPath =
+        parseInventoryPath(inventoryPathElement, variables);
     ++propertyCount;
 
     // Optional devices property
@@ -229,7 +309,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     auto devicesIt = element.find("devices");
     if (devicesIt != element.end())
     {
-        devices = parseDeviceArray(*devicesIt);
+        devices = parseDeviceArray(*devicesIt, variables);
         ++propertyCount;
     }
 
@@ -239,30 +319,72 @@ std::unique_ptr<Chassis> parseChassis(const json& element)
     return std::make_unique<Chassis>(number, inventoryPath, std::move(devices));
 }
 
-std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element)
+std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
+    const json& element)
 {
-    verifyIsArray(element);
-    std::vector<std::unique_ptr<Chassis>> chassis;
-    for (auto& chassisElement : element)
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Optional comments property; value not parsed
+    if (element.contains("comments"))
     {
-        chassis.emplace_back(parseChassis(chassisElement));
+        ++propertyCount;
     }
-    return chassis;
+
+    // Required id property
+    const json& idElement = getRequiredProperty(element, "id");
+    std::string id = parseString(idElement);
+    ++propertyCount;
+
+    // Required number property
+    // Just verify it exists; cannot be parsed without variable values
+    getRequiredProperty(element, "number");
+    ++propertyCount;
+
+    // Required inventory_path property
+    // Just verify it exists; cannot be parsed without variable values
+    getRequiredProperty(element, "inventory_path");
+    ++propertyCount;
+
+    // Optional devices property
+    // Cannot be parsed without variable values
+    if (element.contains("devices"))
+    {
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return {id, JSONRefWrapper{element}};
 }
 
-std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
+std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
+    const json& element)
+{
+    verifyIsArray(element);
+    std::map<std::string, JSONRefWrapper> chassisTemplates;
+    for (auto& chassisTemplateElement : element)
+    {
+        chassisTemplates.emplace(parseChassisTemplate(chassisTemplateElement));
+    }
+    return chassisTemplates;
+}
+
+std::unique_ptr<ComparePresenceAction> parseComparePresence(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseInventoryPath(fruElement);
+    std::string fru = parseInventoryPath(fruElement, variables);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    bool value = parseBoolean(valueElement);
+    bool value = parseBoolean(valueElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -271,19 +393,20 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(const json& element)
     return std::make_unique<ComparePresenceAction>(fru, value);
 }
 
-std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
+std::unique_ptr<CompareVPDAction> parseCompareVPD(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseInventoryPath(fruElement);
+    std::string fru = parseInventoryPath(fruElement, variables);
     ++propertyCount;
 
     // Required keyword property
     const json& keywordElement = getRequiredProperty(element, "keyword");
-    std::string keyword = parseString(keywordElement);
+    std::string keyword = parseString(keywordElement, false, variables);
     ++propertyCount;
 
     // Either value or byte_values required property
@@ -292,13 +415,13 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
     auto byteValuesIt = element.find("byte_values");
     if ((valueIt != element.end()) && (byteValuesIt == element.end()))
     {
-        std::string stringValue = parseString(*valueIt, true);
+        std::string stringValue = parseString(*valueIt, true, variables);
         value.insert(value.begin(), stringValue.begin(), stringValue.end());
         ++propertyCount;
     }
     else if ((valueIt == element.end()) && (byteValuesIt != element.end()))
     {
-        value = parseHexByteArray(*byteValuesIt);
+        value = parseHexByteArray(*byteValuesIt, variables);
         ++propertyCount;
     }
     else
@@ -313,7 +436,8 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(const json& element)
     return std::make_unique<CompareVPDAction>(fru, keyword, value);
 }
 
-std::unique_ptr<Configuration> parseConfiguration(const json& element)
+std::unique_ptr<Configuration> parseConfiguration(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -329,13 +453,13 @@ std::unique_ptr<Configuration> parseConfiguration(const json& element)
     auto voltsIt = element.find("volts");
     if (voltsIt != element.end())
     {
-        volts = parseDouble(*voltsIt);
+        volts = parseDouble(*voltsIt, variables);
         ++propertyCount;
     }
 
     // Required rule_id or actions property
     std::vector<std::unique_ptr<Action>> actions{};
-    actions = parseRuleIDOrActionsProperty(element);
+    actions = parseRuleIDOrActionsProperty(element, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -344,7 +468,8 @@ std::unique_ptr<Configuration> parseConfiguration(const json& element)
     return std::make_unique<Configuration>(volts, std::move(actions));
 }
 
-std::unique_ptr<Device> parseDevice(const json& element)
+std::unique_ptr<Device> parseDevice(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -357,25 +482,25 @@ std::unique_ptr<Device> parseDevice(const json& element)
 
     // Required id property
     const json& idElement = getRequiredProperty(element, "id");
-    std::string id = parseString(idElement);
+    std::string id = parseString(idElement, false, variables);
     ++propertyCount;
 
     // Required is_regulator property
     const json& isRegulatorElement =
         getRequiredProperty(element, "is_regulator");
-    bool isRegulator = parseBoolean(isRegulatorElement);
+    bool isRegulator = parseBoolean(isRegulatorElement, variables);
     ++propertyCount;
 
     // Required fru property
     const json& fruElement = getRequiredProperty(element, "fru");
-    std::string fru = parseInventoryPath(fruElement);
+    std::string fru = parseInventoryPath(fruElement, variables);
     ++propertyCount;
 
     // Required i2c_interface property
     const json& i2cInterfaceElement =
         getRequiredProperty(element, "i2c_interface");
     std::unique_ptr<i2c::I2CInterface> i2cInterface =
-        parseI2CInterface(i2cInterfaceElement);
+        parseI2CInterface(i2cInterfaceElement, variables);
     ++propertyCount;
 
     // Optional presence_detection property
@@ -383,7 +508,8 @@ std::unique_ptr<Device> parseDevice(const json& element)
     auto presenceDetectionIt = element.find("presence_detection");
     if (presenceDetectionIt != element.end())
     {
-        presenceDetection = parsePresenceDetection(*presenceDetectionIt);
+        presenceDetection =
+            parsePresenceDetection(*presenceDetectionIt, variables);
         ++propertyCount;
     }
 
@@ -392,7 +518,7 @@ std::unique_ptr<Device> parseDevice(const json& element)
     auto configurationIt = element.find("configuration");
     if (configurationIt != element.end())
     {
-        configuration = parseConfiguration(*configurationIt);
+        configuration = parseConfiguration(*configurationIt, variables);
         ++propertyCount;
     }
 
@@ -406,7 +532,8 @@ std::unique_ptr<Device> parseDevice(const json& element)
             throw std::invalid_argument{"Invalid phase_fault_detection "
                                         "property when is_regulator is false"};
         }
-        phaseFaultDetection = parsePhaseFaultDetection(*phaseFaultDetectionIt);
+        phaseFaultDetection =
+            parsePhaseFaultDetection(*phaseFaultDetectionIt, variables);
         ++propertyCount;
     }
 
@@ -420,7 +547,7 @@ std::unique_ptr<Device> parseDevice(const json& element)
             throw std::invalid_argument{
                 "Invalid rails property when is_regulator is false"};
         }
-        rails = parseRailArray(*railsIt);
+        rails = parseRailArray(*railsIt, variables);
         ++propertyCount;
     }
 
@@ -433,30 +560,32 @@ std::unique_ptr<Device> parseDevice(const json& element)
         std::move(phaseFaultDetection), std::move(rails));
 }
 
-std::vector<std::unique_ptr<Device>> parseDeviceArray(const json& element)
+std::vector<std::unique_ptr<Device>> parseDeviceArray(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Device>> devices;
     for (auto& deviceElement : element)
     {
-        devices.emplace_back(parseDevice(deviceElement));
+        devices.emplace_back(parseDevice(deviceElement, variables));
     }
     return devices;
 }
 
-std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(const json& element)
+std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required count property
     const json& countElement = getRequiredProperty(element, "count");
-    uint8_t count = parseUint8(countElement);
+    uint8_t count = parseUint8(countElement, variables);
     if (count < 1)
     {
         throw std::invalid_argument{"Invalid byte count: Must be > 0"};
@@ -469,24 +598,25 @@ std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(const json& element)
     return std::make_unique<I2CCaptureBytesAction>(reg, count);
 }
 
-std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(const json& element)
+std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required position property
     const json& positionElement = getRequiredProperty(element, "position");
-    uint8_t position = parseBitPosition(positionElement);
+    uint8_t position = parseBitPosition(positionElement, variables);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    uint8_t value = parseBitValue(valueElement);
+    uint8_t value = parseBitValue(valueElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -495,19 +625,20 @@ std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(const json& element)
     return std::make_unique<I2CCompareBitAction>(reg, position, value);
 }
 
-std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(const json& element)
+std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    uint8_t value = parseHexByte(valueElement);
+    uint8_t value = parseHexByte(valueElement, variables);
     ++propertyCount;
 
     // Optional mask property
@@ -515,7 +646,7 @@ std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(const json& element)
     auto maskIt = element.find("mask");
     if (maskIt != element.end())
     {
-        mask = parseHexByte(*maskIt);
+        mask = parseHexByte(*maskIt, variables);
         ++propertyCount;
     }
 
@@ -525,19 +656,20 @@ std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(const json& element)
     return std::make_unique<I2CCompareByteAction>(reg, value, mask);
 }
 
-std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(const json& element)
+std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required values property
     const json& valueElement = getRequiredProperty(element, "values");
-    std::vector<uint8_t> values = parseHexByteArray(valueElement);
+    std::vector<uint8_t> values = parseHexByteArray(valueElement, variables);
     ++propertyCount;
 
     // Optional masks property
@@ -545,7 +677,7 @@ std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(const json& element)
     auto masksIt = element.find("masks");
     if (masksIt != element.end())
     {
-        masks = parseHexByteArray(*masksIt);
+        masks = parseHexByteArray(*masksIt, variables);
         ++propertyCount;
     }
 
@@ -565,19 +697,20 @@ std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(const json& element)
     return std::make_unique<I2CCompareBytesAction>(reg, values, masks);
 }
 
-std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
+std::unique_ptr<i2c::I2CInterface> parseI2CInterface(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required bus property
     const json& busElement = getRequiredProperty(element, "bus");
-    uint16_t bus = parseUint16(busElement);
+    uint16_t bus = parseUint16(busElement, variables);
     ++propertyCount;
 
     // Required address property
     const json& addressElement = getRequiredProperty(element, "address");
-    uint8_t address = parseHexByte(addressElement);
+    uint8_t address = parseHexByte(addressElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -589,24 +722,25 @@ std::unique_ptr<i2c::I2CInterface> parseI2CInterface(const json& element)
                        maxRetries);
 }
 
-std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
+std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required position property
     const json& positionElement = getRequiredProperty(element, "position");
-    uint8_t position = parseBitPosition(positionElement);
+    uint8_t position = parseBitPosition(positionElement, variables);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    uint8_t value = parseBitValue(valueElement);
+    uint8_t value = parseBitValue(valueElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -615,19 +749,20 @@ std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(const json& element)
     return std::make_unique<I2CWriteBitAction>(reg, position, value);
 }
 
-std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
+std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required value property
     const json& valueElement = getRequiredProperty(element, "value");
-    uint8_t value = parseHexByte(valueElement);
+    uint8_t value = parseHexByte(valueElement, variables);
     ++propertyCount;
 
     // Optional mask property
@@ -635,7 +770,7 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
     auto maskIt = element.find("mask");
     if (maskIt != element.end())
     {
-        mask = parseHexByte(*maskIt);
+        mask = parseHexByte(*maskIt, variables);
         ++propertyCount;
     }
 
@@ -645,19 +780,20 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(const json& element)
     return std::make_unique<I2CWriteByteAction>(reg, value, mask);
 }
 
-std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
+std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required register property
     const json& regElement = getRequiredProperty(element, "register");
-    uint8_t reg = parseHexByte(regElement);
+    uint8_t reg = parseHexByte(regElement, variables);
     ++propertyCount;
 
     // Required values property
     const json& valueElement = getRequiredProperty(element, "values");
-    std::vector<uint8_t> values = parseHexByteArray(valueElement);
+    std::vector<uint8_t> values = parseHexByteArray(valueElement, variables);
     ++propertyCount;
 
     // Optional masks property
@@ -665,7 +801,7 @@ std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
     auto masksIt = element.find("masks");
     if (masksIt != element.end())
     {
-        masks = parseHexByteArray(*masksIt);
+        masks = parseHexByteArray(*masksIt, variables);
         ++propertyCount;
     }
 
@@ -685,20 +821,22 @@ std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(const json& element)
     return std::make_unique<I2CWriteBytesAction>(reg, values, masks);
 }
 
-std::unique_ptr<IfAction> parseIf(const json& element)
+std::unique_ptr<IfAction> parseIf(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required condition property
     const json& conditionElement = getRequiredProperty(element, "condition");
-    std::unique_ptr<Action> conditionAction = parseAction(conditionElement);
+    std::unique_ptr<Action> conditionAction =
+        parseAction(conditionElement, variables);
     ++propertyCount;
 
     // Required then property
     const json& thenElement = getRequiredProperty(element, "then");
     std::vector<std::unique_ptr<Action>> thenActions =
-        parseActionArray(thenElement);
+        parseActionArray(thenElement, variables);
     ++propertyCount;
 
     // Optional else property
@@ -706,7 +844,7 @@ std::unique_ptr<IfAction> parseIf(const json& element)
     auto elseIt = element.find("else");
     if (elseIt != element.end())
     {
-        elseActions = parseActionArray(*elseIt);
+        elseActions = parseActionArray(*elseIt, variables);
         ++propertyCount;
     }
 
@@ -718,9 +856,10 @@ std::unique_ptr<IfAction> parseIf(const json& element)
                                       std::move(elseActions));
 }
 
-std::string parseInventoryPath(const json& element)
+std::string parseInventoryPath(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
-    std::string inventoryPath = parseString(element);
+    std::string inventoryPath = parseString(element, false, variables);
     std::string absPath = "/xyz/openbmc_project/inventory";
     if (inventoryPath.front() != '/')
     {
@@ -730,14 +869,15 @@ std::string parseInventoryPath(const json& element)
     return absPath;
 }
 
-std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(const json& element)
+std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required type property
     const json& typeElement = getRequiredProperty(element, "type");
-    PhaseFaultType type = parsePhaseFaultType(typeElement);
+    PhaseFaultType type = parsePhaseFaultType(typeElement, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -746,15 +886,17 @@ std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(const json& element)
     return std::make_unique<LogPhaseFaultAction>(type);
 }
 
-std::unique_ptr<NotAction> parseNot(const json& element)
+std::unique_ptr<NotAction> parseNot(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     // Required action to execute
-    std::unique_ptr<Action> action = parseAction(element);
+    std::unique_ptr<Action> action = parseAction(element, variables);
 
     return std::make_unique<NotAction>(std::move(action));
 }
 
-std::unique_ptr<OrAction> parseOr(const json& element)
+std::unique_ptr<OrAction> parseOr(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
 
@@ -764,13 +906,14 @@ std::unique_ptr<OrAction> parseOr(const json& element)
         throw std::invalid_argument{"Array must contain two or more actions"};
     }
     // Array of two or more actions
-    std::vector<std::unique_ptr<Action>> actions = parseActionArray(element);
+    std::vector<std::unique_ptr<Action>> actions =
+        parseActionArray(element, variables);
 
     return std::make_unique<OrAction>(std::move(actions));
 }
 
 std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
-    const json& element)
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -786,13 +929,13 @@ std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
     auto deviceIDIt = element.find("device_id");
     if (deviceIDIt != element.end())
     {
-        deviceID = parseString(*deviceIDIt);
+        deviceID = parseString(*deviceIDIt, false, variables);
         ++propertyCount;
     }
 
     // Required rule_id or actions property
     std::vector<std::unique_ptr<Action>> actions{};
-    actions = parseRuleIDOrActionsProperty(element);
+    actions = parseRuleIDOrActionsProperty(element, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -801,9 +944,10 @@ std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
     return std::make_unique<PhaseFaultDetection>(std::move(actions), deviceID);
 }
 
-PhaseFaultType parsePhaseFaultType(const json& element)
+PhaseFaultType parsePhaseFaultType(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
-    std::string value = parseString(element);
+    std::string value = parseString(element, false, variables);
     PhaseFaultType type{};
 
     if (value == "n")
@@ -822,24 +966,26 @@ PhaseFaultType parsePhaseFaultType(const json& element)
     return type;
 }
 
-std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
+std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
 
     // Required type property
     const json& typeElement = getRequiredProperty(element, "type");
-    SensorType type = parseSensorType(typeElement);
+    SensorType type = parseSensorType(typeElement, variables);
     ++propertyCount;
 
     // Required command property
     const json& commandElement = getRequiredProperty(element, "command");
-    uint8_t command = parseHexByte(commandElement);
+    uint8_t command = parseHexByte(commandElement, variables);
     ++propertyCount;
 
     // Required format property
     const json& formatElement = getRequiredProperty(element, "format");
-    pmbus_utils::SensorDataFormat format = parseSensorDataFormat(formatElement);
+    pmbus_utils::SensorDataFormat format =
+        parseSensorDataFormat(formatElement, variables);
     ++propertyCount;
 
     // Optional exponent property
@@ -847,7 +993,7 @@ std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
     auto exponentIt = element.find("exponent");
     if (exponentIt != element.end())
     {
-        exponent = parseInt8(*exponentIt);
+        exponent = parseInt8(*exponentIt, variables);
         ++propertyCount;
     }
 
@@ -859,7 +1005,7 @@ std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(const json& element)
 }
 
 std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
-    const json& element)
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -869,13 +1015,13 @@ std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
     auto voltsIt = element.find("volts");
     if (voltsIt != element.end())
     {
-        volts = parseDouble(*voltsIt);
+        volts = parseDouble(*voltsIt, variables);
         ++propertyCount;
     }
 
     // Required format property
     const json& formatElement = getRequiredProperty(element, "format");
-    std::string formatString = parseString(formatElement);
+    std::string formatString = parseString(formatElement, false, variables);
     if (formatString != "linear")
     {
         throw std::invalid_argument{"Invalid format value: " + formatString};
@@ -888,7 +1034,7 @@ std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
     auto exponentIt = element.find("exponent");
     if (exponentIt != element.end())
     {
-        exponent = parseInt8(*exponentIt);
+        exponent = parseInt8(*exponentIt, variables);
         ++propertyCount;
     }
 
@@ -897,7 +1043,7 @@ std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
     auto isVerifiedIt = element.find("is_verified");
     if (isVerifiedIt != element.end())
     {
-        isVerified = parseBoolean(*isVerifiedIt);
+        isVerified = parseBoolean(*isVerifiedIt, variables);
         ++propertyCount;
     }
 
@@ -908,7 +1054,8 @@ std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
                                                          exponent, isVerified);
 }
 
-std::unique_ptr<PresenceDetection> parsePresenceDetection(const json& element)
+std::unique_ptr<PresenceDetection> parsePresenceDetection(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -921,7 +1068,7 @@ std::unique_ptr<PresenceDetection> parsePresenceDetection(const json& element)
 
     // Required rule_id or actions property
     std::vector<std::unique_ptr<Action>> actions{};
-    actions = parseRuleIDOrActionsProperty(element);
+    actions = parseRuleIDOrActionsProperty(element, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -930,7 +1077,8 @@ std::unique_ptr<PresenceDetection> parsePresenceDetection(const json& element)
     return std::make_unique<PresenceDetection>(std::move(actions));
 }
 
-std::unique_ptr<Rail> parseRail(const json& element)
+std::unique_ptr<Rail> parseRail(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -943,7 +1091,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
 
     // Required id property
     const json& idElement = getRequiredProperty(element, "id");
-    std::string id = parseString(idElement);
+    std::string id = parseString(idElement, false, variables);
     ++propertyCount;
 
     // Optional configuration property
@@ -951,7 +1099,7 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto configurationIt = element.find("configuration");
     if (configurationIt != element.end())
     {
-        configuration = parseConfiguration(*configurationIt);
+        configuration = parseConfiguration(*configurationIt, variables);
         ++propertyCount;
     }
 
@@ -960,7 +1108,8 @@ std::unique_ptr<Rail> parseRail(const json& element)
     auto sensorMonitoringIt = element.find("sensor_monitoring");
     if (sensorMonitoringIt != element.end())
     {
-        sensorMonitoring = parseSensorMonitoring(*sensorMonitoringIt);
+        sensorMonitoring =
+            parseSensorMonitoring(*sensorMonitoringIt, variables);
         ++propertyCount;
     }
 
@@ -971,13 +1120,14 @@ std::unique_ptr<Rail> parseRail(const json& element)
                                   std::move(sensorMonitoring));
 }
 
-std::vector<std::unique_ptr<Rail>> parseRailArray(const json& element)
+std::vector<std::unique_ptr<Rail>> parseRailArray(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsArray(element);
     std::vector<std::unique_ptr<Rail>> rails;
     for (auto& railElement : element)
     {
-        rails.emplace_back(parseRail(railElement));
+        rails.emplace_back(parseRail(railElement, variables));
     }
     return rails;
 }
@@ -1004,10 +1154,19 @@ std::tuple<std::vector<std::unique_ptr<Rule>>,
         ++propertyCount;
     }
 
+    // Optional chassis_templates property
+    std::map<std::string, JSONRefWrapper> chassisTemplates{};
+    auto chassisTemplatesIt = element.find("chassis_templates");
+    if (chassisTemplatesIt != element.end())
+    {
+        chassisTemplates = parseChassisTemplateArray(*chassisTemplatesIt);
+        ++propertyCount;
+    }
+
     // Required chassis property
     const json& chassisElement = getRequiredProperty(element, "chassis");
     std::vector<std::unique_ptr<Chassis>> chassis =
-        parseChassisArray(chassisElement);
+        parseChassisArray(chassisElement, chassisTemplates);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -1035,7 +1194,7 @@ std::unique_ptr<Rule> parseRule(const json& element)
     // Required actions property
     const json& actionsElement = getRequiredProperty(element, "actions");
     std::vector<std::unique_ptr<Action>> actions =
-        parseActionArray(actionsElement);
+        parseActionArray(actionsElement, NO_VARIABLES);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -1056,7 +1215,7 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(const json& element)
 }
 
 std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
-    const json& element)
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     // Required rule_id or actions property
@@ -1065,12 +1224,12 @@ std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
     auto actionsIt = element.find("actions");
     if ((actionsIt == element.end()) && (ruleIDIt != element.end()))
     {
-        std::string ruleID = parseString(*ruleIDIt);
+        std::string ruleID = parseString(*ruleIDIt, false, variables);
         actions.emplace_back(std::make_unique<RunRuleAction>(ruleID));
     }
     else if ((actionsIt != element.end()) && (ruleIDIt == element.end()))
     {
-        actions = parseActionArray(*actionsIt);
+        actions = parseActionArray(*actionsIt, variables);
     }
     else
     {
@@ -1081,21 +1240,19 @@ std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
     return actions;
 }
 
-std::unique_ptr<RunRuleAction> parseRunRule(const json& element)
+std::unique_ptr<RunRuleAction> parseRunRule(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     // String ruleID
-    std::string ruleID = parseString(element);
+    std::string ruleID = parseString(element, false, variables);
 
     return std::make_unique<RunRuleAction>(ruleID);
 }
 
-pmbus_utils::SensorDataFormat parseSensorDataFormat(const json& element)
+pmbus_utils::SensorDataFormat parseSensorDataFormat(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
-    if (!element.is_string())
-    {
-        throw std::invalid_argument{"Element is not a string"};
-    }
-    std::string value = element.get<std::string>();
+    std::string value = parseString(element, false, variables);
     pmbus_utils::SensorDataFormat format{};
 
     if (value == "linear_11")
@@ -1114,7 +1271,8 @@ pmbus_utils::SensorDataFormat parseSensorDataFormat(const json& element)
     return format;
 }
 
-std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
+std::unique_ptr<SensorMonitoring> parseSensorMonitoring(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     verifyIsObject(element);
     unsigned int propertyCount{0};
@@ -1127,7 +1285,7 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
 
     // Required rule_id or actions property
     std::vector<std::unique_ptr<Action>> actions{};
-    actions = parseRuleIDOrActionsProperty(element);
+    actions = parseRuleIDOrActionsProperty(element, variables);
     ++propertyCount;
 
     // Verify no invalid properties exist
@@ -1136,9 +1294,10 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(const json& element)
     return std::make_unique<SensorMonitoring>(std::move(actions));
 }
 
-SensorType parseSensorType(const json& element)
+SensorType parseSensorType(const json& element,
+                           const std::map<std::string, std::string>& variables)
 {
-    std::string value = parseString(element);
+    std::string value = parseString(element, false, variables);
     SensorType type{};
 
     if (value == "iout")
@@ -1185,21 +1344,34 @@ SensorType parseSensorType(const json& element)
     return type;
 }
 
-std::unique_ptr<SetDeviceAction> parseSetDevice(const json& element)
+std::unique_ptr<SetDeviceAction> parseSetDevice(
+    const json& element, const std::map<std::string, std::string>& variables)
 {
     // String deviceID
-    std::string deviceID = parseString(element);
+    std::string deviceID = parseString(element, false, variables);
 
     return std::make_unique<SetDeviceAction>(deviceID);
 }
 
-pmbus_utils::VoutDataFormat parseVoutDataFormat(const json& element)
+std::map<std::string, std::string> parseVariables(const json& element)
 {
-    if (!element.is_string())
+    verifyIsObject(element);
+
+    std::map<std::string, std::string> variables;
+    std::string name, value;
+    for (const auto& [nameElement, valueElement] : element.items())
     {
-        throw std::invalid_argument{"Element is not a string"};
+        name = parseString(nameElement);
+        value = parseString(valueElement);
+        variables.emplace(name, value);
     }
-    std::string value = element.get<std::string>();
+    return variables;
+}
+
+pmbus_utils::VoutDataFormat parseVoutDataFormat(
+    const json& element, const std::map<std::string, std::string>& variables)
+{
+    std::string value = parseString(element, false, variables);
     pmbus_utils::VoutDataFormat format{};
 
     if (value == "linear")

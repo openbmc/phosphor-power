@@ -77,6 +77,8 @@ std::tuple<std::vector<std::unique_ptr<Rule>>,
 namespace internal
 {
 
+using JSONRefWrapper = std::reference_wrapper<const nlohmann::json>;
+
 /**
  * Parses a JSON element containing an action.
  *
@@ -85,9 +87,12 @@ namespace internal
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return Action object
  */
-std::unique_ptr<Action> parseAction(const nlohmann::json& element);
+std::unique_ptr<Action> parseAction(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of actions.
@@ -97,10 +102,12 @@ std::unique_ptr<Action> parseAction(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of Action objects
  */
 std::vector<std::unique_ptr<Action>> parseActionArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an and action.
@@ -110,9 +117,12 @@ std::vector<std::unique_ptr<Action>> parseActionArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return AndAction object
  */
-std::unique_ptr<AndAction> parseAnd(const nlohmann::json& element);
+std::unique_ptr<AndAction> parseAnd(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a chassis.
@@ -122,9 +132,12 @@ std::unique_ptr<AndAction> parseAnd(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param chassisTemplates chassis templates map
  * @return Chassis object
  */
-std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
+std::unique_ptr<Chassis> parseChassis(
+    const nlohmann::json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates);
 
 /**
  * Parses a JSON element containing an array of chassis.
@@ -134,9 +147,69 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param chassisTemplates chassis templates map
  * @return vector of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
+    const nlohmann::json& element,
+    const std::map<std::string, JSONRefWrapper>& chassisTemplates);
+
+/**
+ * Parses a JSON element containing the properties of a chassis.
+ *
+ * The JSON element may be a chassis object or chassis_template object.
+ *
+ * Returns the corresponding C++ Chassis object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param isChassisTemplate specifies whether element is a chassis_template
+ * @param variables variables map used to expand variables in element value
+ * @return Chassis object
+ */
+std::unique_ptr<Chassis> parseChassisProperties(
+    const nlohmann::json& element, bool isChassisTemplate,
+    const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing a chassis_template object.
+ *
+ * Returns the template ID and a C++ reference_wrapper to the JSON element.
+ *
+ * A chassis_template object cannot be fully parsed in isolation. It is a
+ * template that contains variables.
+ *
+ * The chassis_template object is used by one or more chassis objects to avoid
+ * duplicate JSON. The chassis objects define chassis-specific values for the
+ * template variables.
+ *
+ * When the chassis object is parsed, the chassis_template JSON will be
+ * re-parsed, and the template variables will be replaced with the
+ * chassis-specific values.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return template ID and reference_wrapper to JSON element
+ */
+std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
+    const nlohmann::json& element);
+
+/**
+ * Parses a JSON element containing an array of chassis_template objects.
+ *
+ * Returns a map of template IDs to chassis_template JSON elements.
+ *
+ * Note that chassis_template objects cannot be fully parsed in isolation. See
+ * parseChassisTemplate() for more information.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return chassis templates map
+ */
+std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     const nlohmann::json& element);
 
 /**
@@ -147,10 +220,12 @@ std::vector<std::unique_ptr<Chassis>> parseChassisArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return ComparePresenceAction object
  */
 std::unique_ptr<ComparePresenceAction> parseComparePresence(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a compare_vpd action.
@@ -160,10 +235,12 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return CompareVPDAction object
  */
 std::unique_ptr<CompareVPDAction> parseCompareVPD(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a configuration object.
@@ -173,10 +250,12 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return Configuration object
  */
 std::unique_ptr<Configuration> parseConfiguration(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a device.
@@ -186,9 +265,12 @@ std::unique_ptr<Configuration> parseConfiguration(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return Device object
  */
-std::unique_ptr<Device> parseDevice(const nlohmann::json& element);
+std::unique_ptr<Device> parseDevice(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of devices.
@@ -198,10 +280,12 @@ std::unique_ptr<Device> parseDevice(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of Device objects
  */
 std::vector<std::unique_ptr<Device>> parseDeviceArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_capture_bytes action.
@@ -211,10 +295,12 @@ std::vector<std::unique_ptr<Device>> parseDeviceArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CCaptureBytesAction object
  */
 std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_compare_bit action.
@@ -224,10 +310,12 @@ std::unique_ptr<I2CCaptureBytesAction> parseI2CCaptureBytes(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CCompareBitAction object
  */
 std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_compare_byte action.
@@ -237,10 +325,12 @@ std::unique_ptr<I2CCompareBitAction> parseI2CCompareBit(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CCompareByteAction object
  */
 std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_compare_bytes action.
@@ -250,10 +340,12 @@ std::unique_ptr<I2CCompareByteAction> parseI2CCompareByte(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CCompareBytesAction object
  */
 std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_interface.
@@ -263,10 +355,12 @@ std::unique_ptr<I2CCompareBytesAction> parseI2CCompareBytes(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return i2c::I2CInterface object
  */
 std::unique_ptr<i2c::I2CInterface> parseI2CInterface(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_write_bit action.
@@ -276,10 +370,12 @@ std::unique_ptr<i2c::I2CInterface> parseI2CInterface(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CWriteBitAction object
  */
 std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_write_byte action.
@@ -289,10 +385,12 @@ std::unique_ptr<I2CWriteBitAction> parseI2CWriteBit(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CWriteByteAction object
  */
 std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an i2c_write_bytes action.
@@ -302,10 +400,12 @@ std::unique_ptr<I2CWriteByteAction> parseI2CWriteByte(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return I2CWriteBytesAction object
  */
 std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an if action.
@@ -315,9 +415,12 @@ std::unique_ptr<I2CWriteBytesAction> parseI2CWriteBytes(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return IfAction object
  */
-std::unique_ptr<IfAction> parseIf(const nlohmann::json& element);
+std::unique_ptr<IfAction> parseIf(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a relative inventory path.
@@ -330,9 +433,12 @@ std::unique_ptr<IfAction> parseIf(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return absolute D-Bus inventory path
  */
-std::string parseInventoryPath(const nlohmann::json& element);
+std::string parseInventoryPath(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a log_phase_fault action.
@@ -342,10 +448,12 @@ std::string parseInventoryPath(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return LogPhaseFaultAction object
  */
 std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a not action.
@@ -355,9 +463,12 @@ std::unique_ptr<LogPhaseFaultAction> parseLogPhaseFault(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return NotAction object
  */
-std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
+std::unique_ptr<NotAction> parseNot(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an or action.
@@ -367,9 +478,12 @@ std::unique_ptr<NotAction> parseNot(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return OrAction object
  */
-std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
+std::unique_ptr<OrAction> parseOr(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a phase_fault_detection object.
@@ -379,10 +493,12 @@ std::unique_ptr<OrAction> parseOr(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return PhaseFaultDetection object
  */
 std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a PhaseFaultType expressed as a string.
@@ -392,9 +508,12 @@ std::unique_ptr<PhaseFaultDetection> parsePhaseFaultDetection(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return PhaseFaultType enum value
  */
-PhaseFaultType parsePhaseFaultType(const nlohmann::json& element);
+PhaseFaultType parsePhaseFaultType(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a pmbus_read_sensor action.
@@ -404,10 +523,12 @@ PhaseFaultType parsePhaseFaultType(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return PMBusReadSensorAction object
  */
 std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a pmbus_write_vout_command action.
@@ -417,10 +538,12 @@ std::unique_ptr<PMBusReadSensorAction> parsePMBusReadSensor(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return PMBusWriteVoutCommandAction object
  */
 std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a presence_detection object.
@@ -430,10 +553,12 @@ std::unique_ptr<PMBusWriteVoutCommandAction> parsePMBusWriteVoutCommand(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return PresenceDetection object
  */
 std::unique_ptr<PresenceDetection> parsePresenceDetection(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a rail.
@@ -443,9 +568,12 @@ std::unique_ptr<PresenceDetection> parsePresenceDetection(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return Rail object
  */
-std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
+std::unique_ptr<Rail> parseRail(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an array of rails.
@@ -455,10 +583,12 @@ std::unique_ptr<Rail> parseRail(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of Rail objects
  */
 std::vector<std::unique_ptr<Rail>> parseRailArray(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses the JSON root element of the entire configuration file.
@@ -513,10 +643,12 @@ std::vector<std::unique_ptr<Rule>> parseRuleArray(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return vector of Action objects
  */
 std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a run_rule action.
@@ -526,9 +658,12 @@ std::vector<std::unique_ptr<Action>> parseRuleIDOrActionsProperty(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return RunRuleAction object
  */
-std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
+std::unique_ptr<RunRuleAction> parseRunRule(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a SensorDataFormat expressed as a string.
@@ -538,10 +673,12 @@ std::unique_ptr<RunRuleAction> parseRunRule(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return SensorDataFormat enum value
  */
 pmbus_utils::SensorDataFormat parseSensorDataFormat(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a sensor_monitoring object.
@@ -551,10 +688,12 @@ pmbus_utils::SensorDataFormat parseSensorDataFormat(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return SensorMonitoring object
  */
 std::unique_ptr<SensorMonitoring> parseSensorMonitoring(
-    const nlohmann::json& element);
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a SensorType expressed as a string.
@@ -564,9 +703,11 @@ std::unique_ptr<SensorMonitoring> parseSensorMonitoring(
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return SensorType enum value
  */
-SensorType parseSensorType(const nlohmann::json& element);
+SensorType parseSensorType(const nlohmann::json& element,
+                           const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a set_device action.
@@ -576,9 +717,25 @@ SensorType parseSensorType(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return SetDeviceAction object
  */
-std::unique_ptr<SetDeviceAction> parseSetDevice(const nlohmann::json& element);
+std::unique_ptr<SetDeviceAction> parseSetDevice(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing an object with variable names and values.
+ *
+ * Returns the corresponding C++ map of variable names and values.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return map of variable names and values
+ */
+std::map<std::string, std::string> parseVariables(
+    const nlohmann::json& element);
 
 /**
  * Parses a JSON element containing a VoutDataFormat expressed as a string.
@@ -588,9 +745,12 @@ std::unique_ptr<SetDeviceAction> parseSetDevice(const nlohmann::json& element);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param variables variables map used to expand variables in element value
  * @return VoutDataFormat enum value
  */
-pmbus_utils::VoutDataFormat parseVoutDataFormat(const nlohmann::json& element);
+pmbus_utils::VoutDataFormat parseVoutDataFormat(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
 
 } // namespace internal
 

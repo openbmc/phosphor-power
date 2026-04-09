@@ -53,7 +53,6 @@
 
 #include <cstdint>
 #include <cstring>
-#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -222,7 +221,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -235,7 +235,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -249,7 +250,8 @@ TEST(ConfigFileParserTests, ParseAction)
               ]
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -264,7 +266,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -280,7 +283,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -294,7 +298,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -309,7 +314,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -323,7 +329,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -337,7 +344,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -352,7 +360,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -366,7 +375,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -380,7 +390,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -396,7 +407,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -409,7 +421,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -421,7 +434,8 @@ TEST(ConfigFileParserTests, ParseAction)
               { "i2c_compare_byte": { "register": "0xA0", "value": "0xFF" } }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -435,7 +449,8 @@ TEST(ConfigFileParserTests, ParseAction)
               ]
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -450,7 +465,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -463,7 +479,8 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -474,7 +491,8 @@ TEST(ConfigFileParserTests, ParseAction)
               "run_rule": "set_voltage_rule"
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -485,7 +503,24 @@ TEST(ConfigFileParserTests, ParseAction)
               "set_device": "io_expander2"
             }
         )"_json;
-        std::unique_ptr<Action> action = parseAction(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Action> action = parseAction(element, variables);
+        EXPECT_NE(action.get(), nullptr);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "i2c_write_byte": {
+                "register": "${register}",
+                "value": "${value}"
+              }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"register", "0x0A"},
+                                                     {"value", "0xCC"}};
+        std::unique_ptr<Action> action = parseAction(element, variables);
         EXPECT_NE(action.get(), nullptr);
     }
 
@@ -493,7 +528,8 @@ TEST(ConfigFileParserTests, ParseAction)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseAction(element);
+        std::map<std::string, std::string> variables{};
+        parseAction(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -509,7 +545,8 @@ TEST(ConfigFileParserTests, ParseAction)
               "comments": [ "Set output voltage." ]
             }
         )"_json;
-        parseAction(element);
+        std::map<std::string, std::string> variables{};
+        parseAction(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -526,7 +563,8 @@ TEST(ConfigFileParserTests, ParseAction)
               "run_rule": "set_voltage_rule"
             }
         )"_json;
-        parseAction(element);
+        std::map<std::string, std::string> variables{};
+        parseAction(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -545,12 +583,33 @@ TEST(ConfigFileParserTests, ParseAction)
               }
             }
         )"_json;
-        parseAction(element);
+        std::map<std::string, std::string> variables{};
+        parseAction(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "i2c_write_byte": {
+                "register": "${register}",
+                "value": "0xCC"
+              }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"register", "0xZZ"}};
+        parseAction(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -564,9 +623,23 @@ TEST(ConfigFileParserTests, ParseActionArray)
               { "pmbus_write_vout_command": { "volts": 1.03, "format": "linear" } }
             ]
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::vector<std::unique_ptr<Action>> actions =
-            parseActionArray(element);
+            parseActionArray(element, variables);
         EXPECT_EQ(actions.size(), 2);
+    }
+
+    // Test where works: Variable specified
+    {
+        const json element = R"(
+            [
+              { "pmbus_write_vout_command": { "volts": "${volts}", "format": "linear" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"volts", "1.09"}};
+        std::vector<std::unique_ptr<Action>> actions =
+            parseActionArray(element, variables);
+        EXPECT_EQ(actions.size(), 1);
     }
 
     // Test where fails: Element is not an array
@@ -577,12 +650,30 @@ TEST(ConfigFileParserTests, ParseActionArray)
               "foo": "bar"
             }
         )"_json;
-        parseActionArray(element);
+        std::map<std::string, std::string> variables{};
+        parseActionArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Variable value is not valid
+    try
+    {
+        const json element = R"(
+            [
+              { "pmbus_write_vout_command": { "volts": "${volts}", "format": "linear" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"volts", "foo"}};
+        parseActionArray(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a double");
     }
 }
 
@@ -596,7 +687,21 @@ TEST(ConfigFileParserTests, ParseAnd)
               { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
             ]
         )"_json;
-        std::unique_ptr<AndAction> action = parseAnd(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<AndAction> action = parseAnd(element, variables);
+        EXPECT_EQ(action->getActions().size(), 2);
+    }
+
+    // Test where works: Variable specified
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "${byte_val}" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "${byte_val}" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"byte_val", "0xFF"}};
+        std::unique_ptr<AndAction> action = parseAnd(element, variables);
         EXPECT_EQ(action->getActions().size(), 2);
     }
 
@@ -608,7 +713,8 @@ TEST(ConfigFileParserTests, ParseAnd)
               { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } }
             ]
         )"_json;
-        parseAnd(element);
+        std::map<std::string, std::string> variables{};
+        parseAnd(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -624,18 +730,418 @@ TEST(ConfigFileParserTests, ParseAnd)
               "foo": "bar"
             }
         )"_json;
-        parseAnd(element);
+        std::map<std::string, std::string> variables{};
+        parseAnd(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
     }
+
+    // Test where fails: Variable not defined
+    try
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0xA0", "value": "${byte_val}" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "${byte_val}" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "0xFF"}};
+        parseAnd(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: byte_val");
+    }
 }
 
 TEST(ConfigFileParserTests, ParseChassis)
 {
-    // Test where works: Only required properties specified
+    // Constants used by multiple tests
+    const json templateElement = R"(
+        {
+          "id": "foo_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "system/chassis${chassis_number}",
+          "devices": [
+            {
+              "id": "chassis${chassis_number}_${reg_name}",
+              "is_regulator": true,
+              "fru": "system/chassis${chassis_number}/motherboard/${reg_name}",
+              "i2c_interface": { "bus": "${bus}", "address": "${address}" },
+              "rails": []
+            }
+          ]
+        }
+    )"_json;
+    const std::map<std::string, JSONRefWrapper> chassisTemplates{
+        {"foo_chassis", templateElement}};
+
+    // Test where works: Does not use a template
+    {
+        const json element = R"(
+            {
+              "number": 1,
+              "inventory_path": "system/chassis",
+              "devices": [
+                {
+                  "id": "vdd_reg",
+                  "is_regulator": true,
+                  "fru": "system/chassis/motherboard/vdd_reg",
+                  "i2c_interface": { "bus": 2, "address": "0x6f" },
+                  "rails": []
+                }
+              ]
+            }
+        )"_json;
+        auto chassis = parseChassis(element, chassisTemplates);
+        EXPECT_EQ(chassis->getNumber(), 1);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis");
+        EXPECT_EQ(chassis->getDevices().size(), 1);
+        EXPECT_EQ(chassis->getDevices()[0]->getID(), "vdd_reg");
+        EXPECT_EQ(
+            chassis->getDevices()[0]->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/vdd_reg");
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getBusID(), 2);
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getAddress(),
+                  0x6F);
+    }
+
+    // Test where works: Uses template: No comments specified
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": {
+                "chassis_number": "2",
+                "reg_name": "vdd_reg2",
+                "bus": "4",
+                "address": "0x0a"
+              }
+            }
+        )"_json;
+        auto chassis = parseChassis(element, chassisTemplates);
+        EXPECT_EQ(chassis->getNumber(), 2);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis->getDevices().size(), 1);
+        EXPECT_EQ(chassis->getDevices()[0]->getID(), "chassis2_vdd_reg2");
+        EXPECT_EQ(
+            chassis->getDevices()[0]->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis2/motherboard/vdd_reg2");
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getBusID(), 4);
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getAddress(),
+                  0x0A);
+    }
+
+    // Test where works: Uses template: Comments specified
+    {
+        const json element = R"(
+            {
+              "comments": ["Chassis 4: Standard hardware layout"],
+              "template_id": "foo_chassis",
+              "template_variable_values": {
+                "chassis_number": "4",
+                "reg_name": "vio_reg",
+                "bus": "7",
+                "address": "0x3C"
+              }
+            }
+        )"_json;
+        auto chassis = parseChassis(element, chassisTemplates);
+        EXPECT_EQ(chassis->getNumber(), 4);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis4");
+        EXPECT_EQ(chassis->getDevices().size(), 1);
+        EXPECT_EQ(chassis->getDevices()[0]->getID(), "chassis4_vio_reg");
+        EXPECT_EQ(
+            chassis->getDevices()[0]->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis4/motherboard/vio_reg");
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getBusID(), 7);
+        EXPECT_EQ(chassis->getDevices()[0]->getI2CInterface().getAddress(),
+                  0x3C);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Does not use a template: Cannot parse properties
+    try
+    {
+        const json element = R"(
+            {
+              "number": "one",
+              "inventory_path": "system/chassis"
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Uses template: Required template_variable_values
+    // property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis"
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(),
+                     "Required property missing: template_variable_values");
+    }
+
+    // Test where fails: Uses template: template_id value is invalid: Not a
+    // string
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": 23,
+              "template_variable_values": { "chassis_number": "2" }
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Uses template: template_id value is invalid: No
+    // matching template
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "does_not_exist",
+              "template_variable_values": { "chassis_number": "2" }
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis template id: does_not_exist");
+    }
+
+    // Test where fails: Uses template: template_variable_values value is
+    // invalid
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": 2 }
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Uses template: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": "2" },
+              "foo": "bar"
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Uses template: Cannot parse properties in template
+    try
+    {
+        const json element = R"(
+            {
+              "template_id": "foo_chassis",
+              "template_variable_values": { "chassis_number": "0" }
+            }
+        )"_json;
+        parseChassis(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis number: Must be > 0");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassisArray)
+{
+    // Constants used by multiple tests
+    const json fooTemplateElement = R"(
+        {
+          "id": "foo_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "system/chassis${chassis_number}"
+        }
+    )"_json;
+    const json barTemplateElement = R"(
+        {
+          "id": "bar_chassis",
+          "number": "${chassis_number}",
+          "inventory_path": "system/bar_chassis${chassis_number}"
+        }
+    )"_json;
+    const std::map<std::string, JSONRefWrapper> chassisTemplates{
+        {"foo_chassis", fooTemplateElement},
+        {"bar_chassis", barTemplateElement}};
+
+    // Test where works: Array is empty
+    {
+        const json element = R"(
+            [
+            ]
+        )"_json;
+        auto chassis = parseChassisArray(element, chassisTemplates);
+        EXPECT_EQ(chassis.size(), 0);
+    }
+
+    // Test where works: Template not used
+    {
+        const json element = R"(
+            [
+              {
+                "number": 1,
+                "inventory_path": "system/chassis1"
+              },
+              {
+                "number": 2,
+                "inventory_path": "system/chassis2"
+              }
+            ]
+        )"_json;
+        std::map<std::string, internal::JSONRefWrapper> chassisTemplates{};
+        std::vector<std::unique_ptr<Chassis>> chassis =
+            parseChassisArray(element, chassisTemplates);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 1);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis1");
+        EXPECT_EQ(chassis[1]->getNumber(), 2);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+    }
+
+    // Test where works: Template used
+    {
+        const json element = R"(
+            [
+              {
+                "template_id": "foo_chassis",
+                "template_variable_values": { "chassis_number": "2" }
+              },
+              {
+                "template_id": "bar_chassis",
+                "template_variable_values": { "chassis_number": "3" }
+              }
+            ]
+        )"_json;
+        auto chassis = parseChassisArray(element, chassisTemplates);
+        EXPECT_EQ(chassis.size(), 2);
+        EXPECT_EQ(chassis[0]->getNumber(), 2);
+        EXPECT_EQ(chassis[0]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis[1]->getNumber(), 3);
+        EXPECT_EQ(chassis[1]->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/bar_chassis3");
+    }
+
+    // Test where fails: Element is not an array
+    try
+    {
+        const json element = R"(
+            {
+                "foo": "bar"
+            }
+        )"_json;
+        parseChassisArray(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Element within array is invalid
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "number": true,
+                "inventory_path": "system/chassis1"
+              }
+            ]
+        )"_json;
+        parseChassisArray(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            [
+                {
+                  "template_id": "foo_chassis",
+                  "template_variable_values": { "chassis_number": "two" }
+                }
+            ]
+        )"_json;
+        parseChassisArray(element, chassisTemplates);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassisProperties)
+{
+    // Test where works: Not a template: Only required properties specified
     {
         const json element = R"(
             {
@@ -643,14 +1149,17 @@ TEST(ConfigFileParserTests, ParseChassis)
               "inventory_path": "system/chassis1"
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        auto chassis =
+            parseChassisProperties(element, isChassisTemplate, variables);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis1");
         EXPECT_EQ(chassis->getDevices().size(), 0);
     }
 
-    // Test where works: All properties specified
+    // Test where works: Not a template: All properties specified
     {
         const json element = R"(
             {
@@ -671,7 +1180,10 @@ TEST(ConfigFileParserTests, ParseChassis)
               ]
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        auto chassis =
+            parseChassisProperties(element, isChassisTemplate, variables);
         EXPECT_EQ(chassis->getNumber(), 2);
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
@@ -679,7 +1191,73 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getDevices()[0]->getID(), "vdd_regulator");
     }
 
-    // Test where fails: number value is invalid
+    // Test where works: Is a template
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}",
+              "devices": [
+                {
+                  "id": "regulator${chassis_number}",
+                  "is_regulator": true,
+                  "fru": "system/chassis${chassis_number}/motherboard/regulator1",
+                  "i2c_interface": { "bus": "${bus}", "address": "${address}" }
+                }
+              ]
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{
+            {"chassis_number", "2"}, {"bus", "12"}, {"address", "0x71"}};
+        auto chassis =
+            parseChassisProperties(element, isChassisTemplate, variables);
+        EXPECT_EQ(chassis->getNumber(), 2);
+        EXPECT_EQ(chassis->getInventoryPath(),
+                  "/xyz/openbmc_project/inventory/system/chassis2");
+        EXPECT_EQ(chassis->getDevices().size(), 1);
+        EXPECT_EQ(chassis->getDevices()[0]->getID(), "regulator2");
+        EXPECT_EQ(
+            chassis->getDevices()[0]->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis2/motherboard/regulator1");
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( true )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Required id property not specified in chassis
+    // template
+    try
+    {
+        const json element = R"(
+            {
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "2"}};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+
+    // Test where fails: number value is invalid: Not an integer
     try
     {
         const json element = R"(
@@ -688,7 +1266,9 @@ TEST(ConfigFileParserTests, ParseChassis)
               "inventory_path": "system/chassis"
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -696,16 +1276,37 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 
-    // Test where fails: inventory_path is invalid: Not a string
+    // Test where fails: number value is invalid: Equal to 0
     try
     {
         const json element = R"(
             {
-              "number": 2,
+              "number": 0,
+              "inventory_path": "system/chassis"
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid chassis number: Must be > 0");
+    }
+
+    // Test where fails: inventory_path value is invalid: Not a string
+    try
+    {
+        const json element = R"(
+            {
+              "number": 1,
               "inventory_path": true
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -713,16 +1314,18 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_STREQ(e.what(), "Element is not a string");
     }
 
-    // Test where fails: inventory_path is invalid: Empty string
+    // Test where fails: inventory_path value is invalid: Empty string
     try
     {
         const json element = R"(
             {
-              "number": 2,
+              "number": 1,
               "inventory_path": ""
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -730,22 +1333,24 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 
-    // Test where fails: Invalid property specified
+    // Test where fails: devices value is invalid
     try
     {
         const json element = R"(
             {
               "number": 1,
               "inventory_path": "system/chassis",
-              "foo": 2
+              "devices": { "id": "foo" }
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+        EXPECT_STREQ(e.what(), "Element is not an array");
     }
 
     // Test where fails: Required number property not specified
@@ -756,7 +1361,9 @@ TEST(ConfigFileParserTests, ParseChassis)
               "inventory_path": "system/chassis"
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -769,10 +1376,13 @@ TEST(ConfigFileParserTests, ParseChassis)
     {
         const json element = R"(
             {
-              "number": 1
+              "id": "foo_chassis",
+              "number": "${chassis_number}"
             }
         )"_json;
-        parseChassis(element);
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "2"}};
+        parseChassisProperties(element, isChassisTemplate, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -780,11 +1390,119 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_STREQ(e.what(), "Required property missing: inventory_path");
     }
 
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "foo": "bar",
+              "number": 1,
+              "inventory_path": "system/chassis"
+            }
+        )"_json;
+        bool isChassisTemplate{false};
+        std::map<std::string, std::string> variables{};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"chassis_number", "two"}};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Undefined variable
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
+            }
+        )"_json;
+        bool isChassisTemplate{true};
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseChassisProperties(element, isChassisTemplate, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: chassis_number");
+    }
+}
+
+TEST(ConfigFileParserTests, ParseChassisTemplate)
+{
+    // Test where works: Only required properties specified
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
+            }
+        )"_json;
+        auto [id, jsonRef] = parseChassisTemplate(element);
+        EXPECT_EQ(id, "foo_chassis");
+        EXPECT_EQ(jsonRef.get()["number"], "${chassis_number}");
+        EXPECT_EQ(jsonRef.get()["inventory_path"],
+                  "system/chassis${chassis_number}");
+    }
+
+    // Test where works: All properties specified
+    {
+        const json element = R"(
+            {
+              "comments": [ "This is a template for the foo chassis type",
+                            "Chassis contains voltage regulators" ],
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}",
+              "devices": [
+                {
+                  "id": "vdd_regulator",
+                  "is_regulator": true,
+                  "fru": "system/chassis${chassis_number}/motherboard/regulator1",
+                  "i2c_interface": { "bus": "${bus}", "address": "0x70" }
+                }
+              ]
+            }
+        )"_json;
+        auto [id, jsonRef] = parseChassisTemplate(element);
+        EXPECT_EQ(id, "foo_chassis");
+        EXPECT_EQ(jsonRef.get()["comments"].size(), 2);
+        EXPECT_EQ(jsonRef.get()["number"], "${chassis_number}");
+        EXPECT_EQ(jsonRef.get()["inventory_path"],
+                  "system/chassis${chassis_number}");
+        EXPECT_EQ(jsonRef.get()["devices"].size(), 1);
+        EXPECT_EQ(jsonRef.get()["devices"][0]["id"], "vdd_regulator");
+    }
+
     // Test where fails: Element is not an object
     try
     {
-        const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseChassis(element);
+        const json element = R"( [ "vdda", "vddb" ] )"_json;
+        parseChassisTemplate(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -792,61 +1510,133 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_STREQ(e.what(), "Element is not an object");
     }
 
-    // Test where fails: number value is < 1
+    // Test where fails: Required id property not specified
     try
     {
         const json element = R"(
             {
-              "number": 0,
-              "inventory_path": "system/chassis"
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
             }
         )"_json;
-        parseChassis(element);
+        parseChassisTemplate(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Invalid chassis number: Must be > 0");
+        EXPECT_STREQ(e.what(), "Required property missing: id");
     }
 
-    // Test where fails: devices value is invalid
+    // Test where fails: Required number property not specified
     try
     {
         const json element = R"(
             {
-              "number": 1,
-              "inventory_path": "system/chassis",
-              "devices": 2
+              "id": "foo_chassis",
+              "inventory_path": "system/chassis${chassis_number}"
             }
         )"_json;
-        parseChassis(element);
+        parseChassisTemplate(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not an array");
+        EXPECT_STREQ(e.what(), "Required property missing: number");
+    }
+
+    // Test where fails: Required inventory_path property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}"
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: inventory_path");
+    }
+
+    // Test where fails: id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": 13,
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}"
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "foo_chassis",
+              "number": "${chassis_number}",
+              "inventory_path": "system/chassis${chassis_number}",
+              "foo": "bar"
+            }
+        )"_json;
+        parseChassisTemplate(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
     }
 }
 
-TEST(ConfigFileParserTests, ParseChassisArray)
+TEST(ConfigFileParserTests, ParseChassisTemplateArray)
 {
-    // Test where works
+    // Test where works: Array is empty
     {
         const json element = R"(
             [
-              { "number": 1, "inventory_path": "system/chassis1" },
-              { "number": 2, "inventory_path": "system/chassis2" }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Chassis>> chassis =
-            parseChassisArray(element);
-        EXPECT_EQ(chassis.size(), 2);
-        EXPECT_EQ(chassis[0]->getNumber(), 1);
-        EXPECT_EQ(chassis[0]->getInventoryPath(),
-                  "/xyz/openbmc_project/inventory/system/chassis1");
-        EXPECT_EQ(chassis[1]->getNumber(), 2);
-        EXPECT_EQ(chassis[1]->getInventoryPath(),
-                  "/xyz/openbmc_project/inventory/system/chassis2");
+        auto chassisTemplates = parseChassisTemplateArray(element);
+        EXPECT_EQ(chassisTemplates.size(), 0);
+    }
+
+    // Test where works: Array is not empty
+    {
+        const json element = R"(
+            [
+              {
+                "id": "foo_chassis",
+                "number": "${chassis_number}",
+                "inventory_path": "system/chassis${chassis_number}"
+              },
+              {
+                "id": "bar_chassis",
+                "number": "${number}",
+                "inventory_path": "system/bar_chassis${number}"
+              }
+            ]
+        )"_json;
+        auto chassisTemplates = parseChassisTemplateArray(element);
+        EXPECT_EQ(chassisTemplates.size(), 2);
+        EXPECT_EQ(chassisTemplates.at("foo_chassis").get()["number"],
+                  "${chassis_number}");
+        EXPECT_EQ(chassisTemplates.at("foo_chassis").get()["inventory_path"],
+                  "system/chassis${chassis_number}");
+        EXPECT_EQ(chassisTemplates.at("bar_chassis").get()["number"],
+                  "${number}");
+        EXPECT_EQ(chassisTemplates.at("bar_chassis").get()["inventory_path"],
+                  "system/bar_chassis${number}");
     }
 
     // Test where fails: Element is not an array
@@ -854,15 +1644,38 @@ TEST(ConfigFileParserTests, ParseChassisArray)
     {
         const json element = R"(
             {
-              "foo": "bar"
+                "foo": "bar"
             }
         )"_json;
-        parseChassisArray(element);
+        parseChassisTemplateArray(element);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Element within array is invalid
+    try
+    {
+        const json element = R"(
+            [
+              {
+                "id": "foo_chassis",
+                "number": "${chassis_number}",
+                "inventory_path": "system/chassis${chassis_number}"
+              },
+              {
+                "id": "bar_chassis"
+              }
+            ]
+        )"_json;
+        parseChassisTemplateArray(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: number");
     }
 }
 
@@ -876,8 +1689,27 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "value": true
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<ComparePresenceAction> action =
-            parseComparePresence(element);
+            parseComparePresence(element, variables);
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
+        EXPECT_EQ(action->getValue(), true);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/motherboard/${cpu}",
+              "value": "${is_present}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"cpu", "cpu3"},
+                                                     {"is_present", "true"}};
+        std::unique_ptr<ComparePresenceAction> action =
+            parseComparePresence(element, variables);
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
@@ -888,7 +1720,8 @@ TEST(ConfigFileParserTests, ParseComparePresence)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -906,7 +1739,8 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "foo" : true
             }
         )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -922,7 +1756,8 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "value": true
             }
         )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -938,7 +1773,8 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "fru": "system/chassis/motherboard/cpu3"
             }
         )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -955,7 +1791,8 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "value": true
             }
         )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -972,7 +1809,26 @@ TEST(ConfigFileParserTests, ParseComparePresence)
               "value": 1
             }
         )"_json;
-        parseComparePresence(element);
+        std::map<std::string, std::string> variables{};
+        parseComparePresence(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/motherboard/cpu3",
+              "value": "${is_present}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"is_present", "yes"}};
+        parseComparePresence(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -992,7 +1848,9 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": "2D35"
             }
         )"_json;
-        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<CompareVPDAction> action =
+            parseCompareVPD(element, variables);
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
@@ -1010,7 +1868,9 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": ""
             }
         )"_json;
-        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<CompareVPDAction> action =
+            parseCompareVPD(element, variables);
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
@@ -1027,7 +1887,9 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "byte_values": ["0x11", "0x22", "0x33"]
             }
         )"_json;
-        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<CompareVPDAction> action =
+            parseCompareVPD(element, variables);
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
@@ -1044,7 +1906,9 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "byte_values": []
             }
         )"_json;
-        std::unique_ptr<CompareVPDAction> action = parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<CompareVPDAction> action =
+            parseCompareVPD(element, variables);
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
@@ -1052,11 +1916,35 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{}));
     }
 
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/${component}",
+              "keyword": "${keyword}",
+              "value": "${value}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"component", "disk_backplane"},
+            {"keyword", "CCIN"},
+            {"value", "2D35"}};
+        std::unique_ptr<CompareVPDAction> action =
+            parseCompareVPD(element, variables);
+        EXPECT_EQ(
+            action->getFRU(),
+            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getValue(),
+                  (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
+    }
+
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1075,7 +1963,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "foo" : true
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1092,7 +1981,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": "2D35"
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1109,7 +1999,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": "2D35"
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1126,7 +2017,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "keyword": "CCIN"
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1146,7 +2038,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "byte_values": [ "0x01", "0x02" ]
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1165,7 +2058,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": "2D35"
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1183,7 +2077,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": "2D35"
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1201,7 +2096,8 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "value": 1
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1219,12 +2115,33 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
               "byte_values": [1, 2, 3]
             }
         )"_json;
-        parseCompareVPD(element);
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "keyword": "CCIN",
+              "byte_values": ["${byte1}", "${byte2}"]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"byte1", "0xZZ"},
+                                                     {"byte2", "0x22"}};
+        parseCompareVPD(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -1243,8 +2160,9 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<Configuration> configuration =
-            parseConfiguration(element);
+            parseConfiguration(element, variables);
         EXPECT_EQ(configuration->getActions().size(), 1);
         EXPECT_EQ(configuration->getVolts().has_value(), false);
     }
@@ -1261,8 +2179,9 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<Configuration> configuration =
-            parseConfiguration(element);
+            parseConfiguration(element, variables);
         EXPECT_EQ(configuration->getVolts().has_value(), true);
         EXPECT_EQ(configuration->getVolts().value(), 1.03);
         EXPECT_EQ(configuration->getActions().size(), 2);
@@ -1276,8 +2195,26 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               "rule_id": "set_voltage_rule"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<Configuration> configuration =
-            parseConfiguration(element);
+            parseConfiguration(element, variables);
+        EXPECT_EQ(configuration->getVolts().has_value(), true);
+        EXPECT_EQ(configuration->getVolts().value(), 1.05);
+        EXPECT_EQ(configuration->getActions().size(), 1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "volts": "${volts}",
+              "rule_id": "${rule_id}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"volts", "1.05"}, {"rule_id", "set_voltage_rule"}};
+        std::unique_ptr<Configuration> configuration =
+            parseConfiguration(element, variables);
         EXPECT_EQ(configuration->getVolts().has_value(), true);
         EXPECT_EQ(configuration->getVolts().value(), 1.05);
         EXPECT_EQ(configuration->getActions().size(), 1);
@@ -1298,7 +2235,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               ]
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1315,7 +2253,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               "actions": 1
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1332,7 +2271,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               "rule_id": 1
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1348,7 +2288,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               "volts": 1.03
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1373,7 +2314,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               ]
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1386,7 +2328,8 @@ TEST(ConfigFileParserTests, ParseConfiguration)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1404,12 +2347,31 @@ TEST(ConfigFileParserTests, ParseConfiguration)
               "foo": 1
             }
         )"_json;
-        parseConfiguration(element);
+        std::map<std::string, std::string> variables{};
+        parseConfiguration(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "volts": "${volts}",
+              "rule_id": "set_voltage_rule"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"volts", "foo"}};
+        parseConfiguration(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a double");
     }
 }
 
@@ -1425,7 +2387,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               "i2c_interface": { "bus": 1, "address": "0x70" }
             }
         )"_json;
-        std::unique_ptr<Device> device = parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Device> device = parseDevice(element, variables);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
         EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
@@ -1470,7 +2433,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               ]
             }
         )"_json;
-        std::unique_ptr<Device> device = parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Device> device = parseDevice(element, variables);
         EXPECT_EQ(device->getID(), "vdd_regulator");
         EXPECT_EQ(device->isRegulator(), true);
         EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
@@ -1482,8 +2446,31 @@ TEST(ConfigFileParserTests, ParseDevice)
         EXPECT_EQ(device->getRails().size(), 1);
     }
 
-    // Test where fails: phase_fault_detection property exists and is_regulator
-    // is false
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator_${num}",
+              "is_regulator": true,
+              "fru": "system/chassis/motherboard/regulator${num}",
+              "i2c_interface": { "bus": 1, "address": "0x7${num}" }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::unique_ptr<Device> device = parseDevice(element, variables);
+        EXPECT_EQ(device->getID(), "vdd_regulator_2");
+        EXPECT_EQ(device->isRegulator(), true);
+        EXPECT_EQ(device->getFRU(), "/xyz/openbmc_project/inventory/system/"
+                                    "chassis/motherboard/regulator2");
+        EXPECT_NE(&(device->getI2CInterface()), nullptr);
+        EXPECT_EQ(device->getPresenceDetection(), nullptr);
+        EXPECT_EQ(device->getConfiguration(), nullptr);
+        EXPECT_EQ(device->getPhaseFaultDetection(), nullptr);
+        EXPECT_EQ(device->getRails().size(), 0);
+    }
+
+    // Test where fails: phase_fault_detection property exists and
+    // is_regulator is false
     try
     {
         const json element = R"(
@@ -1502,7 +2489,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1536,7 +2524,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               ]
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1560,7 +2549,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1583,7 +2573,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1606,7 +2597,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1625,7 +2617,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               "i2c_interface": 3
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1647,7 +2640,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1669,7 +2663,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1691,7 +2686,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               }
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1709,7 +2705,8 @@ TEST(ConfigFileParserTests, ParseDevice)
               "fru": "system/chassis/motherboard/regulator2"
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1721,7 +2718,8 @@ TEST(ConfigFileParserTests, ParseDevice)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1741,12 +2739,33 @@ TEST(ConfigFileParserTests, ParseDevice)
               "foo" : true
             }
         )"_json;
-        parseDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd_regulator",
+              "is_regulator": true,
+              "fru": "system/chassis/motherboard/regulator2",
+              "i2c_interface": { "bus": "${bus}", "address": "0x70" }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "foo"}};
+        parseDevice(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
     }
 }
 
@@ -1770,8 +2789,36 @@ TEST(ConfigFileParserTests, ParseDeviceArray)
               }
             ]
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::vector<std::unique_ptr<Device>> devices =
-            parseDeviceArray(element);
+            parseDeviceArray(element, variables);
+        EXPECT_EQ(devices.size(), 2);
+        EXPECT_EQ(devices[0]->getID(), "vdd_regulator");
+        EXPECT_EQ(devices[1]->getID(), "vio_regulator");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            [
+              {
+                "id": "${reg1}",
+                "is_regulator": true,
+                "fru": "system/chassis/motherboard/regulator2",
+                "i2c_interface": { "bus": 1, "address": "0x70" }
+              },
+              {
+                "id": "${reg2}",
+                "is_regulator": true,
+                "fru": "system/chassis/motherboard/regulator2",
+                "i2c_interface": { "bus": 1, "address": "0x71" }
+              }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg1", "vdd_regulator"},
+                                                     {"reg2", "vio_regulator"}};
+        std::vector<std::unique_ptr<Device>> devices =
+            parseDeviceArray(element, variables);
         EXPECT_EQ(devices.size(), 2);
         EXPECT_EQ(devices[0]->getID(), "vdd_regulator");
         EXPECT_EQ(devices[1]->getID(), "vio_regulator");
@@ -1785,12 +2832,37 @@ TEST(ConfigFileParserTests, ParseDeviceArray)
               "foo": "bar"
             }
         )"_json;
-        parseDeviceArray(element);
+        std::map<std::string, std::string> variables{};
+        parseDeviceArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Invalid variable value specified
+    {
+        try
+        {
+            const json element = R"(
+                [
+                  {
+                    "id": "vdd_regulator",
+                    "is_regulator": "${is_reg}",
+                    "fru": "system/chassis/motherboard/regulator2",
+                    "i2c_interface": { "bus": 1, "address": "0x70" }
+                  }
+                ]
+            )"_json;
+            std::map<std::string, std::string> variables{{"is_reg", "1"}};
+            parseDeviceArray(element, variables);
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::invalid_argument& e)
+        {
+            EXPECT_STREQ(e.what(), "Element is not a boolean");
+        }
     }
 }
 
@@ -1804,8 +2876,24 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "count": 2
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCaptureBytesAction> action =
-            parseI2CCaptureBytes(element);
+            parseI2CCaptureBytes(element, variables);
+        EXPECT_EQ(action->getRegister(), 0xA0);
+        EXPECT_EQ(action->getCount(), 2);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "count": 2
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "A0"}};
+        std::unique_ptr<I2CCaptureBytesAction> action =
+            parseI2CCaptureBytes(element, variables);
         EXPECT_EQ(action->getRegister(), 0xA0);
         EXPECT_EQ(action->getCount(), 2);
     }
@@ -1814,7 +2902,8 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1831,7 +2920,8 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "count": 2
             }
         )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1848,7 +2938,8 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "count": 0
             }
         )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1864,7 +2955,8 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "count": 2
             }
         )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1880,7 +2972,8 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "register": "0xA0"
             }
         )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1898,12 +2991,31 @@ TEST(ConfigFileParserTests, ParseI2CCaptureBytes)
               "foo": 3
             }
         )"_json;
-        parseI2CCaptureBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCaptureBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "count": 2
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "ZZ"}};
+        parseI2CCaptureBytes(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -1918,10 +3030,29 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "value": 0
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCompareBitAction> action =
-            parseI2CCompareBit(element);
+            parseI2CCompareBit(element, variables);
         EXPECT_EQ(action->getRegister(), 0xA0);
         EXPECT_EQ(action->getPosition(), 3);
+        EXPECT_EQ(action->getValue(), 0);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "position": "${pos}",
+              "value": 0
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0xca"},
+                                                     {"pos", "4"}};
+        std::unique_ptr<I2CCompareBitAction> action =
+            parseI2CCompareBit(element, variables);
+        EXPECT_EQ(action->getRegister(), 0xCA);
+        EXPECT_EQ(action->getPosition(), 4);
         EXPECT_EQ(action->getValue(), 0);
     }
 
@@ -1936,7 +3067,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "foo": 3
             }
         )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1948,7 +3080,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1966,7 +3099,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "value": 0
             }
         )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1984,7 +3118,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
                   "value": 0
                 }
             )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2002,7 +3137,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
                   "value": 2
                 }
             )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2019,7 +3155,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "value": 0
             }
         )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2036,7 +3173,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "value": 0
             }
         )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2053,12 +3191,32 @@ TEST(ConfigFileParserTests, ParseI2CCompareBit)
               "position": 3
             }
         )"_json;
-        parseI2CCompareBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "position": 3,
+              "value": 0
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "GG"}};
+        parseI2CCompareBit(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -2072,8 +3230,9 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "value": "0xCC"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCompareByteAction> action =
-            parseI2CCompareByte(element);
+            parseI2CCompareByte(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValue(), 0xCC);
         EXPECT_EQ(action->getMask(), 0xFF);
@@ -2088,8 +3247,27 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "0xF7"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCompareByteAction> action =
-            parseI2CCompareByte(element);
+            parseI2CCompareByte(element, variables);
+        EXPECT_EQ(action->getRegister(), 0x0A);
+        EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xF7);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "value": "0x${val}",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0A"},
+                                                     {"val", "CC"}};
+        std::unique_ptr<I2CCompareByteAction> action =
+            parseI2CCompareByte(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValue(), 0xCC);
         EXPECT_EQ(action->getMask(), 0xF7);
@@ -2099,7 +3277,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2118,7 +3297,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "foo": 1
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2136,7 +3316,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2154,7 +3335,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2172,7 +3354,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "F7"
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2189,7 +3372,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2206,12 +3390,32 @@ TEST(ConfigFileParserTests, ParseI2CCompareByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CCompareByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "ZZ"}};
+        parseI2CCompareByte(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -2225,8 +3429,9 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "values": [ "0xCC", "0xFF" ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCompareBytesAction> action =
-            parseI2CCompareBytes(element);
+            parseI2CCompareBytes(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValues().size(), 2);
         EXPECT_EQ(action->getValues()[0], 0xCC);
@@ -2245,8 +3450,9 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "masks":  [ "0x7F", "0x77" ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CCompareBytesAction> action =
-            parseI2CCompareBytes(element);
+            parseI2CCompareBytes(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValues().size(), 2);
         EXPECT_EQ(action->getValues()[0], 0xCC);
@@ -2256,11 +3462,34 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
         EXPECT_EQ(action->getMasks()[1], 0x77);
     }
 
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "values": [ "0xCC", "0xFF" ],
+              "masks":  [ "0x7F", "${byte_val}" ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0xCD"},
+                                                     {"byte_val", "0x03"}};
+        std::unique_ptr<I2CCompareBytesAction> action =
+            parseI2CCompareBytes(element, variables);
+        EXPECT_EQ(action->getRegister(), 0xCD);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 2);
+        EXPECT_EQ(action->getMasks()[0], 0x7F);
+        EXPECT_EQ(action->getMasks()[1], 0x03);
+    }
+
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2279,7 +3508,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "foo": 1
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2297,7 +3527,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "masks":  [ "0x7F", "0x7F" ]
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2315,7 +3546,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "masks":  [ "0x7F", "0x7F" ]
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2333,7 +3565,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "masks":  [ "F", "0x7F" ]
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2351,7 +3584,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "masks":  [ "0x7F" ]
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2367,7 +3601,8 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "values": [ "0xCC", "0xFF" ]
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2383,12 +3618,31 @@ TEST(ConfigFileParserTests, ParseI2CCompareBytes)
               "register": "0x0A"
             }
         )"_json;
-        parseI2CCompareBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CCompareBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: values");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "3"}};
+        parseI2CCompareBytes(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -2402,8 +3656,9 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "address": "0xd"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<i2c::I2CInterface> interface =
-            parseI2CInterface(element);
+            parseI2CInterface(element, variables);
         EXPECT_EQ(interface->getBusID(), 3);
         EXPECT_EQ(interface->getAddress(), 0x0D);
     }
@@ -2416,17 +3671,35 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "address": "0x7f"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<i2c::I2CInterface> interface =
-            parseI2CInterface(element);
+            parseI2CInterface(element, variables);
         EXPECT_EQ(interface->getBusID(), 389);
         EXPECT_EQ(interface->getAddress(), 0x7F);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "bus": "${bus}",
+              "address": "${addr}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "13"},
+                                                     {"addr", "0x25"}};
+        std::unique_ptr<i2c::I2CInterface> interface =
+            parseI2CInterface(element, variables);
+        EXPECT_EQ(interface->getBusID(), 13);
+        EXPECT_EQ(interface->getAddress(), 0x25);
     }
 
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2444,7 +3717,8 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "foo": 1
             }
         )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2461,7 +3735,8 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "address": "0xd"
             }
         )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2478,7 +3753,8 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "address": "0xCCC"
             }
         )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2494,7 +3770,8 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "address": "0xd"
             }
         )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2510,12 +3787,31 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
               "bus": 3
             }
         )"_json;
-        parseI2CInterface(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CInterface(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: address");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "bus": "${bus}",
+              "address": "0x7F"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bus", "-1"}};
+        parseI2CInterface(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a 16-bit unsigned integer");
     }
 }
 
@@ -2530,9 +3826,29 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "value": 0
             }
         )"_json;
-        std::unique_ptr<I2CWriteBitAction> action = parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<I2CWriteBitAction> action =
+            parseI2CWriteBit(element, variables);
         EXPECT_EQ(action->getRegister(), 0xA0);
         EXPECT_EQ(action->getPosition(), 3);
+        EXPECT_EQ(action->getValue(), 0);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "position": "${bit_pos}",
+              "value": 0
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0x16"},
+                                                     {"bit_pos", "4"}};
+        std::unique_ptr<I2CWriteBitAction> action =
+            parseI2CWriteBit(element, variables);
+        EXPECT_EQ(action->getRegister(), 0x16);
+        EXPECT_EQ(action->getPosition(), 4);
         EXPECT_EQ(action->getValue(), 0);
     }
 
@@ -2547,7 +3863,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "foo": 3
             }
         )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2559,7 +3876,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2577,7 +3895,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "value": 0
             }
         )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2595,7 +3914,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
                   "value": 0
                 }
             )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2613,7 +3933,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
                   "value": 2
                 }
             )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2630,7 +3951,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "value": 0
             }
         )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2647,7 +3969,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "value": 0
             }
         )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2664,12 +3987,32 @@ TEST(ConfigFileParserTests, ParseI2CWriteBit)
               "position": 3
             }
         )"_json;
-        parseI2CWriteBit(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBit(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x70",
+              "position": 3,
+              "value": "${bit_val}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"bit_val", "2"}};
+        parseI2CWriteBit(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a bit value");
     }
 }
 
@@ -2683,7 +4026,9 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "value": "0xCC"
             }
         )"_json;
-        std::unique_ptr<I2CWriteByteAction> action = parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<I2CWriteByteAction> action =
+            parseI2CWriteByte(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValue(), 0xCC);
         EXPECT_EQ(action->getMask(), 0xFF);
@@ -2698,9 +4043,29 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "0xF7"
             }
         )"_json;
-        std::unique_ptr<I2CWriteByteAction> action = parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<I2CWriteByteAction> action =
+            parseI2CWriteByte(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValue(), 0xCC);
+        EXPECT_EQ(action->getMask(), 0xF7);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "value": "${val}",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0x00"},
+                                                     {"val", "0xFF"}};
+        std::unique_ptr<I2CWriteByteAction> action =
+            parseI2CWriteByte(element, variables);
+        EXPECT_EQ(action->getRegister(), 0x00);
+        EXPECT_EQ(action->getValue(), 0xFF);
         EXPECT_EQ(action->getMask(), 0xF7);
     }
 
@@ -2708,7 +4073,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2727,7 +4093,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "foo": 1
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2745,7 +4112,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2763,7 +4131,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2781,7 +4150,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "F7"
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2798,7 +4168,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2815,12 +4186,32 @@ TEST(ConfigFileParserTests, ParseI2CWriteByte)
               "mask": "0xF7"
             }
         )"_json;
-        parseI2CWriteByte(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteByte(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: value");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "value": "0xCC",
+              "mask": "0xF7"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "FF"}};
+        parseI2CWriteByte(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -2834,8 +4225,9 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "values": [ "0xCC", "0xFF" ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CWriteBytesAction> action =
-            parseI2CWriteBytes(element);
+            parseI2CWriteBytes(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValues().size(), 2);
         EXPECT_EQ(action->getValues()[0], 0xCC);
@@ -2852,11 +4244,34 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "masks":  [ "0x7F", "0x77" ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<I2CWriteBytesAction> action =
-            parseI2CWriteBytes(element);
+            parseI2CWriteBytes(element, variables);
         EXPECT_EQ(action->getRegister(), 0x0A);
         EXPECT_EQ(action->getValues().size(), 2);
         EXPECT_EQ(action->getValues()[0], 0xCC);
+        EXPECT_EQ(action->getValues()[1], 0xFF);
+        EXPECT_EQ(action->getMasks().size(), 2);
+        EXPECT_EQ(action->getMasks()[0], 0x7F);
+        EXPECT_EQ(action->getMasks()[1], 0x77);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "register": "${reg}",
+              "values": [ "${val1}", "0xFF" ],
+              "masks":  [ "0x7F", "0x77" ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "0x52"},
+                                                     {"val1", "0x20"}};
+        std::unique_ptr<I2CWriteBytesAction> action =
+            parseI2CWriteBytes(element, variables);
+        EXPECT_EQ(action->getRegister(), 0x52);
+        EXPECT_EQ(action->getValues().size(), 2);
+        EXPECT_EQ(action->getValues()[0], 0x20);
         EXPECT_EQ(action->getValues()[1], 0xFF);
         EXPECT_EQ(action->getMasks().size(), 2);
         EXPECT_EQ(action->getMasks()[0], 0x7F);
@@ -2867,7 +4282,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2886,7 +4302,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "foo": 1
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2904,7 +4321,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "masks":  [ "0x7F", "0x7F" ]
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2922,7 +4340,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "masks":  [ "0x7F", "0x7F" ]
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2940,7 +4359,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "masks":  [ "F", "0x7F" ]
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2958,7 +4378,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "masks":  [ "0x7F" ]
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2974,7 +4395,8 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "values": [ "0xCC", "0xFF" ]
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -2990,12 +4412,31 @@ TEST(ConfigFileParserTests, ParseI2CWriteBytes)
               "register": "0x0A"
             }
         )"_json;
-        parseI2CWriteBytes(element);
+        std::map<std::string, std::string> variables{};
+        parseI2CWriteBytes(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Required property missing: values");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "register": "0x${reg}",
+              "values": [ "0xCC", "0xFF" ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "ZZ"}};
+        parseI2CWriteBytes(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -3010,7 +4451,8 @@ TEST(ConfigFileParserTests, ParseIf)
                         { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        std::unique_ptr<IfAction> action = parseIf(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<IfAction> action = parseIf(element, variables);
         EXPECT_NE(action->getConditionAction().get(), nullptr);
         EXPECT_EQ(action->getThenActions().size(), 2);
         EXPECT_EQ(action->getElseActions().size(), 0);
@@ -3025,10 +4467,27 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": [ { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        std::unique_ptr<IfAction> action = parseIf(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<IfAction> action = parseIf(element, variables);
         EXPECT_NE(action->getConditionAction().get(), nullptr);
         EXPECT_EQ(action->getThenActions().size(), 1);
         EXPECT_EQ(action->getElseActions().size(), 1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "${rule}" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"rule", "is_downlevel_regulator"}};
+        std::unique_ptr<IfAction> action = parseIf(element, variables);
+        EXPECT_NE(action->getConditionAction().get(), nullptr);
+        EXPECT_EQ(action->getThenActions().size(), 1);
+        EXPECT_EQ(action->getElseActions().size(), 0);
     }
 
     // Test where fails: Required condition property not specified
@@ -3040,7 +4499,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": [ { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3057,7 +4517,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": [ { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3075,7 +4536,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": [ { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3093,7 +4555,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": [ { "run_rule": "configure_standard_regulator" } ]
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3111,7 +4574,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "else": 1
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3129,7 +4593,8 @@ TEST(ConfigFileParserTests, ParseIf)
               "foo": "bar"
             }
         )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3141,12 +4606,30 @@ TEST(ConfigFileParserTests, ParseIf)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseIf(element);
+        std::map<std::string, std::string> variables{};
+        parseIf(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Undefined variable
+    try
+    {
+        const json element = R"(
+            {
+              "condition": { "run_rule": "${rule}" },
+              "then": [ { "run_rule": "configure_downlevel_regulator" } ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseIf(element, variables);
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: rule");
     }
 }
 
@@ -3155,7 +4638,8 @@ TEST(ConfigFileParserTests, ParseInventoryPath)
     // Test where works: Inventory path has a leading '/'
     {
         const json element = "/system/chassis/motherboard/cpu3";
-        std::string value = parseInventoryPath(element);
+        std::map<std::string, std::string> variables{};
+        std::string value = parseInventoryPath(element, variables);
         EXPECT_EQ(
             value,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu3");
@@ -3164,17 +4648,29 @@ TEST(ConfigFileParserTests, ParseInventoryPath)
     // Test where works: Inventory path does not have a leading '/'
     {
         const json element = "system/chassis/motherboard/cpu1";
-        std::string value = parseInventoryPath(element);
+        std::map<std::string, std::string> variables{};
+        std::string value = parseInventoryPath(element, variables);
         EXPECT_EQ(
             value,
             "/xyz/openbmc_project/inventory/system/chassis/motherboard/cpu1");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "system/chassis${num}/motherboard/cpu${num}";
+        std::map<std::string, std::string> variables{{"num", "3"}};
+        std::string value = parseInventoryPath(element, variables);
+        EXPECT_EQ(
+            value,
+            "/xyz/openbmc_project/inventory/system/chassis3/motherboard/cpu3");
     }
 
     // Test where fails: JSON element is not a string
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parseInventoryPath(element);
+        std::map<std::string, std::string> variables{};
+        parseInventoryPath(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3186,7 +4682,21 @@ TEST(ConfigFileParserTests, ParseInventoryPath)
     try
     {
         const json element = "";
-        parseInventoryPath(element);
+        std::map<std::string, std::string> variables{};
+        parseInventoryPath(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Variable value is not valid
+    try
+    {
+        const json element = "${inv_path}";
+        std::map<std::string, std::string> variables{{"inv_path", ""}};
+        parseInventoryPath(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3204,16 +4714,31 @@ TEST(ConfigFileParserTests, ParseLogPhaseFault)
               "type": "n+1"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<LogPhaseFaultAction> action =
-            parseLogPhaseFault(element);
+            parseLogPhaseFault(element, variables);
         EXPECT_EQ(action->getType(), PhaseFaultType::n_plus_1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "type": "${type}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"type", "n"}};
+        std::unique_ptr<LogPhaseFaultAction> action =
+            parseLogPhaseFault(element, variables);
+        EXPECT_EQ(action->getType(), PhaseFaultType::n);
     }
 
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseLogPhaseFault(element);
+        std::map<std::string, std::string> variables{};
+        parseLogPhaseFault(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3228,7 +4753,8 @@ TEST(ConfigFileParserTests, ParseLogPhaseFault)
             {
             }
         )"_json;
-        parseLogPhaseFault(element);
+        std::map<std::string, std::string> variables{};
+        parseLogPhaseFault(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3244,7 +4770,8 @@ TEST(ConfigFileParserTests, ParseLogPhaseFault)
               "type": "n+2"
             }
         )"_json;
-        parseLogPhaseFault(element);
+        std::map<std::string, std::string> variables{};
+        parseLogPhaseFault(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3261,12 +4788,30 @@ TEST(ConfigFileParserTests, ParseLogPhaseFault)
               "foo": 1
             }
         )"_json;
-        parseLogPhaseFault(element);
+        std::map<std::string, std::string> variables{};
+        parseLogPhaseFault(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "${type}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"type", "n-1"}};
+        parseLogPhaseFault(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a phase fault type");
     }
 }
 
@@ -3277,7 +4822,18 @@ TEST(ConfigFileParserTests, ParseNot)
         const json element = R"(
             { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } }
         )"_json;
-        std::unique_ptr<NotAction> action = parseNot(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<NotAction> action = parseNot(element, variables);
+        EXPECT_NE(action->getAction().get(), nullptr);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            { "i2c_compare_byte": { "register": "0x${reg}", "value": "0x00" } }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "09"}};
+        std::unique_ptr<NotAction> action = parseNot(element, variables);
         EXPECT_NE(action->getAction().get(), nullptr);
     }
 
@@ -3285,12 +4841,28 @@ TEST(ConfigFileParserTests, ParseNot)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseNot(element);
+        std::map<std::string, std::string> variables{};
+        parseNot(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            { "i2c_compare_byte": { "register": "0x${reg}", "value": "0x00" } }
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "GG"}};
+        parseNot(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -3304,7 +4876,21 @@ TEST(ConfigFileParserTests, ParseOr)
               { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
             ]
         )"_json;
-        std::unique_ptr<OrAction> action = parseOr(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<OrAction> action = parseOr(element, variables);
+        EXPECT_EQ(action->getActions().size(), 2);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0x${reg}", "value": "0x00" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "03"}};
+        std::unique_ptr<OrAction> action = parseOr(element, variables);
         EXPECT_EQ(action->getActions().size(), 2);
     }
 
@@ -3316,7 +4902,8 @@ TEST(ConfigFileParserTests, ParseOr)
               { "i2c_compare_byte": { "register": "0xA0", "value": "0x00" } }
             ]
         )"_json;
-        parseOr(element);
+        std::map<std::string, std::string> variables{};
+        parseOr(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3332,12 +4919,31 @@ TEST(ConfigFileParserTests, ParseOr)
               "foo": "bar"
             }
         )"_json;
-        parseOr(element);
+        std::map<std::string, std::string> variables{};
+        parseOr(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"(
+            [
+              { "i2c_compare_byte": { "register": "0x${reg}", "value": "0x00" } },
+              { "i2c_compare_byte": { "register": "0xA1", "value": "0x00" } }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"reg", "ZZ"}};
+        parseOr(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
     }
 }
 
@@ -3352,8 +4958,9 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
-            parsePhaseFaultDetection(element);
+            parsePhaseFaultDetection(element, variables);
         EXPECT_EQ(phaseFaultDetection->getActions().size(), 1);
         EXPECT_EQ(phaseFaultDetection->getDeviceID(), "");
     }
@@ -3367,17 +4974,36 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               "rule_id": "detect_phase_fault_rule"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
-            parsePhaseFaultDetection(element);
+            parsePhaseFaultDetection(element, variables);
         EXPECT_EQ(phaseFaultDetection->getActions().size(), 1);
         EXPECT_EQ(phaseFaultDetection->getDeviceID(), "io_expander");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "device_id": "io_expander_${num}",
+              "actions": [
+                { "run_rule": "detect_phase_fault_rule" }
+              ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::unique_ptr<PhaseFaultDetection> phaseFaultDetection =
+            parsePhaseFaultDetection(element, variables);
+        EXPECT_EQ(phaseFaultDetection->getActions().size(), 1);
+        EXPECT_EQ(phaseFaultDetection->getDeviceID(), "io_expander_2");
     }
 
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "foo", "bar" ] )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3394,7 +5020,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               "rule_id": "detect_phase_fault_rule"
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3410,7 +5037,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               "rule_id": 1
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3426,7 +5054,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               "actions": 1
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3442,7 +5071,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               "device_id": "io_expander"
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3462,7 +5092,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               ]
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3482,12 +5113,33 @@ TEST(ConfigFileParserTests, ParsePhaseFaultDetection)
               ]
             }
         )"_json;
-        parsePhaseFaultDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Variable value is not valid
+    try
+    {
+        const json element = R"(
+            {
+              "device_id": "io_expander",
+              "actions": [
+                { "run_rule": "${rule_id}" }
+              ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"rule_id", ""}};
+        parsePhaseFaultDetection(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
@@ -3496,14 +5148,24 @@ TEST(ConfigFileParserTests, ParsePhaseFaultType)
     // Test where works: n
     {
         const json element = "n";
-        PhaseFaultType type = parsePhaseFaultType(element);
+        std::map<std::string, std::string> variables{};
+        PhaseFaultType type = parsePhaseFaultType(element, variables);
         EXPECT_EQ(type, PhaseFaultType::n);
     }
 
     // Test where works: n+1
     {
         const json element = "n+1";
-        PhaseFaultType type = parsePhaseFaultType(element);
+        std::map<std::string, std::string> variables{};
+        PhaseFaultType type = parsePhaseFaultType(element, variables);
+        EXPECT_EQ(type, PhaseFaultType::n_plus_1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "${type}";
+        std::map<std::string, std::string> variables{{"type", "n+1"}};
+        PhaseFaultType type = parsePhaseFaultType(element, variables);
         EXPECT_EQ(type, PhaseFaultType::n_plus_1);
     }
 
@@ -3511,7 +5173,8 @@ TEST(ConfigFileParserTests, ParsePhaseFaultType)
     try
     {
         const json element = "n+2";
-        parsePhaseFaultType(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultType(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3523,12 +5186,26 @@ TEST(ConfigFileParserTests, ParsePhaseFaultType)
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parsePhaseFaultType(element);
+        std::map<std::string, std::string> variables{};
+        parsePhaseFaultType(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = "${type}";
+        std::map<std::string, std::string> variables{{"type", "n-1"}};
+        parsePhaseFaultType(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a phase fault type");
     }
 }
 
@@ -3543,8 +5220,9 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": "linear_11"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PMBusReadSensorAction> action =
-            parsePMBusReadSensor(element);
+            parsePMBusReadSensor(element, variables);
         EXPECT_EQ(action->getType(), SensorType::iout);
         EXPECT_EQ(action->getCommand(), 0x8C);
         EXPECT_EQ(action->getFormat(),
@@ -3562,8 +5240,9 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "exponent": -8
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PMBusReadSensorAction> action =
-            parsePMBusReadSensor(element);
+            parsePMBusReadSensor(element, variables);
         EXPECT_EQ(action->getType(), SensorType::temperature);
         EXPECT_EQ(action->getCommand(), 0x7A);
         EXPECT_EQ(action->getFormat(),
@@ -3572,11 +5251,31 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
         EXPECT_EQ(action->getExponent().value(), -8);
     }
 
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "command": "${cmd}",
+              "format": "linear_11"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"cmd", "0x8C"}};
+        std::unique_ptr<PMBusReadSensorAction> action =
+            parsePMBusReadSensor(element, variables);
+        EXPECT_EQ(action->getType(), SensorType::iout);
+        EXPECT_EQ(action->getCommand(), 0x8C);
+        EXPECT_EQ(action->getFormat(),
+                  pmbus_utils::SensorDataFormat::linear_11);
+        EXPECT_EQ(action->getExponent().has_value(), false);
+    }
+
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3595,7 +5294,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "foo": 1
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3612,7 +5312,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": "linear_11"
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3629,7 +5330,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": "linear_11"
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3646,7 +5348,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "command": "0x8C"
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3664,7 +5367,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": "linear_16"
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3682,7 +5386,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": "linear_16"
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3700,7 +5405,8 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "format": 1
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3719,12 +5425,32 @@ TEST(ConfigFileParserTests, ParsePMBusReadSensor)
               "exponent": 1.3
             }
         )"_json;
-        parsePMBusReadSensor(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusReadSensor(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = R"(
+            {
+              "type": "iout",
+              "command": "0x8C",
+              "format": "${format}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"format", "foo"}};
+        parsePMBusReadSensor(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a sensor data format");
     }
 }
 
@@ -3737,8 +5463,9 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "format": "linear"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PMBusWriteVoutCommandAction> action =
-            parsePMBusWriteVoutCommand(element);
+            parsePMBusWriteVoutCommand(element, variables);
         EXPECT_EQ(action->getVolts().has_value(), false);
         EXPECT_EQ(action->getFormat(), pmbus_utils::VoutDataFormat::linear);
         EXPECT_EQ(action->getExponent().has_value(), false);
@@ -3755,8 +5482,9 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "is_verified": true
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PMBusWriteVoutCommandAction> action =
-            parsePMBusWriteVoutCommand(element);
+            parsePMBusWriteVoutCommand(element, variables);
         EXPECT_EQ(action->getVolts().has_value(), true);
         EXPECT_EQ(action->getVolts().value(), 1.03);
         EXPECT_EQ(action->getFormat(), pmbus_utils::VoutDataFormat::linear);
@@ -3765,11 +5493,28 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
         EXPECT_EQ(action->isVerified(), true);
     }
 
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "format": "${fmt}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"fmt", "linear"}};
+        std::unique_ptr<PMBusWriteVoutCommandAction> action =
+            parsePMBusWriteVoutCommand(element, variables);
+        EXPECT_EQ(action->getVolts().has_value(), false);
+        EXPECT_EQ(action->getFormat(), pmbus_utils::VoutDataFormat::linear);
+        EXPECT_EQ(action->getExponent().has_value(), false);
+        EXPECT_EQ(action->isVerified(), false);
+    }
+
     // Test where fails: Element is not an object
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3786,7 +5531,8 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "format": "linear"
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3803,7 +5549,8 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "is_verified": true
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3819,7 +5566,8 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "format": "linear_11"
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3836,7 +5584,8 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "exponent": 1.3
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3853,7 +5602,8 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "is_verified": "true"
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3870,12 +5620,30 @@ TEST(ConfigFileParserTests, ParsePMBusWriteVoutCommand)
               "foo": "bar"
             }
         )"_json;
-        parsePMBusWriteVoutCommand(element);
+        std::map<std::string, std::string> variables{};
+        parsePMBusWriteVoutCommand(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = R"(
+            {
+              "format": "${fmt}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"fmt", "bar"}};
+        parsePMBusWriteVoutCommand(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid format value: bar");
     }
 }
 
@@ -3886,12 +5654,13 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
         const json element = R"(
             {
               "actions": [
-                { "run_rule": "read_sensors_rule" }
+                { "run_rule": "is_cpu2_present" }
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PresenceDetection> presenceDetection =
-            parsePresenceDetection(element);
+            parsePresenceDetection(element, variables);
         EXPECT_EQ(presenceDetection->getActions().size(), 1);
     }
 
@@ -3900,11 +5669,26 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
         const json element = R"(
             {
               "comments": [ "comments property" ],
-              "rule_id": "set_voltage_rule"
+              "rule_id": "is_cpu2_present"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<PresenceDetection> presenceDetection =
-            parsePresenceDetection(element);
+            parsePresenceDetection(element, variables);
+        EXPECT_EQ(presenceDetection->getActions().size(), 1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "rule_id": "${rule}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{
+            {"rule", "is_foobar_system"}};
+        std::unique_ptr<PresenceDetection> presenceDetection =
+            parsePresenceDetection(element, variables);
         EXPECT_EQ(presenceDetection->getActions().size(), 1);
     }
 
@@ -3916,7 +5700,8 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
               "actions": 1
             }
         )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3932,7 +5717,8 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
               "rule_id": 1
             }
         )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3948,7 +5734,8 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
               "comments": [ "comments property" ]
             }
         )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3968,7 +5755,8 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
               ]
             }
         )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -3981,7 +5769,8 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
     try
     {
         const json element = R"( [ "foo", "bar" ] )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4000,12 +5789,30 @@ TEST(ConfigFileParserTests, ParsePresenceDetection)
               ]
             }
         )"_json;
-        parsePresenceDetection(element);
+        std::map<std::string, std::string> variables{};
+        parsePresenceDetection(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Variable value is not valid
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": "${rule}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"rule", ""}};
+        parsePresenceDetection(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
@@ -4018,7 +5825,8 @@ TEST(ConfigFileParserTests, ParseRail)
               "id": "vdd"
             }
         )"_json;
-        std::unique_ptr<Rail> rail = parseRail(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Rail> rail = parseRail(element, variables);
         EXPECT_EQ(rail->getID(), "vdd");
         EXPECT_EQ(rail->getConfiguration(), nullptr);
         EXPECT_EQ(rail->getSensorMonitoring(), nullptr);
@@ -4047,10 +5855,25 @@ TEST(ConfigFileParserTests, ParseRail)
               }
             }
         )"_json;
-        std::unique_ptr<Rail> rail = parseRail(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<Rail> rail = parseRail(element, variables);
         EXPECT_EQ(rail->getID(), "vdd");
         EXPECT_NE(rail->getConfiguration(), nullptr);
         EXPECT_NE(rail->getSensorMonitoring(), nullptr);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "id": "vdd${num}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::unique_ptr<Rail> rail = parseRail(element, variables);
+        EXPECT_EQ(rail->getID(), "vdd2");
+        EXPECT_EQ(rail->getConfiguration(), nullptr);
+        EXPECT_EQ(rail->getSensorMonitoring(), nullptr);
     }
 
     // Test where fails: id property not specified
@@ -4070,7 +5893,8 @@ TEST(ConfigFileParserTests, ParseRail)
               }
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4096,7 +5920,8 @@ TEST(ConfigFileParserTests, ParseRail)
               }
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4108,7 +5933,8 @@ TEST(ConfigFileParserTests, ParseRail)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4125,7 +5951,8 @@ TEST(ConfigFileParserTests, ParseRail)
               "configuration": "config"
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4153,7 +5980,8 @@ TEST(ConfigFileParserTests, ParseRail)
               "sensor_monitoring": 1
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4170,12 +5998,34 @@ TEST(ConfigFileParserTests, ParseRail)
               "foo" : true
             }
         )"_json;
-        parseRail(element);
+        std::map<std::string, std::string> variables{};
+        parseRail(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Variable not defined
+    try
+    {
+        const json element = R"(
+            {
+              "id": "vdd",
+              "configuration": {
+                "volts": "${volts}",
+                "rule_id": "set_voltage_rule"
+              }
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseRail(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: volts");
     }
 }
 
@@ -4189,10 +6039,28 @@ TEST(ConfigFileParserTests, ParseRailArray)
               { "id": "vio" }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Rail>> rails = parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        std::vector<std::unique_ptr<Rail>> rails =
+            parseRailArray(element, variables);
         EXPECT_EQ(rails.size(), 2);
         EXPECT_EQ(rails[0]->getID(), "vdd");
         EXPECT_EQ(rails[1]->getID(), "vio");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            [
+              { "id": "vdd${num}" },
+              { "id": "vio${num}" }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::vector<std::unique_ptr<Rail>> rails =
+            parseRailArray(element, variables);
+        EXPECT_EQ(rails.size(), 2);
+        EXPECT_EQ(rails[0]->getID(), "vdd2");
+        EXPECT_EQ(rails[1]->getID(), "vio2");
     }
 
     // Test where fails: Element is not an array
@@ -4203,12 +6071,30 @@ TEST(ConfigFileParserTests, ParseRailArray)
               "foo": "bar"
             }
         )"_json;
-        parseRailArray(element);
+        std::map<std::string, std::string> variables{};
+        parseRailArray(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not an array");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = R"(
+            [
+              { "id": "${rail_id}" }
+            ]
+        )"_json;
+        std::map<std::string, std::string> variables{{"rail_id", ""}};
+        parseRailArray(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
@@ -4449,6 +6335,25 @@ TEST(ConfigFileParserTests, ParseRule)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
     }
+
+    // Test where fails: Contains a variable (not allowed in rules)
+    try
+    {
+        const json element = R"(
+            {
+              "id": "set_voltage_rule",
+              "actions": [
+                { "pmbus_write_vout_command": { "volts": "${volts}", "format": "linear" } }
+              ]
+            }
+        )"_json;
+        parseRule(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a double");
+    }
 }
 
 TEST(ConfigFileParserTests, ParseRuleArray)
@@ -4505,8 +6410,9 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::vector<std::unique_ptr<Action>> actions =
-            parseRuleIDOrActionsProperty(element);
+            parseRuleIDOrActionsProperty(element, variables);
         EXPECT_EQ(actions.size(), 2);
     }
 
@@ -4517,8 +6423,22 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
               "rule_id": "set_voltage_rule"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::vector<std::unique_ptr<Action>> actions =
-            parseRuleIDOrActionsProperty(element);
+            parseRuleIDOrActionsProperty(element, variables);
+        EXPECT_EQ(actions.size(), 1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "rule_id": "set_voltage_rule${num}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::vector<std::unique_ptr<Action>> actions =
+            parseRuleIDOrActionsProperty(element, variables);
         EXPECT_EQ(actions.size(), 1);
     }
 
@@ -4526,7 +6446,8 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
     try
     {
         const json element = R"( [ "foo", "bar" ] )"_json;
-        parseRuleIDOrActionsProperty(element);
+        std::map<std::string, std::string> variables{};
+        parseRuleIDOrActionsProperty(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4540,7 +6461,8 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
         const json element = R"(
             { "rule_id": 1 }
         )"_json;
-        parseRuleIDOrActionsProperty(element);
+        std::map<std::string, std::string> variables{};
+        parseRuleIDOrActionsProperty(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4554,7 +6476,8 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
         const json element = R"(
             { "actions": 1 }
         )"_json;
-        parseRuleIDOrActionsProperty(element);
+        std::map<std::string, std::string> variables{};
+        parseRuleIDOrActionsProperty(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4570,7 +6493,8 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
               "volts": 1.03
             }
         )"_json;
-        parseRuleIDOrActionsProperty(element);
+        std::map<std::string, std::string> variables{};
+        parseRuleIDOrActionsProperty(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4595,7 +6519,8 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
               ]
             }
         )"_json;
-        parseRuleIDOrActionsProperty(element);
+        std::map<std::string, std::string> variables{};
+        parseRuleIDOrActionsProperty(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4603,22 +6528,53 @@ TEST(ConfigFileParserTests, ParseRuleIDOrActionsProperty)
         EXPECT_STREQ(e.what(), "Invalid property combination: Must contain "
                                "either rule_id or actions");
     }
+
+    // Test where fails: Variable not defined
+    try
+    {
+        const json element = R"(
+            {
+              "actions": [
+                { "pmbus_write_vout_command": { "format": "linear", "exponent": "${exponent}" } }
+              ]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseRuleIDOrActionsProperty(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: exponent");
+    }
 }
 
 TEST(ConfigFileParserTests, ParseRunRule)
 {
     // Test where works
     {
-        const json element = "vdd_regulator";
-        std::unique_ptr<RunRuleAction> action = parseRunRule(element);
-        EXPECT_EQ(action->getRuleID(), "vdd_regulator");
+        const json element = "set_voltage_rule";
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<RunRuleAction> action =
+            parseRunRule(element, variables);
+        EXPECT_EQ(action->getRuleID(), "set_voltage_rule");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "${rule}";
+        std::map<std::string, std::string> variables{{"rule", "set_voltage"}};
+        std::unique_ptr<RunRuleAction> action =
+            parseRunRule(element, variables);
+        EXPECT_EQ(action->getRuleID(), "set_voltage");
     }
 
     // Test where fails: Element is not a string
     try
     {
         const json element = 1;
-        parseRunRule(element);
+        std::map<std::string, std::string> variables{};
+        parseRunRule(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4630,12 +6586,26 @@ TEST(ConfigFileParserTests, ParseRunRule)
     try
     {
         const json element = "";
-        parseRunRule(element);
+        std::map<std::string, std::string> variables{};
+        parseRunRule(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Undefined variable
+    try
+    {
+        const json element = "${rule}";
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseRunRule(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: rule");
     }
 }
 
@@ -4644,7 +6614,9 @@ TEST(ConfigFileParserTests, ParseSensorDataFormat)
     // Test where works: linear_11
     {
         const json element = "linear_11";
-        pmbus_utils::SensorDataFormat value = parseSensorDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::SensorDataFormat value =
+            parseSensorDataFormat(element, variables);
         pmbus_utils::SensorDataFormat format =
             pmbus_utils::SensorDataFormat::linear_11;
         EXPECT_EQ(value, format);
@@ -4653,9 +6625,22 @@ TEST(ConfigFileParserTests, ParseSensorDataFormat)
     // Test where works: linear_16
     {
         const json element = "linear_16";
-        pmbus_utils::SensorDataFormat value = parseSensorDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::SensorDataFormat value =
+            parseSensorDataFormat(element, variables);
         pmbus_utils::SensorDataFormat format =
             pmbus_utils::SensorDataFormat::linear_16;
+        EXPECT_EQ(value, format);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "${format}";
+        std::map<std::string, std::string> variables{{"format", "linear_11"}};
+        pmbus_utils::SensorDataFormat value =
+            parseSensorDataFormat(element, variables);
+        pmbus_utils::SensorDataFormat format =
+            pmbus_utils::SensorDataFormat::linear_11;
         EXPECT_EQ(value, format);
     }
 
@@ -4663,7 +6648,8 @@ TEST(ConfigFileParserTests, ParseSensorDataFormat)
     try
     {
         const json element = "foo";
-        parseSensorDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorDataFormat(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4675,12 +6661,26 @@ TEST(ConfigFileParserTests, ParseSensorDataFormat)
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parseSensorDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorDataFormat(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = "${format}";
+        std::map<std::string, std::string> variables{{"format", "linear_12"}};
+        parseSensorDataFormat(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a sensor data format");
     }
 }
 
@@ -4695,8 +6695,9 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               ]
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<SensorMonitoring> sensorMonitoring =
-            parseSensorMonitoring(element);
+            parseSensorMonitoring(element, variables);
         EXPECT_EQ(sensorMonitoring->getActions().size(), 1);
     }
 
@@ -4708,8 +6709,22 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               "rule_id": "set_voltage_rule"
             }
         )"_json;
+        std::map<std::string, std::string> variables{};
         std::unique_ptr<SensorMonitoring> sensorMonitoring =
-            parseSensorMonitoring(element);
+            parseSensorMonitoring(element, variables);
+        EXPECT_EQ(sensorMonitoring->getActions().size(), 1);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"(
+            {
+              "rule_id": "read_sensors_rule_chassis${num}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::unique_ptr<SensorMonitoring> sensorMonitoring =
+            parseSensorMonitoring(element, variables);
         EXPECT_EQ(sensorMonitoring->getActions().size(), 1);
     }
 
@@ -4721,7 +6736,8 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               "actions": 1
             }
         )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4737,7 +6753,8 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               "rule_id": 1
             }
         )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4753,7 +6770,8 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               "comments": [ "comments property" ]
             }
         )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4773,7 +6791,8 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               ]
             }
         )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4786,7 +6805,8 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
     try
     {
         const json element = R"( [ "foo", "bar" ] )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4805,12 +6825,30 @@ TEST(ConfigFileParserTests, ParseSensorMonitoring)
               ]
             }
         )"_json;
-        parseSensorMonitoring(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorMonitoring(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Variable not defined
+    try
+    {
+        const json element = R"(
+            {
+              "rule_id": "read_sensors_rule_chassis${num}"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseSensorMonitoring(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: num");
     }
 }
 
@@ -4819,71 +6857,89 @@ TEST(ConfigFileParserTests, ParseSensorType)
     // Test where works: iout
     {
         const json element = "iout";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::iout);
     }
 
     // Test where works: iout_peak
     {
         const json element = "iout_peak";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::iout_peak);
     }
 
     // Test where works: iout_valley
     {
         const json element = "iout_valley";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::iout_valley);
     }
 
     // Test where works: pout
     {
         const json element = "pout";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::pout);
     }
 
     // Test where works: temperature
     {
         const json element = "temperature";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::temperature);
     }
 
     // Test where works: temperature_peak
     {
         const json element = "temperature_peak";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::temperature_peak);
     }
 
     // Test where works: vout
     {
         const json element = "vout";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::vout);
     }
 
     // Test where works: vout_peak
     {
         const json element = "vout_peak";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::vout_peak);
     }
 
     // Test where works: vout_valley
     {
         const json element = "vout_valley";
-        SensorType type = parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        SensorType type = parseSensorType(element, variables);
         EXPECT_EQ(type, SensorType::vout_valley);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "${type}";
+        std::map<std::string, std::string> variables{{"type", "iout"}};
+        SensorType type = parseSensorType(element, variables);
+        EXPECT_EQ(type, SensorType::iout);
     }
 
     // Test where fails: Element is not a sensor type
     try
     {
         const json element = "foo";
-        parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorType(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4895,12 +6951,26 @@ TEST(ConfigFileParserTests, ParseSensorType)
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parseSensorType(element);
+        std::map<std::string, std::string> variables{};
+        parseSensorType(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = "${type}";
+        std::map<std::string, std::string> variables{{"type", "temp_out"}};
+        parseSensorType(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a sensor type");
     }
 }
 
@@ -4909,15 +6979,27 @@ TEST(ConfigFileParserTests, ParseSetDevice)
     // Test where works
     {
         const json element = "regulator1";
-        std::unique_ptr<SetDeviceAction> action = parseSetDevice(element);
+        std::map<std::string, std::string> variables{};
+        std::unique_ptr<SetDeviceAction> action =
+            parseSetDevice(element, variables);
         EXPECT_EQ(action->getDeviceID(), "regulator1");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "regulator${num}";
+        std::map<std::string, std::string> variables{{"num", "2"}};
+        std::unique_ptr<SetDeviceAction> action =
+            parseSetDevice(element, variables);
+        EXPECT_EQ(action->getDeviceID(), "regulator2");
     }
 
     // Test where fails: Element is not a string
     try
     {
         const json element = 1;
-        parseSetDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseSetDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4929,12 +7011,26 @@ TEST(ConfigFileParserTests, ParseSetDevice)
     try
     {
         const json element = "";
-        parseSetDevice(element);
+        std::map<std::string, std::string> variables{};
+        parseSetDevice(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Variable not defined
+    try
+    {
+        const json element = "regulator${num}";
+        std::map<std::string, std::string> variables{{"foo", "bar"}};
+        parseSetDevice(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Undefined variable: num");
     }
 }
 
@@ -4943,7 +7039,9 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     // Test where works: linear
     {
         const json element = "linear";
-        pmbus_utils::VoutDataFormat value = parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::VoutDataFormat value =
+            parseVoutDataFormat(element, variables);
         pmbus_utils::VoutDataFormat format =
             pmbus_utils::VoutDataFormat::linear;
         EXPECT_EQ(value, format);
@@ -4952,7 +7050,9 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     // Test where works: vid
     {
         const json element = "vid";
-        pmbus_utils::VoutDataFormat value = parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::VoutDataFormat value =
+            parseVoutDataFormat(element, variables);
         pmbus_utils::VoutDataFormat format = pmbus_utils::VoutDataFormat::vid;
         EXPECT_EQ(value, format);
     }
@@ -4960,7 +7060,9 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     // Test where works: direct
     {
         const json element = "direct";
-        pmbus_utils::VoutDataFormat value = parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::VoutDataFormat value =
+            parseVoutDataFormat(element, variables);
         pmbus_utils::VoutDataFormat format =
             pmbus_utils::VoutDataFormat::direct;
         EXPECT_EQ(value, format);
@@ -4969,8 +7071,21 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     // Test where works: ieee
     {
         const json element = "ieee";
-        pmbus_utils::VoutDataFormat value = parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        pmbus_utils::VoutDataFormat value =
+            parseVoutDataFormat(element, variables);
         pmbus_utils::VoutDataFormat format = pmbus_utils::VoutDataFormat::ieee;
+        EXPECT_EQ(value, format);
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = "${format}";
+        std::map<std::string, std::string> variables{{"format", "linear"}};
+        pmbus_utils::VoutDataFormat value =
+            parseVoutDataFormat(element, variables);
+        pmbus_utils::VoutDataFormat format =
+            pmbus_utils::VoutDataFormat::linear;
         EXPECT_EQ(value, format);
     }
 
@@ -4978,7 +7093,8 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     try
     {
         const json element = "foo";
-        parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        parseVoutDataFormat(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -4990,11 +7106,25 @@ TEST(ConfigFileParserTests, ParseVoutDataFormat)
     try
     {
         const json element = R"( { "foo": "bar" } )"_json;
-        parseVoutDataFormat(element);
+        std::map<std::string, std::string> variables{};
+        parseVoutDataFormat(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Invalid variable value
+    try
+    {
+        const json element = "${format}";
+        std::map<std::string, std::string> variables{{"format", "invalid"}};
+        parseVoutDataFormat(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a vout data format");
     }
 }
