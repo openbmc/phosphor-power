@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e92ffc8_6268a6c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:11:31Z",
+      "side": 1,
+      "message": "I think these journal messages are confusing. The power-control-chassis1 GPIO should never be used by this app, and it is an output.\n\nIt looks like these are some temporary journal messages from test code. If so, they should probably not be part of the commit message.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "108ed48a_97ef6acb",
         "filename": "phosphor-chassis-power/src/gpio.cpp",
         "patchSetId": 4
