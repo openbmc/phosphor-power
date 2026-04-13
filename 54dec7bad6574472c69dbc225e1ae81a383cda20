@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dd1ec39_fb6cc453",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "Nit: Commit messages should use present tense verbs. The idea is that the commit message describes what will happen when this commit is applied.\n\nSo \u0027Creates a GPIO interface ...\u0027. \u0027Implements necessary ...\u0027\n\nNote this does *not* apply to the Tested section. That should use past tense verbs like you did.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e44d5df_faea7270",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "Nit: \u0027in simulation\u0027 here and next sentence?",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "108ed48a_97ef6acb",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "I don\u0027t agree with this. We shouldn\u0027t pretend the value was the opposite of what we expect. I think this should just stay undefined until enough reads have occurred.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d546157a_80b08e48",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "I don\u0027t understand how the rest of this class works if validateHardware is set to false.\n\nIt seems like find_line is never called, and the line object is not valid for other calls like request()?",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff5ca24e_475b03ce",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "If you don\u0027t specify an initial value, I believe it writes an initial value of 0 during the request. So it is probably better to always specify an initial value when requesting for write. That is why the phosphor-power-sequencer GPIO class has a requestRead() method with no initial value and a requestWrite() method with a required initial value.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7522c2_289b6927",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "I don\u0027t understand how the caller of this method knows whether it succeeded. If it failed, they shouldn\u0027t try to get or set the value, or that will result in a different and kind of misleading exception right?\n\nWould it make sense to have this class keep the failure counter and handle writing the message or lg2, but then rethrow the exception so the caller knows it failed?",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd554f89_afb13c1c",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "See my comments in the constructor. I think we should not have a pretend starting \"de-glitched\" value for the GPIO. We should not successfully return a value until we\u0027ve read the GPIO enough times to be valid.\n\nYou could change the return type of the get method to be std::optional\u003cint\u003e. Then the method could return undefined if:\n* This is the first read, so we have no previous read to compare against.\n* We have not seen two reads in a row that matched, so we still don\u0027t know what the value is.\n\nFor initial startup, another option would be to do N reads in a row, perhaps with a very short sleep in between. That would give you a previous reading or two right away. However, if they don\u0027t agree it is still unclear what to return. It could throw an exception I suppose, since that is an error situation.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0b61374_eb679807",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "Does lastReading always return false for operator\u003d\u003d if it has no value (since it is an optional)?",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab0762a_a9180023",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "If \u0027int\u0027 is 16-bits on a target processor, and you polled every second, this counter would roll over after about 9 hours. It would probably be better to stop incrementing when it hits the limit.\n```\nif (requestFailureCount \u003c requestFailureThreshold)\n{\n  if (++requestFailureCount \u003d\u003d requestFailureThreshold)\n  {\n     lg2::error(...)\n```",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc9a625c_0d159cdf",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "Deglitching seems like an internal detail. I\u0027m not sure if it makes sense to expose that as a general public method?\n\nIt might make more sense to have getValue() be the public method (matching setValue), and do the de-glitching privately in the internal details.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09534409_4933ce7f",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "I think this last sentence should be deleted. It seems very specific to your current situation.",
+      "range": {
+        "startLine": 164,
+        "startChar": 62,
+        "endLine": 165,
+        "endChar": 56
+      },
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2f7942_2326226e",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-13T23:09:39Z",
+      "side": 1,
+      "message": "What is the goal of this flag throughout this commit?\n* To allow for early testing of JSON config files on very early hardware/simulation before all the GPIOs have been set up in the kernel?\n* To allow for automated testing?\n\nThe solution for the two is very different I think.\n\n## Suggestions if trying to allow for early testing\n\nHardcoding this in the C++ class seems like it won\u0027t work for upstream code. One user of the application might want to have it false, and another might want it to be true.\n\nYou could make it a command line parameter or a build flag.\n\nHowever, a simpler approach might be to do the following:\n* Don\u0027t create the gpiod::line object in the constructor. This allows the constructor to succeed and the Gpio object to exist.\n* Create the gpiod::line object if needed when one of the Gpio request methods is called. Throw an exception then if the find_line() fails.\n* Let the caller of the Gpio request method decide how to handle the exception. They could choose to retry a few times and then log an error message.\n\nThis would eliminate the need for all the JSON parser changes.\n\n## Suggestions if trying to allow for automated testing\n\nIn this case, I\u0027d suggest using the standard approach of:\n* Abstract base GPIO class\n* Concrete sub-class that does the real thing\n* Mock sub-class for automated tests\n\nYou already have the first two, and creating the mock class is very simple. Then you just have to decide how to cause the real subclass to be created for production usage and the mock subclass to be created for automated tests.\n\nTwo approaches used in this repository:\n* Create a Services hierarchy with the same three classes (ABC/real/mock). Add a createGPIO method to the Services class. The real subclass creates a real GPIO, and the mock subclass creates a mock GPIO. This Services hierarchy can handle other real/mock problems in the future too, such as error logging and getting data from D-Bus.\n* Create a global scope createGPIO function in the GPIO header file. Provide two implementations in two different .C files. Then link in the implementation that produces a real GPIO when linking the real application. Link in the implementation that produces a mock GPIO when linking the test cases.",
+      "revId": "54dec7bad6574472c69dbc225e1ae81a383cda20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
