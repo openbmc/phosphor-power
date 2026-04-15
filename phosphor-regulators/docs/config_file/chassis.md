@@ -30,6 +30,7 @@ chassis template.
 | number                   | see [notes](#notes) | number                                                  | Chassis number within the system. Chassis numbers start at 1 because chassis 0 represents the entire system.                                                                                             |
 | inventory_path           | see [notes](#notes) | string                                                  | Specify the relative D-Bus inventory path of the chassis. Full inventory paths begin with the root "/xyz/openbmc_project/inventory". Specify the relative path below the root, such as "system/chassis". |
 | devices                  | see [notes](#notes) | array of [devices](device.md)                           | One or more devices within the chassis. The array should contain regulator devices and any related devices required to perform regulator operations.                                                     |
+| status_monitoring        |         no          | [status_monitoring](status_monitoring.md)               | Status monitoring to perform on this chassis, such as verifying it is present.                                                                                                                           |
 | template_id              | see [notes](#notes) | string                                                  | Unique ID of the [chassis template](chassis_template.md) to use for the contents of this chassis.                                                                                                        |
 | template_variable_values | see [notes](#notes) | [template_variable_values](template_variable_values.md) | Chassis-specific values for chassis template variables.                                                                                                                                                  |
 
@@ -39,6 +40,11 @@ chassis template.
   - "number", "inventory_path", and optionally "devices"
   - "template_id" and "template_variable_values"
 - "comments" is optional and can be specified with either property group
+- "status_monitoring" is optional
+  - If specified, it should be in the same property group as "number",
+    "inventory_path", and "devices"
+  - If not specified, the chassis status will be assumed good (present,
+    available, enabled, etc.)
 
 ## Examples
 
