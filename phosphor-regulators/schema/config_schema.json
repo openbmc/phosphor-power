@@ -426,6 +426,9 @@
                 "id": { "$ref": "#/definitions/id" },
                 "number": { "$ref": "#/definitions/number" },
                 "inventory_path": { "$ref": "#/definitions/inventory_path" },
+                "status_monitoring": {
+                    "$ref": "#/definitions/status_monitoring"
+                },
                 "devices": { "$ref": "#/definitions/devices" }
             },
             "required": ["id", "number", "inventory_path"],
@@ -444,6 +447,9 @@
                 "comments": { "$ref": "#/definitions/comments" },
                 "number": { "$ref": "#/definitions/number" },
                 "inventory_path": { "$ref": "#/definitions/inventory_path" },
+                "status_monitoring": {
+                    "$ref": "#/definitions/status_monitoring"
+                },
                 "devices": { "$ref": "#/definitions/devices" },
                 "template_id": { "$ref": "#/definitions/id" },
                 "template_variable_values": {
@@ -453,16 +459,26 @@
             "additionalProperties": false,
             "oneOf": [
                 {
+                    "description": "Group 1: Chassis not using a template",
                     "required": ["number", "inventory_path"],
                     "not": {
-                        "required": ["devices"]
+                        "anyOf": [
+                            { "required": ["template_id"] },
+                            { "required": ["template_variable_values"] }
+                        ]
                     }
                 },
                 {
-                    "required": ["number", "inventory_path", "devices"]
-                },
-                {
-                    "required": ["template_id", "template_variable_values"]
+                    "description": "Group 2: Chassis using template",
+                    "required": ["template_id", "template_variable_values"],
+                    "not": {
+                        "anyOf": [
+                            { "required": ["number"] },
+                            { "required": ["inventory_path"] },
+                            { "required": ["status_monitoring"] },
+                            { "required": ["devices"] }
+                        ]
+                    }
                 }
             ]
         },
@@ -519,6 +535,22 @@
             "type": "array",
             "items": { "$ref": "#/definitions/device" },
             "minItems": 1
+        },
+
+        "status_monitoring": {
+            "type": "object",
+            "properties": {
+                "is_present_monitored": {
+                    "$ref": "#/definitions/boolean_value"
+                },
+                "is_available_monitored": {
+                    "$ref": "#/definitions/boolean_value"
+                },
+                "is_enabled_monitored": {
+                    "$ref": "#/definitions/boolean_value"
+                }
+            },
+            "additionalProperties": false
         },
 
         "template_variable_values": {
