@@ -15,6 +15,7 @@
  */
 #include "action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
@@ -67,7 +68,8 @@ class DeviceTests : public ::testing::Test
     DeviceTests() : ::testing::Test{}
     {
         // Create Chassis
-        auto chassis = std::make_unique<Chassis>(1, chassisInvPath);
+        auto chassis = std::make_unique<Chassis>(1, chassisInvPath,
+                                                 ChassisStatusMonitorOptions{});
         this->chassis = chassis.get();
 
         // Create System

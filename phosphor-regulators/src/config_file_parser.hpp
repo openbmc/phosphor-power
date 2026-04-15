@@ -18,6 +18,7 @@
 #include "action.hpp"
 #include "and_action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "compare_presence_action.hpp"
 #include "compare_vpd_action.hpp"
 #include "configuration.hpp"
@@ -721,6 +722,21 @@ SensorType parseSensorType(const nlohmann::json& element,
  * @return SetDeviceAction object
  */
 std::unique_ptr<SetDeviceAction> parseSetDevice(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing a status_monitoring object.
+ *
+ * Returns the corresponding C++ ChassisStatusMonitorOptions object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return ChassisStatusMonitorOptions object
+ */
+ChassisStatusMonitorOptions parseStatusMonitoring(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables);
 

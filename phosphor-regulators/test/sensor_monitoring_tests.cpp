@@ -15,6 +15,7 @@
  */
 #include "action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
@@ -103,7 +104,8 @@ std::tuple<std::unique_ptr<System>, Chassis*, Device*, i2c::MockedI2CInterface*,
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
     std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
-        1, "/xyz/openbmc_project/inventory/system/chassis", std::move(devices));
+        1, "/xyz/openbmc_project/inventory/system/chassis",
+        ChassisStatusMonitorOptions{}, std::move(devices));
     Chassis* chassisPtr = chassis.get();
 
     // Create System that contains Chassis
