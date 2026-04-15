@@ -304,6 +304,15 @@ std::unique_ptr<Chassis> parseChassisProperties(
         parseInventoryPath(inventoryPathElement, variables);
     ++propertyCount;
 
+    // Optional status_monitoring property
+    ChassisStatusMonitorOptions monitorOptions{};
+    auto statusMonitoringIt = element.find("status_monitoring");
+    if (statusMonitoringIt != element.end())
+    {
+        monitorOptions = parseStatusMonitoring(*statusMonitoringIt, variables);
+        ++propertyCount;
+    }
+
     // Optional devices property
     std::vector<std::unique_ptr<Device>> devices{};
     auto devicesIt = element.find("devices");
@@ -316,7 +325,8 @@ std::unique_ptr<Chassis> parseChassisProperties(
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Chassis>(number, inventoryPath, std::move(devices));
+    return std::make_unique<Chassis>(number, inventoryPath, monitorOptions,
+                                     std::move(devices));
 }
 
 std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
@@ -345,6 +355,13 @@ std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
     // Just verify it exists; cannot be parsed without variable values
     getRequiredProperty(element, "inventory_path");
     ++propertyCount;
+
+    // Optional status_monitoring property
+    // Cannot be parsed without variable values
+    if (element.contains("status_monitoring"))
+    {
+        ++propertyCount;
+    }
 
     // Optional devices property
     // Cannot be parsed without variable values
@@ -1351,6 +1368,48 @@ std::unique_ptr<SetDeviceAction> parseSetDevice(
     std::string deviceID = parseString(element, false, variables);
 
     return std::make_unique<SetDeviceAction>(deviceID);
+}
+
+ChassisStatusMonitorOptions parseStatusMonitoring(
+    const json& element, const std::map<std::string, std::string>& variables)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Note: all ChassisStatusMonitorOptions fields default to false
+    ChassisStatusMonitorOptions options{};
+
+    // Optional is_present_monitored property
+    auto isPresentMonitoredIt = element.find("is_present_monitored");
+    if (isPresentMonitoredIt != element.end())
+    {
+        options.isPresentMonitored =
+            parseBoolean(*isPresentMonitoredIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_available_monitored property
+    auto isAvailableMonitoredIt = element.find("is_available_monitored");
+    if (isAvailableMonitoredIt != element.end())
+    {
+        options.isAvailableMonitored =
+            parseBoolean(*isAvailableMonitoredIt, variables);
+        ++propertyCount;
+    }
+
+    // Optional is_enabled_monitored property
+    auto isEnabledMonitoredIt = element.find("is_enabled_monitored");
+    if (isEnabledMonitoredIt != element.end())
+    {
+        options.isEnabledMonitored =
+            parseBoolean(*isEnabledMonitoredIt, variables);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return options;
 }
 
 std::map<std::string, std::string> parseVariables(const json& element)

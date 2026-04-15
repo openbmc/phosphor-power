@@ -15,6 +15,7 @@
  */
 #include "action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
@@ -80,10 +81,14 @@ TEST_F(ChassisTests, Constructor)
 {
     // Test where works: Only required parameters are specified
     {
-        Chassis chassis{2, defaultInventoryPath};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
         EXPECT_EQ(chassis.getNumber(), 2);
         EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
         EXPECT_EQ(chassis.getDevices().size(), 0);
+        EXPECT_FALSE(chassis.getMonitorOptions().isPresentMonitored);
+        EXPECT_FALSE(chassis.getMonitorOptions().isAvailableMonitored);
+        EXPECT_FALSE(chassis.getMonitorOptions().isEnabledMonitored);
+        EXPECT_TRUE(chassis.getMonitorOptions().isPowerGoodMonitored);
     }
 
     // Test where works: All parameters are specified
@@ -93,17 +98,27 @@ TEST_F(ChassisTests, Constructor)
         devices.emplace_back(createDevice("vdd_reg1"));
         devices.emplace_back(createDevice("vdd_reg2"));
 
+        // Create ChassisStatusMonitorOptions
+        ChassisStatusMonitorOptions options{};
+        options.isPresentMonitored = true;
+        options.isAvailableMonitored = true;
+        options.isEnabledMonitored = false;
+
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, options, std::move(devices)};
         EXPECT_EQ(chassis.getNumber(), 1);
         EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
         EXPECT_EQ(chassis.getDevices().size(), 2);
+        EXPECT_TRUE(chassis.getMonitorOptions().isPresentMonitored);
+        EXPECT_TRUE(chassis.getMonitorOptions().isAvailableMonitored);
+        EXPECT_FALSE(chassis.getMonitorOptions().isEnabledMonitored);
+        EXPECT_TRUE(chassis.getMonitorOptions().isPowerGoodMonitored);
     }
 
     // Test where fails: Invalid chassis number < 1
     try
     {
-        Chassis chassis{0, defaultInventoryPath};
+        Chassis chassis{0, defaultInventoryPath, ChassisStatusMonitorOptions{}};
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -125,7 +140,8 @@ TEST_F(ChassisTests, AddToIDMap)
     devices.emplace_back(createDevice("reg3"));
 
     // Create Chassis
-    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+    Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                    std::move(devices)};
 
     // Add Device and Rail objects within the Chassis to an IDMap
     IDMap idMap{};
@@ -163,7 +179,8 @@ TEST_F(ChassisTests, ClearCache)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+    Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                    std::move(devices)};
 
     // Cache presence value in PresenceDetection
     MockServices services{};
@@ -210,7 +227,8 @@ TEST_F(ChassisTests, ClearErrorHistory)
     // Create Chassis that contains Device
     std::vector<std::unique_ptr<Device>> devices{};
     devices.emplace_back(std::move(device));
-    Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+    Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                    std::move(devices)};
 
     // Create lambda that sets MockServices expectations.  The lambda allows
     // us to set expectations multiple times without duplicate code.
@@ -270,7 +288,7 @@ TEST_F(ChassisTests, CloseDevices)
         EXPECT_CALL(journal, logDebug("Closing devices in chassis 2")).Times(1);
 
         // Create Chassis
-        Chassis chassis{2, defaultInventoryPath};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
 
         // Call closeDevices()
         chassis.closeDevices(services);
@@ -318,7 +336,8 @@ TEST_F(ChassisTests, CloseDevices)
         }
 
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
 
         // Call closeDevices()
         chassis.closeDevices(services);
@@ -337,7 +356,7 @@ TEST_F(ChassisTests, Configure)
         EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
 
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath};
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
 
         // Call configure()
         chassis.configure(services, *system);
@@ -396,7 +415,8 @@ TEST_F(ChassisTests, Configure)
         }
 
         // Create Chassis
-        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
 
         // Call configure()
         chassis.configure(services, *system);
@@ -415,7 +435,7 @@ TEST_F(ChassisTests, DetectPhaseFaults)
         EXPECT_CALL(errorLogging, logPhaseFault).Times(0);
 
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath};
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
 
         // Call detectPhaseFaults() 5 times.  Should do nothing.
         for (int i = 1; i <= 5; ++i)
@@ -501,7 +521,8 @@ TEST_F(ChassisTests, DetectPhaseFaults)
         }
 
         // Create Chassis
-        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
 
         // Call detectPhaseFaults() 5 times
         for (int i = 1; i <= 5; ++i)
@@ -515,7 +536,7 @@ TEST_F(ChassisTests, GetDevices)
 {
     // Test where no devices were specified in constructor
     {
-        Chassis chassis{2, defaultInventoryPath};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
         EXPECT_EQ(chassis.getDevices().size(), 0);
     }
 
@@ -527,7 +548,8 @@ TEST_F(ChassisTests, GetDevices)
         devices.emplace_back(createDevice("vdd_reg2"));
 
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
         EXPECT_EQ(chassis.getDevices().size(), 2);
         EXPECT_EQ(chassis.getDevices()[0]->getID(), "vdd_reg1");
         EXPECT_EQ(chassis.getDevices()[1]->getID(), "vdd_reg2");
@@ -536,13 +558,55 @@ TEST_F(ChassisTests, GetDevices)
 
 TEST_F(ChassisTests, GetInventoryPath)
 {
-    Chassis chassis{3, defaultInventoryPath};
+    Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
     EXPECT_EQ(chassis.getInventoryPath(), defaultInventoryPath);
+}
+
+TEST_F(ChassisTests, GetMonitorOptions)
+{
+    // Test where all options are false (default)
+    {
+        ChassisStatusMonitorOptions options{};
+        Chassis chassis{1, defaultInventoryPath, options};
+        const ChassisStatusMonitorOptions& returnedOptions =
+            chassis.getMonitorOptions();
+        EXPECT_FALSE(returnedOptions.isPresentMonitored);
+        EXPECT_FALSE(returnedOptions.isAvailableMonitored);
+        EXPECT_FALSE(returnedOptions.isEnabledMonitored);
+    }
+
+    // Test where all options are true
+    {
+        ChassisStatusMonitorOptions options{};
+        options.isPresentMonitored = true;
+        options.isAvailableMonitored = true;
+        options.isEnabledMonitored = true;
+        Chassis chassis{2, defaultInventoryPath, options};
+        const ChassisStatusMonitorOptions& returnedOptions =
+            chassis.getMonitorOptions();
+        EXPECT_TRUE(returnedOptions.isPresentMonitored);
+        EXPECT_TRUE(returnedOptions.isAvailableMonitored);
+        EXPECT_TRUE(returnedOptions.isEnabledMonitored);
+    }
+
+    // Test where some options are true
+    {
+        ChassisStatusMonitorOptions options{};
+        options.isPresentMonitored = true;
+        options.isAvailableMonitored = false;
+        options.isEnabledMonitored = true;
+        Chassis chassis{3, defaultInventoryPath, options};
+        const ChassisStatusMonitorOptions& returnedOptions =
+            chassis.getMonitorOptions();
+        EXPECT_TRUE(returnedOptions.isPresentMonitored);
+        EXPECT_FALSE(returnedOptions.isAvailableMonitored);
+        EXPECT_TRUE(returnedOptions.isEnabledMonitored);
+    }
 }
 
 TEST_F(ChassisTests, GetNumber)
 {
-    Chassis chassis{3, defaultInventoryPath};
+    Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
     EXPECT_EQ(chassis.getNumber(), 3);
 }
 
@@ -558,7 +622,7 @@ TEST_F(ChassisTests, MonitorSensors)
         EXPECT_CALL(sensors, endRail).Times(0);
 
         // Create Chassis
-        Chassis chassis{1, defaultInventoryPath};
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
 
         // Call monitorSensors().  Should do nothing.
         chassis.monitorSensors(services, *system);
@@ -649,7 +713,8 @@ TEST_F(ChassisTests, MonitorSensors)
         }
 
         // Create Chassis that contains Devices
-        Chassis chassis{2, defaultInventoryPath, std::move(devices)};
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
 
         // Call monitorSensors()
         chassis.monitorSensors(services, *system);
