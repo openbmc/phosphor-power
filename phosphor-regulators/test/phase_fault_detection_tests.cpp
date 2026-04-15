@@ -16,6 +16,7 @@
 
 #include "action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "device.hpp"
 #include "i2c_capture_bytes_action.hpp"
 #include "i2c_compare_bit_action.hpp"
@@ -101,7 +102,7 @@ class PhaseFaultDetectionTests : public ::testing::Test
         devices.emplace_back(std::move(ioExpander));
         auto chassis = std::make_unique<Chassis>(
             1, "/xyz/openbmc_project/inventory/system/chassis",
-            std::move(devices));
+            ChassisStatusMonitorOptions{}, std::move(devices));
         this->chassis = chassis.get();
 
         // Create System that contains Chassis and save pointer

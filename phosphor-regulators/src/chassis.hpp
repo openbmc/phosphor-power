@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "chassis_status_monitor.hpp"
 #include "device.hpp"
 #include "id_map.hpp"
 #include "services.hpp"
@@ -27,6 +28,9 @@
 
 namespace phosphor::power::regulators
 {
+
+using ChassisStatusMonitorOptions =
+    phosphor::power::util::ChassisStatusMonitorOptions;
 
 // Forward declarations to avoid circular dependencies
 class System;
@@ -62,21 +66,27 @@ class Chassis
      * @param number Chassis number within the system.  Chassis numbers start at
      *               1 because chassis 0 represents the entire system.
      * @param inventoryPath D-Bus inventory path for this chassis
+     * @param monitorOptions Options that specify what types of chassis status
+     *                       monitoring are enabled.
      * @param devices Devices within this chassis, if any.  The vector should
      *                contain regulator devices and any related devices required
      *                to perform regulator operations.
      */
     explicit Chassis(unsigned int number, const std::string& inventoryPath,
+                     const ChassisStatusMonitorOptions& monitorOptions,
                      std::vector<std::unique_ptr<Device>> devices =
                          std::vector<std::unique_ptr<Device>>{}) :
         number{number}, inventoryPath{inventoryPath},
-        devices{std::move(devices)}
+        monitorOptions{monitorOptions}, devices{std::move(devices)}
     {
         if (number < 1)
         {
             throw std::invalid_argument{
                 "Invalid chassis number: " + std::to_string(number)};
         }
+
+        // Turn on chassis power good monitoring. This is always needed.
+        this->monitorOptions.isPowerGoodMonitored = true;
     }
 
     /**
@@ -153,6 +163,17 @@ class Chassis
     }
 
     /**
+     * Returns the options that specify what types of chassis status monitoring
+     * are enabled.
+     *
+     * @return chassis status monitoring options
+     */
+    const ChassisStatusMonitorOptions& getMonitorOptions() const
+    {
+        return monitorOptions;
+    }
+
+    /**
      * Returns the chassis number within the system.
      *
      * @return chassis number
@@ -186,6 +207,11 @@ class Chassis
      * D-Bus inventory path for this chassis.
      */
     const std::string inventoryPath{};
+
+    /**
+     * Options that specify what types of chassis status monitoring are enabled.
+     */
+    ChassisStatusMonitorOptions monitorOptions{};
 
     /**
      * Devices within this chassis, if any.

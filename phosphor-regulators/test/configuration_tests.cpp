@@ -15,6 +15,7 @@
  */
 #include "action.hpp"
 #include "chassis.hpp"
+#include "chassis_status_monitor.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
 #include "i2c_interface.hpp"
@@ -125,8 +126,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -185,8 +187,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -252,8 +255,9 @@ TEST(ConfigurationTests, ExecuteForDevice)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -320,8 +324,9 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -391,8 +396,9 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
@@ -469,8 +475,9 @@ TEST(ConfigurationTests, ExecuteForRail)
         // Create Chassis that contains Device
         std::vector<std::unique_ptr<Device>> devices{};
         devices.emplace_back(std::move(device));
-        std::unique_ptr<Chassis> chassis =
-            std::make_unique<Chassis>(1, chassisInvPath, std::move(devices));
+        std::unique_ptr<Chassis> chassis = std::make_unique<Chassis>(
+            1, chassisInvPath, ChassisStatusMonitorOptions{},
+            std::move(devices));
         Chassis* chassisPtr = chassis.get();
 
         // Create System that contains Chassis
