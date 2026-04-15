@@ -102,6 +102,11 @@ const json validConfigFile = R"(
           "id": "multi_chassis_template",
           "number": "${chassis_number}",
           "inventory_path": "system/chassis${chassis_number}",
+          "status_monitoring": {
+            "is_present_monitored": "${is_present}",
+            "is_available_monitored": "${is_available}",
+            "is_enabled_monitored": "${is_enabled}"
+          },
           "devices": [
             {
               "id": "chassis${chassis_number}_micro",
@@ -192,6 +197,9 @@ const json validConfigFile = R"(
           "comments": [ "Chassis number 1 containing CPUs and memory" ],
           "number": 1,
           "inventory_path": "system/chassis",
+          "status_monitoring": {
+            "is_present_monitored": true
+          },
           "devices": [
             {
               "comments": [ "IR35221 regulator producing the Vdd rail" ],
@@ -228,6 +236,9 @@ const json validConfigFile = R"(
             "cap_count": "2",
             "chassis_number": "2",
             "exponent": "-8",
+            "is_available": "true",
+            "is_enabled": "false",
+            "is_present": "true",
             "is_regulator": "false",
             "is_verified": "true",
             "phase_fault_type": "n+1",
@@ -471,15 +482,16 @@ TEST(ValidateRegulatorsConfigTest, And)
 
 TEST(ValidateRegulatorsConfigTest, Chassis)
 {
-    // Valid: test chassis.
+    // Valid: test chassis with all non-template properties.
     {
         json configFile = validConfigFile;
         EXPECT_JSON_VALID(configFile);
     }
-    // Valid: test chassis with only required properties.
+    // Valid: test chassis with only required non-template properties.
     {
         json configFile = validConfigFile;
         configFile["chassis"][0].erase("comments");
+        configFile["chassis"][0].erase("status_monitoring");
         configFile["chassis"][0].erase("devices");
         EXPECT_JSON_VALID(configFile);
     }
@@ -515,6 +527,12 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         json configFile = validConfigFile;
         configFile["chassis"][0]["inventory_path"] = 2;
         EXPECT_JSON_INVALID(configFile, "2 is not of type 'string'");
+    }
+    // Invalid: test chassis with property status_monitoring wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"] = true;
+        EXPECT_JSON_INVALID(configFile, "True is not of type 'object'");
     }
     // Invalid: test chassis with property devices wrong type.
     {
@@ -580,7 +598,8 @@ TEST(ValidateRegulatorsConfigTest, Chassis)
         configFile["chassis"][0]["template_id"] = "multi_chassis_template";
         configFile["chassis"][0]["template_variable_values"]["chassis_number"] =
             "1";
-        EXPECT_JSON_INVALID(configFile, "is valid under each of");
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
     }
     // Invalid: test chassis with neither mode complete (missing number from
     // traditional, missing template_variable_values from template)
@@ -634,6 +653,7 @@ TEST(ValidateRegulatorsConfigTest, ChassisTemplate)
     {
         json configFile = validConfigFile;
         configFile["chassis_templates"][0].erase("comments");
+        configFile["chassis_templates"][0].erase("status_monitoring");
         configFile["chassis_templates"][0].erase("devices");
         EXPECT_JSON_VALID(configFile);
     }
@@ -681,6 +701,12 @@ TEST(ValidateRegulatorsConfigTest, ChassisTemplate)
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["inventory_path"] = true;
         EXPECT_JSON_INVALID(configFile, "True is not of type 'string'");
+    }
+    // Invalid: test chassis_template with property status_monitoring wrong type
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["status_monitoring"] = true;
+        EXPECT_JSON_INVALID(configFile, "True is not of type 'object'");
     }
     // Invalid: test chassis_template with property devices wrong type
     {
@@ -3197,6 +3223,84 @@ TEST(ValidateRegulatorsConfigTest, SetDevice)
         EXPECT_JSON_VALID(configFile);
     }
 }
+TEST(ValidateRegulatorsConfigTest, StatusMonitoring)
+{
+    // Valid: test status_monitoring with all properties specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"]["is_present_monitored"] =
+            true;
+        configFile["chassis"][0]["status_monitoring"]
+                  ["is_available_monitored"] = true;
+        configFile["chassis"][0]["status_monitoring"]["is_enabled_monitored"] =
+            false;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test status_monitoring with only one property specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"] = json::object();
+        configFile["chassis"][0]["status_monitoring"]
+                  ["is_available_monitored"] = true;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test status_monitoring with no properties specified
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"] = json::object();
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test status_monitoring in chassis_template
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["status_monitoring"]
+                  ["is_present_monitored"] = true;
+        configFile["chassis_templates"][0]["status_monitoring"]
+                  ["is_enabled_monitored"] = false;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Valid: test status_monitoring with template variables
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+    // Invalid: test status_monitoring with property is_present_monitored wrong
+    // type
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"]["is_present_monitored"] =
+            "true";
+        EXPECT_JSON_INVALID(configFile, "'true' does not match '.");
+    }
+    // Invalid: test status_monitoring with property is_available_monitored
+    // wrong type
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"]
+                  ["is_available_monitored"] = 1;
+        EXPECT_JSON_INVALID(configFile,
+                            "1 is not valid under any of the given schemas");
+    }
+    // Invalid: test status_monitoring with property is_enabled_monitored wrong
+    // type
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"]["is_enabled_monitored"] =
+            json::array();
+        EXPECT_JSON_INVALID(configFile,
+                            "[] is not valid under any of the given schemas");
+    }
+    // Invalid: test status_monitoring with invalid property
+    {
+        json configFile = validConfigFile;
+        configFile["chassis"][0]["status_monitoring"]["is_present_monitored"] =
+            true;
+        configFile["chassis"][0]["status_monitoring"]["foo"] = true;
+        EXPECT_JSON_INVALID(
+            configFile,
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+}
 
 TEST(ValidateRegulatorsConfigTest, StringWithVariables)
 {
@@ -3309,7 +3413,7 @@ TEST(ValidateRegulatorsConfigTest, TemplateVariableValues)
     // Invalid: test template_variable_values with empty object
     {
         json configFile = validConfigFile;
-        configFile["chassis"][0]["template_variable_values"] = json::object();
+        configFile["chassis"][1]["template_variable_values"] = json::object();
         EXPECT_JSON_INVALID(configFile, "{} does not have enough properties");
     }
     // Invalid: test template_variable_values with variable name containing
