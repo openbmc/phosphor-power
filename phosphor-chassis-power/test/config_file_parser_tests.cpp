@@ -408,7 +408,7 @@ TEST(ConfigFileParserTests, ParseChassisArray)
 
 TEST(ConfigFileParserTests, ParseGPIOs)
 {
-    // Test where works: All required properties specified
+    // Test where works: All required properties specified (no default)
     {
         const json element = R"(
             {
@@ -421,9 +421,10 @@ TEST(ConfigFileParserTests, ParseGPIOs)
         EXPECT_EQ(gpio->getName(), "presence-chassis1");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
+        EXPECT_FALSE(gpio->getDefaultValue().has_value());
     }
 
-    // Test where works: Output direction and High polarity
+    // Test where works: Output direction and High polarity (no default)
     {
         const json element = R"(
             {
@@ -436,6 +437,62 @@ TEST(ConfigFileParserTests, ParseGPIOs)
         EXPECT_EQ(gpio->getName(), "power-chassis1-standby-fault-reset");
         EXPECT_EQ(gpio->getDirection(), GpioDirection::Output);
         EXPECT_EQ(gpio->getPolarity(), GpioPolarity::High);
+        EXPECT_FALSE(gpio->getDefaultValue().has_value());
+    }
+
+    // Test where works: Input direction, and Default property with Low value
+    {
+        const json element = R"(
+            {
+              "Name": "presence-chassis1",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": 0
+            }
+        )"_json;
+        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        EXPECT_EQ(gpio->getName(), "presence-chassis1");
+        EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
+        EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
+        EXPECT_TRUE(gpio->getDefaultValue().has_value());
+        EXPECT_EQ(gpio->getDefaultValue().value(), 0);
+    }
+
+    // Test where works: Input direction, Default property with High value
+    {
+        const json element = R"(
+            {
+              "Name": "power-fault-unlatched",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": 1
+            }
+        )"_json;
+        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        EXPECT_EQ(gpio->getName(), "power-fault-unlatched");
+        EXPECT_EQ(gpio->getDirection(), GpioDirection::Input);
+        EXPECT_EQ(gpio->getPolarity(), GpioPolarity::Low);
+        EXPECT_TRUE(gpio->getDefaultValue().has_value());
+        EXPECT_EQ(gpio->getDefaultValue().value(), 1);
+    }
+
+    // Test where fails: Output direction, Default property with High value
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "power-fault-unlatched",
+              "Direction": "Output",
+              "Polarity": "Low",
+              "Default": 1
+            }
+        )"_json;
+        std::unique_ptr<Gpio> gpio = parseGpio(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "default value not valid with output polarity");
     }
 
     // Test where fails: Element is not an object
@@ -555,6 +612,82 @@ TEST(ConfigFileParserTests, ParseGPIOs)
         EXPECT_STREQ(e.what(), "Element is not a string");
     }
 
+    // Test where fails: Default value is not a 0 or 1, it is greater
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "presence-chassis1",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": 2
+            }
+        )"_json;
+        parseGpio(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a bit value");
+    }
+
+    // Test where fails: Default value is not a 0 or 1, it is lesser
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "presence-chassis1",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": -1
+            }
+        )"_json;
+        parseGpio(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a bit value");
+    }
+
+    // Test where fails: Default value is invalid string bool true
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "presence-chassis1",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": "true"
+            }
+        )"_json;
+        parseGpio(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
+    // Test where fails: Default value is invalid string bool false.
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "presence-chassis1",
+              "Direction": "Input",
+              "Polarity": "Low",
+              "Default": "false"
+            }
+        )"_json;
+        parseGpio(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an integer");
+    }
+
     // Test where fails: Invalid property specified
     try
     {
@@ -593,7 +726,7 @@ TEST(ConfigFileParserTests, parsePresencePath)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Invalid absolute path:");
+        EXPECT_STREQ(e.what(), "Invalid absolute path");
     }
 
     // Test where fails: Element is not a string

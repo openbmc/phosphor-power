@@ -159,10 +159,28 @@ std::unique_ptr<Gpio> parseGpio(const json& element)
     GpioPolarity polarity = parsePolarity(polarityStr);
     ++propertyCount;
 
+    // Optional Default property
+    std::optional<uint8_t> defaultValue{};
+    auto defaultElement = element.find("Default");
+    if (defaultElement != element.end())
+    {
+        // Perform check to confirm only read default value on input polarity
+        if (direction == GpioDirection::Input)
+        {
+            defaultValue = parseBitValue(*defaultElement, NO_VARIABLES);
+            ++propertyCount;
+        }
+        else
+        {
+            throw std::invalid_argument{
+                "default value not valid with output polarity"};
+        }
+    }
+
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Gpio>(name, direction, polarity);
+    return std::make_unique<Gpio>(name, direction, polarity, defaultValue);
 }
 
 std::string parsePresencePath(const json& element)
@@ -176,7 +194,7 @@ std::string parsePresencePath(const json& element)
     }
     else
     {
-        throw std::invalid_argument{"Invalid absolute path:"};
+        throw std::invalid_argument{"Invalid absolute path"};
     }
 }
 

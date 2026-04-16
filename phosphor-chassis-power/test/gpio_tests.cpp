@@ -40,18 +40,60 @@ class GpioTests : public ::testing::Test
   protected:
 };
 
-TEST_F(GpioTests, GpioInputLow)
+TEST_F(GpioTests, Constructor)
 {
-    Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
-    EXPECT_EQ(gpio.getName(), "GpioName");
-    EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
-    EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
-}
+    // Test where GPIO is Input direction and Low polarity, no default value
+    {
+        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low};
+        EXPECT_EQ(gpio.getName(), "GpioName");
+        EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
+        EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
+        // Verify getDefaultValue() returns std::nullopt when no default is
+        // provided
+        EXPECT_FALSE(gpio.getDefaultValue().has_value());
+    }
 
-TEST_F(GpioTests, GpioOutputHigh)
-{
-    Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
-    EXPECT_EQ(gpio.getName(), "GpioName");
-    EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
-    EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
+    // Test where GPIO is Output direction and High polarity, no default value
+    {
+        Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::High};
+        EXPECT_EQ(gpio.getName(), "GpioName");
+        EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
+        EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
+        // Verify getDefaultValue() returns std::nullopt when no default is
+        // provided
+        EXPECT_FALSE(gpio.getDefaultValue().has_value());
+    }
+
+    // Test where default value Low
+    {
+        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::High, 0};
+        EXPECT_EQ(gpio.getName(), "GpioName");
+        EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
+        EXPECT_EQ(gpio.getPolarity(), GpioPolarity::High);
+        // Verify getDefaultValue() returns the provided default value (Low)
+        EXPECT_TRUE(gpio.getDefaultValue().has_value());
+        EXPECT_EQ(gpio.getDefaultValue().value(), 0);
+    }
+
+    // Test where default value High
+    {
+        Gpio gpio{"GpioName", GpioDirection::Output, GpioPolarity::Low, 1};
+        EXPECT_EQ(gpio.getName(), "GpioName");
+        EXPECT_EQ(gpio.getDirection(), GpioDirection::Output);
+        EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
+        // Verify getDefaultValue() returns the provided default value (High)
+        EXPECT_TRUE(gpio.getDefaultValue().has_value());
+        EXPECT_EQ(gpio.getDefaultValue().value(), 1);
+    }
+
+    // Test where default value with explicit std::nullopt
+    {
+        Gpio gpio{"GpioName", GpioDirection::Input, GpioPolarity::Low,
+                  std::nullopt};
+        EXPECT_EQ(gpio.getName(), "GpioName");
+        EXPECT_EQ(gpio.getDirection(), GpioDirection::Input);
+        EXPECT_EQ(gpio.getPolarity(), GpioPolarity::Low);
+        // Verify getDefaultValue() returns std::nullopt when explicitly passed
+        EXPECT_FALSE(gpio.getDefaultValue().has_value());
+    }
 }
