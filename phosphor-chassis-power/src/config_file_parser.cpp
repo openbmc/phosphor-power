@@ -159,10 +159,20 @@ std::unique_ptr<Gpio> parseGpio(const json& element)
     GpioPolarity polarity = parsePolarity(polarityStr);
     ++propertyCount;
 
+    // Optional Default property
+    std::optional<uint8_t> polarityDefault{};
+    auto defaultElement = element.find("Default");
+    if (defaultElement != element.end())
+    {
+        polarityDefault = parseBitValue(*defaultElement, NO_VARIABLES);
+
+        ++propertyCount;
+    }
+
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Gpio>(name, direction, polarity);
+    return std::make_unique<Gpio>(name, direction, polarity, polarityDefault);
 }
 
 std::string parsePresencePath(const json& element)
