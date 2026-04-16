@@ -16,6 +16,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -67,10 +68,13 @@ class Gpio
      * @param name unique GPIO name
      * @param direction GPIO direction
      * @param polarity GPIO polarity
+     * @param polarityDefault optional default for deglitching GPIO polarity
      */
     explicit Gpio(const std::string& name, GpioDirection direction,
-                  GpioPolarity polarity) :
-        name{name}, direction{direction}, polarity{polarity}
+                  GpioPolarity polarity,
+                  std::optional<GpioPolarity> polarityDefault = std::nullopt) :
+        name{name}, direction{direction}, polarity{polarity},
+        polarityDefault{polarityDefault}
     {}
 
     /**
@@ -103,6 +107,16 @@ class Gpio
         return polarity;
     }
 
+    /**
+     * Returns the default value of this GPIO.
+     *
+     * @return optional GPIO default polarity, or std::nullopt if not set
+     */
+    std::optional<GpioPolarity> getDefault() const
+    {
+        return polarityDefault;
+    }
+
   private:
     /**
      * Unique name of this GPIO.
@@ -118,6 +132,11 @@ class Gpio
      * Polarity of GPIO pin.
      */
     const GpioPolarity polarity{};
+
+    /**
+     * Optional default polarity of GPIO pin.
+     */
+    const std::optional<GpioPolarity> polarityDefault{};
 };
 
 } // namespace phosphor::power::chassis
