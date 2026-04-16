@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf8307ea_08250dbb",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-16T20:01:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4345422_89e5df86",
+      "revId": "af2f5314e93a861f7972749ac7593151926a96ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "471d168b_0f4173aa",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-04-16T19:41:25Z",
       "side": 1,
       "message": "Same as my other comment I would add something along the lines of it being used for previous value tracking/deglitching, vs setting the actual lines value.",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 60
+      },
+      "revId": "af2f5314e93a861f7972749ac7593151926a96ab",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27cfe53e_1d11f337",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-16T20:01:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "471d168b_0f4173aa",
       "range": {
         "startLine": 71,
         "startChar": 13,
