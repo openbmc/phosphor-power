@@ -109,7 +109,7 @@ TEST_F(ChassisTests, getGpios)
         EXPECT_EQ(chassis.getGpios().size(), 0);
     }
 
-    // Test where GPIOs were specified in constructor
+    // Test where GPIOs were specified in constructor (without default values)
     {
         // Create vector of Gpio objects
         std::vector<std::unique_ptr<Gpio>> gpios{};
@@ -130,18 +130,64 @@ TEST_F(ChassisTests, getGpios)
         const auto& chassisGpios = chassis.getGpios();
         EXPECT_EQ(chassisGpios.size(), 3);
 
-        // Verify each GPIO's properties
+        // Verify each GPIO's properties (no default values)
         EXPECT_EQ(chassisGpios[0]->getName(), "GpioName_1");
         EXPECT_EQ(chassisGpios[0]->getDirection(), GpioDirection::Input);
         EXPECT_EQ(chassisGpios[0]->getPolarity(), GpioPolarity::High);
+        EXPECT_FALSE(chassisGpios[0]->getDefaultValue().has_value());
 
         EXPECT_EQ(chassisGpios[1]->getName(), "GpioName_2");
         EXPECT_EQ(chassisGpios[1]->getDirection(), GpioDirection::Input);
         EXPECT_EQ(chassisGpios[1]->getPolarity(), GpioPolarity::Low);
+        EXPECT_FALSE(chassisGpios[1]->getDefaultValue().has_value());
 
         EXPECT_EQ(chassisGpios[2]->getName(), "GpioName_3");
         EXPECT_EQ(chassisGpios[2]->getDirection(), GpioDirection::Output);
         EXPECT_EQ(chassisGpios[2]->getPolarity(), GpioPolarity::High);
+        EXPECT_FALSE(chassisGpios[2]->getDefaultValue().has_value());
+    }
+
+    // Test where GPIOs with default values were specified in constructor
+    {
+        // Create vector of Gpio objects with default values
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+
+        gpios.emplace_back(std::make_unique<Gpio>(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low, 0));
+
+        gpios.emplace_back(
+            std::make_unique<Gpio>("power-fault-unlatched",
+                                   GpioDirection::Input, GpioPolarity::Low, 1));
+
+        gpios.emplace_back(std::make_unique<Gpio>(
+            "power-fault-reset", GpioDirection::Output, GpioPolarity::Low));
+
+        // Create Chassis
+        Chassis chassis{2, "/dev/i2c-259", std::move(gpios)};
+
+        // Verify the number of gpios
+        const auto& chassisGpios = chassis.getGpios();
+        EXPECT_EQ(chassisGpios.size(), 3);
+
+        // Verify GPIO with default Low
+        EXPECT_EQ(chassisGpios[0]->getName(), "presence-chassis1");
+        EXPECT_EQ(chassisGpios[0]->getDirection(), GpioDirection::Input);
+        EXPECT_EQ(chassisGpios[0]->getPolarity(), GpioPolarity::Low);
+        EXPECT_TRUE(chassisGpios[0]->getDefaultValue().has_value());
+        EXPECT_EQ(chassisGpios[0]->getDefaultValue().value(), 0);
+
+        // Verify GPIO with default High
+        EXPECT_EQ(chassisGpios[1]->getName(), "power-fault-unlatched");
+        EXPECT_EQ(chassisGpios[1]->getDirection(), GpioDirection::Input);
+        EXPECT_EQ(chassisGpios[1]->getPolarity(), GpioPolarity::Low);
+        EXPECT_TRUE(chassisGpios[1]->getDefaultValue().has_value());
+        EXPECT_EQ(chassisGpios[1]->getDefaultValue().value(), 1);
+
+        // Verify GPIO without default
+        EXPECT_EQ(chassisGpios[2]->getName(), "power-fault-reset");
+        EXPECT_EQ(chassisGpios[2]->getDirection(), GpioDirection::Output);
+        EXPECT_EQ(chassisGpios[2]->getPolarity(), GpioPolarity::Low);
+        EXPECT_FALSE(chassisGpios[2]->getDefaultValue().has_value());
     }
 }
 

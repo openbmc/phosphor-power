@@ -91,7 +91,8 @@ chassis. The Chassis will have the format outlined in [chassis](chassis.md).
     "PresenceGpio": {
       "Name": "presence-chassis2",
       "Direction": "Input",
-      "Polarity": "Low"
+      "Polarity": "Low",
+      "DefaultValue": 0
     }
   }
 ]
