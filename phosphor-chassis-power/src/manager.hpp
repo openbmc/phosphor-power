@@ -115,6 +115,11 @@ class Manager
     void compatibleSystemTypesNotFoundCallback();
 
     /**
+     * Callback to monitor the system.
+     */
+    void monitor();
+
+    /**
      * Finds the JSON configuration file.
      *
      * Looks for a configuration file based on the list of compatible system
@@ -162,6 +167,11 @@ class Manager
      */
     sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>
         compatibleSystemsTimer;
+
+    /**
+     * Timer that triggers periodic system monitoring.
+     */
+    sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> monitorTimer;
 
     /**
      * Object that finds the compatible system types for the current system.
