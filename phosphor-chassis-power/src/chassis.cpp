@@ -56,4 +56,128 @@ void Chassis::clearErrorHistory()
     }
 }
 
+void Chassis::monitor()
+{
+    for (const auto& gpio : gpios)
+    {
+        const std::string& name = gpio->getName();
+
+        if (!gpio->foundLine())
+        {
+            gpio->findLine();
+        }
+        else if (name.contains(presenceName))
+        {
+            if (gpio->requestRead())
+            {
+                readPresenceValue(*gpio);
+            }
+        }
+
+        else if (name.contains(faultLatchedName))
+        {
+            if (gpio->requestRead())
+            {
+                readFaultLatchedValue(*gpio);
+            }
+        }
+        else if (name.contains(faultUnlatchedName))
+        {
+            if (gpio->requestRead())
+            {
+                readFaultUnlatchedValue(*gpio);
+            }
+        }
+    }
+}
+
+void Chassis::readPresenceValue(Gpio& gpio)
+{
+    int value;
+    int previousValue;
+
+    try
+    {
+        value = gpio.getValue();
+        previousValue = gpio.getPreviousValue();
+    }
+    catch (...)
+    {
+        // Other apps will need to read this line.
+        gpio.release();
+        return;
+    }
+
+    // Get deglitched value.
+    int newPresenceValue = (value == previousValue ? value : presenceGPIOValue);
+
+    if (newPresenceValue != presenceGPIOValue)
+    {
+        // Update value
+        presenceGPIOValue = newPresenceValue;
+
+        // handle gpio change
+    }
+    // Other apps will need to read this line.
+    gpio.release();
+}
+
+void Chassis::readFaultLatchedValue(Gpio& gpio)
+{
+    int value;
+    int previousValue;
+
+    try
+    {
+        value = gpio.getValue();
+        previousValue = gpio.getPreviousValue();
+    }
+    catch (...)
+    {
+        return;
+    }
+
+    // Get deglitched value.
+    int newFaultLatchedValue =
+        (value == previousValue ? value : faultLatchedValue);
+
+    if (newFaultLatchedValue != faultLatchedValue)
+    {
+        // Update value
+        faultLatchedValue = newFaultLatchedValue;
+
+        // handle gpio change
+    }
+}
+
+void Chassis::readFaultUnlatchedValue(Gpio& gpio)
+{
+    int value;
+    int previousValue;
+
+    try
+    {
+        value = gpio.getValue();
+        previousValue = gpio.getPreviousValue();
+    }
+    catch (...)
+    {
+        return;
+    }
+
+    // Get deglitched value.
+    int newFaultUnLatchedValue =
+        (value == previousValue ? value : faultUnlatchedValue);
+
+    if (newFaultUnLatchedValue != faultUnlatchedValue)
+    {
+        // Update value
+        faultUnlatchedValue = newFaultUnLatchedValue;
+        lg2::info("Chassis {CHASSIS} fault-unlatched changed to {VALUE}",
+                  "CHASSIS", number, "VALUE", faultUnlatchedValue);
+
+        // handle gpio change
+    }
+}
+
 } // namespace phosphor::power::chassis
