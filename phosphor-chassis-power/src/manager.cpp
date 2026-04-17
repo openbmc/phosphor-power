@@ -48,6 +48,8 @@ constexpr auto chassisStateProp = "CurrentPowerState";
 
 constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{1};
 
+constexpr std::chrono::seconds monitorInterval{1};
+
 using PowerState =
     sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
@@ -57,6 +59,7 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
     compatibleSystemsTimer{
         event,
         std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
+    monitorTimer{event, std::bind(&Manager::monitor, this), monitorInterval},
     services(services)
 {
     // Start a timer to wait for compatible types.
@@ -90,6 +93,14 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
 void Manager::compatibleSystemTypesNotFoundCallback()
 {
     lg2::error("Compatible system types not found");
+}
+
+void Manager::monitor()
+{
+    if (system)
+    {
+        system->monitor();
+    }
 }
 
 void Manager::compatibleSystemTypesFound(const std::vector<std::string>& types)
