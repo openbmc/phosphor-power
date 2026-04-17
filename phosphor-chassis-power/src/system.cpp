@@ -26,6 +26,14 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
+void System::monitor()
+{
+    for (const auto& curChassis : chassis)
+    {
+        curChassis->monitor();
+    }
+}
+
 void System::clearErrorHistory()
 {
     // Clear error history for all chassis

@@ -234,3 +234,388 @@ TEST_F(ChassisTests, initializePowerSystemInputsInterface)
                   PowerSystemInputs::Status::Good);
     }
 }
+
+TEST_F(ChassisTests, Monitor)
+{
+    // Test where no GPIOs configured
+    {
+        Chassis chassis{1};
+        chassis.monitor();
+    }
+
+    // Test where GPIO line not found
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine())
+            .WillOnce(testing::Return(false));
+        EXPECT_CALL(*mockGpios[0], findLine()).WillOnce(testing::Return(true));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+    }
+
+    // Test monitoring all three GPIO types in one pass
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+
+        // Add presence GPIO
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        // Add fault-latched GPIO
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        // Add fault-unlatched GPIO
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-unlatched",
+                            GpioDirection::Input, GpioPolarity::Low)
+                .release())));
+
+        // Setup expectations for presence GPIO
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], release()).Times(1);
+
+        // Setup expectations for fault-latched GPIO
+        EXPECT_CALL(*mockGpios[1], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[1], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[1]->getName()));
+        EXPECT_CALL(*mockGpios[1], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[1], getValue()).WillOnce(testing::Return(0));
+        EXPECT_CALL(*mockGpios[1], getPreviousValue())
+            .WillOnce(testing::Return(0));
+
+        // Setup expectations for fault-unlatched GPIO
+        EXPECT_CALL(*mockGpios[2], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[2], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[2]->getName()));
+        EXPECT_CALL(*mockGpios[2], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[2], getValue()).WillOnce(testing::Return(0));
+        EXPECT_CALL(*mockGpios[2], getPreviousValue())
+            .WillOnce(testing::Return(0));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+        gpios.push_back(std::move(mockGpios[1]));
+        gpios.push_back(std::move(mockGpios[2]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+
+        EXPECT_EQ(chassis.getPresenceGPIO(), 1);
+        EXPECT_EQ(chassis.getFaultLatched(), 0);
+        EXPECT_EQ(chassis.getFaultUnlatched(), 0);
+    }
+}
+
+TEST_F(ChassisTests, ReadPresenceValue)
+{
+    // Test where value matches previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], release()).Times(1);
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIO(), 1);
+    }
+
+    // Test where value != previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0));
+        EXPECT_CALL(*mockGpios[0], release()).Times(1);
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIO(), 0);
+    }
+
+    // Test where value changes on first read and is accepted on second read
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .Times(2)
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue())
+            .Times(2)
+            .WillRepeatedly(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0))
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], release()).Times(2);
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIO(), 0);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIO(), 1);
+    }
+}
+
+TEST_F(ChassisTests, ReadFaultLatchedValue)
+{
+    // Test where value matches previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(1));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultLatched(), 1);
+    }
+
+    // Test where value != previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultLatched(), 0);
+    }
+
+    // Test where value changes on first read and is accepted on second read
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .Times(2)
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue())
+            .Times(2)
+            .WillRepeatedly(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0))
+            .WillOnce(testing::Return(1));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultLatched(), 0);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultLatched(), 1);
+    }
+}
+
+TEST_F(ChassisTests, ReadFaultUnlatchedValue)
+{
+    // Test where value matches previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-unlatched",
+                            GpioDirection::Input, GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(1));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultUnlatched(), 1);
+    }
+
+    // Test where value != previousValue
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-unlatched",
+                            GpioDirection::Input, GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine()).WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue()).WillOnce(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultUnlatched(), 0);
+    }
+
+    // Test where value changes on first read and is accepted on second read
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<MockGpio>> mockGpios{};
+        mockGpios.emplace_back(std::unique_ptr<MockGpio>(static_cast<MockGpio*>(
+            services
+                .createGPIO("power-chs1-sb-fault-unlatched",
+                            GpioDirection::Input, GpioPolarity::Low)
+                .release())));
+
+        EXPECT_CALL(*mockGpios[0], foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getName())
+            .WillRepeatedly(testing::ReturnRef(mockGpios[0]->getName()));
+        EXPECT_CALL(*mockGpios[0], requestRead())
+            .Times(2)
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(*mockGpios[0], getValue())
+            .Times(2)
+            .WillRepeatedly(testing::Return(1));
+        EXPECT_CALL(*mockGpios[0], getPreviousValue())
+            .WillOnce(testing::Return(0))
+            .WillOnce(testing::Return(1));
+
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.push_back(std::move(mockGpios[0]));
+
+        Chassis chassis{1, std::nullopt, std::move(gpios)};
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultUnlatched(), 0);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getFaultUnlatched(), 1);
+    }
+}
