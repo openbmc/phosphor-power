@@ -17,6 +17,7 @@
 
 #include "chassis_power_system_interface.hpp"
 #include "gpio.hpp"
+#include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -112,6 +113,36 @@ class Chassis
     }
 
     /**
+     * Returns the cached presence GPIO value for this chassis.
+     *
+     * @return presence GPIO value
+     */
+    std::optional<int> getPresenceGPIOValue() const
+    {
+        return presenceGPIOValue;
+    }
+
+    /**
+     * Returns the cached latched fault state for this chassis.
+     *
+     * @return latched fault GPIO value
+     */
+    std::optional<int> getFaultLatched() const
+    {
+        return faultLatchedValue;
+    }
+
+    /**
+     * Returns the cached unlatched fault state for this chassis.
+     *
+     * @return unlatched fault GPIO value
+     */
+    std::optional<int> getFaultUnlatched() const
+    {
+        return faultUnlatchedValue;
+    }
+
+    /**
      * Initialize the PowerSystemInputs D-Bus interface for this chassis.
      *
      * @param bus D-Bus bus object
@@ -119,6 +150,12 @@ class Chassis
      * @return true if interface was created and set, false otherwise
      */
     bool initializePowerSystemInputsInterface(sdbusplus::bus_t& bus);
+
+    /**
+     * Monitors the status of the chassis.
+     *
+     */
+    void monitor();
 
     /**
      * Returns the PowerSystemInputs D-Bus interface for this chassis.
@@ -140,6 +177,17 @@ class Chassis
 
   private:
     /**
+     * Reads the current and previous GPIO values, applies deglitching logic,
+     * and updates the cached value if it has changed.
+     *
+     * @param gpio GPIO object to read from
+     * @param gpioValue Reference to the cached GPIO value to update
+     *
+     * @return true if the GPIO value changed, false otherwise
+     */
+    bool gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue);
+
+    /**
      * Chassis number within the system.
      *
      * Chassis numbers start at 1 because chassis 0 represents the entire
@@ -158,6 +206,36 @@ class Chassis
      * The vector contains GPIO objects to perform operations.
      */
     std::vector<std::unique_ptr<Gpio>> gpios{};
+
+    /**
+     * Cached presence GPIO value for this chassis.
+     */
+    std::optional<int> presenceGPIOValue{};
+
+    /**
+     * Cached latched fault state for this chassis.
+     */
+    std::optional<int> faultLatchedValue{};
+
+    /**
+     * Cached unlatched fault state for this chassis.
+     */
+    std::optional<int> faultUnlatchedValue{};
+
+    /**
+     * Substring used to identify chassis presence GPIOs by name.
+     */
+    static constexpr std::string_view presenceName{"presence-chassis"};
+
+    /**
+     * Substring used to identify latched fault GPIOs by name.
+     */
+    static constexpr std::string_view faultLatchedName{"fault-latched"};
+
+    /**
+     * Substring used to identify unlatched fault GPIOs by name.
+     */
+    static constexpr std::string_view faultUnlatchedName{"fault-unlatched"};
 
     /**
      * D-Bus PowerSystemInputs interface for this chassis.

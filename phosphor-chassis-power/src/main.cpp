@@ -27,7 +27,7 @@ int main()
     }
     catch (const std::exception& e)
     {
-        lg2::error("Application failed: {ERROR}", "ERROR", e.what());
+        lg2::error("Application failed: {ERROR}", "ERROR", e);
         return 1;
     }
 }
