@@ -56,4 +56,119 @@ void Chassis::clearErrorHistory()
     }
 }
 
+void Chassis::monitor()
+{
+    for (const auto& gpio : gpios)
+    {
+        const std::string& name = gpio->getName();
+
+        if (!gpio->foundLine())
+        {
+            if (!gpio->findLine())
+            {
+                continue;
+            }
+        }
+
+        bool changed = false;
+
+        if (name.contains(presenceName))
+        {
+            if (gpio->requestRead())
+            {
+                try
+                {
+                    changed = gpioValueChanged(*gpio, presenceGPIOValue);
+                }
+                catch (...)
+                {
+                    // gpio read fail, handle presence change
+                }
+
+                if (changed)
+                {
+                    // Handle presence change
+                }
+                // Other apps will need to read this line.
+                gpio->release();
+            }
+        }
+        else if (name.contains(faultLatchedName))
+        {
+            if (gpio->requestRead())
+            {
+                try
+                {
+                    changed = gpioValueChanged(*gpio, faultLatchedValue);
+                }
+                catch (...)
+                {
+                    // Handle gpio read fail
+                }
+
+                if (changed)
+                {
+                    // Handle fault latched change
+                }
+            }
+        }
+        else if (name.contains(faultUnlatchedName))
+        {
+            if (gpio->requestRead())
+            {
+                try
+                {
+                    changed = gpioValueChanged(*gpio, faultUnlatchedValue);
+                }
+                catch (...)
+                {
+                    // Handle gpio read fail
+                }
+
+                if (changed)
+                {
+                    // Handle fault unlatched change
+                }
+            }
+        }
+    }
+}
+
+bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
+{
+    int value;
+    int previousValue;
+
+    value = gpio.getValue();
+
+    try
+    {
+        previousValue = gpio.getPreviousValue();
+    }
+    catch (...)
+    {
+        // No previous value available, use current value as new value
+        if (value != gpioValue)
+        {
+            gpioValue = value;
+            return true;
+        }
+        return false;
+    }
+
+    // Get deglitched value: use current if it matches previous,
+    // otherwise keep the cached value
+    int newGPIOValue =
+        (value == previousValue) ? value : gpioValue.value_or(value);
+
+    if (newGPIOValue != gpioValue)
+    {
+        // Update value
+        gpioValue = newGPIOValue;
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace phosphor::power::chassis
