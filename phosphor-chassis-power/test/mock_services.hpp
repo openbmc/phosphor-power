@@ -43,8 +43,8 @@ class MockServices : public Services
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
         std::optional<uint8_t> defaultValue = std::nullopt) override
     {
-        return std::make_unique<MockGpio>(name, direction, polarity,
-                                          defaultValue);
+        return std::make_unique<testing::NiceMock<MockGpio>>(
+            name, direction, polarity, defaultValue);
     }
 };
 

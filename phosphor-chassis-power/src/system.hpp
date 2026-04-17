@@ -76,6 +76,11 @@ class System
      */
     void clearErrorHistory();
 
+    /**
+     * Monitors the status of all chassis.
+     */
+    void monitor();
+
   private:
     /**
      * Chassis in the system.
