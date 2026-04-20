@@ -17,6 +17,7 @@
 
 #include "error_logging.hpp"
 #include "journal.hpp"
+#include "mock_chassis_status_monitor.hpp"
 #include "mock_error_logging.hpp"
 #include "mock_journal.hpp"
 #include "mock_presence_service.hpp"
@@ -27,10 +28,18 @@
 #include "services.hpp"
 #include "vpd.hpp"
 
+#include <stddef.h> // for size_t
+
 #include <sdbusplus/bus.hpp>
+
+#include <memory>
+#include <string>
 
 namespace phosphor::power::regulators
 {
+
+using MockChassisStatusMonitor =
+    phosphor::power::util::MockChassisStatusMonitor;
 
 /**
  * @class MockServices
@@ -82,6 +91,13 @@ class MockServices : public Services
     virtual VPD& getVPD() override
     {
         return vpd;
+    }
+
+    /** @copydoc Services::createChassisStatusMonitor() */
+    virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t, const std::string&, const ChassisStatusMonitorOptions&) override
+    {
+        return std::make_unique<MockChassisStatusMonitor>();
     }
 
     /**

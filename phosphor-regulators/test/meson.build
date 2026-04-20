@@ -1,6 +1,7 @@
 phosphor_regulators_tests_include_directories = include_directories(
     '.',
     'actions',
+    '../../test',
 )
 
 phosphor_regulators_tests_source_files = [

@@ -15,6 +15,7 @@
  */
 #pragma once
 
+#include "chassis_status_monitor.hpp"
 #include "dbus_sensors.hpp"
 #include "error_logging.hpp"
 #include "journal.hpp"
@@ -22,10 +23,20 @@
 #include "sensors.hpp"
 #include "vpd.hpp"
 
+#include <stddef.h> // for size_t
+
 #include <sdbusplus/bus.hpp>
+
+#include <memory>
+#include <string>
 
 namespace phosphor::power::regulators
 {
+
+using ChassisStatusMonitorOptions =
+    phosphor::power::util::ChassisStatusMonitorOptions;
+using ChassisStatusMonitor = phosphor::power::util::ChassisStatusMonitor;
+using BMCChassisStatusMonitor = phosphor::power::util::BMCChassisStatusMonitor;
 
 /**
  * @class Services
@@ -88,6 +99,19 @@ class Services
      * @return hardware VPD interface
      */
     virtual VPD& getVPD() = 0;
+
+    /**
+     * Creates object for monitoring the status of a chassis using D-Bus
+     * properties.
+     *
+     * @param number Chassis number within the system. Must be >= 1.
+     * @param inventoryPath D-Bus inventory path of the chassis.
+     * @param options Options that specify what types of monitoring are enabled.
+     * @return ChassisStatusMonitor object
+     */
+    virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t number, const std::string& inventoryPath,
+        const ChassisStatusMonitorOptions& options) = 0;
 };
 
 /**
@@ -150,6 +174,15 @@ class BMCServices : public Services
     virtual VPD& getVPD() override
     {
         return vpd;
+    }
+
+    /** @copydoc Services::createChassisStatusMonitor() */
+    virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t number, const std::string& inventoryPath,
+        const ChassisStatusMonitorOptions& options) override
+    {
+        return std::make_unique<BMCChassisStatusMonitor>(
+            bus, number, inventoryPath, options);
     }
 
   private:
