@@ -55,6 +55,22 @@ using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
 
+/**
+ * Returns the MockChassisStatusMonitor within a Chassis.
+ *
+ * Assumes that initializeMonitoring() has been called with a MockServices
+ * parameter.
+ *
+ * Throws an exception if initializeMonitoring() has not been called.
+ *
+ * @param chassis Chassis object
+ * @return MockChassisStatusMonitor reference
+ */
+MockChassisStatusMonitor& getMockStatusMonitor(Chassis& chassis)
+{
+    return static_cast<MockChassisStatusMonitor&>(chassis.getStatusMonitor());
+}
+
 class ChassisTests : public ::testing::Test
 {
   public:
@@ -88,6 +104,7 @@ TEST_F(ChassisTests, Constructor)
         EXPECT_FALSE(chassis.getMonitorOptions().isPresentMonitored);
         EXPECT_FALSE(chassis.getMonitorOptions().isAvailableMonitored);
         EXPECT_FALSE(chassis.getMonitorOptions().isEnabledMonitored);
+        EXPECT_TRUE(chassis.getMonitorOptions().isPowerStateMonitored);
         EXPECT_TRUE(chassis.getMonitorOptions().isPowerGoodMonitored);
     }
 
@@ -112,6 +129,7 @@ TEST_F(ChassisTests, Constructor)
         EXPECT_TRUE(chassis.getMonitorOptions().isPresentMonitored);
         EXPECT_TRUE(chassis.getMonitorOptions().isAvailableMonitored);
         EXPECT_FALSE(chassis.getMonitorOptions().isEnabledMonitored);
+        EXPECT_TRUE(chassis.getMonitorOptions().isPowerStateMonitored);
         EXPECT_TRUE(chassis.getMonitorOptions().isPowerGoodMonitored);
     }
 
@@ -608,6 +626,267 @@ TEST_F(ChassisTests, GetNumber)
 {
     Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
     EXPECT_EQ(chassis.getNumber(), 3);
+}
+
+TEST_F(ChassisTests, GetStatusMonitor)
+{
+    Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+    // Test where fails: Monitoring not initialized
+    {
+        try
+        {
+            chassis.getStatusMonitor();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 2");
+        }
+    }
+
+    // Test where works
+    {
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        ChassisStatusMonitor& monitor = chassis.getStatusMonitor();
+        MockChassisStatusMonitor& mockMonitor =
+            static_cast<MockChassisStatusMonitor&>(monitor);
+        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
+        EXPECT_TRUE(chassis.isPresent());
+    }
+}
+
+TEST_F(ChassisTests, InitializeMonitoring)
+{
+    Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+    EXPECT_THROW(chassis.getStatusMonitor(), std::runtime_error);
+    MockServices services{};
+    chassis.initializeMonitoring(services);
+    EXPECT_NO_THROW(chassis.getStatusMonitor());
+}
+
+TEST_F(ChassisTests, IsAvailable)
+{
+    // Test where works
+    {
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isAvailable())
+            .WillOnce(Return(true))
+            .WillOnce(Return(false));
+
+        EXPECT_TRUE(chassis.isAvailable());
+        EXPECT_FALSE(chassis.isAvailable());
+    }
+
+    // Test where fails: Monitoring has not been initialized
+    {
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+        try
+        {
+            chassis.isAvailable();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 2");
+        }
+    }
+
+    // Test where fails: ChassisStatusMonitor throws an exception
+    {
+        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isAvailable())
+            .WillOnce(
+                Throw(std::runtime_error{"Available property value could not "
+                                         "be obtained."}));
+
+        try
+        {
+            chassis.isAvailable();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Available property value could not be obtained.");
+        }
+    }
+}
+
+TEST_F(ChassisTests, IsEnabled)
+{
+    // Test where works
+    {
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isEnabled())
+            .WillOnce(Return(false))
+            .WillOnce(Return(true));
+
+        EXPECT_FALSE(chassis.isEnabled());
+        EXPECT_TRUE(chassis.isEnabled());
+    }
+
+    // Test where fails: Monitoring has not been initialized
+    {
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+        try
+        {
+            chassis.isEnabled();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 2");
+        }
+    }
+
+    // Test where fails: ChassisStatusMonitor throws an exception
+    {
+        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isEnabled())
+            .WillOnce(
+                Throw(std::runtime_error{"Enabled property value could not be "
+                                         "obtained."}));
+
+        try
+        {
+            chassis.isEnabled();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Enabled property value could not be obtained.");
+        }
+    }
+}
+
+TEST_F(ChassisTests, IsPoweredOn)
+{
+    // Test where works
+    {
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isPoweredOn())
+            .WillOnce(Return(true))
+            .WillOnce(Return(false));
+
+        EXPECT_TRUE(chassis.isPoweredOn());
+        EXPECT_FALSE(chassis.isPoweredOn());
+    }
+
+    // Test where fails: Monitoring has not been initialized
+    {
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+        try
+        {
+            chassis.isPoweredOn();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 2");
+        }
+    }
+
+    // Test where fails: ChassisStatusMonitor throws an exception
+    {
+        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isPoweredOn())
+            .WillOnce(Throw(std::runtime_error{
+                "Power good property value could not be obtained."}));
+
+        try
+        {
+            chassis.isPoweredOn();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Power good property value could not be obtained.");
+        }
+    }
+}
+
+TEST_F(ChassisTests, IsPresent)
+{
+    // Test where works
+    {
+        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isPresent())
+            .WillOnce(Return(true))
+            .WillOnce(Return(false));
+
+        EXPECT_TRUE(chassis.isPresent());
+        EXPECT_FALSE(chassis.isPresent());
+    }
+
+    // Test where fails: Monitoring has not been initialized
+    {
+        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+        try
+        {
+            chassis.isPresent();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 2");
+        }
+    }
+
+    // Test where fails: ChassisStatusMonitor throws an exception
+    {
+        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
+
+        MockServices services{};
+        chassis.initializeMonitoring(services);
+        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
+        EXPECT_CALL(mockMonitor, isPresent())
+            .WillOnce(
+                Throw(std::runtime_error{"Present property value could not be "
+                                         "obtained."}));
+
+        try
+        {
+            chassis.isPresent();
+            ADD_FAILURE() << "Should not have reached this line.";
+        }
+        catch (const std::runtime_error& e)
+        {
+            EXPECT_STREQ(e.what(),
+                         "Present property value could not be obtained.");
+        }
+    }
 }
 
 TEST_F(ChassisTests, MonitorSensors)
