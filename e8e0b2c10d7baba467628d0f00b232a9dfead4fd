@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6ca94fa7_52d2429f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-04-21T23:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd414209_984e7176",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 62
+      },
+      "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fec81428_b9f98ff6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,24 @@
       "writtenOn": "2026-04-09T15:52:29Z",
       "side": 1,
       "message": "This is not used any more I think? Should be deleted?",
+      "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14119186_9116ff8d",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-04-21T23:50:36Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "e1c320d9_af9b97bc",
       "revId": "e8e0b2c10d7baba467628d0f00b232a9dfead4fd",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
