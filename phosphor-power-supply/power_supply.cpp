@@ -1,7 +1,6 @@
 #include "config.h"
 
 #include "power_supply.hpp"
-
 #include "types.hpp"
 #include "util.hpp"
 
@@ -1323,8 +1322,21 @@ std::vector<AssociationTuple> PowerSupply::getSensorAssociations()
 
     associations.emplace_back("inventory", "sensors", inventoryPath);
 
-    auto chassis = getChassis(bus, inventoryPath);
-    associations.emplace_back("chassis", "all_sensors", std::move(chassis));
+    try
+    {
+        auto chassis = getChassis(bus, inventoryPath);
+        if (!chassis.empty())
+        {
+            associations.emplace_back("chassis", "all_sensors",
+                                      std::move(chassis));
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::info("getSensorAssociations - Failed to get Chassis association"
+                  " for {PATH} : {ERR}",
+                  "PATH", inventoryPath, "ERR", e);
+    }
 
     return associations;
 }
