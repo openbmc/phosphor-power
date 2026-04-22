@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32715f9e_75b5b886",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-22T14:59:59Z",
+      "side": 1,
+      "message": "Is this used? I think it can be deleted.",
+      "revId": "90719b1565a223171451f73248cb63ad4902e2e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a276b31_c4ce2b3b",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1066,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-22T14:59:59Z",
+      "side": 1,
+      "message": "You don\u0027t need the c_str() call here and line 1070. The parameter is defined as std::string rather than a `const char*` in utility.hpp. So you are causing it to have to create a new string. c_str() is needed on line 1075 since the sdbusplus API uses `const char*`.",
+      "range": {
+        "startLine": 1066,
+        "startChar": 45,
+        "endLine": 1066,
+        "endChar": 53
+      },
+      "revId": "90719b1565a223171451f73248cb63ad4902e2e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
