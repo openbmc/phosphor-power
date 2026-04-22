@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "39d2d1bb_a78784aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "401c9abe_0957b1d0",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ead0b84a_be4bfed6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -64,6 +88,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "865a87f6_200462d7",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a14b4fb_a4e59a24",
+      "range": {
+        "startLine": 15,
+        "startChar": 2,
+        "endLine": 15,
+        "endChar": 13
+      },
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c302b849_d73b5459",
@@ -77,6 +125,24 @@
       "writtenOn": "2026-04-22T15:59:52Z",
       "side": 1,
       "message": "I think we want the JSON documentation to be high level and not tightly coupled with how the C++ code works.\n\nCan we change this to something like:\n\n\u003e Default GPIO value. Only used if the first attempt to read the GPIO fails.\n\u003e Only valid for GPIOs with Direction set to \"Input\".",
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72800185_a4fb25b0",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c302b849_d73b5459",
       "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -98,6 +164,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1787633_0b7a25d2",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90447d34_59e891e4",
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "931b0087_ffc15f5e",
@@ -111,6 +195,24 @@
       "writtenOn": "2026-04-22T15:59:52Z",
       "side": 1,
       "message": "We should probably add a check here that if Default was specified, then Direction is Input. It should not be valid to have a default value for an Output GPIO. Please add a test for that too.",
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "932b3526_84be458e",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "931b0087_ffc15f5e",
       "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -138,6 +240,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17740fa8_a1469e00",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e231767c_431c8e3c",
+      "range": {
+        "startLine": 115,
+        "startChar": 27,
+        "endLine": 115,
+        "endChar": 37
+      },
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "943c1db5_fcb9ca7f",
@@ -151,6 +277,24 @@
       "writtenOn": "2026-04-22T15:59:52Z",
       "side": 1,
       "message": "Thank you for adding all these test variations.\n\nWithin the repository our goal is to have one TEST method for each public method being tested.\n\nSo could you group all of the constructor tests into one TEST named Constructor?\n\ne.g.\n```\nTEST_F(GpioTests, Constructor)\n{\n  // Test where Direction is Input, Polarity is Low, Default not specified\n  {\n    // ... details\n  }\n  \n  // Test where Direction is Output, Polarity is High, Default not specified\n  {\n    // ... details\n  }\n}\n```\n\nThe purpose of having a set of braces for each variation is it makes each one a separate scope so you can reuse the same local variable names for each variation. (e.g. you don\u0027t have to have gpio1, gpio2, ...",
+      "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f89c4a1_83a6debe",
+        "filename": "phosphor-chassis-power/test/gpio_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-22T21:06:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "943c1db5_fcb9ca7f",
       "revId": "a6ba7e290a18284fe437d9e16e74485203243378",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
