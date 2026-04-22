@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e249fde1_04a556d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-22T21:41:53Z",
+      "side": 1,
+      "message": "Looks good. Two minor comments.",
+      "revId": "35740f3087fc529b009b35fe2cdd93a157655c72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52bc193b_b2b98682",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-22T21:41:53Z",
+      "side": 1,
+      "message": "Nit: I think we want this sentence to be in the same row as the rest of the property description. Otherwise it ends up being a separate row, like an additional property with nothing specified except the Description.",
+      "revId": "35740f3087fc529b009b35fe2cdd93a157655c72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c14f4f_90bf74aa",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-22T21:41:53Z",
+      "side": 1,
+      "message": "Direction. Also, did you mean to having a trailing colon with nothing after it?",
+      "range": {
+        "startLine": 176,
+        "startChar": 53,
+        "endLine": 176,
+        "endChar": 61
+      },
+      "revId": "35740f3087fc529b009b35fe2cdd93a157655c72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
