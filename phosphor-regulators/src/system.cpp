@@ -79,6 +79,16 @@ void System::detectPhaseFaults(Services& services)
     }
 }
 
+void System::initializeMonitoring(Services& services)
+{
+    // Initialize status monitoring in all the chassis
+    for (std::unique_ptr<Chassis>& oneChassis : chassis)
+    {
+        oneChassis->initializeMonitoring(services);
+    }
+    isMonitoringInitialized = true;
+}
+
 void System::monitorSensors(Services& services)
 {
     // Monitor sensors in each chassis

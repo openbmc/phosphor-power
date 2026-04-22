@@ -333,6 +333,9 @@ void Manager::loadConfigFile()
             // System object, if any, is automatically deleted.
             system =
                 std::make_unique<System>(std::move(rules), std::move(chassis));
+
+            // Initialize system monitoring
+            system->initializeMonitoring(services);
         }
     }
     catch (const std::exception& e)

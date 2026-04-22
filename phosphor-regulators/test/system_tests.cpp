@@ -455,6 +455,33 @@ TEST(SystemTests, GetRules)
     EXPECT_EQ(system.getRules()[1]->getID(), "read_sensors_rule");
 }
 
+TEST(SystemTests, InitializeMonitoring)
+{
+    // Create Rules
+    std::vector<std::unique_ptr<Rule>> rules{};
+
+    // Create Chassis
+    std::vector<std::unique_ptr<Chassis>> chassis{};
+    chassis.emplace_back(std::make_unique<Chassis>(
+        1, chassisInvPath + '1', ChassisStatusMonitorOptions{}));
+    chassis.emplace_back(std::make_unique<Chassis>(
+        2, chassisInvPath + '2', ChassisStatusMonitorOptions{}));
+
+    // Create System
+    System system{std::move(rules), std::move(chassis)};
+
+    EXPECT_THROW(system.getChassis()[0]->getStatusMonitor(),
+                 std::runtime_error);
+    EXPECT_THROW(system.getChassis()[1]->getStatusMonitor(),
+                 std::runtime_error);
+
+    MockServices services{};
+    system.initializeMonitoring(services);
+
+    EXPECT_NO_THROW(system.getChassis()[0]->getStatusMonitor());
+    EXPECT_NO_THROW(system.getChassis()[1]->getStatusMonitor());
+}
+
 TEST(SystemTests, MonitorSensors)
 {
     // Create mock services.  Set Sensors service expectations.

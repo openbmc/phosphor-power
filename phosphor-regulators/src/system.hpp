@@ -32,8 +32,9 @@ namespace phosphor::power::regulators
  *
  * The computer system being controlled and monitored by the BMC.
  *
- * The system contains one or more chassis.  Chassis are large enclosures that
- * can be independently powered off and on by the BMC.
+ * The system contains one or more chassis. Chassis are typically physical
+ * enclosures that contain system components such as CPUs, fans, power
+ * supplies, and PCIe cards.
  */
 class System
 {
@@ -134,6 +135,19 @@ class System
     }
 
     /**
+     * Initializes system monitoring.
+     *
+     * This method must be called before any methods that return or check the
+     * system status.
+     *
+     * Normally this method is only called once. However, it can be called
+     * multiple times if required, such as for automated testing.
+     *
+     * @param services system services like error logging and the journal
+     */
+    void initializeMonitoring(Services& services);
+
+    /**
      * Monitors the sensors for the voltage rails produced by this system, if
      * any.
      *
@@ -152,6 +166,20 @@ class System
     void buildIDMap();
 
     /**
+     * Verifies that system monitoring has been initialized.
+     *
+     * Throws an exception if monitoring has not been initialized.
+     */
+    void verifyMonitoringInitialized()
+    {
+        if (!isMonitoringInitialized)
+        {
+            throw std::runtime_error{
+                "System monitoring has not been initialized"};
+        }
+    }
+
+    /**
      * Rules used to monitor and control regulators in the system.
      */
     std::vector<std::unique_ptr<Rule>> rules{};
@@ -165,6 +193,11 @@ class System
      * Mapping from string IDs to the associated Device, Rail, and Rule objects.
      */
     IDMap idMap{};
+
+    /**
+     * Indicates whether system monitoring has been initialized.
+     */
+    bool isMonitoringInitialized{false};
 };
 
 } // namespace phosphor::power::regulators
