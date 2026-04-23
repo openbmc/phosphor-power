@@ -55,6 +55,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc0a91ac_47cf72b9",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T21:03:05Z",
+      "side": 1,
+      "message": "Ah I see, yep I agree.  We\u0027ll use the default not as a default of the hw, but from the perspective of the gpio fw name.  Strike my comment from the record please.",
+      "parentUuid": "ae6c6cfb_ea0b1732",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "752cbb77_4484e13c",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T21:03:05Z",
+      "side": 1,
+      "message": "Per the logic as discussed for the \u0027presence\u0027 gpio above, this \u0027Default\u0027 should be 0 right (no fault)?",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98f3d800_459202e1",
         "filename": "phosphor-chassis-power/config_files/Huygens.json",
         "patchSetId": 8
@@ -66,6 +101,24 @@
       "writtenOn": "2026-04-23T18:47:22Z",
       "side": 1,
       "message": "I think we should default all the chassis sb fault latched to inactive (ie 1), per story 5028.",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9fcba7_30c09de0",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T21:03:05Z",
+      "side": 1,
+      "message": "As for the presence gpio above, the default should be 0 meaning \"no fault latched\".  Strike this comment as well.",
+      "parentUuid": "98f3d800_459202e1",
       "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
