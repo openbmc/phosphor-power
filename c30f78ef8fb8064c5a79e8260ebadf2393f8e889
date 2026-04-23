@@ -71,6 +71,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90707d94_bf059380",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T21:59:38Z",
+      "side": 1,
+      "message": "Done\nno change",
+      "parentUuid": "bc0a91ac_47cf72b9",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "752cbb77_4484e13c",
@@ -84,6 +102,24 @@
       "writtenOn": "2026-04-23T21:03:05Z",
       "side": 1,
       "message": "Per the logic as discussed for the \u0027presence\u0027 gpio above, this \u0027Default\u0027 should be 0 right (no fault)?",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e754913_9d7c95e4",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T21:59:38Z",
+      "side": 1,
+      "message": "Done\nChanged all FaultUnlatchedGpio to 0.",
+      "parentUuid": "752cbb77_4484e13c",
       "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -123,6 +159,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d77c0ee_596632bc",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T21:59:38Z",
+      "side": 1,
+      "message": "Done\nno change",
+      "parentUuid": "bc9fcba7_30c09de0",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "384fd09b_50a57909",
@@ -136,6 +190,24 @@
       "writtenOn": "2026-04-23T18:47:22Z",
       "side": 1,
       "message": "These are actually active high.  The hardware is implemented as \"prevent_pulse_n\", which means set the gpio to 0 to PREVENT the bmc reset.  The fw naming convention is \"reset-ENABLE\" - in other words, set to 1 to enable the bmc reset, set to 0 to prevent the bmc reset.",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89563a27_745f3f92",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T21:59:38Z",
+      "side": 1,
+      "message": "Done\nChanged all EnableSystemResetGpio\u0027s to High.",
+      "parentUuid": "384fd09b_50a57909",
       "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
