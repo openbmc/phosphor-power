@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8072f7a9_4ec9fae3",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T15:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67728665_230342cb",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "956d705bbae4abbee1196413f3c20ffab0cdab4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d76b3107_910b36e7",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-04-23T13:56:40Z",
       "side": 1,
       "message": "Still says polarity instead of Direction.",
+      "range": {
+        "startLine": 176,
+        "startChar": 53,
+        "endLine": 176,
+        "endChar": 61
+      },
+      "revId": "956d705bbae4abbee1196413f3c20ffab0cdab4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8969a9_682b82b4",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T15:17:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d76b3107_910b36e7",
       "range": {
         "startLine": 176,
         "startChar": 53,
