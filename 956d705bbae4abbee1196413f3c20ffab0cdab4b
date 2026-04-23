@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67728665_230342cb",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-23T13:56:40Z",
+      "side": 1,
+      "message": "Default.\n\nIf you want to rename, it should match case of others and be DefaultValue.\n\nAlso, sorry I didn\u0027t think of this earlier, but it should probably say \"Default GPIO value (0 or 1)\" at the beginning of the Description to state the valid possible values.",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "956d705bbae4abbee1196413f3c20ffab0cdab4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d76b3107_910b36e7",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-04-23T13:56:40Z",
+      "side": 1,
+      "message": "Still says polarity instead of Direction.",
+      "range": {
+        "startLine": 176,
+        "startChar": 53,
+        "endLine": 176,
+        "endChar": 61
+      },
+      "revId": "956d705bbae4abbee1196413f3c20ffab0cdab4b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
