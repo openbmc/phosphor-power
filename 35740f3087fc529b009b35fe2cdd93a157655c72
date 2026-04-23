@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ea8a62_2ec7c3a1",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T13:22:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52bc193b_b2b98682",
+      "revId": "35740f3087fc529b009b35fe2cdd93a157655c72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16c14f4f_90bf74aa",
@@ -48,6 +66,30 @@
       "writtenOn": "2026-04-22T21:41:53Z",
       "side": 1,
       "message": "Direction. Also, did you mean to having a trailing colon with nothing after it?",
+      "range": {
+        "startLine": 176,
+        "startChar": 53,
+        "endLine": 176,
+        "endChar": 61
+      },
+      "revId": "35740f3087fc529b009b35fe2cdd93a157655c72",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d70b5fd_059a20d5",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-04-23T13:22:05Z",
+      "side": 1,
+      "message": "Done\nFixed all cases inside PCP.",
+      "parentUuid": "16c14f4f_90bf74aa",
       "range": {
         "startLine": 176,
         "startChar": 53,
