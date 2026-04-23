@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dab9bb3_00d433a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T18:47:22Z",
+      "side": 1,
+      "message": "i think 3 default or polarity changes are needed...",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d91919_43fd3373",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T18:47:22Z",
+      "side": 1,
+      "message": "I think we should default all the chassis to missing (ie 1), per story 5026.",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98f3d800_459202e1",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T18:47:22Z",
+      "side": 1,
+      "message": "I think we should default all the chassis sb fault latched to inactive (ie 1), per story 5028.",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384fd09b_50a57909",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-04-23T18:47:22Z",
+      "side": 1,
+      "message": "These are actually active high.  The hardware is implemented as \"prevent_pulse_n\", which means set the gpio to 0 to PREVENT the bmc reset.  The fw naming convention is \"reset-ENABLE\" - in other words, set to 1 to enable the bmc reset, set to 0 to prevent the bmc reset.",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
