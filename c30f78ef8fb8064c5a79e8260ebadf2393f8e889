@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae6c6cfb_ea0b1732",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-23T20:03:21Z",
+      "side": 1,
+      "message": "Since the gpios can be configured with the polarity, would it make sense to keep this as 0? As the reset of the code would be able to treat 0 as missing and 1 as present not seeing what happens in the background in gpio.",
+      "parentUuid": "43d91919_43fd3373",
+      "revId": "c30f78ef8fb8064c5a79e8260ebadf2393f8e889",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98f3d800_459202e1",
         "filename": "phosphor-chassis-power/config_files/Huygens.json",
         "patchSetId": 8
