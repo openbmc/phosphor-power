@@ -424,7 +424,7 @@ void Updater::createServiceableEventLog(
 
         bus.call(method);
     }
-    catch (const sdbusplus::exception::SdBusError& e)
+    catch (const sdbusplus::exception::internal_exception& e)
     {
         lg2::error(
             "Failed creating event log for fault {ERROR_NAME}, error {ERR}",
