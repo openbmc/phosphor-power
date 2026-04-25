@@ -20,6 +20,7 @@
 #include "device.hpp"
 #include "i2c_interface.hpp"
 #include "mock_action.hpp"
+#include "mock_chassis_status_monitor.hpp"
 #include "phase_fault_detection.hpp"
 #include "presence_detection.hpp"
 #include "rail.hpp"
@@ -31,6 +32,11 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+using MockChassisStatusMonitor =
+    phosphor::power::util::MockChassisStatusMonitor;
+
+using ::testing::Return;
 
 namespace phosphor::power::regulators::test_utils
 {
@@ -133,6 +139,37 @@ inline void makeFileRemovable(const fs::path& path)
     // Rename the file back to the original path to restore its contents
     fs::path savePath{path.native() + ".save"};
     fs::rename(savePath, path);
+}
+
+/**
+ * Returns the MockChassisStatusMonitor within a Chassis.
+ *
+ * Assumes that initializeMonitoring() has been called with a MockServices
+ * parameter.
+ *
+ * Throws an exception if initializeMonitoring() has not been called.
+ *
+ * @param chassis Chassis object
+ * @return MockChassisStatusMonitor reference
+ */
+inline MockChassisStatusMonitor& getMockStatusMonitor(Chassis& chassis)
+{
+    return static_cast<MockChassisStatusMonitor&>(chassis.getStatusMonitor());
+}
+
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * properties.
+ *
+ * @param chassis Chassis object
+ */
+inline void setChassisStatusToGood(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPoweredOn).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
 }
 
 } // namespace phosphor::power::regulators::test_utils

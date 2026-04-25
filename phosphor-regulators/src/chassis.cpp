@@ -29,6 +29,93 @@ void Chassis::addToIDMap(IDMap& idMap)
         device->addToIDMap(idMap);
     }
 }
+bool Chassis::canCloseDevices(Services& services)
+{
+    bool canClose{true};
+
+    try
+    {
+        if (!isPresent() || !isAvailable())
+        {
+            canClose = false;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Log error message, but try to close devices anyway since we don't
+        // know the chassis status
+        services.getJournal().logError(std::format(
+            "Unable to determine status of chassis {}: {}", number, e.what()));
+    }
+
+    return canClose;
+}
+
+bool Chassis::canConfigure(Services& services)
+{
+    try
+    {
+        if (!isPresent())
+        {
+            services.getJournal().logInfo(std::format(
+                "Unable to configure chassis {}: Chassis is not present",
+                number));
+            return false;
+        }
+
+        if (!isEnabled())
+        {
+            services.getJournal().logInfo(std::format(
+                "Unable to configure chassis {}: Chassis is not enabled",
+                number));
+            return false;
+        }
+
+        if (!isAvailable())
+        {
+            services.getJournal().logInfo(std::format(
+                "Unable to configure chassis {}: Chassis is not available",
+                number));
+            return false;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        services.getJournal().logError(std::format(
+            "Unable to configure chassis {}: {}", number, e.what()));
+        return false;
+    }
+
+    return true;
+}
+
+bool Chassis::canMonitor(Services& services)
+{
+    bool canMonitor{false};
+
+    try
+    {
+        if (isPresent() && isPoweredOn() && isAvailable())
+        {
+            canMonitor = true;
+        }
+
+        // Clear error count since we were able to determine the chassis status
+        statusErrorCount = 0;
+    }
+    catch (const std::exception& e)
+    {
+        if (statusErrorCount < maxStatusErrorCount)
+        {
+            ++statusErrorCount;
+            services.getJournal().logError(
+                std::format("Unable to determine status of chassis {}: {}",
+                            number, e.what()));
+        }
+    }
+
+    return canMonitor;
+}
 
 void Chassis::clearCache()
 {
@@ -41,6 +128,8 @@ void Chassis::clearCache()
 
 void Chassis::clearErrorHistory()
 {
+    statusErrorCount = 0;
+
     // Clear error history in each device
     for (std::unique_ptr<Device>& device : devices)
     {
@@ -50,6 +139,11 @@ void Chassis::clearErrorHistory()
 
 void Chassis::closeDevices(Services& services)
 {
+    if (!canCloseDevices(services))
+    {
+        return;
+    }
+
     // Log debug message in journal
     services.getJournal().logDebug(
         "Closing devices in chassis " + std::to_string(number));
@@ -63,6 +157,11 @@ void Chassis::closeDevices(Services& services)
 
 void Chassis::configure(Services& services, System& system)
 {
+    if (!canConfigure(services))
+    {
+        return;
+    }
+
     // Log info message in journal; important for verifying success of boot
     services.getJournal().logInfo(
         "Configuring chassis " + std::to_string(number));
@@ -76,6 +175,11 @@ void Chassis::configure(Services& services, System& system)
 
 void Chassis::detectPhaseFaults(Services& services, System& system)
 {
+    if (!canMonitor(services))
+    {
+        return;
+    }
+
     // Detect phase faults in each device
     for (std::unique_ptr<Device>& device : devices)
     {
@@ -85,6 +189,11 @@ void Chassis::detectPhaseFaults(Services& services, System& system)
 
 void Chassis::monitorSensors(Services& services, System& system)
 {
+    if (!canMonitor(services))
+    {
+        return;
+    }
+
     // Monitor sensors in each device
     for (std::unique_ptr<Device>& device : devices)
     {
