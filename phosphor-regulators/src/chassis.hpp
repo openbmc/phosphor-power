@@ -101,6 +101,39 @@ class Chassis
     void addToIDMap(IDMap& idMap);
 
     /**
+     * Returns whether the devices in this chassis can be closed.
+     *
+     * If the chassis status is not valid, such as not present, then the devices
+     * cannot be closed.
+     *
+     * @param services system services like error logging and the journal
+     * @return true if devices can be closed, false otherwise
+     */
+    bool canCloseDevices(Services& services);
+
+    /**
+     * Returns whether the devices in this chassis can be configured.
+     *
+     * If the chassis status is not valid, such as not present, then the devices
+     * cannot be configured.
+     *
+     * @param services system services like error logging and the journal
+     * @return true if devices can be configured, false otherwise
+     */
+    bool canConfigure(Services& services);
+
+    /**
+     * Returns whether the devices in this chassis can be monitored.
+     *
+     * If the chassis status is not valid, such as not present, then the devices
+     * cannot be monitored.
+     *
+     * @param services system services like error logging and the journal
+     * @return true if devices can be monitored, false otherwise
+     */
+    bool canMonitor(Services& services);
+
+    /**
      * Clear any cached data about hardware devices.
      */
     void clearCache();
@@ -335,17 +368,29 @@ class Chassis
     ChassisStatusMonitorOptions monitorOptions{};
 
     /**
-     * Monitors the chassis status using D-Bus properties.
-     */
-    std::unique_ptr<ChassisStatusMonitor> statusMonitor{};
-
-    /**
      * Devices within this chassis, if any.
      *
      * The vector contains regulator devices and any related devices
      * required to perform regulator operations.
      */
     std::vector<std::unique_ptr<Device>> devices{};
+
+    /**
+     * Monitors the chassis status using D-Bus properties.
+     */
+    std::unique_ptr<ChassisStatusMonitor> statusMonitor{};
+
+    /**
+     * Maximum number of consecutive errors to count when obtaining chassis
+     * status.
+     */
+    static constexpr uint8_t maxStatusErrorCount{3};
+
+    /**
+     * Number of consecutive errors that have occurred when obtaining chassis
+     * status.
+     */
+    uint8_t statusErrorCount{0};
 };
 
 } // namespace phosphor::power::regulators

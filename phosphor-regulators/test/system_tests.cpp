@@ -15,10 +15,8 @@
  */
 #include "action.hpp"
 #include "chassis.hpp"
-#include "chassis_status_monitor.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
-#include "i2c_interface.hpp"
 #include "id_map.hpp"
 #include "log_phase_fault_action.hpp"
 #include "mock_action.hpp"
@@ -33,7 +31,6 @@
 #include "rail.hpp"
 #include "rule.hpp"
 #include "sensor_monitoring.hpp"
-#include "sensors.hpp"
 #include "services.hpp"
 #include "system.hpp"
 #include "test_sdbus_error.hpp"
@@ -58,6 +55,20 @@ using ::testing::TypedEq;
 
 static const std::string chassisInvPath{
     "/xyz/openbmc_project/inventory/system/chassis"};
+
+/**
+ * Sets up the MockChassisStatusMonitor for all Chassis in a System to
+ * repeatedly return good status for all properties.
+ *
+ * @param system System object
+ */
+void setAllChassisStatusToGood(System& system)
+{
+    for (auto& chassis : system.getChassis())
+    {
+        setChassisStatusToGood(*chassis);
+    }
+}
 
 TEST(SystemTests, Constructor)
 {
@@ -169,7 +180,11 @@ TEST(SystemTests, ClearErrorHistory)
 
     // Create lambda that sets MockServices expectations.  The lambda allows
     // us to set expectations multiple times without duplicate code.
-    auto setExpectations = [](MockServices& services) {
+    auto setExpectations = [&system](MockServices& services) {
+        // Initialize monitoring and set all chassis status to good
+        system.initializeMonitoring(services);
+        setAllChassisStatusToGood(system);
+
         // Expect Sensors service to be called 10 times
         MockSensors& sensors = services.getMockSensors();
         EXPECT_CALL(sensors, startRail).Times(10);
@@ -238,6 +253,10 @@ TEST(SystemTests, CloseDevices)
     // Create System
     System system{std::move(rules), std::move(chassis)};
 
+    // Initialize monitoring and set all chassis status to good
+    system.initializeMonitoring(services);
+    setAllChassisStatusToGood(system);
+
     // Call closeDevices()
     system.closeDevices(services);
 }
@@ -264,6 +283,10 @@ TEST(SystemTests, Configure)
 
     // Create System
     System system{std::move(rules), std::move(chassis)};
+
+    // Initialize monitoring and set all chassis status to good
+    system.initializeMonitoring(services);
+    setAllChassisStatusToGood(system);
 
     // Call configure()
     system.configure(services);
@@ -356,6 +379,10 @@ TEST(SystemTests, DetectPhaseFaults)
     // Create System that contains Chassis
     std::vector<std::unique_ptr<Rule>> rules{};
     System system{std::move(rules), std::move(chassisVec)};
+
+    // Initialize monitoring and set all chassis status to good
+    system.initializeMonitoring(services);
+    setAllChassisStatusToGood(system);
 
     // Call detectPhaseFaults() 5 times
     for (int i = 1; i <= 5; ++i)
@@ -583,6 +610,10 @@ TEST(SystemTests, MonitorSensors)
     // Create System that contains Chassis
     std::vector<std::unique_ptr<Rule>> rules{};
     System system{std::move(rules), std::move(chassisVec)};
+
+    // Initialize monitoring and set all chassis status to good
+    system.initializeMonitoring(services);
+    setAllChassisStatusToGood(system);
 
     // Call monitorSensors()
     system.monitorSensors(services);
