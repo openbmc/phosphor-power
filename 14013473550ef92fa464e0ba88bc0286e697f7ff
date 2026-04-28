@@ -22,6 +22,29 @@
       },
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dea0aae8_1a5729c1",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-04-28T21:02:07Z",
+      "side": 1,
+      "message": "will remove",
+      "range": {
+        "startLine": 107,
+        "startChar": 6,
+        "endLine": 107,
+        "endChar": 67
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
