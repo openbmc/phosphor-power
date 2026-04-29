@@ -21,22 +21,67 @@
 
 #include <print>
 
-constexpr auto numChassis = 8;
+constexpr auto numProperties = 7;
 constexpr auto smallIndent = "    ";
-constexpr auto normalIndent = "       ";
-constexpr auto largeIndent = "           ";
+constexpr auto largeIndent = "       ";
 
-void dump(sdbusplus::bus_t& bus, int chassisNumber, bool isVerbose)
+/**
+ * Get the number of chassis defined in the system by querying D-Bus.
+ *
+ * @param bus D-Bus bus object
+ * @return number of chassis on the systems
+ */
+int getChassisCount(sdbusplus::bus_t& bus, bool isVerbose)
+{
+    auto service = "xyz.openbmc_project.Power.Chassis";
+    auto objectPath = "/xyz/openbmc_project/power/chassis";
+    auto interfacePath = "org.freedesktop.DBus.Introspectable";
+    try
+    {
+        auto method = bus.new_method_call(service, objectPath, interfacePath,
+                                          "Introspect");
+        auto reply = bus.call(method);
+        std::string introspectXml;
+        reply.read(introspectXml);
+
+        int count = 0;
+        size_t pos = 0;
+        while ((pos = introspectXml.find("<node name=\"chassis", pos)) !=
+               std::string::npos)
+        {
+            count++;
+            pos++;
+        }
+
+        if (count > 0)
+        {
+            return count;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        if (isVerbose)
+        {
+            std::println(stderr, "Warning: Failed to get chassis count: {}",
+                         e.what());
+        }
+    }
+    return -1;
+}
+
+void display(sdbusplus::bus_t& bus, int chassisNumber,
+             const std::map<std::string, bool>& propMap, bool isVerbose)
 {
     phosphor::power::util::ChassisStatusMonitorOptions monitorOptions{};
 
-    monitorOptions.isPresentMonitored = true;
-    monitorOptions.isAvailableMonitored = true;
-    monitorOptions.isEnabledMonitored = true;
-    monitorOptions.isPowerStateMonitored = true;
-    monitorOptions.isPowerGoodMonitored = true;
-    monitorOptions.isInputPowerStatusMonitored = true;
-    monitorOptions.isPowerSuppliesStatusMonitored = true;
+    monitorOptions.isPresentMonitored = propMap.at("Present");
+    monitorOptions.isAvailableMonitored = propMap.at("Available");
+    monitorOptions.isEnabledMonitored = propMap.at("Enabled");
+    monitorOptions.isPowerStateMonitored = propMap.at("PowerState");
+    monitorOptions.isPowerGoodMonitored = propMap.at("PowerGood");
+    monitorOptions.isInputPowerStatusMonitored = propMap.at("InputPowerStatus");
+    monitorOptions.isPowerSuppliesStatusMonitored =
+        propMap.at("PowerSupplyStatus");
 
     phosphor::power::util::BMCChassisStatusMonitor chassis(
         bus, chassisNumber,
@@ -47,200 +92,285 @@ void dump(sdbusplus::bus_t& bus, int chassisNumber, bool isVerbose)
     std::println("");
     std::println("Chassis {}", chassisNumber);
 
-    bool hadException = false;
+    if (propMap.at("Present"))
+    {
+        std::print("{}Present: ", smallIndent);
+        try
+        {
+            std::println("{}", chassis.isPresent() == 1 ? "True" : "False");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
 
-    std::print("{}Present: ", smallIndent);
-    try
-    {
-        std::println("{}", chassis.isPresent() == 1 ? "True" : "False");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
-    }
-
-    if (isVerbose)
-    {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent, chassis.getInventoryPath());
-        std::println("{}Interface: {}", indent, chassis.getPresentInterface());
-    }
-
-    hadException = false;
-
-    std::print("{}Available: ", smallIndent);
-    try
-    {
-        std::println("{}", chassis.isAvailable() == 1 ? "True" : "False");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getInventoryPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getPresentInterface());
+        }
     }
 
-    if (isVerbose)
+    if (propMap.at("Available"))
     {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent, chassis.getInventoryPath());
-        std::println("{}Interface: {}", indent,
-                     chassis.getAvailableInterface());
+        std::print("{}Available: ", smallIndent);
+        try
+        {
+            std::println("{}", chassis.isAvailable() == 1 ? "True" : "False");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
+
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getInventoryPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getAvailableInterface());
+        }
     }
 
-    hadException = false;
+    if (propMap.at("Enabled"))
+    {
+        std::print("{}Enabled: ", smallIndent);
+        try
+        {
+            std::println("{}", chassis.isEnabled() == 1 ? "True" : "False");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
 
-    std::print("{}Enabled: ", smallIndent);
-    try
-    {
-        std::println("{}", chassis.isEnabled() == 1 ? "True" : "False");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
-    }
-
-    if (isVerbose)
-    {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent, chassis.getInventoryPath());
-        std::println("{}Interface: {}", indent, chassis.getEnabledInterface());
-    }
-
-    hadException = false;
-
-    std::print("{}Power state: ", smallIndent);
-    try
-    {
-        std::println("{}",
-                     chassis.getPowerState() == 1 ? "Power On" : "Power Off");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getInventoryPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getEnabledInterface());
+        }
     }
 
-    if (isVerbose)
+    if (propMap.at("PowerState"))
     {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent,
-                     chassis.getChassisPowerPath());
-        std::println("{}Interface: {}", indent, chassis.getPowerInterface());
+        std::print("{}Power state: ", smallIndent);
+        try
+        {
+            std::println("{}", chassis.getPowerState() == 1 ? "Power On"
+                                                            : "Power Off");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
+
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getChassisPowerPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getPowerInterface());
+        }
     }
 
-    hadException = false;
+    if (propMap.at("PowerGood"))
+    {
+        std::print("{}Power Good: ", smallIndent);
+        try
+        {
+            std::println("{}", chassis.getPowerGood() == 1 ? "Powered On"
+                                                           : "Powered Off");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
 
-    std::print("{}Power Good: ", smallIndent);
-    try
-    {
-        std::println("{}", chassis.getPowerGood() == 1 ? "Powered On"
-                                                       : "Powered Off");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
-    }
-
-    if (isVerbose)
-    {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent,
-                     chassis.getChassisPowerPath());
-        std::println("{}Interface: {}", indent, chassis.getPowerInterface());
-    }
-
-    hadException = false;
-
-    std::print("{}Input Power Status: ", smallIndent);
-    try
-    {
-        std::println(
-            "{}", chassis.getInputPowerStatus() ==
-                          phosphor::power::util::PowerSystemInputs::Status::Good
-                      ? "Good"
-                      : "Fault");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getChassisPowerPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getPowerInterface());
+        }
     }
 
-    if (isVerbose)
+    if (propMap.at("InputPowerStatus"))
     {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent,
-                     chassis.getInputPowerStatusPath());
-        std::println("{}Interface: {}", indent,
-                     chassis.getPowerSystemInputsInterface());
+        std::print("{}Input Power Status: ", smallIndent);
+        try
+        {
+            std::println(
+                "{}",
+                chassis.getInputPowerStatus() ==
+                        phosphor::power::util::PowerSystemInputs::Status::Good
+                    ? "Good"
+                    : "Fault");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
+
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getInputPowerStatusPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getPowerSystemInputsInterface());
+        }
     }
 
-    hadException = false;
+    if (propMap.at("PowerSupplyStatus"))
+    {
+        std::print("{}Power Supply Status: ", smallIndent);
+        try
+        {
+            std::println(
+                "{}",
+                chassis.getPowerSuppliesStatus() ==
+                        phosphor::power::util::PowerSystemInputs::Status::Good
+                    ? "Good"
+                    : "Fault");
+        }
+        catch (const std::exception& e)
+        {
+            std::println("Unknown");
+            if (isVerbose)
+            {
+                std::println(stderr, "{}{}", largeIndent, e.what());
+            }
+        }
 
-    std::print("{}Power Supply Status: ", smallIndent);
-    try
-    {
-        std::println(
-            "{}", chassis.getPowerSuppliesStatus() ==
-                          phosphor::power::util::PowerSystemInputs::Status::Good
-                      ? "Good"
-                      : "Fault");
-    }
-    catch (const std::exception& e)
-    {
-        hadException = true;
-        std::println("Unknown");
-        std::println(stderr, "{}{}", normalIndent, e.what());
-    }
-
-    if (isVerbose)
-    {
-        std::string indent = hadException ? largeIndent : normalIndent;
-        std::println("{}Object Path: {}", indent,
-                     chassis.getPowerSuppliesStatusPath());
-        std::println("{}Interface: {}", indent,
-                     chassis.getPowerSystemInputsInterface());
+        if (isVerbose)
+        {
+            std::println("{}Object Path: {}", largeIndent,
+                         chassis.getPowerSuppliesStatusPath());
+            std::println("{}Interface: {}", largeIndent,
+                         chassis.getPowerSystemInputsInterface());
+        }
     }
 }
 
 int main(int argc, char** argv)
 {
-    int chassisNumber = -1;
-    CLI::App app{"Chassis status tool"};
-    app.require_subcommand(1);
-    auto dumpCmd = app.add_subcommand("dump", "Dump chassis status");
-    auto isVerbose = false;
-    dumpCmd
-        ->add_option(
-            "-c", chassisNumber,
-            "Specify a number from 1 to n, where n is the number of the chassis")
-        ->expected(1);
-    dumpCmd
-        ->add_flag("-v,--verbose", isVerbose,
-                   "Include object and interface paths in output")
-        ->expected(0);
-    CLI11_PARSE(app, argc, argv);
+    auto numChassis = -1;
     auto bus = sdbusplus::bus::new_default();
-    if (app.got_subcommand("dump"))
+    int chassisNumber = -1;
+    std::vector<std::string> propertyNames;
+    auto isVerbose = false;
+    std::map<std::string, bool> propMap = {
+        {"Present", false},          {"Available", false},
+        {"Enabled", false},          {"PowerState", false},
+        {"PowerGood", false},        {"InputPowerStatus", false},
+        {"PowerSupplyStatus", false}};
+
+    CLI::App app{"Chassis status tool"};
+    app.footer("Properties:\n"
+               "  * Present\n"
+               "  * Available\n"
+               "  * Enabled\n"
+               "  * PowerState\n"
+               "  * PowerGood\n"
+               "  * InputPowerStatus\n"
+               "  * PowerSupplyStatus\n");
+
+    app.require_subcommand(0, 1);
+    auto displayCmd = app.add_subcommand(
+        "display", "Display chassis status (default if no subcommand given)");
+    displayCmd->fallthrough();
+
+    auto cOption =
+        app.add_option(
+               "-c", chassisNumber,
+               "Specify a number from 1 to n, where n is the number of the chassis")
+            ->expected(1);
+    auto nOption =
+        app.add_option(
+               "-n", numChassis,
+               "Specify a number n, include all the chassis up to and including n")
+            ->expected(1);
+    app.add_option("-p", propertyNames, "Specify what properties to display")
+        ->expected(1, numProperties);
+    app.add_flag(
+           "-v,--verbose", isVerbose,
+           "Include D-Bus object paths, interface names, and error details in output")
+        ->expected(0);
+
+    nOption->excludes(cOption);
+
+    CLI11_PARSE(app, argc, argv);
+
+    // Only find the chassis count if -c and -n options are not used
+    if (numChassis == -1 && chassisNumber == -1)
+    {
+        numChassis = getChassisCount(bus, isVerbose);
+    }
+
+    // If no properties specified, show all
+    if (propertyNames.empty())
+    {
+        for (auto& [name, value] : propMap)
+        {
+            value = true;
+        }
+    }
+    else
+    {
+        // Set only the specified properties to true
+        for (const auto& prop : propertyNames)
+        {
+            if (propMap.contains(prop))
+            {
+                propMap[prop] = true;
+            }
+            else
+            {
+                std::println(stderr, "Error: Unknown property '{}'", prop);
+                return 1;
+            }
+        }
+    }
+
+    if (app.got_subcommand("display") || app.get_subcommands().empty())
     {
         if (chassisNumber > -1)
         {
-            dump(bus, chassisNumber, isVerbose);
+            display(bus, chassisNumber, propMap, isVerbose);
         }
         else
         {
             for (int i = 0; i <= numChassis; i++)
             {
-                dump(bus, i, isVerbose);
+                display(bus, i, propMap, isVerbose);
             }
         }
     }
