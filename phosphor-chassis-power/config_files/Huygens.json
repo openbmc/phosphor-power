@@ -8,24 +8,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis1-standby-fault-unlatched",
+            "Name": "power-chs1-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis1-standby-fault-latched",
+            "Name": "power-chs1-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis1-standby-fault-reset",
+            "Name": "power-chs1-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis1-standby-power",
+            "Name": "reset-enable-chs1-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -40,24 +40,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis2-standby-fault-unlatched",
+            "Name": "power-chs2-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis2-standby-fault-latched",
+            "Name": "power-chs2-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis2-standby-fault-reset",
+            "Name": "power-chs2-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis2-standby-power",
+            "Name": "reset-enable-chs2-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -72,24 +72,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis3-standby-fault-unlatched",
+            "Name": "power-chs3-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis3-standby-fault-latched",
+            "Name": "power-chs3-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis3-standby-fault-reset",
+            "Name": "power-chs3-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis3-standby-power",
+            "Name": "reset-enable-chs3-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -104,24 +104,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis4-standby-fault-unlatched",
+            "Name": "power-chs4-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis4-standby-fault-latched",
+            "Name": "power-chs4-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis4-standby-fault-reset",
+            "Name": "power-chs4-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis4-standby-power",
+            "Name": "reset-enable-chs4-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -136,24 +136,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis5-standby-fault-unlatched",
+            "Name": "power-chs5-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis5-standby-fault-latched",
+            "Name": "power-chs5-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis5-standby-fault-reset",
+            "Name": "power-chs5-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis5-standby-power",
+            "Name": "reset-enable-chs5-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -168,24 +168,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis6-standby-fault-unlatched",
+            "Name": "power-chs6-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis6-standby-fault-latched",
+            "Name": "power-chs6-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis6-standby-fault-reset",
+            "Name": "power-chs6-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis6-standby-power",
+            "Name": "reset-enable-chs6-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -200,24 +200,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis7-standby-fault-unlatched",
+            "Name": "power-chs7-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis7-standby-fault-latched",
+            "Name": "power-chs7-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis7-standby-fault-reset",
+            "Name": "power-chs7-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis7-standby-power",
+            "Name": "reset-enable-chs7-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
@@ -232,24 +232,24 @@
             "DefaultValue": 0
         },
         "FaultUnlatchedGpio": {
-            "Name": "power-chassis8-standby-fault-unlatched",
+            "Name": "power-chs8-sb-fault-unlatched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchedGpio": {
-            "Name": "power-chassis8-standby-fault-latched",
+            "Name": "power-chs8-sb-fault-latched",
             "Direction": "Input",
             "Polarity": "Low",
             "DefaultValue": 0
         },
         "FaultLatchResetGpio": {
-            "Name": "power-chassis8-standby-fault-reset",
+            "Name": "power-chs8-sb-fault-reset",
             "Direction": "Output",
             "Polarity": "Low"
         },
         "EnableSystemResetGpio": {
-            "Name": "reset-enable-chassis8-standby-power",
+            "Name": "reset-enable-chs8-sb-power",
             "Direction": "Output",
             "Polarity": "High"
         },
