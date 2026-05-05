@@ -26,6 +26,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1b4168d7_6bdb69a5",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-05T13:34:32Z",
+      "side": 1,
+      "message": "Unused (chrono, thread). will remove",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 17
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "dea0aae8_1a5729c1",
         "filename": "phosphor-chassis-power/src/manager.hpp",
         "patchSetId": 13
@@ -42,6 +65,29 @@
         "startChar": 6,
         "endLine": 107,
         "endChar": 67
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "654e65c9_2abc43ed",
+        "filename": "phosphor-chassis-power/src/meson.build",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-05T13:34:32Z",
+      "side": 1,
+      "message": "Will reorder this back.",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 15
       },
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
