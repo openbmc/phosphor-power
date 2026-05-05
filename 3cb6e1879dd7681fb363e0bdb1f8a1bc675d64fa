@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44010b6_865c9b15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "Nit: up to",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec33ab8_4a2a8460",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "Nit: no longer",
+      "range": {
+        "startLine": 15,
+        "startChar": 31,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3160d56b_aa7de1ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "Nit: indent since part of previous bullet line",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cffa7aa_41e271d2",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "Is the indentation supposed to be like this? Can it be at the same level as the error message and as the object/interface data for the previous chassis?",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a61ce8d_fee47f33",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "You don\u0027t have to go through the trouble of turning off monitoring. You can if you want to, but I think it is only going to save a few milliseconds on startup.\n\nIt might be simpler to have a std::set\u003cstd::string\u003e that contains the property names to display. Or a std::map\u003cstd::string,bool\u003e with the property names and whether they should be printed. That would eliminate the hardcoded vector offsets in the code here and below.",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68db2491_51cdf418",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "It would be helpful to specify the valid values here, like you did in the .md file.\n\nIf CLI makes it hard to display here, can you add some additional notes/text at the bottom of the help text?",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d12ff96f_7e63673d",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-05T17:48:38Z",
+      "side": 1,
+      "message": "I think it would be easier to remember which property names to specify if they matched the YAML definition and the output. So I\u0027d suggest keeping the same case (Present, Available), and for ones with spaces maybe just remove the spaces (InputPowerStatus).",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
