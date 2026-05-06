@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "203e7a1e_b843d874",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b44010b6_865c9b15",
+      "range": {
+        "startLine": 10,
+        "startChar": 58,
+        "endLine": 10,
+        "endChar": 62
+      },
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ec33ab8_4a2a8460",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-05-05T17:48:38Z",
       "side": 1,
       "message": "Nit: no longer",
+      "range": {
+        "startLine": 15,
+        "startChar": 31,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4f0ab0_1c53d180",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ec33ab8_4a2a8460",
       "range": {
         "startLine": 15,
         "startChar": 31,
@@ -64,6 +112,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5063cb9e_106c132c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3160d56b_aa7de1ac",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cffa7aa_41e271d2",
@@ -77,6 +143,24 @@
       "writtenOn": "2026-05-05T17:48:38Z",
       "side": 1,
       "message": "Is the indentation supposed to be like this? Can it be at the same level as the error message and as the object/interface data for the previous chassis?",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a782c64e_3d473c34",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Thats how it has been, but I can change that.",
+      "parentUuid": "2cffa7aa_41e271d2",
       "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -98,6 +182,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc7095b_716087c7",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a61ce8d_fee47f33",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68db2491_51cdf418",
@@ -115,6 +217,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2601776a_0dfe4967",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68db2491_51cdf418",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d12ff96f_7e63673d",
@@ -128,6 +248,24 @@
       "writtenOn": "2026-05-05T17:48:38Z",
       "side": 1,
       "message": "I think it would be easier to remember which property names to specify if they matched the YAML definition and the output. So I\u0027d suggest keeping the same case (Present, Available), and for ones with spaces maybe just remove the spaces (InputPowerStatus).",
+      "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2081346a_b57f4cba",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-06T18:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d12ff96f_7e63673d",
       "revId": "3cb6e1879dd7681fb363e0bdb1f8a1bc675d64fa",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
