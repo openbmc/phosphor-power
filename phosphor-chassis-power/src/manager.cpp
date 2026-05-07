@@ -99,7 +99,7 @@ void Manager::monitor()
 {
     if (system)
     {
-        system->monitor();
+        system->monitor(services);
     }
 }
 
