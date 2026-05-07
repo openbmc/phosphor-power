@@ -22,7 +22,9 @@
 
 #include <sdbusplus/bus.hpp>
 
+#include <filesystem>
 #include <format>
+#include <map>
 #include <memory>
 #include <optional>
 #include <stdexcept>
@@ -153,10 +155,18 @@ class Chassis
     bool initializePowerSystemInputsInterface(sdbusplus::bus_t& bus);
 
     /**
+     * Initialize the chassis status monitor for this chassis.
+     *
+     * @param services Services object for creating the monitor
+     */
+    void initializeStatusMonitor(Services& services);
+
+    /**
      * Monitors the status of the chassis.
      *
+     * @param services Services object for logging and D-Bus access
      */
-    void monitor();
+    void monitor(Services& services);
 
     /**
      * Set the system status monitor for this chassis.
@@ -194,6 +204,31 @@ class Chassis
      */
     void clearErrorHistory();
 
+    /**
+     * Check if chassis is present via presence path
+     *
+     * @return true if file exists, on the presence path
+     */
+    bool getPresenceFromPath() const;
+
+    /**
+     * Check if chassis is present, based on GPIO and presence path.
+     *
+     * @return true if chassis is present, false otherwise
+     */
+    bool getPresenceValue() const
+    {
+        return presenceValue;
+    }
+
+    /**
+     * Initialize the chassis presence value and notify inventory manager.
+     *
+     * @param services Services object for D-Bus access and logging
+     * @param presentChassis The chassis number containing the BMC
+     */
+    void initializePresence(Services& services, unsigned int presentChassis);
+
   private:
     /**
      * Reads the current and previous GPIO values, applies deglitching logic,
@@ -221,6 +256,22 @@ class Chassis
     std::shared_ptr<ChassisStatusMonitor> systemMonitor;
 
     /**
+     * Notify Phosphor-Inventory-Manager of presence change
+     *
+     * @param bus D-Bus bus object
+     * @param present True if chassis is present, false if missing
+     */
+    void notifyInventoryManager(sdbusplus::bus_t& bus, bool present);
+
+    /**
+     * Handle chassis presence gpio change
+     *
+     * @param services Services object for logging and D-Bus access
+     * @param readFailure True if GPIO read failed, false otherwise
+     */
+    void handlePresenceChange(Services& services, bool readFailure);
+
+    /**
      * Chassis number within the system.
      *
      * Chassis numbers start at 1 because chassis 0 represents the entire
@@ -232,6 +283,11 @@ class Chassis
      * Presence path for this chassis, if any.
      */
     const std::optional<std::string> presencePath{};
+
+    /**
+     * Cached presence value for this chassis.
+     */
+    bool presenceValue{};
 
     /**
      * GPIO objects within this chassis, if any.

@@ -17,11 +17,21 @@
 #include "chassis.hpp"
 
 #include "types.hpp"
+#include "utility.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <xyz/openbmc_project/Logging/Entry/server.hpp>
+
+#include <filesystem>
 
 namespace phosphor::power::chassis
 {
+
+using namespace phosphor::power::util;
+
+constexpr auto invMgrIface = "xyz.openbmc_project.Inventory.Manager";
+constexpr auto invObjPath = "/xyz/openbmc_project/inventory";
+constexpr auto itemIface = "xyz.openbmc_project.Inventory.Item";
 
 bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
 {
@@ -81,7 +91,7 @@ void Chassis::clearErrorHistory()
     }
 }
 
-void Chassis::monitor()
+void Chassis::monitor(Services& services)
 {
     for (const auto& gpio : gpios)
     {
@@ -104,15 +114,15 @@ void Chassis::monitor()
                 try
                 {
                     changed = gpioValueChanged(*gpio, presenceGPIOValue);
+                    if (changed)
+                    {
+                        handlePresenceChange(services, false);
+                    }
                 }
                 catch (...)
                 {
                     // gpio read fail, handle presence change
-                }
-
-                if (changed)
-                {
-                    // Handle presence change
+                    handlePresenceChange(services, true);
                 }
                 // Other apps will need to read this line.
                 gpio->release();
@@ -194,6 +204,146 @@ bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
     }
 
     return false;
+}
+
+bool Chassis::getPresenceFromPath() const
+{
+    if (!presencePath.has_value())
+    {
+        return false;
+    }
+
+    try
+    {
+        return std::filesystem::exists(presencePath.value());
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Error checking presence for chassis {CHASSIS}: {ERROR}",
+                   "CHASSIS", number, "ERROR", e);
+        return false;
+    }
+}
+
+void Chassis::notifyInventoryManager(sdbusplus::bus_t& bus, bool present)
+{
+    try
+    {
+        auto invPath = std::format("/system/chassis{}", number);
+        // Get the inventory manager service
+        auto invMgrService = getService(invObjPath, invMgrIface, bus, false);
+        if (invMgrService.empty())
+        {
+            lg2::info("Inventory manager not available for chassis {CHASSIS}",
+                      "CHASSIS", number);
+            return;
+        }
+
+        // Build the property map for Notify
+        DbusPropertyMap properties;
+        properties["Present"] = present;
+
+        // Build the interface map
+        std::map<std::string, DbusPropertyMap> interfaces;
+        interfaces[itemIface] = properties;
+
+        // Build the object map with object_path key for Notify
+        std::map<sdbusplus::object_path, std::map<std::string, DbusPropertyMap>>
+            objectMap;
+        objectMap[sdbusplus::object_path(invPath)] = interfaces;
+
+        // Call Notify method on inventory manager
+        auto method = bus.new_method_call(invMgrService.c_str(), invObjPath,
+                                          invMgrIface, "Notify");
+        method.append(objectMap);
+        bus.call(method);
+
+        lg2::info("Notified PIM chassis {CHASSIS} Present is {PRESENT}",
+                  "CHASSIS", number, "PRESENT", present);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed to notify inventory manager of Present property for chassis {CHASSIS}: {ERROR}",
+            "CHASSIS", number, "ERROR", e);
+    }
+}
+
+void Chassis::initializePresence(Services& services,
+                                 unsigned int presentChassis)
+{
+    presenceValue = (presentChassis == number);
+
+    notifyInventoryManager(services.getBus(), presenceValue);
+}
+
+void Chassis::handlePresenceChange(Services& services, bool readFailure)
+{
+    bool presencePathPresent = getPresenceFromPath();
+    bool newPresence = presenceValue;
+
+    if (presenceGPIOValue == 1 && presencePathPresent)
+    {
+        // Case 1: GPIO present and path present - chassis is present
+        newPresence = true;
+        lg2::info("Chassis {CHASSIS} confirmed present", "CHASSIS", number);
+    }
+    else if ((presenceGPIOValue == 0 || readFailure) && presencePathPresent)
+    {
+        // Case 2: GPIO absent/failed but path present - chassis present but
+        // GPIO detection incorrect
+        if (presenceValue && isSystemPoweredOn())
+        {
+            std::map<std::string, std::string> data;
+            data["CHASSIS_NUMBER"] = "0";
+            if (presencePath.has_value())
+            {
+                data["PRESENCE_PATH"] = presencePath.value();
+            }
+            services.logError(
+                "xyz.openbmc_project.Power.Chassis.PresentDetection.Incorrect",
+                Entry::Level::Error, data);
+        }
+
+        newPresence = true;
+    }
+    else if ((presenceGPIOValue == 0 || readFailure) && !presencePathPresent)
+    {
+        // Case 3: GPIO absent/failed and path absent - chassis is absent
+        lg2::info("Chassis {CHASSIS} confirmed absent", "CHASSIS", number);
+
+        // Log error if transitioning from present and system is on
+        if (presenceValue && isSystemPoweredOn())
+        {
+            lg2::error(
+                "Chassis {CHASSIS} that should be present is missing: GPIO and presence from path link both absent",
+                "CHASSIS", number);
+
+            std::map<std::string, std::string> data;
+            data["CHASSIS_NUMBER"] = std::to_string(number);
+            if (presencePath.has_value())
+            {
+                data["PRESENCE_PATH"] = presencePath.value();
+            }
+            services.logError(
+                "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
+                Entry::Level::Error, data);
+        }
+
+        newPresence = false;
+    }
+    else if (presenceGPIOValue == 1 && !presencePathPresent)
+    {
+        // Case 4: GPIO present but path absent - chassis present but path
+        // failure
+        newPresence = true;
+    }
+
+    if (newPresence != presenceValue)
+    {
+        presenceValue = newPresence;
+        notifyInventoryManager(services.getBus(), presenceValue);
+    }
 }
 
 } // namespace phosphor::power::chassis

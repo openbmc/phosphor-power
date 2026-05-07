@@ -15,10 +15,14 @@
  */
 #include "system.hpp"
 
+#include "utility.hpp"
+
 #include <phosphor-logging/lg2.hpp>
 
 namespace phosphor::power::chassis
 {
+
+using namespace phosphor::power::util;
 
 void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
 {
@@ -28,11 +32,46 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
-void System::monitor()
+void System::initializePresence(Services& services)
+{
+    auto bmcPosition = 0;
+
+    try
+    {
+        constexpr auto systemPath = "/xyz/openbmc_project/inventory/system";
+        constexpr auto positionIntf =
+            "xyz.openbmc_project.Inventory.Decorator.Position";
+        constexpr auto positionProp = "Position";
+
+        auto service =
+            getService(systemPath, positionIntf, services.getBus(), false);
+        if (!service.empty())
+        {
+            getProperty(positionIntf, positionProp, systemPath, service,
+                        services.getBus(), bmcPosition);
+            bmcPosition++;
+        }
+        else
+        {
+            lg2::error("Unable to get service for BMC position");
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Error getting BMC position: {ERROR}", "ERROR", e);
+    }
+
+    for (const auto& curChassis : chassis)
+    {
+        curChassis->initializePresence(services, bmcPosition);
+    }
+}
+
+void System::monitor(Services& services)
 {
     for (const auto& curChassis : chassis)
     {
-        curChassis->monitor();
+        curChassis->monitor(services);
     }
 }
 

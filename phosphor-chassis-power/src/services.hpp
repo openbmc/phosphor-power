@@ -19,8 +19,12 @@
 #include "chassis_status_monitor.hpp"
 #include "gpio.hpp"
 
+#include <chassis_status_monitor.hpp>
+#include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
+#include <xyz/openbmc_project/Logging/Entry/server.hpp>
 
+#include <map>
 #include <memory>
 #include <optional>
 #include <string>
@@ -33,10 +37,12 @@ using BMCChassisStatusMonitor = phosphor::power::util::BMCChassisStatusMonitor;
 using ChassisStatusMonitorOptions =
     phosphor::power::util::ChassisStatusMonitorOptions;
 
+using Entry = sdbusplus::xyz::openbmc_project::Logging::server::Entry;
 /**
  * @class Services
  *
- * Abstract base class providing an interface to system services like GPIOs.
+ * Abstract base class providing an interface to system services like GPIOs and
+ * error logging.
  */
 class Services
 {
@@ -80,6 +86,17 @@ class Services
     virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
         size_t number, const std::string& inventoryPath,
         const ChassisStatusMonitorOptions& options) = 0;
+
+    /**
+     * Logs an error and creates a PEL (Platform Event Log).
+     *
+     * @param message Error message
+     * @param severity Error severity level
+     * @param additionalData Additional data for the error
+     */
+    virtual void logError(
+        const std::string& message, Entry::Level severity,
+        std::map<std::string, std::string>& additionalData) = 0;
 };
 
 /**
@@ -119,6 +136,9 @@ class BMCServices : public Services
     std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
         size_t number, const std::string& inventoryPath,
         const ChassisStatusMonitorOptions& options) override;
+    /** @copydoc Services::logError() */
+    void logError(const std::string& message, Entry::Level severity,
+                  std::map<std::string, std::string>& additionalData) override;
 
   private:
     /**
