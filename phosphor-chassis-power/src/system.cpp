@@ -15,10 +15,16 @@
  */
 #include "system.hpp"
 
+#include "utility.hpp"
+
 #include <phosphor-logging/lg2.hpp>
+
+#include <ranges>
 
 namespace phosphor::power::chassis
 {
+
+using namespace phosphor::power::util;
 
 void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
 {
@@ -28,11 +34,63 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
-void System::monitor()
+void System::initializePresence(Services& services)
 {
+    initializedPresence = true;
+
+    unsigned int bmcPosition = 0;
+
+    try
+    {
+        constexpr auto systemPath = "/xyz/openbmc_project/inventory/system";
+        constexpr auto positionIntf =
+            "xyz.openbmc_project.Inventory.Decorator.Position";
+        constexpr auto positionProp = "Position";
+
+        auto service =
+            getService(systemPath, positionIntf, services.getBus(), false);
+        if (!service.empty())
+        {
+            getProperty(positionIntf, positionProp, systemPath, service,
+                        services.getBus(), bmcPosition);
+            bmcPosition++;
+        }
+        else
+        {
+            lg2::error("Unable to get service for BMC position");
+            return;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Error getting BMC position: {ERROR}", "ERROR", e);
+        return;
+    }
+
+    const auto it =
+        std::ranges::find_if(chassis, [bmcPosition](const auto& curChassis) {
+            return curChassis->getNumber() == bmcPosition;
+        });
+    if (it == chassis.end())
+    {
+        lg2::error("Unable to find chassis matching BMC position {POSITION}",
+                   "POSITION", bmcPosition);
+        return;
+    }
+    const auto& curChassis = *it;
+    curChassis->initializePresence();
+}
+
+void System::monitor(Services& services)
+{
+    if (!initializedPresence)
+    {
+        initializePresence(services);
+    }
+
     for (const auto& curChassis : chassis)
     {
-        curChassis->monitor();
+        curChassis->monitor(services);
     }
 }
 
