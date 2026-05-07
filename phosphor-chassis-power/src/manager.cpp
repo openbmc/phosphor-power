@@ -99,7 +99,7 @@ void Manager::monitor()
 {
     if (system)
     {
-        system->monitor();
+        system->monitor(services);
     }
 }
 
@@ -189,6 +189,9 @@ void Manager::loadConfigFile()
 
             // Initialize the status monitors for all chassis
             system->initializeStatusMonitors(services);
+
+            // Initialize the presence for all chassis
+            system->initializePresence(services);
         }
         else
         {

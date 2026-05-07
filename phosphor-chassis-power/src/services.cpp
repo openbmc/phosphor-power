@@ -37,4 +37,31 @@ std::unique_ptr<ChassisStatusMonitor> BMCServices::createChassisStatusMonitor(
                                                      options);
 }
 
+void BMCServices::logError(const std::string& message, Entry::Level severity,
+                           std::map<std::string, std::string>& additionalData)
+{
+    try
+    {
+        // Add PID to AdditionalData
+        additionalData.emplace("_PID", std::to_string(getpid()));
+
+        // If severity is critical, set error as system terminating
+        if (severity == Entry::Level::Critical)
+        {
+            additionalData.emplace("SEVERITY_DETAIL", "SYSTEM_TERM");
+        }
+
+        auto method = bus.new_method_call(
+            "xyz.openbmc_project.Logging", "/xyz/openbmc_project/logging",
+            "xyz.openbmc_project.Logging.Create", "Create");
+        method.append(message, severity, additionalData);
+        bus.call_noreply(method);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Unable to log error {ERROR}: {EXCEPTION}", "ERROR", message,
+                   "EXCEPTION", e);
+    }
+}
+
 } // namespace phosphor::power::chassis

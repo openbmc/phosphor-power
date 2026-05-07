@@ -15,10 +15,16 @@
  */
 #include "system.hpp"
 
+#include "utility.hpp"
+
 #include <phosphor-logging/lg2.hpp>
+
+#include <algorithm>
 
 namespace phosphor::power::chassis
 {
+
+using namespace phosphor::power::util;
 
 void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
 {
@@ -28,11 +34,58 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
-void System::monitor()
+void System::initializePresence(Services& services)
 {
+    auto bmcPosition = 0;
+
+    try
+    {
+        constexpr auto systemPath = "/xyz/openbmc_project/inventory/system";
+        constexpr auto positionIntf =
+            "xyz.openbmc_project.Inventory.Decorator.Position";
+        constexpr auto positionProp = "Position";
+
+        auto service =
+            getService(systemPath, positionIntf, services.getBus(), false);
+        if (!service.empty())
+        {
+            getProperty(positionIntf, positionProp, systemPath, service,
+                        services.getBus(), bmcPosition);
+            bmcPosition++;
+        }
+        else
+        {
+            lg2::error("Unable to get service for BMC position");
+            return;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Error getting BMC position: {ERROR}", "ERROR", e);
+        return;
+    }
+
+    auto it = std::find_if(
+        chassis.begin(), chassis.end(), [bmcPosition](const auto& c) {
+            return c->getNumber() == static_cast<unsigned int>(bmcPosition);
+        });
+    if (it != chassis.end())
+    {
+        (*it)->initializePresence(services);
+    }
+}
+
+void System::monitor(Services& services)
+{
+    if (!initializedPresence)
+    {
+        initializePresence(services);
+        initializedPresence = true;
+    }
+
     for (const auto& curChassis : chassis)
     {
-        curChassis->monitor();
+        curChassis->monitor(services);
     }
 }
 
