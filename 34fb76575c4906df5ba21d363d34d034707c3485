@@ -39,6 +39,30 @@
       },
       "revId": "34fb76575c4906df5ba21d363d34d034707c3485",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "315a0cca_d56ff14b",
+        "filename": "tools/power-utils/chassis-status-tool.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-07T13:40:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebd20b34_d86d7688",
+      "range": {
+        "startLine": 351,
+        "startChar": 24,
+        "endLine": 351,
+        "endChar": 29
+      },
+      "revId": "34fb76575c4906df5ba21d363d34d034707c3485",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
