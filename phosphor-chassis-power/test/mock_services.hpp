@@ -65,6 +65,11 @@ class MockServices : public Services
         return std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
     }
 
+    MOCK_METHOD(void, logError,
+                (const std::string& message, Entry::Level severity,
+                 (std::map<std::string, std::string> & additionalData)),
+                (override));
+
   private:
     /**
      * D-Bus bus object.
