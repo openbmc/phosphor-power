@@ -73,6 +73,13 @@ class System
     void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
     /**
+     * Initializes chassis presence to be true on the primary BMC.
+     *
+     * @param services Services object for D-Bus access and logging
+     */
+    void initializePresence(Services& services);
+
+    /**
      * Initializes status monitors for the system and all chassis.
      *
      * @param services Platform services provider
@@ -88,8 +95,10 @@ class System
 
     /**
      * Monitors the status of all chassis.
+     *
+     * @param services Platform services provider
      */
-    void monitor();
+    void monitor(Services& services);
 
   private:
     /**
@@ -103,6 +112,11 @@ class System
      * Monitors the entire system properties. Shared with all chassis.
      */
     std::shared_ptr<ChassisStatusMonitor> systemMonitor{};
+
+    /**
+     * Flag for if chassis presence has been initialized.
+     */
+    bool initializedPresence = false;
 };
 
 } // namespace phosphor::power::chassis
