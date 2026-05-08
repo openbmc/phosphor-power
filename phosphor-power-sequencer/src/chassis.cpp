@@ -134,9 +134,11 @@ void Chassis::monitor(Services& services)
 {
     verifyMonitoringInitialized();
     updatePowerGood(services);
+    setInitialPowerStateIfNeeded(services);
     updateInPowerStateTransition();
     checkForPowerGoodError(services);
     checkForInvalidStatus(services);
+    closeDevicesIfNeeded();
 }
 
 void Chassis::closeDevices()
@@ -197,13 +199,11 @@ void Chassis::updatePowerGood(Services& services)
         // state has not changed. Enables recovery if presence/input power
         // source (such as a GPIO) experiences transitory hardware problem.
         setPowerGoodValue(PowerGood::off, services);
-        closeDevices();
     }
     else if (isPresent() && isAvailable() && isInputPowerGood())
     {
         readPowerGood(services);
     }
-    setInitialPowerStateIfNeeded(services);
 }
 
 void Chassis::readPowerGood(Services& services)

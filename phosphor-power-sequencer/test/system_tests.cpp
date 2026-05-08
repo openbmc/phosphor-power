@@ -563,9 +563,10 @@ TEST(SystemTests, SetPowerState)
             EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(false));
 
             auto& device = getMockDevice(system, 0);
-            EXPECT_CALL(device, isOpen).Times(0);
+            EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, getPowerGood).Times(0);
             EXPECT_CALL(device, powerOff).Times(0);
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGood(system, 1);
@@ -731,8 +732,9 @@ TEST(SystemTests, GetSelectedChassis)
         EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(false));
 
         auto& device = getMockDevice(system, 0);
-        EXPECT_CALL(device, isOpen).Times(0);
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, getPowerGood).Times(0);
+        EXPECT_CALL(device, close).Times(1);
     }
     {
         setChassisStatusToGood(system, 1);
@@ -1038,6 +1040,7 @@ TEST(SystemTests, Monitor)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::updatePowerGood again
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillOnce(Return(true)) // Chassis::canSetPowerState
             .WillOnce(Return(true)) // Chassis::canSetPowerState again
@@ -1712,8 +1715,9 @@ TEST(SystemTests, SetInitialSelectedChassisIfNeeded)
             EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(false));
 
             auto& device = getMockDevice(system, 0);
-            EXPECT_CALL(device, isOpen).Times(0);
+            EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, getPowerGood).Times(0);
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGoodExceptIsInputPowerGood(system, 1);
@@ -1722,8 +1726,9 @@ TEST(SystemTests, SetInitialSelectedChassisIfNeeded)
                 .WillRepeatedly(Return(false));
 
             auto& device = getMockDevice(system, 1);
-            EXPECT_CALL(device, isOpen).WillRepeatedly(Return(false));
+            EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, getPowerGood).Times(0);
+            EXPECT_CALL(device, close).Times(1);
         }
 
         EXPECT_CALL(
@@ -2398,6 +2403,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
                 .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
@@ -2409,6 +2415,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             EXPECT_CALL(device, getPowerGood)
                 .WillOnce(Return(true))
                 .WillOnce(Return(false));
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGood(system, 1);
@@ -2467,6 +2474,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
                 .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
@@ -2477,6 +2485,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             EXPECT_CALL(device, getPowerGood)
                 .WillOnce(Return(true))
                 .WillOnce(Return(false));
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGood(system, 1);
@@ -2538,6 +2547,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
                 .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
@@ -2549,6 +2559,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             EXPECT_CALL(device, getPowerGood)
                 .WillOnce(Return(true))
                 .WillOnce(Return(false));
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGood(system, 1);
@@ -2608,11 +2619,13 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
                 .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true))  // Chassis::updatePowerGood
                 .WillOnce(Return(false)) // Chassis::checkForPowerGoodError
                 .WillOnce(Return(true))  // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true))  // Chassis::closeDevicesIfNeeded
                 .WillOnce(Throw(std::runtime_error{
                     "Available property value could not be obtained."}));
 
@@ -2672,6 +2685,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
             .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillRepeatedly(Return(false));
 
@@ -2713,6 +2727,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             .WillOnce(Return(true)) // Chassis::canSetPowerState again
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillRepeatedly(Return(false));
 
         auto& device = getMockDevice(system, 0);
@@ -2764,6 +2779,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
             .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillRepeatedly(Return(false));
 
         auto& device = getMockDevice(system, 0);
@@ -3191,6 +3207,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
             EXPECT_CALL(monitor, isAvailable)
                 .WillOnce(Return(false)) // Chassis::updatePowerGood
                 .WillOnce(Return(false)) // Chassis::checkForPowerGoodError
+                .WillOnce(Return(false)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(false)) // System::setInitialSelectedChassisIfNeeded
                 .WillRepeatedly(Return(true));
@@ -3201,6 +3218,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
                 .WillOnce(Return(true))
                 .WillRepeatedly(Return(false));
             EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
+            EXPECT_CALL(device, close).Times(1);
         }
         {
             setChassisStatusToGood(system, 1);
@@ -3690,6 +3708,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::updatePowerGood again
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillRepeatedly(Return(false));
 
@@ -3706,6 +3725,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             services,
             logInfoMsg("System power state is off and power good is off"))
             .Times(1);
+        EXPECT_CALL(services, logErrorMsg).Times(0);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
 
@@ -3716,7 +3736,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         EXPECT_EQ(system.getSelectedChassis().size(), 1);
 
         // Monitor. Chassis is not present, but no action taken since system
-        // power state is not defined.
+        // power state is off.
         system.monitor(services);
         EXPECT_EQ(system.getPowerState(), PowerState::off);
         EXPECT_EQ(system.getPowerGood(), PowerGood::off);
@@ -3739,6 +3759,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             .WillOnce(Return(true)) // Chassis::updatePowerGood again
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
             .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillRepeatedly(Return(false));
 
@@ -3807,6 +3828,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, getPowerGood).Times(0);
             EXPECT_CALL(device, powerOn).Times(0);
+            EXPECT_CALL(device, close).Times(2);
         }
 
         EXPECT_CALL(
@@ -3823,6 +3845,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             services,
             logInfoMsg(
                 "Unable to set chassis 2 to state on: Chassis is not available"));
+        EXPECT_CALL(services, logErrorMsg).Times(0);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
 
@@ -3872,6 +3895,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::canSetPowerState
@@ -3966,6 +3990,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             EXPECT_CALL(monitor, isAvailable)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::canSetPowerState
@@ -3976,6 +4001,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
             EXPECT_CALL(device, powerOn).Times(1);
+            EXPECT_CALL(device, close).Times(1);
         }
 
         EXPECT_CALL(
@@ -4044,6 +4070,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
+                .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true)) // Chassis::canSetPowerState
