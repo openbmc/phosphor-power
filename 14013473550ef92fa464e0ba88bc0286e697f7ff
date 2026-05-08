@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ed3ec4d0_567a9b3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "629df58e_41c6500a",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8620b3ce_3ef79986",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 13
@@ -48,6 +66,30 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "I don\u0027t have a strong preference, but if you\u0027d like to keep the short Gpio name in all the places it is passed around/used, you could make Gpio be the abstract base class and then call the real sub-class something else like BMCGpio or LibgpiodGpio.",
+      "range": {
+        "startLine": 70,
+        "startChar": 49,
+        "endLine": 70,
+        "endChar": 62
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7315bbc_4f8e5ae8",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e10ec6a8_b76e197a",
       "range": {
         "startLine": 70,
         "startChar": 49,
@@ -106,6 +148,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2384645c_29a845c8",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95aecf69_50dbf279",
+      "range": {
+        "startLine": 137,
+        "startChar": 52,
+        "endLine": 138,
+        "endChar": 40
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1b4168d7_6bdb69a5",
         "filename": "phosphor-chassis-power/src/gpio.cpp",
         "patchSetId": 13
@@ -144,6 +210,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7f5f69_b45d34e0",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfcf7b5a_4e85cbff",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c07fa976_f3b66963",
@@ -157,6 +241,24 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "If I\u0027m understanding this correctly, once the threshold is reached, this will repeatedly write errors to the journal.\n\nIs the caller expected to gate this? In general we don\u0027t want to fill up the journal with repeated error messages. Or is this something that won\u0027t be called often?\n\nSame comments apply to findLine() and requestWrite().",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90b9be91_6796ffd5",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Sorry I mean to add an else statement in the handleLineNotFound() to prevent that. It should only write once.",
+      "parentUuid": "c07fa976_f3b66963",
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -178,6 +280,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b47f01_2a2c491b",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d1ba4c_7eea9ee1",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e0223be_eb37c640",
@@ -195,6 +315,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de26226c_c30f84a1",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e0223be_eb37c640",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9860ca1e_3ee567dc",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e0223be_eb37c640",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dff4e2e9_7f119ba8",
@@ -208,6 +364,30 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "When reading the code that calls this, the return value is not very obvious. I had to keep going back to the doxygen to know what true or false indicated.\n\nOne option would be to call this shouldLogRequestFail() or something? However, see my comment above about avoiding logging over and over once failureThreshold is hit.\n\nAnother option would be to have this method do the error logging, and only do it for a set number of times. For example, you could have a maxFailureCount (10?) and logFailureCount (7?).  Then when you hit logFailureCount it starts logging, and when it hits maxFailureCount it stops logging.",
+      "range": {
+        "startLine": 180,
+        "startChar": 11,
+        "endLine": 180,
+        "endChar": 28
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf89384_c0c4cf25",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff4e2e9_7f119ba8",
       "range": {
         "startLine": 180,
         "startChar": 11,
@@ -241,6 +421,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c8b89c_d9c56509",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50d096cb_f52edb5a",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 185,
+        "endChar": 30
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5d89611_7cfcae42",
@@ -254,6 +458,24 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "Nit: Missing blank line separators between some of these method declarations.",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b459bfdc_73f15a4a",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5d89611_7cfcae42",
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -275,6 +497,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37caa84d_b2c45936",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Those can also get counters. One should be sufficient as get value should only be called on input gpios, and set only on output gpios.",
+      "parentUuid": "da09cd87_73113a1d",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f41c7d67_7d27a365",
@@ -288,6 +528,24 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "The Manager constructor can throw exceptions. Do you want a try/catch here? Otherwise you\u0027ll get a core dump with an uncaught exception. Some people want that; just letting you know.",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e897563_bfa6fc42",
+        "filename": "phosphor-chassis-power/src/main.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f41c7d67_7d27a365",
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -322,6 +580,24 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "Should probably state that this may throw an exception if an error occurs.",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8603b98_67423986",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63c975c8_a7bf417c",
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -389,6 +665,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1df576e_a7ba2339",
+        "filename": "phosphor-chassis-power/src/services.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "This should not throw. Find line will catch the exception and ignore it the first time. I do see your point I will remove it here.",
+      "parentUuid": "0fc786a1_23d680dc",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "952ad02e_90e544ba",
@@ -406,6 +700,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43f90722_3f86ade9",
+        "filename": "phosphor-chassis-power/src/services.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "952ad02e_90e544ba",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c620dc21_287742e7",
@@ -419,6 +731,30 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "I\u0027d delete this part. System shouldn\u0027t know the internal details of Chassis or GPIO. Over time, you might add more error tracking that needs to be cleared in the Chassis or GPIO class.",
+      "range": {
+        "startLine": 73,
+        "startChar": 36,
+        "endLine": 73,
+        "endChar": 49
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49475ab7_35c579bd",
+        "filename": "phosphor-chassis-power/src/system.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c620dc21_287742e7",
       "range": {
         "startLine": 73,
         "startChar": 36,
@@ -452,6 +788,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26b6adf_9d15c52f",
+        "filename": "phosphor-chassis-power/src/system.hpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "145b71a5_00b2d39e",
+      "range": {
+        "startLine": 75,
+        "startChar": 45,
+        "endLine": 76,
+        "endChar": 41
+      },
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bb1dfed_dada8cfe",
@@ -469,6 +829,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88c234f8_9914d541",
+        "filename": "phosphor-chassis-power/test/config_file_parser_tests.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "Thank you.",
+      "parentUuid": "3bb1dfed_dada8cfe",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1271f9c0_7283e777",
@@ -482,6 +860,24 @@
       "writtenOn": "2026-05-07T19:59:21Z",
       "side": 1,
       "message": "Needed?",
+      "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a677f12_101acde2",
+        "filename": "phosphor-chassis-power/test/gpio_tests.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-08T14:49:43Z",
+      "side": 1,
+      "message": "no",
+      "parentUuid": "1271f9c0_7283e777",
       "revId": "14013473550ef92fa464e0ba88bc0286e697f7ff",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
