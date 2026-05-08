@@ -413,10 +413,10 @@ class Chassis
     /**
      * Closes all power sequencer devices that are open.
      *
-     * Does not throw exceptions. This method may be called because a chassis is
-     * no longer present or no longer has input power. In those scenarios
-     * closing the device may fail. However, closing the devices is still
-     * necessary in order to clean up resources like file handles.
+     * Does not throw exceptions. This method may be called because the chassis
+     * status is not valid, such as not present or not available. In those
+     * scenarios closing the devices may fail. However, closing the devices is
+     * still necessary in order to clean up resources like GPIOs.
      */
     void closeDevices();
 
@@ -649,6 +649,25 @@ class Chassis
         if (!device.isOpen())
         {
             device.open(services);
+        }
+    }
+
+    /**
+     * Closes all power sequencer devices if needed due to the chassis status.
+     *
+     * Does not throw exceptions.
+     */
+    void closeDevicesIfNeeded()
+    {
+        // If the chassis is not present, not available, or has no input power,
+        // we cannot communicate with the power sequencer devices. Close the
+        // devices. Any resources the devices had acquired, such as GPIOs, have
+        // likely become invalid. If the chassis later returns to a valid
+        // status, we will re-open the devices and they will re-acquire those
+        // resources.
+        if (!isPresent() || !isAvailable() || !isInputPowerGood())
+        {
+            closeDevices();
         }
     }
 
