@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87ce66c2_7d0aa9fd",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T18:45:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e693996d_4d230c1d",
+      "revId": "ad59dd47bc68bbdb0c2eeb2e3da84993cd98325d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91b030c6_47ef966b",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-12T15:47:21Z",
       "side": 1,
       "message": "I don\u0027t think the new logic is quite right?\n\nIf I\u0027m reading it correctly, it **only** returns false if the counter is exactly at the failureThreshold. It also increments one past the threshold. See my previous comment in case that algorithm would work.",
+      "revId": "ad59dd47bc68bbdb0c2eeb2e3da84993cd98325d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e1cf69_73e86140",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T18:45:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91b030c6_47ef966b",
       "revId": "ad59dd47bc68bbdb0c2eeb2e3da84993cd98325d",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
