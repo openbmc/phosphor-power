@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e693996d_4d230c1d",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-12T15:47:21Z",
+      "side": 1,
+      "message": "Nit: I forgot that lg2 directly supports exceptions. So you can just pass \u0027e\u0027 rather than \u0027e.what()\u0027. Same comment applies to other traces.\n\nSee https://github.com/openbmc/phosphor-logging/blob/master/docs/structured-logging.md#lg2",
+      "revId": "ad59dd47bc68bbdb0c2eeb2e3da84993cd98325d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91b030c6_47ef966b",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-12T15:47:21Z",
+      "side": 1,
+      "message": "I don\u0027t think the new logic is quite right?\n\nIf I\u0027m reading it correctly, it **only** returns false if the counter is exactly at the failureThreshold. It also increments one past the threshold. See my previous comment in case that algorithm would work.",
+      "revId": "ad59dd47bc68bbdb0c2eeb2e3da84993cd98325d",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
