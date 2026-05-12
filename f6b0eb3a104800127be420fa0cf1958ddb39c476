@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "297a9ef0_8558b32e",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3c1bf5f_429ca693",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "367c3a5a_48f2a0e7",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-11T23:07:04Z",
       "side": 1,
       "message": "I think it would be good to include e.what() in the error message. Hopefully this will describe why the read attempt failed at at least give an errno.",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9329dd61_99aedaa5",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "367c3a5a_48f2a0e7",
       "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56d45f4_a417076e",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "I can set it for readability but to get this path either first read needs to be false or we don\u0027t have a default value, and at that point it could never pass the if statement to return the default value.",
+      "parentUuid": "0f0f5a20_b52cea79",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7ce8421_d9d43064",
@@ -65,6 +119,24 @@
       "writtenOn": "2026-05-11T23:07:04Z",
       "side": 1,
       "message": "As mentioned above, we probably want to include e.what() in the error message right?",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7955eccf_498225f4",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "f7ce8421_d9d43064",
       "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -86,6 +158,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c643fa3_6a2978bd",
+        "filename": "phosphor-chassis-power/src/gpio.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "Looking at it, there is definitely a simpler way.",
+      "parentUuid": "ee1b28d5_86060575",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fe94de3_cb693f76",
@@ -99,6 +189,24 @@
       "writtenOn": "2026-05-11T23:07:04Z",
       "side": 1,
       "message": "Is the a reason for the order below? Usually we just order the source files alphabetically. It makes it easier to find them in the list.",
+      "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d56a611_204310c4",
+        "filename": "phosphor-chassis-power/src/meson.build",
+        "patchSetId": 16
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-12T15:14:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fe94de3_cb693f76",
       "revId": "f6b0eb3a104800127be420fa0cf1958ddb39c476",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
