@@ -48,6 +48,7 @@ using namespace phosphor::power::regulators;
 using namespace phosphor::power::regulators::test_utils;
 
 using ::testing::A;
+using ::testing::Ref;
 using ::testing::Return;
 using ::testing::Throw;
 using ::testing::TypedEq;
@@ -159,75 +160,6 @@ TEST_F(ChassisTests, AddToIDMap)
     EXPECT_THROW(idMap.getRail("rail3"), std::invalid_argument);
 }
 
-TEST_F(ChassisTests, CanCloseDevices)
-{
-    // Test where all statuses are good
-    {
-        Chassis chassis{1, defaultInventoryPath, ChassisStatusMonitorOptions{}};
-
-        MockServices services{};
-        chassis.initializeMonitoring(services);
-        setChassisStatusToGood(chassis);
-
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
-
-        EXPECT_TRUE(chassis.canCloseDevices(services));
-    }
-
-    // Test where chassis is not present
-    {
-        Chassis chassis{2, defaultInventoryPath, ChassisStatusMonitorOptions{}};
-
-        MockServices services{};
-        chassis.initializeMonitoring(services);
-        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
-
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
-
-        EXPECT_FALSE(chassis.canCloseDevices(services));
-    }
-
-    // Test where chassis is not available
-    {
-        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{}};
-
-        MockServices services{};
-        chassis.initializeMonitoring(services);
-        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
-        EXPECT_CALL(mockMonitor, isAvailable()).WillOnce(Return(false));
-
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
-
-        EXPECT_FALSE(chassis.canCloseDevices(services));
-    }
-
-    // Test where exception thrown trying to get status
-    {
-        Chassis chassis{4, defaultInventoryPath, ChassisStatusMonitorOptions{}};
-
-        MockServices services{};
-        chassis.initializeMonitoring(services);
-        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent())
-            .WillOnce(
-                Throw(std::runtime_error{"Present property value could not be "
-                                         "obtained."}));
-
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal,
-                    logError("Unable to determine status of chassis 4: Present "
-                             "property value could not be obtained."))
-            .Times(1);
-
-        EXPECT_TRUE(chassis.canCloseDevices(services));
-    }
-}
-
 TEST_F(ChassisTests, CanConfigure)
 {
     // Test where all statuses are good
@@ -250,6 +182,7 @@ TEST_F(ChassisTests, CanConfigure)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
 
@@ -268,8 +201,8 @@ TEST_F(ChassisTests, CanConfigure)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsEnabled(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
         EXPECT_CALL(mockMonitor, isEnabled()).WillOnce(Return(false));
 
         MockJournal& journal = services.getMockJournal();
@@ -287,9 +220,8 @@ TEST_F(ChassisTests, CanConfigure)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
-        EXPECT_CALL(mockMonitor, isEnabled()).WillOnce(Return(true));
         EXPECT_CALL(mockMonitor, isAvailable()).WillOnce(Return(false));
 
         MockJournal& journal = services.getMockJournal();
@@ -307,6 +239,7 @@ TEST_F(ChassisTests, CanConfigure)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent())
             .WillOnce(
@@ -345,6 +278,7 @@ TEST_F(ChassisTests, CanMonitor)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
 
@@ -360,8 +294,8 @@ TEST_F(ChassisTests, CanMonitor)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPoweredOn(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
         EXPECT_CALL(mockMonitor, isPoweredOn()).WillOnce(Return(false));
 
         MockJournal& journal = services.getMockJournal();
@@ -376,9 +310,8 @@ TEST_F(ChassisTests, CanMonitor)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(true));
-        EXPECT_CALL(mockMonitor, isPoweredOn()).WillOnce(Return(true));
         EXPECT_CALL(mockMonitor, isAvailable()).WillOnce(Return(false));
 
         MockJournal& journal = services.getMockJournal();
@@ -393,6 +326,7 @@ TEST_F(ChassisTests, CanMonitor)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         std::runtime_error error{
             "Present property value could not be obtained."};
@@ -549,6 +483,7 @@ TEST_F(ChassisTests, ClearErrorHistory)
     {
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         std::runtime_error error{
             "Present property value could not be obtained."};
@@ -600,7 +535,7 @@ TEST_F(ChassisTests, CloseDevices)
         chassis.closeDevices(services);
     }
 
-    // Test where devices are closed because all statuses are good
+    // Test where devices are closed and chassis status is good
     {
         std::vector<std::unique_ptr<Device>> devices{};
 
@@ -654,71 +589,42 @@ TEST_F(ChassisTests, CloseDevices)
         chassis.closeDevices(services);
     }
 
-    // Test where device closing is skipped because chassis is not present
+    // Test where devices are closed and errors are logged because chassis
+    // status is valid
     {
         std::vector<std::unique_ptr<Device>> devices{};
 
-        // Create mock services.  No logDebug() should be called.
-        MockServices services{};
-        MockJournal& journal = services.getMockJournal();
-        EXPECT_CALL(journal, logDebug(A<const std::string&>())).Times(0);
-        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
-
-        // Create Device vdd0_reg
-        {
-            // Create mock I2CInterface: should NOT be called
-            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
-            EXPECT_CALL(*i2cInterface, isOpen).Times(0);
-            EXPECT_CALL(*i2cInterface, close).Times(0);
-
-            // Create Device
-            auto device = std::make_unique<Device>(
-                "vdd0_reg", true,
-                "/xyz/openbmc_project/inventory/"
-                "system/chassis/motherboard/vdd0_reg",
-                std::move(i2cInterface));
-            devices.emplace_back(std::move(device));
-        }
-
-        // Create Chassis
-        Chassis chassis{3, defaultInventoryPath, ChassisStatusMonitorOptions{},
-                        std::move(devices)};
-
-        // Initialize monitoring
-        chassis.initializeMonitoring(services);
-        MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
-
-        // Call closeDevices()
-        chassis.closeDevices(services);
-    }
-
-    // Test where devices are closed because exception occurred getting chassis
-    // status
-    {
-        std::vector<std::unique_ptr<Device>> devices{};
-
-        // Create mock services.  Expect logDebug() and logError() to be called.
+        // Create mock services.  Expect logDebug(), logError(), and
+        // logI2CError() to be called.
         MockServices services{};
         MockJournal& journal = services.getMockJournal();
         EXPECT_CALL(journal, logDebug("Closing devices in chassis 4")).Times(1);
-        EXPECT_CALL(journal,
-                    logError("Unable to determine status of chassis 4: Present "
-                             "property value could not be obtained."))
+        std::vector<std::string> expectedErrMessagesException{
+            "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70"};
+        EXPECT_CALL(journal, logError("Unable to close device vdd_reg"))
+            .Times(1);
+        EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging,
+                    logI2CError(Entry::Level::Notice, Ref(journal),
+                                "/dev/i2c-1", 0x70, 0))
             .Times(1);
 
-        // Create Device vdd0_reg
+        // Create Device vdd_reg
         {
             // Create mock I2CInterface: isOpen() and close() should be called
             auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
             EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
-            EXPECT_CALL(*i2cInterface, close).Times(1);
+            EXPECT_CALL(*i2cInterface, close)
+                .Times(1)
+                .WillOnce(Throw(
+                    i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
 
             // Create Device
             auto device = std::make_unique<Device>(
-                "vdd0_reg", true,
+                "vdd_reg", true,
                 "/xyz/openbmc_project/inventory/"
-                "system/chassis/motherboard/vdd0_reg",
+                "system/chassis/motherboard/vdd_reg",
                 std::move(i2cInterface));
             devices.emplace_back(std::move(device));
         }
@@ -729,11 +635,56 @@ TEST_F(ChassisTests, CloseDevices)
 
         // Initialize monitoring
         chassis.initializeMonitoring(services);
+        setChassisStatusToGood(chassis);
+
+        // Call closeDevices()
+        chassis.closeDevices(services);
+    }
+
+    // Test where devices are closed and errors are ignored because chassis
+    // status is not valid
+    {
+        std::vector<std::unique_ptr<Device>> devices{};
+
+        // Create mock services.  Expect logDebug() to be called. No logError or
+        // logI2CError should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logDebug("Closing devices in chassis 4")).Times(1);
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
+            .Times(0);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logI2CError).Times(0);
+
+        // Create Device vdd_reg
+        {
+            // Create mock I2CInterface: isOpen() and close() should be called
+            auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+            EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+            EXPECT_CALL(*i2cInterface, close)
+                .Times(1)
+                .WillOnce(Throw(
+                    i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
+
+            // Create Device
+            auto device = std::make_unique<Device>(
+                "vdd_reg", true,
+                "/xyz/openbmc_project/inventory/"
+                "system/chassis/motherboard/vdd_reg",
+                std::move(i2cInterface));
+            devices.emplace_back(std::move(device));
+        }
+
+        // Create Chassis
+        Chassis chassis{4, defaultInventoryPath, ChassisStatusMonitorOptions{},
+                        std::move(devices)};
+
+        // Initialize monitoring
+        chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent())
-            .WillOnce(
-                Throw(std::runtime_error{"Present property value could not be "
-                                         "obtained."}));
+        EXPECT_CALL(mockMonitor, isPresent()).WillRepeatedly(Return(false));
 
         // Call closeDevices()
         chassis.closeDevices(services);
@@ -865,6 +816,7 @@ TEST_F(ChassisTests, Configure)
 
         // Initialize monitoring
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
 
@@ -989,7 +941,8 @@ TEST_F(ChassisTests, DetectPhaseFaults)
         }
     }
 
-    // Test where detection is skipped because chassis status is not valid
+    // Test where detection is skipped and devices are closed because chassis
+    // status is not valid
     {
         // Create mock services.  No errors should be logged.
         MockServices services{};
@@ -1012,6 +965,10 @@ TEST_F(ChassisTests, DetectPhaseFaults)
 
             // Create Device
             auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+            EXPECT_CALL(*i2cInterface, isOpen)
+                .Times(5)
+                .WillRepeatedly(Return(true));
+            EXPECT_CALL(*i2cInterface, close).Times(5);
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Configuration> configuration{};
             auto device = std::make_unique<Device>(
@@ -1029,8 +986,8 @@ TEST_F(ChassisTests, DetectPhaseFaults)
 
         // Initialize monitoring
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPoweredOn(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillRepeatedly(Return(true));
         EXPECT_CALL(mockMonitor, isPoweredOn()).WillRepeatedly(Return(false));
 
         // Call detectPhaseFaults() 5 times
@@ -1165,6 +1122,7 @@ TEST_F(ChassisTests, IsAvailable)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isAvailable())
             .WillOnce(Return(true))
@@ -1194,6 +1152,7 @@ TEST_F(ChassisTests, IsAvailable)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isAvailable())
             .WillOnce(
@@ -1221,6 +1180,7 @@ TEST_F(ChassisTests, IsEnabled)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsEnabled(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isEnabled())
             .WillOnce(Return(false))
@@ -1250,6 +1210,7 @@ TEST_F(ChassisTests, IsEnabled)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsEnabled(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isEnabled())
             .WillOnce(
@@ -1277,6 +1238,7 @@ TEST_F(ChassisTests, IsPoweredOn)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPoweredOn(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPoweredOn())
             .WillOnce(Return(true))
@@ -1306,6 +1268,7 @@ TEST_F(ChassisTests, IsPoweredOn)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPoweredOn(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPoweredOn())
             .WillOnce(Throw(std::runtime_error{
@@ -1332,6 +1295,7 @@ TEST_F(ChassisTests, IsPresent)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent())
             .WillOnce(Return(true))
@@ -1361,6 +1325,7 @@ TEST_F(ChassisTests, IsPresent)
 
         MockServices services{};
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsPresent(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
         EXPECT_CALL(mockMonitor, isPresent())
             .WillOnce(
@@ -1498,7 +1463,8 @@ TEST_F(ChassisTests, MonitorSensors)
         chassis.monitorSensors(services, *system);
     }
 
-    // Test where monitoring is skipped because chassis status is not valid
+    // Test where monitoring is skipped and devices are closed because chassis
+    // status is not valid
     {
         // Create mock services.  No Sensors methods should be called.
         MockServices services{};
@@ -1526,6 +1492,8 @@ TEST_F(ChassisTests, MonitorSensors)
 
             // Create Device
             auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+            EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+            EXPECT_CALL(*i2cInterface, close).Times(1);
             std::unique_ptr<PresenceDetection> presenceDetection{};
             std::unique_ptr<Configuration> deviceConfiguration{};
             std::unique_ptr<PhaseFaultDetection> phaseFaultDetection{};
@@ -1547,8 +1515,9 @@ TEST_F(ChassisTests, MonitorSensors)
 
         // Initialize monitoring
         chassis.initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(chassis);
         MockChassisStatusMonitor& mockMonitor = getMockStatusMonitor(chassis);
-        EXPECT_CALL(mockMonitor, isPresent()).WillOnce(Return(false));
+        EXPECT_CALL(mockMonitor, isAvailable()).WillOnce(Return(false));
 
         // Call monitorSensors()
         chassis.monitorSensors(services, *system);

@@ -29,28 +29,6 @@ void Chassis::addToIDMap(IDMap& idMap)
         device->addToIDMap(idMap);
     }
 }
-bool Chassis::canCloseDevices(Services& services)
-{
-    bool canClose{true};
-
-    try
-    {
-        if (!isPresent() || !isAvailable())
-        {
-            canClose = false;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        // Log error message, but try to close devices anyway since we don't
-        // know the chassis status
-        services.getJournal().logError(std::format(
-            "Unable to determine status of chassis {}: {}", number, e.what()));
-    }
-
-    return canClose;
-}
-
 bool Chassis::canConfigure(Services& services)
 {
     try
@@ -139,20 +117,17 @@ void Chassis::clearErrorHistory()
 
 void Chassis::closeDevices(Services& services)
 {
-    if (!canCloseDevices(services))
-    {
-        return;
-    }
-
     // Log debug message in journal
     services.getJournal().logDebug(
         "Closing devices in chassis " + std::to_string(number));
 
+    // Ignore errors when closing devices if chassis status is not valid. For
+    // example, if chassis is not present, closing a device will likely fail.
+    // However, we still need to clean up any associated resources.
+    bool ignoreErrors = !canMonitor(services);
+
     // Close devices
-    for (std::unique_ptr<Device>& device : devices)
-    {
-        device->close(services);
-    }
+    closeDevices(services, ignoreErrors);
 }
 
 void Chassis::configure(Services& services, System& system)
@@ -177,6 +152,8 @@ void Chassis::detectPhaseFaults(Services& services, System& system)
 {
     if (!canMonitor(services))
     {
+        bool ignoreErrors{true};
+        closeDevices(services, ignoreErrors);
         return;
     }
 
@@ -191,6 +168,8 @@ void Chassis::monitorSensors(Services& services, System& system)
 {
     if (!canMonitor(services))
     {
+        bool ignoreErrors{true};
+        closeDevices(services, ignoreErrors);
         return;
     }
 
@@ -198,6 +177,14 @@ void Chassis::monitorSensors(Services& services, System& system)
     for (std::unique_ptr<Device>& device : devices)
     {
         device->monitorSensors(services, system, *this);
+    }
+}
+
+void Chassis::closeDevices(Services& services, bool ignoreErrors)
+{
+    for (std::unique_ptr<Device>& device : devices)
+    {
+        device->close(services, ignoreErrors);
     }
 }
 

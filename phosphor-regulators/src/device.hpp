@@ -111,8 +111,10 @@ class Device
      * operating system resources associated with this device.
      *
      * @param services system services like error logging and the journal
+     * @param ignoreErrors if true, do not write errors to the journal or create
+     *                     an error log
      */
-    void close(Services& services);
+    void close(Services& services, bool ignoreErrors = false);
 
     /**
      * Configure this device.

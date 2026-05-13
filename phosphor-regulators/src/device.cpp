@@ -63,7 +63,7 @@ void Device::clearErrorHistory()
     }
 }
 
-void Device::close(Services& services)
+void Device::close(Services& services, bool ignoreErrors)
 {
     try
     {
@@ -75,13 +75,16 @@ void Device::close(Services& services)
     }
     catch (const std::exception& e)
     {
-        // Log error messages in journal
-        services.getJournal().logError(exception_utils::getMessages(e));
-        services.getJournal().logError("Unable to close device " + id);
+        if (!ignoreErrors)
+        {
+            // Log error messages in journal
+            services.getJournal().logError(exception_utils::getMessages(e));
+            services.getJournal().logError("Unable to close device " + id);
 
-        // Create error log entry
-        error_logging_utils::logError(std::current_exception(),
-                                      Entry::Level::Notice, services);
+            // Create error log entry
+            error_logging_utils::logError(std::current_exception(),
+                                          Entry::Level::Notice, services);
+        }
     }
 }
 

@@ -101,17 +101,6 @@ class Chassis
     void addToIDMap(IDMap& idMap);
 
     /**
-     * Returns whether the devices in this chassis can be closed.
-     *
-     * If the chassis status is not valid, such as not present, then the devices
-     * cannot be closed.
-     *
-     * @param services system services like error logging and the journal
-     * @return true if devices can be closed, false otherwise
-     */
-    bool canCloseDevices(Services& services);
-
-    /**
      * Returns whether the devices in this chassis can be configured.
      *
      * If the chassis status is not valid, such as not present, then the devices
@@ -334,6 +323,15 @@ class Chassis
     void monitorSensors(Services& services, System& system);
 
   private:
+    /**
+     * Close the devices within this chassis, if any.
+     *
+     * @param services system services like error logging and the journal
+     * @param ignoreErrors if true, do not write errors to the journal or create
+     *                     an error log
+     */
+    void closeDevices(Services& services, bool ignoreErrors);
+
     /**
      * Verifies that chassis monitoring has been initialized and a
      * ChassisStatusMonitor object has been created.

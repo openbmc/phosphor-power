@@ -172,4 +172,60 @@ inline void setChassisStatusToGood(Chassis& chassis)
     EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
 }
 
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * properties except isAvailable.
+ *
+ * @param chassis Chassis object
+ */
+inline void setChassisStatusToGoodExceptIsAvailable(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPoweredOn).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+}
+
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * properties except isEnabled.
+ *
+ * @param chassis Chassis object
+ */
+inline void setChassisStatusToGoodExceptIsEnabled(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPoweredOn).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+}
+
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * properties except isPoweredOn.
+ *
+ * @param chassis Chassis object
+ */
+inline void setChassisStatusToGoodExceptIsPoweredOn(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+}
+
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * properties except isPresent.
+ *
+ * @param chassis Chassis object
+ */
+inline void setChassisStatusToGoodExceptIsPresent(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPoweredOn).WillRepeatedly(Return(true));
+}
+
 } // namespace phosphor::power::regulators::test_utils

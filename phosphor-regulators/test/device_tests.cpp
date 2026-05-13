@@ -408,13 +408,13 @@ TEST_F(DeviceTests, Close)
         // Create mock services.  Expect logError() and logI2CError() to be
         // called.
         MockServices services{};
-        MockErrorLogging& errorLogging = services.getMockErrorLogging();
         MockJournal& journal = services.getMockJournal();
         std::vector<std::string> expectedErrMessagesException{
             "I2CException: Failed to close: bus /dev/i2c-1, addr 0x70"};
         EXPECT_CALL(journal, logError("Unable to close device vdd_reg"))
             .Times(1);
         EXPECT_CALL(journal, logError(expectedErrMessagesException)).Times(1);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
         EXPECT_CALL(errorLogging,
                     logI2CError(Entry::Level::Notice, Ref(journal),
                                 "/dev/i2c-1", 0x70, 0))
@@ -425,6 +425,33 @@ TEST_F(DeviceTests, Close)
 
         // Close Device
         device.close(services);
+    }
+
+    // Test where fails: closing I2C interface fails: errors are ignored
+    {
+        // Create mock I2CInterface
+        auto i2cInterface = std::make_unique<i2c::MockedI2CInterface>();
+        EXPECT_CALL(*i2cInterface, isOpen).Times(1).WillOnce(Return(true));
+        EXPECT_CALL(*i2cInterface, close)
+            .Times(1)
+            .WillOnce(Throw(
+                i2c::I2CException{"Failed to close", "/dev/i2c-1", 0x70}));
+
+        // Create mock services.  No logError or logI2CError should occur.
+        MockServices services{};
+        MockJournal& journal = services.getMockJournal();
+        EXPECT_CALL(journal, logError(A<const std::string&>())).Times(0);
+        EXPECT_CALL(journal, logError(A<const std::vector<std::string>&>()))
+            .Times(0);
+        MockErrorLogging& errorLogging = services.getMockErrorLogging();
+        EXPECT_CALL(errorLogging, logI2CError).Times(0);
+
+        // Create Device
+        Device device{"vdd_reg", true, deviceInvPath, std::move(i2cInterface)};
+
+        // Close Device
+        bool ignoreErrors{true};
+        device.close(services, ignoreErrors);
     }
 }
 
