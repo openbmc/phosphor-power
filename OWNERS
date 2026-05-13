@@ -37,6 +37,7 @@ owners:
 
 reviewers:
 - anwaar.hadi@ibm.com
+- brendansinger2@gmail.com
 - liuxiwei@ieisystem.com
 
 matchers:
@@ -45,6 +46,9 @@ openbmc:
 - name: Anwaar Hadi
   email: anwaar.hadi@ibm.com
   discord: anwaarhadi
+- name: Brendan Singer
+  email: brendansinger2@gmail.com
+  discord: Brendan S
 - name: George Liu
   email: liuxiwei@ieisystem.com
   discord: George Liu
