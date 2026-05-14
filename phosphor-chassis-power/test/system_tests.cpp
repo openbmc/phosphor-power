@@ -19,6 +19,7 @@
 #include "system.hpp"
 
 #include <sdbusplus/bus.hpp>
+#include <sdeventplus/event.hpp>
 
 #include <memory>
 #include <string>
@@ -38,12 +39,12 @@ using namespace phosphor::power::chassis;
  * @return Chassis object
  */
 std::unique_ptr<Chassis> createChassis(
-    unsigned int number, Services& services,
+    unsigned int number, Services& services, const sdeventplus::Event& event,
     std::optional<std::string> presencePath = std::nullopt)
 {
     std::vector<std::unique_ptr<Gpio>> gpios;
-    return std::make_unique<Chassis>(number, services, std::move(presencePath),
-                                     std::move(gpios));
+    return std::make_unique<Chassis>(number, services, event,
+                                     std::move(presencePath), std::move(gpios));
 }
 
 /**
@@ -54,10 +55,14 @@ std::unique_ptr<Chassis> createChassis(
 class SystemTests : public ::testing::Test
 {
   public:
-    SystemTests() : bus{sdbusplus::bus::new_default()} {}
+    SystemTests() :
+        bus{sdbusplus::bus::new_default()},
+        event{sdeventplus::Event::get_default()}
+    {}
 
   protected:
     sdbusplus::bus_t bus;
+    sdeventplus::Event event;
     MockServices services;
 };
 
@@ -66,7 +71,7 @@ TEST_F(SystemTests, Constructor)
     // Test with single chassis
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+        chassis.emplace_back(createChassis(1, services, event, "/dev/i2c-159"));
         System system{std::move(chassis), services};
 
         EXPECT_EQ(system.getChassis().size(), 1);
@@ -77,9 +82,9 @@ TEST_F(SystemTests, Constructor)
     // Test with multiple chassis
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
-        chassis.emplace_back(createChassis(2, services, "/dev/i2c-160"));
-        chassis.emplace_back(createChassis(3, services, std::nullopt));
+        chassis.emplace_back(createChassis(1, services, event, "/dev/i2c-159"));
+        chassis.emplace_back(createChassis(2, services, event, "/dev/i2c-160"));
+        chassis.emplace_back(createChassis(3, services, event, std::nullopt));
         System system{std::move(chassis), services};
 
         EXPECT_EQ(system.getChassis().size(), 3);
@@ -103,9 +108,9 @@ TEST_F(SystemTests, Constructor)
 TEST_F(SystemTests, GetChassis)
 {
     std::vector<std::unique_ptr<Chassis>> chassis;
-    chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
-    chassis.emplace_back(createChassis(3, services, "/dev/i2c-161"));
-    chassis.emplace_back(createChassis(7, services, std::nullopt));
+    chassis.emplace_back(createChassis(1, services, event, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(3, services, event, "/dev/i2c-161"));
+    chassis.emplace_back(createChassis(7, services, event, std::nullopt));
     System system{std::move(chassis), services};
 
     EXPECT_EQ(system.getChassis().size(), 3);
@@ -115,4 +120,33 @@ TEST_F(SystemTests, GetChassis)
     EXPECT_EQ(system.getChassis()[1]->getPresencePath(), "/dev/i2c-161");
     EXPECT_EQ(system.getChassis()[2]->getNumber(), 7);
     EXPECT_FALSE(system.getChassis()[2]->getPresencePath().has_value());
+}
+
+TEST_F(SystemTests, InitializePowerSystemInputsStatus)
+{
+    using PowerSystemInputs = sdbusplus::server::xyz::openbmc_project::state::
+        decorator::PowerSystemInputs;
+
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    chassis.emplace_back(createChassis(1, services, event, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(2, services, event, "/dev/i2c-160"));
+    System system{std::move(chassis), services};
+
+    // Verify interfaces are null before initialization
+    EXPECT_EQ(system.getChassis()[0]->getPowerSystemInputsInterface(), nullptr);
+    EXPECT_EQ(system.getChassis()[1]->getPowerSystemInputsInterface(), nullptr);
+
+    // Initialize power system inputs status
+    system.getChassis()[0]->initializePowerSystemInputsInterface(
+        PowerSystemInputs::Status::Good);
+    system.getChassis()[1]->initializePowerSystemInputsInterface(
+        PowerSystemInputs::Status::Good);
+
+    // Verify interfaces were created with Good status
+    auto& interface1 = system.getChassis()[0]->getPowerSystemInputsInterface();
+    auto& interface2 = system.getChassis()[1]->getPowerSystemInputsInterface();
+    ASSERT_NE(interface1, nullptr);
+    ASSERT_NE(interface2, nullptr);
+    EXPECT_EQ(interface1->status(), PowerSystemInputs::Status::Good);
+    EXPECT_EQ(interface2->status(), PowerSystemInputs::Status::Good);
 }
