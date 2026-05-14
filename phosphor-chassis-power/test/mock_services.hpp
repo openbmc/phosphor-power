@@ -20,6 +20,7 @@
 #include "services.hpp"
 
 #include <mock_chassis_status_monitor.hpp>
+#include <sdeventplus/event.hpp>
 
 #include <memory>
 
@@ -51,6 +52,11 @@ class MockServices : public Services
         return bus;
     }
 
+    const sdeventplus::Event& getEvent() override
+    {
+        return event;
+    }
+
     std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
         std::optional<uint8_t> defaultValue = std::nullopt) override
@@ -77,6 +83,11 @@ class MockServices : public Services
      * D-Bus bus object.
      */
     sdbusplus::bus_t bus{sdbusplus::bus::new_default()};
+
+    /**
+     * Event loop object.
+     */
+    sdeventplus::Event event{sdeventplus::Event::get_default()};
 };
 
 } // namespace phosphor::power::chassis
