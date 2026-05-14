@@ -19,8 +19,6 @@
 #include "mock_services.hpp"
 #include "temporary_file.hpp"
 
-#include <sdbusplus/bus.hpp>
-
 #include <filesystem>
 #include <memory>
 #include <optional>
@@ -53,15 +51,21 @@ MockGpio& getMockGpio(Chassis& chassis, size_t i)
  *
  * @param chassis Chassis containing the GPIO
  * @param value GPIO value to return (1=present, 0=absent)
- * @param prevValue Previous GPIO value
+ * @param prevValue Previous GPIO value (optional; if not set, getPreviousValue
+ *                  expectation is skipped)
  */
-void expectPresenceGpio(Chassis& chassis, int value, int prevValue)
+void expectPresenceGpio(Chassis& chassis, int value,
+                        std::optional<int> prevValue = std::nullopt)
 {
     auto& gpio = getMockGpio(chassis, 0);
     EXPECT_CALL(gpio, foundLine()).WillOnce(testing::Return(true));
     EXPECT_CALL(gpio, requestRead()).WillOnce(testing::Return(true));
     EXPECT_CALL(gpio, getValue()).WillOnce(testing::Return(value));
-    EXPECT_CALL(gpio, getPreviousValue()).WillOnce(testing::Return(prevValue));
+    if (prevValue.has_value())
+    {
+        EXPECT_CALL(gpio, getPreviousValue())
+            .WillOnce(testing::Return(*prevValue));
+    }
     EXPECT_CALL(gpio, release()).Times(1);
 }
 
@@ -70,35 +74,452 @@ void expectPresenceGpio(Chassis& chassis, int value, int prevValue)
  *
  * @param chassis Chassis containing the GPIO
  * @param value GPIO value to return (1=present, 0=absent)
- * @param prevValue Previous GPIO value
+ * @param prevValue Previous GPIO value (optional; if not set, getPreviousValue
+ *                  expectation is skipped)
  */
-void expectPresenceGpioRepeated(Chassis& chassis, int value, int prevValue)
+void expectPresenceGpioRepeated(Chassis& chassis, int value,
+                                std::optional<int> prevValue = std::nullopt)
 {
     auto& gpio = getMockGpio(chassis, 0);
     EXPECT_CALL(gpio, foundLine()).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(gpio, requestRead()).WillRepeatedly(testing::Return(true));
     EXPECT_CALL(gpio, getValue()).WillRepeatedly(testing::Return(value));
-    EXPECT_CALL(gpio, getPreviousValue())
-        .WillRepeatedly(testing::Return(prevValue));
+    if (prevValue.has_value())
+    {
+        EXPECT_CALL(gpio, getPreviousValue())
+            .WillRepeatedly(testing::Return(*prevValue));
+    }
     EXPECT_CALL(gpio, release()).WillRepeatedly(testing::Return());
 }
 
-class ChassisTests : public ::testing::Test
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-unlatched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultUnLatched(Chassis& chassis, int value)
 {
-  public:
-    /**
-     * Constructor.
-     *
-     * Creates the D-Bus bus object needed for some Chassis methods.
-     */
-    ChassisTests() : bus{sdbusplus::bus::new_default()} {}
+    auto& faultUnlatchedGpio = getMockGpio(chassis, 1);
+    EXPECT_CALL(faultUnlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, requestRead())
+        .WillOnce(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, getValue())
+        .WillOnce(testing::Return(value)); // set return
+    EXPECT_CALL(faultUnlatchedGpio, release()).Times(0);
 
-  protected:
-    /**
-     * D-Bus bus object.
-     */
-    sdbusplus::bus_t bus;
+    // EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+    //     .WillOnce(testing::Return(0));
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-unlatched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultUnLatchedRepeated(Chassis& chassis, int value)
+{
+    auto& faultUnlatchedGpio = getMockGpio(chassis, 1);
+    EXPECT_CALL(faultUnlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, requestRead())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, getValue())
+        .WillRepeatedly(testing::Return(value)); // set return
+    EXPECT_CALL(faultUnlatchedGpio, release()).Times(0);
+
+    // EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+    //     .WillOnce(testing::Return(0));
+}
+
+/**
+ * Helper to not expect GPIO read of power-chs1-sb-fault-unlatched.
+ *
+ * @param chassis Chassis containing the GPIO
+ */
+void unExpectSbFaultUnLatched(Chassis& chassis)
+{
+    auto& faultUnlatchedGpio = getMockGpio(chassis, 1);
+    EXPECT_CALL(faultUnlatchedGpio, foundLine()).Times(0);
+    EXPECT_CALL(faultUnlatchedGpio, requestRead()).Times(0);
+    EXPECT_CALL(faultUnlatchedGpio, getValue()).Times(0);
+    EXPECT_CALL(faultUnlatchedGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-unlatched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param valueRead1 first read GPIO value to return (1=enabled, 0=disabled)
+ * @param valueRead2 second read GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultUnLatched_read3(
+    Chassis& chassis, int valueRead1,
+    // std::optional<int> valueRead2 = std::nullopt)
+    int valueRead2)
+{
+    auto& faultUnlatchedGpio = getMockGpio(chassis, 1);
+    EXPECT_CALL(faultUnlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, requestRead())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultUnlatchedGpio, getValue())
+        .WillOnce(testing::Return(valueRead1))
+        .WillRepeatedly(testing::Return(valueRead2)); // set return
+    EXPECT_CALL(faultUnlatchedGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-latched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultLatched(Chassis& chassis, int value)
+{
+    auto& faultlatchedGpio = getMockGpio(chassis, 2);
+    EXPECT_CALL(faultlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, requestRead())
+        .WillOnce(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, getValue())
+        .WillOnce(testing::Return(value)); // set return
+    EXPECT_CALL(faultlatchedGpio, release()).Times(0);
+
+    // EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+    //     .WillOnce(testing::Return(0));
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-latched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultLatchedRepeated(Chassis& chassis, int value)
+{
+    auto& faultlatchedGpio = getMockGpio(chassis, 2);
+    EXPECT_CALL(faultlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, requestRead())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, getValue())
+        .WillRepeatedly(testing::Return(value)); // set return
+    EXPECT_CALL(faultlatchedGpio, release()).Times(0);
+
+    // EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+    //     .WillRepeatedly(testing::Return(0));
+}
+
+/**
+ * Helper to not expect GPIO read of power-chs1-sb-fault-latched.
+ *
+ * @param chassis Chassis containing the GPIO
+ */
+void unExpectSbFaultLatched(Chassis& chassis)
+{
+    auto& faultlatchedGpio = getMockGpio(chassis, 2);
+    // EXPECT_CALL(faultlatchedGpio, foundLine()).Times(0);
+    EXPECT_CALL(faultlatchedGpio, requestRead()).Times(0);
+    EXPECT_CALL(faultlatchedGpio, getValue()).Times(0);
+    EXPECT_CALL(faultlatchedGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-latched.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param valueRead1 first read GPIO value to return (1=enabled, 0=disabled)
+ * @param valueRead2 second read GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectSbFaultLatched_read3(Chassis& chassis, int valueRead1,
+                                // std::optional<int> valueRead2 = std::nullopt)
+                                int valueRead2)
+{
+    auto& faultlatchedGpio = getMockGpio(chassis, 2);
+    EXPECT_CALL(faultlatchedGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, requestRead())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultlatchedGpio, getValue())
+        .WillOnce(testing::Return(valueRead1))
+        .WillRepeatedly(testing::Return(valueRead2)); // set return
+    EXPECT_CALL(faultlatchedGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for reset-enable-chs1-sb-power.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectResetEnable(Chassis& chassis, int value)
+{
+    auto& resetEnableGpio = getMockGpio(chassis, 3);
+    EXPECT_CALL(resetEnableGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(resetEnableGpio, requestWrite(value)) // set return
+        .WillOnce(testing::Return(true));
+    EXPECT_CALL(resetEnableGpio, setValue(value))     // set return
+        .Times(1);
+    EXPECT_CALL(resetEnableGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for reset-enable-chs1-sb-power.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectResetEnableRepeated(Chassis& chassis, int value)
+{
+    auto& resetEnableGpio = getMockGpio(chassis, 3);
+    EXPECT_CALL(resetEnableGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(resetEnableGpio, requestWrite(value))
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(resetEnableGpio, setValue(value));
+    EXPECT_CALL(resetEnableGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for reset-enable-chs1-sb-power.
+ *
+ * @param chassis Chassis containing the GPIO
+ */
+void unExpectResetEnable(Chassis& chassis)
+{
+    auto& resetEnableGpio = getMockGpio(chassis, 3);
+    EXPECT_CALL(resetEnableGpio, foundLine()).Times(0);
+    EXPECT_CALL(resetEnableGpio, requestWrite(testing::_)).Times(0);
+    EXPECT_CALL(resetEnableGpio, setValue(testing::_)).Times(0);
+    EXPECT_CALL(resetEnableGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-reset.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectFaultReset(Chassis& chassis, int value)
+{
+    auto& faultResetGpio = getMockGpio(chassis, 4);
+    EXPECT_CALL(faultResetGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultResetGpio, requestWrite(value)) // set return
+        .WillOnce(testing::Return(true));
+    EXPECT_CALL(faultResetGpio, setValue(value))     // set return
+        .Times(1);
+    EXPECT_CALL(faultResetGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-reset.
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param value GPIO value to return (1=enabled, 0=disabled)
+ */
+void expectFaultResetRepeated(Chassis& chassis, int value)
+{
+    auto& faultResetGpio = getMockGpio(chassis, 4);
+    EXPECT_CALL(faultResetGpio, foundLine())
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultResetGpio, requestWrite(value)) // set return
+        .WillRepeatedly(testing::Return(true));
+    EXPECT_CALL(faultResetGpio, setValue(value));    // set return
+    EXPECT_CALL(faultResetGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set GPIO read expectations for power-chs1-sb-fault-reset.
+ *
+ * @param chassis Chassis containing the GPIO
+ */
+void unExpectFaultReset(Chassis& chassis)
+{
+    auto& faultResetGpio = getMockGpio(chassis, 4);
+    EXPECT_CALL(faultResetGpio, foundLine()).Times(0);
+    EXPECT_CALL(faultResetGpio, requestWrite(testing::_)).Times(0);
+    EXPECT_CALL(faultResetGpio, setValue(testing::_)).Times(0);
+    EXPECT_CALL(faultResetGpio, release()).Times(0);
+}
+
+/**
+ * Helper to set Monitor isPoweredOn() as powered on/off
+ *
+ * @param chassis Chassis containing the GPIO
+ * @param state bool to return (true=enabled, false=disabled)
+ */
+void expectPowerState(Chassis& chassis, bool state)
+{
+    auto monitorOwner =
+        std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
+    auto* mockMonitor = monitorOwner.get();
+    chassis.setChassisStatusMonitor(std::move(monitorOwner));
+    EXPECT_CALL(*mockMonitor, isPoweredOn()).WillOnce(testing::Return(state));
+}
+
+/**
+ * Helper to Monitor isPoweredOn() is not called.
+ *
+ * @param chassis Chassis containing the monitor
+ */
+void expectNoPowerCheck(Chassis& chassis)
+{
+    auto monitorOwner =
+        std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
+    auto* mockMonitor = monitorOwner.get();
+    chassis.setChassisStatusMonitor(std::move(monitorOwner));
+    EXPECT_CALL(*mockMonitor, isPoweredOn()).Times(0);
+}
+
+/**
+ * Helper to build a Chassis pre-wired with the five GPIOs
+ *
+ * GPIO layout:
+ *   0 – presence-chassis1              (Input,  Low  – not-present)
+ *   1 – power-chs1-sb-fault-unlatched  (Input,  Low  – no-fault)
+ *   2 – power-chs1-sb-fault-latched    (Input,  Low  – no-fault)
+ *   3 – reset-enable-chs1-sb-power     (Output, High)
+ *   4 – power-chs1-sb-fault-reset      (Output, Low)
+ *
+ * @param services    MockServices instance (must outlive the returned Chassis)
+ * @param tempPathOut Optional pointer to a path variable. When non-null, a
+ *                    temporary presence file is created and its path is stored
+ *                    in *tempPathOut so the caller can remove it afterwards.
+ *                    When null (default), no presence file is created and the
+ *                    Chassis is built without a presence path.
+ * @return Chassis configured with or without a presence path
+ */
+Chassis buildSledChassis(MockServices& services,
+                         std::filesystem::path* tempPathOut = nullptr)
+{
+    std::vector<std::unique_ptr<Gpio>> gpios{};
+
+    // Index 0: presence-chassis1 disabled (not-present)
+    gpios.emplace_back(services.createGPIO(
+        "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+    // Index 1: power-chs1-sb-fault-unlatched disabled (no-fault)
+    gpios.emplace_back(
+        services.createGPIO("power-chs1-sb-fault-unlatched",
+                            GpioDirection::Input, GpioPolarity::Low));
+
+    // Index 2: power-chs1-sb-fault-latched disabled (no-fault)
+    gpios.emplace_back(
+        services.createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low));
+
+    // Index 3: reset-enable-chs1-sb-power
+    gpios.emplace_back(
+        services.createGPIO("reset-enable-chs1-sb-power", GpioDirection::Output,
+                            GpioPolarity::High));
+
+    // Index 4: power-chs1-sb-fault-reset
+    gpios.emplace_back(services.createGPIO(
+        "power-chs1-sb-fault-reset", GpioDirection::Output, GpioPolarity::Low));
+
+    if (tempPathOut != nullptr)
+    {
+        return Chassis{1, services, tempPathOut->string(), std::move(gpios)};
+    }
+    else
+    {
+        return Chassis{1, services, std::nullopt, std::move(gpios)};
+    }
+}
+
+/**
+ * Optional default values for each GPIO created by buildChassis().
+ *
+ * Each field corresponds to the GPIO at the matching index:
+ *   0 – presence-chassis1              (0 = not-present, 1 = present)
+ *   1 – power-chs1-sb-fault-unlatched  (0 = disabled/no-fault,
+ *                                       1 = enabled/fault)
+ *   2 – power-chs1-sb-fault-latched    (0 = disabled/no-fault,
+ *                                       1 = enabled/fault)
+ *
+ * Fault GPIO values use semantic polarity (1 = fault active).  buildChassis()
+ * automatically inverts them to the active-Low GPIO defaultValue
+ * (fault-active → signal-Low → defaultValue 0).
+ *
+ * Leave a field as std::nullopt to create the GPIO without a default value.
+ */
+struct ChassisGpioValues
+{
+    std::optional<uint8_t> presence{std::nullopt};       // index 0
+    std::optional<uint8_t> faultUnlatched{std::nullopt}; // index 1
+    std::optional<uint8_t> faultLatched{std::nullopt};   // index 2
 };
+
+/**
+ * Helper to build a Chassis pre-wired with the five GPIOs.
+ *
+ * GPIO layout:
+ *   0 – presence-chassis1              (Input,  Low)
+ *   1 – power-chs1-sb-fault-unlatched  (Input,  Low)
+ *   2 – power-chs1-sb-fault-latched    (Input,  Low)
+ *   3 – reset-enable-chs1-sb-power     (Output, High)
+ *   4 – power-chs1-sb-fault-reset      (Output, Low)
+ *
+ * @param services    MockServices instance (must outlive the returned Chassis)
+ * @param tempPathOut Optional pointer to a path variable. When non-null, a
+ *                    temporary presence file is created and its path is stored
+ *                    in *tempPathOut so the caller can remove it afterwards.
+ *                    When null (default), no presence file is created.
+ * @param gpioValues  Optional default values for each GPIO. Fields left as
+ *                    std::nullopt create the GPIO without a default value
+ *                    (disabled). Pass a value of 0 to explicitly disable or
+ *                    1 to enable.
+ * @return Chassis configured with the requested GPIOs
+ */
+Chassis buildChassis(MockServices& services,
+                     std::filesystem::path* tempPathOut = nullptr,
+                     ChassisGpioValues gpioValues = {})
+{
+    std::vector<std::unique_ptr<Gpio>> gpios{};
+
+    // Index 0: presence-chassis1
+    gpios.emplace_back(
+        services.createGPIO("presence-chassis1", GpioDirection::Input,
+                            GpioPolarity::Low, gpioValues.presence));
+
+    // Index 1: power-chs1-sb-fault-unlatched
+    // Semantic fault value (1=fault) is inverted to active-Low defaultValue.
+    gpios.emplace_back(services.createGPIO(
+        "power-chs1-sb-fault-unlatched", GpioDirection::Input,
+        GpioPolarity::Low, gpioValues.faultUnlatched));
+
+    // Index 2: power-chs1-sb-fault-latched
+    // Semantic fault value (1=fault) is inverted to active-Low defaultValue.
+    gpios.emplace_back(
+        services.createGPIO("power-chs1-sb-fault-latched", GpioDirection::Input,
+                            GpioPolarity::Low, gpioValues.faultLatched));
+
+    // Index 3: reset-enable-chs1-sb-power
+    gpios.emplace_back(
+        services.createGPIO("reset-enable-chs1-sb-power", GpioDirection::Output,
+                            GpioPolarity::High));
+
+    // Index 4: power-chs1-sb-fault-reset
+    gpios.emplace_back(services.createGPIO(
+        "power-chs1-sb-fault-reset", GpioDirection::Output, GpioPolarity::Low));
+
+    if (tempPathOut != nullptr)
+    {
+        return Chassis{1, services, tempPathOut->string(), std::move(gpios)};
+    }
+    else
+    {
+        return Chassis{1, services, std::nullopt, std::move(gpios)};
+    }
+}
+
+class ChassisTests : public ::testing::Test
+{};
 
 TEST_F(ChassisTests, Constructor)
 {
@@ -940,15 +1361,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
     // GPIO On and Presence path missing
     {
         MockServices services{};
-        std::vector<std::unique_ptr<Gpio>> gpios{};
-        gpios.emplace_back(services.createGPIO(
-            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
-
         auto tempPath =
             std::filesystem::temp_directory_path() / "test_presence";
+
         std::filesystem::remove(tempPath);
 
-        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
+        Chassis chassis = buildSledChassis(services, &tempPath);
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -962,6 +1380,8 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         // Verify chassis is present (GPIO says present)
         EXPECT_TRUE(chassis.getPresenceValue());
+
+        std::filesystem::remove(tempPath);
     }
 
     // GPIO off and Presence path missing, system off — both defined and false
@@ -1187,6 +1607,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         EXPECT_FALSE(chassis.getPresenceValue());
     }
+
     // No GPIO configured, presence path disappears while system is on —
     // chassis becomes absent and PEL logged
     {
@@ -1478,4 +1899,704 @@ TEST_F(ChassisTests, GetGpioByName)
         EXPECT_EQ(chassis.getGpioByName("fault-reset"),
                   chassis.getGpios()[0].get());
     }
+}
+
+TEST_F(ChassisTests, HandleBMCReset_NotPresent)
+{
+    // Test For missing sleds (isPresent() returns false):
+    {
+        // ##################################################################
+        // COMMON
+        // ##################################################################
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        expectPresenceGpioRepeated(chassis, 0, 0);
+        expectNoPowerCheck(chassis);
+
+        expectResetEnableRepeated(chassis, 0);
+        expectFaultResetRepeated(chassis, 1);
+
+        // ##################################################################
+        // BMC reset
+        // ##################################################################
+        unExpectSbFaultUnLatched(chassis);
+        unExpectSbFaultLatched(chassis);
+
+        chassis.handleBMCReset();
+
+        // Validatge PowerSystemInputs D-Bus interface does not exist:
+        //    Confirms it did not get set to Good or Fault.
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
+    }
+}
+
+TEST_F(ChassisTests, HandleBMCReset_Present_ChassisOff)
+{
+    // Test Present, chassis OFF, no faults:
+    {
+        // ##################################################################
+        // COMMON
+        // ##################################################################
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        expectPowerState(chassis, false);
+
+        expectSbFaultLatched_read3(chassis, 0, 0);
+        expectSbFaultUnLatched_read3(chassis, 0, 0);
+
+        expectResetEnableRepeated(chassis, 0);
+        expectFaultResetRepeated(chassis, 1);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // ##################################################################
+        // BMC reset
+        // ##################################################################
+        chassis.handleBMCReset();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+
+    // Test Present, chassis Off, power-chsX-sb-fault-unlatched fault,
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        // Setup expectations for 3 monitor() calls
+        // Present
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // ##################################################################
+        // monitor() setting up presence and making sure GPIOs are latched
+        // ##################################################################
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(1))  // Second call
+            .WillOnce(testing::Return(1))  // Third call
+            .WillOnce(testing::Return(1)); // Fourth call
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(0))  // Second call
+            .WillOnce(testing::Return(1))  // Third call
+            .WillOnce(testing::Return(1)); // Fourth call
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        // monitor() nothing special look at unlatched fault, so next
+        //           monitor() will cache the fault.
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        // monitor() finding unlatched fault, and writing GPIOs and setting
+        //           PSI FAULT
+        // ##################################################################
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 1);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 1);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+
+        // ##################################################################
+        //  BMC reset
+        // ##################################################################
+        expectResetEnableRepeated(chassis, 0);
+        expectFaultResetRepeated(chassis, 1);
+
+        chassis.handleBMCReset();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+
+        unExpectResetEnable(chassis);
+        unExpectFaultReset(chassis);
+
+        //  #################################################################
+        chassis.monitor();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+    }
+
+    // Test Present, chassis Off, power-chs1-sb-fault-latched fault,
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        // Setup expectations for 3 monitor() calls
+        // Present
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // ##################################################################
+        // monitor() setting up presence and making sure GPIOs are latched
+        // ##################################################################
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(1));
+        // EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+        //     .WillOnce(testing::Return(0))  // First call
+        //     .WillRepeatedly(testing::Return(1)); // All After call
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 1);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // ##################################################################
+        //  BMC reset
+        // ##################################################################
+        expectPowerState(chassis, false);
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 1);
+
+        chassis.handleBMCReset();
+
+        // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        //  #################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 1);
+
+        // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+}
+
+TEST_F(ChassisTests, HandleBMCReset_Present_ChassisOn)
+{
+    // Present, power On w/ unLatched(disabled)
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        expectPowerState(chassis, true);
+
+        expectPresenceGpioRepeated(chassis, 1, 0);
+
+        // ##################################################################
+        //  COMMON
+        // ##################################################################
+        expectSbFaultLatched_read3(chassis, 0, 0);
+        expectSbFaultUnLatched_read3(chassis, 0, 0);
+        expectResetEnableRepeated(chassis, 1);
+        expectFaultResetRepeated(chassis, 0);
+
+        // ##################################################################
+        chassis.initializePresence();
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        //  BMC reset
+        // ##################################################################
+        chassis.handleBMCReset();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+
+    // Present, power On w/ unLatched(enabled)
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // ##################################################################
+        // monitor() setting up presence and making sure GPIOs are latched
+        // ##################################################################
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(1))  // Second call
+            .WillOnce(testing::Return(1))  // Third call
+            .WillOnce(testing::Return(1)); // Fourth call
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(0))  // Second call
+            .WillOnce(testing::Return(1))  // Third call
+            .WillOnce(testing::Return(1)); // Fourth call
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        // monitor() nothing special look at unlatched fault, so next
+        //           monitor() will cache the fault.
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        // monitor() finding unlatched fault, and writing GPIOs and setting
+        //           PSI FAULT
+        // ##################################################################
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 1);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 1);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+
+        // ##################################################################
+        //  BMC reset
+        // ##################################################################
+        // expectPowerState(chassis, true); // on fault power not called.
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 1);
+
+        chassis.handleBMCReset();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 1);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+    }
+
+    // Present, power On w/ Latched(enabled)
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        // Setup expectations for 3 monitor() calls
+        // Present
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // ##################################################################
+        // monitor() setting up presence and making sure GPIOs are latched
+        // ##################################################################
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(1));
+        // EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+        //     .WillOnce(testing::Return(0))  // First call
+        //     .WillRepeatedly(testing::Return(1)); // All After call
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 1);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 1);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // // ##################################################################
+        // //  BMC reset
+        // // ##################################################################
+        expectPowerState(chassis, true);
+        expectResetEnable(chassis, 1);
+        expectFaultReset(chassis, 0);
+
+        chassis.handleBMCReset();
+
+        // // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        //  #################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 1);
+
+        // // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+}
+
+TEST_F(ChassisTests, HandleBMCReset_Present_NulloptPower_60SecTimerPowerGood)
+{
+    // Test Present sled, no faults, isChassisPoweredOn() returns
+    //     nullopt(status monitor throws), first attempt — 60-second timer
+    //     is started:
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        auto monitorOwner =
+            std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
+        auto* mockMonitor = monitorOwner.get();
+        chassis.setChassisStatusMonitor(std::move(monitorOwner));
+        EXPECT_CALL(*mockMonitor, isPoweredOn())
+            // handleBMCReset() would expect Throw exception error
+            .WillOnce(
+                testing::Throw(std::runtime_error("D-Bus not yet available")))
+            // handleBMCResetTimerCallback() would expect Power on
+            .WillOnce(testing::Return(true));
+
+        expectPresenceGpioRepeated(chassis, 1);
+
+        // ##################################################################
+        //  COMMON
+        // ##################################################################
+
+        // ##################################################################
+        chassis.initializePresence();
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+
+        // ##################################################################
+        //  BMC reset
+        // ##################################################################
+        chassis.handleBMCReset(); // expect throw exception
+
+        // Could not read power state is set to Missing while waiting for timer
+
+        // Validatge PowerSystemInputs D-Bus interface does not exist:
+        //    Confirms it did not get set to Good or Fault.
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
+
+        // ##################################################################
+        // Running call back handler due to no power status above.
+        // ##################################################################
+        expectSbFaultUnLatched(chassis, 0);
+        expectSbFaultLatched(chassis, 0);
+
+        expectResetEnable(chassis, 1);
+        expectFaultReset(chassis, 0);
+
+        chassis.handleBMCResetTimerCallback();
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        //  #################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+}
+
+TEST_F(ChassisTests, chassis_state)
+{
+    // Default Missing
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+    }
+}
+
+TEST_F(ChassisTests, handlePowerStateChange)
+{
+    // Not Present
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        expectPresenceGpioRepeated(chassis, 0, 0);
+    }
+
+    // Present - Power On, unLatched(disabled)
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        // Setup expectations for 3 monitor() calls
+        // Present
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(0)); // Second call
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(0)); // Second call
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        expectResetEnable(chassis, 1);
+        expectFaultReset(chassis, 1);
+
+        chassis.handlePowerStateChange(true);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+
+    // // Present - Power On, unLatched(enabled)
+    {
+        MockServices services{};
+        Chassis chassis = buildSledChassis(services);
+
+        // Setup expectations for 3 monitor() calls
+        // Present
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        // Unlatched
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), getValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(1))  // Second call
+            .WillOnce(testing::Return(1)); // Third call
+        EXPECT_CALL(getMockGpio(chassis, 1), getPreviousValue())
+            .WillOnce(testing::Return(0))  // First call
+            .WillOnce(testing::Return(0))  // Second call
+            .WillOnce(testing::Return(1)); // Third call
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
+
+        // Latched
+        EXPECT_CALL(getMockGpio(chassis, 2), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 2), getValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
+            .WillRepeatedly(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 2), release()).Times(0);
+
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+        // ##################################################################
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 1);
+        EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        // ##################################################################
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 0);
+
+        chassis.handlePowerStateChange(true);
+
+        // Validatge PowerSystemInputs D-Bus interface set:
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+    }
+}
+
+TEST_F(ChassisTests, handleSystemPoweredOff)
+{
+    MockServices services{};
+    Chassis chassis = buildSledChassis(services);
+
+    // Setup expectations for 3 monitor() calls
+    // Present
+    expectPresenceGpioRepeated(chassis, 1, 0);
+    chassis.initializePresence();
+
+    expectResetEnable(chassis, 0);
+    expectFaultReset(chassis, 1);
+
+    chassis.handleSystemPoweredOff();
 }

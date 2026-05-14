@@ -23,7 +23,6 @@
 #include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
-#include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
 #include <xyz/openbmc_project/State/Chassis/server.hpp>
 
@@ -55,10 +54,9 @@ class Manager
      *
      * Throws an exception if an error occurs during initialization.
      *
-     * @param event - Dbus event object.
-     * @param services - Platform services provider
+     * @param services - Platform services provider (provides event loop)
      */
-    Manager(const sdeventplus::Event& event, Services& services);
+    explicit Manager(Services& services);
 
     /**
      * Callback that is called when a list of compatible system types is found.
@@ -162,9 +160,15 @@ class Manager
     void systemdTargetStarted(sdbusplus::message_t& msg);
 
     /**
-     * Event to loop on
+     * Handle BMC reset for all chassis.
+     * Called during initialization to set up GPIO states.
      */
-    const sdeventplus::Event& eventLoop [[maybe_unused]];
+    void handleBMCReset();
+
+    /**
+     * Setup D-Bus matches for monitoring chassis power states.
+     */
+    void setupChassisMatches();
 
     /**
      * Timer to wait for a Compatible system.
