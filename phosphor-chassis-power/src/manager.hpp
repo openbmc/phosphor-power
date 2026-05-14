@@ -151,6 +151,7 @@ class Manager
      */
     void chassisPowerStateChanged(sdbusplus::message_t& msg);
 
+    // SHELDON:QUESTION: where did this come from??
     /**
      * Callback for systemd JobNew signals.
      *
@@ -160,6 +161,17 @@ class Manager
      * @param msg D-Bus message containing the job details
      */
     void systemdTargetStarted(sdbusplus::message_t& msg);
+
+    /**
+     * Handle BMC reset for all chassis.
+     * Called during initialization to set up GPIO states.
+     */
+    void handleBMCReset();
+
+    /**
+     * Setup D-Bus matches for monitoring chassis power states.
+     */
+    void setupChassisMatches();
 
     /**
      * Event to loop on
