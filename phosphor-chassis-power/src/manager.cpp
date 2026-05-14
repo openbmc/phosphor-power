@@ -17,6 +17,7 @@
 
 #include "config_file_parser.hpp"
 #include "format_utils.hpp"
+#include "utility.hpp"
 
 #include <phosphor-logging/lg2.hpp>
 
@@ -56,12 +57,12 @@ constexpr std::chrono::seconds monitorInterval{1};
 using PowerState =
     sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
-Manager::Manager(const sdeventplus::Event& event, Services& services) :
-    eventLoop(event),
+Manager::Manager(Services& services) :
     compatibleSystemsTimer{
-        event,
+        services.getEvent(),
         std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
-    monitorTimer{event, std::bind(&Manager::monitor, this), monitorInterval},
+    monitorTimer{services.getEvent(), std::bind(&Manager::monitor, this),
+                 monitorInterval},
     services(services), objectManager{services.getBus(), rootObjectPath}
 {
     // Start a timer to wait for compatible types.
@@ -184,7 +185,7 @@ fs::path Manager::findConfigFile()
     return fs::path{};
 }
 
-void Manager::loadConfigFile()
+void Manager::loadConfigFile() // SHELDON:level1:
 {
     try
     {
@@ -196,7 +197,6 @@ void Manager::loadConfigFile()
             lg2::info("Loading configuration file {PATH}", "PATH",
                       pathName.string());
 
-            // Parse the config file
             auto chassis = config_file_parser::parse(pathName, services);
 
             system = std::make_unique<System>(std::move(chassis), services);
@@ -206,6 +206,9 @@ void Manager::loadConfigFile()
 
             // Initialize the status monitors for all chassis
             system->initializeStatusMonitors();
+
+            // Handle BMC reset scenario for all chassis
+            handleBMCReset();
         }
         else
         {
@@ -217,6 +220,47 @@ void Manager::loadConfigFile()
         // Log error messages in journal
         lg2::error("Unable to load configuration file: {EXCEPTION}",
                    "EXCEPTION", e.what());
+    }
+}
+
+PowerState Manager::getSystemPowerState()
+{
+    try
+    {
+        auto service = util::getService(chassisStatePath, chassisStateIntf,
+                                        services.getBus(), false);
+        if (!service.empty())
+        {
+            std::string value;
+            util::getProperty(chassisStateIntf, chassisStateProp,
+                              chassisStatePath, service, services.getBus(),
+                              value);
+            return sdbusplus::xyz::openbmc_project::State::server::Chassis::
+                convertPowerStateFromString(value);
+        }
+        lg2::error("Unable to get service for system power state");
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Error getting system power state: {ERROR}", "ERROR", e);
+    }
+
+    // Unable to read the state; assume the system is off
+    return PowerState::Off;
+}
+
+void Manager::handleBMCReset() // SHELDON:level2:
+{
+    if (!system)
+    {
+        return;
+    }
+
+    PowerState systemPowerState = getSystemPowerState();
+
+    for (const auto& chassis : system->getChassis())
+    {
+        chassis->handleBMCReset(systemPowerState);
     }
 }
 
@@ -248,6 +292,13 @@ void Manager::chassisPowerStateChanged(sdbusplus::message_t& msg)
             if (powerState == PowerState::TransitioningToOn)
             {
                 clearErrorHistory();
+            }
+            else if (powerState == PowerState::TransitioningToOff)
+            {
+                for (const auto& chassis : system->getChassis())
+                {
+                    chassis->handleSystemPoweredOff();
+                }
             }
         }
     }
