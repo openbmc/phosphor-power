@@ -24,6 +24,7 @@
 #include <sys/stat.h> // for chmod()
 
 #include <nlohmann/json.hpp>
+#include <sdeventplus/event.hpp>
 
 #include <cstdint>
 #include <cstring>
@@ -47,6 +48,11 @@ using TemporaryFile = phosphor::power::util::TemporaryFile;
 class ConfigFileParserTests : public ::testing::Test
 {
   protected:
+    ConfigFileParserTests() :
+        event{sdeventplus::Event::get_default()}, services{}
+    {}
+
+    sdeventplus::Event event;
     MockServices services;
 };
 
@@ -81,7 +87,7 @@ TEST_F(ConfigFileParserTests, Parse)
         writeConfigFile(pathName, configFileContents);
 
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+            parse(pathName, services, event);
 
         EXPECT_EQ(chassis.size(), 3);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
@@ -130,7 +136,7 @@ TEST_F(ConfigFileParserTests, Parse)
         writeConfigFile(pathName, configFileContents);
 
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+            parse(pathName, services, event);
 
         EXPECT_EQ(chassis.size(), 1);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
@@ -141,7 +147,7 @@ TEST_F(ConfigFileParserTests, Parse)
     try
     {
         std::filesystem::path pathName{"/tmp/non_existent_file"};
-        parse(pathName, services);
+        parse(pathName, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const ConfigFileParserError& e)
@@ -164,7 +170,7 @@ TEST_F(ConfigFileParserTests, Parse)
 
         chmod(pathName.c_str(), 0222);
 
-        parse(pathName, services);
+        parse(pathName, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const ConfigFileParserError& e)
@@ -181,7 +187,7 @@ TEST_F(ConfigFileParserTests, Parse)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        parse(pathName, services);
+        parse(pathName, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const ConfigFileParserError& e)
@@ -198,7 +204,7 @@ TEST_F(ConfigFileParserTests, Parse)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        parse(pathName, services);
+        parse(pathName, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const ConfigFileParserError& e)
@@ -217,7 +223,8 @@ TEST_F(ConfigFileParserTests, ParseChassis)
         }
         )"_json;
 
-        std::unique_ptr<Chassis> chassis = parseChassis(element, services);
+        std::unique_ptr<Chassis> chassis =
+            parseChassis(element, services, event);
         EXPECT_EQ(chassis->getNumber(), 1);
         EXPECT_EQ(chassis->getGpios().size(), 0);
     }
@@ -230,7 +237,8 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 "PresencePath": "/dev/i2c-259"
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element, services);
+        std::unique_ptr<Chassis> chassis =
+            parseChassis(element, services, event);
         EXPECT_EQ(chassis->getNumber(), 3);
         EXPECT_EQ(chassis->getGpios().size(), 0);
         EXPECT_EQ(chassis->getPresencePath(), "/dev/i2c-259");
@@ -270,7 +278,8 @@ TEST_F(ConfigFileParserTests, ParseChassis)
         }
         )"_json;
 
-        std::unique_ptr<Chassis> chassis = parseChassis(element, services);
+        std::unique_ptr<Chassis> chassis =
+            parseChassis(element, services, event);
         EXPECT_EQ(chassis->getNumber(), 2);
         EXPECT_EQ(chassis->getPresencePath(), "/dev/i2c-259");
         EXPECT_EQ(chassis->getGpios().size(), 5);
@@ -297,7 +306,8 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 }
             }
         )"_json;
-        std::unique_ptr<Chassis> chassis = parseChassis(element, services);
+        std::unique_ptr<Chassis> chassis =
+            parseChassis(element, services, event);
         EXPECT_EQ(chassis->getNumber(), 3);
         EXPECT_EQ(chassis->getGpios().size(), 1);
         EXPECT_EQ(chassis->getGpios()[0]->getName(), "presence-chassis3");
@@ -307,7 +317,7 @@ TEST_F(ConfigFileParserTests, ParseChassis)
     try
     {
         const json element = R"( [ "0xFF", "0x01" ] )"_json;
-        parseChassis(element, services);
+        parseChassis(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -323,7 +333,7 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 "PresencePath": "/dev/i2c-159"
             }
         )"_json;
-        parseChassis(element, services);
+        parseChassis(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -339,7 +349,7 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 "ChassisNumber": 0
             }
         )"_json;
-        parseChassis(element, services);
+        parseChassis(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -355,7 +365,7 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 "ChassisNumber": 0.5
             }
         )"_json;
-        parseChassis(element, services);
+        parseChassis(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -372,7 +382,7 @@ TEST_F(ConfigFileParserTests, ParseChassis)
                 "foo": 2
             }
         )"_json;
-        parseChassis(element, services);
+        parseChassis(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -392,7 +402,7 @@ TEST_F(ConfigFileParserTests, ParseChassisArray)
             ]
         )"_json;
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parseChassisArray(element, services);
+            parseChassisArray(element, services, event);
         EXPECT_EQ(chassis.size(), 2);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[1]->getNumber(), 2);
@@ -406,7 +416,7 @@ TEST_F(ConfigFileParserTests, ParseChassisArray)
               "foo": "bar"
             }
         )"_json;
-        parseChassisArray(element, services);
+        parseChassisArray(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -773,7 +783,7 @@ TEST_F(ConfigFileParserTests, ParseRoot)
             ]
         )"_json;
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parseRoot(element, services);
+            parseRoot(element, services, event);
         EXPECT_EQ(chassis.size(), 1);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
     }
@@ -788,7 +798,7 @@ TEST_F(ConfigFileParserTests, ParseRoot)
             ]
         )"_json;
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parseRoot(element, services);
+            parseRoot(element, services, event);
         EXPECT_EQ(chassis.size(), 3);
         EXPECT_EQ(chassis[0]->getNumber(), 1);
         EXPECT_EQ(chassis[1]->getNumber(), 2);
@@ -803,7 +813,7 @@ TEST_F(ConfigFileParserTests, ParseRoot)
               "foo": "bar"
             }
         )"_json;
-        parseRoot(element, services);
+        parseRoot(element, services, event);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -1062,7 +1072,7 @@ TEST_F(ConfigFileParserTests, ParseRoot)
         writeConfigFile(pathName, configFileContents);
 
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+            parse(pathName, services, event);
 
         EXPECT_EQ(chassis.size(), 10);
 
