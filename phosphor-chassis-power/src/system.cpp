@@ -114,10 +114,12 @@ void System::initializeStatusMonitors()
                    "ERROR", e);
     }
 
-    // Pass system monitor to all chassis
+    // Pass system monitor to all chassis and initialize per-chassis status
+    // monitor
     for (const auto& curChassis : chassis)
     {
         curChassis->setSystemStatusMonitor(systemMonitor);
+        curChassis->initializeStatusMonitor(services.getBus());
     }
 }
 
