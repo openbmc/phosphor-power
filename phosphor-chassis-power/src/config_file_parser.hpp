@@ -20,6 +20,7 @@
 #include "services.hpp"
 
 #include <nlohmann/json.hpp>
+#include <sdeventplus/event.hpp>
 
 #include <filesystem>
 #include <string>
@@ -37,10 +38,15 @@ namespace phosphor::power::chassis::config_file_parser
  *
  * @param pathName configuration file path name
  * @param services Services object
+<<<<<<< HEAD
+=======
+ * @param event Event loop for timer operations
+>>>>>>> 3d2bb96 (PCP enable/disable BMC POR circuitry from sled)
  * @return vector of C++ Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services);
+    const std::filesystem::path& pathName, Services& services,
+    const sdeventplus::Event& event);
 
 /*
  * Internal implementation details for parse()
@@ -57,10 +63,15 @@ namespace internal
  *
  * @param element JSON element
  * @param services Services object
+<<<<<<< HEAD
+=======
+ * @param event Event loop for timer operations
+>>>>>>> 3d2bb96 (PCP enable/disable BMC POR circuitry from sled)
  * @return Chassis object
  */
 std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
-                                      Services& services);
+                                      Services& services,
+                                      const sdeventplus::Event& event);
 
 /**
  * Parses a JSON element containing an array of chassis.
@@ -71,10 +82,15 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
  *
  * @param element JSON element
  * @param services Services object
+<<<<<<< HEAD
+=======
+ * @param event Event loop for timer operations
+>>>>>>> 3d2bb96 (PCP enable/disable BMC POR circuitry from sled)
  * @return Returns vector of C++ Chassis objects.
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
-    const nlohmann::json& element, Services& services);
+    const nlohmann::json& element, Services& services,
+    const sdeventplus::Event& event);
 
 /**
  * Parses a JSON element containing a GPIO.
@@ -128,10 +144,12 @@ GpioPolarity parsePolarity(const std::string& polarityStr);
  *
  * @param element JSON element
  * @param services Services object
+ * @param event Event loop for timer operations
  * @return vectors of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element,
-                                                Services& services);
+                                                Services& services,
+                                                const sdeventplus::Event& event);
 
 } // namespace internal
 
