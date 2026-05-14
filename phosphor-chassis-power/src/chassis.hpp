@@ -21,7 +21,12 @@
 #include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
+#include <sdbusplus/bus/match.hpp>
+#include <sdeventplus/event.hpp>
+#include <sdeventplus/utility/timer.hpp>
+#include <xyz/openbmc_project/State/Chassis/server.hpp>
 
+#include <filesystem>
 #include <format>
 #include <map>
 #include <memory>
@@ -33,6 +38,14 @@
 
 namespace phosphor::power::chassis
 {
+
+constexpr auto DbusReadDelay = 60;
+
+/**
+ * Current power state of the system (chassis 0 CurrentPowerState).
+ */
+using SystemPowerState =
+    sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
 /**
  * @class Chassis
@@ -74,7 +87,8 @@ class Chassis
                      std::vector<std::unique_ptr<Gpio>> gpioPins =
                          std::vector<std::unique_ptr<Gpio>>{}) :
         number{number}, services{services},
-        presencePath{std::move(presencePath)}, gpios{std::move(gpioPins)}
+        presencePath{std::move(presencePath)}, gpios{std::move(gpioPins)},
+        eventLoop{services.getEvent()}
     {
         if (number < 1)
         {
@@ -126,16 +140,6 @@ class Chassis
     }
 
     /**
-     * Returns the cached latched fault state for this chassis.
-     *
-     * @return latched fault GPIO value
-     */
-    std::optional<int> getFaultLatchedValue() const
-    {
-        return faultLatchedValue;
-    }
-
-    /**
      * Returns the cached unlatched fault state for this chassis.
      *
      * @return unlatched fault GPIO value
@@ -143,6 +147,16 @@ class Chassis
     std::optional<int> getFaultUnlatchedValue() const
     {
         return faultUnlatchedValue;
+    }
+
+    /**
+     * Returns the cached latched fault state for this chassis.
+     *
+     * @return latched fault GPIO value
+     */
+    std::optional<int> getFaultLatchedValue() const
+    {
+        return faultLatchedValue;
     }
 
     /**
@@ -154,11 +168,6 @@ class Chassis
      */
     bool initializePowerSystemInputsInterface(
         PowerSystemInputs::Status initialStatus);
-
-    /**
-     * Initialize the chassis status monitor for this chassis.
-     */
-    void initializeStatusMonitor();
 
     /**
      * Starts a latched fault check for this chassis.
@@ -242,15 +251,93 @@ class Chassis
     void initializePresence();
 
     /**
+     * Initialize chassis GPIOs scenario.
+     * Manages GPIOs based on chassis presence and power state.
+     * This is not meant to be called externally except by automated tests.
+     *
+     * @param systemPowerState current power state of the system
+     */
+    void initializeChassisGpios(SystemPowerState systemPowerState);
+
+    /**
+     * Handle system boot scenario.
+     * Called when chassis power state changes.
+     * This is not meant to be called externally except by automated tests.
+     *
+     * @param powerOn true if chassis powered on, false if powered off
+     */
+    void handlePowerStateChange(bool powerOn);
+
+    /**
      * Returns the first GPIO whose name contains the given substring,
      * or nullptr if not found.
      *
      * @param name Substring to search for in GPIO names
      * @return matching GPIO pointer, or nullptr if not found
      */
-    Gpio* getGpioByName(std::string_view name) const;
+    Gpio* getGpioByName(const std::string_view name) const;
+
+    /**
+     * Initialize the chassis status monitor for this chassis.
+     *
+     * @param bus D-Bus bus object
+     *
+     * @return true if status monitor was created, false otherwise
+     */
+    bool initChassisPowerCallback(sdbusplus::bus_t& bus);
+
+    /**
+     * Set the chassis status monitor (for testing only).
+     * This is not meant to be called externally except by automated tests.
+     *
+     * @param monitor Unique pointer to chassis status monitor
+     */
+    void setChassisStatusMonitor(
+        std::unique_ptr<phosphor::power::util::ChassisStatusMonitor> monitor)
+    {
+        statusMonitor = std::move(monitor);
+    }
+
+    /**
+     * initialize chassis GPIOs callback scenario.
+     * This gets used when chassis power state can not be read.
+     * This is not meant to be called externally except by automated tests.
+     *
+     */
+    void initializeChassisGpiosTimerCallback();
+
+    /**
+     * Handle system Power off scenario.
+     * Called when chassis power state transitions to off.
+     * This is not meant to be called externally except by automated tests.
+     *
+     */
+    void handleSystemPoweredOff();
 
   private:
+    /**
+     * Callback function for D-Bus power state property changes.
+     * Called when the power state or pgood property changes.
+     *
+     * @param message D-Bus message containing the property change
+     */
+    void powerStateChangeCallback(sdbusplus::message_t& message);
+
+    /**
+     * Checks if a chassis is powered on.
+     *
+     * @return std::optional<bool> containing true if powered on, false if
+     *         powered off, or std::nullopt if status cannot be determined
+     */
+    std::optional<bool> isChassisPoweredOn() const;
+
+    /**
+     * Chassis status monitor.
+     *
+     * Monitors chassis via D-Bus. May be null if initialization failed.
+     */
+    std::unique_ptr<phosphor::power::util::ChassisStatusMonitor> statusMonitor;
+
     /**
      * Reads the current and previous GPIO values, applies deglitching logic,
      * and updates the cached value if it has changed.
@@ -330,6 +417,14 @@ class Chassis
      * @return true on success, false if the write failed
      */
     bool writeAndReleaseGPIO(Gpio& gpio, int value);
+
+    /**
+     * Writes a value to a GPIO by name and holds the line.
+     *
+     * @param gpioNamePattern GPIO name pattern to use for getGpioByName()
+     * @param enable 1 to enable, 0 to disable
+     */
+    void writeGpioByName(const std::string& gpioNamePattern, int enable);
 
     /**
      * Chassis number within the system.
@@ -423,6 +518,43 @@ class Chassis
      * On the first handlePresenceChange call, PIM is always notified.
      */
     bool presenceInitialized{false};
+
+    /**
+     * Previous power state (pgood) of the chassis.
+     */
+    bool previousPowerState{false};
+
+    /**
+     * Event loop for timer operations.
+     */
+    std::optional<sdeventplus::Event> eventLoop{};
+
+    /**
+     * Timer for retrying initializeChassisGpios() when power status cannot be
+     * determined. Set to 60 seconds.
+     */
+    std::unique_ptr<
+        sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic>>
+        initializeChassisGpiosRetryTimer{};
+
+    /**
+     * System power state passed to initializeChassisGpios() call.
+     * Used when initializeChassisGpios() is retried by the timer callback.
+     */
+    SystemPowerState initializeChassisGpiosSystemPowerState{
+        SystemPowerState::Off};
+
+    /**
+     * Flag to track if the BMC reset retry timer has already been used.
+     * Ensures the timer only fires once.
+     */
+    bool initializeChassisGpiosRetryTimerUsed{false};
+
+    /**
+     * D-Bus match object for monitoring power state changes.
+     * Subscribes to PropertiesChanged signals on the power interface.
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> powerStateMatch{};
 };
 
 } // namespace phosphor::power::chassis
