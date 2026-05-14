@@ -20,8 +20,8 @@ int main()
         auto event = sdeventplus::Event::get_default();
         bus.attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
 
-        chassis::BMCServices services(bus);
-        chassis::Manager manager(event, services);
+        chassis::BMCServices services(bus, event);
+        chassis::Manager manager(services);
 
         return event.loop();
     }

@@ -20,14 +20,19 @@
 #include "utility.hpp"
 
 #include <phosphor-logging/lg2.hpp>
+#include <sdbusplus/bus.hpp>
+#include <sdeventplus/clock.hpp>
 #include <xyz/openbmc_project/Logging/Entry/server.hpp>
 
+#include <chrono>
 #include <filesystem>
+#include <fstream>
 
 namespace phosphor::power::chassis
 {
 
 using namespace phosphor::power::util;
+using namespace std::string_literals;
 
 bool Chassis::initializePowerSystemInputsInterface(
     PowerSystemInputs::Status initialStatus)
@@ -122,6 +127,67 @@ void Chassis::clearErrorHistory()
     }
 }
 
+bool Chassis::initializeStatusMonitor(sdbusplus::bus_t& bus)
+{
+    try
+    {
+        phosphor::power::util::ChassisStatusMonitorOptions options;
+        options.isPowerGoodMonitored = true;
+        options.isPowerStateMonitored = true;
+
+        auto inventoryPath = std::format(
+            "/xyz/openbmc_project/inventory/system/chassis{}", number);
+
+        statusMonitor =
+            std::make_unique<phosphor::power::util::BMCChassisStatusMonitor>(
+                bus, number, inventoryPath, options);
+
+        // Set up D-Bus subscription for power state changes
+        auto chassisPowerPath = std::format(CHASSIS_POWER_PATH, number);
+
+        auto matchRule = sdbusplus::bus::match::rules::propertiesChanged(
+            chassisPowerPath, POWER_IFACE);
+
+        powerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
+            bus, matchRule, [this](sdbusplus::message_t& msg) {
+                this->powerStateChangeCallback(msg);
+            });
+
+        lg2::info("Set up power state monitoring for chassis {CHASSIS}",
+                  "CHASSIS", number);
+
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed to initialize status monitor for chassis {CHASSIS}: {ERROR}",
+            "CHASSIS", number, "ERROR", e);
+        return false;
+    }
+}
+
+std::optional<bool> Chassis::isChassisPoweredOn() const
+{
+    if (!statusMonitor)
+    {
+        lg2::error("Chassis{CHASSIS} Status monitor not initialized", "CHASSIS",
+                   number);
+        return std::nullopt;
+    }
+
+    try
+    {
+        return statusMonitor->isPoweredOn();
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Chassis{CHASSIS} isChassisPoweredOn(): {ERROR}", "CHASSIS",
+                   number, "ERROR", e.what());
+        return std::nullopt;
+    }
+}
+
 void Chassis::monitor()
 {
     bool presenceGPIOChanged = false;
@@ -133,6 +199,11 @@ void Chassis::monitor()
 
     for (const auto& gpio : gpios)
     {
+        if (gpio->getDirection() == GpioDirection::Output)
+        {
+            continue;
+        }
+
         const std::string& name = gpio->getName();
 
         if (!gpio->foundLine())
@@ -142,6 +213,8 @@ void Chassis::monitor()
                 continue;
             }
         }
+
+        bool changed = false;
 
         if (name.contains(presenceName))
         {
@@ -173,13 +246,12 @@ void Chassis::monitor()
                 if (checkLatchedFaultPending)
                 {
                     checkLatchedFault();
+                    // Handle gpio read fail
                 }
             }
         }
         else if (name.contains(faultUnlatchedName) && presenceValue)
         {
-            bool changed = false;
-
             if (gpio->requestRead())
             {
                 try
@@ -198,6 +270,16 @@ void Chassis::monitor()
                                       ? PowerSystemInputs::Status::Fault
                                       : PowerSystemInputs::Status::Good;
                     setPowerSystemInputsStatus(status);
+                    if (faultUnlatchedValue == 1)
+                    {
+                        // THIS IS A POWER FAULT
+                        writeGpioByName("reset-enable", 0);
+                        writeGpioByName("fault-reset", 1);
+
+                        lg2::error(
+                            "chassis{CHASSIS} power fault detected loss of standby power",
+                            "CHASSIS", number);
+                    }
                 }
             }
         }
@@ -269,7 +351,18 @@ bool Chassis::writeGPIO(Gpio& gpio, int value)
     return false;
 }
 
-Gpio* Chassis::getGpioByName(std::string_view name) const
+void Chassis::writeGpioByName(const std::string& gpioNamePattern, int enable)
+{
+    // Find GPIO by name
+    Gpio* gpio = getGpioByName(gpioNamePattern);
+
+    if (gpio != nullptr)
+    {
+        writeGPIO(*gpio, enable);
+    }
+}
+
+Gpio* Chassis::getGpioByName(const std::string_view name) const
 {
     for (const auto& gpio : gpios)
     {
@@ -286,7 +379,6 @@ bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
 {
     int value;
     int previousValue;
-
     value = gpio.getValue();
 
     try
@@ -315,7 +407,6 @@ bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
         gpioValue = newGPIOValue;
         return true;
     }
-
     return false;
 }
 
@@ -384,6 +475,240 @@ void Chassis::notifyInventoryManager(sdbusplus::bus_t& bus, bool present)
         lg2::error(
             "Failed to notify inventory manager of Present property for chassis {CHASSIS}: {ERROR}",
             "CHASSIS", number, "ERROR", e);
+    }
+}
+
+void Chassis::handleBMCResetTimerCallback()
+{
+    lg2::info(
+        "chassis{CHASSIS} {READDELAY} Sec. Timer expired, handleBMCResetTimerCallback() retrying handleBMCReset()",
+        "CHASSIS", number, "READDELAY", DbusReadDelay);
+
+    // Mark timer as used to prevent it from being restarted
+    bmcResetRetryTimerUsed = true;
+
+    // Disable the timer to ensure it only fires once
+    if (bmcResetRetryTimer)
+    {
+        bmcResetRetryTimer->setEnabled(false);
+        lg2::info("chassis{CHASSIS} Disabled BMC reset retry timer", "CHASSIS",
+                  number);
+    }
+    handleBMCReset(bmcResetSystemPowerState);
+}
+
+void Chassis::handleBMCReset(SystemPowerState systemPowerState)
+{
+    bmcResetSystemPowerState = systemPowerState;
+
+    auto chassisPowerStatus = isChassisPoweredOn();
+
+    // if can not read chassis power it must be off.
+    if (!chassisPowerStatus.has_value())
+    {
+        // Cannot determine power status - start 60 second timer to retry (only
+        // once)
+        if (!bmcResetRetryTimerUsed)
+        {
+            // Create timer if it doesn't exist
+            if (!bmcResetRetryTimer && eventLoop.has_value())
+            {
+                bmcResetRetryTimer =
+                    std::make_unique<sdeventplus::utility::Timer<
+                        sdeventplus::ClockId::Monotonic>>(
+                        eventLoop.value(),
+                        [this](auto&) { this->handleBMCResetTimerCallback(); });
+            }
+
+            // Start or restart the timer for 60 seconds
+            if (bmcResetRetryTimer)
+            {
+                bmcResetRetryTimer->restartOnce(
+                    std::chrono::seconds(DbusReadDelay));
+                lg2::error(
+                    "Chassis{CHASSIS}, start {READDELAY} Second timer for attempt on reading pgood",
+                    "CHASSIS", number, "READDELAY", DbusReadDelay);
+            }
+            else
+            {
+                lg2::error("Chassis{CHASSIS}, Failed to create timer",
+                           "CHASSIS", number);
+                writeGpioByName("reset-enable", 0);
+                writeGpioByName("fault-reset", 0);
+            }
+        }
+        else
+        {
+            // Timer already used, cannot determine power status after retry
+            // Assume chassis is powered off
+            lg2::error(
+                "Chassis{CHASSIS} pgood status timed out ({READDELAY} sec.), assuming it's Off",
+                "CHASSIS", number, "READDELAY", DbusReadDelay);
+            writeGpioByName("reset-enable", 0);
+            writeGpioByName("fault-reset", 1);
+        }
+        return;
+    }
+
+    // Power status was read successfully (checked above).
+    const bool chassisPoweredOn = chassisPowerStatus.value();
+
+    lg2::info(
+        "handleBMCReset():chassis{CHASSIS}: Present:{PRESENT} SystemPowerState:{SYSSTATE} ChassisPowerState:{CHASSTATE}",
+        "CHASSIS", number, "PRESENT", presenceValue, "SYSSTATE",
+        sdbusplus::xyz::openbmc_project::State::server::Chassis::
+            convertPowerStateToString(systemPowerState),
+        "CHASSTATE", chassisPoweredOn);
+
+    // power status is true.
+    if (systemPowerState == SystemPowerState::On)
+    {
+        // if Chassis off or not present
+        if (!chassisPoweredOn || !presenceValue)
+        {
+            writeGpioByName("reset-enable", 0);
+            writeGpioByName("fault-reset", 0);
+        }
+        // if Chassis on
+        else if (chassisPoweredOn)
+        {
+            if (faultUnlatchedValue == 1)
+            {
+                // If fault detected, disable GPIOs and set status to Fault
+                lg2::error("Chassis{CHASSIS} has power fault", "CHASSIS",
+                           number);
+                writeGpioByName("reset-enable", 0);
+                writeGpioByName("fault-reset", 1);
+                setPowerSystemInputsStatus(PowerSystemInputs::Status::Fault);
+            }
+            else
+            {
+                // System & Chassis Powered with no fault.
+                lg2::info("Chassis{CHASSIS} system & chassis power On",
+                          "CHASSIS", number);
+                writeGpioByName("reset-enable", 1);
+                writeGpioByName("fault-reset", 1);
+                setPowerSystemInputsStatus(PowerSystemInputs::Status::Good);
+            }
+        }
+    }
+    // System OFF
+    else
+    {
+        //            Chassis presence what ever
+        //                               disable reset-enable
+        //                               do not touch latching!
+        lg2::info("Chassis{CHASSIS} pgood status found as Off", "CHASSIS",
+                  number);
+        writeGpioByName("reset-enable", 0);
+    }
+}
+
+void Chassis::handleSystemPoweredOff()
+{
+    writeGpioByName("reset-enable", 0);
+    writeGpioByName("fault-reset", 1);
+}
+
+void Chassis::handlePowerStateChange(bool powerOn)
+{
+    lg2::info("handling power state change for chassis{CHASSIS}: {STATE}",
+              "CHASSIS", number, "STATE", (powerOn ? "On" : "Off"));
+
+    if (!presenceValue)
+    {
+        lg2::info(
+            "Chassis {CHASSIS} is not present, ignoring power state change",
+            "CHASSIS", number);
+        return;
+    }
+
+    // if powered on
+    if (powerOn)
+    {
+        // Chassis is present, check for fault
+        // This signal is used to tell the live state of the chassis. Does it
+        // have standby power
+        if (faultUnlatchedValue == 1)
+        {
+            // Power fault detected during boot
+            lg2::error(
+                "Chassis {CHASSIS} failed to power on due to power fault",
+                "CHASSIS", number);
+            writeGpioByName("reset-enable", 0);
+            writeGpioByName("fault-reset", 0);
+            setPowerSystemInputsStatus(PowerSystemInputs::Status::Fault);
+
+            lg2::info("Logging power fault PEL for chassis {CHASSIS}",
+                      "CHASSIS", number);
+
+            std::map<std::string, std::string> additionalData;
+            additionalData["CHASSIS_NUMBER"] = std::to_string(number);
+
+            additionalData["CALLOUT_INVENTORY_PATH"] =
+                "/xyz/openbmc_project/inventory/system/chassis/" +
+                std::to_string(number);
+            additionalData["CALLOUT_PRIORITY"] = "H";
+
+            services.logError("xyz.openbmc_project.Power.ChassisPowerMissing",
+                              Entry::Level::Error, additionalData);
+        }
+        // else this is a clean power on.
+        else
+        {
+            // Successful power on
+            lg2::info("Chassis {CHASSIS} powered on successfully", "CHASSIS",
+                      number);
+            writeGpioByName("reset-enable", 1);
+            writeGpioByName("fault-reset", 1);
+            setPowerSystemInputsStatus(PowerSystemInputs::Status::Good);
+        }
+    }
+
+    previousPowerState = powerOn;
+}
+
+void Chassis::powerStateChangeCallback(sdbusplus::message_t& message)
+{
+    try
+    {
+        std::string interface;
+        std::map<std::string, std::variant<int>> properties;
+
+        message.read(interface, properties);
+
+        if (interface != POWER_IFACE)
+        {
+            lg2::error("chassis{CHASSIS}: interface no POWER_IFACE", "CHASSIS",
+                       number);
+            return;
+        }
+
+        // Check if power state or pgood changed
+        bool isPoweredOn = false;
+
+        auto pgoodIt = properties.find(POWER_GOOD_PROP);
+        if (pgoodIt != properties.end())
+        {
+            isPoweredOn |= std::get<int>(pgoodIt->second);
+        }
+
+        if (isPoweredOn != previousPowerState)
+        {
+            lg2::error(
+                "chassis{CHASSIS}:powerStateChangeCallback() : PRE:{PRESTATE}-> NEW:{NEWSTATE}",
+                "CHASSIS", number, "NEWSTATE", (isPoweredOn ? "On" : "Off"),
+                "PRESTATE", (previousPowerState ? "On" : "Off"));
+
+            previousPowerState = isPoweredOn;
+            handlePowerStateChange(isPoweredOn);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Error processing power state change for chassis{CHASSIS}: {ERROR}",
+            "CHASSIS", number, "ERROR", e.what());
     }
 }
 
@@ -462,6 +787,9 @@ void Chassis::handlePresenceChange(bool readFailure)
             services.logError(
                 "xyz.openbmc_project.Power.Chassis.PresentDetection.Incorrect",
                 Entry::Level::Error, data);
+
+            writeGpioByName("reset-enable", 0);
+            writeGpioByName("fault-reset", 1);
         }
 
         newPresence = true;

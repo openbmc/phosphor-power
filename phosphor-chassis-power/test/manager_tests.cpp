@@ -17,7 +17,6 @@
 #include "mock_services.hpp"
 
 #include <sdbusplus/bus.hpp>
-#include <sdeventplus/event.hpp>
 
 #include <filesystem>
 #include <fstream>
@@ -42,12 +41,11 @@ class ManagerTests : public ::testing::Test
   public:
     /**
      * Constructor.
-     *
-     * Creates the event loop needed for Manager tests.
      */
-    ManagerTests() : event{sdeventplus::Event::get_default()}, services{}
+    ManagerTests() : services{}
     {
-        services.getBus().attach_event(event.get(), SD_EVENT_PRIORITY_NORMAL);
+        services.getBus().attach_event(services.getEvent().get(),
+                                       SD_EVENT_PRIORITY_NORMAL);
     }
 
     /**
@@ -105,11 +103,6 @@ class ManagerTests : public ::testing::Test
     }
 
     /**
-     * Event loop object.
-     */
-    sdeventplus::Event event;
-
-    /**
      * Mock services object for testing.
      */
     MockServices services;
@@ -121,7 +114,7 @@ class ManagerTests : public ::testing::Test
 TEST_F(ManagerTests, Constructor)
 {
     // Create Manager object
-    Manager manager{event, services};
+    Manager manager{services};
 
     // Verify config file is not loaded initially
     EXPECT_FALSE(manager.isConfigFileLoaded());
@@ -135,7 +128,7 @@ TEST_F(ManagerTests, Constructor)
  */
 TEST_F(ManagerTests, CompatibleSystemTypesFound)
 {
-    Manager manager{event, services};
+    Manager manager{services};
     std::vector<std::string> types{"com.ibm.Hardware.Chassis.Model.Huygens"};
     createTestConfigFile("Huygens.json");
 
@@ -172,7 +165,7 @@ TEST_F(ManagerTests, CompatibleSystemTypesFound)
  */
 TEST_F(ManagerTests, IsConfigFileLoaded)
 {
-    Manager manager{event, services};
+    Manager manager{services};
     createTestConfigFile("Huygens.json");
 
     // Initially should return false
@@ -192,7 +185,7 @@ TEST_F(ManagerTests, IsConfigFileLoaded)
  */
 TEST_F(ManagerTests, FindConfigFile)
 {
-    Manager manager{event, services};
+    Manager manager{services};
 
     // Test config file not found
     {
@@ -260,7 +253,7 @@ TEST_F(ManagerTests, FindConfigFile)
  */
 TEST_F(ManagerTests, LoadConfigFile)
 {
-    Manager manager{event, services};
+    Manager manager{services};
 
     // No config file found - system should fail to load
     {

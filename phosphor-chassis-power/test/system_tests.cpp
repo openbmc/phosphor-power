@@ -53,11 +53,7 @@ std::unique_ptr<Chassis> createChassis(
  */
 class SystemTests : public ::testing::Test
 {
-  public:
-    SystemTests() : bus{sdbusplus::bus::new_default()} {}
-
   protected:
-    sdbusplus::bus_t bus;
     MockServices services;
 };
 
@@ -115,4 +111,33 @@ TEST_F(SystemTests, GetChassis)
     EXPECT_EQ(system.getChassis()[1]->getPresencePath(), "/dev/i2c-161");
     EXPECT_EQ(system.getChassis()[2]->getNumber(), 7);
     EXPECT_FALSE(system.getChassis()[2]->getPresencePath().has_value());
+}
+
+TEST_F(SystemTests, InitializePowerSystemInputsStatus)
+{
+    using PowerSystemInputs = sdbusplus::server::xyz::openbmc_project::state::
+        decorator::PowerSystemInputs;
+
+    std::vector<std::unique_ptr<Chassis>> chassis;
+    chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(2, services, "/dev/i2c-160"));
+    System system{std::move(chassis), services};
+
+    // Verify interfaces are null before initialization
+    EXPECT_EQ(system.getChassis()[0]->getPowerSystemInputsInterface(), nullptr);
+    EXPECT_EQ(system.getChassis()[1]->getPowerSystemInputsInterface(), nullptr);
+
+    // Initialize power system inputs status
+    system.getChassis()[0]->initializePowerSystemInputsInterface(
+        PowerSystemInputs::Status::Good);
+    system.getChassis()[1]->initializePowerSystemInputsInterface(
+        PowerSystemInputs::Status::Good);
+
+    // Verify interfaces were created with Good status
+    auto& interface1 = system.getChassis()[0]->getPowerSystemInputsInterface();
+    auto& interface2 = system.getChassis()[1]->getPowerSystemInputsInterface();
+    ASSERT_NE(interface1, nullptr);
+    ASSERT_NE(interface2, nullptr);
+    EXPECT_EQ(interface1->status(), PowerSystemInputs::Status::Good);
+    EXPECT_EQ(interface2->status(), PowerSystemInputs::Status::Good);
 }

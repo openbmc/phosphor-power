@@ -22,6 +22,7 @@
 #include <chassis_status_monitor.hpp>
 #include <phosphor-logging/lg2.hpp>
 #include <sdbusplus/bus.hpp>
+#include <sdeventplus/event.hpp>
 #include <xyz/openbmc_project/Logging/Entry/server.hpp>
 
 #include <map>
@@ -60,6 +61,13 @@ class Services
      * @return D-Bus bus
      */
     virtual sdbusplus::bus_t& getBus() = 0;
+
+    /**
+     * Returns the event loop object.
+     *
+     * @return event loop
+     */
+    virtual const sdeventplus::Event& getEvent() = 0;
 
     /**
      * Creates a GPIO object.
@@ -130,12 +138,21 @@ class BMCServices : public Services
      *
      * @param bus D-Bus bus object
      */
-    explicit BMCServices(sdbusplus::bus_t& bus) : bus{bus} {}
+    explicit BMCServices(sdbusplus::bus_t& bus,
+                         const sdeventplus::Event& event) :
+        bus{bus}, event{event}
+    {}
 
     /** @copydoc Services::getBus() */
     sdbusplus::bus_t& getBus() override
     {
         return bus;
+    }
+
+    /** @copydoc Services::getEvent() */
+    const sdeventplus::Event& getEvent() override
+    {
+        return event;
     }
 
     /** @copydoc Services::createGPIO() */
@@ -160,6 +177,11 @@ class BMCServices : public Services
      * D-Bus bus object.
      */
     sdbusplus::bus_t& bus;
+
+    /**
+     * Event loop object.
+     */
+    const sdeventplus::Event& event;
 };
 
 } // namespace phosphor::power::chassis
