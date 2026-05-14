@@ -47,6 +47,8 @@ using TemporaryFile = phosphor::power::util::TemporaryFile;
 class ConfigFileParserTests : public ::testing::Test
 {
   protected:
+    ConfigFileParserTests() : services{} {}
+
     MockServices services;
 };
 

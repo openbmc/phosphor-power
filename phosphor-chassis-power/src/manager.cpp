@@ -56,12 +56,12 @@ constexpr std::chrono::seconds monitorInterval{1};
 using PowerState =
     sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
-Manager::Manager(const sdeventplus::Event& event, Services& services) :
-    eventLoop(event),
+Manager::Manager(Services& services) :
     compatibleSystemsTimer{
-        event,
+        services.getEvent(),
         std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
-    monitorTimer{event, std::bind(&Manager::monitor, this), monitorInterval},
+    monitorTimer{services.getEvent(), std::bind(&Manager::monitor, this),
+                 monitorInterval},
     services(services), objectManager{services.getBus(), rootObjectPath}
 {
     // Start a timer to wait for compatible types.
@@ -196,7 +196,6 @@ void Manager::loadConfigFile()
             lg2::info("Loading configuration file {PATH}", "PATH",
                       pathName.string());
 
-            // Parse the config file
             auto chassis = config_file_parser::parse(pathName, services);
 
             system = std::make_unique<System>(std::move(chassis), services);
@@ -206,6 +205,9 @@ void Manager::loadConfigFile()
 
             // Initialize the status monitors for all chassis
             system->initializeStatusMonitors();
+
+            // Handle BMC reset scenario for all chassis
+            handleBMCReset();
         }
         else
         {
@@ -217,6 +219,19 @@ void Manager::loadConfigFile()
         // Log error messages in journal
         lg2::error("Unable to load configuration file: {EXCEPTION}",
                    "EXCEPTION", e.what());
+    }
+}
+
+void Manager::handleBMCReset()
+{
+    if (!system)
+    {
+        return;
+    }
+
+    for (const auto& chassis : system->getChassis())
+    {
+        chassis->handleBMCReset();
     }
 }
 
@@ -248,6 +263,13 @@ void Manager::chassisPowerStateChanged(sdbusplus::message_t& msg)
             if (powerState == PowerState::TransitioningToOn)
             {
                 clearErrorHistory();
+            }
+            else if (powerState == PowerState::TransitioningToOff)
+            {
+                for (const auto& chassis : system->getChassis())
+                {
+                    chassis->handleSystemPoweredOff();
+                }
             }
         }
     }
