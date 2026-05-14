@@ -151,6 +151,17 @@ class Manager
     void chassisPowerStateChanged(sdbusplus::message_t& msg);
 
     /**
+     * Handle BMC reset for all chassis.
+     * Called during initialization to set up GPIO states.
+     */
+    void handleBMCReset();
+
+    /**
+     * Setup D-Bus matches for monitoring chassis power states.
+     */
+    void setupChassisMatches();
+
+    /**
      * Event to loop on
      */
     const sdeventplus::Event& eventLoop [[maybe_unused]];
