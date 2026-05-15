@@ -24,6 +24,7 @@
 #include "power_interface.hpp"
 #include "power_sequencer_device.hpp"
 #include "system.hpp"
+#include "test_utils.hpp"
 
 #include <stddef.h> // for size_t
 
@@ -38,6 +39,7 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::sequencer;
+using namespace phosphor::power::sequencer::test_utils;
 
 using ::testing::_;
 using ::testing::MatchesRegex;
@@ -78,6 +80,19 @@ void setDelaysToZero(System& system)
 }
 
 /**
+ * Returns a reference to the Chassis object at the specified index within the
+ * system's vector of Chassis.
+ *
+ * @param system System object
+ * @param i Index of chassis
+ * @return Chassis reference
+ */
+Chassis& getChassis(System& system, int i)
+{
+    return *(system.getChassis()[i]);
+}
+
+/**
  * Returns the MockChassisStatusMonitor for the Chassis object at the specified
  * index within the system's vector of Chassis.
  *
@@ -92,8 +107,7 @@ void setDelaysToZero(System& system)
  */
 MockChassisStatusMonitor& getMockStatusMonitor(System& system, int i)
 {
-    return static_cast<MockChassisStatusMonitor&>(
-        system.getChassis()[i]->getStatusMonitor());
+    return getMockStatusMonitor(getChassis(system, i));
 }
 
 /**
@@ -107,11 +121,7 @@ MockChassisStatusMonitor& getMockStatusMonitor(System& system, int i)
  */
 void setChassisStatusToGood(System& system, int i)
 {
-    auto& monitor = getMockStatusMonitor(system, i);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    setChassisStatusToGood(getChassis(system, i));
 }
 
 /**
@@ -125,10 +135,7 @@ void setChassisStatusToGood(System& system, int i)
  */
 void setChassisStatusToGoodExceptIsPresent(System& system, int i)
 {
-    auto& monitor = getMockStatusMonitor(system, i);
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    setChassisStatusToGoodExceptIsPresent(getChassis(system, i));
 }
 
 /**
@@ -142,10 +149,7 @@ void setChassisStatusToGoodExceptIsPresent(System& system, int i)
  */
 void setChassisStatusToGoodExceptIsEnabled(System& system, int i)
 {
-    auto& monitor = getMockStatusMonitor(system, i);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    setChassisStatusToGoodExceptIsEnabled(getChassis(system, i));
 }
 
 /**
@@ -159,10 +163,7 @@ void setChassisStatusToGoodExceptIsEnabled(System& system, int i)
  */
 void setChassisStatusToGoodExceptIsAvailable(System& system, int i)
 {
-    auto& monitor = getMockStatusMonitor(system, i);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    setChassisStatusToGoodExceptIsAvailable(getChassis(system, i));
 }
 
 /**
@@ -176,10 +177,7 @@ void setChassisStatusToGoodExceptIsAvailable(System& system, int i)
  */
 void setChassisStatusToGoodExceptIsInputPowerGood(System& system, int i)
 {
-    auto& monitor = getMockStatusMonitor(system, i);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    setChassisStatusToGoodExceptIsInputPowerGood(getChassis(system, i));
 }
 
 /**
@@ -192,8 +190,7 @@ void setChassisStatusToGoodExceptIsInputPowerGood(System& system, int i)
  */
 MockDevice& getMockDevice(System& system, int i)
 {
-    return static_cast<MockDevice&>(
-        *(system.getChassis()[i]->getPowerSequencers()[0]));
+    return getMockDevice(getChassis(system, i), 0);
 }
 
 /*

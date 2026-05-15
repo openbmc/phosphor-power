@@ -18,11 +18,11 @@
 
 #include "chassis.hpp"
 #include "chassis_status_monitor.hpp"
-#include "mock_chassis_status_monitor.hpp"
 #include "mock_device.hpp"
 #include "mock_services.hpp"
 #include "power_sequencer_device.hpp"
 #include "rail.hpp"
+#include "test_utils.hpp"
 #include "ucd90160_device.hpp"
 
 #include <stddef.h> // for size_t
@@ -40,6 +40,7 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::sequencer;
+using namespace phosphor::power::sequencer::test_utils;
 
 using ::testing::_;
 using ::testing::DoAll;
@@ -101,106 +102,6 @@ std::unique_ptr<Chassis> createChassis(size_t powerSequencerCount)
     ChassisStatusMonitorOptions monitorOptions;
     return std::make_unique<Chassis>(
         number, inventoryPath, std::move(powerSequencers), monitorOptions);
-}
-
-/**
- * Returns the MockChassisStatusMonitor within a Chassis.
- *
- * Assumes that initializeMonitoring() has been called with a MockServices
- * parameter.
- *
- * Throws an exception if initializeMonitoring() has not been called.
- *
- * @param chassis Chassis object
- * @return MockChassisStatusMonitor reference
- */
-MockChassisStatusMonitor& getMockStatusMonitor(Chassis& chassis)
-{
-    return static_cast<MockChassisStatusMonitor&>(chassis.getStatusMonitor());
-}
-
-/**
- * Returns a reference to the MockDevice at the specified index within the
- * chassis's vector of power sequencer devices.
- *
- * @param chassis Chassis object
- * @param i Index of power sequencer device
- * @return MockDevice reference
- */
-MockDevice& getMockDevice(Chassis& chassis, int i)
-{
-    return static_cast<MockDevice&>(*(chassis.getPowerSequencers()[i]));
-}
-
-/**
- * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
- * properties.
- *
- * @param chassis Chassis object
- */
-void setChassisStatusToGood(Chassis& chassis)
-{
-    auto& monitor = getMockStatusMonitor(chassis);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
-}
-
-/**
- * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
- * properties except isPresent.
- *
- * @param chassis Chassis object
- */
-void setChassisStatusToGoodExceptIsPresent(Chassis& chassis)
-{
-    auto& monitor = getMockStatusMonitor(chassis);
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
-}
-
-/**
- * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
- * properties except isEnabled.
- *
- * @param chassis Chassis object
- */
-void setChassisStatusToGoodExceptIsEnabled(Chassis& chassis)
-{
-    auto& monitor = getMockStatusMonitor(chassis);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
-}
-
-/**
- * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
- * properties except isAvailable.
- *
- * @param chassis Chassis object
- */
-void setChassisStatusToGoodExceptIsAvailable(Chassis& chassis)
-{
-    auto& monitor = getMockStatusMonitor(chassis);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
-}
-
-/**
- * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
- * properties except isInputPowerGood.
- *
- * @param chassis Chassis object
- */
-void setChassisStatusToGoodExceptIsInputPowerGood(Chassis& chassis)
-{
-    auto& monitor = getMockStatusMonitor(chassis);
-    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
-    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
 }
 
 /*
@@ -362,10 +263,8 @@ TEST(ChassisTests, GetStatusMonitor)
     // Test where works
     {
         chassis->initializeMonitoring(services);
-        ChassisStatusMonitor& monitor = chassis->getStatusMonitor();
-        MockChassisStatusMonitor& mockMonitor =
-            static_cast<MockChassisStatusMonitor&>(monitor);
-        EXPECT_CALL(mockMonitor, isPresent()).Times(1).WillOnce(Return(true));
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isPresent()).Times(1).WillOnce(Return(true));
         EXPECT_TRUE(chassis->isPresent());
     }
 }

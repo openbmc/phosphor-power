@@ -18,13 +18,13 @@
 #include "mock_services.hpp"
 #include "pmbus.hpp"
 #include "rail.hpp"
+#include "test_utils.hpp"
 #include "ucd90x_device.hpp"
 
 #include <cstdint>
 #include <exception>
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -33,31 +33,11 @@
 #include <gtest/gtest.h>
 
 using namespace phosphor::power::sequencer;
+using namespace phosphor::power::sequencer::test_utils;
 using namespace phosphor::pmbus;
 
 using ::testing::Return;
 using ::testing::Throw;
-
-/**
- * Creates a Rail object that checks for a pgood fault using a GPIO.
- *
- * @param name Unique name for the rail
- * @param gpio GPIO line to read to determine the pgood status of the rail
- * @return Rail object
- */
-static std::unique_ptr<Rail> createRail(const std::string& name,
-                                        unsigned int gpioLine)
-{
-    std::optional<std::string> presence{};
-    std::optional<uint8_t> page{};
-    bool isPowerSupplyRail{false};
-    bool checkStatusVout{false};
-    bool compareVoltageToLimit{false};
-    bool activeLow{false};
-    std::optional<PgoodGPIO> gpio{PgoodGPIO{gpioLine, activeLow}};
-    return std::make_unique<Rail>(name, presence, page, isPowerSupplyRail,
-                                  checkStatusVout, compareVoltageToLimit, gpio);
-}
 
 TEST(UCD90xDeviceTests, Constructor)
 {
