@@ -1,6 +1,125 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "65de8992_6128a20b",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "If findLine() succeeds, don\u0027t we want to also do a requestRead() and a getValue()? Is there a reason the GPIO has to wait until the next monitor() cycle?\n\nIf findLine() fails, then we want to skip to the next GPIO right?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bda9224_e75c6211",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "Since this method does the release(), would it make sense to have it also do the requestRead()?\n\nSeems like they should be in the same method to make it easier to make sure both happen. That would also make monitor() simpler.\n\nSame comment for the other read*Value() methods.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daa1c03_24342571",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "It seems like a lot of the code in the three read*Value() methods is very similar.\n\nCould you implement some common code, like readGPIOValue(Gpio\u0026 gpio, int\u0026 currentValue) that has most of these lines? Then readFaultLatchedValue() could just call readGPIOValue(gpio, faultLatchedValue)?\n\nIt probably depends on what ends up going into the \"// handle gpio change\" blocks. Just trying to reduce copy/paste.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd1cd085_31b0dc78",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "My understanding in reading the Gpio class is that the first time the GPIO is read, getPreviousValue() is going to throw an exception because it does not have a value (undefined). That is not a problem and makes sense.\n\nIs your intention for the exception to be caught below and ignored? So on the first monitor() cycle, presenceGPIOValue will not get set? If so, it might be helpful to add a comment indicating that.\n\nIf that is not your intention, then you need to put a try/catch around the call to getPreviousValue() and then decide how you want to handle the previous value being undefined in your logic on line 112.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6b2aad0_e5ac5ba5",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "Just curious - what will go here in the future?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b5b24f9_0eb99036",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "This name is a little confusing, since it sounds like it would return a GPIO object rather than a GPIO value.\n\nI\u0027m guessing the reason it isn\u0027t called getPresence() is because there is another source of presence via the path?\n\nWhat is the planned API when presence via path is implemented? It can\u0027t be called getPresencePath(), since that already returns the path vs. the presence based on the path.\n\nAlso, who will own the logic of determining what the \"true\" chassis presence is, based on ANDing or ORing those two together? Will the Chassis class own that, so the caller doesn\u0027t need to know the details?\n\nIf the Chassis class will own the logic of finding the \"truth\", one naming option would be something like:\n* getPresenceFromGPIO()\n* getPresenceFromPath()\n* getPresence()\n\nNormally the Chassis class user would call getPresence(), and it would return the \"true\" presence based on the other two. The other two would be called by automated tests, and they could be helpful if the Chassis class user needs more details for some reason.\n\nNot a big deal. Just a question/suggestion.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f3afe3a_f6646c7e",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "Nit: Missing blank line",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a7dcef61_30b87386",
@@ -20,6 +139,137 @@
         "endLine": 222,
         "endChar": 25
       },
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35553f5f_c1ada40f",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "You are not specifying initial values for these. It likely defaults to 0, but if that is what you want it would be more clear to specify {0}.\n\nHowever, should these actually be std::optional\u003cint\u003e like in the Gpio class? That way you can tell the difference between \"I don\u0027t know the value\" and \"I read a 0 value\".\n\nThis is related to my comment on setting these values in the .cpp file. If these values rely on Gpio::getPreviousValue(), that is not going to be defined in the first monitor cycle. Also, if an attempt to find a line or request it fails, then it won\u0027t have a value in the first monitor cycle.\n\nIf other code is going to call getFaultLatched(), should that code get a 0 in these cases? Or should it know that the value is currently undefined?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f591f69_a34e4330",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "If you specify the interval when you create the timer, you don\u0027t need to keep restarting it.  See https://github.com/openbmc/phosphor-power/blob/master/phosphor-power-sequencer/src/manager.cpp#L36\n\nIf you copied this from the regulators app, I implemented that differently because monitoring gets turned on/off depending on whether the system is powered on/off. But I think the chassis power app, like the power sequencer app, is always monitoring once it finds the JSON config file right?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28b21880_0c38d7c7",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "See comment above. Since the callback checks whether system has a value, you can probably just have the timer run all the time and not have to keep restarting it.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e72564b_2dc7749f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "I\u0027m not sure if it is safe/correct to static_cast a unique_ptr\u003cMockGpio\u003e to a MockGpio* and then wrap that in another unique_ptr. I worry about both objects trying to delete the same memory. Maybe you already checked into this. It just looks pretty complex.\n\nCan you instead do the following?\n```\nmockGpios.emplace_back(static_cast\u003cstd::unique_ptr\u003cMockGpio\u003e\u003e(services.createGPIO(...)));\n```\n\nAnother option is to write a helper function like\n```\nMockGpio\u0026 getMockGpio(Chassis\u0026 chassis, int i)\n{\n  return static_cast\u003cMockGpio\u0026\u003e(*(chassis.getGpios()[i]));\n}\n```\n\nThis would allow you to create all the objects, move them into the Chassis, and then make the EXPECT_CALLs before the monitor().\n\n```\nEXPECT_CALL(getMockGpio(chassis, 0), ...);\n```\n\nSorry I didn\u0027t try to compile any of that code. There are probably some bugs. Just trying to get a general idea.\n}\n```",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d753d05_6cc4907f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "Why is this necessary? The MockGpio constructor doesn\u0027t request the line, and MockGpio::release() doesn\u0027t do anything.",
+      "range": {
+        "startLine": 254,
+        "startChar": 17,
+        "endLine": 254,
+        "endChar": 24
+      },
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e94ecc74_a2e9aec4",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "Are you trying to verify that getName() is being called? If not, I think the ON_CALL for getName() in the MockGpio constructor should cover it?\n\nAlso, I\u0027m not sure if ReturnRef is needed here vs. Return?\n\nThe same questions apply to other instances in this file.",
+      "range": {
+        "startLine": 296,
+        "startChar": 37,
+        "endLine": 296,
+        "endChar": 46
+      },
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "837ced63_107590dc",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-20T16:56:56Z",
+      "side": 1,
+      "message": "As mentioned in a comment in chassis.hpp, should the value be 0 here? Or should it be \"I don\u0027t know/undefined\"?",
       "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
