@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "604246b4_f87cb6a4",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65de8992_6128a20b",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bda9224_e75c6211",
@@ -69,6 +87,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "199fa694_76a60f5f",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "I can do that",
+      "parentUuid": "5daa1c03_24342571",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d040f205_21d5cc54",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bda9224_e75c6211",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd1cd085_31b0dc78",
@@ -82,6 +136,24 @@
       "writtenOn": "2026-05-20T16:56:56Z",
       "side": 1,
       "message": "My understanding in reading the Gpio class is that the first time the GPIO is read, getPreviousValue() is going to throw an exception because it does not have a value (undefined). That is not a problem and makes sense.\n\nIs your intention for the exception to be caught below and ignored? So on the first monitor() cycle, presenceGPIOValue will not get set? If so, it might be helpful to add a comment indicating that.\n\nIf that is not your intention, then you need to put a try/catch around the call to getPreviousValue() and then decide how you want to handle the previous value being undefined in your logic on line 112.",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02639e32_8d890b34",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd1cd085_31b0dc78",
       "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -103,6 +175,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d1e22cf_78e7d065",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "I plan making a handler method for the presence changes, and call that handler here.",
+      "parentUuid": "f6b2aad0_e5ac5ba5",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b5b24f9_0eb99036",
@@ -120,6 +210,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba448896_d02147f1",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "I\u0027m guessing the reason it isn\u0027t called getPresence() is because there is another source of presence via the path? - yes. \n\nWhat is the planned API when presence via path is implemented?\nI believe it would be good to have a over arching presence value (source of truth), and then the gpio value separate. Presence path should only be checked when the gpio changes values so a method to get the value but not store it would be my preference. \n\nwho will own the logic of determining what the \"true\" chassis presence is, based on ANDing or ORing those two together?\n\nChassis should own the presence. What would you think of\n- getPresenceGPIOValue()\n- getPresenceFromPath()\n- getPresenceValue()",
+      "parentUuid": "7b5b24f9_0eb99036",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f3afe3a_f6646c7e",
@@ -133,6 +241,24 @@
       "writtenOn": "2026-05-20T16:56:56Z",
       "side": 1,
       "message": "Nit: Missing blank line",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7323e5d8_607e4f59",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f3afe3a_f6646c7e",
       "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -177,6 +303,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b801d4e_78bde91f",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35553f5f_c1ada40f",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f591f69_a34e4330",
@@ -190,6 +334,24 @@
       "writtenOn": "2026-05-20T16:56:56Z",
       "side": 1,
       "message": "If you specify the interval when you create the timer, you don\u0027t need to keep restarting it.  See https://github.com/openbmc/phosphor-power/blob/master/phosphor-power-sequencer/src/manager.cpp#L36\n\nIf you copied this from the regulators app, I implemented that differently because monitoring gets turned on/off depending on whether the system is powered on/off. But I think the chassis power app, like the power sequencer app, is always monitoring once it finds the JSON config file right?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc3ff157_4c945030",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f591f69_a34e4330",
       "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -211,6 +373,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d9d8e45_7565e4a4",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28b21880_0c38d7c7",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e72564b_2dc7749f",
@@ -228,6 +408,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd3707b0_f015da30",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e72564b_2dc7749f",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d753d05_6cc4907f",
@@ -241,6 +439,30 @@
       "writtenOn": "2026-05-20T16:56:56Z",
       "side": 1,
       "message": "Why is this necessary? The MockGpio constructor doesn\u0027t request the line, and MockGpio::release() doesn\u0027t do anything.",
+      "range": {
+        "startLine": 254,
+        "startChar": 17,
+        "endLine": 254,
+        "endChar": 24
+      },
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7079e719_4217069d",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "release was for the pointer ownership.",
+      "parentUuid": "8d753d05_6cc4907f",
       "range": {
         "startLine": 254,
         "startChar": 17,
@@ -274,6 +496,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72866feb_8893e499",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e94ecc74_a2e9aec4",
+      "range": {
+        "startLine": 296,
+        "startChar": 37,
+        "endLine": 296,
+        "endChar": 46
+      },
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "837ced63_107590dc",
@@ -287,6 +533,24 @@
       "writtenOn": "2026-05-20T16:56:56Z",
       "side": 1,
       "message": "As mentioned in a comment in chassis.hpp, should the value be 0 here? Or should it be \"I don\u0027t know/undefined\"?",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad81f1d9_2260764d",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-21T19:34:14Z",
+      "side": 1,
+      "message": "I will make a helper to set up the state of the gpios for the test so it is clear.",
+      "parentUuid": "837ced63_107590dc",
       "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
