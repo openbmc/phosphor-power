@@ -228,6 +228,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8af52b67_8966227b",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "That sounds fine",
+      "parentUuid": "ba448896_d02147f1",
+      "revId": "8354420d2352c0c1cc0030f12993fef354765c9a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f3afe3a_f6646c7e",

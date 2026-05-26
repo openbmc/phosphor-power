@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4985720_c5897782",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "This method is getting pretty long, and there is a fair amount of duplication. However, we can probably wait to clean that up once you start implementing the code to handle read fails and handle value changes.",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6fb18ccf_e1304b76",
@@ -20,6 +37,91 @@
         "endLine": 125,
         "endChar": 37
       },
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e63fbe_5418a459",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "If getPresenceGPIO() was changed to add Value() at the end, should the same be done with getFaultLatched() and the others for consistency?",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b5f3983_03ebfa5a",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "Doesn\u0027t setGpioState() handle all these EXPECT_CALLs except release()?\n\nShould it handle release too, checking if the current gpio is the presence one?",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cf02011_862637b9",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "I think you can still specify the simple constants 1/0 here. std::optional normally converts to the value type automatically. However, if you tried that and it didn\u0027t work, perhaps something about the way EXPECT_EQ is implemented prevents that.",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0469b40_4869bd7e",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "Should there be some tests that involve the default value being used?",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfeb1972_478e07e1",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-26T12:30:41Z",
+      "side": 1,
+      "message": "Why does this return 0? If getValue() throws, and no default value is defined, shouldn\u0027t getPresenceGPIOValue() return an undefined std::optional?",
       "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
