@@ -16,6 +16,7 @@
 #pragma once
 
 #include "chassis_power_system_interface.hpp"
+#include "chassis_status_monitor.hpp"
 #include "gpio.hpp"
 #include "services.hpp"
 
@@ -158,6 +159,14 @@ class Chassis
     void monitor();
 
     /**
+     * Set the system status monitor for this chassis.
+     *
+     * @param monitor Shared pointer to system status monitor
+     */
+    void setSystemStatusMonitor(
+        const std::shared_ptr<ChassisStatusMonitor>& monitor);
+
+    /**
      * Returns the PowerSystemInputs D-Bus interface for this chassis.
      *
      * @return interface pointer (may be nullptr if not created)
@@ -166,6 +175,16 @@ class Chassis
         getPowerSystemInputsInterface() const
     {
         return powerSystemInputsInterface;
+    }
+
+    /**
+     * Returns the chassis status monitor for the system.
+     *
+     * @return monitor pointer (may be nullptr if not created)
+     */
+    const std::shared_ptr<ChassisStatusMonitor>& getSystemMonitor() const
+    {
+        return systemMonitor;
     }
 
     /**
@@ -186,6 +205,20 @@ class Chassis
      * @return true if the GPIO value changed, false otherwise
      */
     bool gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue);
+
+    /**
+     * Checks if the system is powered on.
+     *
+     * @return true if the system is powered on, false otherwise.
+     */
+    bool isSystemPoweredOn() const;
+
+    /**
+     * System status monitor
+     *
+     * Shared pointer to monitor owned by System class.
+     */
+    std::shared_ptr<ChassisStatusMonitor> systemMonitor;
 
     /**
      * Chassis number within the system.
