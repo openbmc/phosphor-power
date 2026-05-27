@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1852f81a_fa3a0d43",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-27T16:18:08Z",
+      "side": 1,
+      "message": "Missed this one will change it to e",
+      "range": {
+        "startLine": 93,
+        "startChar": 47,
+        "endLine": 93,
+        "endChar": 55
+      },
+      "revId": "f3165929cc0fcd6372e5ef99fa4ba0917e157c11",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
