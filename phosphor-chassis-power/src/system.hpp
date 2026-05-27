@@ -16,6 +16,7 @@
 #pragma once
 
 #include "chassis.hpp"
+#include "services.hpp"
 
 #include <sdbusplus/bus.hpp>
 
@@ -25,6 +26,8 @@
 
 namespace phosphor::power::chassis
 {
+
+using ChassisStatusMonitor = phosphor::power::util::ChassisStatusMonitor;
 
 /**
  * @class System
@@ -70,6 +73,13 @@ class System
     void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
     /**
+     * Initializes status monitors for the system and all chassis.
+     *
+     * @param services Platform services provider
+     */
+    void initializeStatusMonitors(Services& services);
+
+    /**
      * Clears the error history in all chassis.
      *
      * This should be called when the system reboots.
@@ -86,6 +96,13 @@ class System
      * Chassis in the system.
      */
     std::vector<std::unique_ptr<Chassis>> chassis{};
+
+    /**
+     * System-level status monitor.
+     *
+     * Monitors the entire system properties. Shared with all chassis.
+     */
+    std::shared_ptr<ChassisStatusMonitor> systemMonitor{};
 };
 
 } // namespace phosphor::power::chassis

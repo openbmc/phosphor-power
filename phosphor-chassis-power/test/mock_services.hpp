@@ -19,10 +19,17 @@
 #include "mock_gpio.hpp"
 #include "services.hpp"
 
+#include <mock_chassis_status_monitor.hpp>
+
 #include <memory>
+
+#include <gmock/gmock.h>
 
 namespace phosphor::power::chassis
 {
+
+using MockChassisStatusMonitor =
+    phosphor::power::util::MockChassisStatusMonitor;
 
 /**
  * @class MockServices
@@ -39,6 +46,11 @@ class MockServices : public Services
     MockServices& operator=(MockServices&&) = delete;
     ~MockServices() override = default;
 
+    sdbusplus::bus_t& getBus() override
+    {
+        return bus;
+    }
+
     std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
         std::optional<uint8_t> defaultValue = std::nullopt) override
@@ -46,6 +58,18 @@ class MockServices : public Services
         return std::make_unique<testing::NiceMock<MockGpio>>(
             name, direction, polarity, defaultValue);
     }
+
+    std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t, const std::string&, const ChassisStatusMonitorOptions&) override
+    {
+        return std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
+    }
+
+  private:
+    /**
+     * D-Bus bus object.
+     */
+    sdbusplus::bus_t bus{sdbusplus::bus::new_default()};
 };
 
 } // namespace phosphor::power::chassis

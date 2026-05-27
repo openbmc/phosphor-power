@@ -48,6 +48,31 @@ bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
     }
 }
 
+void Chassis::setSystemStatusMonitor(
+    const std::shared_ptr<ChassisStatusMonitor>& monitor)
+{
+    systemMonitor = monitor;
+}
+
+bool Chassis::isSystemPoweredOn() const
+{
+    if (!systemMonitor)
+    {
+        lg2::error("System monitor not initialized for chassis {CHASSIS}",
+                   "CHASSIS", number);
+        return false;
+    }
+
+    try
+    {
+        return systemMonitor->getPowerGood();
+    }
+    catch (const std::exception& e)
+    {
+        return false;
+    }
+}
+
 void Chassis::clearErrorHistory()
 {
     for (const auto& gpio : gpios)
