@@ -28,6 +28,7 @@ test(
         implicit_include_directories: false,
         include_directories: [
             '../src',
+            '../../test',
             libpower_inc,
             phosphor_chassis_power_include_directories,
         ],

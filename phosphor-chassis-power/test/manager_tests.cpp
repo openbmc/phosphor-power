@@ -128,7 +128,7 @@ class ManagerTests : public ::testing::Test
 TEST_F(ManagerTests, Constructor)
 {
     // Create Manager object
-    Manager manager{bus, event, services};
+    Manager manager{event, services};
 
     // Verify config file is not loaded initially
     EXPECT_FALSE(manager.isConfigFileLoaded());
@@ -142,7 +142,7 @@ TEST_F(ManagerTests, Constructor)
  */
 TEST_F(ManagerTests, CompatibleSystemTypesFound)
 {
-    Manager manager{bus, event, services};
+    Manager manager{event, services};
     std::vector<std::string> types{"com.ibm.Hardware.Chassis.Model.Huygens"};
     createTestConfigFile("Huygens.json");
 
@@ -179,7 +179,7 @@ TEST_F(ManagerTests, CompatibleSystemTypesFound)
  */
 TEST_F(ManagerTests, IsConfigFileLoaded)
 {
-    Manager manager{bus, event, services};
+    Manager manager{event, services};
     createTestConfigFile("Huygens.json");
 
     // Initially should return false
@@ -199,7 +199,7 @@ TEST_F(ManagerTests, IsConfigFileLoaded)
  */
 TEST_F(ManagerTests, FindConfigFile)
 {
-    Manager manager{bus, event, services};
+    Manager manager{event, services};
 
     // Test config file not found
     {
@@ -267,7 +267,7 @@ TEST_F(ManagerTests, FindConfigFile)
  */
 TEST_F(ManagerTests, LoadConfigFile)
 {
-    Manager manager{bus, event, services};
+    Manager manager{event, services};
 
     // No config file found - system should fail to load
     {
