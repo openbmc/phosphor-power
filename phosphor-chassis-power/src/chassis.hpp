@@ -16,6 +16,7 @@
 #pragma once
 
 #include "chassis_power_system_interface.hpp"
+#include "chassis_status_monitor.hpp"
 #include "gpio.hpp"
 
 #include <sdbusplus/bus.hpp>
@@ -121,6 +122,15 @@ class Chassis
     bool initializePowerSystemInputsInterface(sdbusplus::bus_t& bus);
 
     /**
+     * Initialize the chassis status monitor for this chassis.
+     *
+     * @param bus D-Bus bus object
+     *
+     * @return true if status monitor was created, false otherwise
+     */
+    bool initializeStatusMonitor(sdbusplus::bus_t& bus);
+
+    /**
      * Returns the PowerSystemInputs D-Bus interface for this chassis.
      *
      * @return interface pointer (may be nullptr if not created)
@@ -139,6 +149,19 @@ class Chassis
     void clearErrorHistory();
 
   private:
+    /**
+     * Checks if a chassis is powered on.
+     *
+     * @return true if the chassis is powered on, false otherwise.
+     */
+    bool isChassisPoweredOn() const;
+
+    /**
+     * Chassis status monitor.
+     */
+    std::unique_ptr<phosphor::power::util::BMCChassisStatusMonitor>
+        statusMonitor;
+
     /**
      * Chassis number within the system.
      *

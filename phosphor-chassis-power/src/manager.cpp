@@ -175,6 +175,9 @@ void Manager::loadConfigFile()
 
             // Initialize power system inputs status for all chassis
             system->initializePowerSystemInputs(bus);
+
+            // Initialize the status monitors for all chassis
+            system->initializeStatusMonitors(bus);
         }
         else
         {

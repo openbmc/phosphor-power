@@ -48,6 +48,53 @@ bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
     }
 }
 
+bool Chassis::initializeStatusMonitor(sdbusplus::bus_t& bus)
+{
+    try
+    {
+        phosphor::power::util::ChassisStatusMonitorOptions options;
+        options.isPowerGoodMonitored = true;
+        options.isPowerStateMonitored = true;
+
+        auto inventoryPath = std::format(
+            "/xyz/openbmc_project/inventory/system/chassis{}", number);
+
+        statusMonitor =
+            std::make_unique<phosphor::power::util::BMCChassisStatusMonitor>(
+                bus, number, inventoryPath, options);
+
+        return true;
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "Failed to initialize status monitor for chassis {CHASSIS}: {ERROR}",
+            "CHASSIS", number, "ERROR", e);
+        return false;
+    }
+}
+
+bool Chassis::isChassisPoweredOn() const
+{
+    if (!statusMonitor)
+    {
+        lg2::error("Status monitor not initialized for chassis {CHASSIS}",
+                   "CHASSIS", number);
+        return false;
+    }
+
+    try
+    {
+        return statusMonitor->isPoweredOn();
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to get power status for chassis {CHASSIS}: {ERROR}",
+                   "CHASSIS", number, "ERROR", e.what());
+        return false;
+    }
+}
+
 void Chassis::clearErrorHistory()
 {
     for (const auto& gpio : gpios)

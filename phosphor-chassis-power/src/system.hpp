@@ -70,6 +70,13 @@ class System
     void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
     /**
+     * Initializes each chassis status monitors.
+     *
+     * @param bus D-Bus bus object
+     */
+    void initializeStatusMonitors(sdbusplus::bus_t& bus);
+
+    /**
      * Clears the error history in all chassis.
      *
      * This should be called when the system reboots.
