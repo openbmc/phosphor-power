@@ -16,7 +16,10 @@
 
 #pragma once
 
+#include "chassis_status_monitor.hpp"
 #include "gpio.hpp"
+
+#include <sdbusplus/bus.hpp>
 
 #include <memory>
 #include <optional>
@@ -24,6 +27,11 @@
 
 namespace phosphor::power::chassis
 {
+
+using ChassisStatusMonitor = phosphor::power::util::ChassisStatusMonitor;
+using BMCChassisStatusMonitor = phosphor::power::util::BMCChassisStatusMonitor;
+using ChassisStatusMonitorOptions =
+    phosphor::power::util::ChassisStatusMonitorOptions;
 
 /**
  * @class Services
@@ -41,6 +49,13 @@ class Services
     virtual ~Services() = default;
 
     /**
+     * Returns the D-Bus bus object.
+     *
+     * @return D-Bus bus
+     */
+    virtual sdbusplus::bus_t& getBus() = 0;
+
+    /**
      * Creates a GPIO object.
      *
      * @param name GPIO name
@@ -52,6 +67,19 @@ class Services
     virtual std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
         std::optional<uint8_t> defaultValue = std::nullopt) = 0;
+
+    /**
+     * Creates object for monitoring the status of a chassis using D-Bus
+     * properties.
+     *
+     * @param number Chassis number within the system. Must be >= 0.
+     * @param inventoryPath D-Bus inventory path of the chassis.
+     * @param options Options that specify what types of monitoring are enabled.
+     * @return ChassisStatusMonitor object
+     */
+    virtual std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t number, const std::string& inventoryPath,
+        const ChassisStatusMonitorOptions& options) = 0;
 };
 
 /**
@@ -62,17 +90,41 @@ class Services
 class BMCServices : public Services
 {
   public:
-    BMCServices() = default;
+    BMCServices() = delete;
     BMCServices(const BMCServices&) = delete;
     BMCServices(BMCServices&&) = delete;
     BMCServices& operator=(const BMCServices&) = delete;
     BMCServices& operator=(BMCServices&&) = delete;
     ~BMCServices() override = default;
 
+    /**
+     * Constructor.
+     *
+     * @param bus D-Bus bus object
+     */
+    explicit BMCServices(sdbusplus::bus_t& bus) : bus{bus} {}
+
+    /** @copydoc Services::getBus() */
+    sdbusplus::bus_t& getBus() override
+    {
+        return bus;
+    }
+
     /** @copydoc Services::createGPIO() */
     std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
         std::optional<uint8_t> defaultValue = std::nullopt) override;
+
+    /** @copydoc Services::createChassisStatusMonitor() */
+    std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
+        size_t number, const std::string& inventoryPath,
+        const ChassisStatusMonitorOptions& options) override;
+
+  private:
+    /**
+     * D-Bus bus object.
+     */
+    sdbusplus::bus_t& bus;
 };
 
 } // namespace phosphor::power::chassis

@@ -53,9 +53,8 @@ constexpr std::chrono::seconds monitorInterval{1};
 using PowerState =
     sdbusplus::xyz::openbmc_project::State::server::Chassis::PowerState;
 
-Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
-                 Services& services) :
-    bus(bus), eventLoop(event),
+Manager::Manager(const sdeventplus::Event& event, Services& services) :
+    eventLoop(event),
     compatibleSystemsTimer{
         event,
         std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
@@ -67,13 +66,14 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
 
     // Create object to find compatible system types for current system.
     compatSysTypesFinder = std::make_unique<util::CompatibleSystemTypesFinder>(
-        bus, std::bind_front(&Manager::compatibleSystemTypesFound, this));
+        services.getBus(),
+        std::bind_front(&Manager::compatibleSystemTypesFound, this));
 
     // Subscribe to system power state changes
     try
     {
         chassisPowerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
-            bus,
+            services.getBus(),
             sdbusplus::bus::match::rules::propertiesChanged(chassisStatePath,
                                                             chassisStateIntf),
             std::bind_front(&Manager::chassisPowerStateChanged, this));
@@ -87,7 +87,7 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
     }
 
     // Obtain D-Bus service name
-    bus.request_name(busName);
+    services.getBus().request_name(busName);
 }
 
 void Manager::compatibleSystemTypesNotFoundCallback()
@@ -185,7 +185,10 @@ void Manager::loadConfigFile()
                       system->getChassis().size());
 
             // Initialize power system inputs status for all chassis
-            system->initializePowerSystemInputs(bus);
+            system->initializePowerSystemInputs(services.getBus());
+
+            // Initialize the status monitors for all chassis
+            system->initializeStatusMonitors(services);
         }
         else
         {
