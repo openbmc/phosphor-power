@@ -29,4 +29,12 @@ std::unique_ptr<Gpio> BMCServices::createGPIO(
     return gpio;
 }
 
+std::unique_ptr<ChassisStatusMonitor> BMCServices::createChassisStatusMonitor(
+    size_t number, const std::string& inventoryPath,
+    const ChassisStatusMonitorOptions& options)
+{
+    return std::make_unique<BMCChassisStatusMonitor>(bus, number, inventoryPath,
+                                                     options);
+}
+
 } // namespace phosphor::power::chassis
