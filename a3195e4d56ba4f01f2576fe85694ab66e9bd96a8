@@ -232,6 +232,24 @@
       "parentUuid": "bfeb1972_478e07e1",
       "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d099438_bca86bea",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-05-27T16:04:51Z",
+      "side": 1,
+      "message": "Brendan explained this offline. I missed that setGpioState() does a monitor call.",
+      "parentUuid": "e5497a5e_c2a6f31a",
+      "revId": "a3195e4d56ba4f01f2576fe85694ab66e9bd96a8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
