@@ -15,6 +15,8 @@
  */
 #include "system.hpp"
 
+#include <phosphor-logging/lg2.hpp>
+
 namespace phosphor::power::chassis
 {
 
@@ -31,6 +33,33 @@ void System::monitor()
     for (const auto& curChassis : chassis)
     {
         curChassis->monitor();
+    }
+}
+
+void System::initializeStatusMonitors(Services& services)
+{
+    // Create system-level status monitor
+    try
+    {
+        phosphor::power::util::ChassisStatusMonitorOptions options;
+        options.isPowerGoodMonitored = true;
+
+        std::string systemInventoryPath =
+            "/xyz/openbmc_project/inventory/system/chassis";
+
+        systemMonitor = services.createChassisStatusMonitor(
+            0, systemInventoryPath, options);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to initialize system status monitor: {ERROR}",
+                   "ERROR", e);
+    }
+
+    // Pass system monitor to all chassis
+    for (const auto& curChassis : chassis)
+    {
+        curChassis->setSystemStatusMonitor(systemMonitor);
     }
 }
 
