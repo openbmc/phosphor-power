@@ -33,6 +33,24 @@
       "message": "I really like this utility function. However, as we discussed offline, you probably need to remove the chassis.monitor() call.\n\nThe gmock docs say it is unsupported to make some EXPECT_CALLs, call a function that invokes those EXPECT_CALLS, and then make more EXPECT_CALLs after that. You have to do all your expects up front. So you might need to let the caller add more expects and then do the monitor() themself.",
       "revId": "c9c0c60e0e122268211027eb0b9bd3adc0b02f37",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f102d72d_5368a0f5",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-05-28T20:52:42Z",
+      "side": 1,
+      "message": "Unfortunately I can\u0027t find a nice way of keeping this function while following best practices.",
+      "parentUuid": "563cc0ea_ea85c57f",
+      "revId": "c9c0c60e0e122268211027eb0b9bd3adc0b02f37",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
