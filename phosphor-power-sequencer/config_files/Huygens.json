@@ -2,8 +2,7 @@
     "comments": [
         "phosphor-power-sequencer configuration file for IBM Huygens systems.",
         "Huygens systems contain up to 8 chassis with host CPUs and memory.",
-        "A chassis template is used to minimize duplicated data across chassis.",
-        "Power sequencer and rail information will be added later."
+        "A chassis template is used to minimize duplicated data across chassis."
     ],
     "chassis_templates": [
         {
@@ -12,9 +11,109 @@
             "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
             "power_sequencers": [
                 {
-                    "type": "gpios_only_device",
+                    "type": "UCD90320",
+                    "i2c_interface": { "bus": "${i2c_bus}", "address": "0x11" },
                     "power_control_gpio_name": "power-control-chassis${chassis_number}",
-                    "power_good_gpio_name": "power-good-chassis${chassis_number}"
+                    "power_good_gpio_name": "power-good-chassis${chassis_number}",
+                    "rails": [
+                        {
+                            "name": "12P0V",
+                            "page": 0,
+                            "is_power_supply_rail": true,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "AVDD_1P5V",
+                            "page": 1,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDN_0P65V",
+                            "page": 2,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VIO_0P90V",
+                            "page": 3,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_0",
+                            "page": 4,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_1",
+                            "page": 5,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_2",
+                            "page": 6,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_3",
+                            "page": 7,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_4",
+                            "page": 8,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_5",
+                            "page": 9,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_6",
+                            "page": 10,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VDD_7",
+                            "page": 11,
+                            "check_status_vout": true,
+                            "compare_voltage_to_limit": true
+                        },
+                        {
+                            "name": "VCS_0",
+                            "page": 12,
+                            "check_status_vout": true,
+                            "gpio": { "line": 72 }
+                        },
+                        {
+                            "name": "VCS_1",
+                            "page": 13,
+                            "check_status_vout": true,
+                            "gpio": { "line": 73 }
+                        },
+                        {
+                            "name": "VCS_2",
+                            "page": 14,
+                            "check_status_vout": true,
+                            "gpio": { "line": 74 }
+                        },
+                        {
+                            "name": "VCS_3",
+                            "page": 15,
+                            "check_status_vout": true,
+                            "gpio": { "line": 75 }
+                        }
+                    ]
                 }
             ],
             "status_monitoring": {
@@ -27,56 +126,64 @@
             "comments": ["Chassis 1"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "1"
+                "chassis_number": "1",
+                "i2c_bus": "159"
             }
         },
         {
             "comments": ["Chassis 2"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "2"
+                "chassis_number": "2",
+                "i2c_bus": "259"
             }
         },
         {
             "comments": ["Chassis 3"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "3"
+                "chassis_number": "3",
+                "i2c_bus": "359"
             }
         },
         {
             "comments": ["Chassis 4"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "4"
+                "chassis_number": "4",
+                "i2c_bus": "459"
             }
         },
         {
             "comments": ["Chassis 5"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "5"
+                "chassis_number": "5",
+                "i2c_bus": "559"
             }
         },
         {
             "comments": ["Chassis 6"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "6"
+                "chassis_number": "6",
+                "i2c_bus": "659"
             }
         },
         {
             "comments": ["Chassis 7"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "7"
+                "chassis_number": "7",
+                "i2c_bus": "759"
             }
         },
         {
             "comments": ["Chassis 8"],
             "template_id": "huygens_chassis_template",
             "template_variable_values": {
-                "chassis_number": "8"
+                "chassis_number": "8",
+                "i2c_bus": "859"
             }
         }
     ]
