@@ -71,7 +71,32 @@ for multi chassis.
 
 ### 5. PowerSystemInputs Interface
 
-- TBD
+- Add support for one `xyz.openbmc_project.State.Decorator.PowerSystemInputs`
+  interface per chassis on a chassis-specific object path:
+  `/xyz/openbmc_project/power/power_supplies/chassis{X}/psus`
+- Ensure the `Status` property is maintained independently for each chassis so a
+  fault on one chassis does not affect another chassis
+- The phosphor-psu-monitor application (via the `Chassis` class) determines if
+  each chassis is experiencing marginal utility power via the power supply fault
+  status. When the applied utility power is sufficient to operate the control
+  supply that powers the BMC, but insufficient to operate the main power system
+  (brownout condition), the monitor will update the `PowerSystemInputs` status
+  property
+- Update the per-chassis `Status` property based on power supply fault status as
+  implemented in [`Chassis::analyzeBrownout()`](../chassis.cpp):
+  - Set `Status` to `Fault` when brownout is detected (chassis pgood has failed,
+    at least one PSU has seen an AC fail, and all present PSUs have an AC or
+    pgood failure)
+  - Set `Status` to `Good` when brownout clears (at least one PSU is no longer
+    in AC fault and chassis is in `Off` power state)
+- When `Status` is set to `Good`, phosphor-state-manager can perform Auto Power
+  Restart (APR) if enabled
+- Log an informational message with brownout details when a brownout is detected (NOT_PRESENT_COUNT, AC_FAILED_COUNT, PGOOD_FAILED_COUNT)
+- Create a `xyz.openbmc_project.State.Shutdown.Power.Error.Blackout` error with
+  additional data when brownout is detected
+- Keep the D-Bus service as `xyz.openbmc_project.Power.PSUMonitor` and expose
+  the interface on each chassis object path so other components can evaluate the
+  per-chassis power-input status
 
 ### 6. Error Handling
 
