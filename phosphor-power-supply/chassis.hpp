@@ -497,6 +497,16 @@ class Chassis
      * @brief Chassis power path
      */
     std::string chassisPowerPath;
+
+    /**
+     * @brief Chassis state path for checking power state
+     */
+    std::string chassisStatePath;
+
+    /**
+     * @brief Chassis state service name
+     */
+    std::string chassisServiceName;
 };
 
 } // namespace phosphor::power::chassis
