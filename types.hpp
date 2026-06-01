@@ -47,6 +47,8 @@ constexpr auto CHASSIS_INPUT_POWER_STATUS_PATH =
     "/xyz/openbmc_project/power/chassis/chassis{}";
 constexpr auto POWER_SUPPLIES_STATUS_PATH =
     "/xyz/openbmc_project/power/power_supplies/chassis{}/psus";
+constexpr auto CHASSIS_STATE_PATH = "/xyz/openbmc_project/state/chassis{}";
+constexpr auto CHASSIS_SERVICE_BASE = "xyz.openbmc_project.State.Chassis{}";
 
 constexpr auto INPUT_HISTORY = "input_history";
 
