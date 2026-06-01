@@ -45,6 +45,8 @@ Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
     sensorsObjManager(bus, sensorsObjPath), eventLoop(e)
 {
     chassisPowerPath = std::format(CHASSIS_POWER_PATH, chassisPathUniqueId);
+    chassisStatePath = std::format(CHASSIS_STATE_PATH, chassisPathUniqueId);
+    chassisServiceName = std::format("xyz.openbmc_project.State.Chassis{}", chassisPathUniqueId);
     getPSUConfiguration();
     getSupportedConfiguration();
 }
@@ -795,8 +797,7 @@ void Chassis::analyzeBrownout()
                 PowerState currentPowerState;
                 util::getProperty<PowerState>(
                     "xyz.openbmc_project.State.Chassis", "CurrentPowerState",
-                    "/xyz/openbmc_project/state/chassis0",
-                    "xyz.openbmc_project.State.Chassis0", bus,
+                    chassisStatePath, chassisServiceName, bus,
                     currentPowerState);
 
                 if (currentPowerState == PowerState::Off)
