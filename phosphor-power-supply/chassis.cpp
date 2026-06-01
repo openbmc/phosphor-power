@@ -57,6 +57,10 @@ Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
         std::bind(&Chassis::chassisPresentChanged, this,
                   std::placeholders::_1));
 
+    chassisStatePath =
+        std::format(CHASSIS_STATE_PATH, chassisPathPositionId);
+    chassisServiceName =
+        std::format(CHASSIS_SERVICE_BASE, chassisPathPositionId);
     getPSUConfiguration();
     getSupportedConfiguration();
 }

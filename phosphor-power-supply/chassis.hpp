@@ -516,6 +516,16 @@ class Chassis
     std::string chassisPowerPath;
 
     /**
+     * @brief Chassis state path
+     */
+    std::string chassisStatePath;
+
+    /**
+     * @brief Chassis service name
+     */
+    std::string chassisServiceName;
+
+    /**
      * @brief Multi chassis system flag
      */
     bool isMultiChassisSystem;
