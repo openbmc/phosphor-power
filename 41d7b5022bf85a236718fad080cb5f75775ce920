@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14bc938f_5ee199f0",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-03T13:58:33Z",
+      "side": 1,
+      "message": "Yes, I didn\u0027t think it was bad from a point of using the test to understand the code, but from a standpoint of how the mock class works it does not work here. I will remove.",
+      "parentUuid": "c53ccf6c_c7297b8b",
+      "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10a1256a_e4f27ee5",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-06-02T18:34:33Z",
       "side": 1,
       "message": "Nit: spelling",
+      "range": {
+        "startLine": 428,
+        "startChar": 40,
+        "endLine": 428,
+        "endChar": 51
+      },
+      "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8b76b25_61483718",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-03T13:58:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10a1256a_e4f27ee5",
       "range": {
         "startLine": 428,
         "startChar": 40,
@@ -81,6 +123,48 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb0c749_202fd72b",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-03T13:58:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf0e4b1e_97074c9e",
+      "range": {
+        "startLine": 510,
+        "startChar": 70,
+        "endLine": 510,
+        "endChar": 76
+      },
+      "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81185c3c_cb8f81bf",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-03T13:58:33Z",
+      "side": 1,
+      "message": "Thank you.",
+      "parentUuid": "988c2c87_fb127f7d",
+      "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5a28e43_06619d28",
@@ -94,6 +178,24 @@
       "writtenOn": "2026-06-02T18:34:33Z",
       "side": 1,
       "message": "Might be good to do an EXPECT_EQ after each monitor, just to verify it is first 0, stays 0, and then changes to 1 on the third.",
+      "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9fac09a_3b08ed56",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-03T13:58:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5a28e43_06619d28",
       "revId": "41d7b5022bf85a236718fad080cb5f75775ce920",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
