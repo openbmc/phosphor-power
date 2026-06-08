@@ -31,7 +31,7 @@ using namespace sdeventplus;
 namespace phosphor::power::chassis
 {
 
-constexpr uint64_t invalidObjectPathUniqueId = 9999;
+constexpr uint64_t invalidObjectPathPositionId = 9999;
 using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
     Decorator::server::PowerSystemInputs;
 using PowerSystemInputsObject =
@@ -78,18 +78,20 @@ class Chassis
      * @param[in] chassisPath - Chassis path
      * @param[in] chassisName - Chassis name
      * @param[in] event - Event loop object
+     * @param[in] multiChassis - Multi chassis system flag
      */
     Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
-            const std::string& chassisName, const sdeventplus::Event& e);
+            const std::string& chassisName, const sdeventplus::Event& e,
+            bool multiChassis);
 
     /**
-     * @brief Retrieves the unique identifier of the chassis.
+     * @brief Retrieves the position identifier of the chassis.
      *
-     * @return uint64_t The unique 64 bits identifier of the chassis.
+     * @return uint64_t The position 64 bits identifier of the chassis.
      */
-    uint64_t getChassisId()
+    uint64_t getChassisPositionId()
     {
-        return chassisPathUniqueId;
+        return chassisPathPositionId;
     }
 
     /**
@@ -147,6 +149,16 @@ class Chassis
         }
     };
 
+    /**
+     * @brief Helper function provides inventory path
+     *
+     * @return String chassisPath
+     */
+    std::string getInventoryPath()
+    {
+        return chassisPath;
+    }
+
   private:
     /**
      * @brief The D-Bus object
@@ -180,6 +192,19 @@ class Chassis
 
     /** @brief Used to subscribe to D-Bus power supply presence changes */
     std::vector<std::unique_ptr<sdbusplus::bus::match_t>> presenceMatches;
+
+    /** @brief Used to subscribe to PowerSupply interfaces added */
+    std::unique_ptr<sdbusplus::bus::match_t> powerSupplyAdditionMatch;
+
+    /**
+     * @brief Callback for entity-manager interface added
+     *
+     * @details Macthes backplane position id with the chassis position id then
+     * add chassis to list of chassis to monitor.
+     *
+     * @param[in] msg - D-Bus message containing the interface details.
+     */
+    void onInterfaceAdded(sdbusplus::message_t& msg);
 
     /**
      * @brief Flag to indicate if the validateConfig() function should be run.
@@ -221,11 +246,11 @@ class Chassis
     std::string chassisShortName;
 
     /**
-     * @brief The Chassis path unique ID
+     * @brief The Chassis path position ID
      *
-     * Note: chassisPathUniqueId must be declared before powerSystemInputs.
+     * Note: chassisPathPositionId must be declared before powerSystemInputs.
      */
-    uint64_t chassisPathUniqueId = invalidObjectPathUniqueId;
+    uint64_t chassisPathPositionId = invalidObjectPathPositionId;
 
     /**
      * @brief PowerSystemInputs object
@@ -282,7 +307,7 @@ class Chassis
 
     /**
      * @brief Queries D-Bus for chassis configuration provided by the Entity
-     * Manager. Matches the object against the current chassis unique ID. Upon
+     * Manager. Matches the object against the current chassis position ID. Upon
      * finding a match calls populateSupportedConfiguration().
      */
     void getSupportedConfiguration();
@@ -319,12 +344,12 @@ class Chassis
     void populateDriverName();
 
     /**
-     * @brief Get chassis path unique ID.
+     * @brief Get chassis path position ID.
      *
      * @param [in] path - Chassis path.
-     * @return uint64_t - Chassis path unique ID.
+     * @return uint64_t - Chassis path position ID.
      */
-    uint64_t getChassisPathUniqueId(const std::string& path);
+    uint64_t getChassisPathPositionId(const std::string& path);
 
     /**
      * @brief Initializes the chassis.
@@ -497,6 +522,18 @@ class Chassis
      * @brief Chassis power path
      */
     std::string chassisPowerPath;
+
+    /**
+     * @brief Multi chassis system flag
+     */
+    bool multiChassisSystem;
+
+    /**
+     * @brief Returns present status of the current chassis.
+     *
+     * @return true if this chassis present, false otherwise.
+     */
+    bool thisChassisPresent();
 };
 
 } // namespace phosphor::power::chassis

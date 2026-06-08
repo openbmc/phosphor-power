@@ -15,6 +15,8 @@ using namespace phosphor::power::psu;
 
 namespace phosphor::power::chassis_manager
 {
+using Association = std::tuple<std::string, std::string, std::string>;
+using Associations = std::vector<Association>;
 
 // Validation timeout. Allow 30s to detect if new EM interfaces show up in D-Bus
 // before performing the validation.
@@ -78,6 +80,11 @@ class ChassisManager
     std::unique_ptr<sdbusplus::bus::match_t> entityManagerIfacesAddedMatch;
 
     /**
+     * @brief Used to subscribe to chassis present change
+     */
+    std::unique_ptr<sdbusplus::bus::match_t> chassisPresentMatch;
+
+    /**
      * @brief List of chassis objects populated dynamically.
      */
     std::vector<std::unique_ptr<phosphor::power::chassis::Chassis>>
@@ -116,17 +123,91 @@ class ChassisManager
     /**
      * @brief Retrieves a pointer to a Chassis object matching the given ID.
      *
-     * @param[in] chassisId - Unique identifier of the chassis to search for.
+     * @param[in] chassisPositonId - Unique identifier of the chassis to search
+     * for.
      * @return Raw pointer to the matching Chassis object if found, otherwise a
      * nullptr.
      */
     phosphor::power::chassis::Chassis* getMatchingChassisPtr(
-        uint64_t chassisId);
+        uint64_t chassisPositonId);
 
     /**
      * @brief Initialize chassis power monitoring.
      */
     void initChassisPowerMonitoring();
+
+    /**
+     * @brief True if multi chassis system
+     */
+    bool multiChassisSystem;
+
+    /**
+     * @brief Retrieves chassis present state.
+     *
+     * @param[in] chassisPath - Chassis D-Bus object path
+     *
+     * @return True or False
+     */
+    bool isChassisPresent(const std::string& chassisPath);
+
+    /**
+     * @brief Extract the chassis endpoint path from a collection of D-Bus
+     * associations.
+     *
+     * @details Searchs through provided associations to find the first
+     * endpoint path that contains "chassis".
+     *
+     * @param[in] associations - A collection of association tuples, where each
+     * tuple contains: forward, reverse, and endpoint
+     *
+     * @return std::string -  The filesystem path extracted from the chassis
+     * endpoint if found, or an empty string if no chassis association exists
+     */
+    std::string getChassisAssociation(const Associations& associations);
+
+    /**
+     * @brief Retrieves D-Bus associations for a given inventory object path
+     *
+     * @details Queries the D-Bus association interface to obtain all
+     * associations related to the specified inventory path.
+     *
+     * @param[in] bus - Reference to the system D-Bus object.
+     * @param[in] inventoryPath - The D-Bus object path of the inventory item to
+     * query
+     *
+     * @return Associations - A collection of association tuples contains:
+     * forward, reverse, and endpoint. An empty collection if no service is
+     * found.
+     */
+    Associations getAssociations(sdbusplus::bus_t& bus,
+                                 const std::string& inventoryPath);
+
+    /**
+     * @brief Creates and adds a new Chassis object to the managed chassis list
+     *
+     * @details Constructs a Chassis object from the provided D-Bus path and
+     * adds it to the internal list of managed chassis.
+     *
+     * @param[in] chassisPath - The full D-Bus object path of the chassis to add
+     */
+    void addChassisToList(const std::string& chassisPath);
+
+    /**
+     * @brief Callback for chassis present change.
+     *
+     * @details Process present state change
+     *
+     * @param[in] msg - D-Bus message containing the interface details.
+     */
+    void chassisPresentChanged(sdbusplus::message_t& msg);
+
+    /**
+     * @brief Remove chassis from monitored listOfChassis
+     *
+     * @param[in] chassisPath - The full D-Bus object path of the chassis to
+     * remove
+     */
+    void chassisRemoved(const std::string& chassisPath);
 };
 
 } // namespace phosphor::power::chassis_manager
