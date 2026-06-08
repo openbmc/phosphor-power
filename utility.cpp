@@ -18,6 +18,7 @@
 #include "types.hpp"
 
 #include <fstream>
+#include <unordered_set>
 
 namespace phosphor
 {
@@ -30,9 +31,9 @@ constexpr auto MAPPER_BUSNAME = "xyz.openbmc_project.ObjectMapper";
 constexpr auto MAPPER_PATH = "/xyz/openbmc_project/object_mapper";
 constexpr auto MAPPER_INTERFACE = "xyz.openbmc_project.ObjectMapper";
 
-constexpr auto DECORATOR_CHASSIS_ID =
+constexpr auto POSITION_IFACE =
     "xyz.openbmc_project.Inventory.Decorator.Position";
-constexpr auto CHASSIS_ID_PROPERTY = "Position";
+constexpr auto POSITION_PROPERTY = "Position";
 
 using json = nlohmann::json;
 
@@ -224,25 +225,59 @@ std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus)
     return paths;
 }
 
-uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
-                                     const std::string& path)
+bool isMultiChassis(sdbusplus::bus_t& bus)
 {
-    uint64_t chassisId;
-    getProperty(DECORATOR_CHASSIS_ID, CHASSIS_ID_PROPERTY, path,
-                INVENTORY_MGR_IFACE, bus, chassisId);
-    return chassisId;
+    auto paths = getChassisInventoryPaths(bus);
+
+    static const std::unordered_set<std::string> validTypes = {
+        "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.RackMount",
+        "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.StandAlone",
+        "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.Blade"};
+    auto count = 0;
+    for (const auto& path : paths)
+    {
+        try
+        {
+            std::string type;
+            getProperty(CHASSIS_IFACE, "Type", path, INVENTORY_MGR_IFACE, bus,
+                        type);
+            if (validTypes.contains(type))
+            {
+                count++;
+            }
+        }
+        catch (...)
+        {
+            lg2::info("getProperty type failed: {PATH}", "PATH", path);
+        }
+    }
+
+    return (count > 1) ? true : false;
 }
 
-uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path)
+uint64_t getChassisInventoryPositionId(sdbusplus::bus_t& bus,
+                                       const std::string& path)
+{
+    uint64_t chassisPositionId;
+    getProperty(POSITION_IFACE, POSITION_PROPERTY, path, INVENTORY_MGR_IFACE,
+                bus, chassisPositionId);
+    return chassisPositionId;
+}
+
+uint64_t getParentEMPositionId(sdbusplus::bus_t& bus, const std::string& path)
 {
     namespace fs = std::filesystem;
-    uint64_t chassisId;
     fs::path fspath(path);
-    getProperty(DECORATOR_CHASSIS_ID, CHASSIS_ID_PROPERTY, fspath.parent_path(),
-                ENTITY_MGR_SERVICE, bus, chassisId);
-    return chassisId;
+    return getEMPositionId(bus, fspath.parent_path());
 }
 
+uint64_t getEMPositionId(sdbusplus::bus_t& bus, const std::string& path)
+{
+    uint64_t positionId;
+    getProperty(POSITION_IFACE, POSITION_PROPERTY, path, ENTITY_MGR_SERVICE,
+                bus, positionId);
+    return positionId;
+}
 } // namespace util
 } // namespace power
 } // namespace phosphor
