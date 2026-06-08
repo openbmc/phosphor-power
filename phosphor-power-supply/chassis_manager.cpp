@@ -19,6 +19,9 @@ ChassisManager::ChassisManager(sdbusplus::bus_t& bus,
                                const sdeventplus::Event& e) :
     bus(bus), eventLoop(e)
 {
+    // Determine if this is a multi-chassis system
+    isMultiChassisSystem = isMultiChassis(bus);
+
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
@@ -30,6 +33,8 @@ ChassisManager::ChassisManager(sdbusplus::bus_t& bus,
         std::bind(&ChassisManager::entityManagerIfaceAdded, this,
                   std::placeholders::_1));
 
+    // Initialize all chassis (present or not)
+    // Each chassis will set up its own present property listener
     initializeChassisList();
 
     // Request the bus name before the analyze() function, which is the one that
@@ -52,62 +57,60 @@ void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
         std::map<std::string, std::map<std::string, util::DbusVariant>>
             interfaces;
         msg.read(objPath, interfaces);
-
         std::string objPathStr = objPath;
 
+        std::filesystem::path fsPath(objPathStr);
+        std::string backplanePath = fsPath.parent_path().string();
         auto itInterface = interfaces.find(supportedConfIntf);
         if (itInterface != interfaces.cend())
         {
-            lg2::info("InterfacesAdded supportedConfIntf- objPathStr= {OBJ}",
-                      "OBJ", objPathStr);
-            auto myChassisId = getParentEMUniqueId(bus, objPathStr);
-            chassisMatchPtr = getMatchingChassisPtr(myChassisId);
+            lg2::info("InterfacesAdded supportedConfIntf- objPath= {BP}", "BP",
+                      objPath);
+            auto myPositionId = getEMPositionId(bus, backplanePath);
+            chassisMatchPtr = getMatchingChassisPtr(myPositionId);
             if (chassisMatchPtr)
             {
-                lg2::debug("InterfacesAdded for: {SUPPORTED_CONFIGURATION}",
-                           "SUPPORTED_CONFIGURATION", supportedConfIntf);
                 chassisMatchPtr->supportedConfigurationInterfaceAdded(
                     itInterface->second);
             }
         }
+
         itInterface = interfaces.find(IBMCFFPSInterface);
         if (itInterface != interfaces.cend())
         {
-            lg2::debug("InterfacesAdded IBMCFFPSInterface- objPathStr= {OBJ}",
-                       "OBJ", objPathStr);
-            auto myChassisId = getParentEMUniqueId(bus, objPathStr);
-            chassisMatchPtr = getMatchingChassisPtr(myChassisId);
-            if (chassisMatchPtr)
+            auto associations = getAssociations(bus, backplanePath);
+            auto targetChassisPath = getChassisAssociation(associations);
+
+            if (!targetChassisPath.empty())
             {
-                lg2::info("InterfacesAdded for: {IBMCFFPSINTERFACE}",
-                          "IBMCFFPSINTERFACE", IBMCFFPSInterface);
-                chassisMatchPtr->psuInterfaceAdded(itInterface->second);
+                auto myChassisId = getParentEMPositionId(bus, objPathStr);
+                chassisMatchPtr = getMatchingChassisPtr(myChassisId);
+                if (chassisMatchPtr)
+                {
+                    lg2::info("InterfacesAdded for: {IBMCFFPSINTERFACE}",
+                              "IBMCFFPSINTERFACE", IBMCFFPSInterface);
+                    chassisMatchPtr->psuInterfaceAdded(itInterface->second);
+                }
             }
-        }
-        if (chassisMatchPtr != nullptr)
-        {
-            lg2::debug(
-                "InterfacesAdded validatePsuConfigAndInterfacesProcessed()");
-            chassisMatchPtr->validatePsuConfigAndInterfacesProcessed();
         }
     }
     catch (const std::exception& e)
     {
-        // Ignore, the property may be of a different type than expected.
+        lg2::error("Exception in entityManagerIfaceAdded: {ERROR}", "ERROR", e);
     }
 }
 
 phosphor::power::chassis::Chassis* ChassisManager::getMatchingChassisPtr(
-    uint64_t chassisId)
+    uint64_t chassisPositionId)
 {
     for (const auto& chassisPtr : listOfChassis)
     {
-        if (chassisPtr->getChassisId() == chassisId)
+        if (chassisPtr->getChassisPositionId() == chassisPositionId)
         {
             return chassisPtr.get();
         }
     }
-    lg2::debug("Chassis ID {ID} not found", "ID", chassisId);
+    lg2::debug("Chassis ID {ID} not found", "ID", chassisPositionId);
     return nullptr;
 }
 
@@ -126,15 +129,10 @@ void ChassisManager::initializeChassisList()
         auto chassisPathList = getChassisInventoryPaths(bus);
         for (const auto& chassisPath : chassisPathList)
         {
-            std::filesystem::path path(chassisPath);
-            const std::string chassisName = path.filename();
-
-            lg2::info(
-                "ChassisManager::initializeChassisList chassisPath= {CHASSIS_PATH}",
-                "CHASSIS_PATH", chassisPath);
-            auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
-                bus, chassisPath, chassisName, eventLoop);
-            listOfChassis.push_back(std::move(chassis));
+            // Add all chassis to the list regardless of present state
+            // Each chassis will monitor its own present property
+            addChassisToList(chassisPath);
+            lg2::info("Added chassis to list: {PATH}", "PATH", chassisPath);
         }
     }
     catch (const sdbusplus::exception_t& e)
@@ -144,12 +142,66 @@ void ChassisManager::initializeChassisList()
     }
 }
 
+void ChassisManager::addChassisToList(const std::string& chassisPath)
+{
+    std::filesystem::path path(chassisPath);
+    const std::string chassisName = path.filename();
+
+    auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
+        bus, chassisPath, chassisName, eventLoop, isMultiChassisSystem);
+    listOfChassis.push_back(std::move(chassis));
+}
+
 void ChassisManager::initChassisPowerMonitoring()
 {
     for (const auto& chassis : listOfChassis)
     {
         chassis->initPowerMonitoring();
     }
+}
+
+Associations ChassisManager::getAssociations(sdbusplus::bus_t& bus,
+                                             const std::string& inventoryPath)
+{
+    Associations associations;
+
+    auto service =
+        phosphor::power::util::getService(inventoryPath, ASSOC_DEF_IFACE, bus);
+
+    if (service.empty())
+    {
+        lg2::debug("No service found for: {INV}", "INV", inventoryPath);
+        return associations;
+    }
+
+    try
+    {
+        phosphor::power::util::getProperty<Associations>(
+            ASSOC_DEF_IFACE, ASSOC_PROP, inventoryPath, service, bus,
+            associations);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to get associations for {PATH}: {ERROR}", "PATH",
+                   inventoryPath, "ERROR", e.what());
+    }
+
+    return associations;
+}
+
+std::string ChassisManager::getChassisAssociation(
+    const Associations& associations)
+{
+    for (const auto& [forward, reverse, endpoint] : associations)
+    {
+        if (endpoint.find("powersupply") != std::string::npos)
+        {
+            std::filesystem::path fsPath(endpoint);
+            return fsPath;
+        }
+    }
+
+    return {};
 }
 
 } // namespace phosphor::power::chassis_manager

@@ -240,32 +240,56 @@ std::vector<std::string> getPSUInventoryPaths(sdbusplus::bus_t& bus);
 std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus);
 
 /**
- * @brief Retrieve the chassis ID for the given D-Bus inventory path.
- * Query the D-Bus interface for inventory object path and retrieve its unique
+ * @detail Is this a multi-chassis system
+ *
+ * @param[in] bus - D-Bus object
+ *
+ * @return True or False
+ */
+bool isMultiChassis(sdbusplus::bus_t& bus);
+
+/**
+ * @brief Retrieve the chassis Position ID for the given D-Bus inventory path.
+ * Query the D-Bus interface for inventory object path and retrieve its Position
  * ID (ID specified by SlotNumber)
  *
  * @param[in] bus - D-Bus object
  * @param[in] path - The inventory manager D-Bus path for a chassis.
  *
- * @return uint64_t - Chassis unique ID
+ * @return uint64_t - Chassis position ID
  */
-uint64_t getChassisInventoryUniqueId(sdbusplus::bus_t& bus,
-                                     const std::string& path);
+uint64_t getChassisInventoryPositionId(sdbusplus::bus_t& bus,
+                                       const std::string& path);
 /**
- * @brief Retrieve the parent chassis unique ID from the Entity Manager.
+ * @brief Retrieve the chassis parent Position ID from the Entity Manager.
  * Given a D-Bus object path, this function extracts the parent path (board or
- * chassis) and retrieve the chassis unique ID from Entity Manager.
+ * chassis) and retrieve the chassis parent Position ID from Entity Manager.
  *
  * @param[in] bus - D-Bus object
  * @param[in] path - The EntityManager D-Bus path for hardware within a chassis
  * or board.
  *
- * @return uint64_t - Chassis unique ID
+ * @return uint64_t - Chassis parent position ID
  *
  * @note This function assumes the parent object path contains property in
  * Entity Manager.
  */
-uint64_t getParentEMUniqueId(sdbusplus::bus_t& bus, const std::string& path);
+uint64_t getParentEMPositionId(sdbusplus::bus_t& bus, const std::string& path);
+
+/**
+ * @brief Retrieve the Position ID from the Entity Manager.
+ * Given a D-Bus object path, Position ID from Entity Manager.
+ *
+ * @param[in] bus - D-Bus object
+ * @param[in] path - The EntityManager D-Bus path for hardware within a chassis
+ * or board.
+ *
+ * @return - Chassis parent position ID
+ *
+ * @note This function assumes object path contains property in
+ * Entity Manager.
+ */
+uint64_t getEMPositionId(sdbusplus::bus_t& bus, const std::string& path);
 
 } // namespace util
 } // namespace power
