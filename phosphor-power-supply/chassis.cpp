@@ -35,16 +35,28 @@ const auto entityMgrService = "xyz.openbmc_project.EntityManager";
 constexpr auto INPUT_HISTORY_SYNC_DELAY = 5;
 
 Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
-                 const std::string& chassisName, const sdeventplus::Event& e) :
+                 const std::string& chassisName, const sdeventplus::Event& e,
+                 bool multiChassis) :
     bus(bus), chassisPath(chassisPath), chassisShortName(chassisName),
-    chassisPathUniqueId(getChassisPathUniqueId(chassisPath)),
+    chassisPathPositionId(getChassisPathPositionId(chassisPath)),
     powerSystemInputs(
-        bus, std::format(powerSystemsInputsObjPath, chassisPathUniqueId)),
+        bus, std::format(powerSystemsInputsObjPath, chassisPathPositionId)),
     objectManagerPath(std::format(objectManagerObjPath, chassisShortName)),
     objectManager(bus, objectManagerPath.c_str()),
-    sensorsObjManager(bus, sensorsObjPath), eventLoop(e)
+    sensorsObjManager(bus, sensorsObjPath), eventLoop(e),
+    isMultiChassisSystem(multiChassis)
 {
-    chassisPowerPath = std::format(CHASSIS_POWER_PATH, chassisPathUniqueId);
+    chassisPowerPath = std::format(CHASSIS_POWER_PATH, chassisPathPositionId);
+    isPresent = isItPresent();
+
+    // Subscribe to this chassis's Present property changes
+    chassisPresentMatch = std::make_unique<sdbusplus::bus::match_t>(
+        bus,
+        sdbusplus::bus::match::rules::propertiesChanged(chassisPath,
+                                                        INVENTORY_IFACE),
+        std::bind(&Chassis::chassisPresentChanged, this,
+                  std::placeholders::_1));
+
     getPSUConfiguration();
     getSupportedConfiguration();
 }
@@ -55,7 +67,7 @@ void Chassis::getPSUConfiguration()
 
     try
     {
-        if (chassisPathUniqueId == invalidObjectPathUniqueId)
+        if (chassisPathPositionId == invalidObjectPathPositionId)
         {
             lg2::error(
                 "{CHASSIS_SHORT_NAME}: Chassis does not have chassis ID: {CHASSISPATH}",
@@ -66,7 +78,7 @@ void Chassis::getPSUConfiguration()
         auto connectorsSubTree = getSubTree(bus, "/", IBMCFFPSInterface, depth);
         for (const auto& [path, services] : connectorsSubTree)
         {
-            if (chassisPathUniqueId == getParentEMUniqueId(bus, path))
+            if (chassisPathPositionId == getParentEMPositionId(bus, path))
             {
                 // For each object in the array of objects, I want
                 // to get properties from the service, path, and
@@ -220,7 +232,7 @@ void Chassis::getSupportedConfiguration()
                 continue;
             }
 
-            if (chassisPathUniqueId == getParentEMUniqueId(bus, objPath))
+            if (chassisPathPositionId == getParentEMPositionId(bus, objPath))
             {
                 auto properties = util::getAllProperties(
                     bus, objPath, supportedConfIntf, service);
@@ -365,11 +377,11 @@ void Chassis::populateDriverName()
                   [&driverName](auto& psu) { psu->setDriverName(driverName); });
 }
 
-uint64_t Chassis::getChassisPathUniqueId(const std::string& path)
+uint64_t Chassis::getChassisPathPositionId(const std::string& path)
 {
     try
     {
-        return getChassisInventoryUniqueId(bus, path);
+        return getChassisInventoryPositionId(bus, path);
     }
     catch (const sdbusplus::exception_t& e)
     {
@@ -378,7 +390,7 @@ uint64_t Chassis::getChassisPathUniqueId(const std::string& path)
             "CHASSIS_SHORT_NAME", chassisShortName, "CHASSIS_PATH", path,
             "ERROR", e);
     }
-    return invalidObjectPathUniqueId;
+    return invalidObjectPathPositionId;
 }
 
 void Chassis::initPowerMonitoring()
@@ -505,6 +517,11 @@ void Chassis::syncHistory()
 
 void Chassis::analyze()
 {
+    if (!isPresent)
+    {
+        return;
+    }
+
     auto syncHistoryRequired =
         std::any_of(psus.begin(), psus.end(), [](const auto& psu) {
             return psu->isSyncHistoryRequired();
@@ -1164,6 +1181,10 @@ void Chassis::setPowerConfigGPIO()
 
 void Chassis::powerIfaceAdded(sdbusplus::message_t& msg)
 {
+    if (!isPresent)
+    {
+        return;
+    }
     try
     {
         sdbusplus::object_path objPath;
@@ -1186,6 +1207,10 @@ void Chassis::powerIfaceAdded(sdbusplus::message_t& msg)
 
 void Chassis::powerStateChanged(sdbusplus::message_t& msg)
 {
+    if (!isPresent)
+    {
+        return;
+    }
     std::string msgSensor;
     std::map<std::string, std::variant<int>> msgData;
     msg.read(msgSensor, msgData);
@@ -1235,6 +1260,50 @@ void Chassis::powerStateChanged(sdbusplus::message_t& msg)
         "{CHASSIS_SHORT_NAME}: powerStateChanged: power on: {POWER_ON}, power fault occurring: {POWER_FAULT_OCCURRING}",
         "CHASSIS_SHORT_NAME", chassisShortName, "POWER_ON", powerOn,
         "POWER_FAULT_OCCURRING", powerFaultOccurring);
+}
+void Chassis::chassisPresentChanged(sdbusplus::message_t& msg)
+{
+    try
+    {
+        std::string interface;
+        std::map<std::string, util::DbusVariant> properties;
+        msg.read(interface, properties);
+
+        auto it = properties.find("Present");
+        if (it != properties.end())
+        {
+            isPresent = std::get<bool>(it->second);
+            if (!isPresent)
+            {
+                // Chassis is no longer present
+                lg2::info(
+                    "{CHASSIS_SHORT_NAME}: {PATH} is not present, clearing faults",
+                    "CHASSIS_SHORT_NAME", chassisShortName, "PATH",
+                    chassisPath);
+                clearFaults();
+
+                // Clear PSU list when chassis is removed
+                psus.clear();
+            }
+            else
+            {
+                // Chassis became present
+                lg2::info(
+                    "{CHASSIS_SHORT_NAME}: {PATH} is now present, reinitializing",
+                    "CHASSIS_SHORT_NAME", chassisShortName, "PATH",
+                    chassisPath);
+
+                // Reinitialize PSU configuration
+                getPSUConfiguration();
+                getSupportedConfiguration();
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Exception in chassisPresentChanged for {PATH}: {ERROR}",
+                   "PATH", chassisPath, "ERROR", e);
+    }
 }
 
 bool Chassis::validateModelName(
@@ -1405,5 +1474,26 @@ unsigned int Chassis::getRequiredPSUCount()
     }
 
     return requiredCount;
+}
+
+bool Chassis::isItPresent()
+{
+    constexpr auto INVENTORY_MGR_SERVICE =
+        "xyz.openbmc_project.Inventory.Manager";
+    try
+    {
+        bool isPresent;
+        util::getProperty(INVENTORY_IFACE, "Present", chassisPath,
+                          INVENTORY_MGR_SERVICE, bus, isPresent);
+        return isPresent;
+    }
+    catch (const std::exception& e)
+    {
+        lg2::warning("{CHASSIS_SHORT_NAME}: Failed to get Present property for "
+                     "chassis {PATH}: {ERROR}.",
+                     "CHASSIS_SHORT_NAME", chassisShortName, "PATH",
+                     chassisPath, "ERROR", e);
+        return false;
+    }
 }
 } // namespace phosphor::power::chassis
