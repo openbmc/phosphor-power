@@ -89,6 +89,29 @@ bool Chassis::isSystemPoweredOn() const
         return false;
     }
 }
+void Chassis::checkLatchedFault()
+{
+    latchedFaultPELLogged = false;
+
+    if (faultLatchedValue.has_value())
+    {
+        if (faultLatchedValue.value() == 1)
+        {
+            if (!handleLatchedFault())
+            {
+                checkLatchedFaultPending = true;
+            }
+        }
+        else
+        {
+            checkLatchedFaultPending = false;
+        }
+    }
+    else
+    {
+        checkLatchedFaultPending = true;
+    }
+}
 
 void Chassis::clearErrorHistory()
 {
@@ -141,16 +164,23 @@ void Chassis::monitor()
             {
                 try
                 {
-                    changed = gpioValueChanged(*gpio, faultLatchedValue);
+                    gpioValueChanged(*gpio, faultLatchedValue);
                 }
                 catch (...)
+                {}
+                if (checkLatchedFaultPending)
                 {
-                    // Handle gpio read fail
-                }
-
-                if (changed)
-                {
-                    // Handle fault latched change
+                    if (faultLatchedValue.value() == 1)
+                    {
+                        if (handleLatchedFault())
+                        {
+                            checkLatchedFaultPending = false;
+                        }
+                    }
+                    else if (faultLatchedValue.value() == 0)
+                    {
+                        checkLatchedFaultPending = false;
+                    }
                 }
             }
         }
@@ -178,6 +208,64 @@ void Chassis::monitor()
             }
         }
     }
+}
+
+bool Chassis::handleLatchedFault()
+{
+    if (!latchedFaultPELLogged)
+    {
+        lg2::info("Chassis {CHASSIS} handeling latched fault", "CHASSIS",
+                  number);
+
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", std::to_string(number)}};
+
+        services.logError(
+            "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+            Entry::Level::Error, additionalData);
+
+        latchedFaultPELLogged = true;
+    }
+
+    return writeAndReleaseGPIO(faultResetName, 0);
+}
+
+bool Chassis::writeAndReleaseGPIO(std::string_view name, int value)
+{
+    auto* gpio = getGpioByName(name);
+
+    if (gpio == nullptr)
+    {
+        return true;
+    }
+
+    if (!gpio->foundLine())
+    {
+        gpio->findLine();
+    }
+
+    if (!gpio->requestWrite(value))
+    {
+        lg2::error("Failed to write GPIO '{NAME}', will retry", "NAME",
+                   gpio->getName());
+        return false;
+    }
+
+    gpio->release();
+    return true;
+}
+
+Gpio* Chassis::getGpioByName(std::string_view name) const
+{
+    for (const auto& gpio : gpios)
+    {
+        if (gpio->getName().contains(name))
+        {
+            return gpio.get();
+        }
+    }
+
+    return nullptr;
 }
 
 bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
