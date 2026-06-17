@@ -35,6 +35,23 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4d9495_eeb744cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:57:45Z",
+      "side": 1,
+      "message": "Sorry, my previous comment was not very clear. You don\u0027t need to break *this* commit into smaller ones. But for future work, use smaller commits if possible. I know sometimes that is hard due to a bunch of inter-related changes.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a0a308e_3e5c6e96",
