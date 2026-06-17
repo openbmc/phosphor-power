@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df534dd_b8591840",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T20:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "620baee8_47a281de",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "818cc77e_a086c09e",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-06-17T17:29:38Z",
       "side": 1,
       "message": "The method signature and std::move() is confusing.\n\nYou want to share the pointer, so wouldn\u0027t you want to pass the shared pointer as a reference, and then just do a normal assignment without the std::move()?\n\n```\nvoid Chassis::setSystemStatusMonitor(\n    std::shared_ptr\u003cChassisStatusMonitor\u003e\u0026 monitor)\n{\n    systemMonitor \u003d monitor;\n```\n\nRight now you are creating a copy, and then moving the internals of the copy to your data member. Maybe that is the same thing? Seems confusing though.\n\nSee https://en.cppreference.com/cpp/memory/shared_ptr/operator%3D",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51484822_c33cb2ee",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T20:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "818cc77e_a086c09e",
       "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -58,6 +100,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9200c2a_1173a7e6",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T20:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f6959f8_a05be712",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "340c7b8a_e5d75d97",
@@ -75,6 +135,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb18bc8_55f73bc8",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T20:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "340c7b8a_e5d75d97",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cc64756_4afc3273",
@@ -88,6 +166,24 @@
       "writtenOn": "2026-06-17T17:29:38Z",
       "side": 1,
       "message": "As noted above, you can just specify the base name without the namespace.",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b78311f_8ad938ef",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T20:43:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cc64756_4afc3273",
       "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
