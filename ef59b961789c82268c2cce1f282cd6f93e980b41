@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "669f6b96_24431466",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T21:12:01Z",
+      "side": 1,
+      "message": "The app is specifically designed for multiple chassis systems, but should work for chassis 1 - n. I will change the wording.",
+      "parentUuid": "33d34a04_7a694075",
+      "range": {
+        "startLine": 5,
+        "startChar": 72,
+        "endLine": 5,
+        "endChar": 78
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e40bba33_3bda5039",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-06-17T16:49:31Z",
       "side": 1,
       "message": "Nit: It is not valid grammar to have \", and\" followed by a clause with no subject. So delete the comma or break this long sentence into two. I think the latter would be helpful, as this sentence is a little confusing.",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 36
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f9e97f_62815b17",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T21:12:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e40bba33_3bda5039",
       "range": {
         "startLine": 7,
         "startChar": 31,
@@ -64,6 +112,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa64ed9_911f66f0",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T21:12:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4db4a08c_eda837d7",
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a011048_8195a134",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-06-17T16:49:31Z",
       "side": 1,
       "message": "chassis",
+      "range": {
+        "startLine": 75,
+        "startChar": 52,
+        "endLine": 75,
+        "endChar": 58
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91e7a171_0a9aa166",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-06-17T21:12:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a011048_8195a134",
       "range": {
         "startLine": 75,
         "startChar": 52,
