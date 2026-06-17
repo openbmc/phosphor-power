@@ -16,8 +16,28 @@
 
 #include "services.hpp"
 
+#include <utility.hpp>
+
+#include <chrono>
+
 namespace phosphor::power::chassis
 {
+
+void BMCServices::subscribeToSystemdSignals()
+{
+    auto method = bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                      util::SYSTEMD_INTERFACE, "Subscribe");
+    try
+    {
+        bus.call(method, std::chrono::seconds(60));
+    }
+    catch (const sdbusplus::exception_t& e)
+    {
+        lg2::error("Failed to subscribe to systemd signals: {ERROR}", "ERROR",
+                   e);
+        throw;
+    }
+}
 
 std::unique_ptr<Gpio> BMCServices::createGPIO(
     const std::string& name, GpioDirection direction, GpioPolarity polarity,
