@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d34a04_7a694075",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:49:31Z",
+      "side": 1,
+      "message": "Is this app applicable to single-chassis systems?\n\nMaybe the latched chassis power fault?\n\nIt seems like the other GPIOs might not be relevant? e.g. if a single chassis system is not present or does not have input power, then there is no powered BMC to run this app.",
+      "range": {
+        "startLine": 5,
+        "startChar": 72,
+        "endLine": 5,
+        "endChar": 78
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40bba33_3bda5039",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:49:31Z",
+      "side": 1,
+      "message": "Nit: It is not valid grammar to have \", and\" followed by a clause with no subject. So delete the comma or break this long sentence into two. I think the latter would be helpful, as this sentence is a little confusing.",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 36
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db4a08c_eda837d7",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:49:31Z",
+      "side": 1,
+      "message": "This is not a valid link. This should be an http link to the upstream PDI repo path right?",
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a011048_8195a134",
+        "filename": "phosphor-chassis-power/docs/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:49:31Z",
+      "side": 1,
+      "message": "chassis",
+      "range": {
+        "startLine": 75,
+        "startChar": 52,
+        "endLine": 75,
+        "endChar": 58
+      },
+      "revId": "ef59b961789c82268c2cce1f282cd6f93e980b41",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
