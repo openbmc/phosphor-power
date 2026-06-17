@@ -88,6 +88,17 @@ class Services
         const ChassisStatusMonitorOptions& options) = 0;
 
     /**
+     * Subscribes to systemd D-Bus signals.
+     *
+     * Tells systemd to emit D-Bus signals for job state changes (e.g.
+     * JobNew, JobRemoved).  Must be called before registering any match
+     * rules that listen for those signals.
+     *
+     * Throws an exception if the subscription fails.
+     */
+    virtual void subscribeToSystemdSignals() = 0;
+
+    /**
      * Logs an error and creates a PEL (Platform Event Log).
      *
      * @param message Error message
@@ -136,6 +147,10 @@ class BMCServices : public Services
     std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
         size_t number, const std::string& inventoryPath,
         const ChassisStatusMonitorOptions& options) override;
+
+    /** @copydoc Services::subscribeToSystemdSignals() */
+    void subscribeToSystemdSignals() override;
+
     /** @copydoc Services::logError() */
     void logError(const std::string& message, Entry::Level severity,
                   std::map<std::string, std::string>& additionalData) override;
