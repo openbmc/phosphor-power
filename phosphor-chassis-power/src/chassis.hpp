@@ -161,6 +161,15 @@ class Chassis
     void initializeStatusMonitor();
 
     /**
+     * Check the latched fault state for this chassis.
+     *
+     * Called by System::checkLatchedFaults() when PCP pokes the
+     * system-level latched fault check interface. If the fault-latched
+     * GPIO has not been read yet, defers to the next monitor tick.
+     */
+    void checkLatchedFault();
+
+    /**
      * Monitors the status of the chassis.
      */
     void monitor();
@@ -234,6 +243,15 @@ class Chassis
      */
     void initializePresence();
 
+    /**
+     * Returns the first GPIO whose name contains the given substring,
+     * or nullptr if not found.
+     *
+     * @param name Substring to search for in GPIO names
+     * @return matching GPIO pointer, or nullptr if not found
+     */
+    Gpio* getGpioByName(std::string_view name) const;
+
   private:
     /**
      * Reads the current and previous GPIO values, applies deglitching logic,
@@ -274,6 +292,11 @@ class Chassis
      * @param readFailure True if GPIO read failed, false otherwise
      */
     void handlePresenceChange(bool readFailure);
+
+    /**
+     * Handles a latched fault for this chassis once.
+     */
+    void handleLatchedFault();
 
     /**
      * Chassis number within the system.
@@ -336,9 +359,26 @@ class Chassis
     static constexpr std::string_view faultUnlatchedName{"fault-unlatched"};
 
     /**
+     * Substring used to identify latched fault reset GPIOs by name.
+     */
+    static constexpr std::string_view faultResetName{"fault-reset"};
+
+    /**
      * D-Bus PowerSystemInputs interface for this chassis.
      */
     std::unique_ptr<ChassisPowerSystemInterface> powerSystemInputsInterface{};
+
+    /**
+     * Indicates whether the latched fault actions have already been handled.
+     */
+    bool latchedFaultHandled{false};
+
+    /**
+     * Indicates whether a latched fault check is pending on the next monitor
+     * tick. Set when the power check priority interface is poked before the
+     * fault-latched GPIO has been read for the first time.
+     */
+    bool checkLatchedFaultPending{false};
 };
 
 } // namespace phosphor::power::chassis

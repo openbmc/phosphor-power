@@ -26,6 +26,14 @@ namespace phosphor::power::chassis
 
 using namespace phosphor::power::util;
 
+void System::checkLatchedFaults()
+{
+    for (const auto& curChassis : chassis)
+    {
+        curChassis->checkLatchedFault();
+    }
+}
+
 void System::initializePresence()
 {
     initializedPresence = true;

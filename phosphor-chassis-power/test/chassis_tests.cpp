@@ -947,3 +947,163 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_FALSE(chassis.getPresenceValue());
     }
 }
+
+TEST_F(ChassisTests, CheckLatchedFault)
+{
+    // Test where fault-latched GPIO has not been read yet — defers (pending)
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        // No GPIO mock calls expected — just sets pending flag internally
+        chassis.checkLatchedFault();
+    }
+
+    // Test where fault-latched value is 0 — no fault action taken
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
+
+        // Prime the cached value to 0 via monitor()
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Return(0));
+        chassis.monitor();
+        ASSERT_EQ(chassis.getFaultLatchedValue(), 0);
+
+        chassis.checkLatchedFault();
+
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+    }
+
+    // Test where fault-latched value is 1 — logs error PEL
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
+        ASSERT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+
+        // Prime the cached value to 1 via monitor()
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Return(1));
+        chassis.monitor();
+        ASSERT_EQ(chassis.getFaultLatchedValue(), 1);
+
+        EXPECT_CALL(
+            services,
+            logError(
+                "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+                Entry::Level::Error, testing::_))
+            .Times(1);
+
+        chassis.checkLatchedFault();
+    }
+}
+
+TEST_F(ChassisTests, HandleLatchedFault)
+{
+    // Test fault lacthed, reset GPIO is set and error logged
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-reset",
+                                GpioDirection::Output, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        chassis.monitor();
+
+        // Reset GPIO is pulsed and error PEL is logged
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(1))
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
+
+        EXPECT_CALL(
+            services,
+            logError(
+                "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+                Entry::Level::Error, testing::_))
+            .Times(1);
+
+        chassis.checkLatchedFault();
+    }
+}
+
+TEST_F(ChassisTests, GetGpioByName)
+{
+    // Test where no GPIO name contains the substring — returns nullptr
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_EQ(chassis.getGpioByName("fault-reset"), nullptr);
+    }
+
+    // Test where exactly one GPIO name contains the substring — returns that
+    // GPIO
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-reset",
+                                GpioDirection::Output, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_EQ(chassis.getGpioByName("fault-reset"),
+                  chassis.getGpios()[0].get());
+    }
+}
