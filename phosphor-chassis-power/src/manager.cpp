@@ -22,6 +22,7 @@
 
 #include <chrono>
 #include <exception>
+#include <format>
 #include <functional>
 
 namespace phosphor::power::chassis
@@ -45,6 +46,7 @@ constexpr auto busName = "xyz.openbmc_project.Power.Chassis";
 constexpr auto chassisStatePath = "/xyz/openbmc_project/state/chassis0";
 constexpr auto chassisStateIntf = "xyz.openbmc_project.State.Chassis";
 constexpr auto chassisStateProp = "CurrentPowerState";
+constexpr auto blackoutTarget = "obmc-chassis-blackout@0.target";
 
 constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{1};
 
@@ -86,6 +88,17 @@ Manager::Manager(const sdeventplus::Event& event, Services& services) :
         throw;
     }
 
+    // Subscribe to systemd signals so we receive JobNew when targets start
+    services.subscribeToSystemdSignals();
+
+    systemdTargetMatch = std::make_unique<sdbusplus::match>(
+        services.getBus(),
+        sdbusplus::match_rules::type::signal() +
+            sdbusplus::match_rules::member("JobNew") +
+            sdbusplus::match_rules::path(util::SYSTEMD_ROOT) +
+            sdbusplus::match_rules::interface(util::SYSTEMD_INTERFACE),
+        std::bind_front(&Manager::systemdTargetStarted, this));
+
     // Obtain D-Bus service name
     services.getBus().request_name(busName);
 }
@@ -100,6 +113,13 @@ void Manager::monitor()
     if (system)
     {
         system->monitor();
+
+        // Run any deferred latched fault check
+        if (checkLatchedFaults)
+        {
+            system->checkLatchedFaults();
+            checkLatchedFaults = false;
+        }
     }
 }
 
@@ -228,6 +248,29 @@ void Manager::chassisPowerStateChanged(sdbusplus::message_t& msg)
             {
                 clearErrorHistory();
             }
+        }
+    }
+}
+
+void Manager::systemdTargetStarted(sdbusplus::message_t& msg)
+{
+    uint32_t id{};
+    sdbusplus::object_path jobPath;
+    std::string unit{};
+    msg.read(id, jobPath, unit);
+
+    if (unit == blackoutTarget)
+    {
+        lg2::info("Received signal that blackout target started, "
+                  "checking latched faults");
+        if (system)
+        {
+            system->checkLatchedFaults();
+        }
+        else
+        {
+            // Config file not yet loaded; defer until system is created.
+            checkLatchedFaults = true;
         }
     }
 }
