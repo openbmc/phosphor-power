@@ -89,9 +89,28 @@ bool Chassis::isSystemPoweredOn() const
         return false;
     }
 }
+void Chassis::checkLatchedFault()
+{
+    if (faultLatchedValue.has_value())
+    {
+        if (faultLatchedValue.value() == 1)
+        {
+            lg2::info("Chassis {CHASSIS} fault latched, handling latched fault",
+                      "CHASSIS", number);
+            handleLatchedFault();
+        }
+    }
+    else
+    {
+        checkLatchedFaultPending = true;
+    }
+}
 
 void Chassis::clearErrorHistory()
 {
+    latchedFaultHandled = false;
+    checkLatchedFaultPending = false;
+
     for (const auto& gpio : gpios)
     {
         gpio->clearErrorHistory();
@@ -144,13 +163,18 @@ void Chassis::monitor()
                     changed = gpioValueChanged(*gpio, faultLatchedValue);
                 }
                 catch (...)
-                {
-                    // Handle gpio read fail
-                }
-
+                {}
                 if (changed)
                 {
-                    // Handle fault latched change
+                    if (checkLatchedFaultPending)
+                    {
+                        checkLatchedFaultPending = false;
+
+                        if (faultLatchedValue.value() == 1)
+                        {
+                            handleLatchedFault();
+                        }
+                    }
                 }
             }
         }
@@ -178,6 +202,44 @@ void Chassis::monitor()
             }
         }
     }
+}
+
+void Chassis::handleLatchedFault()
+{
+    auto* resetGPIO = findGpio(faultResetName);
+
+    if (resetGPIO != nullptr)
+    {
+        if (!resetGPIO->foundLine())
+        {
+            resetGPIO->findLine();
+        }
+
+        if (resetGPIO->requestWrite(1))
+        {
+            resetGPIO->release();
+        }
+    }
+
+    std::map<std::string, std::string> additionalData{
+        {"CHASSIS_NUMBER", std::to_string(number)}};
+
+    services.logError(
+        "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+        Entry::Level::Error, additionalData);
+}
+
+Gpio* Chassis::findGpio(std::string_view name) const
+{
+    for (const auto& gpio : gpios)
+    {
+        if (gpio->getName().contains(name))
+        {
+            return gpio.get();
+        }
+    }
+
+    return nullptr;
 }
 
 bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)

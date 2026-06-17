@@ -75,6 +75,13 @@ class System
     void initializeStatusMonitors();
 
     /**
+     * Fan out a latched fault check to all chassis.
+     *
+     * Called when the obmc-chassis-blackout@0.target starts.
+     */
+    void checkLatchedFaults();
+
+    /**
      * Clears the error history in all chassis.
      *
      * This should be called when the system reboots.

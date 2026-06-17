@@ -16,8 +16,33 @@
 
 #include "services.hpp"
 
+#include <utility.hpp>
+
+#include <chrono>
+
 namespace phosphor::power::chassis
 {
+
+void BMCServices::subscribeToSystemdSignals()
+{
+    auto method = bus.new_method_call(util::SYSTEMD_SERVICE, util::SYSTEMD_ROOT,
+                                      util::SYSTEMD_INTERFACE, "Subscribe");
+    try
+    {
+        // On OpenBMC based systems, systemd has had a few situations where it
+        // has been unable to respond to this call within the default d-bus
+        // timeout of 25 seconds. This is due to the large amount of work being
+        // done by systemd during OpenBMC startup. Set the timeout for this call
+        // to 60 seconds (worst case seen was around 30s so double it).
+        bus.call(method, std::chrono::seconds(60));
+    }
+    catch (const sdbusplus::exception_t& e)
+    {
+        lg2::error("Failed to subscribe to systemd signals: {ERROR}", "ERROR",
+                   e);
+        throw;
+    }
+}
 
 std::unique_ptr<Gpio> BMCServices::createGPIO(
     const std::string& name, GpioDirection direction, GpioPolarity polarity,
