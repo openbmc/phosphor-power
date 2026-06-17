@@ -161,6 +161,15 @@ class Chassis
     void initializeStatusMonitor();
 
     /**
+     * Checks the latched fault state for this chassis.
+     *
+     * If a fault is active, calls handleLatchedFault().  If the fault-latched
+     * GPIO has not yet been read or the handle fails, defers to the next
+     * monitor tick.
+     */
+    void checkLatchedFault();
+
+    /**
      * Monitors the status of the chassis.
      */
     void monitor();
@@ -234,6 +243,15 @@ class Chassis
      */
     void initializePresence();
 
+    /**
+     * Returns the first GPIO whose name contains the given substring,
+     * or nullptr if not found.
+     *
+     * @param name Substring to search for in GPIO names
+     * @return matching GPIO pointer, or nullptr if not found
+     */
+    Gpio* getGpioByName(std::string_view name) const;
+
   private:
     /**
      * Reads the current and previous GPIO values, applies deglitching logic,
@@ -274,6 +292,27 @@ class Chassis
      * @param readFailure True if GPIO read failed, false otherwise
      */
     void handlePresenceChange(bool readFailure);
+
+    /**
+     * Handles a latched fault for this chassis.
+     *
+     * Writes the fault reset GPIO and logs the PEL.
+     *
+     * @return true if the GPIO write succeeded or no fault reset GPIO is
+     * configured (caller should not retry), false if the GPIO write
+     * failed (caller should retry).
+     */
+    bool handleLatchedFault();
+
+    /**
+     * Writes a value to a GPIO and releases the line.
+     *
+     * @param gpio GPIO object to write to
+     * @param value Value to write
+     *
+     * @return true on success, false if the write failed
+     */
+    bool writeAndReleaseGPIO(Gpio& gpio, int value);
 
     /**
      * Chassis number within the system.
@@ -336,9 +375,27 @@ class Chassis
     static constexpr std::string_view faultUnlatchedName{"fault-unlatched"};
 
     /**
+     * Substring used to identify latched fault reset GPIOs by name.
+     */
+    static constexpr std::string_view faultResetName{"fault-reset"};
+
+    /**
      * D-Bus PowerSystemInputs interface for this chassis.
      */
     std::unique_ptr<ChassisPowerSystemInterface> powerSystemInputsInterface{};
+
+    /**
+     * Indicates whether a latched fault check is pending on the next monitor
+     * tick. Set when checkLatchedFault is called before the fault-latched
+     * GPIO has been read for the first time.
+     */
+    bool checkLatchedFaultPending{false};
+
+    /**
+     * Indicates whether the latched fault PEL has already been logged.
+     * Prevents duplicate PELs across multiple write retries.
+     */
+    bool latchedFaultPELLogged{false};
 };
 
 } // namespace phosphor::power::chassis

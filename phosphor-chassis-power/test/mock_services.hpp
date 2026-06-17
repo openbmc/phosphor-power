@@ -65,6 +65,8 @@ class MockServices : public Services
         return std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
     }
 
+    void subscribeToSystemdSignals() override {}
+
     MOCK_METHOD(void, logError,
                 (const std::string& message, Entry::Level severity,
                  (std::map<std::string, std::string> & additionalData)),
