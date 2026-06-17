@@ -1,0 +1,535 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02776e3b_cceb50e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Duplicate",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a0a308e_3e5c6e96",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I agree that this path is kind of strange since it has both \u0027power_supplies\u0027 and \u0027psus\u0027 in it.\n\nHowever, this is used in several other places, such as:\n* https://github.com/openbmc/phosphor-power/blob/master/types.hpp#L48\n* https://github.com/openbmc/phosphor-state-manager/blob/master/chassis_state_manager.cpp#L87\n\nThis path is how the PSU app communicates that a brownout is occurring to other applications.\n\nSo you need to either leave it the same or change those other places too.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba76ffd6_af897f22",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Do callbacks like this need to check if the chassis is present before continuing?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84ba1795_51b1b2fc",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This is going to get called once per second by analyze(), right?\n\nWe should not be polling the D-Bus property value. This is going to cause a lot of expensive D-Bus traffic.\n\nFrom the commit comments, I thought the plan was to remove the Chassis object completely if it is not present.\n\nIf I misunderstood and the Chassis object will remain, then it should have an isPresent data member. That should be set and updated using the normal D-Bus pattern of\n- Get the D-Bus property value during initialization if it is available on D-Bus\n- Add an InterfacesAdded listener to cover case where property is published on D-Bus later\n- Add a PropertiesChanged listener for when the value changes",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68e325bc_f3064122",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "You don\u0027t have to change this, but there is a newer way to handle the situation where a data member initially has no value.\n\nYou can use a std::optional\u003cuint64_t\u003e to represent two possible states:\n* Undefined value (I don\u0027t know the position value)\n* Defined value (e.g. 1-8 or whatever)\n\ne.g.\n```\n  std::optional\u003cuint64_t\u003e chassisPathPositionId;\n  \n  ...\n  \n  if (chassisPathPositionId)\n  {\n    // ... some code that only should happen if the position is defined/known\n  }\n```",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f76a20_b1c1ade2",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Probably don\u0027t need to specify the data type size in the description. It is clear from the data type.",
+      "range": {
+        "startLine": 90,
+        "startChar": 37,
+        "endLine": 90,
+        "endChar": 44
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8cf408f_8f2b59ab",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Nit: Spelling",
+      "range": {
+        "startLine": 202,
+        "startChar": 16,
+        "endLine": 202,
+        "endChar": 23
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0be2c98f_b6af0804",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Normally boolean variables start with is/was/has. So it would be more standard if this was called something like isMultiChassisSystem.",
+      "range": {
+        "startLine": 529,
+        "startChar": 9,
+        "endLine": 529,
+        "endChar": 27
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "341cffce_5df2e1fa",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Since this method is in a chassis class, we probably don\u0027t need Chassis in the method name?\n\nUsually this method is just called \u0027isPresent\u0027.  e.g.\n```\n  if (chassis.isPresent())\n  {\n    // Do stuff that only applies to present chassis\n  }\n```",
+      "range": {
+        "startLine": 536,
+        "startChar": 9,
+        "endLine": 536,
+        "endChar": 27
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d3363eb_071ed415",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "All three of these are already defined in types.hpp. Please use the common constants where possible.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b13befcb_1ad29ef3",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This is not a backplane path if the interface is supportedConfIntf right?\n\nThe supported configuration information is in the EM chassis object. The PSU information is in the EM backplane object.\n\nSince you also use it in the block starting on line 79, is this more parentPath?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e3a19f_9a24cf9c",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This method is getting pretty long and complex.\n\nIt looks like from the code on lines 98-103 that the return value from getChassisAssociation() is a chassis inventory path + an extra node.\n\nShould getChassisAssociation remove the extra node so the calling code can be simpler?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec1416ec_3ae9be6f",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand this.\n\nIf a chassis is not present, why do you remove it if exists in the list, but you add it if it doesn\u0027t exist in the list?\n\nWouldn\u0027t you want it to either always be in the list or never be in the list?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a27bdd33_87bbdf17",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I\u0027m not sure what this journal message means, but it is in the block of code for when a PSU interface was found. So no PSU configuration interfaces may have been found.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88325278_06078fc0",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I believe this callback is getting called when *any* inventory item has a change in their Item interface, right?\n\nIt could be a chassis, PSU, DIMM, fan, etc.\n\nAll of those inventory paths may have \u0027chassis\u0027 in the middle of their path, like\n\n```\n/xyz/openbmc_project/inventory/system/chassis/fan0\n```\n\nSo I don\u0027t think this check is going to return when the item is not a chassis if that was your intent.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dde91249_d3ac22b5",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I believe for some systems the present property is initially set to false for all chassis. Then GPIOs or other means are used to detect which chassis are present, and the property changes to true.\n\nIf the PSU app starts before the process above is done, you might see a chassis go from not present to present, but it was never really gone.\n\nSo in your journal message, you may want to say \"Chassis present\" rather than \"Chassis returned\".",
+      "range": {
+        "startLine": 213,
+        "startChar": 35,
+        "endLine": 213,
+        "endChar": 43
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13a50c4f_02a2afd5",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this also match with inventory paths that had chassis in the middle of their path, like\n```\n/xyz/openbmc_project/inventory/system/chassis/cpu/core0\n```\n\n?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f774e2_f9a0f318",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Nit: Spelling",
+      "range": {
+        "startLine": 126,
+        "startChar": 18,
+        "endLine": 126,
+        "endChar": 35
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6241bfe7_f55068df",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "As mentioned in a previous file, boolean variables normally start with is/was/has, so this should probably be isMultiChassisSystem.\n\nThen if statements read a little nicer:\n```\n  if (isMultiChassisSystem)\n  {\n    // Do stuff that only applies for multi-chassis systems\n```",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65f33ecc_97e9ec3e",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This is not a filesystem path, right?",
+      "range": {
+        "startLine": 163,
+        "startChar": 34,
+        "endLine": 163,
+        "endChar": 45
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b37fdc39_0b3667fd",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "No need to specify the return type in the doxygen. It is in the code and just a source of dual maintenance.",
+      "range": {
+        "startLine": 163,
+        "startChar": 15,
+        "endLine": 163,
+        "endChar": 26
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93a2a518_5592c9b2",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Don\u0027t need to specify data types in doxygen.",
+      "range": {
+        "startLine": 174,
+        "startChar": 24,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1740a5d9_fc2dbe28",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This should probably be renamed to POSITION_INTERFACE right?\n\nThis file contains general utility functions, so this interface may be used for other reasons than just finding the chassis position.",
+      "range": {
+        "startLine": 34,
+        "startChar": 15,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4897aa3b_03827c04",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "This should probably be renamed to POSITION_PROPERTY right?",
+      "range": {
+        "startLine": 36,
+        "startChar": 15,
+        "endLine": 36,
+        "endChar": 35
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0ce4ac7_20221e55",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand this.\n\nDon\u0027t you want to count the number of chassis that are one of these types, and then return whether count \u003e 1?\n\nIt seems like this function would return true in a single-chassis system too?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b3e2ede_db009ae4",
+        "filename": "utility.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "Nit: Grammar. Should be something like \"Is this a multi-chassis system\".",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9311d69e_179be3d0",
+        "filename": "utility.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T16:36:40Z",
+      "side": 1,
+      "message": "No need for return types in doxygen.",
+      "range": {
+        "startLine": 287,
+        "startChar": 11,
+        "endLine": 287,
+        "endChar": 20
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
