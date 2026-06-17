@@ -21,6 +21,7 @@
 
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/bus/match.hpp>
+#include <sdbusplus/message.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
@@ -151,6 +152,16 @@ class Manager
     void chassisPowerStateChanged(sdbusplus::message_t& msg);
 
     /**
+     * Callback for systemd JobNew signals.
+     *
+     * Checks standby faults across all chassis when the
+     * obmc-chassis-blackout@0.target starts.
+     *
+     * @param msg D-Bus message containing the job details
+     */
+    void systemdTargetStarted(sdbusplus::message_t& msg);
+
+    /**
      * Event to loop on
      */
     const sdeventplus::Event& eventLoop [[maybe_unused]];
@@ -196,6 +207,18 @@ class Manager
      * D-Bus match object for monitoring chassis 0 power state changes.
      */
     std::unique_ptr<sdbusplus::match> chassisPowerStateMatch;
+
+    /**
+     * D-Bus match object for monitoring systemd JobNew signals
+     */
+    std::unique_ptr<sdbusplus::match> systemdTargetMatch;
+
+    /**
+     * Set to true if a latched fault check was requested before the config
+     * file was loaded, so the check can be deferred until the System object
+     * is ready.
+     */
+    bool checkLatchedFaults{false};
 };
 
 } // namespace phosphor::power::chassis
