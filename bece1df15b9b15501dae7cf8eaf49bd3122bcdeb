@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "620baee8_47a281de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:29:38Z",
+      "side": 1,
+      "message": "This sentence and the next one are confusing. I don\u0027t quite understand them. Can you rewrite them to make them clearer?\n\nAlso, the method name is incorrect if it is referring to the ChassisStatusMonitor class. The method is getPowerGood().\n\nIn general, commit messages should describe the end result of applying the commit rather than the internal details. You normally don\u0027t need to discuss new methods or data members. That is clear from the file diffs. The commit message is explaining the high level \"what/why\".",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "818cc77e_a086c09e",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:29:38Z",
+      "side": 1,
+      "message": "The method signature and std::move() is confusing.\n\nYou want to share the pointer, so wouldn\u0027t you want to pass the shared pointer as a reference, and then just do a normal assignment without the std::move()?\n\n```\nvoid Chassis::setSystemStatusMonitor(\n    std::shared_ptr\u003cChassisStatusMonitor\u003e\u0026 monitor)\n{\n    systemMonitor \u003d monitor;\n```\n\nRight now you are creating a copy, and then moving the internals of the copy to your data member. Maybe that is the same thing? Seems confusing though.\n\nSee https://en.cppreference.com/cpp/memory/shared_ptr/operator%3D",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f6959f8_a05be712",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:29:38Z",
+      "side": 1,
+      "message": "As noted on line 162, this is a system status monitor rather than a chassis level monitor.",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "340c7b8a_e5d75d97",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:29:38Z",
+      "side": 1,
+      "message": "Since you include services.hpp, and that has a using statement for ChassisStatusMonitor, you can just specify the base name without the namespace.",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc64756_4afc3273",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-17T17:29:38Z",
+      "side": 1,
+      "message": "As noted above, you can just specify the base name without the namespace.",
+      "revId": "bece1df15b9b15501dae7cf8eaf49bd3122bcdeb",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
