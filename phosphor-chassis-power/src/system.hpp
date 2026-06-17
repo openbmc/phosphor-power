@@ -75,6 +75,11 @@ class System
     void initializeStatusMonitors();
 
     /**
+     * Calls each chassis to start a latched fault check.
+     */
+    void checkLatchedFaults();
+
+    /**
      * Clears the error history in all chassis.
      *
      * This should be called when the system reboots.
