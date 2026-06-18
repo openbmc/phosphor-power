@@ -612,12 +612,11 @@ void PowerSupply::resolveError(const std::string& callout,
 void PowerSupply::updateInventory()
 {
     using namespace phosphor::pmbus;
-    using namespace sdbusplus::message;
 
     // Build the object map and send it to the inventory
     using Properties = std::map<std::string, std::variant<std::string, bool>>;
     using Interfaces = std::map<std::string, Properties>;
-    using Object = std::map<object_path, Interfaces>;
+    using Object = std::map<sdbusplus::object_path, Interfaces>;
     Properties assetProps;
     Properties operProps;
     Interfaces interfaces;
