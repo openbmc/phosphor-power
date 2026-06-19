@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69dd626c_708bee45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002404
+      },
+      "writtenOn": "2026-06-19T22:46:14Z",
+      "side": 1,
+      "message": "Nice job! Just minor things from me. I\u0027m not too familiar with the brownout logic, so I\u0027ll defer to Shawn on that.",
+      "revId": "e5f82ecf537b44f552db261ce9abf84e91da13cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2f1980_02b917c0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1002404
+      },
+      "writtenOn": "2026-06-19T22:46:14Z",
+      "side": 1,
+      "message": "Not a huge deal, but you can probably make this a constant as well (e.g. CHASSIS_SERVICE_BASE)",
+      "range": {
+        "startLine": 50,
+        "startChar": 20,
+        "endLine": 50,
+        "endChar": 57
+      },
+      "revId": "e5f82ecf537b44f552db261ce9abf84e91da13cd",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
