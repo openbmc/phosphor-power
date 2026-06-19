@@ -554,7 +554,7 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
      */
     void addNameOwnerChangedMatch(const std::string& service)
     {
-        matches.emplace_back(std::make_unique<sdbusplus::bus::match_t>(
+        matches.emplace_back(std::make_unique<sdbusplus::match>(
             bus, sdbusplus::bus::match::rules::nameOwnerChanged(service),
             std::bind_front(&BMCChassisStatusMonitor::nameOwnerChangedCallback,
                             this)));
@@ -567,7 +567,7 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
      */
     void addInterfacesAddedMatch(const std::string& path)
     {
-        matches.emplace_back(std::make_unique<sdbusplus::bus::match_t>(
+        matches.emplace_back(std::make_unique<sdbusplus::match>(
             bus, sdbusplus::bus::match::rules::interfacesAddedAtPath(path),
             std::bind_front(&BMCChassisStatusMonitor::interfacesAddedCallback,
                             this)));
@@ -583,7 +583,7 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
     void addPropertiesChangedMatch(const std::string& path,
                                    const std::string& interface)
     {
-        matches.emplace_back(std::make_unique<sdbusplus::bus::match_t>(
+        matches.emplace_back(std::make_unique<sdbusplus::match>(
             bus,
             sdbusplus::bus::match::rules::propertiesChanged(path, interface),
             std::bind_front(&BMCChassisStatusMonitor::propertiesChangedCallback,
@@ -800,7 +800,7 @@ class BMCChassisStatusMonitor : public ChassisStatusMonitor
      * Match objects created to get NameOwnerChanged, InterfacesAdded, and
      * PropertiesChanged signals.
      */
-    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> matches{};
+    std::vector<std::unique_ptr<sdbusplus::match>> matches{};
 };
 
 } // namespace phosphor::power::util

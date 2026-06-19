@@ -43,11 +43,11 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     sensorsObjManager(bus, "/xyz/openbmc_project/sensors")
 {
     // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
-    powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+    powerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
         bus,
         sdbusplus::bus::match::rules::interfacesAddedAtPath(POWER_OBJ_PATH),
         std::bind(&PSUManager::powerIfaceAdded, this, std::placeholders::_1));
-    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+    powerOnMatch = std::make_unique<sdbusplus::match>(
         bus,
         sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
                                                         POWER_IFACE),
@@ -56,7 +56,7 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
         bus,
         sdbusplus::bus::match::rules::interfacesAdded() +
             sdbusplus::bus::match::rules::sender(
@@ -214,7 +214,7 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes
-        auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+        auto presenceMatch = std::make_unique<sdbusplus::match>(
             bus,
             sdbusplus::bus::match::rules::propertiesChanged(invpath,
                                                             INVENTORY_IFACE),

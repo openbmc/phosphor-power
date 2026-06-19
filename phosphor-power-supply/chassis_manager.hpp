@@ -75,7 +75,7 @@ class ChassisManager
     /**
      * @brief Used to subscribe to Entity Manager interfaces added
      */
-    std::unique_ptr<sdbusplus::bus::match_t> entityManagerIfacesAddedMatch;
+    std::unique_ptr<sdbusplus::match> entityManagerIfacesAddedMatch;
 
     /**
      * @brief List of chassis objects populated dynamically.

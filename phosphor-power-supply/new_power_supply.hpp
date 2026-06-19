@@ -866,13 +866,13 @@ class PowerSupply
      * @brief D-Bus match variable used to subscribe to Present property
      * changes.
      **/
-    std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
+    std::unique_ptr<sdbusplus::match> presentMatch;
 
     /**
      * @brief D-Bus match variable used to subscribe for Present property
      * interface added.
      */
-    std::unique_ptr<sdbusplus::bus::match_t> presentAddedMatch;
+    std::unique_ptr<sdbusplus::match> presentAddedMatch;
 
     /**
      * @brief Pointer to the PMBus interface

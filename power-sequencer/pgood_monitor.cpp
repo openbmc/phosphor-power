@@ -90,7 +90,7 @@ void PGOODMonitor::propertyChanged()
 
 void PGOODMonitor::startListening()
 {
-    match = std::make_unique<sdbusplus::bus::match_t>(
+    match = std::make_unique<sdbusplus::match>(
         bus,
         sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
                                                         POWER_INTERFACE),

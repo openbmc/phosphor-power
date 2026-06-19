@@ -99,7 +99,7 @@ class RuntimeMonitor : public DeviceMonitor
     /**
      * Match object for PowerLost signals
      */
-    sdbusplus::bus::match_t match;
+    sdbusplus::match match;
 };
 
 } // namespace power

@@ -22,7 +22,7 @@ ChassisManager::ChassisManager(sdbusplus::bus_t& bus,
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
         bus,
         sdbusplus::bus::match::rules::interfacesAdded() +
             sdbusplus::bus::match::rules::sender(
