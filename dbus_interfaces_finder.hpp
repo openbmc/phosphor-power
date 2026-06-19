@@ -143,7 +143,7 @@ class DBusInterfacesFinder
     /**
      * Match object for InterfacesAdded signals.
      */
-    sdbusplus::bus::match_t match;
+    sdbusplus::match match;
 };
 
 } // namespace phosphor::power::util

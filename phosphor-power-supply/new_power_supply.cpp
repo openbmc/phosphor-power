@@ -74,16 +74,16 @@ PowerSupply::PowerSupply(
         presenceGPIO = nullptr;
         // Setup the functions to call when the D-Bus inventory path for the
         // Present property changes.
-        presentMatch = std::make_unique<sdbusplus::bus::match_t>(
+        presentMatch = std::make_unique<sdbusplus::match>(
             bus,
-            sdbusplus::bus::match::rules::propertiesChanged(inventoryPath,
-                                                            INVENTORY_IFACE),
+            sdbusplus::match_rules::propertiesChanged(inventoryPath,
+                                                      INVENTORY_IFACE),
             [this](auto& msg) { this->inventoryChanged(msg); });
 
-        presentAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+        presentAddedMatch = std::make_unique<sdbusplus::match>(
             bus,
-            sdbusplus::bus::match::rules::interfacesAdded() +
-                sdbusplus::bus::match::rules::argNpath(0, inventoryPath),
+            sdbusplus::match_rules::interfacesAdded() +
+                sdbusplus::match_rules::argNpath(0, inventoryPath),
             [this](auto& msg) { this->inventoryAdded(msg); });
 
         updatePresence();

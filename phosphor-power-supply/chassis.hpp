@@ -173,13 +173,13 @@ class Chassis
     bool brownoutLogged = false;
 
     /** @brief Used to subscribe to Power interfaces added */
-    std::unique_ptr<sdbusplus::bus::match_t> powerIfacesAddedMatch;
+    std::unique_ptr<sdbusplus::match> powerIfacesAddedMatch;
 
     /** @brief Used to subscribe to D-Bus power on state changes */
-    std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
+    std::unique_ptr<sdbusplus::match> powerOnMatch;
 
     /** @brief Used to subscribe to D-Bus power supply presence changes */
-    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> presenceMatches;
+    std::vector<std::unique_ptr<sdbusplus::match>> presenceMatches;
 
     /**
      * @brief Flag to indicate if the validateConfig() function should be run.

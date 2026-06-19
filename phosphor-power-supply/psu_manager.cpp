@@ -43,24 +43,21 @@ PSUManager::PSUManager(sdbusplus::bus_t& bus, const sdeventplus::Event& e) :
     sensorsObjManager(bus, "/xyz/openbmc_project/sensors")
 {
     // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
-    powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAddedAtPath(POWER_OBJ_PATH),
+    powerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
+        bus, sdbusplus::match_rules::interfacesAddedAtPath(POWER_OBJ_PATH),
         std::bind(&PSUManager::powerIfaceAdded, this, std::placeholders::_1));
-    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+    powerOnMatch = std::make_unique<sdbusplus::match>(
         bus,
-        sdbusplus::bus::match::rules::propertiesChanged(POWER_OBJ_PATH,
-                                                        POWER_IFACE),
+        sdbusplus::match_rules::propertiesChanged(POWER_OBJ_PATH, POWER_IFACE),
         [this](auto& msg) { this->powerStateChanged(msg); });
 
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
+    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
         bus,
-        sdbusplus::bus::match::rules::interfacesAdded() +
-            sdbusplus::bus::match::rules::sender(
-                "xyz.openbmc_project.EntityManager"),
+        sdbusplus::match_rules::interfacesAdded() +
+            sdbusplus::match_rules::sender("xyz.openbmc_project.EntityManager"),
         std::bind(&PSUManager::entityManagerIfaceAdded, this,
                   std::placeholders::_1));
     getPSUConfiguration();
@@ -214,10 +211,9 @@ void PSUManager::getPSUProperties(util::DbusPropertyMap& properties)
         psus.emplace_back(std::move(psu));
 
         // Subscribe to power supply presence changes
-        auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+        auto presenceMatch = std::make_unique<sdbusplus::match>(
             bus,
-            sdbusplus::bus::match::rules::propertiesChanged(invpath,
-                                                            INVENTORY_IFACE),
+            sdbusplus::match_rules::propertiesChanged(invpath, INVENTORY_IFACE),
             [this](auto& msg) { this->presenceChanged(msg); });
         presenceMatches.emplace_back(std::move(presenceMatch));
     }

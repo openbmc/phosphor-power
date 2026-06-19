@@ -101,7 +101,7 @@ class PGOODMonitor : public DeviceMonitor
     /**
      * The match object for the properties changed signal
      */
-    std::unique_ptr<sdbusplus::bus::match_t> match;
+    std::unique_ptr<sdbusplus::match> match;
 };
 
 } // namespace power

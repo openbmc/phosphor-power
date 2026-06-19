@@ -125,10 +125,10 @@ ColdRedundancy::ColdRedundancy(
             }
         };
 
-    using namespace sdbusplus::bus::match::rules;
+    using namespace sdbusplus::match_rules;
     for (const char* type : psuInterfaceTypes)
     {
-        auto match = std::make_unique<sdbusplus::bus::match_t>(
+        auto match = std::make_unique<sdbusplus::match>(
             static_cast<sdbusplus::bus_t&>(*systemBus),
             type::signal() + member("PropertiesChanged") +
                 path_namespace(inventoryPath) + arg0namespace(type),
@@ -138,7 +138,7 @@ ColdRedundancy::ColdRedundancy(
 
     for (const char* eventType : psuEventInterface)
     {
-        auto eventMatch = std::make_unique<sdbusplus::bus::match_t>(
+        auto eventMatch = std::make_unique<sdbusplus::match>(
             static_cast<sdbusplus::bus_t&>(*systemBus),
             type::signal() + member("PropertiesChanged") +
                 path_namespace(eventPath) + arg0namespace(eventType),

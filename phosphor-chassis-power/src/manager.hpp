@@ -202,7 +202,7 @@ class Manager
     /**
      * D-Bus match object for monitoring chassis 0 power state changes.
      */
-    std::unique_ptr<sdbusplus::bus::match_t> chassisPowerStateMatch;
+    std::unique_ptr<sdbusplus::match> chassisPowerStateMatch;
 };
 
 } // namespace phosphor::power::chassis

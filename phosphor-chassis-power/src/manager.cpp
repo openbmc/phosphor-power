@@ -72,10 +72,10 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event,
     // Subscribe to system power state changes
     try
     {
-        chassisPowerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
+        chassisPowerStateMatch = std::make_unique<sdbusplus::match>(
             bus,
-            sdbusplus::bus::match::rules::propertiesChanged(chassisStatePath,
-                                                            chassisStateIntf),
+            sdbusplus::match_rules::propertiesChanged(chassisStatePath,
+                                                      chassisStateIntf),
             std::bind_front(&Manager::chassisPowerStateChanged, this));
     }
     catch (const std::exception& e)

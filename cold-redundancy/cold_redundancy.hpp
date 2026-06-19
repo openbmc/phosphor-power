@@ -74,7 +74,7 @@ class ColdRedundancy
      *          D-Bus properties change will trigger callback function
      *          by these matches
      */
-    std::vector<std::unique_ptr<sdbusplus::bus::match_t>> matches;
+    std::vector<std::unique_ptr<sdbusplus::match>> matches;
 };
 
 /**

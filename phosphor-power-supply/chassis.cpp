@@ -175,10 +175,10 @@ void Chassis::getPSUProperties(util::DbusPropertyMap& properties)
             psus.emplace_back(std::move(psu));
 
             // Subscribe to power supply presence changes
-            auto presenceMatch = std::make_unique<sdbusplus::bus::match_t>(
+            auto presenceMatch = std::make_unique<sdbusplus::match>(
                 bus,
-                sdbusplus::bus::match::rules::propertiesChanged(
-                    invpath, INVENTORY_IFACE),
+                sdbusplus::match_rules::propertiesChanged(invpath,
+                                                          INVENTORY_IFACE),
                 [this](auto& msg) { this->psuPresenceChanged(msg); });
             presenceMatches.emplace_back(std::move(presenceMatch));
         }
@@ -390,14 +390,13 @@ void Chassis::initPowerMonitoring()
     attemptToCreatePowerConfigGPIO();
 
     // Subscribe to InterfacesAdded and PropertiesChanged for power state/pgood
-    powerIfacesAddedMatch = std::make_unique<sdbusplus::bus::match_t>(
-        bus,
-        sdbusplus::bus::match::rules::interfacesAddedAtPath(chassisPowerPath),
+    powerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
+        bus, sdbusplus::match_rules::interfacesAddedAtPath(chassisPowerPath),
         std::bind(&Chassis::powerIfaceAdded, this, std::placeholders::_1));
-    powerOnMatch = std::make_unique<sdbusplus::bus::match_t>(
+    powerOnMatch = std::make_unique<sdbusplus::match>(
         bus,
-        sdbusplus::bus::match::rules::propertiesChanged(chassisPowerPath,
-                                                        POWER_IFACE),
+        sdbusplus::match_rules::propertiesChanged(chassisPowerPath,
+                                                  POWER_IFACE),
         [this](auto& msg) { this->powerStateChanged(msg); });
 
     initialize();
