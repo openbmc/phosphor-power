@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77600286_21933278",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-23T21:30:46Z",
+      "side": 1,
+      "message": "Nit: Missing newline here",
+      "revId": "85564d6fb95b393dfe55e56ce56eba5bac26eee5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7941d1e2_d30c6726",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-23T21:30:46Z",
+      "side": 1,
+      "message": "Should this move to after psus.clear()?\n\nChassis::clearFaults() calls clearFaults on all the PSUs. If their Present property hasn\u0027t updated yet, they will try to write to PSUs that don\u0027t exist and hit errors I think?",
+      "revId": "85564d6fb95b393dfe55e56ce56eba5bac26eee5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb527a3f_4bdb9b9a",
+        "filename": "utility.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-23T21:30:46Z",
+      "side": 1,
+      "message": "I didn\u0027t realize what you mean when you discussed adding this due to differences in the way clang-format runs in your editor vs. the way it runs in CI.\n\nI don\u0027t think we want to hard-code this here.",
+      "range": {
+        "startLine": 16,
+        "startChar": 13,
+        "endLine": 16,
+        "endChar": 14
+      },
+      "revId": "85564d6fb95b393dfe55e56ce56eba5bac26eee5",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
