@@ -16,6 +16,23 @@
       "message": "Looks good to me. Do you mind rebasing or re-running your tool if this is tool-based? There were a couple commits in front of yours on my list that merged.",
       "revId": "784c1da909af7706715a3be7d2c36c251cd4aa2b",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "868dfcfe_2fc75e6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-23T23:37:27Z",
+      "side": 1,
+      "message": "Sorry, I should have specified. I try to review commits in terms of which ones have been waiting longest. So I merged a couple that had been waiting longer than this one.",
+      "revId": "784c1da909af7706715a3be7d2c36c251cd4aa2b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
