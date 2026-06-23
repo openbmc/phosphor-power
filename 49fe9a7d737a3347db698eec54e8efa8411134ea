@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "390b9b1f_821e007c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02776e3b_cceb50e8",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4e124424_d0ef9392",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -69,6 +87,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5543c28d_ed3810d2",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Restored to previous code",
+      "parentUuid": "0a0a308e_3e5c6e96",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba76ffd6_af897f22",
@@ -82,6 +118,42 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "Do callbacks like this need to check if the chassis is present before continuing?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d43f9e_a47272d6",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba76ffd6_af897f22",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6601a74b_a719a64e",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba76ffd6_af897f22",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -103,6 +175,42 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33d4a99_084d19b3",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84ba1795_51b1b2fc",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ebf035_cd76bbbb",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84ba1795_51b1b2fc",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68e325bc_f3064122",
@@ -120,6 +228,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f435fcc_f2d846f1",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "68e325bc_f3064122",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6f76a20_b1c1ade2",
@@ -133,6 +259,30 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "Probably don\u0027t need to specify the data type size in the description. It is clear from the data type.",
+      "range": {
+        "startLine": 90,
+        "startChar": 37,
+        "endLine": 90,
+        "endChar": 44
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3536fd8e_65d67002",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6f76a20_b1c1ade2",
       "range": {
         "startLine": 90,
         "startChar": 37,
@@ -166,6 +316,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "691bbc92_4de6d69a",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8cf408f_8f2b59ab",
+      "range": {
+        "startLine": 202,
+        "startChar": 16,
+        "endLine": 202,
+        "endChar": 23
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0be2c98f_b6af0804",
@@ -179,6 +353,30 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "Normally boolean variables start with is/was/has. So it would be more standard if this was called something like isMultiChassisSystem.",
+      "range": {
+        "startLine": 529,
+        "startChar": 9,
+        "endLine": 529,
+        "endChar": 27
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4b6670_f42b2ba6",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0be2c98f_b6af0804",
       "range": {
         "startLine": 529,
         "startChar": 9,
@@ -212,6 +410,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52e783f6_1ec3fe60",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "341cffce_5df2e1fa",
+      "range": {
+        "startLine": 536,
+        "startChar": 9,
+        "endLine": 536,
+        "endChar": 27
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d3363eb_071ed415",
@@ -225,6 +447,24 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "All three of these are already defined in types.hpp. Please use the common constants where possible.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbd598f2_46ea0dc4",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d3363eb_071ed415",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -246,6 +486,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f55fd784_50f8b4aa",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b13befcb_1ad29ef3",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09e3a19f_9a24cf9c",
@@ -259,6 +517,24 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "This method is getting pretty long and complex.\n\nIt looks like from the code on lines 98-103 that the return value from getChassisAssociation() is a chassis inventory path + an extra node.\n\nShould getChassisAssociation remove the extra node so the calling code can be simpler?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afec8a82_8d020a5a",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "09e3a19f_9a24cf9c",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -280,6 +556,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "473dc939_8d6353c2",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "no more chassis remove/add",
+      "parentUuid": "ec1416ec_3ae9be6f",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a27bdd33_87bbdf17",
@@ -297,6 +591,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "506b17d1_0fa2d923",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a27bdd33_87bbdf17",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88325278_06078fc0",
@@ -310,6 +622,24 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "I believe this callback is getting called when *any* inventory item has a change in their Item interface, right?\n\nIt could be a chassis, PSU, DIMM, fan, etc.\n\nAll of those inventory paths may have \u0027chassis\u0027 in the middle of their path, like\n\n```\n/xyz/openbmc_project/inventory/system/chassis/fan0\n```\n\nSo I don\u0027t think this check is going to return when the item is not a chassis if that was your intent.",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba5dee5_21a71c48",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "removed from ChassisManager",
+      "parentUuid": "88325278_06078fc0",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -337,6 +667,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67b735b0_e9d05bc4",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dde91249_d3ac22b5",
+      "range": {
+        "startLine": 213,
+        "startChar": 35,
+        "endLine": 213,
+        "endChar": 43
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13a50c4f_02a2afd5",
@@ -350,6 +704,24 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "Wouldn\u0027t this also match with inventory paths that had chassis in the middle of their path, like\n```\n/xyz/openbmc_project/inventory/system/chassis/cpu/core0\n```\n\n?",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa06b33_3b53da89",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a50c4f_02a2afd5",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -377,6 +749,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "842a9eb5_188426d7",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52f774e2_f9a0f318",
+      "range": {
+        "startLine": 126,
+        "startChar": 18,
+        "endLine": 126,
+        "endChar": 35
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6241bfe7_f55068df",
@@ -390,6 +786,24 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "As mentioned in a previous file, boolean variables normally start with is/was/has, so this should probably be isMultiChassisSystem.\n\nThen if statements read a little nicer:\n```\n  if (isMultiChassisSystem)\n  {\n    // Do stuff that only applies for multi-chassis systems\n```",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c666449_2162adeb",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6241bfe7_f55068df",
       "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -440,6 +854,54 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "329bf704_1bf17546",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Update to chassis path or an empty if no chassis association",
+      "parentUuid": "65f33ecc_97e9ec3e",
+      "range": {
+        "startLine": 163,
+        "startChar": 34,
+        "endLine": 163,
+        "endChar": 45
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c01108bd_29644821",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b37fdc39_0b3667fd",
+      "range": {
+        "startLine": 163,
+        "startChar": 15,
+        "endLine": 163,
+        "endChar": 26
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93a2a518_5592c9b2",
@@ -453,6 +915,30 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "Don\u0027t need to specify data types in doxygen.",
+      "range": {
+        "startLine": 174,
+        "startChar": 24,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cdebc8_61426e10",
+        "filename": "phosphor-power-supply/chassis_manager.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93a2a518_5592c9b2",
       "range": {
         "startLine": 174,
         "startChar": 24,
@@ -486,6 +972,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e003257b_cc56721d",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1740a5d9_fc2dbe28",
+      "range": {
+        "startLine": 34,
+        "startChar": 15,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4897aa3b_03827c04",
@@ -499,6 +1009,30 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "This should probably be renamed to POSITION_PROPERTY right?",
+      "range": {
+        "startLine": 36,
+        "startChar": 15,
+        "endLine": 36,
+        "endChar": 35
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd25774_dd21ccf7",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4897aa3b_03827c04",
       "range": {
         "startLine": 36,
         "startChar": 15,
@@ -526,6 +1060,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9b032ce_5fae7357",
+        "filename": "utility.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Humm, I thought if I have one these system means a multi-chassis.\n\nChanged to count if \u003e1 then multi-chassis",
+      "parentUuid": "a0ce4ac7_20221e55",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b3e2ede_db009ae4",
@@ -543,6 +1095,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03276ee7_ab23a198",
+        "filename": "utility.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b3e2ede_db009ae4",
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9311d69e_179be3d0",
@@ -556,6 +1126,30 @@
       "writtenOn": "2026-06-17T16:36:40Z",
       "side": 1,
       "message": "No need for return types in doxygen.",
+      "range": {
+        "startLine": 287,
+        "startChar": 11,
+        "endLine": 287,
+        "endChar": 20
+      },
+      "revId": "49fe9a7d737a3347db698eec54e8efa8411134ea",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad906a5_4cb554ec",
+        "filename": "utility.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-06-23T19:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9311d69e_179be3d0",
       "range": {
         "startLine": 287,
         "startChar": 11,
