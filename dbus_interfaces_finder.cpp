@@ -30,8 +30,8 @@ DBusInterfacesFinder::DBusInterfacesFinder(
     bus{bus}, service{service}, interfaces{interfaces},
     callback{std::move(callback)},
     match{bus,
-          sdbusplus::bus::match::rules::interfacesAdded() +
-              sdbusplus::bus::match::rules::sender(service),
+          sdbusplus::match_rules::interfacesAdded() +
+              sdbusplus::match_rules::sender(service),
           std::bind(&DBusInterfacesFinder::interfacesAddedCallback, this,
                     std::placeholders::_1)}
 {

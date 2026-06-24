@@ -18,7 +18,7 @@ namespace power
 {
 namespace psu
 {
-namespace sdbusRule = sdbusplus::bus::match::rules;
+namespace sdbusRule = sdbusplus::match_rules;
 
 constexpr auto FAULT_COUNT = 3;
 
@@ -121,7 +121,7 @@ class PowerSupply : public Device
     bool present = false;
 
     /** @brief Used to subscribe to D-Bus property changes for Present */
-    std::unique_ptr<sdbusplus::bus::match_t> presentMatch;
+    std::unique_ptr<sdbusplus::match> presentMatch;
 
     /**
      * @brief Interval for setting present to true.
@@ -170,7 +170,7 @@ class PowerSupply : public Device
     sdeventplus::utility::Timer<sdeventplus::ClockId::Monotonic> powerOnTimer;
 
     /** @brief Used to subscribe to D-Bus power on state changes */
-    std::unique_ptr<sdbusplus::bus::match_t> powerOnMatch;
+    std::unique_ptr<sdbusplus::match> powerOnMatch;
 
     /** @brief Indicates that a read failure has occurred.
      *

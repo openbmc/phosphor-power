@@ -82,7 +82,7 @@ class RuntimeMonitor : public DeviceMonitor
      */
     std::string getMatchString()
     {
-        using namespace sdbusplus::bus::match::rules;
+        using namespace sdbusplus::match_rules;
 
         std::string s = type::signal() + path("/org/openbmc/control/power0") +
                         interface("org.openbmc.control.Power") +
@@ -99,7 +99,7 @@ class RuntimeMonitor : public DeviceMonitor
     /**
      * Match object for PowerLost signals
      */
-    sdbusplus::bus::match_t match;
+    sdbusplus::match match;
 };
 
 } // namespace power
