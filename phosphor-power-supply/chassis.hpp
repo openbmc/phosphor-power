@@ -31,7 +31,6 @@ using namespace sdeventplus;
 namespace phosphor::power::chassis
 {
 
-constexpr uint64_t invalidObjectPathPositionId = 9999;
 using PowerSystemInputsInterface = sdbusplus::xyz::openbmc_project::State::
     Decorator::server::PowerSystemInputs;
 using PowerSystemInputsObject =
@@ -78,6 +77,17 @@ class Chassis
      * @param[in] chassisPath - Chassis path
      * @param[in] chassisName - Chassis name
      * @param[in] event - Event loop object
+     */
+    Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
+            const std::string& chassisName, const sdeventplus::Event& e);
+
+    /**
+     * @brief Constructor to read configuration from D-Bus.
+     *
+     * @param[in] bus - D-Bus bus object
+     * @param[in] chassisPath - Chassis path
+     * @param[in] chassisName - Chassis name
+     * @param[in] event - Event loop object
      * @param[in] multiChassis - Multi chassis system flag
      */
     Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
@@ -87,9 +97,9 @@ class Chassis
     /**
      * @brief Retrieves the position identifier of the chassis.
      *
-     * @return uint64_t The position identifier of the chassis.
+     * @return The position identifier of the chassis
      */
-    uint64_t getChassisPositionId()
+    std::optional<uint64_t> getChassisPositionId()
     {
         return chassisPathPositionId;
     }
@@ -233,7 +243,7 @@ class Chassis
      *
      * Note: chassisPathPositionId must be declared before powerSystemInputs.
      */
-    uint64_t chassisPathPositionId = invalidObjectPathPositionId;
+    std::optional<uint64_t> chassisPathPositionId;
 
     /**
      * @brief PowerSystemInputs object
@@ -330,9 +340,17 @@ class Chassis
      * @brief Get chassis path position ID.
      *
      * @param [in] path - Chassis path.
-     * @return uint64_t - Chassis path position ID.
+     *
+     * @return Chassis path position ID, or empty if not found.
      */
-    uint64_t getChassisPathPositionId(const std::string& path);
+    std::optional<uint64_t> getChassisPathPositionId(const std::string& path);
+
+    /**
+     * @brief Initializes chassis presence state and subscribes to Present
+     * property changes. Must be called before getPSUConfiguration() and
+     * getSupportedConfiguration().
+     */
+    void initPropertyChangeListener();
 
     /**
      * @brief Initializes the chassis.

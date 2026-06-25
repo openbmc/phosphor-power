@@ -21,16 +21,32 @@ ChassisManager::ChassisManager(sdbusplus::bus_t& bus,
 {
     // Determine if this is a multi-chassis system
     isMultiChassisSystem = isMultiChassis(bus);
+    lg2::info("ChassisManager::ChassisManager isMultiChassisSystem= {M}", "M",
+              isMultiChassisSystem);
 
     // Subscribe to InterfacesAdded before doing a property read, otherwise
     // the interface could be created after the read attempt but before the
     // match is created.
-    entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
-        bus,
-        sdbusplus::match_rules::interfacesAdded() +
-            sdbusplus::match_rules::sender("xyz.openbmc_project.EntityManager"),
-        std::bind(&ChassisManager::entityManagerIfaceAdded, this,
-                  std::placeholders::_1));
+    if (isMultiChassisSystem)
+    {
+        entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
+            bus,
+            sdbusplus::match_rules::interfacesAdded() +
+                sdbusplus::match_rules::sender(
+                    "xyz.openbmc_project.EntityManager"),
+            std::bind(&ChassisManager::entityManagerIfaceAdded, this,
+                      std::placeholders::_1));
+    }
+    else
+    {
+        entityManagerIfacesAddedMatch = std::make_unique<sdbusplus::match>(
+            bus,
+            sdbusplus::match_rules::interfacesAdded() +
+                sdbusplus::match_rules::sender(
+                    "xyz.openbmc_project.EntityManager"),
+            std::bind(&ChassisManager::legacyEntityManagerIfaceAdded, this,
+                      std::placeholders::_1));
+    }
 
     // Initialize all chassis (present or not)
     // Each chassis will set up its own present property listener
@@ -99,6 +115,40 @@ void ChassisManager::entityManagerIfaceAdded(sdbusplus::message_t& msg)
     }
 }
 
+void ChassisManager::legacyEntityManagerIfaceAdded(sdbusplus::message_t& msg)
+{
+    try
+    {
+        sdbusplus::object_path objPath;
+        std::map<std::string, std::map<std::string, util::DbusVariant>>
+            interfaces;
+        msg.read(objPath, interfaces);
+
+        auto* chassis = getSingleChassis();
+        if (!chassis)
+        {
+            return;
+        }
+        auto itIntf = interfaces.find(supportedConfIntf);
+        if (itIntf != interfaces.cend() && listOfChassis.size() == 1)
+        {
+            chassis->supportedConfigurationInterfaceAdded((itIntf->second));
+        }
+
+        itIntf = interfaces.find(IBMCFFPSInterface);
+        if (itIntf != interfaces.cend())
+        {
+            lg2::info("InterfacesAdded for: {IBMCFFPSINTERFACE}",
+                      "IBMCFFPSINTERFACE", IBMCFFPSInterface);
+            chassis->psuInterfaceAdded(itIntf->second);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        // Ignore, the property may be of a different type than expected.
+    }
+}
+
 phosphor::power::chassis::Chassis* ChassisManager::getMatchingChassisPtr(
     uint64_t chassisPositionId)
 {
@@ -146,9 +196,18 @@ void ChassisManager::addChassisToList(const std::string& chassisPath)
     std::filesystem::path path(chassisPath);
     const std::string chassisName = path.filename();
 
-    auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
-        bus, chassisPath, chassisName, eventLoop, isMultiChassisSystem);
-    listOfChassis.push_back(std::move(chassis));
+    if (isMultiChassisSystem)
+    {
+        auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
+            bus, chassisPath, chassisName, eventLoop, isMultiChassisSystem);
+        listOfChassis.push_back(std::move(chassis));
+    }
+    else
+    {
+        auto chassis = std::make_unique<phosphor::power::chassis::Chassis>(
+            bus, chassisPath, chassisName, eventLoop);
+        listOfChassis.push_back(std::move(chassis));
+    }
 }
 
 void ChassisManager::initChassisPowerMonitoring()
@@ -203,4 +262,14 @@ std::string ChassisManager::getChassisAssociation(
     return {};
 }
 
+phosphor::power::chassis::Chassis* ChassisManager::getSingleChassis()
+{
+    if (isSingleChassisSystem())
+    {
+        return listOfChassis[0].get();
+    }
+    lg2::warning("getSingleChassis called but system has {COUNT} chassis",
+                 "COUNT", listOfChassis.size());
+    return nullptr;
+}
 } // namespace phosphor::power::chassis_manager

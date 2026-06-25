@@ -54,7 +54,7 @@ class ChassisManager
     /**
      * @brief Starts the main event loop for monitoring.
      *
-     * @return int Returns the result the result of the event loop execution.
+     * @return Returns the result of the event loop execution.
      */
     int run()
     {
@@ -86,7 +86,7 @@ class ChassisManager
         listOfChassis;
 
     /**
-     * @brief Declares a constant reference to an sdeventplus::Envent to manage
+     * @brief Declares a constant reference to an sdeventplus::Event to manage
      * async processing.
      */
     const sdeventplus::Event& eventLoop;
@@ -100,6 +100,16 @@ class ChassisManager
      * @param[in] msg - D-Bus message containing the interface details.
      */
     void entityManagerIfaceAdded(sdbusplus::message_t& msg);
+
+    /**
+     * @brief Callback for entity-manager interface added
+     *
+     * @details Process the information from the supported configuration and
+     * or IBM CFFPS Connector interface being added.
+     *
+     * @param[in] msg - D-Bus message containing the interface details.
+     */
+    void legacyEntityManagerIfaceAdded(sdbusplus::message_t& msg);
 
     /**
      * @brief Invoke the PSU analysis method in each chassis on the system.
@@ -124,7 +134,7 @@ class ChassisManager
      * nullptr.
      */
     phosphor::power::chassis::Chassis* getMatchingChassisPtr(
-        uint64_t chassisPositonId);
+        uint64_t chassisPositionId);
 
     /**
      * @brief Initialize chassis power monitoring.
@@ -140,8 +150,8 @@ class ChassisManager
      * @brief Extract the chassis endpoint path from a collection of D-Bus
      * associations.
      *
-     * @details Searchs through provided associations to find the first
-     * endpoint path that contains "chassis".
+     * @details Search through provided associations to find the first
+     * endpoint path that contains "powersupply".
      *
      * @param[in] associations - A collection of association tuples, where each
      * tuple contains: forward, reverse, and endpoint
@@ -177,6 +187,21 @@ class ChassisManager
      * @param[in] chassisPath - The full D-Bus object path of the chassis to add
      */
     void addChassisToList(const std::string& chassisPath);
+
+    /**
+     * @brief Check if system has only one chassis
+     * @return true if single chassis system
+     */
+    bool isSingleChassisSystem() const
+    {
+        return listOfChassis.size() == 1;
+    }
+
+    /**
+     * @brief Get the single chassis (only valid for single chassis systems)
+     * @return Pointer to the chassis, or nullptr if not single chassis system
+     */
+    phosphor::power::chassis::Chassis* getSingleChassis();
 };
 
 } // namespace phosphor::power::chassis_manager

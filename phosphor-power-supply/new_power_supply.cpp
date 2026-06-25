@@ -28,10 +28,11 @@ PowerSupply::PowerSupply(
     sdbusplus::bus_t& bus, const std::string& invpath, std::uint16_t i2cbus,
     std::uint16_t i2caddr, const std::string& driver,
     const std::string& gpioLineName, std::function<bool()>&& callback,
-    const std::string& chassisShortName) :
+    const std::string& chassisShortName, bool isMultiChassis) :
     bus(bus), inventoryPath(invpath),
     bindPath("/sys/bus/i2c/drivers/" + driver), isPowerOn(std::move(callback)),
-    driverName(driver), chassisName(chassisShortName)
+    driverName(driver), chassisName(chassisShortName),
+    multiChassis(isMultiChassis)
 {
     if (inventoryPath.empty())
     {
@@ -100,14 +101,6 @@ PowerSupply::PowerSupply(
                   "CHASSIS_NAME", chassisName, "ERR", e);
     }
 }
-
-PowerSupply::PowerSupply(
-    sdbusplus::bus_t& bus, const std::string& invpath, std::uint16_t i2cbus,
-    std::uint16_t i2caddr, const std::string& driver,
-    const std::string& gpioLineName, std::function<bool()>&& callback) :
-    PowerSupply(bus, invpath, i2cbus, i2caddr, driver, gpioLineName,
-                std::move(callback), "")
-{}
 
 void PowerSupply::bindOrUnbindDriver(bool present)
 {
@@ -1136,9 +1129,18 @@ void PowerSupply::setupInputPowerPeakSensor()
         return;
     }
 
-    auto sensorPath = std::format(
-        "/xyz/openbmc_project/sensors/power/{}_ps{}_input_power_peak",
-        chassisName, shortName.back());
+    std::string sensorPath = "/xyz/openbmc_project/sensors/power/";
+    if (multiChassis)
+    {
+        sensorPath = std::format("{}{}_ps{}_input_power_peak", sensorPath,
+                                 chassisName, shortName.back());
+    }
+    else
+    {
+        sensorPath = std::format("{}ps{}_input_power_peak", sensorPath,
+                                 shortName.back());
+    }
+
     peakInputPowerSensor = std::make_unique<PowerSensorObject>(
         bus, sensorPath.c_str(), PowerSensorObject::action::defer_emit);
 
@@ -1295,9 +1297,17 @@ void PowerSupply::setInputVoltageRating()
 
     if (!inputVoltageRatingIface)
     {
-        auto path = std::format(
-            "/xyz/openbmc_project/sensors/voltage/{}_ps{}_input_voltage_rating",
-            chassisName, shortName.back());
+        std::string path = "/xyz/openbmc_project/sensors/voltage/";
+        if (multiChassis)
+        {
+            path = std::format("{}{}_ps{}_input_voltage_rating", path,
+                               chassisName, shortName.back());
+        }
+        else
+        {
+            path = std::format("{}ps{}_input_voltage_rating", path,
+                               shortName.back());
+        }
 
         inputVoltageRatingIface = std::make_unique<SensorObject>(
             bus, path.c_str(), SensorObject::action::defer_emit);

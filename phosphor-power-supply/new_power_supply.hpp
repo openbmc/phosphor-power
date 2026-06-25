@@ -89,27 +89,14 @@ class PowerSupply
      * @param[in] gpioLineName - The gpio-line-name to read for presence. See
      * https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
      * @param[in] callback - Get the power on status of the psu manager class
-     */
-    PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
-                std::uint16_t i2cbus, const std::uint16_t i2caddr,
-                const std::string& driver, const std::string& gpioLineName,
-                std::function<bool()>&& callback);
-
-    /**
-     * @param[in] invpath - String for inventory path to use
-     * @param[in] i2cbus - The bus number this power supply is on
-     * @param[in] i2caddr - The 16-bit I2C address of the power supply
-     * @param[in] driver - i2c driver name for power supply
-     * @param[in] gpioLineName - The gpio-line-name to read for presence. See
-     * https://github.com/openbmc/docs/blob/master/designs/device-tree-gpio-naming.md
-     * @param[in] callback - Get the power on status of the psu manager class
      * @param[in] chassisShortName - Chassis name
+     * @param[in] isMultiChassis - True if this is a multi-chassis system
      */
     PowerSupply(sdbusplus::bus_t& bus, const std::string& invpath,
                 std::uint16_t i2cbus, const std::uint16_t i2caddr,
                 const std::string& driver, const std::string& gpioLineName,
                 std::function<bool()>&& callback,
-                const std::string& chassisShortName);
+                const std::string& chassisShortName, bool isMultiChassis);
 
     phosphor::pmbus::PMBusBase& getPMBus()
     {
@@ -1094,6 +1081,11 @@ class PowerSupply
      * @brief The chassis unique name
      */
     std::string chassisName;
+
+    /**
+     * @brief True if this is a multi-chassis system
+     */
+    bool multiChassis;
 };
 
 } // namespace phosphor::power::psu
