@@ -187,7 +187,7 @@ class Chassis
     std::vector<std::unique_ptr<sdbusplus::match>> presenceMatches;
 
     /** @brief Used to subscribe to this chassis's Present property changes */
-    std::unique_ptr<sdbusplus::bus::match_t> chassisPresentMatch;
+    std::unique_ptr<sdbusplus::match> chassisPresentMatch;
 
     /**
      * @brief Flag to indicate if the validateConfig() function should be run.

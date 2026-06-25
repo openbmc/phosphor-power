@@ -50,10 +50,9 @@ Chassis::Chassis(sdbusplus::bus_t& bus, const std::string& chassisPath,
     isPresent = isItPresent();
 
     // Subscribe to this chassis's Present property changes
-    chassisPresentMatch = std::make_unique<sdbusplus::bus::match_t>(
+    chassisPresentMatch = std::make_unique<sdbusplus::match>(
         bus,
-        sdbusplus::bus::match::rules::propertiesChanged(chassisPath,
-                                                        INVENTORY_IFACE),
+        sdbusplus::match_rules::propertiesChanged(chassisPath, INVENTORY_IFACE),
         std::bind(&Chassis::chassisPresentChanged, this,
                   std::placeholders::_1));
 
