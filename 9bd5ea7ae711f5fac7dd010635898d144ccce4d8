@@ -1,0 +1,385 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91ef74e1_eeff160c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Thanks for adding a lot of test cases.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4e75e35_57904c84",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "The following three constants are already defined in types.hpp. Please use the standard constants.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "262b542d_c89514bd",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "There is a constant for this property name in types.hpp",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c9e490_985b5bc2",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "You could wrap this in std::move() to avoid making a copy.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26ccca17_60628e96",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "You could wrap this in std::move() to avoid making a copy.",
+      "range": {
+        "startLine": 254,
+        "startChar": 53,
+        "endLine": 254,
+        "endChar": 63
+      },
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b7302f5_36374f1b",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "If I am understanding this correctly, the System class will initialize the chassis containing the BMC to present and all the others to not present.\n\nI don\u0027t agree with this. Other firmware (such as VPD collection) may have already set the chassis presence in inventory manager based on GPIOs. So you would be overwriting the correct presence with False. Also, some other applications will take actions based on the value you publish on D-Bus. So we shouldn\u0027t publish false if that is not the correct value (haven\u0027t read GPIO yet).",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0c27f05_2acf16eb",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "The logic here is pretty complex, so I\u0027m not sure I\u0027ve understood all the cases.\n\nBut at a high level, both the PresenceGpio and PresencePath JSON properties are optional. So the user could have specify only the GPIO, only the path, both, or neither.\n\nI\u0027m not sure if all those variations are covered in the if statements below. Also it does not check if presenceGPIOValue has a value. Lastly, this is only called if the GPIO value changes, so if the user had specified only the path then the path presence would be ignored I think?",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a30f30f6_0c02d450",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Can this method be called before presenceValue has been changed from the initial value of false (from the data member initializer)?",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1353cabb_de8438f7",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "If the read failed, why are we logging an error saying the presence was incorrect?",
+      "range": {
+        "startLine": 291,
+        "startChar": 40,
+        "endLine": 291,
+        "endChar": 51
+      },
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cf28730_3111058f",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Why does it matter if the system is powered on? Would probably be worth a comment explaining.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b07dd70f_dc35ee9a",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to use the common Services method to log the error here?",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d99c6c30_12938d56",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "I think you should put lines 301-303 in the message registry. The callout info could differ across machine types and countries.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5ff9429_9f5410ba",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Same questions as above regarding why a readFailure is handle the same as a 0 value, using Services to log error, why system needs to be powered on, etc.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bef3fba3_2cea709e",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Once the property has been published on D-Bus, I don\u0027t think you need to use Notify to update it. I think you can just set the property. That is probably more efficient. You don\u0027t have to build up all those maps and call a more complex API.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7849cbc7_c261f37d",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "This method is confusing.\n\nI think it would be clearer if the argument was a boolean indicating whether the chassis is initially true or false. If you want the System class to set the chassis containing the BMC to be present, just call initializePresence() on that one chassis.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50986cf6_894c6fe1",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Nit: If you are trying to refer generally to this application, I think we should remove the hyphens.\n\nThe repo name is phosphor-inventory-manager (lower case). The executable is phosphor-inventory.\n\nI agree with referring to it more generally, since the repo or executable name is sort of internal detail that could change.",
+      "range": {
+        "startLine": 258,
+        "startChar": 14,
+        "endLine": 258,
+        "endChar": 40
+      },
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420166e7_98ff9cc8",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "This will have a default value of false. Is that what you want? Or should it be a std::optional\u003cbool\u003e so the default value is undefined/unknown?",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b980af2d_da422d4c",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "I don\u0027t understand the requirement for this method.\n\nAs I mentioned in the chassis class, it is going to set the presence of all the chassis that don\u0027t contain the active BMC to false initially. I think this has negative side-effects.\n\nAlso, some systems won\u0027t have redundant BMCs or the Position property. Won\u0027t we get the correct chassis presence from the GPIO and/or path?",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a7c0ea1_d114698e",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Since the polarity is low, wouldn\u0027t values of 1 mean not present? I realize this ends up being a MockGpio, so the polarity is ignored I think. But it makes the test case confusing.\n\nSame question with some of the other test variations.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "380583b0_06164105",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "FYI if you don\u0027t care about the parameter values you can just omit the entire parenthesized part.",
+      "range": {
+        "startLine": 620,
+        "startChar": 38,
+        "endLine": 620,
+        "endChar": 47
+      },
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "972a2516_0692ed4f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-06-29T16:58:40Z",
+      "side": 1,
+      "message": "Presence path was not specified vs. not existing, right?\n\nI\u0027m not sure if it affects the code flow, but those are different scenarios.",
+      "revId": "9bd5ea7ae711f5fac7dd010635898d144ccce4d8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
