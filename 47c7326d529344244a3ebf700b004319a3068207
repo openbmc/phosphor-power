@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "386fd09a_7913442f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-08T22:28:26Z",
+      "side": 1,
+      "message": "This is only true for the re-designed code that is not yet in use yet, right?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0038bbc1_0af2eda7",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-08T22:28:26Z",
+      "side": 1,
+      "message": "Do you need to check if chassisPathPositionId has a value, like you did in one of the other modified methods?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e313c5b8_cf045d51",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-08T22:28:26Z",
+      "side": 1,
+      "message": "Why is a separate constructor required if the only difference is the multiChassis parameter?\n\nCan\u0027t that parameter just be false on a single chassis system?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b111a27_68fc2e1a",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-08T22:28:26Z",
+      "side": 1,
+      "message": "Are you planning to keep this method? If so, you probably don\u0027t want the name \u0027legacy\u0027 in there. That implies it is old and will probably go away. Maybe singleChassis... instead?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89858c39_549b1851",
+        "filename": "phosphor-power-supply/new_power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-08T22:28:26Z",
+      "side": 1,
+      "message": "Normally boolean variables start with is/was/has/etc.\n\nShould this be isMultiChassis?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
