@@ -34,7 +34,7 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
-void System::initializePresence(Services& services)
+void System::initializePresence()
 {
     initializedPresence = true;
 
@@ -81,20 +81,20 @@ void System::initializePresence(Services& services)
     curChassis->initializePresence();
 }
 
-void System::monitor(Services& services)
+void System::monitor()
 {
     if (!initializedPresence)
     {
-        initializePresence(services);
+        initializePresence();
     }
 
     for (const auto& curChassis : chassis)
     {
-        curChassis->monitor(services);
+        curChassis->monitor();
     }
 }
 
-void System::initializeStatusMonitors(Services& services)
+void System::initializeStatusMonitors()
 {
     // Create system-level status monitor
     try
