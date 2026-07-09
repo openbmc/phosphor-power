@@ -122,7 +122,7 @@ std::unique_ptr<Chassis> parseChassis(const json& element, Services& services)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Chassis>(number, std::move(presencePath),
+    return std::make_unique<Chassis>(number, services, std::move(presencePath),
                                      std::move(gpios));
 }
 

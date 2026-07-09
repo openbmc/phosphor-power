@@ -64,16 +64,17 @@ class Chassis
      *
      * @param number Chassis number within the system.  Chassis numbers start at
      *               1 because chassis 0 represents the entire system.
+     * @param services Platform services provider
      * @param presencePath Presence absolute path for this chassis
-     * @param GPIOs within this chassis, if any.  The vector should
-     *                contain GPIOs to perform operations on.
+     * @param gpioPins GPIOs within this chassis, if any.  The vector should
+     *                 contain GPIOs to perform operations on.
      */
-    explicit Chassis(unsigned int number,
+    explicit Chassis(unsigned int number, Services& services,
                      std::optional<std::string> presencePath = std::nullopt,
                      std::vector<std::unique_ptr<Gpio>> gpioPins =
                          std::vector<std::unique_ptr<Gpio>>{}) :
-        number{number}, presencePath{std::move(presencePath)},
-        gpios{std::move(gpioPins)}
+        number{number}, services{services},
+        presencePath{std::move(presencePath)}, gpios{std::move(gpioPins)}
     {
         if (number < 1)
         {
@@ -155,17 +156,13 @@ class Chassis
 
     /**
      * Initialize the chassis status monitor for this chassis.
-     *
-     * @param services Services object for creating the monitor
      */
-    void initializeStatusMonitor(Services& services);
+    void initializeStatusMonitor();
 
     /**
      * Monitors the status of the chassis.
-     *
-     * @param services Services object for logging and D-Bus access
      */
-    void monitor(Services& services);
+    void monitor();
 
     /**
      * Set the system status monitor for this chassis.
@@ -264,10 +261,9 @@ class Chassis
     /**
      * Handle chassis presence gpio change
      *
-     * @param services Services object for logging and D-Bus access
      * @param readFailure True if GPIO read failed, false otherwise
      */
-    void handlePresenceChange(Services& services, bool readFailure);
+    void handlePresenceChange(bool readFailure);
 
     /**
      * Chassis number within the system.
@@ -276,6 +272,11 @@ class Chassis
      * system.
      */
     const unsigned int number{};
+
+    /**
+     * System services (D-Bus, GPIO, etc.).
+     */
+    Services& services;
 
     /**
      * Presence path for this chassis, if any.
