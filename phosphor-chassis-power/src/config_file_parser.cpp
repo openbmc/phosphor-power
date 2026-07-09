@@ -122,8 +122,9 @@ std::unique_ptr<Chassis> parseChassis(const json& element, Services& services)
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<Chassis>(number, std::move(presencePath),
-                                     std::move(gpios));
+    return std::make_unique<Chassis>(
+        number, std::shared_ptr<Services>(&services, [](Services*){}),
+        std::move(presencePath), std::move(gpios));
 }
 
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(const json& element,

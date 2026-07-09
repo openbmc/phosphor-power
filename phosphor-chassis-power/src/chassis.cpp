@@ -87,7 +87,7 @@ void Chassis::clearErrorHistory()
     }
 }
 
-void Chassis::monitor(Services& services)
+void Chassis::monitor()
 {
     for (const auto& gpio : gpios)
     {
@@ -112,13 +112,13 @@ void Chassis::monitor(Services& services)
                     changed = gpioValueChanged(*gpio, presenceGPIOValue);
                     if (changed)
                     {
-                        handlePresenceChange(services, false);
+                        handlePresenceChange(false);
                     }
                 }
                 catch (...)
                 {
                     // gpio read fail, handle presence change
-                    handlePresenceChange(services, true);
+                    handlePresenceChange(true);
                 }
                 // Other apps will need to read this line.
                 gpio->release();
@@ -273,7 +273,7 @@ void Chassis::initializePresence()
     presenceValue = true;
 }
 
-void Chassis::handlePresenceChange(Services& services, bool readFailure)
+void Chassis::handlePresenceChange(bool readFailure)
 {
     bool presencePathPresent = getPresenceFromPath();
     bool newPresence = presenceValue;
@@ -297,8 +297,7 @@ void Chassis::handlePresenceChange(Services& services, bool readFailure)
             }
 
             // Callout the system
-
-            services.logError(
+            services->logError(
                 "xyz.openbmc_project.Power.Chassis.PresentDetection.Incorrect",
                 Entry::Level::Error, data);
         }
@@ -322,8 +321,7 @@ void Chassis::handlePresenceChange(Services& services, bool readFailure)
             }
 
             // Callout the specific chassis that went missing
-
-            services.logError(
+            services->logError(
                 "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
                 Entry::Level::Error, data);
         }
@@ -338,7 +336,7 @@ void Chassis::handlePresenceChange(Services& services, bool readFailure)
     if (newPresence != presenceValue)
     {
         presenceValue = newPresence;
-        notifyInventoryManager(services.getBus(), presenceValue);
+        notifyInventoryManager(services->getBus(), presenceValue);
     }
 }
 
