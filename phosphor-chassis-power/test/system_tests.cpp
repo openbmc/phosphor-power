@@ -15,6 +15,7 @@
  */
 
 #include "chassis.hpp"
+#include "mock_services.hpp"
 #include "system.hpp"
 
 #include <sdbusplus/bus.hpp>
@@ -32,15 +33,17 @@ using namespace phosphor::power::chassis;
  * Creates a Chassis object with the specified parameters.
  *
  * @param number Chassis number within the system.
+ * @param services Shared pointer to services
  * @param presencePath Optional presence path for the chassis
  * @return Chassis object
  */
 std::unique_ptr<Chassis> createChassis(
-    unsigned int number, std::optional<std::string> presencePath = std::nullopt)
+    unsigned int number, std::shared_ptr<Services> services,
+    std::optional<std::string> presencePath = std::nullopt)
 {
     std::vector<std::unique_ptr<Gpio>> gpios;
-    return std::make_unique<Chassis>(number, std::move(presencePath),
-                                     std::move(gpios));
+    return std::make_unique<Chassis>(number, std::move(services),
+                                     std::move(presencePath), std::move(gpios));
 }
 
 /**
@@ -51,10 +54,14 @@ std::unique_ptr<Chassis> createChassis(
 class SystemTests : public ::testing::Test
 {
   public:
-    SystemTests() : bus{sdbusplus::bus::new_default()} {}
+    SystemTests() :
+        bus{sdbusplus::bus::new_default()},
+        services{std::make_shared<MockServices>()}
+    {}
 
   protected:
     sdbusplus::bus_t bus;
+    std::shared_ptr<MockServices> services;
 };
 
 TEST_F(SystemTests, Constructor)
@@ -62,8 +69,8 @@ TEST_F(SystemTests, Constructor)
     // Test with single chassis
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
-        System system{std::move(chassis)};
+        chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+        System system{std::move(chassis), services};
 
         EXPECT_EQ(system.getChassis().size(), 1);
         EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
@@ -73,10 +80,10 @@ TEST_F(SystemTests, Constructor)
     // Test with multiple chassis
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
-        chassis.emplace_back(createChassis(2, "/dev/i2c-160"));
-        chassis.emplace_back(createChassis(3, std::nullopt));
-        System system{std::move(chassis)};
+        chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+        chassis.emplace_back(createChassis(2, services, "/dev/i2c-160"));
+        chassis.emplace_back(createChassis(3, services, std::nullopt));
+        System system{std::move(chassis), services};
 
         EXPECT_EQ(system.getChassis().size(), 3);
         EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
@@ -90,7 +97,7 @@ TEST_F(SystemTests, Constructor)
     // Test with empty chassis vector
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        System system{std::move(chassis)};
+        System system{std::move(chassis), services};
 
         EXPECT_EQ(system.getChassis().size(), 0);
     }
@@ -99,10 +106,10 @@ TEST_F(SystemTests, Constructor)
 TEST_F(SystemTests, GetChassis)
 {
     std::vector<std::unique_ptr<Chassis>> chassis;
-    chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
-    chassis.emplace_back(createChassis(3, "/dev/i2c-161"));
-    chassis.emplace_back(createChassis(7, std::nullopt));
-    System system{std::move(chassis)};
+    chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(3, services, "/dev/i2c-161"));
+    chassis.emplace_back(createChassis(7, services, std::nullopt));
+    System system{std::move(chassis), services};
 
     EXPECT_EQ(system.getChassis().size(), 3);
     EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
@@ -119,9 +126,9 @@ TEST_F(SystemTests, InitializePowerSystemInputsStatus)
         decorator::PowerSystemInputs;
 
     std::vector<std::unique_ptr<Chassis>> chassis;
-    chassis.emplace_back(createChassis(1, "/dev/i2c-159"));
-    chassis.emplace_back(createChassis(2, "/dev/i2c-160"));
-    System system{std::move(chassis)};
+    chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
+    chassis.emplace_back(createChassis(2, services, "/dev/i2c-160"));
+    System system{std::move(chassis), services};
 
     // Verify interfaces are null before initialization
     EXPECT_EQ(system.getChassis()[0]->getPowerSystemInputsInterface(), nullptr);

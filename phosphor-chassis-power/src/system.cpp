@@ -34,7 +34,7 @@ void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
     }
 }
 
-void System::initializePresence(Services& services)
+void System::initializePresence()
 {
     initializedPresence = true;
 
@@ -48,11 +48,11 @@ void System::initializePresence(Services& services)
         constexpr auto positionProp = "Position";
 
         auto service =
-            getService(systemPath, positionIntf, services.getBus(), false);
+            getService(systemPath, positionIntf, services->getBus(), false);
         if (!service.empty())
         {
             getProperty(positionIntf, positionProp, systemPath, service,
-                        services.getBus(), bmcPosition);
+                        services->getBus(), bmcPosition);
             bmcPosition++;
         }
         else
@@ -81,20 +81,20 @@ void System::initializePresence(Services& services)
     curChassis->initializePresence();
 }
 
-void System::monitor(Services& services)
+void System::monitor()
 {
     if (!initializedPresence)
     {
-        initializePresence(services);
+        initializePresence();
     }
 
     for (const auto& curChassis : chassis)
     {
-        curChassis->monitor(services);
+        curChassis->monitor();
     }
 }
 
-void System::initializeStatusMonitors(Services& services)
+void System::initializeStatusMonitors()
 {
     // Create system-level status monitor
     try
@@ -105,7 +105,7 @@ void System::initializeStatusMonitors(Services& services)
         std::string systemInventoryPath =
             "/xyz/openbmc_project/inventory/system/chassis";
 
-        systemMonitor = services.createChassisStatusMonitor(
+        systemMonitor = services->createChassisStatusMonitor(
             0, systemInventoryPath, options);
     }
     catch (const std::exception& e)

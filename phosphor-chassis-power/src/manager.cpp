@@ -99,7 +99,7 @@ void Manager::monitor()
 {
     if (system)
     {
-        system->monitor(services);
+        system->monitor();
     }
 }
 
@@ -178,8 +178,11 @@ void Manager::loadConfigFile()
             // Parse the config file
             auto chassis = config_file_parser::parse(pathName, services);
 
-            // Create System object with parsed chassis
-            system = std::make_unique<System>(std::move(chassis));
+            // Create System object with parsed chassis, passing services as a
+            // shared_ptr (non-owning; Manager owns the Services lifetime)
+            system = std::make_unique<System>(
+                std::move(chassis),
+                std::shared_ptr<Services>(&services, [](Services*) {}));
 
             lg2::info("Parsed {NUMBER} chassis", "NUMBER",
                       system->getChassis().size());
@@ -188,7 +191,7 @@ void Manager::loadConfigFile()
             system->initializePowerSystemInputs(services.getBus());
 
             // Initialize the status monitors for all chassis
-            system->initializeStatusMonitors(services);
+            system->initializeStatusMonitors();
         }
         else
         {
@@ -202,6 +205,7 @@ void Manager::loadConfigFile()
                    "EXCEPTION", e.what());
     }
 }
+
 void Manager::clearErrorHistory()
 {
     if (system)

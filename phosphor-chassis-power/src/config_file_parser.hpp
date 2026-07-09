@@ -36,6 +36,7 @@ namespace phosphor::power::chassis::config_file_parser
  * Throws a ConfigFileParserError if an error occurs.
  *
  * @param pathName configuration file path name
+ * @param services Services object
  * @return vector of C++ Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parse(
@@ -55,6 +56,7 @@ namespace internal
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param services Services object
  * @return Chassis object
  */
 std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
@@ -68,6 +70,7 @@ std::unique_ptr<Chassis> parseChassis(const nlohmann::json& element,
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param services Services object
  * @return Returns vector of C++ Chassis objects.
  */
 std::vector<std::unique_ptr<Chassis>> parseChassisArray(
@@ -124,6 +127,7 @@ GpioPolarity parsePolarity(const std::string& polarityStr);
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
+ * @param services Services object
  * @return vectors of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element,
