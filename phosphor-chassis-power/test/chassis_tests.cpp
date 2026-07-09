@@ -103,7 +103,8 @@ TEST_F(ChassisTests, Constructor)
 {
     // Test where works: Only required parameters are specified
     {
-        Chassis chassis{2};
+        MockServices services{};
+        Chassis chassis{2, services};
         EXPECT_EQ(chassis.getNumber(), 2);
         EXPECT_EQ(chassis.getGpios().size(), 0);
         EXPECT_FALSE(chassis.getPresencePath().has_value());
@@ -112,7 +113,8 @@ TEST_F(ChassisTests, Constructor)
     // Test where fails: Invalid chassis number < 1
     try
     {
-        Chassis chassis{0};
+        MockServices services{};
+        Chassis chassis{0, services};
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -129,8 +131,8 @@ TEST_F(ChassisTests, GetPresencePath)
 {
     // Test where works: Only PresencePath specified with Absolute path
     {
-        // Create Chassis
-        Chassis chassis{1, "/dev/i2c-359"};
+        MockServices services{};
+        Chassis chassis{1, services, "/dev/i2c-359"};
         EXPECT_EQ(chassis.getNumber(), 1);
         EXPECT_EQ(chassis.getPresencePath(), "/dev/i2c-359");
     }
@@ -140,13 +142,15 @@ TEST_F(ChassisTests, GetNumber)
 {
     // Test where only required parameter (number as int) is specified
     {
-        Chassis chassis{1};
+        MockServices services{};
+        Chassis chassis{1, services};
         EXPECT_EQ(chassis.getNumber(), 1);
     }
 
     // Test where only required parameter (number as hex) is specified
     {
-        Chassis chassis{0xa};
+        MockServices services{};
+        Chassis chassis{0xa, services};
         EXPECT_EQ(chassis.getNumber(), 10);
     }
 }
@@ -155,7 +159,8 @@ TEST_F(ChassisTests, getGpios)
 {
     // Test where no GPIOs were specified in constructor
     {
-        Chassis chassis{2};
+        MockServices services{};
+        Chassis chassis{2, services};
         EXPECT_EQ(chassis.getGpios().size(), 0);
     }
 
@@ -163,7 +168,7 @@ TEST_F(ChassisTests, getGpios)
     {
         // Create vector of Gpio objects
         std::vector<std::unique_ptr<Gpio>> gpios{};
-        MockServices services;
+        MockServices services{};
 
         gpios.emplace_back(services.createGPIO(
             "GpioName_1", GpioDirection::Input, GpioPolarity::High));
@@ -175,7 +180,7 @@ TEST_F(ChassisTests, getGpios)
             "GpioName_3", GpioDirection::Output, GpioPolarity::High));
 
         // Create Chassis
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Verify the number of gpios
         const auto& chassisGpios = chassis.getGpios();
@@ -202,7 +207,7 @@ TEST_F(ChassisTests, getGpios)
     {
         // Create vector of Gpio objects with default values
         std::vector<std::unique_ptr<Gpio>> gpios{};
-        MockServices services;
+        MockServices services{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low, 0));
@@ -215,7 +220,7 @@ TEST_F(ChassisTests, getGpios)
             "power-fault-reset", GpioDirection::Output, GpioPolarity::Low));
 
         // Create Chassis
-        Chassis chassis{2, "/dev/i2c-259", std::move(gpios)};
+        Chassis chassis{2, services, "/dev/i2c-259", std::move(gpios)};
 
         // Verify the number of gpios
         const auto& chassisGpios = chassis.getGpios();
@@ -247,13 +252,15 @@ TEST_F(ChassisTests, getPowerSystemInputsInterface)
 {
     // Test where interface has not been set
     {
-        Chassis chassis{1};
+        MockServices services{};
+        Chassis chassis{1, services};
         EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
     }
 
     // Test where interface has been set to Good
     {
-        Chassis chassis{1};
+        MockServices services{};
+        Chassis chassis{1, services};
 
         chassis.initializePowerSystemInputsInterface(bus);
 
@@ -268,7 +275,8 @@ TEST_F(ChassisTests, initializePowerSystemInputsInterface)
 {
     // Test setting interface successfully
     {
-        Chassis chassis{1};
+        MockServices services{};
+        Chassis chassis{1, services};
 
         // Verify initial state
         EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
@@ -288,50 +296,50 @@ TEST_F(ChassisTests, Monitor)
 {
     // Test where no GPIOs configured
     {
-        MockServices services;
-        Chassis chassis{1};
-        chassis.monitor(services);
+        MockServices services{};
+        Chassis chassis{1, services};
+        chassis.monitor();
     }
 
     // Test where GPIO line not found
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(false));
         EXPECT_CALL(getMockGpio(chassis, 0), findLine())
             .WillOnce(testing::Return(true));
 
-        chassis.monitor(services);
+        chassis.monitor();
     }
 
     // Test where requestRead fails
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
         EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
             .WillOnce(testing::Return(false));
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_FALSE(chassis.getPresenceGPIOValue().has_value());
     }
 
     // Test monitoring all three GPIO types in one pass
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         // Add presence GPIO
@@ -348,7 +356,7 @@ TEST_F(ChassisTests, Monitor)
             services.createGPIO("power-chs1-sb-fault-unlatched",
                                 GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Setup expectations for presence GPIO
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -381,7 +389,7 @@ TEST_F(ChassisTests, Monitor)
         EXPECT_CALL(getMockGpio(chassis, 2), getPreviousValue())
             .WillOnce(testing::Return(0));
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
         EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
@@ -393,13 +401,13 @@ TEST_F(ChassisTests, gpioValueChanged)
 {
     // Test where previous value fails
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -412,19 +420,19 @@ TEST_F(ChassisTests, gpioValueChanged)
             .WillOnce(testing::Throw(std::runtime_error("No previous value")));
         EXPECT_CALL(mockGpio, release()).Times(1);
 
-        chassis.monitor(services);
+        chassis.monitor();
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
     }
 
     // Test where getValue fails on first read
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -436,19 +444,19 @@ TEST_F(ChassisTests, gpioValueChanged)
             .WillOnce(
                 testing::Throw(std::runtime_error("Failed to read value")));
         EXPECT_CALL(mockGpio, release()).Times(1);
-        chassis.monitor(services);
+        chassis.monitor();
         EXPECT_EQ(chassis.getPresenceGPIOValue(), std::nullopt);
     }
 
     // Test where getValue fails, after successful reads
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -465,20 +473,20 @@ TEST_F(ChassisTests, gpioValueChanged)
         EXPECT_CALL(mockGpio, getPreviousValue()).WillOnce(testing::Return(0));
         EXPECT_CALL(mockGpio, release()).Times(2);
 
-        chassis.monitor(services);
-        chassis.monitor(services);
+        chassis.monitor();
+        chassis.monitor();
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
     }
 
     // Test where value matches previousValue
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -490,19 +498,19 @@ TEST_F(ChassisTests, gpioValueChanged)
             .WillOnce(testing::Return(1));
         EXPECT_CALL(getMockGpio(chassis, 0), release()).Times(1);
 
-        chassis.monitor(services);
+        chassis.monitor();
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
     }
 
     // Test where value != previousValue
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Setup expectations for 2 monitor() calls
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -517,20 +525,20 @@ TEST_F(ChassisTests, gpioValueChanged)
             .WillRepeatedly(testing::Return(0));
         EXPECT_CALL(getMockGpio(chassis, 0), release()).Times(2);
 
-        chassis.monitor(services);
-        chassis.monitor(services);
+        chassis.monitor();
+        chassis.monitor();
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
     }
 
     // Test where value changes on second read and is accepted on the third read
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
 
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         // Setup expectations for 3 monitor() calls
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -546,15 +554,15 @@ TEST_F(ChassisTests, gpioValueChanged)
             .WillOnce(testing::Return(1));       // Third call
         EXPECT_CALL(getMockGpio(chassis, 0), release()).Times(3);
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
     }
@@ -569,12 +577,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         auto tempPath = std::filesystem::temp_directory_path() / "test";
         std::ofstream(tempPath).close();
 
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, tempPath.string(), std::move(gpios)};
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -584,7 +592,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
         expectPresenceGpio(chassis, 1, 1);
 
         // Monitor to update GPIO value and handle presence change
-        chassis.monitor(services);
+        chassis.monitor();
 
         // Verify chassis is present
         EXPECT_TRUE(chassis.getPresenceValue());
@@ -597,12 +605,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         auto tempPath = std::filesystem::temp_directory_path() / "test";
         std::ofstream(tempPath).close();
 
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, tempPath.string(), std::move(gpios)};
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
         chassis.initializePresence();
 
@@ -620,7 +628,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_CALL(services, logError).Times(0);
 
         // Monitor to update GPIO value and handle presence change
-        chassis.monitor(services);
+        chassis.monitor();
 
         // Verify chassis is present
         EXPECT_TRUE(chassis.getPresenceValue());
@@ -633,12 +641,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         auto tempPath = std::filesystem::temp_directory_path() / "test_pel";
         std::ofstream(tempPath).close();
 
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, tempPath.string(), std::move(gpios)};
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -657,8 +665,8 @@ TEST_F(ChassisTests, HandlePresenceChange)
                                        "PresentDetection.Incorrect",
                                        Entry::Level::Error, _))
             .Times(1);
-        chassis.monitor(services);
-        chassis.monitor(services);
+        chassis.monitor();
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
         EXPECT_TRUE(chassis.getPresenceValue());
@@ -668,12 +676,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
     // GPIO off and Presence Path not specified, system off
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         chassis.initializePresence();
 
@@ -691,7 +699,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_CALL(services, logError).Times(0);
 
         // Monitor to update GPIO value and handle presence change
-        chassis.monitor(services);
+        chassis.monitor();
 
         // Verify chassis is absent
         EXPECT_FALSE(chassis.getPresenceValue());
@@ -699,12 +707,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
     // GPIO off and Presence Path not specified, system on
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -728,8 +736,8 @@ TEST_F(ChassisTests, HandlePresenceChange)
                 Entry::Level::Error, _))
             .Times(1);
 
-        chassis.monitor(services);
-        chassis.monitor(services);
+        chassis.monitor();
+        chassis.monitor();
 
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 0);
         EXPECT_FALSE(chassis.getPresenceValue());
@@ -737,14 +745,14 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
     // GPIO On and Presence path does not exists
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         auto tempPath =
             std::filesystem::temp_directory_path() / "test_presence";
-        Chassis chassis{1, tempPath.string(), std::move(gpios)};
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -754,7 +762,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
         expectPresenceGpio(chassis, 1, 1);
 
         // Monitor to update GPIO value and handle presence change
-        chassis.monitor(services);
+        chassis.monitor();
 
         // Verify chassis is present (GPIO says present)
         EXPECT_TRUE(chassis.getPresenceValue());
@@ -765,12 +773,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         auto tempPath = std::filesystem::temp_directory_path() / "test";
         std::ofstream(tempPath).close();
 
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, tempPath.string(), std::move(gpios)};
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -796,7 +804,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         EXPECT_CALL(services, logError).Times(0);
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_TRUE(chassis.getPresenceValue());
 
@@ -805,12 +813,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
     // GPIO read failure, Presence path not specified, system off
     {
-        MockServices services;
+        MockServices services{};
         std::vector<std::unique_ptr<Gpio>> gpios{};
         gpios.emplace_back(services.createGPIO(
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
-        Chassis chassis{1, std::nullopt, std::move(gpios)};
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
         auto monitor = services.createChassisStatusMonitor(
             0, "/xyz/openbmc_project/inventory/system/chassis",
@@ -834,7 +842,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         EXPECT_CALL(services, logError).Times(0);
 
-        chassis.monitor(services);
+        chassis.monitor();
 
         EXPECT_FALSE(chassis.getPresenceValue());
     }

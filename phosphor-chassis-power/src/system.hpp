@@ -49,10 +49,11 @@ class System
     /**
      * Constructor.
      *
-     * @param chassis Chassis in the system
+     * @param chassis  Chassis in the system
+     * @param services Platform services provider
      */
-    explicit System(std::vector<std::unique_ptr<Chassis>> chassis) :
-        chassis{std::move(chassis)}
+    System(std::vector<std::unique_ptr<Chassis>> chassis, Services& services) :
+        chassis{std::move(chassis)}, services{services}
     {}
 
     /**
@@ -74,17 +75,13 @@ class System
 
     /**
      * Initializes chassis presence to be true on the primary BMC.
-     *
-     * @param services Services object for D-Bus access and logging
      */
-    void initializePresence(Services& services);
+    void initializePresence();
 
     /**
      * Initializes status monitors for the system and all chassis.
-     *
-     * @param services Platform services provider
      */
-    void initializeStatusMonitors(Services& services);
+    void initializeStatusMonitors();
 
     /**
      * Clears the error history in all chassis.
@@ -95,10 +92,8 @@ class System
 
     /**
      * Monitors the status of all chassis.
-     *
-     * @param services Platform services provider
      */
-    void monitor(Services& services);
+    void monitor();
 
   private:
     /**
@@ -117,6 +112,11 @@ class System
      * Flag for if chassis presence has been initialized.
      */
     bool initializedPresence = false;
+
+    /**
+     * System services (D-Bus, GPIO, etc.).
+     */
+    Services& services;
 };
 
 } // namespace phosphor::power::chassis
