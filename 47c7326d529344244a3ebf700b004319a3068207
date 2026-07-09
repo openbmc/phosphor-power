@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d7abee9_37eeab32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-07-09T18:35:47Z",
+      "side": 1,
+      "message": "Removed previously",
+      "parentUuid": "386fd09a_7913442f",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0038bbc1_0af2eda7",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-07-08T22:28:26Z",
       "side": 1,
       "message": "Do you need to check if chassisPathPositionId has a value, like you did in one of the other modified methods?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78a2c77_471a92d0",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-07-09T18:35:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0038bbc1_0af2eda7",
       "revId": "47c7326d529344244a3ebf700b004319a3068207",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce8b660_086d1332",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-07-09T18:35:47Z",
+      "side": 1,
+      "message": "You\u0027re right the only difference is multiChassis parameter, and I chose to have separate constructor and I don\u0027t have to check multiChassis flag. and another thing multi-chassis constructor uses position id in powerSystemInputs while single chassis does not.\n\nDo you see an issue with that? it was preference to have separate constuctor",
+      "parentUuid": "e313c5b8_cf045d51",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b111a27_68fc2e1a",
@@ -69,6 +123,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa11438_c3957f5f",
+        "filename": "phosphor-power-supply/chassis_manager.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-07-09T18:35:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8b111a27_68fc2e1a",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89858c39_549b1851",
@@ -82,6 +154,24 @@
       "writtenOn": "2026-07-08T22:28:26Z",
       "side": 1,
       "message": "Normally boolean variables start with is/was/has/etc.\n\nShould this be isMultiChassis?",
+      "revId": "47c7326d529344244a3ebf700b004319a3068207",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37e9c20f_08e092a4",
+        "filename": "phosphor-power-supply/new_power_supply.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-07-09T18:35:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89858c39_549b1851",
       "revId": "47c7326d529344244a3ebf700b004319a3068207",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
