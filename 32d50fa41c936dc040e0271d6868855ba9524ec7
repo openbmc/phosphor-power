@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65403f3e_57306b91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-13T13:32:42Z",
+      "side": 1,
+      "message": "What was the reason for wanting to move Services into the System and Chassis classes?\n\nThe benefit of making it a parameter is that you can pass a fresh new Services instance in to each method call if you want during automated testing.\n\nThis is important because gtest does NOT support the following:\n* Set some expectations\n* Call some methods that fulfill those expectations\n* Set some new expectations\n* Call some methods that fulfill those new expectations\n\nSince you can\u0027t interleave expectations and method calls multiple times, it will require you to create new System and Chassis objects each time. If you don\u0027t mind, that is fine. But if there is a complex situation you are setting up that requires that interleaving, that is where being able to pass a fresh MockServices instance in helps.\n\nIf you want to continue with this design, as I noted in a comment I think it would simplify things a lot if you just had System and Chassis have a Services\u0026 rather than a shared_ptr\u003cServices\u003e as their data member. Then you wouldn\u0027t have to use the unusual constructor that has a do-nothing deleter and comments talking about that. However, that is your choice if having the shared_ptr is providing a benefit I didn\u0027t understand.",
+      "revId": "32d50fa41c936dc040e0271d6868855ba9524ec7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81b0ac4a_a54e9234",
+        "filename": "phosphor-chassis-power/src/config_file_parser.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-13T13:32:42Z",
+      "side": 1,
+      "message": "This is a pretty unusual constructor to call (I think?).\n\nIf I\u0027m understanding this correctly, you are creating a shared pointer with an empty deleter. So when the reference count gets to 0, it won\u0027t clean up any memory?\n\nIs that because it is starting with a reference, and the class that called this parse method and passed in its Service object is going to continue to own the storage?\n\nIn that case, couldn\u0027t all the shared_ptr\u003cService\u003e instances be replaced by Service\u0026?\n\nIt is valid to have a class data member that is a reference. You just have to immediately assign it a value in the constructor initialization list.\n\nSorry if I\u0027m misunderstanding this.",
+      "revId": "32d50fa41c936dc040e0271d6868855ba9524ec7",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
