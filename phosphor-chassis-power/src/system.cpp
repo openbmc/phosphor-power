@@ -26,14 +26,6 @@ namespace phosphor::power::chassis
 
 using namespace phosphor::power::util;
 
-void System::initializePowerSystemInputs(sdbusplus::bus_t& bus)
-{
-    for (const auto& curChassis : chassis)
-    {
-        curChassis->initializePowerSystemInputsInterface(bus);
-    }
-}
-
 void System::initializePresence()
 {
     initializedPresence = true;

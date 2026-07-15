@@ -18,8 +18,6 @@
 #include "chassis.hpp"
 #include "services.hpp"
 
-#include <sdbusplus/bus.hpp>
-
 #include <memory>
 #include <utility>
 #include <vector>
@@ -65,13 +63,6 @@ class System
     {
         return chassis;
     }
-
-    /**
-     * Initializes each chassis power system inputs status to be good.
-     *
-     * @param bus D-Bus bus object
-     */
-    void initializePowerSystemInputs(sdbusplus::bus_t& bus);
 
     /**
      * Initializes chassis presence to be true on the primary BMC.

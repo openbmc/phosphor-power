@@ -29,7 +29,8 @@ namespace phosphor::power::chassis
 
 using namespace phosphor::power::util;
 
-bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
+bool Chassis::initializePowerSystemInputsInterface(
+    PowerSystemInputs::Status initialStatus)
 {
     auto chassisInputPowerStatusPath =
         std::format(CHASSIS_INPUT_POWER_STATUS_PATH, number);
@@ -37,20 +38,30 @@ bool Chassis::initializePowerSystemInputsInterface(sdbusplus::bus_t& bus)
     // Create the D-Bus interface object for this chassis
     try
     {
-        // TODO: Update to set status to fault when gpio reads are
-        // implemented
         powerSystemInputsInterface =
             std::make_unique<ChassisPowerSystemInterface>(
-                bus, chassisInputPowerStatusPath.c_str(),
-                PowerSystemInputs::Status::Good);
+                services.getBus(), chassisInputPowerStatusPath.c_str(),
+                initialStatus);
         return true;
     }
     catch (const std::exception& e)
     {
         lg2::error(
             "Failed to initialize PowerSystemInputs interface for chassis {CHASSIS}: {ERROR}",
-            "CHASSIS", number, "ERROR", e.what());
+            "CHASSIS", number, "ERROR", e);
         return false;
+    }
+}
+
+void Chassis::setPowerSystemInputsStatus(PowerSystemInputs::Status status)
+{
+    if (!powerSystemInputsInterface)
+    {
+        initializePowerSystemInputsInterface(status);
+    }
+    else
+    {
+        powerSystemInputsInterface->status(status);
     }
 }
 
@@ -159,6 +170,10 @@ void Chassis::monitor()
                 if (changed)
                 {
                     // Handle fault unlatched change
+                    auto status = (faultUnlatchedValue == 1)
+                                      ? PowerSystemInputs::Status::Fault
+                                      : PowerSystemInputs::Status::Good;
+                    setPowerSystemInputsStatus(status);
                 }
             }
         }

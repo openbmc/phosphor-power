@@ -148,11 +148,12 @@ class Chassis
     /**
      * Initialize the PowerSystemInputs D-Bus interface for this chassis.
      *
-     * @param bus D-Bus bus object
+     * @param initialStatus Initial value for the 'status' property
      *
      * @return true if interface was created and set, false otherwise
      */
-    bool initializePowerSystemInputsInterface(sdbusplus::bus_t& bus);
+    bool initializePowerSystemInputsInterface(
+        PowerSystemInputs::Status initialStatus);
 
     /**
      * Initialize the chassis status monitor for this chassis.
@@ -182,6 +183,15 @@ class Chassis
     {
         return powerSystemInputsInterface;
     }
+
+    /**
+     * Sets the status on the PowerSystemInputs D-Bus interface.
+     * If the interface has not yet been initialized, calls
+     * initializePowerSystemInputsInterface with the given status.
+     *
+     * @param[in] status  The status to set.
+     */
+    void setPowerSystemInputsStatus(PowerSystemInputs::Status status);
 
     /**
      * Returns the chassis status monitor for the system.

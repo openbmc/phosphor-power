@@ -183,9 +183,6 @@ void Manager::loadConfigFile()
             lg2::info("Parsed {NUMBER} chassis", "NUMBER",
                       system->getChassis().size());
 
-            // Initialize power system inputs status for all chassis
-            system->initializePowerSystemInputs(services.getBus());
-
             // Initialize the status monitors for all chassis
             system->initializeStatusMonitors();
         }
