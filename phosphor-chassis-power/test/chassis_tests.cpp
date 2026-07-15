@@ -262,7 +262,8 @@ TEST_F(ChassisTests, getPowerSystemInputsInterface)
         MockServices services{};
         Chassis chassis{1, services};
 
-        chassis.initializePowerSystemInputsInterface(bus);
+        chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
 
         // Verify interface was set and has correct status
         EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
@@ -273,22 +274,117 @@ TEST_F(ChassisTests, getPowerSystemInputsInterface)
 
 TEST_F(ChassisTests, initializePowerSystemInputsInterface)
 {
-    // Test setting interface successfully
+    // Test setting interface successfully with Good status
     {
         MockServices services{};
         Chassis chassis{1, services};
 
-        // Verify initial state
-        EXPECT_EQ(chassis.getPowerSystemInputsInterface(), nullptr);
+        bool result = chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
 
-        // Set interface using bus
-        bool result = chassis.initializePowerSystemInputsInterface(bus);
-
-        // Verify interface was created successfully
         EXPECT_TRUE(result);
         EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
         EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
                   PowerSystemInputs::Status::Good);
+    }
+
+    // Test setting interface successfully with Fault status
+    {
+        MockServices services{};
+        Chassis chassis{1, services};
+
+        bool result = chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Fault);
+
+        EXPECT_TRUE(result);
+        EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+    }
+}
+
+TEST_F(ChassisTests, SetPowerSystemInputsStatus)
+{
+    // Test where interface not created, initialized to Fault.
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-unlatched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Throw(std::runtime_error("No previous value")));
+
+        chassis.monitor();
+
+        EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 1);
+    }
+
+    // Test where interface not created, initialized to Good.
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-unlatched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(0));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Throw(std::runtime_error("No previous value")));
+
+        chassis.monitor();
+
+        EXPECT_NE(chassis.getPowerSystemInputsInterface(), nullptr);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Good);
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+    }
+
+    // Test where interface is already initialized, and status updated
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-unlatched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        chassis.initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
+        const auto* firstIface = chassis.getPowerSystemInputsInterface().get();
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Throw(std::runtime_error("No previous value")));
+
+        chassis.monitor();
+
+        // Same interface object, status updated to Fault
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface().get(), firstIface);
+        EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
+                  PowerSystemInputs::Status::Fault);
     }
 }
 
