@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77db96f3_16b2d43f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-15T13:57:43Z",
+      "side": 1,
+      "message": "Please update this message since a shared_ptr is not being used now.",
+      "revId": "ccf51c97c3a8157f9cc3d77756ec48e31ae7cb29",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d274fe3_57f3a310",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-07-15T13:57:43Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to be a shared_ptr now. You can just do\n```\nMockServices services{};\n```\n\nSame comment for other instances.",
+      "revId": "ccf51c97c3a8157f9cc3d77756ec48e31ae7cb29",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
