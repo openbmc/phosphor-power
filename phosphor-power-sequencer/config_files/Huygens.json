@@ -24,91 +24,91 @@
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "AVDD_1P5V",
+                            "name": "AVDD",
                             "page": 1,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDN_0P65V",
+                            "name": "VDN",
                             "page": 2,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VIO_0P90V",
+                            "name": "VIO",
                             "page": 3,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_0",
+                            "name": "VDDA",
                             "page": 4,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_1",
+                            "name": "VDDB",
                             "page": 5,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_2",
+                            "name": "VDDC",
                             "page": 6,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_3",
+                            "name": "VDDD",
                             "page": 7,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_4",
+                            "name": "VDDE",
                             "page": 8,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_5",
+                            "name": "VDDF",
                             "page": 9,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_6",
+                            "name": "VDDG",
                             "page": 10,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VDD_7",
+                            "name": "VDDH",
                             "page": 11,
                             "check_status_vout": true,
                             "compare_voltage_to_limit": true
                         },
                         {
-                            "name": "VCS_0",
+                            "name": "VCSJ",
                             "page": 12,
                             "check_status_vout": true,
                             "gpio": { "line": 72 }
                         },
                         {
-                            "name": "VCS_1",
+                            "name": "VCSL",
                             "page": 13,
                             "check_status_vout": true,
                             "gpio": { "line": 73 }
                         },
                         {
-                            "name": "VCS_2",
+                            "name": "VCSN",
                             "page": 14,
                             "check_status_vout": true,
                             "gpio": { "line": 74 }
                         },
                         {
-                            "name": "VCS_3",
+                            "name": "VCSR",
                             "page": 15,
                             "check_status_vout": true,
                             "gpio": { "line": 75 }
