@@ -135,7 +135,7 @@ void Manager::monitor(bool enable)
     isMonitoringEnabled = enable;
     if (isMonitoringEnabled)
     {
-        services.getJournal().logDebug("Monitoring enabled");
+        services.getJournal().logInfo("Monitoring enabled");
 
         // Restart phase fault detection timer with repeating 15 second interval
         phaseFaultTimer.restart(std::chrono::seconds(15));
@@ -148,7 +148,7 @@ void Manager::monitor(bool enable)
     }
     else
     {
-        services.getJournal().logDebug("Monitoring disabled");
+        services.getJournal().logInfo("Monitoring disabled");
 
         // Disable timers
         phaseFaultTimer.setEnabled(false);

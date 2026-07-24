@@ -1,6 +1,6 @@
 [Unit]
 Description=Phosphor Power Regulators Disable Monitoring
-Requires=phosphor-regulators.service
+Wants=phosphor-regulators.service
 After=phosphor-regulators.service
 Wants=obmc-power-stop-pre@0.target
 Before=obmc-power-stop-pre@0.target
