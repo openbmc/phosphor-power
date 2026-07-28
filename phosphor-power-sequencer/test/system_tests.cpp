@@ -627,6 +627,9 @@ TEST(SystemTests, SetPowerState)
         EXPECT_CALL(device, powerOff).Times(1);
         EXPECT_CALL(device, findPgoodFault).WillRepeatedly(Return(""));
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is on and power good is on"))
@@ -637,8 +640,7 @@ TEST(SystemTests, SetPowerState)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(2);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(2);
         EXPECT_CALL(services, createBMCDump).Times(2);
         EXPECT_CALL(services, hardPowerOff).Times(2);
@@ -3122,6 +3124,9 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
         EXPECT_CALL(device, powerOff).Times(1);
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is on and power good is on"))
@@ -3132,8 +3137,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(1);
@@ -3225,6 +3229,9 @@ TEST(SystemTests, CheckForPowerGoodFaults)
             EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
         }
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is on and power good is on"))
@@ -3239,8 +3246,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
@@ -3340,6 +3346,9 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        std::string error{"xyz.openbmc_project.Power.Error.PowerOnTimeout"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is off and power good is off"))
@@ -3354,8 +3363,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
                     logErrorMsg("Power on failed in chassis 1: Timeout"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.PowerOnTimeout",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
@@ -3463,6 +3471,9 @@ TEST(SystemTests, CheckForPowerGoodFaults)
             EXPECT_CALL(device, powerOn).Times(1);
         }
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is off and power good is off"))
@@ -3481,8 +3492,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
@@ -3576,6 +3586,9 @@ TEST(SystemTests, CheckForPowerGoodFaults)
             EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
         }
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "2"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is off and power good is off"))
@@ -3594,8 +3607,7 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 2"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
@@ -4166,6 +4178,9 @@ TEST(SystemTests, HardPowerOff)
         EXPECT_CALL(device, powerOn).Times(1);
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is off and power good is off"))
@@ -4179,8 +4194,7 @@ TEST(SystemTests, HardPowerOff)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(2);
         EXPECT_CALL(services, hardPowerOff).Times(2);
@@ -4272,6 +4286,9 @@ TEST(SystemTests, HardPowerOff)
             EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
         }
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "2"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is off and power good is off"))
@@ -4290,8 +4307,7 @@ TEST(SystemTests, HardPowerOff)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 2"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(0);

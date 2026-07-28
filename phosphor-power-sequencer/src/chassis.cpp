@@ -403,6 +403,7 @@ void Chassis::handlePowerGoodFault(Services& services)
 void Chassis::logPowerOffTimeout(Services& services)
 {
     std::map<std::string, std::string> additionalData{};
+    additionalData.emplace("CHASSIS_NUMBER", std::to_string(number));
     services.logError(powerOffTimeoutError, Entry::Level::Critical,
                       additionalData);
 }
@@ -430,6 +431,7 @@ void Chassis::logPowerGoodFault(Services& services)
         }
     }
 
+    additionalData.emplace("CHASSIS_NUMBER", std::to_string(number));
     services.logError(error, Entry::Level::Critical, additionalData);
     powerGoodFault->wasLogged = true;
 }
