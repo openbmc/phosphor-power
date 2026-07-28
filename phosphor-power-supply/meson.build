@@ -6,9 +6,10 @@ install_subdir(
 
 phosphor_psu_monitor = executable(
     'phosphor-psu-monitor',
-    'main.cpp',
-    'psu_manager.cpp',
-    'power_supply.cpp',
+    'new_main.cpp',
+    'chassis_manager.cpp',
+    'chassis.cpp',
+    'new_power_supply.cpp',
     'util.cpp',
     dependencies: [
         cli11_dep,
@@ -23,8 +24,6 @@ phosphor_psu_monitor = executable(
     install: true,
     link_with: [libpower],
 )
-
-power_supply = phosphor_psu_monitor.extract_objects('power_supply.cpp')
 
 if get_option('tests').allowed()
     subdir('test')
