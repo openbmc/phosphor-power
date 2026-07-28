@@ -2883,6 +2883,9 @@ TEST(ChassisTests, CheckForPowerGoodError)
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(false));
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        std::string error{"xyz.openbmc_project.Power.Error.PowerOnTimeout"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -2892,8 +2895,7 @@ TEST(ChassisTests, CheckForPowerGoodError)
                     logErrorMsg("Power on failed in chassis 1: Timeout"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.PowerOnTimeout",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set power good timeout to 10 milliseconds
@@ -2955,6 +2957,9 @@ TEST(ChassisTests, CheckForPowerGoodError)
         EXPECT_CALL(device, powerOff).Times(1);
         EXPECT_CALL(device, getPowerGood).WillRepeatedly(Return(true));
 
+        std::string error{"xyz.openbmc_project.Power.Error.PowerOffTimeout"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
         EXPECT_CALL(
             services,
@@ -2964,8 +2969,7 @@ TEST(ChassisTests, CheckForPowerGoodError)
                     logErrorMsg("Power off failed in chassis 1: Timeout"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.PowerOffTimeout",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set power good timeout to 10 milliseconds
@@ -3149,6 +3153,9 @@ TEST(ChassisTests, CheckForPowerGoodError)
             .WillRepeatedly(Return(false));
         EXPECT_CALL(device, findPgoodFault).WillOnce(Return(""));
 
+        std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
         EXPECT_CALL(
             services,
             logInfoMsg("Chassis 1 power state is on and power good is on"))
@@ -3156,8 +3163,7 @@ TEST(ChassisTests, CheckForPowerGoodError)
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
         EXPECT_CALL(services,
-                    logError("xyz.openbmc_project.Power.Error.Shutdown",
-                             Entry::Level::Critical, _))
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Monitor: Power good is on
@@ -3376,7 +3382,9 @@ TEST(ChassisTests, LogPowerGoodFault)
         std::string error{
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
-            {"RAIL_NAME", "vdd"}, {"DEVICE_NAME", "pseq0"}};
+            {"CHASSIS_NUMBER", "1"},
+            {"DEVICE_NAME", "pseq0"},
+            {"RAIL_NAME", "vdd"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3434,6 +3442,8 @@ TEST(ChassisTests, LogPowerGoodFault)
 
         std::string error{
             "xyz.openbmc_project.Power.PowerSupply.Error.IoutOCFault"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3451,7 +3461,8 @@ TEST(ChassisTests, LogPowerGoodFault)
             .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
-        EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
+        EXPECT_CALL(services,
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set fault logging delay time to 0 milliseconds
@@ -3491,6 +3502,8 @@ TEST(ChassisTests, LogPowerGoodFault)
         MockServices services;
 
         std::string error{"xyz.openbmc_project.Power.Error.PowerOnTimeout"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3509,7 +3522,8 @@ TEST(ChassisTests, LogPowerGoodFault)
         EXPECT_CALL(services,
                     logErrorMsg("Power on failed in chassis 1: Timeout"))
             .Times(1);
-        EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
+        EXPECT_CALL(services,
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set power good timeout to 0 milliseconds
@@ -3538,6 +3552,8 @@ TEST(ChassisTests, LogPowerGoodFault)
         MockServices services;
 
         std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3555,7 +3571,8 @@ TEST(ChassisTests, LogPowerGoodFault)
             .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
-        EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
+        EXPECT_CALL(services,
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set fault logging delay time to 0 milliseconds
@@ -3597,7 +3614,9 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
         std::string error{
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
-            {"RAIL_NAME", "vio"}, {"DEVICE_NAME", "pseq0"}};
+            {"CHASSIS_NUMBER", "1"},
+            {"DEVICE_NAME", "pseq0"},
+            {"RAIL_NAME", "vio"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3665,7 +3684,9 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
         std::string error{
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
-            {"RAIL_NAME", "vdd"}, {"DEVICE_NAME", "pseq1"}};
+            {"CHASSIS_NUMBER", "1"},
+            {"DEVICE_NAME", "pseq1"},
+            {"RAIL_NAME", "vdd"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3731,6 +3752,8 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
         MockServices services;
 
         std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
@@ -3756,7 +3779,8 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
-        EXPECT_CALL(services, logError(error, Entry::Level::Critical, _))
+        EXPECT_CALL(services,
+                    logError(error, Entry::Level::Critical, additionalData))
             .Times(1);
 
         // Set fault logging delay time to 0 milliseconds
@@ -3794,7 +3818,7 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
 
         std::string error{"xyz.openbmc_project.Power.Error.Shutdown"};
         std::map<std::string, std::string> additionalData{
-            {"ERROR", "Unable to acquire GPIO line"}};
+            {"CHASSIS_NUMBER", "1"}, {"ERROR", "Unable to acquire GPIO line"}};
 
         chassis->initializeMonitoring(services);
         setChassisStatusToGood(*chassis);
