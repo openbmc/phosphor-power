@@ -38,7 +38,9 @@ class MockedPMBus : public PMBusBase
     MOCK_METHOD(std::string, insertPageNum,
                 (const std::string& templateName, size_t page), (override));
     MOCK_METHOD(fs::path, getPath, (Type type), (override));
+    MOCK_METHOD(std::string, getGPIOChipName, (), (const, override));
 };
+
 } // namespace pmbus
 
 namespace power

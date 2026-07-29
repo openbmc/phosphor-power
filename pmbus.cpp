@@ -23,6 +23,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <regex>
 
 namespace phosphor
 {
@@ -402,6 +403,29 @@ void PMBus::findHwmonDir()
                   "DEVICE_PATH={DEVICE_PATH}",
                   "DEVICE_PATH", basePath);
     }
+}
+
+std::string PMBus::getGPIOChipName() const
+{
+    try
+    {
+        std::regex gpiochipRegex{"^gpiochip[0-9]+$"};
+        std::string entryName{};
+        for (const auto& entry : fs::directory_iterator(basePath))
+        {
+            entryName = entry.path().filename().string();
+            if (std::regex_match(entryName, gpiochipRegex))
+            {
+                return entryName;
+            }
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error("Failed to find GPIO chip name in {PATH}: {ERROR}", "PATH",
+                   basePath, "ERROR", e);
+    }
+    return std::string{};
 }
 
 std::unique_ptr<PMBusBase> PMBus::createPMBus(std::uint16_t bus,
