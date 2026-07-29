@@ -35,21 +35,23 @@ std::vector<int> PMBusDriverDevice::getGPIOValues(Services& services)
 {
     verifyIsOpen();
 
-    // Get lower case version of device name to use as chip label
-    std::string label{name};
-    std::transform(label.begin(), label.end(), label.begin(), ::tolower);
-
-    // Read the GPIO values by specifying the chip label
     std::vector<int> values;
     try
     {
-        values = services.getGPIOValues(label);
+        // Get GPIO chip name for device from sysfs
+        std::string chipName = pmbusInterface->getGPIOChipName();
+        if (chipName.empty())
+        {
+            throw std::runtime_error{"Unable to get GPIO chip name"};
+        }
+
+        // Read GPIO values from chip
+        values = services.getGPIOValues(chipName);
     }
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read GPIO values from device {} using label {}: {}",
-            name, label, e.what())};
+            "Unable to read GPIO values from device {}: {}", name, e.what())};
     }
     return values;
 }

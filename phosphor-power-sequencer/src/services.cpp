@@ -97,14 +97,13 @@ bool BMCServices::isPresent(const std::string& inventoryPath)
     return present;
 }
 
-std::vector<int> BMCServices::getGPIOValues(const std::string& chipLabel)
+std::vector<int> BMCServices::getGPIOValues(const std::string& chipName)
 {
     // Set up the chip object
-    gpiod::chip chip{chipLabel, gpiod::chip::OPEN_BY_LABEL};
+    gpiod::chip chip{chipName, gpiod::chip::OPEN_BY_NAME};
     unsigned int numLines = chip.num_lines();
-    lg2::info(
-        "Reading GPIO values from chip {NAME} with label {LABEL} and {NUM_LINES} lines",
-        "NAME", chip.name(), "LABEL", chipLabel, "NUM_LINES", numLines);
+    lg2::info("Reading GPIO values from chip {NAME} with {NUM_LINES} lines",
+              "NAME", chipName, "NUM_LINES", numLines);
 
     // Read GPIO values.  Work around libgpiod bulk line maximum by getting
     // values from individual lines.

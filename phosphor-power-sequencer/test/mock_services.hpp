@@ -67,7 +67,7 @@ class MockServices : public Services
         return std::make_unique<NiceMock<MockGPIO>>();
     }
 
-    MOCK_METHOD(std::vector<int>, getGPIOValues, (const std::string& chipLabel),
+    MOCK_METHOD(std::vector<int>, getGPIOValues, (const std::string& chipName),
                 (override));
 
     virtual std::unique_ptr<PMBusBase> createPMBus(

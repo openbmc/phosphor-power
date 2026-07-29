@@ -358,7 +358,7 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
 {
     // Test where works
     {
-        std::string name{"ABC_382%#, ZY"};
+        std::string name{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -372,12 +372,16 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
                                  std::move(rails)};
 
         MockServices services;
+        device.open(services);
+        MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
         std::vector<int> gpioValues{1, 1, 1};
-        EXPECT_CALL(services, getGPIOValues("abc_382%#, zy"))
+        EXPECT_CALL(pmbus, getGPIOChipName())
+            .Times(1)
+            .WillOnce(Return("gpiochip36"));
+        EXPECT_CALL(services, getGPIOValues("gpiochip36"))
             .Times(1)
             .WillOnce(Return(gpioValues));
 
-        device.open(services);
         EXPECT_TRUE(device.getGPIOValues(services) == gpioValues);
     }
 
@@ -397,10 +401,6 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
                                  std::move(rails)};
 
         MockServices services;
-        EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
-            .Times(1)
-            .WillOnce(
-                Throw(std::runtime_error{"libgpiod: Unable to open chip"}));
 
         // Device not open
         try
@@ -417,15 +417,17 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
         try
         {
             device.open(services);
+            MockPMBus& pmbus =
+                static_cast<MockPMBus&>(device.getPMBusInterface());
+            EXPECT_CALL(pmbus, getGPIOChipName()).Times(1).WillOnce(Return(""));
             device.getGPIOValues(services);
             ADD_FAILURE() << "Should not have reached this line.";
         }
         catch (const std::exception& e)
         {
             EXPECT_STREQ(e.what(),
-                         "Unable to read GPIO values from device XYZ_PSEQ "
-                         "using label xyz_pseq: "
-                         "libgpiod: Unable to open chip");
+                         "Unable to read GPIO values from device XYZ_PSEQ: "
+                         "Unable to get GPIO chip name");
         }
     }
 }
@@ -1137,14 +1139,18 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
 
     MockServices services;
     std::vector<int> gpioValues{1, 1, 1};
-    EXPECT_CALL(services, getGPIOValues("xyz_pseq"))
-        .Times(1)
-        .WillOnce(Return(gpioValues));
 
     device.open(services);
 
-    // Methods that get hwmon file info should be called twice
     MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
+    EXPECT_CALL(pmbus, getGPIOChipName())
+        .Times(1)
+        .WillOnce(Return("gpiochip36"));
+    EXPECT_CALL(services, getGPIOValues("gpiochip36"))
+        .Times(1)
+        .WillOnce(Return(gpioValues));
+
+    // Methods that get hwmon file info should be called twice
     EXPECT_CALL(pmbus, getPath(Type::Hwmon))
         .Times(2)
         .WillRepeatedly(Return(tempDirPath));

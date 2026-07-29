@@ -79,9 +79,6 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
         };
 
         MockServices services;
-        EXPECT_CALL(services, getGPIOValues("ucd90160"))
-            .Times(1)
-            .WillOnce(Return(gpioValues));
         EXPECT_CALL(services, logInfoMsg("Device UCD90160 GPIO values:"))
             .Times(1);
         EXPECT_CALL(services,
@@ -140,6 +137,12 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
 
         device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
+        EXPECT_CALL(pmbus, getGPIOChipName())
+            .Times(1)
+            .WillOnce(Return("gpiochip36"));
+        EXPECT_CALL(services, getGPIOValues("gpiochip36"))
+            .Times(1)
+            .WillOnce(Return(gpioValues));
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
             .WillOnce(Return("/tmp"));
@@ -201,9 +204,6 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
         };
 
         MockServices services;
-        EXPECT_CALL(services, getGPIOValues("ucd90160"))
-            .Times(1)
-            .WillOnce(Return(gpioValues));
         EXPECT_CALL(services,
                     logInfoMsg("Device UCD90160 GPIO values: ["
                                "1, 0, 0, 1, "
@@ -241,6 +241,12 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
 
         device.open(services);
         MockPMBus& pmbus = static_cast<MockPMBus&>(device.getPMBusInterface());
+        EXPECT_CALL(pmbus, getGPIOChipName())
+            .Times(1)
+            .WillOnce(Return("gpiochip36"));
+        EXPECT_CALL(services, getGPIOValues("gpiochip36"))
+            .Times(1)
+            .WillOnce(Return(gpioValues));
         EXPECT_CALL(pmbus, getPath(Type::Hwmon))
             .Times(1)
             .WillOnce(Return("/tmp"));

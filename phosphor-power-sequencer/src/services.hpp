@@ -119,14 +119,14 @@ class Services
     virtual std::unique_ptr<GPIO> createGPIO(const std::string& name) = 0;
 
     /**
-     * Reads all the GPIO values on the chip with the specified label.
+     * Reads all the GPIO values on the chip with the specified name.
      *
      * Throws an exception if an error occurs while obtaining the values.
      *
-     * @param chipLabel label identifying the chip with the GPIOs
+     * @param chipName Name identifying the chip with the GPIOs
      * @return GPIO values
      */
-    virtual std::vector<int> getGPIOValues(const std::string& chipLabel) = 0;
+    virtual std::vector<int> getGPIOValues(const std::string& chipName) = 0;
 
     /**
      * Creates object for communicating with a PMBus device by reading and
@@ -250,7 +250,7 @@ class BMCServices : public Services
 
     /** @copydoc Services::getGPIOValues() */
     virtual std::vector<int> getGPIOValues(
-        const std::string& chipLabel) override;
+        const std::string& chipName) override;
 
     /** @copydoc Services::createPMBus() */
     virtual std::unique_ptr<PMBusBase> createPMBus(
