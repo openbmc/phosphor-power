@@ -182,6 +182,7 @@ class PMBusBase
     virtual std::string insertPageNum(const std::string& templateName,
                                       size_t page) = 0;
     virtual fs::path getPath(Type type) = 0;
+    virtual std::string getGPIOChipName() const = 0;
 };
 
 /**
@@ -381,6 +382,17 @@ class PMBus : public PMBusBase
      * @return fs::path - the full path
      */
     fs::path getPath(Type type) override;
+
+    /**
+     * Returns the name of the GPIO chip in the base sysfs path, if present.
+     *
+     * The base sysfs path may contain one or more entries of the form
+     * gpiochipN, where N is one or more decimal digits. If such an entry
+     * is found, its name is returned. Otherwise an empty string is returned.
+     *
+     * @return the GPIO chip name, or an empty string if not found
+     */
+    std::string getGPIOChipName() const override;
 
   private:
     /**
