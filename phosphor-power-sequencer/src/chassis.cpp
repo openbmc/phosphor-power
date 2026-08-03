@@ -279,7 +279,7 @@ void Chassis::powerOn(Services& services)
             // Catch and save error so we can power on any remaining devices
             error =
                 std::format("Unable to power on device {} in chassis {}: {}",
-                            powerSequencer->getName(), number, e.what());
+                            powerSequencer->getID(), number, e.what());
         }
     }
 
@@ -304,7 +304,7 @@ void Chassis::powerOff(Services& services)
             // Catch and save error so we can power off any remaining devices
             error =
                 std::format("Unable to power off device {} in chassis {}: {}",
-                            powerSequencer->getName(), number, e.what());
+                            powerSequencer->getID(), number, e.what());
         }
     }
 

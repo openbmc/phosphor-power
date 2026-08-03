@@ -59,12 +59,12 @@ class BasicDeviceImpl : public BasicDevice
     BasicDeviceImpl& operator=(BasicDeviceImpl&&) = delete;
     virtual ~BasicDeviceImpl() = default;
 
-    explicit BasicDeviceImpl(const std::string& name, uint16_t bus,
+    explicit BasicDeviceImpl(const std::string& id, uint16_t bus,
                              uint16_t address,
                              const std::string& powerControlGPIOName,
                              const std::string& powerGoodGPIOName,
                              std::vector<std::unique_ptr<Rail>> rails) :
-        BasicDevice(name, bus, address, powerControlGPIOName, powerGoodGPIOName,
+        BasicDevice(id, bus, address, powerControlGPIOName, powerGoodGPIOName,
                     std::move(rails))
     {}
 
@@ -85,20 +85,20 @@ TEST(BasicDeviceTests, Constructor)
 {
     // Test where works: Empty vector of rails
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
                                powerGoodGPIOName,
                                std::move(rails)};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -109,7 +109,7 @@ TEST(BasicDeviceTests, Constructor)
 
     // Test where works: Non-empty vector of rails
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -117,14 +117,14 @@ TEST(BasicDeviceTests, Constructor)
         std::vector<std::unique_ptr<Rail>> rails{};
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
                                powerGoodGPIOName,
                                std::move(rails)};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -140,13 +140,13 @@ TEST(BasicDeviceTests, Destructor)
 {
     // Test where succeeds: No exception thrown
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -158,13 +158,13 @@ TEST(BasicDeviceTests, Destructor)
 
     // Test where succeeds: Exception caught
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -179,33 +179,33 @@ TEST(BasicDeviceTests, Destructor)
     }
 }
 
-TEST(BasicDeviceTests, GetName)
+TEST(BasicDeviceTests, GetID)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
                            powerGoodGPIOName,
                            std::move(rails)};
 
-    EXPECT_EQ(device.getName(), name);
+    EXPECT_EQ(device.getID(), id);
 }
 
 TEST(BasicDeviceTests, GetBus)
 {
-    std::string name{"abc_pseq"};
+    std::string id{"abc_pseq"};
     uint16_t bus{1};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -217,13 +217,13 @@ TEST(BasicDeviceTests, GetBus)
 
 TEST(BasicDeviceTests, GetAddress)
 {
-    std::string name{"abc_pseq"};
+    std::string id{"abc_pseq"};
     uint16_t bus{1};
     uint16_t address{0x24};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -235,13 +235,13 @@ TEST(BasicDeviceTests, GetAddress)
 
 TEST(BasicDeviceTests, GetPowerControlGPIOName)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -253,13 +253,13 @@ TEST(BasicDeviceTests, GetPowerControlGPIOName)
 
 TEST(BasicDeviceTests, GetPowerGoodGPIOName)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -273,13 +273,13 @@ TEST(BasicDeviceTests, GetRails)
 {
     // Empty vector of rails
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -291,7 +291,7 @@ TEST(BasicDeviceTests, GetRails)
 
     // Non-empty vector of rails
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -300,7 +300,7 @@ TEST(BasicDeviceTests, GetRails)
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
         rails.emplace_back(createRail("VDDR", 9));
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -316,13 +316,13 @@ TEST(BasicDeviceTests, GetRails)
 
 TEST(BasicDeviceTests, Open)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -346,13 +346,13 @@ TEST(BasicDeviceTests, Open)
 
 TEST(BasicDeviceTests, IsOpen)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -370,13 +370,13 @@ TEST(BasicDeviceTests, Close)
 {
     // Test where works
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -400,13 +400,13 @@ TEST(BasicDeviceTests, Close)
     // Test where fails: Exception thrown
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -433,13 +433,13 @@ TEST(BasicDeviceTests, Close)
 
 TEST(BasicDeviceTests, CloseWithoutException)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -471,13 +471,13 @@ TEST(BasicDeviceTests, CloseWithoutException)
 
 TEST(BasicDeviceTests, GetPowerControlGPIO)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -508,13 +508,13 @@ TEST(BasicDeviceTests, GetPowerControlGPIO)
 
 TEST(BasicDeviceTests, GetPowerGoodGPIO)
 {
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{0};
     uint16_t address{0x23};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
     std::vector<std::unique_ptr<Rail>> rails{};
-    BasicDeviceImpl device{name,
+    BasicDeviceImpl device{id,
                            bus,
                            address,
                            powerControlGPIOName,
@@ -548,13 +548,13 @@ TEST(BasicDeviceTests, PowerOn)
     // Test where fails: Device not open
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -571,13 +571,13 @@ TEST(BasicDeviceTests, PowerOn)
 
     // Test where works
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -596,13 +596,13 @@ TEST(BasicDeviceTests, PowerOn)
     // Test where fails: GPIO request throws exception
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -629,13 +629,13 @@ TEST(BasicDeviceTests, PowerOff)
     // Test where fails: Device not open
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -652,13 +652,13 @@ TEST(BasicDeviceTests, PowerOff)
 
     // Test where works
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -677,13 +677,13 @@ TEST(BasicDeviceTests, PowerOff)
     // Test where fails: GPIO set value throws exception
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -711,13 +711,13 @@ TEST(BasicDeviceTests, GetPowerGood)
     // Test where fails: Device not open
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -734,13 +734,13 @@ TEST(BasicDeviceTests, GetPowerGood)
 
     // Test where works: Value is false
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -756,13 +756,13 @@ TEST(BasicDeviceTests, GetPowerGood)
 
     // Test where works: Value is true
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,
@@ -779,13 +779,13 @@ TEST(BasicDeviceTests, GetPowerGood)
     // Test where fails: GPIO get value throws exception
     try
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
         std::vector<std::unique_ptr<Rail>> rails{};
-        BasicDeviceImpl device{name,
+        BasicDeviceImpl device{id,
                                bus,
                                address,
                                powerControlGPIOName,

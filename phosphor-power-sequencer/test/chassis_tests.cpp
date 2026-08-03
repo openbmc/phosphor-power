@@ -826,7 +826,7 @@ TEST(ChassisTests, SetPowerState)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, powerOn)
             .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
-        EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+        EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
 
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
 
@@ -854,7 +854,7 @@ TEST(ChassisTests, SetPowerState)
         EXPECT_CALL(device, isOpen).WillOnce(Return(true));
         EXPECT_CALL(device, powerOff)
             .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
-        EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+        EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
 
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
 
@@ -2420,7 +2420,7 @@ TEST(ChassisTests, PowerOn)
             EXPECT_CALL(device, open)
                 .WillOnce(Throw(std::runtime_error{"Unable to open device"}));
             EXPECT_CALL(device, powerOn).Times(0);
-            EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+            EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
         }
         {
             auto& device = getMockDevice(*chassis, 1);
@@ -2457,7 +2457,7 @@ TEST(ChassisTests, PowerOn)
             EXPECT_CALL(device, isOpen).WillOnce(Return(true));
             EXPECT_CALL(device, powerOn)
                 .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
-            EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+            EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
         }
         {
             auto& device = getMockDevice(*chassis, 1);
@@ -2535,7 +2535,7 @@ TEST(ChassisTests, PowerOff)
             EXPECT_CALL(device, open)
                 .WillOnce(Throw(std::runtime_error{"Unable to open device"}));
             EXPECT_CALL(device, powerOff).Times(0);
-            EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+            EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
         }
         {
             auto& device = getMockDevice(*chassis, 1);
@@ -2572,7 +2572,7 @@ TEST(ChassisTests, PowerOff)
             EXPECT_CALL(device, isOpen).WillOnce(Return(true));
             EXPECT_CALL(device, powerOff)
                 .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
-            EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+            EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
         }
         {
             auto& device = getMockDevice(*chassis, 1);
@@ -3383,7 +3383,7 @@ TEST(ChassisTests, LogPowerGoodFault)
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
             {"CHASSIS_NUMBER", "1"},
-            {"DEVICE_NAME", "pseq0"},
+            {"DEVICE_ID", "pseq0"},
             {"RAIL_NAME", "vdd"}};
 
         chassis->initializeMonitoring(services);
@@ -3615,7 +3615,7 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
             {"CHASSIS_NUMBER", "1"},
-            {"DEVICE_NAME", "pseq0"},
+            {"DEVICE_ID", "pseq0"},
             {"RAIL_NAME", "vio"}};
 
         chassis->initializeMonitoring(services);
@@ -3685,7 +3685,7 @@ TEST(ChassisTests, FindPowerGoodFaultInRail)
             "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault"};
         std::map<std::string, std::string> additionalData{
             {"CHASSIS_NUMBER", "1"},
-            {"DEVICE_NAME", "pseq1"},
+            {"DEVICE_ID", "pseq1"},
             {"RAIL_NAME", "vdd"}};
 
         chassis->initializeMonitoring(services);

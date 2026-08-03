@@ -53,7 +53,7 @@ class PMBusDriverDevice : public StandardDevice
     /**
      * Constructor.
      *
-     * @param name Device name
+     * @param id Unique ID of the device
      * @param bus I2C bus for the device
      * @param address I2C address for the device
      * @param powerControlGPIOName Name of the GPIO that turns this device on
@@ -65,12 +65,12 @@ class PMBusDriverDevice : public StandardDevice
      * @param instance Chip instance number
      */
     explicit PMBusDriverDevice(
-        const std::string& name, uint16_t bus, uint16_t address,
+        const std::string& id, uint16_t bus, uint16_t address,
         const std::string& powerControlGPIOName,
         const std::string& powerGoodGPIOName,
         std::vector<std::unique_ptr<Rail>> rails,
         const std::string& driverName = "", size_t instance = 0) :
-        StandardDevice(name, bus, address, powerControlGPIOName,
+        StandardDevice(id, bus, address, powerControlGPIOName,
                        powerGoodGPIOName, std::move(rails)),
         driverName{driverName}, instance{instance}
     {}

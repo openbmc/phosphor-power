@@ -47,11 +47,11 @@ class PowerSequencerDevice
     virtual ~PowerSequencerDevice() = default;
 
     /**
-     * Returns the device name.
+     * Returns the unique ID of the device.
      *
-     * @return device name
+     * @return unique ID of the device
      */
-    virtual const std::string& getName() const = 0;
+    virtual const std::string& getID() const = 0;
 
     /**
      * Returns the I2C bus for the device.

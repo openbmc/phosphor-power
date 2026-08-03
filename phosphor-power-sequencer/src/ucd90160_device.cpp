@@ -57,7 +57,7 @@ void UCD90160Device::storeGPIOValues(
 
     // Store GPIO names and values in additional data and journal.
     // Use groups of GPIOs in journal to minimize number of entries.
-    services.logInfoMsg(std::format("Device {} GPIO values:", name));
+    services.logInfoMsg(std::format("Device {} GPIO values:", id));
     unsigned int groupSize{4};
     auto namesSpan = std::span{gpioNames};
     auto valuesSpan = std::span{values};

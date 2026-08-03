@@ -108,7 +108,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
 {
     // Test where works; optional parameters not specified
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -116,14 +116,14 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 5));
         rails.emplace_back(createRail("VIO", 7));
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
                                  powerGoodGPIOName,
                                  std::move(rails)};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -137,7 +137,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
 
     // Test where works; optional parameters specified
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-on"};
@@ -148,7 +148,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
         std::string driverName{"xyzdev"};
         size_t instance{3};
         PMBusDriverDevice device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -157,7 +157,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
             driverName,
             instance};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -172,7 +172,7 @@ TEST_F(PMBusDriverDeviceTests, Constructor)
 
 TEST_F(PMBusDriverDeviceTests, GetDriverName)
 {
-    std::string name{"XYZ_PSEQ"};
+    std::string id{"XYZ_PSEQ"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
@@ -180,7 +180,7 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
     std::vector<std::unique_ptr<Rail>> rails;
     std::string driverName{"xyzdev"};
     PMBusDriverDevice device{
-        name,
+        id,
         bus,
         address,
         powerControlGPIOName,
@@ -193,7 +193,7 @@ TEST_F(PMBusDriverDeviceTests, GetDriverName)
 
 TEST_F(PMBusDriverDeviceTests, GetInstance)
 {
-    std::string name{"XYZ_PSEQ"};
+    std::string id{"XYZ_PSEQ"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
@@ -202,7 +202,7 @@ TEST_F(PMBusDriverDeviceTests, GetInstance)
     std::string driverName{"xyzdev"};
     size_t instance{3};
     PMBusDriverDevice device{
-        name,
+        id,
         bus,
         address,
         powerControlGPIOName,
@@ -216,13 +216,13 @@ TEST_F(PMBusDriverDeviceTests, GetInstance)
 
 TEST_F(PMBusDriverDeviceTests, Open)
 {
-    std::string name{"XYZ_PSEQ"};
+    std::string id{"XYZ_PSEQ"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
-    PMBusDriverDevice device{name,
+    PMBusDriverDevice device{id,
                              bus,
                              address,
                              powerControlGPIOName,
@@ -255,13 +255,13 @@ TEST_F(PMBusDriverDeviceTests, Close)
 {
     // Test where works
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -285,13 +285,13 @@ TEST_F(PMBusDriverDeviceTests, Close)
     // Test where fails: Exception thrown
     try
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -318,13 +318,13 @@ TEST_F(PMBusDriverDeviceTests, Close)
 
 TEST_F(PMBusDriverDeviceTests, GetPMBusInterface)
 {
-    std::string name{"XYZ_PSEQ"};
+    std::string id{"XYZ_PSEQ"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
-    PMBusDriverDevice device{name,
+    PMBusDriverDevice device{id,
                              bus,
                              address,
                              powerControlGPIOName,
@@ -358,13 +358,13 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
 {
     // Test where works
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -387,13 +387,13 @@ TEST_F(PMBusDriverDeviceTests, GetGPIOValues)
 
     // Test where fails
     {
-        std::string name{"XYZ_PSEQ"};
+        std::string id{"XYZ_PSEQ"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -436,13 +436,13 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
 {
     // Test where works
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -462,13 +462,13 @@ TEST_F(PMBusDriverDeviceTests, GetStatusWord)
 
     // Test where fails
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -514,13 +514,13 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
 {
     // Test where works
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -540,13 +540,13 @@ TEST_F(PMBusDriverDeviceTests, GetStatusVout)
 
     // Test where fails
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -595,13 +595,13 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         // Create simulated hwmon voltage label file
         createFile("in13_label"); // PAGE 9 -> file number 13
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -630,13 +630,13 @@ TEST_F(PMBusDriverDeviceTests, GetReadVout)
         // Create simulated hwmon voltage label file
         createFile("in13_label"); // PAGE 8 -> file number 13
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -688,13 +688,13 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         // Create simulated hwmon voltage label file
         createFile("in1_label"); // PAGE 6 -> file number 1
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -723,13 +723,13 @@ TEST_F(PMBusDriverDeviceTests, GetVoutUVFaultLimit)
         // Create simulated hwmon voltage label file
         createFile("in1_label"); // PAGE 7 -> file number 1
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -786,13 +786,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("fan3_label");  // Not a voltage label file
         createFile("temp8_label"); // Not a voltage label file
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -825,13 +825,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         createFile("fan3_label");  // Not a voltage label file
         createFile("temp8_label"); // Not a voltage label file
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -870,13 +870,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
 
     // Test where fails: Device not open
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -899,13 +899,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         // Create file that will be returned as the hwmon directory path
         createFile("in9_label");
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -927,13 +927,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
 
     // Test where fails: hwmon directory path does not exist
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -963,13 +963,13 @@ TEST_F(PMBusDriverDeviceTests, GetPageToFileNumberMap)
         // Change temporary directory to be unreadable
         fs::permissions(tempDirPath, fs::perms::none);
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -1007,13 +1007,13 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         createFile("in0_label");  // PAGE 6 -> file number 0
         createFile("in13_label"); // PAGE 9 -> file number 13
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -1044,13 +1044,13 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
 
     // Test where fails: Device not open
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -1075,13 +1075,13 @@ TEST_F(PMBusDriverDeviceTests, GetFileNumber)
         createFile("in0_label");  // PAGE 6 -> file number 0
         createFile("in13_label"); // PAGE 9 -> file number 13
 
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        PMBusDriverDevice device{name,
+        PMBusDriverDevice device{id,
                                  bus,
                                  address,
                                  powerControlGPIOName,
@@ -1124,13 +1124,13 @@ TEST_F(PMBusDriverDeviceTests, PrepareForPgoodFaultDetection)
     // Create simulated hwmon voltage label file
     createFile("in1_label"); // PAGE 6 -> file number 1
 
-    std::string name{"xyz_pseq"};
+    std::string id{"xyz_pseq"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
-    PMBusDriverDevice device{name,
+    PMBusDriverDevice device{id,
                              bus,
                              address,
                              powerControlGPIOName,

@@ -386,7 +386,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
         EXPECT_TRUE(chassis->getMonitorOptions().isEnabledMonitored);
@@ -410,7 +410,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 13);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x70);
         EXPECT_TRUE(chassis->getMonitorOptions().isPresentMonitored);
@@ -435,7 +435,7 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis3");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 23);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x54);
         EXPECT_FALSE(chassis->getMonitorOptions().isPresentMonitored);
@@ -748,7 +748,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90160");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90160");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
@@ -795,7 +795,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getName(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 12);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x71);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
@@ -1840,7 +1840,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         )"_json;
         std::map<std::string, std::string> variables{};
         auto powerSequencer = parsePowerSequencer(element, variables);
-        EXPECT_EQ(powerSequencer->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencer->getID(), "UCD90160");
         EXPECT_EQ(powerSequencer->getBus(), 3);
         EXPECT_EQ(powerSequencer->getAddress(), 0x11);
         EXPECT_EQ(powerSequencer->getPowerControlGPIOName(),
@@ -1872,7 +1872,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             {"rail1", "cpu1"},
             {"rail2", "cpu2"}};
         auto powerSequencer = parsePowerSequencer(element, variables);
-        EXPECT_EQ(powerSequencer->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencer->getID(), "UCD90320");
         EXPECT_EQ(powerSequencer->getBus(), 4);
         EXPECT_EQ(powerSequencer->getAddress(), 0x24);
         EXPECT_EQ(powerSequencer->getPowerControlGPIOName(), "power_on");
@@ -1893,7 +1893,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         )"_json;
         std::map<std::string, std::string> variables{};
         auto powerSequencer = parsePowerSequencer(element, variables);
-        EXPECT_EQ(powerSequencer->getName(), "gpios_only_device");
+        EXPECT_EQ(powerSequencer->getID(), "gpios_only_device");
         EXPECT_EQ(powerSequencer->getBus(), 0);
         EXPECT_EQ(powerSequencer->getAddress(), 0);
         EXPECT_EQ(powerSequencer->getPowerControlGPIOName(),
@@ -2223,10 +2223,10 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         std::map<std::string, std::string> variables{};
         auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
-        EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getID(), "UCD90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 3);
         EXPECT_EQ(powerSequencers[0]->getAddress(), 0x11);
-        EXPECT_EQ(powerSequencers[1]->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getID(), "UCD90320");
         EXPECT_EQ(powerSequencers[1]->getBus(), 4);
         EXPECT_EQ(powerSequencers[1]->getAddress(), 0x70);
     }
@@ -2258,10 +2258,10 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             {"address2", "0x49"}};
         auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
-        EXPECT_EQ(powerSequencers[0]->getName(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getID(), "UCD90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 5);
         EXPECT_EQ(powerSequencers[0]->getAddress(), 0x22);
-        EXPECT_EQ(powerSequencers[1]->getName(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getID(), "UCD90320");
         EXPECT_EQ(powerSequencers[1]->getBus(), 7);
         EXPECT_EQ(powerSequencers[1]->getAddress(), 0x49);
     }

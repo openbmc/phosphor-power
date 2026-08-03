@@ -46,7 +46,7 @@ std::string StandardDevice::findPgoodFault(
         if (rail != nullptr)
         {
             services.logErrorMsg(std::format(
-                "Pgood fault found in rail monitored by device {}", name));
+                "Pgood fault found in rail monitored by device {}", id));
 
             // If this is a PSU rail and a PSU error was previously detected
             if (rail->isPowerSupplyRail() && !powerSupplyError.empty())
@@ -68,7 +68,7 @@ std::string StandardDevice::findPgoodFault(
     {
         throw std::runtime_error{std::format(
             "Unable to determine if a pgood fault occurred in device {}: {}",
-            name, e.what())};
+            id, e.what())};
     }
     return error;
 }
@@ -128,7 +128,7 @@ void StandardDevice::storePgoodFaultDebugData(
 {
     try
     {
-        additionalData.emplace("DEVICE_NAME", name);
+        additionalData.emplace("DEVICE_ID", id);
         storeGPIOValues(services, gpioValues, additionalData);
     }
     catch (...)
@@ -143,7 +143,7 @@ void StandardDevice::storeGPIOValues(
     {
         std::string valuesStr = format_utils::toString(std::span(values));
         services.logInfoMsg(
-            std::format("Device {} GPIO values: {}", name, valuesStr));
+            std::format("Device {} GPIO values: {}", id, valuesStr));
         additionalData.emplace("GPIO_VALUES", valuesStr);
     }
 }

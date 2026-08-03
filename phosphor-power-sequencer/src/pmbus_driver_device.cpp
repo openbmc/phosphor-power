@@ -16,9 +16,6 @@
 
 #include "pmbus_driver_device.hpp"
 
-#include <ctype.h> // for tolower()
-
-#include <algorithm>
 #include <exception>
 #include <filesystem>
 #include <format>
@@ -51,7 +48,7 @@ std::vector<int> PMBusDriverDevice::getGPIOValues(Services& services)
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read GPIO values from device {}: {}", name, e.what())};
+            "Unable to read GPIO values from device {}: {}", id, e.what())};
     }
     return values;
 }
@@ -69,7 +66,7 @@ uint16_t PMBusDriverDevice::getStatusWord(uint8_t page)
     {
         throw std::runtime_error{std::format(
             "Unable to read STATUS_WORD for PAGE {:d} of device {}: {}", page,
-            name, e.what())};
+            id, e.what())};
     }
     return value;
 }
@@ -87,7 +84,7 @@ uint8_t PMBusDriverDevice::getStatusVout(uint8_t page)
     {
         throw std::runtime_error{std::format(
             "Unable to read STATUS_VOUT for PAGE {:d} of device {}: {}", page,
-            name, e.what())};
+            id, e.what())};
     }
     return value;
 }
@@ -108,8 +105,8 @@ double PMBusDriverDevice::getReadVout(uint8_t page)
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read READ_VOUT for PAGE {:d} of device {}: {}", page,
-            name, e.what())};
+            "Unable to read READ_VOUT for PAGE {:d} of device {}: {}", page, id,
+            e.what())};
     }
     return volts;
 }
@@ -131,7 +128,7 @@ double PMBusDriverDevice::getVoutUVFaultLimit(uint8_t page)
     {
         throw std::runtime_error{std::format(
             "Unable to read VOUT_UV_FAULT_LIMIT for PAGE {:d} of device {}: {}",
-            page, name, e.what())};
+            page, id, e.what())};
     }
     return volts;
 }
@@ -149,7 +146,7 @@ unsigned int PMBusDriverDevice::getFileNumber(uint8_t page)
     {
         throw std::runtime_error{std::format(
             "Unable to find hwmon file number for PAGE {:d} of device {}", page,
-            name)};
+            id)};
     }
 
     return it->second;
@@ -192,7 +189,7 @@ void PMBusDriverDevice::buildPageToFileNumberMap()
         throw std::runtime_error{
             std::format("Unable to map PMBus PAGE numbers to hwmon file "
                         "numbers for device {}: {}",
-                        name, e.what())};
+                        id, e.what())};
     }
 }
 

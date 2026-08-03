@@ -41,7 +41,7 @@ using ::testing::Throw;
 
 TEST(UCD90xDeviceTests, Constructor)
 {
-    std::string name{"ucd90320"};
+    std::string id{"ucd90320"};
     uint16_t bus{3};
     uint16_t address{0x72};
     std::string powerControlGPIOName{"power-chassis-control"};
@@ -49,14 +49,14 @@ TEST(UCD90xDeviceTests, Constructor)
     std::vector<std::unique_ptr<Rail>> rails;
     rails.emplace_back(createRail("VDD", 5));
     rails.emplace_back(createRail("VIO", 7));
-    UCD90xDevice device{name,
+    UCD90xDevice device{id,
                         bus,
                         address,
                         powerControlGPIOName,
                         powerGoodGPIOName,
                         std::move(rails)};
 
-    EXPECT_EQ(device.getName(), name);
+    EXPECT_EQ(device.getID(), id);
     EXPECT_EQ(device.getBus(), bus);
     EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -72,13 +72,13 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
 {
     // Test where works
     {
-        std::string name{"ucd90320"};
+        std::string id{"ucd90320"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        UCD90xDevice device{name,
+        UCD90xDevice device{id,
                             bus,
                             address,
                             powerControlGPIOName,
@@ -98,13 +98,13 @@ TEST(UCD90xDeviceTests, GetMfrStatus)
 
     // Test where fails
     {
-        std::string name{"ucd90320"};
+        std::string id{"ucd90320"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
-        UCD90xDevice device{name,
+        UCD90xDevice device{id,
                             bus,
                             address,
                             powerControlGPIOName,
@@ -171,14 +171,14 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        std::string name{"ucd90320"};
+        std::string id{"ucd90320"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 2));
-        UCD90xDevice device{name,
+        UCD90xDevice device{id,
                             bus,
                             address,
                             powerControlGPIOName,
@@ -209,7 +209,7 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
         EXPECT_EQ(additionalData["MFR_STATUS"], "0x123456789abc");
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "ucd90320");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "ucd90320");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD");
         EXPECT_EQ(additionalData["GPIO_LINE"], "2");
@@ -236,14 +236,14 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
                 "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
             .Times(1);
 
-        std::string name{"ucd90320"};
+        std::string id{"ucd90320"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails;
         rails.emplace_back(createRail("VDD", 2));
-        UCD90xDevice device{name,
+        UCD90xDevice device{id,
                             bus,
                             address,
                             powerControlGPIOName,
@@ -273,7 +273,7 @@ TEST(UCD90xDeviceTests, StorePgoodFaultDebugData)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "ucd90320");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "ucd90320");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD");
         EXPECT_EQ(additionalData["GPIO_LINE"], "2");

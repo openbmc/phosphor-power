@@ -39,7 +39,7 @@ TEST(GPIOsOnlyDeviceTests, Constructor)
     std::string powerGoodGPIOName{"power-chassis-good"};
     GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
 
-    EXPECT_EQ(device.getName(), GPIOsOnlyDevice::deviceName);
+    EXPECT_EQ(device.getID(), GPIOsOnlyDevice::deviceName);
     EXPECT_EQ(device.getBus(), 0);
     EXPECT_EQ(device.getAddress(), 0x00);
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);

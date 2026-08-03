@@ -61,12 +61,12 @@ class StandardDeviceImpl : public StandardDevice
     virtual ~StandardDeviceImpl() = default;
 
     // Constructor just calls StandardDevice constructor
-    explicit StandardDeviceImpl(const std::string& name, uint16_t bus,
+    explicit StandardDeviceImpl(const std::string& id, uint16_t bus,
                                 uint16_t address,
                                 const std::string& powerControlGPIOName,
                                 const std::string& powerGoodGPIOName,
                                 std::vector<std::unique_ptr<Rail>> rails) :
-        StandardDevice(name, bus, address, powerControlGPIOName,
+        StandardDevice(id, bus, address, powerControlGPIOName,
                        powerGoodGPIOName, std::move(rails))
     {}
 
@@ -151,21 +151,21 @@ TEST(StandardDeviceTests, Constructor)
 {
     // Test where works: Empty vector of rails
     {
-        std::string name{"xyz_pseq"};
+        std::string id{"xyz_pseq"};
         uint16_t bus{3};
         uint16_t address{0x72};
         std::string powerControlGPIOName{"power-chassis-control"};
         std::string powerGoodGPIOName{"power-chassis-good"};
         std::vector<std::unique_ptr<Rail>> rails{};
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
             std::move(rails)};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -175,7 +175,7 @@ TEST(StandardDeviceTests, Constructor)
 
     // Test where works: Non-empty vector of rails
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -185,14 +185,14 @@ TEST(StandardDeviceTests, Constructor)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
             powerGoodGPIOName,
             std::move(rails)};
 
-        EXPECT_EQ(device.getName(), name);
+        EXPECT_EQ(device.getID(), id);
         EXPECT_EQ(device.getBus(), bus);
         EXPECT_EQ(device.getAddress(), address);
         EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -208,7 +208,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
 {
     // Test where works: No rail has a pgood fault
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -218,7 +218,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -249,7 +249,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where works: First rail has a pgood fault detected via GPIO
     // Is a PSU rail: No PSU error specified
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -259,7 +259,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -300,7 +300,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "PSU");
         EXPECT_EQ(additionalData["GPIO_LINE"], "2");
@@ -310,7 +310,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where works: First rail has a pgood fault detected via GPIO
     // Is a PSU rail: PSU error specified
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -320,7 +320,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -360,7 +360,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             device.findPgoodFault(services, powerSupplyError, additionalData);
         EXPECT_EQ(error, powerSupplyError);
         EXPECT_EQ(additionalData.size(), 5);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "PSU");
         EXPECT_EQ(additionalData["GPIO_LINE"], "2");
@@ -370,7 +370,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Test where works: Second rail has pgood fault detected via output voltage
     // Not a PSU rail: PSU error specified
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -380,7 +380,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -426,7 +426,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 1]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD");
         EXPECT_EQ(additionalData["READ_VOUT"], "1.1");
@@ -438,7 +438,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Device returns 0 GPIO values
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -448,7 +448,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -489,7 +489,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 4);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VIO");
         EXPECT_EQ(additionalData["STATUS_VOUT"], "0x11");
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
@@ -499,7 +499,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // Exception occurs trying to obtain GPIO values from device
     // Does not halt pgood fault detection because GPIO values not used by rails
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -509,7 +509,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -549,7 +549,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 4);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VIO");
         EXPECT_EQ(additionalData["STATUS_VOUT"], "0x11");
         EXPECT_EQ(additionalData["STATUS_WORD"], "0xbeef");
@@ -560,7 +560,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // because it is checked using STATUS_VOUT.  That check happens before the
     // other checks.
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -570,7 +570,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailGPIO("VDD", false, 1));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -611,7 +611,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 5);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[0, 0, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VIO");
         EXPECT_EQ(additionalData["STATUS_VOUT"], "0x11");
@@ -622,7 +622,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
     // via output voltage and one is found via a GPIO.  Verify the first rail in
     // the sequence with a fault is selected.
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -632,7 +632,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailGPIO("PSU", true, 2));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -678,7 +678,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         EXPECT_EQ(error,
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "abc_pseq");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "abc_pseq");
         EXPECT_EQ(additionalData["GPIO_VALUES"], "[1, 1, 0]");
         EXPECT_EQ(additionalData["RAIL_NAME"], "VDD");
         EXPECT_EQ(additionalData["READ_VOUT"], "1.1");
@@ -688,7 +688,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
     // Test where fails: Device is not open
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -698,7 +698,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,
@@ -721,7 +721,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
 
     // Test where fails: Exception is thrown during pgood fault detection
     {
-        std::string name{"abc_pseq"};
+        std::string id{"abc_pseq"};
         uint16_t bus{0};
         uint16_t address{0x23};
         std::string powerControlGPIOName{"power-chassis-control"};
@@ -731,7 +731,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
         rails.emplace_back(createRailOutputVoltage("VDD", false, 5));
         rails.emplace_back(createRailStatusVout("VIO", false, 7));
         StandardDeviceImpl device{
-            name,
+            id,
             bus,
             address,
             powerControlGPIOName,

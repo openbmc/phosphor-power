@@ -39,7 +39,7 @@ uint64_t UCD90xDevice::getMfrStatus()
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read MFR_STATUS for device {}: {}", name, e.what())};
+            "Unable to read MFR_STATUS for device {}: {}", id, e.what())};
     }
     return value;
 }
@@ -53,7 +53,7 @@ void UCD90xDevice::storePgoodFaultDebugData(
     {
         uint64_t value = getMfrStatus();
         services.logInfoMsg(
-            std::format("Device {} MFR_STATUS: {:#014x}", name, value));
+            std::format("Device {} MFR_STATUS: {:#014x}", id, value));
         additionalData.emplace("MFR_STATUS", std::format("{:#014x}", value));
     }
     catch (...)

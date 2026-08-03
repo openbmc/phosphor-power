@@ -56,7 +56,7 @@ class StandardDevice : public BasicDevice
      *
      * Throws an exception if an error occurs during initialization.
      *
-     * @param name device name
+     * @param id unique ID of the device
      * @param bus I2C bus for the device
      * @param address I2C address for the device
      * @param powerControlGPIOName name of the GPIO that turns this device on
@@ -65,12 +65,12 @@ class StandardDevice : public BasicDevice
      *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
      */
-    explicit StandardDevice(const std::string& name, uint16_t bus,
+    explicit StandardDevice(const std::string& id, uint16_t bus,
                             uint16_t address,
                             const std::string& powerControlGPIOName,
                             const std::string& powerGoodGPIOName,
                             std::vector<std::unique_ptr<Rail>> rails) :
-        BasicDevice(name, bus, address, powerControlGPIOName, powerGoodGPIOName,
+        BasicDevice(id, bus, address, powerControlGPIOName, powerGoodGPIOName,
                     std::move(rails))
     {}
 
@@ -134,7 +134,7 @@ class StandardDevice : public BasicDevice
     /**
      * Store pgood fault debug data in the specified additional data map.
      *
-     * The default implementation stores the device name and then calls
+     * The default implementation stores the device ID and then calls
      * storeGPIOValues().
      *
      * Sub-classes should override if needed to store device-specific data.

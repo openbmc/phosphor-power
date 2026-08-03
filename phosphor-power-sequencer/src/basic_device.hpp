@@ -54,7 +54,7 @@ class BasicDevice : public PowerSequencerDevice
      *
      * Throws an exception if an error occurs during initialization.
      *
-     * @param name device name
+     * @param id unique ID of the device
      * @param bus I2C bus for the device
      * @param address I2C address for the device
      * @param powerControlGPIOName name of the GPIO that turns this device on
@@ -63,12 +63,11 @@ class BasicDevice : public PowerSequencerDevice
      *                          signal from this device
      * @param rails voltage rails that are enabled and monitored by this device
      */
-    explicit BasicDevice(const std::string& name, uint16_t bus,
-                         uint16_t address,
+    explicit BasicDevice(const std::string& id, uint16_t bus, uint16_t address,
                          const std::string& powerControlGPIOName,
                          const std::string& powerGoodGPIOName,
                          std::vector<std::unique_ptr<Rail>> rails) :
-        name{name}, bus{bus}, address{address},
+        id{id}, bus{bus}, address{address},
         powerControlGPIOName{powerControlGPIOName},
         powerGoodGPIOName{powerGoodGPIOName}, rails{std::move(rails)}
     {}
@@ -87,10 +86,10 @@ class BasicDevice : public PowerSequencerDevice
         }
     }
 
-    /** @copydoc PowerSequencerDevice::getName() */
-    virtual const std::string& getName() const override
+    /** @copydoc PowerSequencerDevice::getID() */
+    virtual const std::string& getID() const override
     {
-        return name;
+        return id;
     }
 
     /** @copydoc PowerSequencerDevice::getBus() */
@@ -221,14 +220,14 @@ class BasicDevice : public PowerSequencerDevice
     {
         if (!isOpen())
         {
-            throw std::runtime_error{"Device not open: " + name};
+            throw std::runtime_error{"Device not open: " + id};
         }
     }
 
     /**
-     * Device name.
+     * Unique ID of the device.
      */
-    std::string name{};
+    std::string id{};
 
     /**
      * I2C bus for the device.

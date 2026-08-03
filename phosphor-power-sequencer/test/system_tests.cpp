@@ -519,7 +519,7 @@ TEST(SystemTests, SetPowerState)
             EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
             EXPECT_CALL(device, powerOn)
                 .WillOnce(Throw(std::runtime_error{"Unable to write GPIO"}));
-            EXPECT_CALL(device, getName).WillOnce(ReturnRef(deviceName));
+            EXPECT_CALL(device, getID).WillOnce(ReturnRef(deviceName));
         }
         {
             setChassisStatusToGood(system, 1);

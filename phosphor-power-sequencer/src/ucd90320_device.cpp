@@ -66,7 +66,7 @@ void UCD90320Device::storeGPIOValues(
     }
 
     // Store GPIO groups in additional data and journal
-    services.logInfoMsg(std::format("Device {} GPIO values:", name));
+    services.logInfoMsg(std::format("Device {} GPIO values:", id));
     auto span = std::span{values};
     std::string valuesStr;
     for (const GPIOGroup& group : gpioGroups)

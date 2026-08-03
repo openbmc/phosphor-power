@@ -49,7 +49,7 @@ TEST(UCD90320DeviceTests, Constructor)
     UCD90320Device device{bus, address, powerControlGPIOName, powerGoodGPIOName,
                           std::move(rails)};
 
-    EXPECT_EQ(device.getName(), "UCD90320");
+    EXPECT_EQ(device.getID(), "UCD90320");
     EXPECT_EQ(device.getBus(), bus);
     EXPECT_EQ(device.getAddress(), address);
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -151,7 +151,7 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 10);
         EXPECT_EQ(additionalData["MFR_STATUS"], "0x123456789abc");
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "UCD90320");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "UCD90320");
         EXPECT_EQ(additionalData["MAR01_24_GPIO_VALUES"],
                   "[1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
                   "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0]");
@@ -246,7 +246,7 @@ TEST(UCD90320DeviceTests, StoreGPIOValues)
                   "xyz.openbmc_project.Power.Error.PowerSequencerVoltageFault");
         EXPECT_EQ(additionalData.size(), 6);
         EXPECT_EQ(additionalData["MFR_STATUS"], "0x123456789abc");
-        EXPECT_EQ(additionalData["DEVICE_NAME"], "UCD90320");
+        EXPECT_EQ(additionalData["DEVICE_ID"], "UCD90320");
         EXPECT_EQ(additionalData["GPIO_VALUES"],
                   "[1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, "
                   "1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, "
