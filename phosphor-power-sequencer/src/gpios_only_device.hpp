@@ -61,15 +61,17 @@ class GPIOsOnlyDevice : public BasicDevice
      *
      * Throws an exception if an error occurs during initialization.
      *
+     * @param id unique ID of the device
      * @param powerControlGPIOName name of the GPIO that turns this device on
      *                             and off
      * @param powerGoodGPIOName name of the GPIO that reads the power good
      *                          signal from this device
      */
-    explicit GPIOsOnlyDevice(const std::string& powerControlGPIOName,
+    explicit GPIOsOnlyDevice(const std::string& id,
+                             const std::string& powerControlGPIOName,
                              const std::string& powerGoodGPIOName) :
-        BasicDevice(deviceName, 0, 0x00, powerControlGPIOName,
-                    powerGoodGPIOName, std::vector<std::unique_ptr<Rail>>{})
+        BasicDevice(id, 0, 0x00, powerControlGPIOName, powerGoodGPIOName,
+                    std::vector<std::unique_ptr<Rail>>{})
     {}
 
     /** @copydoc PowerSequencerDevice::getGPIOValues() */
@@ -113,8 +115,6 @@ class GPIOsOnlyDevice : public BasicDevice
         verifyIsOpen();
         return std::string{};
     }
-
-    inline static const std::string deviceName{"gpios_only_device"};
 };
 
 } // namespace phosphor::power::sequencer
