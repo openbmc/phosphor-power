@@ -62,11 +62,12 @@ using ::testing::Throw;
 std::unique_ptr<PowerSequencerDevice> createRealPowerSequencer(uint16_t bus,
                                                                uint16_t address)
 {
+    std::string id{"UCD90160"};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
     std::vector<std::unique_ptr<Rail>> rails;
     return std::make_unique<UCD90160Device>(
-        bus, address, powerControlGPIOName, powerGoodGPIOName,
+        id, bus, address, powerControlGPIOName, powerGoodGPIOName,
         std::move(rails));
 }
 

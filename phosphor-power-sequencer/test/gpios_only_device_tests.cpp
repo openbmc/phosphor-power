@@ -35,11 +35,12 @@ using ::testing::Throw;
 
 TEST(GPIOsOnlyDeviceTests, Constructor)
 {
+    std::string id{"gpios_only_device"};
     std::string powerControlGPIOName{"power-chassis-control"};
     std::string powerGoodGPIOName{"power-chassis-good"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
-    EXPECT_EQ(device.getID(), GPIOsOnlyDevice::deviceName);
+    EXPECT_EQ(device.getID(), id);
     EXPECT_EQ(device.getBus(), 0);
     EXPECT_EQ(device.getAddress(), 0x00);
     EXPECT_EQ(device.getPowerControlGPIOName(), powerControlGPIOName);
@@ -51,9 +52,10 @@ TEST(GPIOsOnlyDeviceTests, GetGPIOValues)
 {
     try
     {
+        std::string id{"gpios_only_device"};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
         MockServices services{};
         device.open(services);
@@ -70,9 +72,10 @@ TEST(GPIOsOnlyDeviceTests, GetStatusWord)
 {
     try
     {
+        std::string id{"gpios_only_device"};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
         MockServices services{};
         device.open(services);
@@ -89,9 +92,10 @@ TEST(GPIOsOnlyDeviceTests, GetStatusVout)
 {
     try
     {
+        std::string id{"gpios_only_device"};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
         MockServices services{};
         device.open(services);
@@ -108,9 +112,10 @@ TEST(GPIOsOnlyDeviceTests, GetReadVout)
 {
     try
     {
+        std::string id{"gpios_only_device"};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
         MockServices services{};
         device.open(services);
@@ -127,9 +132,10 @@ TEST(GPIOsOnlyDeviceTests, GetVoutUVFaultLimit)
 {
     try
     {
+        std::string id{"gpios_only_device"};
         std::string powerControlGPIOName{"power-on"};
         std::string powerGoodGPIOName{"chassis-pgood"};
-        GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+        GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
         MockServices services{};
         device.open(services);
@@ -144,9 +150,10 @@ TEST(GPIOsOnlyDeviceTests, GetVoutUVFaultLimit)
 
 TEST(GPIOsOnlyDeviceTests, FindPgoodFault)
 {
+    std::string id{"gpios_only_device"};
     std::string powerControlGPIOName{"power-on"};
     std::string powerGoodGPIOName{"chassis-pgood"};
-    GPIOsOnlyDevice device{powerControlGPIOName, powerGoodGPIOName};
+    GPIOsOnlyDevice device{id, powerControlGPIOName, powerGoodGPIOName};
 
     MockServices services{};
     std::string powerSupplyError{};

@@ -48,6 +48,7 @@ class UCD90320Device : public UCD90xDevice
     /**
      * Constructor.
      *
+     * @param id unique ID of the device
      * @param bus I2C bus for the device
      * @param address I2C address for the device
      * @param powerControlGPIOName Name of the GPIO that turns this device on
@@ -56,15 +57,14 @@ class UCD90320Device : public UCD90xDevice
      *                          signal from this device
      * @param rails Voltage rails that are enabled and monitored by this device
      */
-    explicit UCD90320Device(uint16_t bus, uint16_t address,
+    explicit UCD90320Device(const std::string& id, uint16_t bus,
+                            uint16_t address,
                             const std::string& powerControlGPIOName,
                             const std::string& powerGoodGPIOName,
                             std::vector<std::unique_ptr<Rail>> rails) :
-        UCD90xDevice(deviceName, bus, address, powerControlGPIOName,
-                     powerGoodGPIOName, std::move(rails))
+        UCD90xDevice(id, bus, address, powerControlGPIOName, powerGoodGPIOName,
+                     std::move(rails))
     {}
-
-    constexpr static std::string deviceName{"UCD90320"};
 
   protected:
     /** @copydoc UCD90xDevice::storeGPIOValues() */

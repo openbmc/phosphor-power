@@ -460,19 +460,19 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     if (type == ucd90160DeviceType)
     {
         return std::make_unique<UCD90160Device>(
-            bus, address, powerControlGPIOName, powerGoodGPIOName,
-            std::move(rails));
+            ucd90160DeviceType, bus, address, powerControlGPIOName,
+            powerGoodGPIOName, std::move(rails));
     }
     else if (type == ucd90320DeviceType)
     {
         return std::make_unique<UCD90320Device>(
-            bus, address, powerControlGPIOName, powerGoodGPIOName,
-            std::move(rails));
+            ucd90320DeviceType, bus, address, powerControlGPIOName,
+            powerGoodGPIOName, std::move(rails));
     }
     else if (type == gpiosOnlyDeviceType)
     {
-        return std::make_unique<GPIOsOnlyDevice>(powerControlGPIOName,
-                                                 powerGoodGPIOName);
+        return std::make_unique<GPIOsOnlyDevice>(
+            gpiosOnlyDeviceType, powerControlGPIOName, powerGoodGPIOName);
     }
     throw std::invalid_argument{"Invalid power sequencer type: " + type};
 }
