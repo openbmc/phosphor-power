@@ -45,6 +45,10 @@ std::filesystem::path getDefaultConfigFilePath()
     return standardConfigFileDirectory / defaultConfigFileName;
 }
 
+const std::string gpiosOnlyDeviceType{"gpios_only_device"};
+const std::string ucd90160DeviceType{"UCD90160"};
+const std::string ucd90320DeviceType{"UCD90320"};
+
 std::filesystem::path find(
     const std::vector<std::string>& compatibleSystemTypes,
     const std::filesystem::path& configFileDir)
@@ -418,7 +422,7 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
         std::tie(bus, address) = parseI2CInterface(*i2cInterfaceIt, variables);
         ++propertyCount;
     }
-    else if (type != GPIOsOnlyDevice::deviceName)
+    else if (type != gpiosOnlyDeviceType)
     {
         throw std::invalid_argument{"Required property missing: i2c_interface"};
     }
@@ -445,7 +449,7 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
         rails = parseRailArray(*railsIt, variables);
         ++propertyCount;
     }
-    else if (type != GPIOsOnlyDevice::deviceName)
+    else if (type != gpiosOnlyDeviceType)
     {
         throw std::invalid_argument{"Required property missing: rails"};
     }
@@ -453,19 +457,19 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    if (type == UCD90160Device::deviceName)
+    if (type == ucd90160DeviceType)
     {
         return std::make_unique<UCD90160Device>(
             bus, address, powerControlGPIOName, powerGoodGPIOName,
             std::move(rails));
     }
-    else if (type == UCD90320Device::deviceName)
+    else if (type == ucd90320DeviceType)
     {
         return std::make_unique<UCD90320Device>(
             bus, address, powerControlGPIOName, powerGoodGPIOName,
             std::move(rails));
     }
-    else if (type == GPIOsOnlyDevice::deviceName)
+    else if (type == gpiosOnlyDeviceType)
     {
         return std::make_unique<GPIOsOnlyDevice>(powerControlGPIOName,
                                                  powerGoodGPIOName);
