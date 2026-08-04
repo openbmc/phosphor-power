@@ -350,6 +350,7 @@ TEST(ConfigFileParserTests, ParseChassis)
           "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
           "power_sequencers": [
             {
+              "id": "chassis${chassis_number}_ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": "${bus}", "address": "${address}" },
               "power_control_gpio_name": "power-chassis${chassis_number}-control",
@@ -371,6 +372,7 @@ TEST(ConfigFileParserTests, ParseChassis)
               "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
               "power_sequencers": [
                 {
+                  "id": "backplane_ucd90320",
                   "type": "UCD90320",
                   "i2c_interface": { "bus": 3, "address": "0x11" },
                   "power_control_gpio_name": "power-chassis-control",
@@ -386,7 +388,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(),
+                  "backplane_ucd90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
         EXPECT_TRUE(chassis->getMonitorOptions().isEnabledMonitored);
@@ -410,7 +413,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(),
+                  "chassis2_ucd90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 13);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x70);
         EXPECT_TRUE(chassis->getMonitorOptions().isPresentMonitored);
@@ -435,7 +439,8 @@ TEST(ConfigFileParserTests, ParseChassis)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis3");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(),
+                  "chassis3_ucd90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 23);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x54);
         EXPECT_FALSE(chassis->getMonitorOptions().isPresentMonitored);
@@ -730,6 +735,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
               "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
               "power_sequencers": [
                 {
+                  "id": "ucd90160",
                   "type": "UCD90160",
                   "i2c_interface": { "bus": 3, "address": "0x11" },
                   "power_control_gpio_name": "power-chassis-control",
@@ -748,7 +754,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90160");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "ucd90160");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 3);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x11);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
@@ -773,6 +779,7 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
               "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
               "power_sequencers": [
                 {
+                  "id": "chassis${chassis_number}_ucd90320",
                   "type": "UCD90320",
                   "i2c_interface": { "bus": "${bus}", "address": "${address}" },
                   "power_control_gpio_name": "power-chassis${chassis_number}-control",
@@ -795,7 +802,8 @@ TEST(ConfigFileParserTests, ParseChassisProperties)
         EXPECT_EQ(chassis->getInventoryPath(),
                   "/xyz/openbmc_project/inventory/system/chassis2");
         EXPECT_EQ(chassis->getPowerSequencers().size(), 1);
-        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(), "UCD90320");
+        EXPECT_EQ(chassis->getPowerSequencers()[0]->getID(),
+                  "chassis2_ucd90320");
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getBus(), 12);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getAddress(), 0x71);
         EXPECT_EQ(chassis->getPowerSequencers()[0]->getPowerControlGPIOName(),
@@ -1057,6 +1065,7 @@ TEST(ConfigFileParserTests, ParseChassisTemplate)
               "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
               "power_sequencers": [
                 {
+                  "id": "chassis${chassis_number}_ucd90320",
                   "type": "UCD90320",
                   "i2c_interface": { "bus": "${bus}", "address": "0x11" },
                   "power_control_gpio_name": "power-chassis${chassis_number}-control",
@@ -1823,6 +1832,78 @@ TEST(ConfigFileParserTests, ParseI2CInterface)
     }
 }
 
+TEST(ConfigFileParserTests, ParseID)
+{
+    // Test where works: Uses all valid character classes in regex
+    // (lowercase letters, uppercase letters, digits, underscores)
+    {
+        const json element = R"( "abc_ABC_123" )"_json;
+        std::map<std::string, std::string> variables{};
+        std::string id = parseID(element, variables);
+        EXPECT_EQ(id, "abc_ABC_123");
+    }
+
+    // Test where works: Variables specified
+    {
+        const json element = R"( "${id}" )"_json;
+        std::map<std::string, std::string> variables{{"id", "abc_ABC_123"}};
+        std::string id = parseID(element, variables);
+        EXPECT_EQ(id, "abc_ABC_123");
+    }
+
+    // Test where fails: Element is not a string
+    try
+    {
+        const json element = R"( 1 )"_json;
+        std::map<std::string, std::string> variables{};
+        parseID(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: Empty string
+    try
+    {
+        const json element = R"( "" )"_json;
+        std::map<std::string, std::string> variables{};
+        parseID(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
+    }
+
+    // Test where fails: Invalid character that doesn't match regex
+    try
+    {
+        const json element = R"( "invalid-id" )"_json;
+        std::map<std::string, std::string> variables{};
+        parseID(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid id: invalid-id");
+    }
+
+    // Test where fails: Invalid variable value specified
+    try
+    {
+        const json element = R"( "${id}" )"_json;
+        std::map<std::string, std::string> variables{{"id", "invalid-id"}};
+        parseID(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid id: invalid-id");
+    }
+}
+
 TEST(ConfigFileParserTests, ParsePowerSequencer)
 {
     // Test where works: Has comments property: Type is "UCD90160"
@@ -1831,6 +1912,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             {
               "comments": [ "Power sequencer in chassis 1",
                             "Controls VDD rails" ],
+              "id": "backplane_ucd90160",
               "type": "UCD90160",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -1840,7 +1922,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         )"_json;
         std::map<std::string, std::string> variables{};
         auto powerSequencer = parsePowerSequencer(element, variables);
-        EXPECT_EQ(powerSequencer->getID(), "UCD90160");
+        EXPECT_EQ(powerSequencer->getID(), "backplane_ucd90160");
         EXPECT_EQ(powerSequencer->getBus(), 3);
         EXPECT_EQ(powerSequencer->getAddress(), 0x11);
         EXPECT_EQ(powerSequencer->getPowerControlGPIOName(),
@@ -1856,6 +1938,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "${id}",
               "type": "${type}",
               "i2c_interface": { "bus": "${bus}", "address": "${address}" },
               "power_control_gpio_name": "${power_control_gpio_name}",
@@ -1864,6 +1947,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             }
         )"_json;
         std::map<std::string, std::string> variables{
+            {"id", "ucd90320"},
             {"type", "UCD90320"},
             {"bus", "4"},
             {"address", "0x24"},
@@ -1872,7 +1956,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
             {"rail1", "cpu1"},
             {"rail2", "cpu2"}};
         auto powerSequencer = parsePowerSequencer(element, variables);
-        EXPECT_EQ(powerSequencer->getID(), "UCD90320");
+        EXPECT_EQ(powerSequencer->getID(), "ucd90320");
         EXPECT_EQ(powerSequencer->getBus(), 4);
         EXPECT_EQ(powerSequencer->getAddress(), 0x24);
         EXPECT_EQ(powerSequencer->getPowerControlGPIOName(), "power_on");
@@ -1886,6 +1970,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "gpios_only_device",
               "type": "gpios_only_device",
               "power_control_gpio_name": "power-chassis-control",
               "power_good_gpio_name": "power-chassis-good"
@@ -1915,11 +2000,33 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         EXPECT_STREQ(e.what(), "Element is not an object");
     }
 
+    // Test where fails: Required id property not specified
+    try
+    {
+        const json element = R"(
+            {
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parsePowerSequencer(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: id");
+    }
+
     // Test where fails: Required type property not specified
     try
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
               "power_good_gpio_name": "power-chassis-good",
@@ -1940,6 +2047,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "power_control_gpio_name": "power-chassis-control",
               "power_good_gpio_name": "power-chassis-good",
@@ -1960,6 +2068,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_good_gpio_name": "power-chassis-good",
@@ -1981,6 +2090,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2002,6 +2112,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2017,11 +2128,34 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
         EXPECT_STREQ(e.what(), "Required property missing: rails");
     }
 
+    // Test where fails: id value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "id": 13,
+              "type": "UCD90320",
+              "i2c_interface": { "bus": 3, "address": "0x11" },
+              "power_control_gpio_name": "power-chassis-control",
+              "power_good_gpio_name": "power-chassis-good",
+              "rails": []
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parsePowerSequencer(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
     // Test where fails: type value is invalid: Not a string
     try
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": true,
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2043,6 +2177,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "foo_bar",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2064,6 +2199,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": 3,
               "power_control_gpio_name": "power-chassis-control",
@@ -2085,6 +2221,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": [],
@@ -2106,6 +2243,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2127,6 +2265,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2148,6 +2287,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": 3, "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2170,6 +2310,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencer)
     {
         const json element = R"(
             {
+              "id": "ucd90320",
               "type": "UCD90320",
               "i2c_interface": { "bus": "${bus}", "address": "0x11" },
               "power_control_gpio_name": "power-chassis-control",
@@ -2205,6 +2346,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         const json element = R"(
             [
               {
+                "id": "ucd90160",
                 "type": "UCD90160",
                 "i2c_interface": { "bus": 3, "address": "0x11" },
                 "power_control_gpio_name": "power-chassis-control1",
@@ -2212,6 +2354,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
                 "rails": []
               },
               {
+                "id": "ucd90320",
                 "type": "UCD90320",
                 "i2c_interface": { "bus": 4, "address": "0x70" },
                 "power_control_gpio_name": "power-chassis-control2",
@@ -2223,10 +2366,10 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         std::map<std::string, std::string> variables{};
         auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
-        EXPECT_EQ(powerSequencers[0]->getID(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getID(), "ucd90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 3);
         EXPECT_EQ(powerSequencers[0]->getAddress(), 0x11);
-        EXPECT_EQ(powerSequencers[1]->getID(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getID(), "ucd90320");
         EXPECT_EQ(powerSequencers[1]->getBus(), 4);
         EXPECT_EQ(powerSequencers[1]->getAddress(), 0x70);
     }
@@ -2236,6 +2379,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         const json element = R"(
             [
               {
+                "id": "ucd90160",
                 "type": "UCD90160",
                 "i2c_interface": { "bus": "${bus1}", "address": "${address1}" },
                 "power_control_gpio_name": "power-chassis-control1",
@@ -2243,6 +2387,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
                 "rails": []
               },
               {
+                "id": "ucd90320",
                 "type": "UCD90320",
                 "i2c_interface": { "bus": "${bus2}", "address": "${address2}" },
                 "power_control_gpio_name": "power-chassis-control2",
@@ -2258,10 +2403,10 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
             {"address2", "0x49"}};
         auto powerSequencers = parsePowerSequencerArray(element, variables);
         EXPECT_EQ(powerSequencers.size(), 2);
-        EXPECT_EQ(powerSequencers[0]->getID(), "UCD90160");
+        EXPECT_EQ(powerSequencers[0]->getID(), "ucd90160");
         EXPECT_EQ(powerSequencers[0]->getBus(), 5);
         EXPECT_EQ(powerSequencers[0]->getAddress(), 0x22);
-        EXPECT_EQ(powerSequencers[1]->getID(), "UCD90320");
+        EXPECT_EQ(powerSequencers[1]->getID(), "ucd90320");
         EXPECT_EQ(powerSequencers[1]->getBus(), 7);
         EXPECT_EQ(powerSequencers[1]->getAddress(), 0x49);
     }
@@ -2289,6 +2434,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         const json element = R"(
             [
               {
+                "id": "ucd90160",
                 "type": "UCD90160",
                 "i2c_interface": { "bus": 3, "address": "0x11" },
                 "power_control_gpio_name": "power-chassis-control1",
@@ -2313,6 +2459,7 @@ TEST(ConfigFileParserTests, ParsePowerSequencerArray)
         const json element = R"(
             [
               {
+                "id": "ucd90320",
                 "type": "UCD90320",
                 "i2c_interface": { "bus": "${bus}", "address": "${address}" },
                 "power_control_gpio_name": "power-chassis-control",

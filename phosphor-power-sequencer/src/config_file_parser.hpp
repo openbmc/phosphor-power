@@ -188,20 +188,6 @@ std::map<std::string, JSONRefWrapper> parseChassisTemplateArray(
     const json& element);
 
 /**
- * Parses a JSON element containing chassis status monitoring options.
- *
- * Returns the corresponding C++ ChassisStatusMonitorOptions object.
- *
- * Throws an exception if parsing fails.
- *
- * @param element JSON element
- * @param variables variables map used to expand variables in element value
- * @return ChassisStatusMonitorOptions object
- */
-ChassisStatusMonitorOptions parseStatusMonitoring(
-    const json& element, const std::map<std::string, std::string>& variables);
-
-/**
  * Parses a JSON element containing a gpio object.
  *
  * Returns the corresponding C++ PgoodGPIO object.
@@ -228,6 +214,23 @@ PgoodGPIO parseGPIO(const json& element,
  */
 std::tuple<uint16_t, uint16_t> parseI2CInterface(
     const json& element, const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing an id string.
+ *
+ * Returns the corresponding C++ string.
+ *
+ * The id can only contain letters (A-Z, a-z), numbers (0-9), and underscore
+ * (_).
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return id string
+ */
+std::string parseID(const json& element,
+                    const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing a power_sequencer object.
@@ -296,6 +299,20 @@ std::vector<std::unique_ptr<Rail>> parseRailArray(
  * @return vector of Chassis objects
  */
 std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element);
+
+/**
+ * Parses a JSON element containing chassis status monitoring options.
+ *
+ * Returns the corresponding C++ ChassisStatusMonitorOptions object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return ChassisStatusMonitorOptions object
+ */
+ChassisStatusMonitorOptions parseStatusMonitoring(
+    const json& element, const std::map<std::string, std::string>& variables);
 
 /**
  * Parses a JSON element containing an object with variable names and values.

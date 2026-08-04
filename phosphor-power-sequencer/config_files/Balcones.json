@@ -8,6 +8,7 @@
             "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
             "power_sequencers": [
                 {
+                    "id": "ucd90160",
                     "type": "UCD90160",
                     "i2c_interface": { "bus": 2, "address": "0x64" },
                     "power_control_gpio_name": "power-chassis-control",

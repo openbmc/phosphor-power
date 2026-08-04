@@ -61,6 +61,7 @@ required type.
   "inventory_path": "/xyz/openbmc_project/inventory/system/chassis${chassis_number}",
   "power_sequencers": [
     {
+      "id": "chassis${chassis_number}_ucd90320",
       "type": "UCD90320",
       "i2c_interface": { "bus": "${sequencer_bus_number}", "address": "0x11" },
       "power_control_gpio_name": "power-chassis${chassis_number}-control",
