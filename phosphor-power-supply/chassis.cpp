@@ -530,7 +530,7 @@ void Chassis::syncHistory()
 
 void Chassis::analyze()
 {
-    if (!isPresent)
+    if (!isPresent || !pimAvailable)
     {
         return;
     }
@@ -1085,6 +1085,35 @@ void Chassis::initPropertyChangeListener()
         sdbusplus::match_rules::propertiesChanged(chassisPath, INVENTORY_IFACE),
         std::bind(&Chassis::chassisPresentChanged, this,
                   std::placeholders::_1));
+
+    // Subscribe to PIM Available property changes for this chassis
+    pimAvailableMatch = std::make_unique<sdbusplus::match>(
+        bus,
+        sdbusplus::match_rules::propertiesChanged(chassisPath,
+                                                  AVAILABILITY_IFACE),
+        [this](sdbusplus::message_t& msg) {
+            try
+            {
+                std::string interface;
+                std::map<std::string, util::DbusVariant> properties;
+                msg.read(interface, properties);
+                auto it = properties.find(AVAILABLE_PROP);
+                if (it != properties.end())
+                {
+                    pimAvailable = std::get<bool>(it->second);
+                    lg2::info(
+                        "{CHASSIS_SHORT_NAME}: PIM Available changed to {AVAILABLE}",
+                        "CHASSIS_SHORT_NAME", chassisShortName, "AVAILABLE",
+                        pimAvailable);
+                }
+            }
+            catch (const std::exception& e)
+            {
+                lg2::error(
+                    "{CHASSIS_SHORT_NAME}: Exception in PIM Available handler: {ERROR}",
+                    "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
+            }
+        });
 }
 
 void Chassis::initialize()
@@ -1520,4 +1549,5 @@ bool Chassis::isItPresent()
         return false;
     }
 }
+
 } // namespace phosphor::power::chassis

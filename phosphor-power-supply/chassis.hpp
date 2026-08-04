@@ -187,6 +187,14 @@ class Chassis
     /** @brief True if chassis present */
     bool isPresent = false;
 
+    /**
+     * @brief True if the PIM reports the chassis as available. When
+     * false, PSU devices on this chassis should not be accessed.
+     *
+     * Note: Default is true for single chassis support
+     */
+    bool pimAvailable = true;
+
     /** @brief Used to subscribe to Power interfaces added */
     std::unique_ptr<sdbusplus::match> powerIfacesAddedMatch;
 
@@ -198,6 +206,9 @@ class Chassis
 
     /** @brief Used to subscribe to this chassis's Present property changes */
     std::unique_ptr<sdbusplus::match> chassisPresentMatch;
+
+    /** @brief Used to subscribe to PIM Available property changes */
+    std::unique_ptr<sdbusplus::match> pimAvailableMatch;
 
     /**
      * @brief Flag to indicate if the validateConfig() function should be run.
