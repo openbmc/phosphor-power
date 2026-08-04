@@ -187,6 +187,13 @@ class Chassis
     /** @brief True if chassis present */
     bool isPresent = false;
 
+    /**
+     * @brief True if the Phosphor Inventory Manager reports the chassis
+     * as available. When false, PSU devices on this chassis should not be
+     * accessed.
+     */
+    bool isChassisAvailable = true;
+
     /** @brief Used to subscribe to Power interfaces added */
     std::unique_ptr<sdbusplus::match> powerIfacesAddedMatch;
 
@@ -198,6 +205,9 @@ class Chassis
 
     /** @brief Used to subscribe to this chassis's Present property changes */
     std::unique_ptr<sdbusplus::match> chassisPresentMatch;
+
+    /** @brief Used to subscribe to Chassis Available property changes */
+    std::unique_ptr<sdbusplus::match> chassisAvailableMatch;
 
     /**
      * @brief Flag to indicate if the validateConfig() function should be run.
@@ -453,6 +463,17 @@ class Chassis
      * @param[in] msg - Data associated with the present property change signal
      */
     void chassisPresentChanged(sdbusplus::message_t& msg);
+
+    /**
+     * @brief Callback for Chassis Available property changed
+     *
+     * Updates isChassisAvailable so that Chassis::analyze() can skip PSU
+     * access when the chassis is not available.
+     *
+     * @param[in] msg - Data associated with the Available property change
+     * signal
+     */
+    void chassisAvailableChanged(sdbusplus::message_t& msg);
 
     /**
      * @brief Attempt to create GPIO

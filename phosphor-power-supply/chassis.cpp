@@ -530,7 +530,7 @@ void Chassis::syncHistory()
 
 void Chassis::analyze()
 {
-    if (!isPresent)
+    if (!isPresent || !isChassisAvailable)
     {
         return;
     }
@@ -1085,6 +1085,14 @@ void Chassis::initPropertyChangeListener()
         sdbusplus::match_rules::propertiesChanged(chassisPath, INVENTORY_IFACE),
         std::bind(&Chassis::chassisPresentChanged, this,
                   std::placeholders::_1));
+
+    // Subscribe to Chassis Available property changed
+    chassisAvailableMatch = std::make_unique<sdbusplus::match>(
+        bus,
+        sdbusplus::match_rules::propertiesChanged(chassisPath,
+                                                  AVAILABILITY_IFACE),
+        std::bind(&Chassis::chassisAvailableChanged, this,
+                  std::placeholders::_1));
 }
 
 void Chassis::initialize()
@@ -1327,6 +1335,32 @@ void Chassis::chassisPresentChanged(sdbusplus::message_t& msg)
     {
         lg2::error("Exception in chassisPresentChanged for {PATH}: {ERROR}",
                    "PATH", chassisPath, "ERROR", e);
+    }
+}
+
+void Chassis::chassisAvailableChanged(sdbusplus::message_t& msg)
+{
+    try
+    {
+        std::string interface;
+        std::map<std::string, util::DbusVariant> properties;
+        msg.read(interface, properties);
+
+        auto it = properties.find(AVAILABLE_PROP);
+        if (it != properties.end())
+        {
+            isChassisAvailable = std::get<bool>(it->second);
+            lg2::info(
+                "{CHASSIS_SHORT_NAME}: Chassis Available changed to {AVAILABLE}",
+                "CHASSIS_SHORT_NAME", chassisShortName, "AVAILABLE",
+                isChassisAvailable);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "{CHASSIS_SHORT_NAME}: Exception in chassisAvailableChanged: {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "ERROR", e);
     }
 }
 
