@@ -25,6 +25,7 @@ sequencer, but they might still be monitored for pgood faults.
 | Name                    |      Required       | Type                              | Description                                                                                                                   |
 | :---------------------- | :-----------------: | :-------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
 | comments                |         no          | array of strings                  | One or more comment lines describing this power sequencer.                                                                    |
+| id                      |         yes         | string                            | Unique ID for this power sequencer. Can only contain letters (A-Z, a-z), numbers (0-9), and underscore (\_).                  |
 | type                    |         yes         | string                            | Power sequencer type. Specify one of the following supported types: "UCD90160", "UCD90320", "gpios_only_device".              |
 | i2c_interface           | see [notes](#notes) | [i2c_interface](i2c_interface.md) | I2C interface to this power sequencer.                                                                                        |
 | power_control_gpio_name |         yes         | string                            | Named GPIO for turning this power sequencer on and off.                                                                       |
@@ -41,6 +42,7 @@ sequencer, but they might still be monitored for pgood faults.
 
 ```json
 {
+  "id": "backplane_ucd90320",
   "type": "UCD90320",
   "i2c_interface": { "bus": 3, "address": "0x11" },
   "power_control_gpio_name": "power-chassis-control",

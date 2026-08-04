@@ -26,6 +26,7 @@
 #include <exception>
 #include <fstream>
 #include <optional>
+#include <regex>
 #include <stdexcept>
 
 using namespace phosphor::power::json_parser_utils;
@@ -247,7 +248,7 @@ std::tuple<std::string, JSONRefWrapper> parseChassisTemplate(
 
     // Required id property
     const json& idElement = getRequiredProperty(element, "id");
-    std::string id = parseString(idElement);
+    std::string id = parseID(idElement, NO_VARIABLES);
     ++propertyCount;
 
     // Required number property
@@ -395,6 +396,18 @@ std::tuple<uint16_t, uint16_t> parseI2CInterface(
     return {bus, address};
 }
 
+std::string parseID(const nlohmann::json& element,
+                    const std::map<std::string, std::string>& variables)
+{
+    std::string id = parseString(element, false, variables);
+    static const std::regex validIDRegex{"^[A-Za-z0-9_]+$"};
+    if (!std::regex_match(id, validIDRegex))
+    {
+        throw std::invalid_argument{"Invalid id: " + id};
+    }
+    return id;
+}
+
 std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables)
@@ -407,6 +420,11 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     {
         ++propertyCount;
     }
+
+    // Required id property
+    const json& idElement = getRequiredProperty(element, "id");
+    std::string id = parseID(idElement, variables);
+    ++propertyCount;
 
     // Required type property
     const json& typeElement = getRequiredProperty(element, "type");
@@ -460,19 +478,19 @@ std::unique_ptr<PowerSequencerDevice> parsePowerSequencer(
     if (type == ucd90160DeviceType)
     {
         return std::make_unique<UCD90160Device>(
-            ucd90160DeviceType, bus, address, powerControlGPIOName,
-            powerGoodGPIOName, std::move(rails));
+            id, bus, address, powerControlGPIOName, powerGoodGPIOName,
+            std::move(rails));
     }
     else if (type == ucd90320DeviceType)
     {
         return std::make_unique<UCD90320Device>(
-            ucd90320DeviceType, bus, address, powerControlGPIOName,
-            powerGoodGPIOName, std::move(rails));
+            id, bus, address, powerControlGPIOName, powerGoodGPIOName,
+            std::move(rails));
     }
     else if (type == gpiosOnlyDeviceType)
     {
-        return std::make_unique<GPIOsOnlyDevice>(
-            gpiosOnlyDeviceType, powerControlGPIOName, powerGoodGPIOName);
+        return std::make_unique<GPIOsOnlyDevice>(id, powerControlGPIOName,
+                                                 powerGoodGPIOName);
     }
     throw std::invalid_argument{"Invalid power sequencer type: " + type};
 }

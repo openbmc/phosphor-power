@@ -53,6 +53,7 @@ chassis template.
   "inventory_path": "/xyz/openbmc_project/inventory/system/chassis",
   "power_sequencers": [
     {
+      "id": "backplane_ucd90320",
       "type": "UCD90320",
       "i2c_interface": { "bus": 3, "address": "0x11" },
       "power_control_gpio_name": "power-chassis-control",
