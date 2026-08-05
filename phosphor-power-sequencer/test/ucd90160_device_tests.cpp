@@ -123,12 +123,13 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device UCD90160"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD "
+                                          "in device UCD90160"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg(
-                "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VDD pgood GPIO line offset 2 in device UCD90160 "
+                        "has inactive value 0"))
             .Times(1);
 
         std::string id{"UCD90160"};
@@ -232,12 +233,13 @@ TEST(UCD90160DeviceTests, StoreGPIOValues)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device UCD90160"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD "
+                                          "in device UCD90160"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg(
-                "Rail VDD pgood GPIO line offset 2 has inactive value 0"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VDD pgood GPIO line offset 2 in device UCD90160 "
+                        "has inactive value 0"))
             .Times(1);
 
         std::string id{"UCD90160"};
