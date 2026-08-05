@@ -15,15 +15,14 @@
  */
 
 #include "chassis_status_monitor.hpp"
+#include "pldm-fetcher.hpp"
 
 #include <CLI/CLI.hpp>
-#include <sdbusplus/bus.hpp>
 
+#include <memory>
 #include <print>
 
 constexpr auto numProperties = 7;
-constexpr auto smallIndent = "    ";
-constexpr auto largeIndent = "       ";
 
 /**
  * Get the number of chassis defined in the system by querying D-Bus.
@@ -287,6 +286,8 @@ int main(int argc, char** argv)
     int chassisNumber = -1;
     std::vector<std::string> propertyNames;
     auto isVerbose = false;
+    auto includePldm = false;
+    uint8_t mctpEid = PldmFetcher::defaultMctpEid;
     std::map<std::string, bool> propMap = {
         {"Present", false},          {"Available", false},
         {"Enabled", false},          {"PowerState", false},
@@ -294,14 +295,20 @@ int main(int argc, char** argv)
         {"PowerSupplyStatus", false}};
 
     CLI::App app{"Chassis status tool"};
-    app.footer("Properties:\n"
-               "  * Present\n"
-               "  * Available\n"
-               "  * Enabled\n"
-               "  * PowerState\n"
-               "  * PowerGood\n"
-               "  * InputPowerStatus\n"
-               "  * PowerSupplyStatus\n");
+    app.footer(
+        "D-Bus properties:\n"
+        "  * Present\n"
+        "  * Available\n"
+        "  * Enabled\n"
+        "  * PowerState\n"
+        "  * PowerGood\n"
+        "  * InputPowerStatus\n"
+        "  * PowerSupplyStatus\n"
+        "PLDM properties:\n"
+        "  * Present\n"
+        "  * Available\n"
+        "  * PowerState\n"
+        "  * Operational Fault Status\n");
 
     app.require_subcommand(0, 1);
     auto displayCmd = app.add_subcommand(
@@ -322,8 +329,17 @@ int main(int argc, char** argv)
         ->expected(1, numProperties);
     app.add_flag(
            "-v,--verbose", isVerbose,
-           "Include D-Bus object paths, interface names, and error details in output")
+           "Include D-Bus object paths, interface names, and error details in "
+           "output. For PLDM properties, includes sensor ID, TID, and FRU "
+           "serial numbers.")
         ->expected(0);
+    app.add_flag("--pldm", includePldm,
+                 "Includes PLDM chassis status properties in output")
+        ->expected(0);
+    app.add_option("-m,--mctp_eid", mctpEid, "MCTP endpoint ID. Must be used "
+                   "with --pldm. (default: 8)")
+        ->expected(1)
+        ->needs(app.get_option("--pldm"));
 
     nOption->excludes(cOption);
 
@@ -362,15 +378,38 @@ int main(int argc, char** argv)
 
     if (app.got_subcommand("display") || app.get_subcommands().empty())
     {
+        std::unique_ptr<PldmFetcher> pldmFetcher;
+        if (includePldm)
+        {
+            auto pldmScanLimit =
+                (chassisNumber > -1) ? chassisNumber : numChassis;
+            pldmFetcher = std::make_unique<PldmFetcher>(bus, isVerbose,
+                                                        pldmScanLimit, mctpEid);
+        }
+
+        if (pldmFetcher && !pldmFetcher->isTransportOpen() && isVerbose)
+        {
+            std::println(stderr,
+                         "PLDM transport unavailable; skipping PLDM output");
+        }
+
         if (chassisNumber > -1)
         {
             display(bus, chassisNumber, propMap, isVerbose);
+            if (pldmFetcher && pldmFetcher->isTransportOpen())
+            {
+                pldmFetcher->display(chassisNumber);
+            }
         }
         else
         {
             for (int i = 0; i <= numChassis; i++)
             {
                 display(bus, i, propMap, isVerbose);
+                if (pldmFetcher && pldmFetcher->isTransportOpen())
+                {
+                    pldmFetcher->display(i);
+                }
             }
         }
     }
