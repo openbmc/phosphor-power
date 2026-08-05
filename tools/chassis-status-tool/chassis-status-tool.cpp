@@ -15,13 +15,15 @@
  */
 
 #include "chassis_status_monitor.hpp"
+#include "pldm-fetcher.hpp"
 
 #include <CLI/CLI.hpp>
 #include <sdbusplus/bus.hpp>
 
+#include <memory>
 #include <print>
 
-constexpr auto numProperties = 7;
+constexpr auto numProperties = 8;
 constexpr auto smallIndent = "    ";
 constexpr auto largeIndent = "       ";
 
@@ -88,6 +90,14 @@ void display(sdbusplus::bus_t& bus, int chassisNumber,
         std::format("/xyz/openbmc_project/inventory/system/chassis{}",
                     chassisNumber),
         monitorOptions);
+
+    const bool anyEnabled = std::ranges::any_of(propMap, [](const auto& entry) {
+        return entry.second;
+    });
+    if (!anyEnabled)
+    {
+        return;
+    }
 
     std::println("");
     std::println("Chassis {}", chassisNumber);
@@ -280,6 +290,46 @@ void display(sdbusplus::bus_t& bus, int chassisNumber,
     }
 }
 
+void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
+                const std::map<std::string, bool>& propMap,
+                const std::map<std::string, bool>& pldmPropMap, bool isVerbose,
+                bool includePldm, bool oemIbm, uint8_t mctpEid)
+{
+    std::unique_ptr<PldmFetcher> pldmFetcher;
+    if (includePldm)
+    {
+        auto pldmScanLimit = (chassisNumber > -1) ? chassisNumber : numChassis;
+        pldmFetcher = std::make_unique<PldmFetcher>(
+            bus, isVerbose, pldmScanLimit, oemIbm, mctpEid, pldmPropMap);
+    }
+
+    if (pldmFetcher && !pldmFetcher->isTransportOpen() && isVerbose)
+    {
+        std::println(stderr,
+                     "PLDM transport unavailable; skipping PLDM output");
+    }
+
+    if (chassisNumber > -1)
+    {
+        display(bus, chassisNumber, propMap, isVerbose);
+        if (pldmFetcher && pldmFetcher->isTransportOpen())
+        {
+            pldmFetcher->display(chassisNumber);
+        }
+    }
+    else
+    {
+        for (int i = 0; i <= numChassis; i++)
+        {
+            display(bus, i, propMap, isVerbose);
+            if (pldmFetcher && pldmFetcher->isTransportOpen())
+            {
+                pldmFetcher->display(i);
+            }
+        }
+    }
+}
+
 int main(int argc, char** argv)
 {
     auto numChassis = -1;
@@ -287,21 +337,35 @@ int main(int argc, char** argv)
     int chassisNumber = -1;
     std::vector<std::string> propertyNames;
     auto isVerbose = false;
+    auto includePldm = false;
+    auto oemIbm = false;
+    uint8_t mctpEid = PldmFetcher::defaultMctpEid;
     std::map<std::string, bool> propMap = {
         {"Present", false},          {"Available", false},
         {"Enabled", false},          {"PowerState", false},
         {"PowerGood", false},        {"InputPowerStatus", false},
         {"PowerSupplyStatus", false}};
+    std::map<std::string, bool> pldmPropMap = {
+        {"Present", false},
+        {"Available", false},
+        {"PowerState", false},
+        {"OperationalFaultStatus", false}};
 
     CLI::App app{"Chassis status tool"};
-    app.footer("Properties:\n"
-               "  * Present\n"
-               "  * Available\n"
-               "  * Enabled\n"
-               "  * PowerState\n"
-               "  * PowerGood\n"
-               "  * InputPowerStatus\n"
-               "  * PowerSupplyStatus\n");
+    app.footer(
+        "D-Bus properties:\n"
+        "  * Present\n"
+        "  * Available\n"
+        "  * Enabled\n"
+        "  * PowerState\n"
+        "  * PowerGood\n"
+        "  * InputPowerStatus\n"
+        "  * PowerSupplyStatus\n"
+        "PLDM properties:\n"
+        "  * Present\n"
+        "  * Available\n"
+        "  * PowerState\n"
+        "  * OperationalFaultStatus\n");
 
     app.require_subcommand(0, 1);
     auto displayCmd = app.add_subcommand(
@@ -322,8 +386,23 @@ int main(int argc, char** argv)
         ->expected(1, numProperties);
     app.add_flag(
            "-v,--verbose", isVerbose,
-           "Include D-Bus object paths, interface names, and error details in output")
+           "Include D-Bus object paths, interface names, and error details in "
+           "output. For PLDM properties, includes sensor ID, TID, and FRU "
+           "matching info (location code or serial number).")
         ->expected(0);
+    app.add_flag("--pldm", includePldm,
+                 "Includes PLDM chassis status properties in output")
+        ->expected(0);
+    app.add_flag("--oem-ibm", oemIbm,
+                 "Use IBM OEM FRU location codes to match PLDM entities to "
+                 "chassis. Must be used with --pldm.")
+        ->expected(0)
+        ->needs(app.get_option("--pldm"));
+    app.add_option("-m,--mctp_eid", mctpEid,
+                   "MCTP endpoint ID. Must be used "
+                   "with --pldm. (default: 8)")
+        ->expected(1)
+        ->needs(app.get_option("--pldm"));
 
     nOption->excludes(cOption);
 
@@ -342,17 +421,29 @@ int main(int argc, char** argv)
         {
             value = true;
         }
+        for (auto& [name, value] : pldmPropMap)
+        {
+            value = true;
+        }
     }
     else
     {
-        // Set only the specified properties to true
+        // Set only the specified properties to true in whichever map(s)
+        // contain the name. A name may appear in both (e.g. Present).
         for (const auto& prop : propertyNames)
         {
+            bool found = false;
             if (propMap.contains(prop))
             {
                 propMap[prop] = true;
+                found = true;
             }
-            else
+            if (pldmPropMap.contains(prop))
+            {
+                pldmPropMap[prop] = true;
+                found = true;
+            }
+            if (!found)
             {
                 std::println(stderr, "Error: Unknown property '{}'", prop);
                 return 1;
@@ -362,17 +453,8 @@ int main(int argc, char** argv)
 
     if (app.got_subcommand("display") || app.get_subcommands().empty())
     {
-        if (chassisNumber > -1)
-        {
-            display(bus, chassisNumber, propMap, isVerbose);
-        }
-        else
-        {
-            for (int i = 0; i <= numChassis; i++)
-            {
-                display(bus, i, propMap, isVerbose);
-            }
-        }
+        runDisplay(bus, chassisNumber, numChassis, propMap, pldmPropMap,
+                   isVerbose, includePldm, oemIbm, mctpEid);
     }
 
     std::println("");
