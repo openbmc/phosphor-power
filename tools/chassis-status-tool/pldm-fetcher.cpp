@@ -1,0 +1,803 @@
+/**
+ * Copyright © 2026 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "pldm-fetcher.hpp"
+
+#include <libpldm/fru.h>
+#include <libpldm/oem/ibm/fru.h>
+
+#include <format>
+#include <print>
+
+PldmFetcher::PldmFetcher(sdbusplus::bus_t& bus, bool isVerbose, int numChassis,
+                         bool oemIbm, uint8_t mctpEid,
+                         const std::map<std::string, bool>& pldmPropMap) :
+    pldmPropMap(pldmPropMap), verbose(isVerbose), bus(bus),
+    tid(static_cast<pldm_tid_t>(mctpEid)), oemIbm(oemIbm)
+{
+    // Fetch only the PDRs needed for the requested properties
+    if (pldmPropMap.at("Available"))
+    {
+        pdrSets.availability =
+            fetchSensorPDRs(PLDM_STATE_SET_AVAILABILITY, chassisEntityType);
+    }
+    if (pldmPropMap.at("Present"))
+    {
+        pdrSets.presence =
+            fetchSensorPDRs(PLDM_STATE_SET_PRESENCE, chassisEntityType);
+    }
+    if (pldmPropMap.at("PowerState"))
+    {
+        pdrSets.powerState = fetchSensorPDRs(PLDM_STATE_SET_SYSTEM_POWER_STATE,
+                                             chassisEntityType);
+    }
+    if (pldmPropMap.at("OperationalFaultStatus"))
+    {
+        pdrSets.operationalFault = fetchSensorPDRs(
+            PLDM_STATE_SET_OPERATIONAL_FAULT_STATUS, chassisEntityType);
+    }
+
+    // Open MCTP transport
+    if (pldm_instance_db_init_default(&instanceDb) != 0)
+    {
+        if (verbose)
+        {
+            std::println(stderr, "{}Failed to open PLDM instance ID database",
+                         largeIndent);
+        }
+        instanceDb = nullptr;
+        return;
+    }
+
+    // Initialize the mctp-demux transport before creating the PLDM transport.
+    if (pldm_transport_mctp_demux_init(&demux) != 0)
+    {
+        if (verbose)
+        {
+            std::println(stderr, "{}Failed to init mctp-demux transport",
+                         largeIndent);
+        }
+        demux = nullptr;
+        return;
+    }
+
+    // Currently the OpenBMC ecosystem assumes TID == EID.
+    pldm_transport_mctp_demux_map_tid(demux, static_cast<pldm_tid_t>(mctpEid),
+                                      mctpEid);
+
+    // Get the pldm_transport handle that wraps the demux backend.
+    transport = pldm_transport_mctp_demux_core(demux);
+
+    fruRsiEntries = fetchFruRecordSetPDRs();
+
+    // One targeted GetFRURecordByOption request per chassis RSI.
+    if (oemIbm)
+    {
+        for (const auto& entry : fruRsiEntries)
+        {
+            auto locCode = readPldmFruField(
+                entry.rsi, PLDM_FRU_RECORD_TYPE_OEM,
+                PLDM_OEM_FRU_FIELD_TYPE_LOCATION_CODE, "readPldmLocationCode");
+            if (locCode)
+            {
+                fruLocationCache[entry.entityInstance] = std::move(*locCode);
+            }
+        }
+
+        // Match PLDM FRU location codes against D-Bus Inventory location codes
+        // to map chassisNumber → entityInstance.
+        for (const auto& [entityInstance, pldmLocCode] : fruLocationCache)
+        {
+            for (int i = 0; i <= numChassis; ++i)
+            {
+                auto invLocCode = readInventoryProperty(
+                    i, "xyz.openbmc_project.Inventory.Decorator.LocationCode",
+                    "LocationCode");
+                if (invLocCode && !invLocCode->empty() &&
+                    *invLocCode == pldmLocCode)
+                {
+                    chassisToEntityInstance[i] = entityInstance;
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        for (const auto& entry : fruRsiEntries)
+        {
+            if (fruSerialCache.contains(entry.entityInstance))
+            {
+                continue;
+            }
+            auto serial = readPldmFruField(
+                entry.rsi, PLDM_FRU_RECORD_TYPE_GENERAL, PLDM_FRU_FIELD_TYPE_SN,
+                "readPldmSerialNumber");
+            if (serial)
+            {
+                fruSerialCache[entry.entityInstance] = std::move(*serial);
+            }
+        }
+
+        for (const auto& [entityInstance, pldmSerial] : fruSerialCache)
+        {
+            for (int i = 0; i <= numChassis; ++i)
+            {
+                if (chassisToEntityInstance.contains(i))
+                {
+                    continue;
+                }
+                auto invSerial = readInventoryProperty(
+                    i, "xyz.openbmc_project.Inventory.Decorator.Asset",
+                    "SerialNumber");
+                if (invSerial && !invSerial->empty() &&
+                    *invSerial == pldmSerial)
+                {
+                    chassisToEntityInstance[i] = entityInstance;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+PldmFetcher::~PldmFetcher()
+{
+    if (demux != nullptr)
+    {
+        pldm_transport_mctp_demux_destroy(demux);
+    }
+    if (instanceDb != nullptr)
+    {
+        pldm_instance_db_destroy(instanceDb);
+    }
+}
+
+std::optional<pldm_instance_id_t> PldmFetcher::allocateInstanceId(
+    std::string_view operation) const
+{
+    pldm_instance_id_t instanceId{};
+    if (pldm_instance_id_alloc(instanceDb, tid, &instanceId) == 0)
+    {
+        return instanceId;
+    }
+
+    if (verbose)
+    {
+        std::println(stderr, "{}{}: failed to allocate PLDM instance ID",
+                     largeIndent, operation);
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::vector<uint8_t>> PldmFetcher::encodeGetPdrRequest(
+    pldm_instance_id_t instanceId, uint32_t recordHandle) const
+{
+    std::vector<uint8_t> requestMsg(
+        sizeof(pldm_msg_hdr) + PLDM_GET_PDR_REQ_BYTES);
+    auto* request = reinterpret_cast<pldm_msg*>(requestMsg.data());
+    const auto rc = encode_get_pdr_req(
+        instanceId, recordHandle,
+        0,                  // dataTransferHandle
+        PLDM_GET_FIRSTPART, // transferOpFlag
+        UINT16_MAX,         // requestCount: fetch all
+        0,                  // recordChangeNumber
+        request, PLDM_GET_PDR_REQ_BYTES);
+    if (rc == PLDM_SUCCESS)
+    {
+        return requestMsg;
+    }
+
+    pldm_instance_id_free(instanceDb, tid, instanceId);
+    if (verbose)
+    {
+        std::println(
+            stderr, "{}fetchFruRecordSetPDRs: encode_get_pdr_req failed: rc={}",
+            largeIndent, rc);
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::vector<uint8_t>>
+    PldmFetcher::encodeGetStateSensorReadingsRequest(
+        pldm_instance_id_t instanceId, uint16_t sensorId) const
+{
+    std::vector<uint8_t> requestMsg(
+        sizeof(pldm_msg_hdr) + PLDM_GET_STATE_SENSOR_READINGS_REQ_BYTES);
+    auto* request = reinterpret_cast<pldm_msg*>(requestMsg.data());
+    bitfield8_t rearm{0};
+    const auto rc = encode_get_state_sensor_readings_req(instanceId, sensorId,
+                                                         rearm, 0, request);
+    if (rc == PLDM_SUCCESS)
+    {
+        return requestMsg;
+    }
+
+    pldm_instance_id_free(instanceDb, tid, instanceId);
+    if (verbose)
+    {
+        std::println(stderr,
+                     "{}Failed to encode GetStateSensorReadings request "
+                     "for sensorID={}: rc={}",
+                     largeIndent, sensorId, rc);
+    }
+
+    return std::nullopt;
+}
+
+std::optional<uint32_t> PldmFetcher::decodeGetPdrResponse(
+    uint32_t recordHandle, std::span<const std::byte> response,
+    std::vector<FruRSIEntry>& results) const
+{
+    uint8_t completionCode{};
+    uint32_t nextRecordHandle{};
+    uint32_t nextDataTransferHandle{};
+    uint8_t transferFlag{};
+    uint16_t respCnt{};
+    uint8_t transferCRC{};
+    std::vector<uint8_t> pdrData(UINT16_MAX);
+
+    const auto payloadLen = response.size() - sizeof(pldm_msg_hdr);
+    const auto rc = decode_get_pdr_resp(
+        reinterpret_cast<const pldm_msg*>(response.data()), payloadLen,
+        &completionCode, &nextRecordHandle, &nextDataTransferHandle,
+        &transferFlag, &respCnt, pdrData.data(), pdrData.size(), &transferCRC);
+
+    if (rc != PLDM_SUCCESS || completionCode != PLDM_SUCCESS)
+    {
+        if (verbose)
+        {
+            std::println(stderr,
+                         "{}fetchFruRecordSetPDRs: decode_get_pdr_resp failed "
+                         "for recordHandle={}: rc={} cc={}",
+                         largeIndent, recordHandle, rc,
+                         static_cast<unsigned>(completionCode));
+        }
+        return std::nullopt;
+    }
+
+    // Only parse the PDR body when enough bytes arrived for both the common
+    // header and the FRU Record Set fixed fields.
+    if (respCnt >= sizeof(pldm_pdr_hdr) + sizeof(pldm_pdr_fru_record_set))
+    {
+        const auto* hdr = reinterpret_cast<const pldm_pdr_hdr*>(pdrData.data());
+        if (hdr->type == PLDM_PDR_FRU_RECORD_SET)
+        {
+            const auto* fruPdr =
+                reinterpret_cast<const pldm_pdr_fru_record_set*>(
+                    pdrData.data() + sizeof(pldm_pdr_hdr));
+            if (fruPdr->entity_type == chassisEntityType)
+            {
+                results.push_back({fruPdr->entity_instance, fruPdr->fru_rsi});
+            }
+        }
+    }
+
+    return nextRecordHandle;
+}
+
+std::vector<PldmFetcher::FruRSIEntry> PldmFetcher::fetchFruRecordSetPDRs()
+{
+    std::vector<FruRSIEntry> results;
+    uint32_t recordHandle = 0;
+
+    do
+    {
+        const auto instanceId = allocateInstanceId("fetchFruRecordSetPDRs");
+        if (!instanceId)
+        {
+            break;
+        }
+
+        const auto requestMsg = encodeGetPdrRequest(*instanceId, recordHandle);
+        if (!requestMsg)
+        {
+            break;
+        }
+
+        void* responseMsg = nullptr;
+        size_t responseSize{};
+        const auto rc = pldm_transport_send_recv_msg(
+            transport, tid, requestMsg->data(), requestMsg->size(),
+            &responseMsg, &responseSize);
+        pldm_instance_id_free(instanceDb, tid, *instanceId);
+
+        if (rc != PLDM_REQUESTER_SUCCESS)
+        {
+            if (verbose)
+            {
+                std::println(stderr,
+                             "{}fetchFruRecordSetPDRs: GetPDR send/recv failed "
+                             "for recordHandle={}: rc={}",
+                             largeIndent, recordHandle, static_cast<int>(rc));
+            }
+            free(responseMsg);
+            break;
+        }
+
+        // Decode the current GetPDR response
+        const std::span<const std::byte> response(
+            static_cast<const std::byte*>(responseMsg), responseSize);
+        const auto nextRecordHandle =
+            decodeGetPdrResponse(recordHandle, response, results);
+        free(responseMsg);
+        if (!nextRecordHandle)
+        {
+            break;
+        }
+
+        recordHandle = *nextRecordHandle;
+    } while (recordHandle != 0);
+
+    return results;
+}
+
+std::optional<std::vector<uint8_t>>
+    PldmFetcher::encodeGetFruRecordByOptionRequest(
+        pldm_instance_id_t instanceId, uint16_t rsi, uint8_t recordType,
+        uint8_t fieldType, std::string_view operation) const
+{
+    const auto payloadLength = sizeof(pldm_get_fru_record_by_option_req);
+    std::vector<uint8_t> requestMsg(sizeof(pldm_msg_hdr) + payloadLength);
+    auto* request = reinterpret_cast<pldm_msg*>(requestMsg.data());
+    const auto rc = encode_get_fru_record_by_option_req(
+        instanceId,
+        0,   // dataTransferHandle
+        0,   // fruTableHandle
+        rsi, // recordSetIdentifier
+        recordType, fieldType, PLDM_GET_FIRSTPART, request, payloadLength);
+    if (rc == PLDM_SUCCESS)
+    {
+        return requestMsg;
+    }
+
+    pldm_instance_id_free(instanceDb, tid, instanceId);
+    if (verbose)
+    {
+        std::println(stderr, "{}{}: encode request failed for rsi={}: rc={}",
+                     largeIndent, operation, rsi, rc);
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::vector<uint8_t>>
+    PldmFetcher::decodeGetFruRecordByOptionResponse(
+        uint16_t rsi, std::span<const std::byte> response) const
+{
+    uint8_t completionCode{};
+    uint32_t nextTransferHandle{};
+    uint8_t transferFlag{};
+    variable_field fruData{};
+    const auto payloadLen = response.size() - sizeof(pldm_msg_hdr);
+    const auto rc = decode_get_fru_record_by_option_resp(
+        reinterpret_cast<const pldm_msg*>(response.data()), payloadLen,
+        &completionCode, &nextTransferHandle, &transferFlag, &fruData);
+
+    std::vector<uint8_t> fruBytes;
+    if (rc == PLDM_SUCCESS && completionCode == PLDM_SUCCESS &&
+        fruData.ptr != nullptr && fruData.length > 0)
+    {
+        fruBytes.assign(fruData.ptr, fruData.ptr + fruData.length);
+    }
+
+    if (rc != PLDM_SUCCESS || completionCode != PLDM_SUCCESS)
+    {
+        if (verbose)
+        {
+            std::println(stderr,
+                         "{}decodeGetFruRecordByOptionResponse: failed for "
+                         "rsi={}: rc={} cc={}",
+                         largeIndent, rsi, rc,
+                         static_cast<unsigned>(completionCode));
+        }
+        return std::nullopt;
+    }
+
+    return fruBytes;
+}
+
+std::optional<std::string> PldmFetcher::findFruField(
+    const std::vector<uint8_t>& fruBytes, uint8_t recordType,
+    uint8_t fieldType) const
+{
+    const auto* pos = fruBytes.data();
+    const auto* end = pos + fruBytes.size();
+
+    while (pos + sizeof(pldm_fru_record_data_format) -
+               sizeof(pldm_fru_record_tlv) <=
+           end)
+    {
+        const auto* rec =
+            reinterpret_cast<const pldm_fru_record_data_format*>(pos);
+        pos += sizeof(pldm_fru_record_data_format) -
+               sizeof(pldm_fru_record_tlv);
+
+        for (int i = 0; i < rec->num_fru_fields; ++i)
+        {
+            if (pos + sizeof(pldm_fru_record_tlv) - 1 > end)
+            {
+                return std::nullopt;
+            }
+
+            const auto* tlv = reinterpret_cast<const pldm_fru_record_tlv*>(pos);
+            // stride = fixed TLV header (minus flex array byte) + value bytes
+            const auto stride = sizeof(pldm_fru_record_tlv) - 1 + tlv->length;
+            if (pos + stride > end)
+            {
+                return std::nullopt;
+            }
+
+            if (rec->record_type == recordType && tlv->type == fieldType)
+            {
+                return std::string(reinterpret_cast<const char*>(tlv->value),
+                                   tlv->length);
+            }
+
+            pos += stride;
+        }
+    }
+
+    return std::nullopt;
+}
+
+std::optional<std::string> PldmFetcher::readPldmFruField(
+    uint16_t rsi, uint8_t recordType, uint8_t fieldType,
+    std::string_view operation) const
+{
+    const auto instanceId = allocateInstanceId(operation);
+    if (!instanceId)
+    {
+        return std::nullopt;
+    }
+
+    const auto requestMsg = encodeGetFruRecordByOptionRequest(
+        *instanceId, rsi, recordType, fieldType, operation);
+    if (!requestMsg)
+    {
+        return std::nullopt;
+    }
+
+    void* responseMsg = nullptr;
+    size_t responseSize{};
+    const auto rc = pldm_transport_send_recv_msg(
+        transport, tid, requestMsg->data(), requestMsg->size(), &responseMsg,
+        &responseSize);
+    pldm_instance_id_free(instanceDb, tid, *instanceId);
+
+    if (rc != PLDM_REQUESTER_SUCCESS)
+    {
+        if (verbose)
+        {
+            std::println(stderr,
+                         "{}{}: MCTP send/recv failed for rsi={}: rc={}",
+                         largeIndent, operation, rsi, static_cast<int>(rc));
+        }
+        free(responseMsg);
+        return std::nullopt;
+    }
+
+    const std::span<const std::byte> response(
+        static_cast<const std::byte*>(responseMsg), responseSize);
+    const auto fruBytes = decodeGetFruRecordByOptionResponse(rsi, response);
+    free(responseMsg);
+    if (!fruBytes)
+    {
+        return std::nullopt;
+    }
+
+    return findFruField(*fruBytes, recordType, fieldType);
+}
+
+auto PldmFetcher::readInventoryProperty(int chassisNumber,
+                                        std::string_view interface,
+                                        std::string_view property) const
+    -> std::optional<std::string>
+{
+    try
+    {
+        auto method = bus.new_method_call(
+            "xyz.openbmc_project.Inventory.Manager",
+            std::format("/xyz/openbmc_project/inventory/system/chassis{}",
+                        chassisNumber)
+                .c_str(),
+            "org.freedesktop.DBus.Properties", "Get");
+        method.append(std::string(interface), std::string(property));
+        auto reply = bus.call(method);
+        std::variant<std::string> val;
+        reply.read(val);
+        return std::get<std::string>(val);
+    }
+    catch (const std::exception&)
+    {
+        return std::nullopt;
+    }
+}
+
+auto PldmFetcher::fetchSensorPDRs(uint16_t stateSetId,
+                                  uint16_t entityType) const
+    -> std::vector<SensorPDREntry>
+{
+    std::vector<SensorPDREntry> results;
+    try
+    {
+        auto method = bus.new_method_call(
+            pldmService, "/xyz/openbmc_project/pldm",
+            "xyz.openbmc_project.PLDM.PDR", "FindStateSensorPDR");
+        method.append(static_cast<uint8_t>(0),
+                      static_cast<uint16_t>(entityType),
+                      static_cast<uint16_t>(stateSetId));
+        auto reply = bus.call(method);
+
+        std::vector<std::vector<uint8_t>> pdrs;
+        reply.read(pdrs);
+
+        for (const auto& pdr : pdrs)
+        {
+            // Minimum size: fixed fields of pldm_state_sensor_pdr excluding
+            // the variable-length possible_states tail
+            if (pdr.size() < sizeof(pldm_state_sensor_pdr) - sizeof(uint8_t))
+            {
+                continue;
+            }
+            const auto* sensorPdr =
+                reinterpret_cast<const pldm_state_sensor_pdr*>(pdr.data());
+            results.push_back(
+                {sensorPdr->sensor_id, sensorPdr->entity_instance});
+        }
+    }
+    catch (const std::exception& e)
+    {
+        if (verbose)
+        {
+            std::println(stderr,
+                         "{}FindStateSensorPDR(stateSetId={}, entityType={:#x})"
+                         " failed: {}",
+                         largeIndent, stateSetId, entityType, e.what());
+        }
+    }
+    return results;
+}
+
+auto PldmFetcher::findSensorEntry(const std::vector<SensorPDREntry>& pdrs,
+                                  uint16_t entityInstance) const
+    -> std::optional<SensorPDREntry>
+{
+    for (const auto& entry : pdrs)
+    {
+        if (entry.entityInstance == entityInstance)
+        {
+            return entry;
+        }
+    }
+    return std::nullopt;
+}
+
+std::optional<uint8_t> PldmFetcher::decodeStateSensorResponse(
+    std::span<const std::byte> response) const
+{
+    const auto payloadLen = response.size() - sizeof(pldm_msg_hdr);
+
+    // An error response contains only the completion code (1 byte payload).
+    if (payloadLen == 1)
+    {
+        return std::nullopt;
+    }
+
+    uint8_t completionCode{};
+    uint8_t compCount{};
+    std::array<get_sensor_state_field, 8> stateField{};
+    auto rc = decode_get_state_sensor_readings_resp(
+        reinterpret_cast<const pldm_msg*>(response.data()), payloadLen,
+        &completionCode, &compCount, stateField.data());
+
+    if (rc != PLDM_SUCCESS || completionCode != PLDM_SUCCESS || compCount == 0)
+    {
+        return std::nullopt;
+    }
+
+    return stateField[0].present_state;
+}
+
+std::optional<uint8_t> PldmFetcher::readStateSensor(uint16_t sensorId) const
+{
+    const auto instanceId = allocateInstanceId("readStateSensor");
+    if (!instanceId)
+    {
+        return std::nullopt;
+    }
+
+    auto requestMsg =
+        encodeGetStateSensorReadingsRequest(*instanceId, sensorId);
+    if (!requestMsg)
+    {
+        return std::nullopt;
+    }
+
+    void* responseMsg = nullptr;
+    size_t responseSize{};
+    // Send the encoded request, receive the response buffer, then release
+    // the reserved instance ID.
+    auto rc = pldm_transport_send_recv_msg(
+        transport, tid, requestMsg->data(), requestMsg->size(), &responseMsg,
+        &responseSize);
+    pldm_instance_id_free(instanceDb, tid, *instanceId);
+
+    if (rc != PLDM_REQUESTER_SUCCESS)
+    {
+        if (verbose)
+        {
+            std::println(stderr,
+                         "{}GetStateSensorReadings MCTP send/recv failed "
+                         "for sensorID={}: rc={}",
+                         largeIndent, sensorId, static_cast<int>(rc));
+        }
+        return std::nullopt;
+    }
+
+    const std::span<const std::byte> response(
+        static_cast<const std::byte*>(responseMsg), responseSize);
+    auto state = decodeStateSensorResponse(response);
+    if (!state && verbose)
+    {
+        std::println(stderr,
+                     "{}GetStateSensorReadings decode failed for sensorID={}",
+                     largeIndent, sensorId);
+    }
+    free(responseMsg);
+    return state;
+}
+
+void PldmFetcher::printSensorState(
+    const std::optional<SensorPDREntry>& entry,
+    const std::map<uint8_t, std::string_view>& stateNames) const
+{
+    if (!entry)
+    {
+        std::println("Unknown (no PDR found)");
+        return;
+    }
+
+    auto state = readStateSensor(entry->sensorId);
+    if (!state)
+    {
+        std::println("Unknown (MCTP read failed)");
+        return;
+    }
+
+    auto found = stateNames.find(*state);
+    std::println("{}", found != stateNames.end() ? found->second
+                                                 : std::string_view{"Unknown"});
+
+    if (verbose)
+    {
+        std::println("{}sensorID: {}  TID: {}", largeIndent, entry->sensorId,
+                     static_cast<unsigned>(tid));
+    }
+}
+
+void PldmFetcher::display(int chassisNumber) const
+{
+    std::println("{}PLDM", smallIndent);
+
+    // Use the entity instance derived from FRU serial matching, or UINT16_MAX
+    // to "throw away" the pldm data that does not map to a chassis
+    const uint16_t entityInstance =
+        chassisToEntityInstance.contains(chassisNumber)
+            ? chassisToEntityInstance.at(chassisNumber)
+            : UINT16_MAX;
+
+    if (pldmPropMap.at("Available"))
+    {
+        std::print("{}Availability: ", largeIndent);
+        printSensorState(findSensorEntry(pdrSets.availability, entityInstance),
+                         availabilityStateNames);
+    }
+
+    if (pldmPropMap.at("Present"))
+    {
+        std::print("{}Present: ", largeIndent);
+        printSensorState(findSensorEntry(pdrSets.presence, entityInstance),
+                         presenceStateNames);
+    }
+
+    if (pldmPropMap.at("PowerState"))
+    {
+        std::print("{}Power State: ", largeIndent);
+        printSensorState(findSensorEntry(pdrSets.powerState, entityInstance),
+                         systemPowerStateNames);
+    }
+
+    if (pldmPropMap.at("OperationalFaultStatus"))
+    {
+        std::print("{}Operational Fault Status: ", largeIndent);
+        printSensorState(
+            findSensorEntry(pdrSets.operationalFault, entityInstance),
+            operationalFaultStateNames);
+    }
+
+    if (!verbose)
+    {
+        return;
+    }
+
+    if (oemIbm)
+    {
+        auto invOpt = readInventoryProperty(
+            chassisNumber,
+            "xyz.openbmc_project.Inventory.Decorator.LocationCode",
+            "LocationCode");
+        if (invOpt && invOpt->empty())
+        {
+            invOpt = std::nullopt;
+        }
+
+        if (fruLocationCache.empty() && !invOpt)
+        {
+            return;
+        }
+
+        const auto& invLocCode = invOpt.value_or("Unknown");
+
+        std::string pldmLocCode = "Unknown";
+        for (const auto& [cachedInstance, cachedLocCode] : fruLocationCache)
+        {
+            if (cachedLocCode == invLocCode)
+            {
+                pldmLocCode = cachedLocCode;
+                break;
+            }
+        }
+
+        std::println("{}Location Code (PLDM):      {}", largeIndent,
+                     pldmLocCode);
+        std::println("{}Location Code (Inventory): {}", largeIndent,
+                     invLocCode);
+    }
+    else
+    {
+        auto invOpt = readInventoryProperty(
+            chassisNumber, "xyz.openbmc_project.Inventory.Decorator.Asset",
+            "SerialNumber");
+        if (invOpt && invOpt->empty())
+        {
+            invOpt = std::nullopt;
+        }
+
+        if (fruSerialCache.empty() && !invOpt)
+        {
+            return;
+        }
+
+        const auto& invSerial = invOpt.value_or("Unknown");
+
+        std::string pldmSerial = "Unknown";
+        for (const auto& [cachedInstance, cachedSerial] : fruSerialCache)
+        {
+            if (cachedSerial == invSerial)
+            {
+                pldmSerial = cachedSerial;
+                break;
+            }
+        }
+
+        std::println("{}Serial Number (PLDM):      {}", largeIndent,
+                     pldmSerial);
+        std::println("{}Serial Number (Inventory): {}", largeIndent, invSerial);
+    }
+}
