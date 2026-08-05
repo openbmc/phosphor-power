@@ -84,6 +84,7 @@ endif
 
 
 
+libpldm_dep = dependency('libpldm')
 phosphor_dbus_interfaces = dependency('phosphor-dbus-interfaces')
 phosphor_logging = dependency('phosphor-logging')
 prog_python = import('python').find_installation('python3')
@@ -203,6 +204,7 @@ libpower_inc = include_directories('.')
 # Build the tools/i2c sub-directory first.  Other sub-directories depend on
 # Meson variables defined there.
 subdir('tools/i2c')
+subdir('tools/chassis-status-tool')
 
 if get_option('regulators')
     subdir('phosphor-regulators')
