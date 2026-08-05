@@ -33,7 +33,15 @@ OPTIONS
       If not specified, displays all properties.
 
 -v, --verbose
-    - Include D-Bus object paths, interface names, and error details for each property.
+    - Include D-Bus object paths, interface names, and error details for each
+      property. For PLDM properties, includes the sensor ID, TID, and FRU
+      serial numbers.
+
+--pldm
+    - Also display PLDM-sourced chassis status properties. Reads state sensor
+      PDRs from pldmd via D-Bus and sensor values directly over MCTP. PLDM
+      properties displayed:
+        Availability, Present, Power State, Operational Fault Status
 
 display
     - Optional subcommand. When omitted, the tool defaults to display behavior.
@@ -149,4 +157,24 @@ Chassis 1:
        Power supplies power Status property value could not be obtained.
        Object Path: /xyz/openbmc_project/power/power_supplies/chassis1/psus
        Interface: xyz.openbmc_project.State.Decorator.PowerSystemInputs
+```
+
+- Display a single chassis with PLDM properties included:
+
+```text
+$ chassis-status-tool -c 1 --pldm
+
+Chassis 1:
+    Present: True
+    Available: True
+    Enabled: True
+    Power state: Power On
+    Power Good: Powered On
+    Input Power Status: Good
+    Power Supply Status: Good
+PLDM
+    Availability: Enabled
+    Present: Present
+    Power State: On
+    Operational Fault Status: Normal
 ```
