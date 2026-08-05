@@ -22,6 +22,30 @@
       },
       "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b59fca14_0cb470d3",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-05T19:37:05Z",
+      "side": 1,
+      "message": "This is a little confusing to me, sorry.\n\nI thought the GPIO properties in the JSON file handled the system-specific details such as whether the GPIO is active high or low.\n\nFrom the perspective of the common code here, is the goal to set the GPIO to a logical 0/off? If so, do we want to write 0 here and let the high/low stuff be handled within the GPIO class configured by the JSON.\n\nSorry, I might be off base here. I just don\u0027t want this written from the perspective of how one specific system is wired.",
+      "parentUuid": "fc47d8c6_dc92cbe3",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 40
+      },
+      "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
