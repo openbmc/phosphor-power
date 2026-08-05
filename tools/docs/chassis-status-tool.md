@@ -33,7 +33,23 @@ OPTIONS
       If not specified, displays all properties.
 
 -v, --verbose
-    - Include D-Bus object paths, interface names, and error details for each property.
+    - Include D-Bus object paths, interface names, and error details for each
+      property. For PLDM properties, includes the sensor ID, TID, and FRU
+      serial numbers.
+
+--pldm
+    - Also display PLDM-sourced chassis status properties. Reads state sensor
+      PDRs from pldmd via D-Bus and sensor values directly over MCTP. PLDM
+      properties displayed:
+        Availability, Present, Power State, Operational Fault Status
+
+--oem-ibm
+    - Use IBM OEM FRU location codes to match PLDM entities to chassis numbers.
+      Must be used with --pldm. When omitted, standard FRU serial numbers are
+      used for matching instead.
+
+-m, --mctp_eid <INT>
+    - MCTP endpoint ID. Must be used with --pldm. Defaults to 8.
 
 display
     - Optional subcommand. When omitted, the tool defaults to display behavior.
@@ -149,4 +165,52 @@ Chassis 1:
        Power supplies power Status property value could not be obtained.
        Object Path: /xyz/openbmc_project/power/power_supplies/chassis1/psus
        Interface: xyz.openbmc_project.State.Decorator.PowerSystemInputs
+```
+
+- Display a single chassis with PLDM properties included, with verbose output
+  showing sensor IDs and FRU serial numbers:
+
+```text
+$ chassis-status-tool -c 1 --pldm -v
+
+Chassis 1:
+    Present: True
+       Object Path: /xyz/openbmc_project/inventory/system/chassis1
+       Interface: xyz.openbmc_project.Inventory.Item
+    ...
+PLDM
+    Availability: Enabled
+       sensorID: 5  TID: 8
+    Present: Present
+       sensorID: 6  TID: 8
+    Power State: On
+       sensorID: 7  TID: 8
+    Operational Fault Status: Normal
+       sensorID: 8  TID: 8
+       Serial Number (PLDM):      ABC123
+       Serial Number (Inventory): ABC123
+```
+
+- Display a single chassis with PLDM properties using IBM OEM location code
+  matching, with verbose output showing the matched location codes:
+
+```text
+$ chassis-status-tool -c 1 --pldm --oem-ibm -v
+
+Chassis 1:
+    Present: True
+       Object Path: /xyz/openbmc_project/inventory/system/chassis1
+       Interface: xyz.openbmc_project.Inventory.Item
+    ...
+PLDM
+    Availability: Enabled
+       sensorID: 5  TID: 8
+    Present: Present
+       sensorID: 6  TID: 8
+    Power State: On
+       sensorID: 7  TID: 8
+    Operational Fault Status: Normal
+       sensorID: 8  TID: 8
+       Location Code (PLDM):      U78DA.ND1.1234567
+       Location Code (Inventory): U78DA.ND1.1234567
 ```
