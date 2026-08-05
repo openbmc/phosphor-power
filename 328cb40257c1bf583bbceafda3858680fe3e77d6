@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b4f203b_584d3a63",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0dbf295_3a6ed822",
+      "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "632daac2_dda8aff7",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-08-04T14:26:04Z",
       "side": 1,
       "message": "It might be more accurate to call this systemdJobStarted or something, right? Your match rules don\u0027t constrain matches to only the blackout target.",
+      "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d1b26c_4d3a26bf",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "632daac2_dda8aff7",
       "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -52,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "796a3b36_5c949597",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "thank you",
+      "parentUuid": "242f63e3_a26ddc08",
+      "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dbb611c_9b4c5dae",
@@ -69,6 +123,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd10032_9b4573d1",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dbb611c_9b4c5dae",
+      "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5649ffec_688c7cd6",
@@ -82,6 +154,24 @@
       "writtenOn": "2026-08-04T14:26:04Z",
       "side": 1,
       "message": "Should you do an EXPECT_CALL(..).Times(0) on logError to verify no error is logged?",
+      "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ba769d_3e0ad958",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5649ffec_688c7cd6",
       "revId": "328cb40257c1bf583bbceafda3858680fe3e77d6",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }

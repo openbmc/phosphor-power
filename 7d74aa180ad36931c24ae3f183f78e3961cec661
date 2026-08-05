@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc47d8c6_dc92cbe3",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-05T16:08:43Z",
+      "side": 1,
+      "message": "Changed because at the hardware level because 0 resets the latch fault, and 1 allows latch. Since GPIO is configured active low writing a 1(active) will set the gpio to 0 in hardware resetting the latch, releasing it should let the line go back to its default value (1/disabled) allowing a latch.",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 40
+      },
+      "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
