@@ -1,0 +1,342 @@
+#pragma once
+
+#include <libpldm/instance-id.h>
+#include <libpldm/platform.h>
+#include <libpldm/state_set.h>
+#include <libpldm/transport.h>
+#include <libpldm/transport/mctp-demux.h>
+
+#include <sdbusplus/bus.hpp>
+
+#include <cstdint>
+#include <map>
+#include <optional>
+#include <string>
+#include <string_view>
+#include <vector>
+
+/**
+ * @class PldmFetcher
+ * @brief Fetches and displays PLDM chassis state sensor data.
+ *
+ * PDRs are retrieved via D-Bus on construction and sensor values are read
+ * directly over MCTP.
+ */
+class PldmFetcher
+{
+  public:
+    PldmFetcher(sdbusplus::bus_t& bus, bool isVerbose);
+    ~PldmFetcher();
+
+    // Non-copyable, non-movable — owns C resources
+    PldmFetcher(const PldmFetcher&) = delete;
+    PldmFetcher& operator=(const PldmFetcher&) = delete;
+    PldmFetcher(PldmFetcher&&) = delete;
+    PldmFetcher& operator=(PldmFetcher&&) = delete;
+
+    /** Returns true if the MCTP transport was successfully opened. */
+    bool isTransportOpen() const
+    {
+        return transport != nullptr;
+    }
+
+    /** Display PLDM-sourced chassis status for the given chassis number. */
+    void display(int chassisNumber) const;
+
+  private:
+    // PLDM entity type for physical chassis (45) and logical (0x8000|45)
+    static constexpr uint16_t chassisEntityType = 45;
+    static constexpr uint16_t logicalChassisEntityType =
+        0x8000 | chassisEntityType;
+
+    // Maximum chassis index to probe when building the entity instance map.
+    static constexpr int maxChassisProbe = 12;
+
+    // EID of the host-bmc PLDM terminus
+    static constexpr pldm_tid_t hostEID = 8;
+
+    static constexpr auto pldmService = "xyz.openbmc_project.PLDM";
+
+    // State set 2 — Availability
+    inline static const std::map<uint8_t, std::string_view>
+        availabilityStateNames = {
+            {PLDM_STATE_SET_AVAILABILITY_ENABLED, "Enabled"},
+            {PLDM_STATE_SET_AVAILABILITY_DISABLED, "Disabled"},
+            {PLDM_STATE_SET_AVAILABILITY_REBOOTING, "Rebooting"},
+    };
+
+    // State set 10 — Operational Fault Status
+    inline static const std::map<uint8_t, std::string_view>
+        operationalFaultStateNames = {
+            {PLDM_STATE_SET_OPERATIONAL_FAULT_STATUS_NORMAL, "Normal"},
+            {PLDM_STATE_SET_OPERATIONAL_FAULT_STATUS_ERROR, "Fault"},
+            {PLDM_STATE_SET_OPERATIONAL_FAULT_STATUS_NON_RECOVERABLE_ERROR,
+             "Non-Recoverable Fault"},
+    };
+
+    // State set 13 — Presence
+    inline static const std::map<uint8_t, std::string_view> presenceStateNames =
+        {
+            {PLDM_STATE_SET_PRESENCE_PRESENT, "Present"},
+            {PLDM_STATE_SET_PRESENCE_NOT_PRESENT, "Not Present"},
+    };
+
+    // State set 260 — System Power State
+    inline static const std::map<uint8_t, std::string_view>
+        systemPowerStateNames = {
+            {PLDM_STATE_SET_SYS_POWER_STATE_ON, "On"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_HIBERNATE, "Hibernate"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_SLEEP_LIGHT, "Sleep (Light)"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_SLEEP_DEEP, "Sleep (Deep)"},
+            {PLDM_STATE_SET_SYS_POWER_CYCLE_SOFT, "Power Cycle (Soft)"},
+            {PLDM_STATE_SET_SYS_POWER_CYCLE_HARD, "Power Cycle (Hard)"},
+            {PLDM_STATE_SET_SYS_POWER_CYCLE_OFF_SOFT_GRACEFUL,
+             "Power Cycle Off-Soft Graceful"},
+            {PLDM_STATE_SET_SYS_POWER_CYCLE_OFF_HARD_GRACEFUL,
+             "Power Cycle Off-Hard Graceful"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_OFF_SOFT_GRACEFUL,
+             "Off-Soft Graceful"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_OFF_HARD_GRACEFUL,
+             "Off-Hard Graceful"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_MASTER_BUS_RESET,
+             "Master Bus Reset"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_MASTER_BUS_RESET_GRACEFUL,
+             "Master Bus Reset Graceful"},
+            {PLDM_STATE_SET_SYS_POWER_STATE_NMI, "NMI"},
+    };
+
+    struct SensorPDREntry
+    {
+        uint16_t sensorId;
+        uint16_t entityInstance;
+    };
+
+    struct FruRSIEntry
+    {
+        uint16_t entityInstance;
+        uint16_t rsi;
+    };
+
+    struct PdrSet
+    {
+        std::vector<SensorPDREntry> physical;
+        std::vector<SensorPDREntry> logical;
+
+        const std::vector<SensorPDREntry>& forChassis(int chassisNumber) const
+        {
+            return (chassisNumber == 0) ? logical : physical;
+        }
+    };
+
+    struct PldmPdrSets
+    {
+        PdrSet availability;
+        PdrSet presence;
+        PdrSet powerState;
+        PdrSet operationalFault;
+    };
+
+    // Flag for verbose output
+    bool verbose;
+
+    /** D-Bus connection used for Inventory and PDR queries. */
+    sdbusplus::bus_t& bus;
+
+    /** Terminus ID of the host PLDM endpoint. */
+    pldm_tid_t tid{0};
+
+    /** MCTP demux transport instance used to send and receive PLDM messages. */
+    struct pldm_transport_mctp_demux* demux{nullptr};
+
+    /** PLDM instance ID database used to allocate per-request instance IDs. */
+    struct pldm_instance_db* instanceDb{nullptr};
+
+    /** Abstract PLDM transport handle wrapping the MCTP demux transport. */
+    struct pldm_transport* transport{nullptr};
+
+    /** Cached PDR entries for each monitored state set, indexed by chassis. */
+    PldmPdrSets pdrSets;
+
+    /** Cached FRU Record Set PDR entries for chassis entities. */
+    std::vector<FruRSIEntry> fruRsiEntries;
+
+    /**
+     * FRU serial numbers keyed by entityInstance.
+     * Populated in the constructor from MCTP GetFRURecordByOption requests.
+     */
+    std::map<uint16_t, std::string> fruSerialCache;
+
+    /**
+     * Maps chassisNumber → PLDM entityInstance.
+     * Derived by matching fruSerialCache values against Inventory serial
+     * numbers, since firmware entity instance numbering is not contiguous
+     * with chassisNumber + 1 on all platforms.
+     */
+    std::map<int, uint16_t> chassisToEntityInstance;
+
+    /**
+     * Queries pldmd via D-Bus for state sensor PDRs.
+     *
+     * @param[in] bus         D-Bus connection to use.
+     * @param[in] stateSetId  PLDM state set to search for.
+     * @param[in] entityType  Entity type to filter by.
+     *
+     * @return Matching sensor PDR entries, or an empty vector if none found.
+     */
+    std::vector<SensorPDREntry> fetchSensorPDRs(
+        sdbusplus::bus_t& bus, uint16_t stateSetId, uint16_t entityType) const;
+
+    /**
+     * Iterates the PLDM PDR repository via MCTP GetPDR requests and returns
+     * all FRU Record Set PDRs whose entity_type matches chassisEntityType.
+     *
+     * @return Vector of FruRSIEntry with entityInstance and RSI, or an empty
+     *         vector on failure.
+     */
+    std::vector<FruRSIEntry> fetchFruRecordSetPDRs();
+
+    /**
+     * Allocates a PLDM instance ID for a request/response transaction.
+     *
+     * @param[in] operation  Operation name used in verbose error messages.
+     *
+     * @return Allocated instance ID, or std::nullopt on failure.
+     */
+    std::optional<pldm_instance_id_t> allocateInstanceId(
+        std::string_view operation) const;
+
+    /**
+     * Encodes a GetPDR request.
+     *
+     * @param[in] instanceId    PLDM instance ID for the request.
+     * @param[in] recordHandle  PDR record handle to fetch.
+     *
+     * @return Encoded request bytes, or std::nullopt on failure.
+     */
+    std::optional<std::vector<uint8_t>> encodeGetPdrRequest(
+        pldm_instance_id_t instanceId, uint32_t recordHandle) const;
+
+    /**
+     * Decodes a GetPDR response and appends matching FRU Record Set entries.
+     *
+     * @param[in] recordHandle   PDR record handle used for the request.
+     * @param[in] responseMsg    Response message.
+     * @param[in] responseSize   Response message size in bytes.
+     * @param[out] results       Matching FRU Record Set entries collected so
+     * far.
+     *
+     * @return Next record handle, or std::nullopt on failure.
+     */
+    std::optional<uint32_t> decodeGetPdrResponse(
+        uint32_t recordHandle, void* responseMsg, size_t responseSize,
+        std::vector<FruRSIEntry>& results) const;
+
+    /**
+     * Encodes a GetStateSensorReadings request.
+     *
+     * @param[in] instanceId  PLDM instance ID for the request.
+     * @param[in] sensorId    Sensor ID to read.
+     *
+     * @return Encoded request bytes, or std::nullopt on failure.
+     */
+    std::optional<std::vector<uint8_t>> encodeGetStateSensorReadingsRequest(
+        pldm_instance_id_t instanceId, uint16_t sensorId) const;
+
+    /**
+     * Encodes a GetFRURecordByOption request for the chassis serial number.
+     *
+     * @param[in] instanceId  PLDM instance ID for the request.
+     * @param[in] rsi         FRU Record Set Identifier to query.
+     *
+     * @return Encoded request bytes, or std::nullopt on failure.
+     */
+    std::optional<std::vector<uint8_t>> encodeGetFruRecordByOptionRequest(
+        pldm_instance_id_t instanceId, uint16_t rsi) const;
+
+    /**
+     * Decodes a GetFRURecordByOption response.
+     *
+     * @param[in] rsi           FRU Record Set Identifier used for the request.
+     * @param[in] responseMsg   Response message.
+     * @param[in] responseSize  Response message size in bytes.
+     *
+     * @return FRU table bytes, or std::nullopt on failure.
+     */
+    std::optional<std::vector<uint8_t>> decodeGetFruRecordByOptionResponse(
+        uint16_t rsi, void* responseMsg, size_t responseSize) const;
+
+    /**
+     * Finds the Serial Number field in raw FRU table data.
+     *
+     * @param[in] fruBytes  Raw FRU table bytes.
+     *
+     * @return Serial number string, or std::nullopt if not found.
+     */
+    std::optional<std::string> findFruSerialNumber(
+        const std::vector<uint8_t>& fruBytes) const;
+
+    /**
+     * Fetches the FRU serial number for a chassis via a targeted MCTP
+     * GetFRURecordByOption request.
+     *
+     * @param[in] rsi  FRU Record Set Identifier to query.
+     *
+     * @return Serial number string, or std::nullopt on failure or if not found.
+     */
+    std::optional<std::string> readPldmSerialNumber(uint16_t rsi) const;
+
+    /**
+     * Reads the SerialNumber property from the Inventory Manager for the given
+     * chassis number.
+     *
+     * @param[in] chassisNumber  Chassis index (0-based).
+     *
+     * @return Serial number string, or std::nullopt if not found or on error.
+     */
+    std::optional<std::string> readInventorySerialNumber(
+        int chassisNumber) const;
+
+    /**
+     * Finds the PDR entry for the given entity instance.
+     *
+     * @param[in] pdrs            PDR entries to search.
+     * @param[in] entityInstance  Entity instance to match.
+     *
+     * @return Matching entry, or std::nullopt if not found.
+     */
+    std::optional<SensorPDREntry> findSensorEntry(
+        const std::vector<SensorPDREntry>& pdrs, uint16_t entityInstance) const;
+
+    /**
+     * Prints the current state of a sensor. Reads the sensor value via MCTP
+     * and maps it to a human-readable string using the provided state name map.
+     *
+     * @param[in] entry       PDR entry for the sensor, or std::nullopt if not
+     *                        found.
+     * @param[in] stateNames  Map of state values to display strings.
+     */
+    void printSensorState(
+        const std::optional<SensorPDREntry>& entry,
+        const std::map<uint8_t, std::string_view>& stateNames) const;
+
+    /**
+     * Decodes a GetStateSensorReadings response and returns the current state
+     * of the first sensor component.
+     *
+     * @param[in] responseMsg Response message.
+     * @param[in] payloadLen  Payload length (excluding PLDM header).
+     *
+     * @return Current sensor state, or std::nullopt on failure.
+     */
+    std::optional<uint8_t> decodeStateSensorResponse(void* responseMsg,
+                                                     size_t payloadLen) const;
+
+    /**
+     * Reads the current state of a sensor via MCTP.
+     *
+     * @param[in] sensorId  Sensor ID to read.
+     *
+     * @return Current sensor state, or std::nullopt on failure.
+     */
+    std::optional<uint8_t> readStateSensor(uint16_t sensorId) const;
+};
