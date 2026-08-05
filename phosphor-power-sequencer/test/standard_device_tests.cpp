@@ -284,12 +284,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail PSU"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail PSU "
+                                          "in device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg(
-                "Rail PSU pgood GPIO line offset 2 has inactive value 0"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail PSU pgood GPIO line offset 2 in device abc_pseq "
+                        "has inactive value 0"))
             .Times(1);
 
         device.open(services);
@@ -345,12 +346,13 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail PSU"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail PSU "
+                                          "in device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg(
-                "Rail PSU pgood GPIO line offset 2 has inactive value 0"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail PSU pgood GPIO line offset 2 in device abc_pseq "
+                        "has inactive value 0"))
             .Times(1);
 
         device.open(services);
@@ -408,14 +410,18 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logInfoMsg("Rail VDD STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD in device abc_pseq STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD "
+                                          "in device abc_pseq"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V"))
+                "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V "
+                "in device abc_pseq"))
             .Times(1);
 
         device.open(services);
@@ -472,13 +478,17 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logInfoMsg("Rail VIO STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VIO in device abc_pseq STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO "
+                                          "in device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VIO in device abc_pseq has fault bits set in "
+                        "STATUS_VOUT: 0x11"))
             .Times(1);
 
         device.open(services);
@@ -532,13 +542,17 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logInfoMsg("Rail VIO STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VIO in device abc_pseq STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO "
+                                          "in device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VIO in device abc_pseq has fault bits set in "
+                        "STATUS_VOUT: 0x11"))
             .Times(1);
 
         device.open(services);
@@ -594,13 +608,17 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logInfoMsg("Rail VIO STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VIO in device abc_pseq STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VIO "
+                                          "in device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VIO has fault bits set in STATUS_VOUT: 0x11"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VIO in device abc_pseq has fault bits set in "
+                        "STATUS_VOUT: 0x11"))
             .Times(1);
 
         device.open(services);
@@ -660,14 +678,18 @@ TEST(StandardDeviceTests, FindPgoodFault)
             logErrorMsg(
                 "Pgood fault found in rail monitored by device abc_pseq"))
             .Times(1);
-        EXPECT_CALL(services, logInfoMsg("Rail VDD STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD in device abc_pseq STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD "
+                                          "in device abc_pseq"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V"))
+                "Rail VDD output voltage 1.1V is <= UV fault limit 1.2V "
+                "in device abc_pseq"))
             .Times(1);
 
         device.open(services);
@@ -763,7 +785,7 @@ TEST(StandardDeviceTests, FindPgoodFault)
             EXPECT_STREQ(
                 e.what(),
                 "Unable to determine if a pgood fault occurred in device abc_pseq: "
-                "Unable to read STATUS_VOUT value for rail VIO: "
+                "Unable to read STATUS_VOUT value for rail VIO in device abc_pseq: "
                 "File does not exist");
         }
     }

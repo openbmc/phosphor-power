@@ -30,6 +30,7 @@
 using namespace phosphor::power::sequencer;
 
 using ::testing::Return;
+using ::testing::ReturnRef;
 using ::testing::Throw;
 
 TEST(PgoodGPIOTests, Initialization)
@@ -454,7 +455,9 @@ TEST(RailTests, GetStatusWord)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusWord).Times(0);
 
         try
@@ -464,9 +467,10 @@ TEST(RailTests, GetStatusWord)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_WORD value for rail VDD2: "
-                         "No PAGE number defined for rail VDD2");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read STATUS_WORD value for rail VDD2 in device "
+                "test_device: No PAGE number defined for rail VDD2");
         }
     }
 
@@ -481,7 +485,9 @@ TEST(RailTests, GetStatusWord)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         EXPECT_EQ(rail.getStatusWord(device), 0xbeef);
@@ -498,7 +504,9 @@ TEST(RailTests, GetStatusWord)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusWord(2))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -510,9 +518,10 @@ TEST(RailTests, GetStatusWord)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_WORD value for rail VDD2: "
-                         "File does not exist");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read STATUS_WORD value for rail VDD2 in device "
+                "test_device: File does not exist");
         }
     }
 }
@@ -537,7 +546,9 @@ TEST(RailTests, GetStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout).Times(0);
 
         try
@@ -547,9 +558,10 @@ TEST(RailTests, GetStatusVout)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_VOUT value for rail VDD2: "
-                         "No PAGE number defined for rail VDD2");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read STATUS_VOUT value for rail VDD2 in device "
+                "test_device: No PAGE number defined for rail VDD2");
         }
     }
 
@@ -564,7 +576,9 @@ TEST(RailTests, GetStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0xad));
 
         EXPECT_EQ(rail.getStatusVout(device), 0xad);
@@ -581,7 +595,9 @@ TEST(RailTests, GetStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -593,9 +609,10 @@ TEST(RailTests, GetStatusVout)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_VOUT value for rail VDD2: "
-                         "File does not exist");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read STATUS_VOUT value for rail VDD2 in device "
+                "test_device: File does not exist");
         }
     }
 }
@@ -620,7 +637,9 @@ TEST(RailTests, GetReadVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout).Times(0);
 
         try
@@ -630,9 +649,10 @@ TEST(RailTests, GetReadVout)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read READ_VOUT value for rail VDD2: "
-                         "No PAGE number defined for rail VDD2");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read READ_VOUT value for rail VDD2 in device "
+                "test_device: No PAGE number defined for rail VDD2");
         }
     }
 
@@ -647,7 +667,9 @@ TEST(RailTests, GetReadVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.23));
 
         EXPECT_EQ(rail.getReadVout(device), 1.23);
@@ -664,7 +686,9 @@ TEST(RailTests, GetReadVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -676,9 +700,10 @@ TEST(RailTests, GetReadVout)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read READ_VOUT value for rail VDD2: "
-                         "File does not exist");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read READ_VOUT value for rail VDD2 in device "
+                "test_device: File does not exist");
         }
     }
 }
@@ -703,7 +728,9 @@ TEST(RailTests, GetVoutUVFaultLimit)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getVoutUVFaultLimit).Times(0);
 
         try
@@ -715,8 +742,8 @@ TEST(RailTests, GetVoutUVFaultLimit)
         {
             EXPECT_STREQ(
                 e.what(),
-                "Unable to read VOUT_UV_FAULT_LIMIT value for rail VDD2: "
-                "No PAGE number defined for rail VDD2");
+                "Unable to read VOUT_UV_FAULT_LIMIT value for rail VDD2 in "
+                "device test_device: No PAGE number defined for rail VDD2");
         }
     }
 
@@ -731,7 +758,9 @@ TEST(RailTests, GetVoutUVFaultLimit)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
             .WillOnce(Return(0.9));
@@ -750,7 +779,9 @@ TEST(RailTests, GetVoutUVFaultLimit)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -764,8 +795,8 @@ TEST(RailTests, GetVoutUVFaultLimit)
         {
             EXPECT_STREQ(
                 e.what(),
-                "Unable to read VOUT_UV_FAULT_LIMIT value for rail VDD2: "
-                "File does not exist");
+                "Unable to read VOUT_UV_FAULT_LIMIT value for rail VDD2 in "
+                "device test_device: File does not exist");
         }
     }
 }
@@ -790,7 +821,9 @@ TEST(RailTests, HasPgoodFault)
 
     // No fault detected
     {
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
@@ -808,19 +841,25 @@ TEST(RailTests, HasPgoodFault)
 
     // Fault detected via STATUS_VOUT
     {
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x10));
         EXPECT_CALL(device, getReadVout(2)).Times(0);
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VDD2 in device test_device has fault bits set "
+                        "in STATUS_VOUT: 0x10"))
             .Times(1);
 
         std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
@@ -835,20 +874,26 @@ TEST(RailTests, HasPgoodFault)
 
     // Fault detected via GPIO
     {
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
         EXPECT_CALL(device, getReadVout(2)).Times(0);
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 pgood GPIO line offset 3 has inactive value 1"))
+                "Rail VDD2 pgood GPIO line offset 3 in device test_device "
+                "has inactive value 1"))
             .Times(1);
 
         std::vector<int> gpioValues{0, 0, 0, 1, 0, 0};
@@ -864,7 +909,9 @@ TEST(RailTests, HasPgoodFault)
 
     // Fault detected via output voltage
     {
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(2)).Times(1).WillOnce(Return(0x00));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
@@ -873,14 +920,18 @@ TEST(RailTests, HasPgoodFault)
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V"))
+                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V "
+                "in device test_device"))
             .Times(1);
 
         std::vector<int> gpioValues{0, 0, 0, 0, 0, 0};
@@ -916,7 +967,9 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(0);
 
         MockServices services{};
@@ -943,7 +996,9 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x00));
 
         MockServices services{};
@@ -969,7 +1024,9 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(0);
 
         MockServices services{};
@@ -992,7 +1049,9 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x00));
 
         MockServices services{};
@@ -1016,13 +1075,16 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x6a));
 
         MockServices services{};
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Rail VDD2 has warning bits set in STATUS_VOUT: 0x6a"))
+        EXPECT_CALL(services,
+                    logInfoMsg(
+                        "Rail VDD2 in device test_device has warning bits set "
+                        "in STATUS_VOUT: 0x6a"))
             .Times(1);
 
         std::map<std::string, std::string> additionalData{};
@@ -1044,18 +1106,24 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3)).Times(1).WillOnce(Return(0x10));
         EXPECT_CALL(device, getStatusWord(3)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
-        EXPECT_CALL(
-            services,
-            logErrorMsg("Rail VDD2 has fault bits set in STATUS_VOUT: 0x10"))
+        EXPECT_CALL(services,
+                    logErrorMsg(
+                        "Rail VDD2 in device test_device has fault bits set "
+                        "in STATUS_VOUT: 0x10"))
             .Times(1);
 
         std::map<std::string, std::string> additionalData{};
@@ -1079,7 +1147,9 @@ TEST(RailTests, HasPgoodFaultStatusVout)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusVout(3))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -1094,9 +1164,10 @@ TEST(RailTests, HasPgoodFaultStatusVout)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read STATUS_VOUT value for rail VDD2: "
-                         "File does not exist");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read STATUS_VOUT value for rail VDD2 in device "
+                "test_device: File does not exist");
         }
     }
 }
@@ -1123,7 +1194,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
         EXPECT_CALL(services, isPresent(*presence))
@@ -1152,7 +1225,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
         EXPECT_CALL(services, isPresent(*presence))
@@ -1179,7 +1254,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
 
@@ -1205,7 +1282,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
 
@@ -1232,15 +1311,19 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 pgood GPIO line offset 3 has inactive value 0"))
+                "Rail VDD2 pgood GPIO line offset 3 in device test_device "
+                "has inactive value 0"))
             .Times(1);
 
         std::vector<int> gpioValues{1, 1, 1, 0, 1, 1};
@@ -1268,18 +1351,24 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 pgood GPIO line offset 3 has inactive value 1"))
+                "Rail VDD2 pgood GPIO line offset 3 in device test_device "
+                "has inactive value 1"))
             .Times(1);
 
         std::vector<int> gpioValues{0, 0, 0, 1, 0, 0};
@@ -1307,7 +1396,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
 
         MockServices services{};
 
@@ -1321,8 +1412,9 @@ TEST(RailTests, HasPgoodFaultGPIO)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(), "Invalid GPIO line offset 6 for rail VDD2: "
-                                   "Device only has 6 GPIO values");
+            EXPECT_STREQ(e.what(),
+                         "Invalid GPIO line offset 6 for rail VDD2: Device "
+                         "test_device only has 6 GPIO values");
         }
     }
 }
@@ -1348,7 +1440,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(0);
         EXPECT_CALL(device, getVoutUVFaultLimit(2)).Times(0);
 
@@ -1376,7 +1470,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
@@ -1405,7 +1501,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(0);
         EXPECT_CALL(device, getVoutUVFaultLimit(2)).Times(0);
 
@@ -1429,7 +1527,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
@@ -1455,7 +1555,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
@@ -1463,14 +1565,18 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
         EXPECT_CALL(device, getStatusWord(2)).Times(1).WillOnce(Return(0xbeef));
 
         MockServices services{};
-        EXPECT_CALL(services, logInfoMsg("Rail VDD2 STATUS_WORD: 0xbeef"))
+        EXPECT_CALL(services,
+                    logInfoMsg("Rail VDD2 in device test_device STATUS_WORD: "
+                               "0xbeef"))
             .Times(1);
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.2V"))
+                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.2V "
+                "in device test_device"))
             .Times(1);
 
         std::map<std::string, std::string> additionalData{};
@@ -1496,7 +1602,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2)).Times(1).WillOnce(Return(1.1));
         EXPECT_CALL(device, getVoutUVFaultLimit(2))
             .Times(1)
@@ -1506,12 +1614,14 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
 
         MockServices services{};
-        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2"))
+        EXPECT_CALL(services, logErrorMsg("Pgood fault detected in rail VDD2 "
+                                          "in device test_device"))
             .Times(1);
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V"))
+                "Rail VDD2 output voltage 1.1V is <= UV fault limit 1.1V "
+                "in device test_device"))
             .Times(1);
 
         std::map<std::string, std::string> additionalData{};
@@ -1535,7 +1645,9 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
                   compareVoltageToLimit,
                   gpio};
 
+        std::string deviceId{"test_device"};
         MockDevice device{};
+        EXPECT_CALL(device, getID).WillRepeatedly(ReturnRef(deviceId));
         EXPECT_CALL(device, getReadVout(2))
             .Times(1)
             .WillOnce(Throw(std::runtime_error{"File does not exist"}));
@@ -1550,9 +1662,10 @@ TEST(RailTests, HasPgoodFaultOutputVoltage)
         }
         catch (const std::exception& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "Unable to read READ_VOUT value for rail VDD2: "
-                         "File does not exist");
+            EXPECT_STREQ(
+                e.what(),
+                "Unable to read READ_VOUT value for rail VDD2 in device "
+                "test_device: File does not exist");
         }
     }
 }

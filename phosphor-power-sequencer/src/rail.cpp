@@ -60,9 +60,9 @@ uint16_t Rail::getStatusWord(PowerSequencerDevice& device)
     }
     catch (const std::exception& e)
     {
-        throw std::runtime_error{
-            std::format("Unable to read STATUS_WORD value for rail {}: {}",
-                        name, e.what())};
+        throw std::runtime_error{std::format(
+            "Unable to read STATUS_WORD value for rail {} in device {}: {}",
+            name, device.getID(), e.what())};
     }
     return value;
 }
@@ -77,9 +77,9 @@ uint8_t Rail::getStatusVout(PowerSequencerDevice& device)
     }
     catch (const std::exception& e)
     {
-        throw std::runtime_error{
-            std::format("Unable to read STATUS_VOUT value for rail {}: {}",
-                        name, e.what())};
+        throw std::runtime_error{std::format(
+            "Unable to read STATUS_VOUT value for rail {} in device {}: {}",
+            name, device.getID(), e.what())};
     }
     return value;
 }
@@ -95,7 +95,8 @@ double Rail::getReadVout(PowerSequencerDevice& device)
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read READ_VOUT value for rail {}: {}", name, e.what())};
+            "Unable to read READ_VOUT value for rail {} in device {}: {}", name,
+            device.getID(), e.what())};
     }
     return value;
 }
@@ -111,8 +112,8 @@ double Rail::getVoutUVFaultLimit(PowerSequencerDevice& device)
     catch (const std::exception& e)
     {
         throw std::runtime_error{std::format(
-            "Unable to read VOUT_UV_FAULT_LIMIT value for rail {}: {}", name,
-            e.what())};
+            "Unable to read VOUT_UV_FAULT_LIMIT value for rail {} in device {}: {}",
+            name, device.getID(), e.what())};
     }
     return value;
 }
@@ -143,8 +144,8 @@ bool Rail::hasPgoodFaultStatusVout(
         {
             hasFault = true;
             services.logErrorMsg(std::format(
-                "Rail {} has fault bits set in STATUS_VOUT: {:#04x}", name,
-                statusVout));
+                "Rail {} in device {} has fault bits set in STATUS_VOUT: {:#04x}",
+                name, device.getID(), statusVout));
             additionalData.emplace("STATUS_VOUT",
                                    std::format("{:#04x}", statusVout));
             storePgoodFaultDebugData(device, services, additionalData);
@@ -152,8 +153,8 @@ bool Rail::hasPgoodFaultStatusVout(
         else if (statusVout != 0)
         {
             services.logInfoMsg(std::format(
-                "Rail {} has warning bits set in STATUS_VOUT: {:#04x}", name,
-                statusVout));
+                "Rail {} in device {} has warning bits set in STATUS_VOUT: {:#04x}",
+                name, device.getID(), statusVout));
         }
     }
 
@@ -175,8 +176,8 @@ bool Rail::hasPgoodFaultGPIO(PowerSequencerDevice& device, Services& services,
         if (line >= gpioValues.size())
         {
             throw std::runtime_error{std::format(
-                "Invalid GPIO line offset {} for rail {}: Device only has {} GPIO values",
-                line, name, gpioValues.size())};
+                "Invalid GPIO line offset {} for rail {}: Device {} only has {} GPIO values",
+                line, name, device.getID(), gpioValues.size())};
         }
         int value = gpioValues[line];
 
@@ -185,8 +186,8 @@ bool Rail::hasPgoodFaultGPIO(PowerSequencerDevice& device, Services& services,
         {
             hasFault = true;
             services.logErrorMsg(std::format(
-                "Rail {} pgood GPIO line offset {} has inactive value {}", name,
-                line, value));
+                "Rail {} pgood GPIO line offset {} in device {} has inactive value {}",
+                name, line, device.getID(), value));
             additionalData.emplace("GPIO_LINE", std::format("{}", line));
             additionalData.emplace("GPIO_VALUE", std::format("{}", value));
             storePgoodFaultDebugData(device, services, additionalData);
@@ -214,8 +215,8 @@ bool Rail::hasPgoodFaultOutputVoltage(
         {
             hasFault = true;
             services.logErrorMsg(std::format(
-                "Rail {} output voltage {}V is <= UV fault limit {}V", name,
-                vout, uvLimit));
+                "Rail {} output voltage {}V is <= UV fault limit {}V in device {}",
+                name, vout, uvLimit, device.getID()));
             additionalData.emplace("READ_VOUT", std::format("{}", vout));
             additionalData.emplace("VOUT_UV_FAULT_LIMIT",
                                    std::format("{}", uvLimit));
@@ -239,7 +240,8 @@ void Rail::storePgoodFaultDebugData(
     PowerSequencerDevice& device, Services& services,
     std::map<std::string, std::string>& additionalData)
 {
-    services.logErrorMsg(std::format("Pgood fault detected in rail {}", name));
+    services.logErrorMsg(std::format(
+        "Pgood fault detected in rail {} in device {}", name, device.getID()));
     additionalData.emplace("RAIL_NAME", name);
     if (page)
     {
@@ -247,7 +249,8 @@ void Rail::storePgoodFaultDebugData(
         {
             uint16_t statusWord = getStatusWord(device);
             services.logInfoMsg(
-                std::format("Rail {} STATUS_WORD: {:#06x}", name, statusWord));
+                std::format("Rail {} in device {} STATUS_WORD: {:#06x}", name,
+                            device.getID(), statusWord));
             additionalData.emplace("STATUS_WORD",
                                    std::format("{:#06x}", statusWord));
         }
