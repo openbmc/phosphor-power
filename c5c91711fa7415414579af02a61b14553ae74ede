@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9a66a79_350fa1de",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-06T18:41:51Z",
+      "side": 1,
+      "message": "Will change to chassisAvailableMatch",
+      "parentUuid": "9bc0c135_a514e449",
+      "revId": "c5c91711fa7415414579af02a61b14553ae74ede",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ddb9f2f_f10e0106",
@@ -52,6 +70,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60fe4b26_a10a7e9d",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-06T18:41:51Z",
+      "side": 1,
+      "message": "No reason,I will change to a function",
+      "parentUuid": "5ddb9f2f_f10e0106",
+      "revId": "c5c91711fa7415414579af02a61b14553ae74ede",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cce49ef_bf2d4b9c",
@@ -65,6 +101,24 @@
       "writtenOn": "2026-08-06T14:23:54Z",
       "side": 1,
       "message": "I would suggest removing PIM in the comments and variable names. I\u0027m not sure if that acronym is explained somewhere in this file. Also, the application providing the Available flag could change over time.\n\nI think we want to focus on the Available property of the chassis. Since this is a boolean variable, it should start with a is/was/has/etc. So isAvailable would be more descriptive and not tied to a specific application providing the Available property.",
+      "revId": "c5c91711fa7415414579af02a61b14553ae74ede",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc306df8_c7222f0e",
+        "filename": "phosphor-power-supply/chassis.hpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-06T18:41:51Z",
+      "side": 1,
+      "message": "Ok, will remove PIM as I focused on the wording of the story as it mentions PIM and sled",
+      "parentUuid": "2cce49ef_bf2d4b9c",
       "revId": "c5c91711fa7415414579af02a61b14553ae74ede",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
