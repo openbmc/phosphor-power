@@ -46,6 +46,54 @@
       },
       "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a0a28f3_aa427d59",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-06T19:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b59fca14_0cb470d3",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 40
+      },
+      "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "137e4b87_4349cbfd",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-06T19:07:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b59fca14_0cb470d3",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 230,
+        "endChar": 40
+      },
+      "revId": "7d74aa180ad36931c24ae3f183f78e3961cec661",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
