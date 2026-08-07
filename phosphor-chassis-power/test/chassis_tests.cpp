@@ -1039,6 +1039,7 @@ TEST_F(ChassisTests, CheckLatchedFault)
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
             .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
         EXPECT_CALL(
             services,
@@ -1118,6 +1119,7 @@ TEST_F(ChassisTests, HandleLatchedFault)
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
             .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
         EXPECT_CALL(
             services,
@@ -1158,6 +1160,7 @@ TEST_F(ChassisTests, HandleLatchedFault)
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
             .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
         EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
         EXPECT_CALL(
             services,

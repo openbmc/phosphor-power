@@ -232,16 +232,10 @@ bool Chassis::handleLatchedFault()
 
 bool Chassis::writeAndReleaseGPIO(Gpio& gpio, int value)
 {
-    if (!gpio.foundLine())
-    {
-        gpio.findLine();
-    }
-
-    if (!gpio.requestWrite(value))
+    if (!writeGPIO(gpio, value))
     {
         return false;
     }
-
     gpio.release();
     return true;
 }
