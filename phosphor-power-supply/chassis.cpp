@@ -504,8 +504,6 @@ void Chassis::syncHistory()
             catch (const std::exception& e)
             {
                 // Not an error, system just hasn't implemented the synch gpio
-                lg2::info("{CHASSIS_SHORT_NAME}: No synchronization GPIO found",
-                          "CHASSIS_SHORT_NAME", chassisShortName);
                 syncHistoryGPIO = nullptr;
             }
         }
@@ -906,9 +904,6 @@ void Chassis::attemptToCreatePowerConfigGPIO()
     catch (const std::exception& e)
     {
         powerConfigGPIO = nullptr;
-        lg2::info("{CHASSIS_SHORT_NAME}: GPIO not implemented in {CHASSIS}",
-                  "CHASSIS_SHORT_NAME", chassisShortName, "CHASSIS",
-                  chassisShortName);
     }
 }
 

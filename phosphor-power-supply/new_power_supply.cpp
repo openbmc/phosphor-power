@@ -750,9 +750,6 @@ void PowerSupply::onOffConfig(uint8_t data)
 
     if (present && driverName != ACBEL_FSG032_DD_NAME)
     {
-        lg2::info("{CHASSIS_NAME}: ON_OFF_CONFIG write: DATA={DATA}",
-                  "CHASSIS_NAME", chassisName, "DATA", lg2::hex | lg2::field8,
-                  data);
         try
         {
             std::vector<uint8_t> configData{data};
