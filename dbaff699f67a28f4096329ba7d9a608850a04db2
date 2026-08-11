@@ -16,6 +16,24 @@
       "message": "Hi Faisal,\n\nYou did not address the following comment. Are you planning on doing that in a separate commit? I just want to make sure you are planning to address it.\n\n-------\n\n\nI think you also need to do the following:\n\nAdd an InterfacesAdded listener. The first time Available is published, you won\u0027t get a PropertiesChanged event. That is only when an already published property changes value.\nTry to get the value of Available right away. It is OK if the attempt fails. The property might not be published yet, or it might never be published (single-chassis). But you should try to get it. Otherwise, if it is published before your app starts, and it is false, you won\u0027t know it. You won\u0027t get an InterfacesAdded or PropertiesChanged event.",
       "revId": "dbaff699f67a28f4096329ba7d9a608850a04db2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5816393e_de7a8682",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-11T21:23:29Z",
+      "side": 1,
+      "message": "Sorry, I missed it I will add it",
+      "parentUuid": "0b2c4f6a_591c953e",
+      "revId": "dbaff699f67a28f4096329ba7d9a608850a04db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
