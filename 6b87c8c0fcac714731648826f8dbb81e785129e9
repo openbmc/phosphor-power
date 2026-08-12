@@ -84,6 +84,24 @@
       "message": "just a general question, when looking through a defect/field issue how will we know why a chassis isn\u0027t available? eg if it had fsi errors vs no input power?",
       "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6920dfa_66abddc4",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-12T19:27:56Z",
+      "side": 1,
+      "message": "I think the pseq, regs, and psu app all have code that looks like this. We probably don\u0027t want to invent another interface where we ask why it is unavailable?\n\nSo maybe the simplest approach is to include in our error logs the journal messages from whatever app is managing the Available property?",
+      "parentUuid": "72b087c0_efb63892",
+      "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
