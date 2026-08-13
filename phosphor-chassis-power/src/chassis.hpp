@@ -216,11 +216,13 @@ class Chassis
     void clearErrorHistory();
 
     /**
-     * Check if chassis is present via presence path
+     * Updates and gets presencePathValue by checking whether the presence path
+     * file exists.
      *
-     * @return true if file exists on the presence path, false otherwise
+     * @return The presence path value, or std::nullopt if presencePath is not
+     *         set.
      */
-    bool getPresenceFromPath() const;
+    std::optional<bool> getPresenceFromPath();
 
     /**
      * Check if chassis is present, based on GPIO and presence path.
@@ -360,6 +362,11 @@ class Chassis
     std::vector<std::unique_ptr<Gpio>> gpios{};
 
     /**
+     * Cached presence Path value for this chassis.
+     */
+    std::optional<bool> presencePathValue{};
+
+    /**
      * Cached presence GPIO value for this chassis.
      */
     std::optional<int> presenceGPIOValue{};
@@ -410,6 +417,12 @@ class Chassis
      * Prevents duplicate PELs across multiple write retries.
      */
     bool latchedFaultPELLogged{false};
+
+    /**
+     * Indicates whether the initial presence state has been pushed to PIM.
+     * On the first handlePresenceChange call, PIM is always notified.
+     */
+    bool presenceInitialized{false};
 };
 
 } // namespace phosphor::power::chassis
