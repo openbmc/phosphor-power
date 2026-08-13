@@ -27,7 +27,9 @@ If the PresenceGpio property is specified, the GPIO will be read. If the GPIO is
 active, such as a 1 value with Polarity High, then the chassis is present. If
 the PresencePath property is specified, then if the specified path exists the
 chassis is present. If both properties are specified, the chassis is present if
-either property indicates it is present.
+either property indicates it is present. However, the GPIO is considered of
+slightly higher priority, so an error will be logged in the case where the GPIO
+says the chassis is absent and the path says it is present.
 
 ## Examples
 
