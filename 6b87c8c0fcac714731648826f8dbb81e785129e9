@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cba32637_b75dede3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-13T13:25:36Z",
+      "side": 1,
+      "message": "added a note why not able to test",
+      "parentUuid": "553e1044_abe870af",
+      "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e78414ad_8076002e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -69,6 +87,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d50b31_e3fd59e2",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-13T13:25:36Z",
+      "side": 1,
+      "message": "Good catch",
+      "parentUuid": "60f1460f_ab28076c",
+      "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72b087c0_efb63892",
@@ -100,6 +136,24 @@
       "side": 1,
       "message": "I think the pseq, regs, and psu app all have code that looks like this. We probably don\u0027t want to invent another interface where we ask why it is unavailable?\n\nSo maybe the simplest approach is to include in our error logs the journal messages from whatever app is managing the Available property?",
       "parentUuid": "72b087c0_efb63892",
+      "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f9c6635_94464a8e",
+        "filename": "phosphor-power-supply/chassis.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-08-13T13:25:36Z",
+      "side": 1,
+      "message": "Agree with Shawn, the available property is set by other apps which they log the reason. I don\u0027t think we need to invent interface to carry the reason into the psu-monitor.",
+      "parentUuid": "d6920dfa_66abddc4",
       "revId": "6b87c8c0fcac714731648826f8dbb81e785129e9",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
