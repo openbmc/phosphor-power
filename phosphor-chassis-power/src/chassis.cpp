@@ -124,6 +124,13 @@ void Chassis::clearErrorHistory()
 
 void Chassis::monitor()
 {
+    bool presenceGPIOChanged = false;
+    bool presenceGPIOReadFailure = false;
+    std::optional<bool> oldPresencePathValue = presencePathValue;
+
+    getPresenceFromPath();
+    bool presencePathChanged = (presencePathValue != oldPresencePathValue);
+
     for (const auto& gpio : gpios)
     {
         const std::string& name = gpio->getName();
@@ -136,24 +143,18 @@ void Chassis::monitor()
             }
         }
 
-        bool changed = false;
-
         if (name.contains(presenceName))
         {
             if (gpio->requestRead())
             {
                 try
                 {
-                    changed = gpioValueChanged(*gpio, presenceGPIOValue);
-                    if (changed)
-                    {
-                        handlePresenceChange(false);
-                    }
+                    presenceGPIOChanged =
+                        gpioValueChanged(*gpio, presenceGPIOValue);
                 }
                 catch (...)
                 {
-                    // gpio read fail, handle presence change
-                    handlePresenceChange(true);
+                    presenceGPIOReadFailure = true;
                 }
                 // Other apps will need to read this line.
                 gpio->release();
@@ -177,6 +178,8 @@ void Chassis::monitor()
         }
         else if (name.contains(faultUnlatchedName))
         {
+            bool changed = false;
+
             if (gpio->requestRead())
             {
                 try
@@ -198,6 +201,11 @@ void Chassis::monitor()
                 }
             }
         }
+    }
+
+    if (presenceGPIOChanged || presencePathChanged || presenceGPIOReadFailure)
+    {
+        handlePresenceChange(presenceGPIOReadFailure);
     }
 }
 
@@ -311,24 +319,26 @@ bool Chassis::gpioValueChanged(Gpio& gpio, std::optional<int>& gpioValue)
     return false;
 }
 
-bool Chassis::getPresenceFromPath() const
+std::optional<bool> Chassis::getPresenceFromPath()
 {
     if (!presencePath.has_value())
     {
-        return false;
+        return std::nullopt;
     }
 
     try
     {
-        return std::filesystem::exists(presencePath.value());
+        presencePathValue = std::filesystem::exists(presencePath.value());
     }
     catch (const std::exception& e)
     {
+        presencePathValue = false;
         lg2::error(
             "Error checking presence path for chassis {CHASSIS}: {ERROR}",
             "CHASSIS", number, "ERROR", e);
-        return false;
     }
+
+    return presencePathValue;
 }
 
 void Chassis::notifyInventoryManager(sdbusplus::bus_t& bus, bool present)
@@ -384,15 +394,32 @@ void Chassis::initializePresence()
 
 void Chassis::handlePresenceChange(bool readFailure)
 {
-    bool presencePathPresent = getPresenceFromPath();
     bool newPresence = presenceValue;
 
-    if (presenceGPIOValue == 1 && presencePathPresent)
+    // Presence Path not defined — use GPIO value only.
+    if (!presencePath.has_value())
+    {
+        newPresence = (presenceGPIOValue == 1) && !readFailure;
+
+        if (!newPresence && presenceValue && isSystemPoweredOn())
+        {
+            std::map<std::string, std::string> data;
+            data["CHASSIS_NUMBER"] = std::to_string(number);
+
+            services.logError(
+                "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
+                Entry::Level::Error, data);
+        }
+    }
+    // Both true
+    else if (presenceGPIOValue == 1 && presencePathValue.value())
     {
         newPresence = true;
         lg2::info("Chassis {CHASSIS} confirmed present", "CHASSIS", number);
     }
-    else if ((presenceGPIOValue == 0 || readFailure) && presencePathPresent)
+    // Both false
+    else if ((presenceGPIOValue == 0 || readFailure) &&
+             presencePathValue.value())
     {
         if (presenceValue && isSystemPoweredOn())
         {
@@ -413,7 +440,9 @@ void Chassis::handlePresenceChange(bool readFailure)
 
         newPresence = true;
     }
-    else if ((presenceGPIOValue == 0 || readFailure) && !presencePathPresent)
+    // Both have different values
+    else if ((presenceGPIOValue == 0 || readFailure) &&
+             !presencePathValue.value())
     {
         lg2::info("Chassis {CHASSIS} confirmed absent", "CHASSIS", number);
 
@@ -437,14 +466,35 @@ void Chassis::handlePresenceChange(bool readFailure)
 
         newPresence = false;
     }
-    else if (presenceGPIOValue == 1 && !presencePathPresent)
+    else if (presenceGPIOValue == 1 && !presencePathValue.value())
     {
         newPresence = true;
     }
+    // GPIO not defined
+    else if (!presenceGPIOValue.has_value())
+    {
+        newPresence = presencePathValue.value();
+        if (!presencePathValue.value() && isSystemPoweredOn())
+        {
+            std::map<std::string, std::string> data;
+            data["CHASSIS_NUMBER"] = std::to_string(number);
 
-    if (newPresence != presenceValue)
+            if (presencePath.has_value())
+            {
+                data["PRESENCE_PATH"] = presencePath.value();
+            }
+
+            // Callout the specific chassis that went missing
+            services.logError(
+                "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
+                Entry::Level::Error, data);
+        }
+    }
+
+    if (newPresence != presenceValue || !presenceInitialized)
     {
         presenceValue = newPresence;
+        presenceInitialized = true;
         notifyInventoryManager(services.getBus(), presenceValue);
     }
 }
