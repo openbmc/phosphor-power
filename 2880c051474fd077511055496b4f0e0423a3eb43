@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0955a60_65f447aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-17T18:30:13Z",
+      "side": 1,
+      "message": "Is this part a typo?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "2880c051474fd077511055496b4f0e0423a3eb43",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
