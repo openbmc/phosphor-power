@@ -250,7 +250,6 @@ void Chassis::getSupportedConfiguration()
                 auto properties = util::getAllProperties(
                     bus, objPath, supportedConfIntf, service);
                 populateSupportedConfiguration(properties);
-                break;
             }
         }
     }
@@ -528,7 +527,7 @@ void Chassis::syncHistory()
 
 void Chassis::analyze()
 {
-    if (!isPresent || !isChassisAvailable)
+    if (!isPresent)
     {
         return;
     }
