@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74501022_c4e93fae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35fe83cc_3d2749fa",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f5eb799_55ccff41",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c099767_50f7909b",
+        "filename": "meson.build",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "I did not ask the pldm team about it. There was not a dbus interface for the data we wanted so I looked for other ways to get it.",
+      "parentUuid": "3f5eb799_55ccff41",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "113a7990_aa22adac",
         "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
         "patchSetId": 12
@@ -48,6 +84,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "Was this list so users know what they can specify after -p?\n\nIf so, are the PLDM properties accepted with -p too?",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afa81582_736624d0",
+        "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "Yes, also to state what properties the tool displayed. I did not make it so the pldm properties are accepted, but I can.",
+      "parentUuid": "113a7990_aa22adac",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9718186_dba0c95b",
+        "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "The location code fru information is defined under \"PLDM_OEM_IBM_FRU_FIELD_TYPE_LOCATION_CODE \u003d 0xfe\" in upstream.",
+      "parentUuid": "72b7c4ca_5cc840d6",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09512a1e_2efd4410",
         "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
         "patchSetId": 12
@@ -82,6 +154,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "main() is getting pretty long. Maybe the display logic should be refactored into a separate function?",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da3105d_37082bc2",
+        "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09512a1e_2efd4410",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -105,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5e31297_1b77c465",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "I could not find any.",
+      "parentUuid": "e79169c9_2b8a3c81",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8a22076_83693fce",
         "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
         "patchSetId": 12
@@ -122,6 +230,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "abf065e5_90b2a73d",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "The location code seemed stronger, and is what I was asked to match it with, to make it work both ways I made it a flag.",
+      "parentUuid": "c8a22076_83693fce",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "86303f28_a21ff8df",
         "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
         "patchSetId": 12
@@ -133,6 +259,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "Does transport need to be destroyed too?",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "716d500b_ecfba418",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "No, transport wraps the demux it doesn\u0027t own it, so the destroy on line 148 takes care of it.",
+      "parentUuid": "86303f28_a21ff8df",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -156,6 +300,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbdd9107_ff521692",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "The caller will call pldm_instance_id_free() on success.",
+      "parentUuid": "8e144356_9623e9f1",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "56efd574_03309a73",
         "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
         "patchSetId": 12
@@ -167,6 +329,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "This path doesn\u0027t call pldm_instance_id_free(). Does it need to?",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0124d7f9_9bd9a610",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "encodePdrRequest free\u0027s instanceId if it is not a success, I can move the free to be here if it is more readable that way.",
+      "parentUuid": "56efd574_03309a73",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -190,6 +370,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dcd34345_7211caa2",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "encodeGetFruRecordByOptionRequest calls pldm_instance_id_free() if the encode does not succeeded. I can move the free to be here if it is more readable.",
+      "parentUuid": "16070181_9f2c8517",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b18d033a_800d21bb",
         "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
         "patchSetId": 12
@@ -201,6 +399,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "Need to call pldm_instance_id_free()?",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc50211c_91a3fc28",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "encodeGetStateSensorReadingsRequest calls free for this path. I can move the free to be here if it is more readable.",
+      "parentUuid": "b18d033a_800d21bb",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -230,6 +446,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "98f7f017_7db189f0",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "I believe a span would work.",
+      "parentUuid": "41691fef_64cfcdb3",
+      "range": {
+        "startLine": 244,
+        "startChar": 31,
+        "endLine": 244,
+        "endChar": 70
+      },
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8eb904f4_88a650c1",
         "filename": "tools/chassis-status-tool/pldm-fetcher.hpp",
         "patchSetId": 12
@@ -241,6 +481,24 @@
       "writtenOn": "2026-08-21T15:46:05Z",
       "side": 1,
       "message": "Same comment as above.",
+      "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f65d37c_666dcab1",
+        "filename": "tools/chassis-status-tool/pldm-fetcher.hpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-24T15:32:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb904f4_88a650c1",
       "revId": "d347e4f90819445a933ed9cbc3862a3feed49ff2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
