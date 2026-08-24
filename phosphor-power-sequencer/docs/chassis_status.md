@@ -151,9 +151,9 @@ This interface is published on the D-Bus inventory path for each chassis.
 `Enabled` property on multiple chassis systems.
 
 This interface is optional. If the interface exists and `Enabled` is set to
-false, it means that the chassis has been put in hardware isolation (guarded). A
-critical error has been detected in the chassis, and it will not be used when
-the system is powered on.
+false, it means that the chassis has been put in hardware isolation
+(deconfigured). A critical error has been detected in the chassis, and it will
+not be used when the system is powered on.
 
 If `Enabled` is set to false for a chassis:
 
