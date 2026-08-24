@@ -221,7 +221,7 @@ class Chassis
      * Returns whether the chassis is enabled.
      *
      * If the D-Bus Enabled property is false, it means that the chassis has
-     * been put in hardware isolation (guarded).
+     * been put in hardware isolation (deconfigured).
      *
      * Throws an exception if:
      * - Chassis monitoring has not been initialized
