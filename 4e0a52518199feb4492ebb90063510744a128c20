@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4daa873a_bbe4cce6",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-25T19:36:55Z",
+      "side": 1,
+      "message": "If I\u0027m understanding the code correctly, the if check on line 405 is testing if the GPIO and presence path disagree. This comparison on line 450 would seem to be the same sort of test (just opposite boolean values). However, it is complicated by the fact that this variable is set to false if presencePath has no value, right?\n\nIf we want to treat presence path and GPIO as equally important, wouldn\u0027t we have the following cases:\n* both defined and true\n* both defined and false\n* both defined and have different values\n* GPIO value defined and path is not\n* GPIO value not defined but path value is\n* Neither have defined value (not possible within this method? internal error?)\n\nWould be good to have those variations in the automated test too (if they are not there already).",
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f7b344e_45f541c8",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-25T19:36:55Z",
+      "side": 1,
+      "message": "I like that you are only calling Notify once. After that you just need to set the property value. Where is the code that does that (on the 2nd/3rd/etc. change)?",
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e9eb1d7_34f2dafd",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-08-25T19:36:55Z",
+      "side": 1,
+      "message": "I would suggest using the TemporaryFile class in the root dir of this repo. It handles the following issues:\n* Generates a unique name each time\n* Automatically deletes file when object goes out of scope (in destructor)",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 19
+      },
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
