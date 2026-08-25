@@ -864,6 +864,8 @@ void Chassis::createError(const std::string& faultName,
     try
     {
         additionalData["_PID"] = std::to_string(getpid());
+        additionalData["CHASSIS_NUMBER"] =
+            std::to_string(chassisPathPositionId.value_or(0));
 
         auto service =
             util::getService(loggingObjectPath, loggingCreateInterface, bus);
@@ -1348,8 +1350,10 @@ void Chassis::chassisPresentChanged(sdbusplus::message_t& msg)
     }
     catch (const std::exception& e)
     {
-        lg2::error("Exception in chassisPresentChanged for {PATH}: {ERROR}",
-                   "PATH", chassisPath, "ERROR", e);
+        lg2::error(
+            "{CHASSIS_SHORT_NAME}: Exception in chassisPresentChanged for {PATH}: {ERROR}",
+            "CHASSIS_SHORT_NAME", chassisShortName, "PATH", chassisPath,
+            "ERROR", e);
     }
 }
 
