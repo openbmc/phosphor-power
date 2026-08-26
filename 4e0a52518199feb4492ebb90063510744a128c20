@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "172ed867_643088bf",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-26T15:42:55Z",
+      "side": 1,
+      "message": "That understanding is correct. Since both cases where gpio is present evaluate to setting the presence to be true and have no error log and the case where there is no presence path and gpio is missing would log the same error I assumed it be okay. However I agree that would make more sense to be explicit about each scenario.\n\nNeither have defined value will never reach this function.",
+      "parentUuid": "4daa873a_bbe4cce6",
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f7b344e_45f541c8",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c409f35c_ab524128",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-26T15:42:55Z",
+      "side": 1,
+      "message": "This still calls Notify on all the changes, I add the \" || !presenceInitialized\" after in testing I noticed on initialization when restarting the app, dbus output did not match the journal. Ie if presence for chassis1 was set to false before PCP started, and chassis 1 contained the active bmc it would not be updated when the gpio or path became active.",
+      "parentUuid": "5f7b344e_45f541c8",
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e9eb1d7_34f2dafd",
         "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
         "patchSetId": 8
@@ -48,6 +84,30 @@
       "writtenOn": "2026-08-25T19:36:55Z",
       "side": 1,
       "message": "I would suggest using the TemporaryFile class in the root dir of this repo. It handles the following issues:\n* Generates a unique name each time\n* Automatically deletes file when object goes out of scope (in destructor)",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 19
+      },
+      "revId": "4e0a52518199feb4492ebb90063510744a128c20",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8695857a_a8941477",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-26T15:42:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e9eb1d7_34f2dafd",
       "range": {
         "startLine": 152,
         "startChar": 18,
