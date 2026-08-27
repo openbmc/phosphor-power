@@ -16,6 +16,24 @@
       "message": "Is there a reason the PresentDetection.Incorrect error is not logged here too?",
       "revId": "e2490d248936ad9869e6ec4d81872058cd6f80ac",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ef170f_2d9aac7f",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-27T20:26:32Z",
+      "side": 1,
+      "message": "There was no requirement that had me log an error when the gpio was active and the presence path was missing.",
+      "parentUuid": "79f86ff6_891d6a04",
+      "revId": "e2490d248936ad9869e6ec4d81872058cd6f80ac",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
