@@ -42,6 +42,13 @@ const std::string powerOffTimeoutError =
  */
 const std::string shutdownError = "xyz.openbmc_project.Power.Error.Shutdown";
 
+/**
+ * Informational Error logged when the chassis has an unexpected status during a
+ * power on or power off.
+ */
+const std::string unexpectedChassisStatusError =
+    "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus";
+
 Chassis::Chassis(
     size_t number, const std::string& inventoryPath,
     std::vector<std::unique_ptr<PowerSequencerDevice>> powerSequencers,
@@ -58,43 +65,63 @@ Chassis::Chassis(
 }
 
 std::tuple<bool, std::string> Chassis::canSetPowerState(
-    PowerState newPowerState)
+    PowerState newPowerState, Services& services)
 {
     verifyMonitoringInitialized();
+    std::optional<UnexpectedStatusType> unexpectedStatusType{};
+    std::string additionalErrorInfo{};
+    bool logError = false;
     try
     {
         if (powerState && (powerState == newPowerState))
         {
-            return {false, "Chassis is already at requested state"};
+            unexpectedStatusType = UnexpectedStatusType::alreadyAtState;
         }
-
-        if (!isPresent())
+        else if (!isPresent())
         {
-            return {false, "Chassis is not present"};
+            unexpectedStatusType = UnexpectedStatusType::notPresent;
         }
-
         // Do not allow power on for chassis in hardware isolation; power off OK
-        if (!isEnabled() && (newPowerState == PowerState::on))
+        else if (!isEnabled() && (newPowerState == PowerState::on))
         {
-            return {false, "Chassis is not enabled"};
+            unexpectedStatusType = UnexpectedStatusType::notEnabled;
+            logError = true;
         }
-
-        if (!isInputPowerGood())
+        else if (!isInputPowerGood())
         {
-            return {false, "Chassis does not have input power"};
+            unexpectedStatusType = UnexpectedStatusType::noInputPower;
+            logError = (newPowerState == PowerState::on);
         }
-
         // Check Available last. This D-Bus property is based on a list of
         // factors including some of the preceding properties.
-        if (!isAvailable())
+        else if (!isAvailable())
         {
-            return {false, "Chassis is not available"};
+            unexpectedStatusType = UnexpectedStatusType::notAvailable;
+            logError = true;
         }
     }
     catch (const std::exception& e)
     {
-        return {false,
-                std::format("Error determining chassis status: {}", e.what())};
+        unexpectedStatusType = UnexpectedStatusType::unknownStatusError;
+        additionalErrorInfo = e.what();
+        logError = true;
+    }
+
+    if (unexpectedStatusType)
+    {
+        // Note: Don't check loggedUnexpectedStatusTypes. Log every time.
+        if (logError)
+        {
+            logUnexpectedStatusError(*unexpectedStatusType, newPowerState,
+                                     services, additionalErrorInfo);
+        }
+
+        std::string message = toString(*unexpectedStatusType);
+        if (!additionalErrorInfo.empty())
+        {
+            message += ": " + additionalErrorInfo;
+        }
+        return {false, message};
     }
 
     return {true, ""};
@@ -103,7 +130,7 @@ std::tuple<bool, std::string> Chassis::canSetPowerState(
 void Chassis::setPowerState(PowerState newPowerState, Services& services)
 {
     verifyMonitoringInitialized();
-    auto [canSet, reason] = canSetPowerState(newPowerState);
+    auto [canSet, reason] = canSetPowerState(newPowerState, services);
     if (!canSet)
     {
         throw std::runtime_error{
@@ -137,7 +164,7 @@ void Chassis::monitor(Services& services)
     setInitialPowerStateIfNeeded(services);
     updateInPowerStateTransition();
     checkForPowerGoodError(services);
-    checkForInvalidStatus(services);
+    checkForUnexpectedStatus(services);
     closeDevicesIfNeeded();
 }
 
@@ -463,67 +490,67 @@ std::string Chassis::findPowerGoodFaultInRail(
     return error;
 }
 
-void Chassis::checkForInvalidStatus(Services& services)
+void Chassis::checkForUnexpectedStatus(Services& services)
 {
-    // If the requested power state is on, check for invalid chassis status.
+    // If the requested  power state is on, check for unexpected chassis status.
     // Check Available last since it is based on some of the other properties.
     if (powerState == PowerState::on)
     {
+        std::optional<UnexpectedStatusType> unexpectedStatusType{};
         if (!isPresent())
         {
-            handleStateOnButNotPresent(services);
+            unexpectedStatusType = UnexpectedStatusType::notPresent;
         }
         else if (!isInputPowerGood())
         {
-            handleStateOnButNoInputPower(services);
+            unexpectedStatusType = UnexpectedStatusType::noInputPower;
         }
         else if (!isAvailable())
         {
-            handleStateOnButNotAvailable(services);
+            unexpectedStatusType = UnexpectedStatusType::notAvailable;
+        }
+
+        if (unexpectedStatusType &&
+            !loggedUnexpectedStatusTypes.contains(*unexpectedStatusType))
+        {
+            services.logErrorMsg(
+                std::format("Chassis {} requested power state is on: {}",
+                            number, toString(*unexpectedStatusType)));
+
+            // Only log an error if the chassis is in a power state transition
+            if (isInStateTransition)
+            {
+                logUnexpectedStatusError(*unexpectedStatusType, *powerState,
+                                         services);
+            }
+            loggedUnexpectedStatusTypes.emplace(*unexpectedStatusType);
         }
     }
 }
 
-void Chassis::handleStateOnButNotPresent(Services& services)
+void Chassis::logUnexpectedStatusError(
+    UnexpectedStatusType unexpectedStatusType, PowerState newPowerState,
+    Services& services, const std::string& additionalErrorInfo)
 {
-    if (!hasLoggedNotPresent)
+    std::string unexpectedChassisStatus = toString(unexpectedStatusType);
+    if (!additionalErrorInfo.empty())
     {
-        services.logErrorMsg(std::format(
-            "Chassis {} requested power state is on, but chassis is not present",
-            number));
-
-        // TODO: Create error log
-
-        hasLoggedNotPresent = true;
+        unexpectedChassisStatus += ": " + additionalErrorInfo;
     }
-}
-
-void Chassis::handleStateOnButNoInputPower(Services& services)
-{
-    if (!hasLoggedNoInputPower)
+    std::map<std::string, std::string> additionalData{};
+    additionalData.emplace("CHASSIS_NUMBER", std::to_string(number));
+    additionalData.emplace("UNEXPECTED_CHASSIS_STATUS",
+                           unexpectedChassisStatus);
+    std::string powerStateStr{"Unknown"};
+    if (powerState)
     {
-        services.logErrorMsg(std::format(
-            "Chassis {} requested power state is on, but chassis does not have input power",
-            number));
-
-        // TODO: Create error log
-
-        hasLoggedNoInputPower = true;
+        powerStateStr = PowerInterface::toString(*powerState);
     }
-}
-
-void Chassis::handleStateOnButNotAvailable(Services& services)
-{
-    if (!hasLoggedNotAvailable)
-    {
-        services.logErrorMsg(std::format(
-            "Chassis {} requested power state is on, but chassis is not available",
-            number));
-
-        // TODO: Create error log
-
-        hasLoggedNotAvailable = true;
-    }
+    additionalData.emplace("POWER_STATE", powerStateStr);
+    additionalData.emplace("NEW_POWER_STATE",
+                           PowerInterface::toString(newPowerState));
+    services.logError(unexpectedChassisStatusError, Entry::Level::Informational,
+                      additionalData);
 }
 
 } // namespace phosphor::power::sequencer
