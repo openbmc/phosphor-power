@@ -160,7 +160,8 @@ std::set<size_t> System::getChassisForNewPowerState(PowerState newPowerState,
     std::set<size_t> chassisForState;
     for (auto& curChassis : chassis)
     {
-        auto [canSet, reason] = curChassis->canSetPowerState(newPowerState);
+        auto [canSet,
+              reason] = curChassis->canSetPowerState(newPowerState, services);
         if (canSet)
         {
             chassisForState.emplace(curChassis->getNumber());

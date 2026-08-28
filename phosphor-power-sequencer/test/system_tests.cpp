@@ -488,6 +488,17 @@ TEST(SystemTests, SetPowerState)
             logInfoMsg(
                 "Unable to set chassis 2 to state on: Chassis is not enabled"));
 
+        std::string error{
+            "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "2"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is not enabled"},
+            {"POWER_STATE", "Unknown"},
+            {"NEW_POWER_STATE", "on"}};
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData))
+            .Times(1);
+
         system.setPowerState(PowerState::on, services);
         ADD_FAILURE() << "Should not have reached this line.";
     }
@@ -587,6 +598,17 @@ TEST(SystemTests, SetPowerState)
                 "Unable to set chassis 1 to state off: Chassis is not available"));
         EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 2")).Times(1);
+
+        std::string error{
+            "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is not available"},
+            {"POWER_STATE", "Unknown"},
+            {"NEW_POWER_STATE", "off"}};
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData))
+            .Times(1);
 
         system.monitor(services);
         EXPECT_EQ(system.getSelectedChassis().size(), 1);
@@ -1064,8 +1086,20 @@ TEST(SystemTests, Monitor)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis is not present"))
+                "Chassis 1 requested power state is on: Chassis is not present"))
             .Times(1);
+
+        std::string error{
+            "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is not present"},
+            {"POWER_STATE", "on"},
+            {"NEW_POWER_STATE", "on"}};
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData))
+            .Times(1);
+
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(1);
 
@@ -2401,7 +2435,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-                .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
                 .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
@@ -2437,7 +2471,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis is not present"))
+                "Chassis 1 requested power state is on: Chassis is not present"))
             .Times(1);
 
         // Initial monitor. Both chassis present with power on. Both selected.
@@ -2472,7 +2506,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             EXPECT_CALL(monitor, isAvailable)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-                .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
                 .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
@@ -2508,7 +2542,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis is not available"))
+                "Chassis 1 requested power state is on: Chassis is not available"))
             .Times(1);
 
         // Initial monitor. Both chassis present with power on. Both selected.
@@ -2545,7 +2579,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::updatePowerGood again
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-                .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
                 .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
@@ -2582,7 +2616,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis does not have input power"))
+                "Chassis 1 requested power state is on: Chassis does not have input power"))
             .Times(1);
 
         // Initial monitor. Both chassis have good input power and are powered
@@ -2617,13 +2651,13 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             EXPECT_CALL(monitor, isAvailable)
                 .WillOnce(Return(true)) // Chassis::updatePowerGood
                 .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-                .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
                 .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
                 .WillOnce(
                     Return(true)) // System::setInitialSelectedChassisIfNeeded
                 .WillOnce(Return(true))  // Chassis::updatePowerGood
                 .WillOnce(Return(false)) // Chassis::checkForPowerGoodError
-                .WillOnce(Return(true))  // Chassis::checkForInvalidStatus
+                .WillOnce(Return(true))  // Chassis::checkForUnexpectedStatus
                 .WillOnce(Return(true))  // Chassis::closeDevicesIfNeeded
                 .WillOnce(Throw(std::runtime_error{
                     "Available property value could not be obtained."}));
@@ -2683,7 +2717,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
         EXPECT_CALL(monitor, isAvailable)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-            .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
             .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillRepeatedly(Return(false));
@@ -2777,7 +2811,7 @@ TEST(SystemTests, ShouldUseChassisPowerGood)
             .WillOnce(Return(true)) // Chassis::canSetPowerState again
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-            .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
             .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillRepeatedly(Return(false));
 
@@ -3767,7 +3801,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             .WillOnce(Return(true)) // Chassis::updatePowerGood
             .WillOnce(Return(true)) // Chassis::updatePowerGood again
             .WillOnce(Return(true)) // Chassis::checkForPowerGoodError
-            .WillOnce(Return(true)) // Chassis::checkForInvalidStatus
+            .WillOnce(Return(true)) // Chassis::checkForUnexpectedStatus
             .WillOnce(Return(true)) // Chassis::closeDevicesIfNeeded
             .WillOnce(Return(true)) // System::setInitialSelectedChassisIfNeeded
             .WillRepeatedly(Return(false));
@@ -3787,7 +3821,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis is not present"))
+                "Chassis 1 requested power state is on: Chassis is not present"))
             .Times(1);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
@@ -3855,6 +3889,7 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             logInfoMsg(
                 "Unable to set chassis 2 to state on: Chassis is not available"));
         EXPECT_CALL(services, logErrorMsg).Times(0);
+        EXPECT_CALL(services, logError).Times(1);
         EXPECT_CALL(services, createBMCDump).Times(0);
         EXPECT_CALL(services, hardPowerOff).Times(0);
 
@@ -3944,8 +3979,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis is not present"))
+                "Chassis 1 requested power state is on: Chassis is not present"))
             .Times(1);
+        EXPECT_CALL(services, logError).Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 
@@ -4031,8 +4067,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 2 requested power state is on, but chassis is not available"))
+                "Chassis 2 requested power state is on: Chassis is not available"))
             .Times(1);
+        EXPECT_CALL(services, logError).Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 
@@ -4119,8 +4156,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
         EXPECT_CALL(
             services,
             logErrorMsg(
-                "Chassis 1 requested power state is on, but chassis does not have input power"))
+                "Chassis 1 requested power state is on: Chassis does not have input power"))
             .Times(1);
+        EXPECT_CALL(services, logError).Times(1);
         EXPECT_CALL(services, createBMCDump).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 

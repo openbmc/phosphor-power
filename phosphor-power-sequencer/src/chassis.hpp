@@ -30,6 +30,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -88,6 +89,48 @@ class Chassis
 {
   public:
     Chassis() = delete;
+
+    /**
+     * Unexpected chassis statuses during a power on/off.
+     */
+    enum class UnexpectedStatusType
+    {
+        alreadyAtState,
+        notPresent,
+        notEnabled,
+        noInputPower,
+        notAvailable,
+        unknownStatusError
+    };
+
+    /**
+     * Converts the specified UnexpectedStatusType enumeration value to a
+     * string.
+     *
+     * @param type Value in UnexpectedStatusType enumeration
+     * @return string representation of value
+     */
+    static std::string toString(UnexpectedStatusType type)
+    {
+        switch (type)
+        {
+            case UnexpectedStatusType::alreadyAtState:
+                return "Chassis is already at requested state";
+            case UnexpectedStatusType::notPresent:
+                return "Chassis is not present";
+            case UnexpectedStatusType::notEnabled:
+                return "Chassis is not enabled";
+            case UnexpectedStatusType::noInputPower:
+                return "Chassis does not have input power";
+            case UnexpectedStatusType::notAvailable:
+                return "Chassis is not available";
+            case UnexpectedStatusType::unknownStatusError:
+                return "Unable to determine chassis status";
+            default:
+                return "No string defined for UnexpectedStatusType value";
+        }
+    }
+
     Chassis(const Chassis&) = delete;
     Chassis(Chassis&&) = delete;
     Chassis& operator=(const Chassis&) = delete;
@@ -294,11 +337,13 @@ class Chassis
      * Throws an exception if chassis monitoring has not been initialized.
      *
      * @param newPowerState New chassis power state
+     * @param services System services like hardware presence and the journal
      * @return If the state can be set, returns true and an empty string. If the
      *         state cannot be set, returns false and a string containing the
      *         reason.
      */
-    std::tuple<bool, std::string> canSetPowerState(PowerState newPowerState);
+    std::tuple<bool, std::string> canSetPowerState(PowerState newPowerState,
+                                                   Services& services);
 
     /**
      * Sets the requested chassis power state.
@@ -427,9 +472,7 @@ class Chassis
     {
         powerSupplyError.clear();
         powerGoodFault.reset();
-        hasLoggedNotPresent = false;
-        hasLoggedNoInputPower = false;
-        hasLoggedNotAvailable = false;
+        loggedUnexpectedStatusTypes.clear();
     }
 
     /**
@@ -813,7 +856,8 @@ class Chassis
         std::map<std::string, std::string>& additionalData, Services& services);
 
     /**
-     * Checks if the chassis has an invalid status for the current power state.
+     * Checks if the chassis has an unexpected status for the current power
+     * state.
      *
      * If the requested power state is on, then the following statuses are not
      * valid:
@@ -826,31 +870,19 @@ class Chassis
      *
      * @param services System services like hardware presence and the journal
      */
-    void checkForInvalidStatus(Services& services);
+    void checkForUnexpectedStatus(Services& services);
 
     /**
-     * Handles error where requested power state is on but chassis is not
-     * present.
+     * Logs an error due to an unexpected chassis status.
      *
+     * @param unexpectedStatusType Type of unexpected chassis status
+     * @param newPowerState New chassis power state that was requested
      * @param services System services like hardware presence and the journal
+     * @param additionalErrorInfo Additional error information, if any
      */
-    void handleStateOnButNotPresent(Services& services);
-
-    /**
-     * Handles error where requested power state is on but chassis does not have
-     * good input power.
-     *
-     * @param services System services like hardware presence and the journal
-     */
-    void handleStateOnButNoInputPower(Services& services);
-
-    /**
-     * Handles error where requested power state is on but chassis is not
-     * available.
-     *
-     * @param services System services like hardware presence and the journal
-     */
-    void handleStateOnButNotAvailable(Services& services);
+    void logUnexpectedStatusError(UnexpectedStatusType unexpectedStatusType,
+                                  PowerState newPowerState, Services& services,
+                                  const std::string& additionalErrorInfo = "");
 
     /**
      * Chassis number within the system.
@@ -948,22 +980,12 @@ class Chassis
     std::string powerSupplyError{};
 
     /**
-     * Indicates whether an error has been logged because the chassis state was
-     * on but the chassis was not present.
+     * Tracks which unexpected chassis status types have been logged.
+     *
+     * Used to avoid writing repeated messages to the journal and creating
+     * duplicate error logs.
      */
-    bool hasLoggedNotPresent{false};
-
-    /**
-     * Indicates whether an error has been logged because the chassis state was
-     * on but the chassis had no input power.
-     */
-    bool hasLoggedNoInputPower{false};
-
-    /**
-     * Indicates whether an error has been logged because the chassis state was
-     * on but the chassis was not available.
-     */
-    bool hasLoggedNotAvailable{false};
+    std::set<UnexpectedStatusType> loggedUnexpectedStatusTypes{};
 
     /**
      * D-Bus object path for this chassis.
