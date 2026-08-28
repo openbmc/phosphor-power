@@ -17,16 +17,15 @@
 #include "pldm-fetcher.hpp"
 
 #include <libpldm/fru.h>
-#include <libpldm/oem/ibm/fru.h>
 
 #include <format>
 #include <print>
 
 PldmFetcher::PldmFetcher(sdbusplus::bus_t& bus, bool isVerbose, int numChassis,
-                         bool oemIbm, uint8_t mctpEid,
+                         uint8_t mctpEid,
                          const std::map<std::string, bool>& pldmPropMap) :
     pldmPropMap(pldmPropMap), verbose(isVerbose), bus(bus),
-    tid(static_cast<pldm_tid_t>(mctpEid)), oemIbm(oemIbm)
+    tid(static_cast<pldm_tid_t>(mctpEid))
 {
     // Fetch only the PDRs needed for the requested properties
     if (pldmPropMap.at("Available"))
@@ -84,71 +83,36 @@ PldmFetcher::PldmFetcher(sdbusplus::bus_t& bus, bool isVerbose, int numChassis,
     fruRsiEntries = fetchFruRecordSetPDRs();
 
     // One targeted GetFRURecordByOption request per chassis RSI.
-    if (oemIbm)
+    for (const auto& entry : fruRsiEntries)
     {
-        for (const auto& entry : fruRsiEntries)
+        if (fruSerialCache.contains(entry.entityInstance))
         {
-            auto locCode = readPldmFruField(
-                entry.rsi, PLDM_FRU_RECORD_TYPE_OEM,
-                PLDM_OEM_FRU_FIELD_TYPE_LOCATION_CODE, "readPldmLocationCode");
-            if (locCode)
-            {
-                fruLocationCache[entry.entityInstance] = std::move(*locCode);
-            }
+            continue;
         }
-
-        // Match PLDM FRU location codes against D-Bus Inventory location codes
-        // to map chassisNumber → entityInstance.
-        for (const auto& [entityInstance, pldmLocCode] : fruLocationCache)
+        auto serial =
+            readPldmFruField(entry.rsi, PLDM_FRU_RECORD_TYPE_GENERAL,
+                             PLDM_FRU_FIELD_TYPE_SN, "readPldmSerialNumber");
+        if (serial)
         {
-            for (int i = 0; i <= numChassis; ++i)
-            {
-                auto invLocCode = readInventoryProperty(
-                    i, "xyz.openbmc_project.Inventory.Decorator.LocationCode",
-                    "LocationCode");
-                if (invLocCode && !invLocCode->empty() &&
-                    *invLocCode == pldmLocCode)
-                {
-                    chassisToEntityInstance[i] = entityInstance;
-                    break;
-                }
-            }
+            fruSerialCache[entry.entityInstance] = std::move(*serial);
         }
     }
-    else
+
+    for (const auto& [entityInstance, pldmSerial] : fruSerialCache)
     {
-        for (const auto& entry : fruRsiEntries)
+        for (int i = 0; i <= numChassis; ++i)
         {
-            if (fruSerialCache.contains(entry.entityInstance))
+            if (chassisToEntityInstance.contains(i))
             {
                 continue;
             }
-            auto serial = readPldmFruField(
-                entry.rsi, PLDM_FRU_RECORD_TYPE_GENERAL, PLDM_FRU_FIELD_TYPE_SN,
-                "readPldmSerialNumber");
-            if (serial)
+            auto invSerial = readInventoryProperty(
+                i, "xyz.openbmc_project.Inventory.Decorator.Asset",
+                "SerialNumber");
+            if (invSerial && !invSerial->empty() && *invSerial == pldmSerial)
             {
-                fruSerialCache[entry.entityInstance] = std::move(*serial);
-            }
-        }
-
-        for (const auto& [entityInstance, pldmSerial] : fruSerialCache)
-        {
-            for (int i = 0; i <= numChassis; ++i)
-            {
-                if (chassisToEntityInstance.contains(i))
-                {
-                    continue;
-                }
-                auto invSerial = readInventoryProperty(
-                    i, "xyz.openbmc_project.Inventory.Decorator.Asset",
-                    "SerialNumber");
-                if (invSerial && !invSerial->empty() &&
-                    *invSerial == pldmSerial)
-                {
-                    chassisToEntityInstance[i] = entityInstance;
-                    break;
-                }
+                chassisToEntityInstance[i] = entityInstance;
+                break;
             }
         }
     }
@@ -326,7 +290,6 @@ std::vector<PldmFetcher::FruRSIEntry> PldmFetcher::fetchFruRecordSetPDRs()
                              "for recordHandle={}: rc={}",
                              mediumIndent, recordHandle, static_cast<int>(rc));
             }
-            free(responseMsg);
             break;
         }
 
@@ -488,7 +451,6 @@ std::optional<std::string> PldmFetcher::readPldmFruField(
                          "{}{}: MCTP send/recv failed for rsi={}: rc={}",
                          mediumIndent, operation, rsi, static_cast<int>(rc));
         }
-        free(responseMsg);
         return std::nullopt;
     }
 
@@ -736,69 +698,31 @@ void PldmFetcher::display(int chassisNumber) const
         return;
     }
 
-    if (oemIbm)
+    auto invOpt = readInventoryProperty(
+        chassisNumber, "xyz.openbmc_project.Inventory.Decorator.Asset",
+        "SerialNumber");
+    if (invOpt && invOpt->empty())
     {
-        auto invOpt = readInventoryProperty(
-            chassisNumber,
-            "xyz.openbmc_project.Inventory.Decorator.LocationCode",
-            "LocationCode");
-        if (invOpt && invOpt->empty())
-        {
-            invOpt = std::nullopt;
-        }
-
-        if (fruLocationCache.empty() && !invOpt)
-        {
-            return;
-        }
-
-        const auto& invLocCode = invOpt.value_or("Unknown");
-
-        std::string pldmLocCode = "Unknown";
-        for (const auto& [cachedInstance, cachedLocCode] : fruLocationCache)
-        {
-            if (cachedLocCode == invLocCode)
-            {
-                pldmLocCode = cachedLocCode;
-                break;
-            }
-        }
-
-        std::println("{}Location Code (PLDM):      {}", mediumIndent,
-                     pldmLocCode);
-        std::println("{}Location Code (Inventory): {}", mediumIndent,
-                     invLocCode);
+        invOpt = std::nullopt;
     }
-    else
+
+    if (fruSerialCache.empty() && !invOpt)
     {
-        auto invOpt = readInventoryProperty(
-            chassisNumber, "xyz.openbmc_project.Inventory.Decorator.Asset",
-            "SerialNumber");
-        if (invOpt && invOpt->empty())
-        {
-            invOpt = std::nullopt;
-        }
-
-        if (fruSerialCache.empty() && !invOpt)
-        {
-            return;
-        }
-
-        const auto& invSerial = invOpt.value_or("Unknown");
-
-        std::string pldmSerial = "Unknown";
-        for (const auto& [cachedInstance, cachedSerial] : fruSerialCache)
-        {
-            if (cachedSerial == invSerial)
-            {
-                pldmSerial = cachedSerial;
-                break;
-            }
-        }
-
-        std::println("{}Serial Number (PLDM):      {}", mediumIndent,
-                     pldmSerial);
-        std::println("{}Serial Number (Inventory): {}", mediumIndent,
-                     invSerial);
+        return;
     }
+
+    const auto& invSerial = invOpt.value_or("Unknown");
+
+    std::string pldmSerial = "Unknown";
+    for (const auto& [cachedInstance, cachedSerial] : fruSerialCache)
+    {
+        if (cachedSerial == invSerial)
+        {
+            pldmSerial = cachedSerial;
+            break;
+        }
+    }
+
+    std::println("{}Serial Number (PLDM):      {}", mediumIndent, pldmSerial);
+    std::println("{}Serial Number (Inventory): {}", mediumIndent, invSerial);
 }

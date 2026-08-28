@@ -43,12 +43,10 @@ class PldmFetcher
      * @param[in] bus         D-Bus connection for PDR and Inventory queries.
      * @param[in] isVerbose   Enable verbose diagnostic output.
      * @param[in] numChassis  Number of chassis to scan for entity matching.
-     * @param[in] oemIbm      Use IBM OEM location codes for entity matching.
-     *                        When false (default), serial numbers are used.
      * @param[in] mctpEid     MCTP endpoint ID.
      */
     PldmFetcher(sdbusplus::bus_t& bus, bool isVerbose, int numChassis,
-                bool oemIbm = false, uint8_t mctpEid = defaultMctpEid,
+                uint8_t mctpEid = defaultMctpEid,
                 const std::map<std::string, bool>& pldmPropMap = {});
     PldmFetcher(const PldmFetcher&) = delete;
     PldmFetcher& operator=(const PldmFetcher&) = delete;
@@ -175,17 +173,8 @@ class PldmFetcher
     // Cached FRU Record Set PDR entries for chassis entities.
     std::vector<FruRSIEntry> fruRsiEntries;
 
-    // Whether to attempt IBM OEM location-code matching.
-    bool oemIbm;
-
     /**
-     * IBM OEM FRU location codes keyed by entityInstance.
-     * Populated only when oemIbm is true.
-     */
-    std::map<uint16_t, std::string> fruLocationCache;
-
-    /**
-     * Standard FRU serial numbers keyed by entityInstance.
+     * FRU serial numbers keyed by entityInstance.
      */
     std::map<uint16_t, std::string> fruSerialCache;
 

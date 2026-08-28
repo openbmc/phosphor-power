@@ -31,7 +31,8 @@ OPTIONS
 -p <PROPERTY>
     - Display only the specified properties. Valid properties:
       Present, Available, Enabled, PowerState, PowerGood,
-      InputPowerStatus, PowerSupplyStatus
+      InputPowerStatus, PowerSupplyStatus,
+      OperationalFaultStatus (PLDM only)
       If not specified, displays all properties.
 
 -v, --verbose
@@ -44,11 +45,6 @@ OPTIONS
       PDRs from pldmd via D-Bus and sensor values directly over MCTP. PLDM
       properties displayed:
         Availability, Present, Power State, Operational Fault Status
-
---oem-ibm
-    - Use IBM OEM FRU location codes to match PLDM entities to chassis numbers.
-      Must be used with --pldm. When omitted, standard FRU serial numbers are
-      used for matching instead.
 
 -m, --mctp_eid <INT>
     - MCTP endpoint ID. Must be used with --pldm. Defaults to 8.
@@ -191,28 +187,4 @@ PLDM
        sensorID: 8  TID: 8
        Serial Number (PLDM):      ABC123
        Serial Number (Inventory): ABC123
-```
-
-- Display a single chassis with PLDM properties using IBM OEM location code
-  matching, with verbose output showing the matched location codes:
-
-```text
-$ chassis-status-tool -c 1 --pldm --oem-ibm -v
-
-Chassis 1:
-    Present: True
-       Object Path: /xyz/openbmc_project/inventory/system/chassis1
-       Interface: xyz.openbmc_project.Inventory.Item
-    ...
-PLDM
-    Availability: Enabled
-       sensorID: 5  TID: 8
-    Present: Present
-       sensorID: 6  TID: 8
-    Power State: On
-       sensorID: 7  TID: 8
-    Operational Fault Status: Normal
-       sensorID: 8  TID: 8
-       Location Code (PLDM):      U78DA.ND1.1234567
-       Location Code (Inventory): U78DA.ND1.1234567
 ```
