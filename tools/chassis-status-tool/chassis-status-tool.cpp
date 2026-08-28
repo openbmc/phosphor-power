@@ -293,14 +293,14 @@ void display(sdbusplus::bus_t& bus, int chassisNumber,
 void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
                 const std::map<std::string, bool>& propMap,
                 const std::map<std::string, bool>& pldmPropMap, bool isVerbose,
-                bool includePldm, bool oemIbm, uint8_t mctpEid)
+                bool includePldm, uint8_t mctpEid)
 {
     std::unique_ptr<PldmFetcher> pldmFetcher;
     if (includePldm)
     {
         auto pldmScanLimit = (chassisNumber > -1) ? chassisNumber : numChassis;
         pldmFetcher = std::make_unique<PldmFetcher>(
-            bus, isVerbose, pldmScanLimit, oemIbm, mctpEid, pldmPropMap);
+            bus, isVerbose, pldmScanLimit, mctpEid, pldmPropMap);
     }
 
     if (pldmFetcher && !pldmFetcher->isTransportOpen() && isVerbose)
@@ -338,7 +338,6 @@ int main(int argc, char** argv)
     std::vector<std::string> propertyNames;
     auto isVerbose = false;
     auto includePldm = false;
-    auto oemIbm = false;
     uint8_t mctpEid = PldmFetcher::defaultMctpEid;
     std::map<std::string, bool> propMap = {
         {"Present", false},          {"Available", false},
@@ -393,11 +392,6 @@ int main(int argc, char** argv)
     app.add_flag("--pldm", includePldm,
                  "Includes PLDM chassis status properties in output")
         ->expected(0);
-    app.add_flag("--oem-ibm", oemIbm,
-                 "Use IBM OEM FRU location codes to match PLDM entities to "
-                 "chassis. Must be used with --pldm.")
-        ->expected(0)
-        ->needs(app.get_option("--pldm"));
     app.add_option("-m,--mctp_eid", mctpEid,
                    "MCTP endpoint ID. Must be used "
                    "with --pldm. (default: 8)")
@@ -454,7 +448,7 @@ int main(int argc, char** argv)
     if (app.got_subcommand("display") || app.get_subcommands().empty())
     {
         runDisplay(bus, chassisNumber, numChassis, propMap, pldmPropMap,
-                   isVerbose, includePldm, oemIbm, mctpEid);
+                   isVerbose, includePldm, mctpEid);
     }
 
     std::println("");
