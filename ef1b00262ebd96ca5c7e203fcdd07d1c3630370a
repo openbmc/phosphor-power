@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "711eb258_5673ca83",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "This came from me, used for the scenario of coming up after a blackout.",
+      "range": {
+        "startLine": 243,
+        "startChar": 20,
+        "endLine": 244,
+        "endChar": 55
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7dac4c1_fea0e35d",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "For this you just need to check presenceValue, as it will be updated in monitor/handlePresenceChange.",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 25
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b2b15b1_fc09fca9",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "This function is odd to me. Also there is a writeGPIO and a writeAndReleaseGPIO function now in chassis.",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 78
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c692db_81b734af",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "Chassis::setPowerSystemInputsStatus already does this.",
+      "range": {
+        "startLine": 582,
+        "startChar": 5,
+        "endLine": 582,
+        "endChar": 43
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2748aa_a059baac",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "I don\u0027t like this name just because there are two power fault pels: currently missing and previously lost.",
+      "range": {
+        "startLine": 595,
+        "startChar": 14,
+        "endLine": 595,
+        "endChar": 30
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01232fa8_ae70298b",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "This isn\u0027t checking the system power state.",
+      "range": {
+        "startLine": 803,
+        "startChar": 10,
+        "endLine": 803,
+        "endChar": 62
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4114e9b3_9c4afab0",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "would it make sense to pass the event loop through services?",
+      "range": {
+        "startLine": 199,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 73
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35538b5a_684f8141",
+        "filename": "phosphor-chassis-power/src/manager.hpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-08-28T15:40:39Z",
+      "side": 1,
+      "message": "This came from me, it is there for blackout detection, to log an error and write the fault-latched reset gpio under certain condions. R-PCP-1.",
+      "range": {
+        "startLine": 154,
+        "startChar": 2,
+        "endLine": 154,
+        "endChar": 51
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
