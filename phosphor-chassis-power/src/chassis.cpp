@@ -176,7 +176,7 @@ void Chassis::monitor()
                 }
             }
         }
-        else if (name.contains(faultUnlatchedName))
+        else if (name.contains(faultUnlatchedName) && presenceValue)
         {
             bool changed = false;
 
