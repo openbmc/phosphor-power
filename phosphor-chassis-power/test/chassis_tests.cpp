@@ -364,6 +364,7 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
             services.createGPIO("power-chs1-sb-fault-unlatched",
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePresence();
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -392,6 +393,7 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
             services.createGPIO("power-chs1-sb-fault-unlatched",
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePresence();
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -420,6 +422,7 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
             services.createGPIO("power-chs1-sb-fault-unlatched",
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePresence();
 
         chassis.initializePowerSystemInputsInterface(
             PowerSystemInputs::Status::Good);
@@ -508,6 +511,7 @@ TEST_F(ChassisTests, Monitor)
                                 GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        chassis.initializePresence();
 
         // Setup expectations for presence GPIO
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -545,6 +549,27 @@ TEST_F(ChassisTests, Monitor)
         EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
         EXPECT_EQ(chassis.getFaultLatchedValue(), 0);
         EXPECT_EQ(chassis.getFaultUnlatchedValue(), 0);
+    }
+    // Test fault-unlatched GPIO is ignored when chassis is not present
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+
+        // Add fault-unlatched GPIO only; presenceValue defualts to false
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-unlatched",
+                                GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        // requestRead should not be called when chassis is not present
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead()).Times(0);
+
+        chassis.monitor();
+
+        EXPECT_EQ(chassis.getFaultUnlatchedValue(), std::nullopt);
     }
 }
 
