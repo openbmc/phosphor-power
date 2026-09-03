@@ -92,6 +92,13 @@ std::tuple<bool, std::string> Chassis::canSetPowerState(
             unexpectedStatusType = UnexpectedStatusType::noInputPower;
             logError = (newPowerState == PowerState::on);
         }
+        // Check for brownout (PSU power not good). Only a concern for power on.
+        else if (!isPowerSuppliesPowerGood() &&
+                 (newPowerState == PowerState::on))
+        {
+            unexpectedStatusType = UnexpectedStatusType::psuPowerNotGood;
+            logError = true;
+        }
         // Check Available last. This D-Bus property is based on a list of
         // factors including some of the preceding properties.
         else if (!isAvailable())

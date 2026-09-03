@@ -181,6 +181,20 @@ void setChassisStatusToGoodExceptIsInputPowerGood(System& system, int i)
 }
 
 /**
+ * Sets up the MockChassisStatusMonitor for the specified Chassis to repeatedly
+ * return good status for all properties except isPowerSuppliesPowerGood.
+ *
+ * Throws an exception if initializeMonitoring() has not been called.
+ *
+ * @param system System object
+ * @param i Index of chassis
+ */
+void setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(System& system, int i)
+{
+    setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(getChassis(system, i));
+}
+
+/**
  * Returns the MockDevice for the Chassis object at the specified index within
  * the system's vector of Chassis.
  *
@@ -497,6 +511,70 @@ TEST(SystemTests, SetPowerState)
             {"NEW_POWER_STATE", "on"}};
         EXPECT_CALL(services, logError(error, Entry::Level::Informational,
                                        additionalData))
+            .Times(1);
+
+        system.setPowerState(PowerState::on, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::runtime_error& e)
+    {
+        EXPECT_STREQ(
+            e.what(),
+            "Unable to set system to state on: No chassis can be set to that state");
+    }
+
+    // Test where fails: Brownout on all chassis (PSU power not good): No
+    // chassis can be set to on
+    try
+    {
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        chassis.emplace_back(
+            createChassis(1, "/xyz/openbmc_project/inventory/system/chassis1"));
+        chassis.emplace_back(
+            createChassis(2, "/xyz/openbmc_project/inventory/system/chassis2"));
+        System system{std::move(chassis)};
+        MockServices services;
+
+        setDelaysToZero(system);
+        system.initializeMonitoring(services);
+        {
+            setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(system, 0);
+            auto& monitor = getMockStatusMonitor(system, 0);
+            EXPECT_CALL(monitor, isPowerSuppliesPowerGood)
+                .WillOnce(Return(false));
+        }
+        {
+            setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(system, 1);
+            auto& monitor = getMockStatusMonitor(system, 1);
+            EXPECT_CALL(monitor, isPowerSuppliesPowerGood)
+                .WillOnce(Return(false));
+        }
+        EXPECT_CALL(services,
+                    logInfoMsg(
+                        "Unable to set chassis 1 to state on: Chassis is "
+                        "experiencing a brownout"));
+        EXPECT_CALL(services,
+                    logInfoMsg(
+                        "Unable to set chassis 2 to state on: Chassis is "
+                        "experiencing a brownout"));
+
+        std::string error{
+            "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus"};
+        std::map<std::string, std::string> additionalData1{
+            {"CHASSIS_NUMBER", "1"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is experiencing a brownout"},
+            {"POWER_STATE", "Unknown"},
+            {"NEW_POWER_STATE", "on"}};
+        std::map<std::string, std::string> additionalData2{
+            {"CHASSIS_NUMBER", "2"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is experiencing a brownout"},
+            {"POWER_STATE", "Unknown"},
+            {"NEW_POWER_STATE", "on"}};
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData1))
+            .Times(1);
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData2))
             .Times(1);
 
         system.setPowerState(PowerState::on, services);
