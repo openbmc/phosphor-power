@@ -100,6 +100,7 @@ class Chassis
         notEnabled,
         noInputPower,
         notAvailable,
+        psuPowerNotGood,
         unknownStatusError
     };
 
@@ -124,6 +125,8 @@ class Chassis
                 return "Chassis does not have input power";
             case UnexpectedStatusType::notAvailable:
                 return "Chassis is not available";
+            case UnexpectedStatusType::psuPowerNotGood:
+                return "Chassis is experiencing a brownout";
             case UnexpectedStatusType::unknownStatusError:
                 return "Unable to determine chassis status";
             default:

@@ -101,4 +101,12 @@ void setChassisStatusToGoodExceptIsInputPowerGood(Chassis& chassis);
  */
 void setChassisStatusToGoodExceptIsPresent(Chassis& chassis);
 
+/**
+ * Sets up the MockChassisStatusMonitor to repeatedly return good status for all
+ * D-Bus properties except isPowerSuppliesPowerGood.
+ *
+ * @param chassis Chassis object
+ */
+void setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(Chassis& chassis);
+
 } // namespace phosphor::power::sequencer::test_utils

@@ -53,6 +53,7 @@ void setChassisStatusToGood(Chassis& chassis)
     EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillRepeatedly(Return(true));
 }
 
 void setChassisStatusToGoodExceptIsAvailable(Chassis& chassis)
@@ -61,6 +62,7 @@ void setChassisStatusToGoodExceptIsAvailable(Chassis& chassis)
     EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillRepeatedly(Return(true));
 }
 
 void setChassisStatusToGoodExceptIsEnabled(Chassis& chassis)
@@ -69,6 +71,7 @@ void setChassisStatusToGoodExceptIsEnabled(Chassis& chassis)
     EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillRepeatedly(Return(true));
 }
 
 void setChassisStatusToGoodExceptIsInputPowerGood(Chassis& chassis)
@@ -77,6 +80,7 @@ void setChassisStatusToGoodExceptIsInputPowerGood(Chassis& chassis)
     EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillRepeatedly(Return(true));
 }
 
 void setChassisStatusToGoodExceptIsPresent(Chassis& chassis)
@@ -85,6 +89,16 @@ void setChassisStatusToGoodExceptIsPresent(Chassis& chassis)
     EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
     EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillRepeatedly(Return(true));
+}
+
+void setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(Chassis& chassis)
+{
+    auto& monitor = getMockStatusMonitor(chassis);
+    EXPECT_CALL(monitor, isAvailable).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isInputPowerGood).WillRepeatedly(Return(true));
+    EXPECT_CALL(monitor, isPresent).WillRepeatedly(Return(true));
 }
 
 } // namespace phosphor::power::sequencer::test_utils
