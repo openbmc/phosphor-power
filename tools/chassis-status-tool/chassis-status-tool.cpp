@@ -22,42 +22,64 @@
 
 #include <memory>
 #include <print>
+#include <unordered_set>
 
 constexpr auto numProperties = 8;
 constexpr auto smallIndent = "    ";
 constexpr auto largeIndent = "       ";
 
 /**
- * Get the number of chassis defined in the system by querying D-Bus.
+ * Get the highest chassis number defined in the system by querying the
+ * object mapper for objects implementing the Chassis inventory interface.
  *
  * @param bus D-Bus bus object
- * @return number of chassis on the systems
+ * @return highest chassis number on the system, or -1 on failure
  */
 int getChassisCount(sdbusplus::bus_t& bus, bool isVerbose)
 {
-    auto service = "xyz.openbmc_project.Power.Chassis";
-    auto objectPath = "/xyz/openbmc_project/power/chassis";
-    auto interfacePath = "org.freedesktop.DBus.Introspectable";
     try
     {
-        auto method = bus.new_method_call(service, objectPath, interfacePath,
-                                          "Introspect");
-        auto reply = bus.call(method);
-        std::string introspectXml;
-        reply.read(introspectXml);
+        auto paths = phosphor::power::util::getChassisInventoryPaths(bus);
 
-        int count = 0;
-        size_t pos = 0;
-        while ((pos = introspectXml.find("<node name=\"chassis", pos)) !=
-               std::string::npos)
+        static const std::unordered_set<std::string> validTypes = {
+            "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.RackMount",
+            "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.StandAlone",
+            "xyz.openbmc_project.Inventory.Item.Chassis.ChassisType.Blade"};
+
+        int maxChassisNum = -1;
+        for (const auto& path : paths)
         {
-            count++;
-            pos++;
+            std::string type;
+            try
+            {
+                phosphor::power::util::getProperty(
+                    "xyz.openbmc_project.Inventory.Item.Chassis", "Type", path,
+                    "xyz.openbmc_project.Inventory.Manager", bus, type);
+                if (validTypes.contains(type))
+                {
+                    auto pos = path.rfind("chassis");
+                    if (pos != std::string::npos)
+                    {
+                        int num =
+                            std::stoi(path.substr(pos + strlen("chassis")));
+                        maxChassisNum = std::max(maxChassisNum, num);
+                    }
+                }
+            }
+            catch (const std::exception& e)
+            {
+                if (isVerbose)
+                {
+                    std::println(stderr,
+                                 "Warning: Failed to get type for {}: {}", path,
+                                 e.what());
+                }
+            }
         }
 
-        if (count > 0)
+        if (maxChassisNum >= 0)
         {
-            return count;
+            return maxChassisNum;
         }
     }
     catch (const std::exception& e)
