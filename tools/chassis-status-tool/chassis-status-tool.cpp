@@ -27,50 +27,6 @@ constexpr auto numProperties = 8;
 constexpr auto smallIndent = "    ";
 constexpr auto largeIndent = "       ";
 
-/**
- * Get the number of chassis defined in the system by querying D-Bus.
- *
- * @param bus D-Bus bus object
- * @return number of chassis on the systems
- */
-int getChassisCount(sdbusplus::bus_t& bus, bool isVerbose)
-{
-    auto service = "xyz.openbmc_project.Power.Chassis";
-    auto objectPath = "/xyz/openbmc_project/power/chassis";
-    auto interfacePath = "org.freedesktop.DBus.Introspectable";
-    try
-    {
-        auto method = bus.new_method_call(service, objectPath, interfacePath,
-                                          "Introspect");
-        auto reply = bus.call(method);
-        std::string introspectXml;
-        reply.read(introspectXml);
-
-        int count = 0;
-        size_t pos = 0;
-        while ((pos = introspectXml.find("<node name=\"chassis", pos)) !=
-               std::string::npos)
-        {
-            count++;
-            pos++;
-        }
-
-        if (count > 0)
-        {
-            return count;
-        }
-    }
-    catch (const std::exception& e)
-    {
-        if (isVerbose)
-        {
-            std::println(stderr, "Warning: Failed to get chassis count: {}",
-                         e.what());
-        }
-    }
-    return -1;
-}
-
 void display(sdbusplus::bus_t& bus, int chassisNumber,
              const std::map<std::string, bool>& propMap, bool isVerbose)
 {
@@ -405,7 +361,7 @@ int main(int argc, char** argv)
     // Only find the chassis count if -c and -n options are not used
     if (numChassis == -1 && chassisNumber == -1)
     {
-        numChassis = getChassisCount(bus, isVerbose);
+        numChassis = phosphor::power::util::getSystemChassisCount(bus);
     }
 
     // If no properties specified, show all
