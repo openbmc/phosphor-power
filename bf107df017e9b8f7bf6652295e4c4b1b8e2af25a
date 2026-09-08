@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8147f28f_4d594882",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-09-08T19:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1882f900_c36543aa",
+      "revId": "bf107df017e9b8f7bf6652295e4c4b1b8e2af25a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d28a8dd5_6402c3a2",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-09-08T14:31:02Z",
       "side": 1,
       "message": "Nit: spelling",
+      "range": {
+        "startLine": 558,
+        "startChar": 56,
+        "endLine": 558,
+        "endChar": 65
+      },
+      "revId": "bf107df017e9b8f7bf6652295e4c4b1b8e2af25a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "587ecb4e_be554dfd",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-09-08T19:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d28a8dd5_6402c3a2",
       "range": {
         "startLine": 558,
         "startChar": 56,
