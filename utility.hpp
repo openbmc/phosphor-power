@@ -249,6 +249,19 @@ std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus);
 bool isMultiChassis(sdbusplus::bus_t& bus);
 
 /**
+ * @brief Returns the number of system chassis.
+ *
+ * Counts inventory items whose ChassisType is Blade, RackMount, or
+ * StandAlone.
+ *
+ * @param[in] bus - D-Bus object
+ *
+ * @return Number of system chassis. Returns 0 if none are found or
+ *         if the inventory cannot be queried.
+ */
+int getSystemChassisCount(sdbusplus::bus_t& bus);
+
+/**
  * @brief Retrieve the chassis Position ID for the given D-Bus inventory path.
  * Query the D-Bus interface for inventory object path and retrieve its Position
  * ID (ID specified by SlotNumber)

@@ -227,6 +227,11 @@ std::vector<std::string> getChassisInventoryPaths(sdbusplus::bus_t& bus)
 
 bool isMultiChassis(sdbusplus::bus_t& bus)
 {
+    return (getSystemChassisCount(bus) > 1) ? true : false;
+}
+
+int getSystemChassisCount(sdbusplus::bus_t& bus)
+{
     auto paths = getChassisInventoryPaths(bus);
 
     static const std::unordered_set<std::string> validTypes = {
@@ -252,7 +257,7 @@ bool isMultiChassis(sdbusplus::bus_t& bus)
         }
     }
 
-    return (count > 1) ? true : false;
+    return count;
 }
 
 uint64_t getChassisInventoryPositionId(sdbusplus::bus_t& bus,
