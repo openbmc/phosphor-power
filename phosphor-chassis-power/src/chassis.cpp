@@ -436,6 +436,10 @@ void Chassis::handlePresenceChange(bool readFailure)
             }
 
             // Callout the specific chassis that went missing
+            data["CALLOUT_DEVICE_PATH"] =
+                std::string(INVENTORY_OBJ_PATH) + "/system/chassis" +
+                std::to_string(number);
+
             services.logError(
                 "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
                 Entry::Level::Error, data);
@@ -459,6 +463,9 @@ void Chassis::handlePresenceChange(bool readFailure)
             }
 
             // Callout the system
+            data["CALLOUT_DEVICE_PATH"] =
+                std::string(INVENTORY_OBJ_PATH) + "/system/chassis0";
+
             services.logError(
                 "xyz.openbmc_project.Power.Chassis.PresentDetection.Incorrect",
                 Entry::Level::Error, data);
