@@ -537,6 +537,34 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the average input power value if there is one,
+     *        otherwise std::nullopt.
+     */
+    std::optional<double> getAvgInputPower() const
+    {
+        std::optional<double> value;
+        if (avgInputPowerSensor)
+        {
+            value = avgInputPowerSensor->value();
+        }
+        return value;
+    }
+
+    /**
+     * @brief Returns the output capacity (MFR_POUT_MAX) value if there is one,
+     *        otherwise std::nullopt.
+     */
+    std::optional<double> getOutputCapacity() const
+    {
+        std::optional<double> value;
+        if (outputCapacitySensor)
+        {
+            value = outputCapacitySensor->value();
+        }
+        return value;
+    }
+
+    /**
      * @brief Converts a Linear Format power number to an integer
      *
      * The PMBus spec describes a 2 byte Linear Format
@@ -779,9 +807,22 @@ class PowerSupply
     void setupInputPowerPeakSensor();
 
     /**
-     * @brief Monitors the peak input power sensor
+     * @brief Creates the average input power sensor D-Bus object
+     *        if the PS supports it.
      */
-    void monitorPeakInputPowerSensor();
+    void setupAvgInputPowerSensor();
+
+    /**
+     * @brief Creates the output capacity sensor D-Bus object once the PSU
+     *        is present and MFR_POUT_MAX can be read.
+     */
+    void setupOutputCapacitySensor();
+
+    /**
+     * @brief Monitors the peak input power sensor and the
+     *        average input power sensors 
+     */
+    void monitorInputHistorySensors();
 
     /**
      * @brief Sets any sensor objects to Available = false on D-Bus.
@@ -1071,6 +1112,16 @@ class PowerSupply
      * @brief The D-Bus object for the peak input power sensor.
      */
     std::unique_ptr<PowerSensorObject> peakInputPowerSensor;
+
+    /**
+     * @brief The D-Bus object for the 30 s rolling average input power sensor.
+     */
+    std::unique_ptr<PowerSensorObject> avgInputPowerSensor;
+
+    /**
+     * @brief The D-Bus object for the output capacity (MFR_POUT_MAX) sensor.
+     */
+    std::unique_ptr<PowerSensorObject> outputCapacitySensor;
 
     /**
      * @brief The device driver name

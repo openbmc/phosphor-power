@@ -1110,6 +1110,8 @@ auto PowerSupply::getMaxPowerOut() const
 void PowerSupply::setupSensors()
 {
     setupInputPowerPeakSensor();
+    setupAvgInputPowerSensor();
+    setupOutputCapacitySensor();
 }
 
 void PowerSupply::setupInputPowerPeakSensor()
@@ -1155,6 +1157,88 @@ void PowerSupply::setupInputPowerPeakSensor()
     peakInputPowerSensor->emit_object_added();
 }
 
+void PowerSupply::setupAvgInputPowerSensor()
+{
+    if (avgInputPowerSensor || !present ||
+        (bindPath.string().find(IBMCFFPS_DD_NAME) == std::string::npos))
+    {
+        return;
+    }
+
+    // This PSU has problems with the input_history command
+    if (getMaxPowerOut() == phosphor::pmbus::IBM_CFFPS_1400W)
+    {
+        return;
+    }
+
+    std::string sensorPath = "/xyz/openbmc_project/sensors/power/";
+    if (isMultiChassis)
+    {
+        sensorPath = std::format("{}{}_ps{}_input_power_average", sensorPath,
+                                 chassisName, shortName.back());
+    }
+    else
+    {
+        sensorPath = std::format("{}ps{}_input_power_average", sensorPath,
+                                 shortName.back());
+    }
+
+    avgInputPowerSensor = std::make_unique<PowerSensorObject>(
+        bus, sensorPath.c_str(), PowerSensorObject::action::defer_emit);
+
+    avgInputPowerSensor->functional(true, true);
+    avgInputPowerSensor->available(true, true);
+    avgInputPowerSensor->value(0, true);
+    avgInputPowerSensor->unit(
+        sdbusplus::xyz::openbmc_project::Sensor::server::Value::Unit::Watts,
+        true);
+
+    auto associations = getSensorAssociations();
+    avgInputPowerSensor->associations(associations, true);
+
+    avgInputPowerSensor->emit_object_added();
+}
+
+void PowerSupply::setupOutputCapacitySensor()
+{
+    if (outputCapacitySensor || !present ||
+        (bindPath.string().find(IBMCFFPS_DD_NAME) == std::string::npos))
+    {
+        return;
+    }
+
+    auto maxPowerOut = getMaxPowerOut();
+    if (maxPowerOut == 0)
+    {
+        return;
+    }
+
+    std::string sensorPath = "/xyz/openbmc_project/sensors/power/";
+    if (isMultiChassis)
+    {
+        sensorPath = std::format("{}{}_ps{}_output_capacity", sensorPath,
+                                 chassisName, shortName.back());
+    }
+    else
+    {
+        sensorPath =
+            std::format("{}ps{}_output_capacity", sensorPath, shortName.back());
+    }
+
+    outputCapacitySensor = std::make_unique<PowerSensorObject>(
+        bus, sensorPath.c_str(), PowerSensorObject::action::defer_emit);
+
+    outputCapacitySensor->functional(true, true);
+    outputCapacitySensor->available(true, true);
+    outputCapacitySensor->unit(SensorInterface::Unit::Watts, true);
+    outputCapacitySensor->value(maxPowerOut, true);
+
+    auto associations = getSensorAssociations();
+    outputCapacitySensor->associations(associations, true);
+
+    outputCapacitySensor->emit_object_added();
+}
+
 void PowerSupply::setSensorsNotAvailable()
 {
     if (peakInputPowerSensor)
@@ -1162,14 +1246,23 @@ void PowerSupply::setSensorsNotAvailable()
         peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
         peakInputPowerSensor->available(false);
     }
+    if (avgInputPowerSensor)
+    {
+        avgInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
+        avgInputPowerSensor->available(false);
+    }
+    if (outputCapacitySensor)
+    {
+        outputCapacitySensor->available(false);
+    }
 }
 
 void PowerSupply::monitorSensors()
 {
-    monitorPeakInputPowerSensor();
+    monitorInputHistorySensors();
 }
 
-void PowerSupply::monitorPeakInputPowerSensor()
+void PowerSupply::monitorInputHistorySensors()
 {
     if (!peakInputPowerSensor)
     {
@@ -1208,12 +1301,19 @@ void PowerSupply::monitorPeakInputPowerSensor()
     //   SS = packet sequence number
     //   AAAA = average power (linear format, little endian)
     //   PPPP = peak power (linear format, little endian)
+    auto avg = static_cast<uint16_t>(data[2]) << 8 | data[1];
+    auto avgPower = linearToInteger(avg);
+
     auto peak = static_cast<uint16_t>(data[4]) << 8 | data[3];
     auto peakPower = linearToInteger(peak);
 
     peakInputPowerSensor->value(peakPower);
     peakInputPowerSensor->functional(true);
     peakInputPowerSensor->available(true);
+
+    avgInputPowerSensor->value(avgPower);
+    avgInputPowerSensor->functional(true);
+    avgInputPowerSensor->available(true);
 }
 
 void PowerSupply::getInputVoltage(double& actualInputVoltage,
