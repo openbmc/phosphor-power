@@ -537,6 +537,20 @@ class PowerSupply
     }
 
     /**
+     * @brief Returns the max output power (MFR_POUT_MAX) value if there is one,
+     *        otherwise std::nullopt.
+     */
+    std::optional<double> getOutputPowerMax() const
+    {
+        std::optional<double> value;
+        if (outputPowerMaxSensor)
+        {
+            value = outputPowerMaxSensor->value();
+        }
+        return value;
+    }
+
+    /**
      * @brief Converts a Linear Format power number to an integer
      *
      * The PMBus spec describes a 2 byte Linear Format
@@ -779,9 +793,15 @@ class PowerSupply
     void setupInputPowerPeakSensor();
 
     /**
+     * @brief Creates the max output power sensor D-Bus object once the PSU
+     *        is present and MFR_POUT_MAX can be read.
+     */
+    void setupOutputPowerMaxSensor();
+
+    /**
      * @brief Monitors the peak input power sensor
      */
-    void monitorPeakInputPowerSensor();
+    void monitorInputHistorySensors();
 
     /**
      * @brief Sets any sensor objects to Available = false on D-Bus.
@@ -1071,6 +1091,11 @@ class PowerSupply
      * @brief The D-Bus object for the peak input power sensor.
      */
     std::unique_ptr<PowerSensorObject> peakInputPowerSensor;
+
+    /**
+     * @brief The D-Bus object for the max output power (MFR_POUT_MAX) sensor.
+     */
+    std::unique_ptr<PowerSensorObject> outputPowerMaxSensor;
 
     /**
      * @brief The device driver name

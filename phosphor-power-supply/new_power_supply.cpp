@@ -1110,6 +1110,7 @@ auto PowerSupply::getMaxPowerOut() const
 void PowerSupply::setupSensors()
 {
     setupInputPowerPeakSensor();
+    setupOutputPowerMaxSensor();
 }
 
 void PowerSupply::setupInputPowerPeakSensor()
@@ -1155,6 +1156,46 @@ void PowerSupply::setupInputPowerPeakSensor()
     peakInputPowerSensor->emit_object_added();
 }
 
+void PowerSupply::setupOutputPowerMaxSensor()
+{
+    if (outputPowerMaxSensor || !present ||
+        (bindPath.string().find(IBMCFFPS_DD_NAME) == std::string::npos))
+    {
+        return;
+    }
+
+    auto maxPowerOut = getMaxPowerOut();
+    if (maxPowerOut == 0)
+    {
+        return;
+    }
+
+    std::string sensorPath = "/xyz/openbmc_project/sensors/power/";
+    if (isMultiChassis)
+    {
+        sensorPath = std::format("{}{}_ps{}_output_power_max", sensorPath,
+                                 chassisName, shortName.back());
+    }
+    else
+    {
+        sensorPath = std::format("{}ps{}_output_power_max", sensorPath,
+                                 shortName.back());
+    }
+
+    outputPowerMaxSensor = std::make_unique<PowerSensorObject>(
+        bus, sensorPath.c_str(), PowerSensorObject::action::defer_emit);
+
+    outputPowerMaxSensor->functional(true, true);
+    outputPowerMaxSensor->available(true, true);
+    outputPowerMaxSensor->unit(SensorInterface::Unit::Watts, true);
+    outputPowerMaxSensor->value(maxPowerOut, true);
+
+    auto associations = getSensorAssociations();
+    outputPowerMaxSensor->associations(associations, true);
+
+    outputPowerMaxSensor->emit_object_added();
+}
+
 void PowerSupply::setSensorsNotAvailable()
 {
     if (peakInputPowerSensor)
@@ -1162,14 +1203,18 @@ void PowerSupply::setSensorsNotAvailable()
         peakInputPowerSensor->value(std::numeric_limits<double>::quiet_NaN());
         peakInputPowerSensor->available(false);
     }
+    if (outputPowerMaxSensor)
+    {
+        outputPowerMaxSensor->available(false);
+    }
 }
 
 void PowerSupply::monitorSensors()
 {
-    monitorPeakInputPowerSensor();
+    monitorInputHistorySensors();
 }
 
-void PowerSupply::monitorPeakInputPowerSensor()
+void PowerSupply::monitorInputHistorySensors()
 {
     if (!peakInputPowerSensor)
     {
