@@ -948,10 +948,11 @@ void PowerSupply::updateInventory()
     const auto ACBEL_FSG032_FW_VERSION_SIZE = 6;
 
     using PropertyMap =
-        std::map<std::string,
-                 std::variant<std::string, std::vector<uint8_t>, bool>>;
+        std::map<std::string, std::variant<std::string, std::vector<uint8_t>,
+                                           bool, uint64_t>>;
     PropertyMap assetProps;
     PropertyMap operProps;
+    PropertyMap powerAttrsProps;
     PropertyMap versionProps;
     PropertyMap ipzvpdDINFProps;
     PropertyMap ipzvpdVINIProps;
@@ -1032,7 +1033,10 @@ void PowerSupply::updateInventory()
         // Populate the DINF Resource Type (RT) keyword
         ipzvpdDINFProps.emplace("RT", std::vector<uint8_t>{'D', 'I', 'N', 'F'});
 
+        powerAttrsProps.emplace(POWER_CAPACITY_PROP, getMaxPowerOut());
+
         interfaces.emplace(ASSET_IFACE, std::move(assetProps));
+        interfaces.emplace(POWER_ATTRS_IFACE, std::move(powerAttrsProps));
         interfaces.emplace(VERSION_IFACE, std::move(versionProps));
         interfaces.emplace(DINF_IFACE, std::move(ipzvpdDINFProps));
         interfaces.emplace(VINI_IFACE, std::move(ipzvpdVINIProps));
@@ -1076,11 +1080,9 @@ void PowerSupply::updateInventory()
     }
 }
 
-auto PowerSupply::getMaxPowerOut() const
+uint64_t PowerSupply::getMaxPowerOut() const
 {
     using namespace phosphor::pmbus;
-
-    auto maxPowerOut = 0;
 
     if (present)
     {
@@ -1093,7 +1095,7 @@ auto PowerSupply::getMaxPowerOut() const
                 "{CHASSIS_NAME}: {SHORT_NAME} MFR_POUT_MAX read {MAX_POWER_OUT_STR}",
                 "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
                 "MAX_POWER_OUT_STR", maxPowerOutStr);
-            maxPowerOut = std::stod(maxPowerOutStr);
+            return static_cast<uint64_t>(std::stod(maxPowerOutStr));
         }
         catch (const std::exception& e)
         {
@@ -1104,7 +1106,7 @@ auto PowerSupply::getMaxPowerOut() const
         }
     }
 
-    return maxPowerOut;
+    return std::numeric_limits<uint64_t>::max();
 }
 
 void PowerSupply::setupSensors()

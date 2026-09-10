@@ -33,6 +33,9 @@ constexpr auto PN_PROP = "PartNumber";
 constexpr auto SPARE_PN_PROP = "SparePartNumber";
 constexpr auto SN_PROP = "SerialNumber";
 constexpr auto VERSION_PROP = "Version";
+constexpr auto POWER_CAPACITY_PROP = "PowerCapacityWatts";
+constexpr auto POWER_ATTRS_IFACE =
+    "xyz.openbmc_project.Inventory.Decorator.PowerAttributes";
 
 // ipzVPD Keyword sizes
 static constexpr auto FL_KW_SIZE = 20;
@@ -732,7 +735,7 @@ class PowerSupply
      *
      * @return max_power_out value converted from string.
      */
-    auto getMaxPowerOut() const;
+    uint64_t getMaxPowerOut() const;
 
     /**
      * @brief Reads a VPD value from PMBus, correct size, and contents.
