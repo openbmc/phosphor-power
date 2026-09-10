@@ -948,10 +948,11 @@ void PowerSupply::updateInventory()
     const auto ACBEL_FSG032_FW_VERSION_SIZE = 6;
 
     using PropertyMap =
-        std::map<std::string,
-                 std::variant<std::string, std::vector<uint8_t>, bool>>;
+        std::map<std::string, std::variant<std::string, std::vector<uint8_t>,
+                                           bool, uint64_t>>;
     PropertyMap assetProps;
     PropertyMap operProps;
+    PropertyMap psuProps;
     PropertyMap versionProps;
     PropertyMap ipzvpdDINFProps;
     PropertyMap ipzvpdVINIProps;
@@ -1032,7 +1033,12 @@ void PowerSupply::updateInventory()
         // Populate the DINF Resource Type (RT) keyword
         ipzvpdDINFProps.emplace("RT", std::vector<uint8_t>{'D', 'I', 'N', 'F'});
 
+        auto maxPowerOut = getMaxPowerOut();
+        psuProps.emplace(POWER_CAPACITY_PROP,
+                         static_cast<uint64_t>(maxPowerOut));
+
         interfaces.emplace(ASSET_IFACE, std::move(assetProps));
+        interfaces.emplace(PSU_INVENTORY_IFACE, std::move(psuProps));
         interfaces.emplace(VERSION_IFACE, std::move(versionProps));
         interfaces.emplace(DINF_IFACE, std::move(ipzvpdDINFProps));
         interfaces.emplace(VINI_IFACE, std::move(ipzvpdVINIProps));
@@ -1076,11 +1082,11 @@ void PowerSupply::updateInventory()
     }
 }
 
-auto PowerSupply::getMaxPowerOut() const
+double PowerSupply::getMaxPowerOut() const
 {
     using namespace phosphor::pmbus;
 
-    auto maxPowerOut = 0;
+    double maxPowerOut = 0.0;
 
     if (present)
     {
