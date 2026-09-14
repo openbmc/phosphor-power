@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bff9877_87ff8cd7",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-09-14T21:08:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you want here.\n\nDid you mean to use CALLOUT_INVENTORY_PATH?\n\nCALLOUT_DEVICE_PATH is used with sysfs paths representing hardware devices (like a fan/PSU/etc.). It is used with an errno. The system information is used to automatically generate the appropriate callouts.\n\nCALLOUT_INVENTORY_PATH is when you just want to call out one inventory item.\n\nIn this case, I\u0027m not sure if you only want to call out the chassis, or if there are other system components that could be at fault.\n\nSame comment applies below. Also, if you are going to use the inventory path, you used probably get it from D-Bus and then store it in this Chassis object vs. building it on the fly. This code assumes a specific D-Bus path naming scheme, which we probably don\u0027t want to assume.\n\nSee the following for more information:\n\nhttps://github.com/openbmc/phosphor-logging/blob/master/extensions/openpower-pels/README.md#passing-callouts-in-with-the-additionaldata-property",
+      "revId": "021995fda34d39a07be1686f7a1fc8fcf3bd161c",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
