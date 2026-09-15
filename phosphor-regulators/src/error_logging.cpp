@@ -18,17 +18,11 @@
 
 #include "exception_utils.hpp"
 
-#include <errno.h>     // for errno
-#include <string.h>    // for strerror()
-#include <sys/types.h> // for getpid(), lseek(), ssize_t
-#include <unistd.h>    // for getpid(), lseek(), write()
-
-#include <sdbusplus/message.hpp>
+#include <sys/types.h> // for getpid()
+#include <unistd.h>    // for getpid()
 
 #include <exception>
-#include <ios>
 #include <sstream>
-#include <stdexcept>
 
 namespace phosphor::power::regulators
 {
@@ -117,94 +111,6 @@ void DBusErrorLogging::logWriteVerificationError(
              severity, additionalData, journal);
 }
 
-FFDCFile DBusErrorLogging::createFFDCFile(const std::vector<std::string>& lines)
-{
-    // Create FFDC file of type Text
-    FFDCFile file{FFDCFormat::Text};
-    int fd = file.getFileDescriptor();
-
-    // Write lines to file
-    std::string buffer;
-    for (const std::string& line : lines)
-    {
-        // Copy line to buffer.  Add newline if necessary.
-        buffer = line;
-        if (line.empty() || (line.back() != '\n'))
-        {
-            buffer += '\n';
-        }
-
-        // Write buffer to file
-        const char* bufPtr = buffer.c_str();
-        unsigned int count = buffer.size();
-        while (count > 0)
-        {
-            // Try to write remaining bytes; it might not write all of them
-            ssize_t bytesWritten = write(fd, bufPtr, count);
-            if (bytesWritten == -1)
-            {
-                throw std::runtime_error{
-                    std::string{"Unable to write to FFDC file: "} +
-                    strerror(errno)};
-            }
-            bufPtr += bytesWritten;
-            count -= bytesWritten;
-        }
-    }
-
-    // Seek to beginning of file so error logging system can read data
-    if (lseek(fd, 0, SEEK_SET) != 0)
-    {
-        throw std::runtime_error{
-            std::string{"Unable to seek within FFDC file: "} + strerror(errno)};
-    }
-
-    return file;
-}
-
-std::vector<FFDCFile> DBusErrorLogging::createFFDCFiles(Journal& journal)
-{
-    std::vector<FFDCFile> files{};
-
-    // Create FFDC files containing journal messages from relevant executables.
-    // Executables in priority order in case error log cannot hold all the FFDC.
-    std::vector<std::string> executables{"phosphor-regulators", "systemd"};
-    for (const std::string& executable : executables)
-    {
-        try
-        {
-            // Get recent journal messages from the executable
-            std::vector<std::string> messages =
-                journal.getMessages("SYSLOG_IDENTIFIER", executable, 30);
-
-            // Create FFDC file containing the journal messages
-            if (!messages.empty())
-            {
-                files.emplace_back(createFFDCFile(messages));
-            }
-        }
-        catch (const std::exception& e)
-        {
-            journal.logError(exception_utils::getMessages(e));
-        }
-    }
-
-    return files;
-}
-
-std::vector<FFDCTuple> DBusErrorLogging::createFFDCTuples(
-    std::vector<FFDCFile>& files)
-{
-    std::vector<FFDCTuple> ffdcTuples{};
-    for (FFDCFile& file : files)
-    {
-        ffdcTuples.emplace_back(
-            file.getFormat(), file.getSubType(), file.getVersion(),
-            sdbusplus::message::unix_fd(file.getFileDescriptor()));
-    }
-    return ffdcTuples;
-}
-
 void DBusErrorLogging::logError(
     const std::string& message, Entry::Level severity,
     std::map<std::string, std::string>& additionalData, Journal& journal)
@@ -214,51 +120,18 @@ void DBusErrorLogging::logError(
         // Add PID to AdditionalData
         additionalData.emplace("_PID", std::to_string(getpid()));
 
-        // Create FFDC files containing debug data to store in error log
-        std::vector<FFDCFile> files{createFFDCFiles(journal)};
-
-        // Create FFDC tuples used to pass FFDC files to D-Bus method
-        std::vector<FFDCTuple> ffdcTuples{createFFDCTuples(files)};
-
-        // Call D-Bus method to create an error log with FFDC files
-        const char* service = "xyz.openbmc_project.Logging";
-        const char* objPath = "/xyz/openbmc_project/logging";
-        const char* interface = "xyz.openbmc_project.Logging.Create";
-        const char* method = "CreateWithFFDCFiles";
-        auto reqMsg = bus.new_method_call(service, objPath, interface, method);
-        reqMsg.append(message, severity, additionalData, ffdcTuples);
-        auto respMsg = bus.call(reqMsg);
-
-        // Remove FFDC files.  If an exception occurs before this, the files
-        // will be deleted by FFDCFile destructor but errors will be ignored.
-        removeFFDCFiles(files, journal);
+        // Call D-Bus method to create an error log
+        auto method = bus.new_method_call(
+            "xyz.openbmc_project.Logging", "/xyz/openbmc_project/logging",
+            "xyz.openbmc_project.Logging.Create", "Create");
+        method.append(message, severity, additionalData);
+        bus.call_noreply(method);
     }
     catch (const std::exception& e)
     {
         journal.logError(exception_utils::getMessages(e));
         journal.logError("Unable to log error " + message);
     }
-}
-
-void DBusErrorLogging::removeFFDCFiles(std::vector<FFDCFile>& files,
-                                       Journal& journal)
-{
-    // Explicitly remove FFDC files rather than relying on FFDCFile destructor.
-    // This allows any resulting errors to be written to the journal.
-    for (FFDCFile& file : files)
-    {
-        try
-        {
-            file.remove();
-        }
-        catch (const std::exception& e)
-        {
-            journal.logError(exception_utils::getMessages(e));
-        }
-    }
-
-    // Clear vector since the FFDCFile objects can no longer be used
-    files.clear();
 }
 
 } // namespace phosphor::power::regulators

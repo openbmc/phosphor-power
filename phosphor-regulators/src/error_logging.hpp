@@ -15,10 +15,8 @@
  */
 #pragma once
 
-#include "ffdc_file.hpp"
 #include "journal.hpp"
 #include "phase_fault.hpp"
-#include "xyz/openbmc_project/Logging/Create/server.hpp"
 #include "xyz/openbmc_project/Logging/Entry/server.hpp"
 
 #include <sdbusplus/bus.hpp>
@@ -26,15 +24,11 @@
 #include <cstdint>
 #include <map>
 #include <string>
-#include <tuple>
-#include <vector>
 
 namespace phosphor::power::regulators
 {
 
 using namespace sdbusplus::xyz::openbmc_project::Logging::server;
-using FFDCTuple =
-    std::tuple<FFDCFormat, uint8_t, uint8_t, sdbusplus::message::unix_fd>;
 
 /**
  * @class ErrorLogging
@@ -201,39 +195,7 @@ class DBusErrorLogging : public ErrorLogging
 
   private:
     /**
-     * Create an FFDCFile object containing the specified lines of text data.
-     *
-     * Throws an exception if an error occurs.
-     *
-     * @param lines lines of text data to write to file
-     * @return FFDCFile object
-     */
-    FFDCFile createFFDCFile(const std::vector<std::string>& lines);
-
-    /**
-     * Create FFDCFile objects containing debug data to store in the error log.
-     *
-     * If an error occurs, the error is written to the journal but an exception
-     * is not thrown.
-     *
-     * @param journal system journal
-     * @return vector of FFDCFile objects
-     */
-    std::vector<FFDCFile> createFFDCFiles(Journal& journal);
-
-    /**
-     * Create FFDCTuple objects corresponding to the specified FFDC files.
-     *
-     * The D-Bus method to create an error log requires a vector of tuples to
-     * pass in the FFDC file information.
-     *
-     * @param files FFDC files
-     * @return vector of FFDCTuple objects
-     */
-    std::vector<FFDCTuple> createFFDCTuples(std::vector<FFDCFile>& files);
-
-    /**
-     * Logs an error using the D-Bus CreateWithFFDCFiles method.
+     * Logs an error using the D-Bus Create method.
      *
      * If logging fails, a message is written to the journal but an exception is
      * not thrown.
@@ -246,19 +208,6 @@ class DBusErrorLogging : public ErrorLogging
     void logError(const std::string& message, Entry::Level severity,
                   std::map<std::string, std::string>& additionalData,
                   Journal& journal);
-
-    /**
-     * Removes the specified FFDC files from the file system.
-     *
-     * Also clears the specified vector, removing the FFDCFile objects.
-     *
-     * If an error occurs, the error is written to the journal but an exception
-     * is not thrown.
-     *
-     * @param files FFDC files to remove
-     * @param journal system journal
-     */
-    void removeFFDCFiles(std::vector<FFDCFile>& files, Journal& journal);
 
     /**
      * D-Bus bus object.

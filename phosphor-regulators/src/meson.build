@@ -14,7 +14,6 @@ phosphor_regulators_library_source_files = [
     'error_logging.cpp',
     'error_logging_utils.cpp',
     'exception_utils.cpp',
-    'ffdc_file.cpp',
     'id_map.cpp',
     'journal.cpp',
     'phase_fault_detection.cpp',
