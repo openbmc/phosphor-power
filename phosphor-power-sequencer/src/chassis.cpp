@@ -77,7 +77,8 @@ std::tuple<bool, std::string> Chassis::canSetPowerState(
         {
             unexpectedStatusType = UnexpectedStatusType::alreadyAtState;
         }
-        else if (!isPresent())
+        // Do not allow power on if chassis is not present; power off OK
+        else if (!isPresent() && (newPowerState == PowerState::on))
         {
             unexpectedStatusType = UnexpectedStatusType::notPresent;
         }
@@ -87,10 +88,11 @@ std::tuple<bool, std::string> Chassis::canSetPowerState(
             unexpectedStatusType = UnexpectedStatusType::notEnabled;
             logError = true;
         }
-        else if (!isInputPowerGood())
+        // Do not allow power on if chassis has no input power; power off OK
+        else if (!isInputPowerGood() && (newPowerState == PowerState::on))
         {
             unexpectedStatusType = UnexpectedStatusType::noInputPower;
-            logError = (newPowerState == PowerState::on);
+            logError = true;
         }
         // Check for brownout (PSU power not good). Only a concern for power on.
         else if (!isPowerSuppliesPowerGood() &&
@@ -160,7 +162,14 @@ void Chassis::setPowerState(PowerState newPowerState, Services& services)
     }
     else
     {
-        powerOff(services);
+        // Only power off hardware if chassis is present and has input power. If
+        // not present/no input power, the power sequencer device is
+        // unreachable. In that case only set state to off; pgood is already off
+        // since updatePowerGood() sets it to off.
+        if (isPresent() && isInputPowerGood())
+        {
+            powerOff(services);
+        }
     }
 }
 

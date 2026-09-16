@@ -206,16 +206,7 @@ int PowerInterface::callbackSetPowerState(sd_bus_message* msg, void* context,
             lg2::info(
                 "Chassis {CHASSIS_NUMBER}: D-Bus setPowerState method called with value {STATE}",
                 "CHASSIS_NUMBER", pwrObj->getChassisNumber(), "STATE", state);
-            if (state == pwrObj->getStateProperty())
-            {
-                lg2::info(
-                    "Chassis {CHASSIS_NUMBER} is already at the requested power state",
-                    "CHASSIS_NUMBER", pwrObj->getChassisNumber());
-            }
-            else
-            {
-                pwrObj->setPowerState(state);
-            }
+            pwrObj->setPowerState(state);
             m.new_method_return().method_return();
         }
         catch (const sdbusplus::exception_t& e)
