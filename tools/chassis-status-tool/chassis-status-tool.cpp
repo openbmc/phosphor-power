@@ -275,7 +275,7 @@ void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
     }
     else
     {
-        for (int i = 0; i <= numChassis; i++)
+        for (int i = 0; i < numChassis; i++)
         {
             display(bus, i, propMap, isVerbose);
             if (pldmFetcher && pldmFetcher->isTransportOpen())
