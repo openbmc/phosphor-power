@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15ab246_9fb704c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-09-16T15:08:24Z",
+      "side": 1,
+      "message": "I have not reviewed this since Jim is now looking at adding this static information to the PowerSupply interface instead (which I think is a good idea). I will revisit this commit if needed.",
+      "revId": "4d2d9843e2710e041a40f63a0e3617d2a771cb6e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
