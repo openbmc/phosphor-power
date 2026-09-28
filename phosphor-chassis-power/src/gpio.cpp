@@ -98,7 +98,8 @@ bool BMCGpio::requestRead()
                 {
                     lg2::error(
                         "Failed to request GPIO line '{NAME}' after {ATTEMPTS} attempts: {ERROR}",
-                        "NAME", name, "ATTEMPTS", failureThreshold, "ERROR", e);
+                        "NAME", name, "ATTEMPTS", requestFailureCount, "ERROR",
+                        e);
                 }
                 return false;
             }
@@ -135,7 +136,8 @@ bool BMCGpio::requestWrite(int initialValue)
                 {
                     lg2::error(
                         "Failed to request GPIO line '{NAME}' after {ATTEMPTS} attempts: {ERROR}",
-                        "NAME", name, "ATTEMPTS", failureThreshold, "ERROR", e);
+                        "NAME", name, "ATTEMPTS", requestFailureCount, "ERROR",
+                        e);
                 }
                 return false;
             }
@@ -180,7 +182,8 @@ int BMCGpio::getValue()
             {
                 lg2::error(
                     "Failed to read GPIO line '{NAME}' after {ATTEMPTS} attempts: {ERROR}",
-                    "NAME", name, "ATTEMPTS", failureThreshold, "ERROR", e);
+                    "NAME", name, "ATTEMPTS", readWriteFailureCount, "ERROR",
+                    e);
             }
 
             firstRead = false;
@@ -217,7 +220,7 @@ void BMCGpio::setValue(int value)
         {
             lg2::error(
                 "Failed to write GPIO line '{NAME}' after {ATTEMPTS} attempts: {ERROR}",
-                "NAME", name, "ATTEMPTS", failureThreshold, "ERROR", e);
+                "NAME", name, "ATTEMPTS", readWriteFailureCount, "ERROR", e);
         }
         throw;
     }

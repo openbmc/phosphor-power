@@ -367,9 +367,10 @@ class BMCGpio : public Gpio
     int readWriteFailureCount = 0;
 
     /**
-     * Threshold for number of failures before logging an error.
+     * Threshold for consecutive failures to log before suppressing
+     * further error messages.
      */
-    static constexpr int failureThreshold = 10;
+    static constexpr int failureThreshold = 3;
 
     /**
      * Flag to track if the first attempt to read from the GPIO has been made.
