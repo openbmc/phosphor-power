@@ -65,9 +65,24 @@ class System
     }
 
     /**
+     * Gets the chassis matching the active BMC position.
+     *
+     * Returns nullptr if the BMC position cannot be determined or no
+     * matching chassis is found.
+     *
+     * @return pointer to the primary chassis, or nullptr
+     */
+    Chassis* getPrimaryChassis();
+
+    /**
      * Initializes chassis presence to be true on the primary BMC.
      */
     void initializePresence();
+
+    /**
+     * Initializes powerSystemInputs to be true on the primary BMC.
+     */
+    void initializePowerSystemInputs();
 
     /**
      * Initializes status monitors for the system and all chassis.
@@ -108,6 +123,11 @@ class System
      * Flag for if chassis presence has been initialized.
      */
     bool initializedPresence = false;
+
+    /**
+     * Flag for if chassis powerSystemInputs has been initialized.
+     */
+    bool initializedPowerSystemInputs = false;
 
     /**
      * System services (D-Bus, GPIO, etc.).
