@@ -34,10 +34,8 @@ void System::checkLatchedFaults()
     }
 }
 
-void System::initializePresence()
+Chassis* System::getPrimaryChassis()
 {
-    initializedPresence = true;
-
     unsigned int bmcPosition = 0;
 
     try
@@ -58,27 +56,50 @@ void System::initializePresence()
         else
         {
             lg2::error("Unable to get service for BMC position");
-            return;
+            return nullptr;
         }
     }
     catch (const std::exception& e)
     {
         lg2::error("Error getting BMC position: {ERROR}", "ERROR", e);
-        return;
+        return nullptr;
     }
 
-    const auto it =
+    const auto primaryChassis =
         std::ranges::find_if(chassis, [bmcPosition](const auto& curChassis) {
             return curChassis->getNumber() == bmcPosition;
         });
-    if (it == chassis.end())
+    if (primaryChassis == chassis.end())
     {
         lg2::error("Unable to find chassis matching BMC position {POSITION}",
                    "POSITION", bmcPosition);
-        return;
+        return nullptr;
     }
-    const auto& curChassis = *it;
-    curChassis->initializePresence();
+
+    return primaryChassis->get();
+}
+
+void System::initializePresence()
+{
+    initializedPresence = true;
+    auto* curChassis = getPrimaryChassis();
+
+    if (curChassis != nullptr)
+    {
+        curChassis->initializePresence();
+    }
+}
+
+void System::initializePowerSystemInputs()
+{
+    initializedPowerSystemInputs = true;
+    auto* curChassis = getPrimaryChassis();
+
+    if (curChassis != nullptr)
+    {
+        curChassis->initializePowerSystemInputsInterface(
+            PowerSystemInputs::Status::Good);
+    }
 }
 
 void System::monitor()
@@ -87,7 +108,10 @@ void System::monitor()
     {
         initializePresence();
     }
-
+    if (!initializedPowerSystemInputs)
+    {
+        initializePowerSystemInputs();
+    }
     for (const auto& curChassis : chassis)
     {
         curChassis->monitor();
