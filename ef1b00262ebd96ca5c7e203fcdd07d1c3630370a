@@ -71,6 +71,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edc1369a_4a01232c",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-01T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7dac4c1_fea0e35d",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 25
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b2b15b1_fc09fca9",
@@ -84,6 +108,30 @@
       "writtenOn": "2026-08-28T15:40:39Z",
       "side": 1,
       "message": "This function is odd to me. Also there is a writeGPIO and a writeAndReleaseGPIO function now in chassis.",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 514,
+        "endChar": 78
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8497361_493191e5",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-01T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b2b15b1_fc09fca9",
       "range": {
         "startLine": 514,
         "startChar": 0,
@@ -164,6 +212,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa2a6e58_c73d46e3",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-01T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe2748aa_a059baac",
+      "range": {
+        "startLine": 595,
+        "startChar": 14,
+        "endLine": 595,
+        "endChar": 30
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01232fa8_ae70298b",
@@ -177,6 +249,30 @@
       "writtenOn": "2026-08-28T15:40:39Z",
       "side": 1,
       "message": "This isn\u0027t checking the system power state.",
+      "range": {
+        "startLine": 803,
+        "startChar": 10,
+        "endLine": 803,
+        "endChar": 62
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b62c5300_8eeac400",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-01T19:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01232fa8_ae70298b",
       "range": {
         "startLine": 803,
         "startChar": 10,
