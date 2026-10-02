@@ -22,6 +22,30 @@
       },
       "revId": "6912cd3a9c824ffd9fe36d64b8ce714d6040c688",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0050000_1fb76235",
+        "filename": "phosphor-chassis-power/src/system.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-02T20:12:46Z",
+      "side": 1,
+      "message": "Good point about the name, I will change to chassis. Then I see how that complicates it, will update the pointer.",
+      "parentUuid": "6bc394bc_40ad2eb0",
+      "range": {
+        "startLine": 37,
+        "startChar": 6,
+        "endLine": 37,
+        "endChar": 55
+      },
+      "revId": "6912cd3a9c824ffd9fe36d64b8ce714d6040c688",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
