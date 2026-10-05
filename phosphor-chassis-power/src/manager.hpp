@@ -204,6 +204,14 @@ class Manager
     Services& services;
 
     /**
+     * D-Bus object manager.
+     *
+     * Causes this application to implement the
+     * org.freedesktop.DBus.ObjectManager interface.
+     */
+    sdbusplus::server::manager_t objectManager;
+
+    /**
      * D-Bus match object for monitoring chassis 0 power state changes.
      */
     std::unique_ptr<sdbusplus::match> chassisPowerStateMatch;

@@ -47,6 +47,7 @@ constexpr auto chassisStatePath = "/xyz/openbmc_project/state/chassis0";
 constexpr auto chassisStateIntf = "xyz.openbmc_project.State.Chassis";
 constexpr auto chassisStateProp = "CurrentPowerState";
 constexpr auto blackoutTarget = "obmc-chassis-blackout@0.target";
+constexpr auto rootObjectPath = "/xyz/openbmc_project/power/chassis";
 
 constexpr std::chrono::minutes maxTimeToWaitForCompatTypes{1};
 
@@ -61,7 +62,7 @@ Manager::Manager(const sdeventplus::Event& event, Services& services) :
         event,
         std::bind(&Manager::compatibleSystemTypesNotFoundCallback, this)},
     monitorTimer{event, std::bind(&Manager::monitor, this), monitorInterval},
-    services(services)
+    services(services), objectManager{services.getBus(), rootObjectPath}
 {
     // Start a timer to wait for compatible types.
     compatibleSystemsTimer.restartOnce(maxTimeToWaitForCompatTypes);
