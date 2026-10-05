@@ -22,6 +22,7 @@
 #include <sdbusplus/bus.hpp>
 #include <sdbusplus/bus/match.hpp>
 #include <sdbusplus/message.hpp>
+#include <sdbusplus/server/manager.hpp>
 #include <sdbusplus/server/object.hpp>
 #include <sdeventplus/event.hpp>
 #include <sdeventplus/utility/timer.hpp>
@@ -202,6 +203,14 @@ class Manager
      * Platform services provider.
      */
     Services& services;
+
+    /**
+     * D-Bus object manager.
+     *
+     * Causes this application to implement the
+     * org.freedesktop.DBus.ObjectManager interface.
+     */
+    sdbusplus::server::manager_t objectManager;
 
     /**
      * D-Bus match object for monitoring chassis 0 power state changes.
