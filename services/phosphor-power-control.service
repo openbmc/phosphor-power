@@ -1,7 +1,10 @@
 [Unit]
 Description=Phosphor Power Control
+After=phosphor-chassis-availability.service
 
 [Service]
+Type=dbus
+BusName=org.openbmc.control.Power
 Restart=always
 ExecStart=/usr/bin/phosphor-power-control
 

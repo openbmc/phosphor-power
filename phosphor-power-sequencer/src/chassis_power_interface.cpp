@@ -26,7 +26,8 @@ namespace phosphor::power::sequencer
 ChassisPowerInterface::ChassisPowerInterface(
     sdbusplus::bus_t& bus, const char* path, int state, int pgood,
     int pgoodTimeout, Chassis& chassis) :
-    PowerObject{bus, path, PowerObject::action::defer_emit}, chassis{chassis}
+    PowerObject{bus, path, PowerObject::action::emit_no_signals},
+    chassis{chassis}
 {
     setChassisNumber(chassis.getNumber());
 
@@ -35,9 +36,6 @@ ChassisPowerInterface::ChassisPowerInterface(
     setStateProperty(state, skipSignal);
     setPgoodProperty(pgood, skipSignal);
     setPgoodTimeoutProperty(pgoodTimeout, skipSignal);
-
-    // Emit D-Bus signal that object has been created
-    emit_object_added();
 }
 
 void ChassisPowerInterface::setPowerState(int newState [[maybe_unused]])

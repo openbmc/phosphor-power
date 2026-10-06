@@ -17,6 +17,7 @@
 #include "system_power_interface.hpp"
 
 #include "system.hpp"
+#include "types.hpp"
 
 #include <chrono>
 
@@ -26,8 +27,8 @@ namespace phosphor::power::sequencer
 SystemPowerInterface::SystemPowerInterface(
     sdbusplus::bus_t& bus, const char* path, int state, int pgood,
     int pgoodTimeout, System& system, Services& services) :
-    PowerObject{bus, path, PowerObject::action::defer_emit}, system{system},
-    services{services}
+    PowerObject{bus, path, PowerObject::action::emit_no_signals},
+    system{system}, services{services}
 {
     setChassisNumber(0);
 
@@ -37,8 +38,9 @@ SystemPowerInterface::SystemPowerInterface(
     setPgoodProperty(pgood, skipSignal);
     setPgoodTimeoutProperty(pgoodTimeout, skipSignal);
 
-    // Emit D-Bus signal that object has been created
-    emit_object_added();
+    // Obtain D-Bus service name. This application is not considered started
+    // until it has published system state/pgood and claimed bus name.
+    bus.request_name(POWER_IFACE);
 }
 
 void SystemPowerInterface::setPowerState(int newState)

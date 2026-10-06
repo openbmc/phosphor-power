@@ -35,9 +35,6 @@ Manager::Manager(sdbusplus::bus_t& bus, const sdeventplus::Event& event) :
     bus{bus}, objectManager{bus, rootObjectPath}, services{bus},
     monitorTimer{event, std::bind(&Manager::monitor, this), monitorInterval}
 {
-    // Obtain D-Bus service name
-    bus.request_name(POWER_IFACE);
-
     findConfigFile();
 
     // Call monitor() once right away rather than waiting for the timer
