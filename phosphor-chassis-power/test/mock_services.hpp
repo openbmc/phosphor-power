@@ -60,10 +60,17 @@ class MockServices : public Services
     }
 
     std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
-        size_t, const std::string&, const ChassisStatusMonitorOptions&) override
+        size_t, const std::string&,
+        const ChassisStatusMonitorOptions& options) override
     {
+        monitorOptions = options;
         return std::make_unique<testing::NiceMock<MockChassisStatusMonitor>>();
     }
+
+    /**
+     * Options passed to the most recent createChassisStatusMonitor() call.
+     */
+    ChassisStatusMonitorOptions monitorOptions{};
 
     void subscribeToSystemdSignals() override {}
 

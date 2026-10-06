@@ -71,6 +71,23 @@ void Chassis::setSystemStatusMonitor(
     systemMonitor = monitor;
 }
 
+bool Chassis::isSystemAvailable() const
+{
+    if (!systemMonitor)
+    {
+        return false;
+    }
+
+    try
+    {
+        return systemMonitor->isAvailable();
+    }
+    catch (const std::exception&)
+    {
+        return false;
+    }
+}
+
 bool Chassis::isSystemPoweredOn() const
 {
     if (!systemMonitor)
@@ -124,6 +141,11 @@ void Chassis::clearErrorHistory()
 
 void Chassis::monitor()
 {
+    if (!isSystemAvailable())
+    {
+        return;
+    }
+
     bool presenceGPIOChanged = false;
     bool presenceGPIOReadFailure = false;
     std::optional<bool> oldPresencePathValue = presencePathValue;

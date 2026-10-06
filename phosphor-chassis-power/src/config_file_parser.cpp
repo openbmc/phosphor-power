@@ -24,6 +24,7 @@
 #include <fstream>
 #include <optional>
 #include <stdexcept>
+#include <tuple>
 #include <utility>
 
 using json = nlohmann::json;
@@ -33,8 +34,8 @@ using namespace phosphor::power::json_parser_utils;
 namespace phosphor::power::chassis::config_file_parser
 {
 
-std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services)
+std::tuple<std::vector<std::unique_ptr<Chassis>>, ChassisStatusMonitorOptions>
+    parse(const std::filesystem::path& pathName, Services& services)
 {
     try
     {
@@ -184,6 +185,27 @@ std::unique_ptr<Gpio> parseGpio(const json& element, Services& services)
     return services.createGPIO(name, direction, polarity, defaultValue);
 }
 
+ChassisStatusMonitorOptions parseStatusMonitoring(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    ChassisStatusMonitorOptions options;
+
+    // Optional is_available_monitored property
+    auto propIt = element.find("is_available_monitored");
+    if (propIt != element.end())
+    {
+        options.isAvailableMonitored = parseBoolean(*propIt, NO_VARIABLES);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return options;
+}
+
 std::string parsePresencePath(const json& element)
 {
     std::string presencePath = parseString(element);
@@ -231,13 +253,31 @@ GpioPolarity parsePolarity(const std::string& polarityStr)
     }
 }
 
-std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
-                                                Services& services)
+std::tuple<std::vector<std::unique_ptr<Chassis>>, ChassisStatusMonitorOptions>
+    parseRoot(const json& element, Services& services)
 {
-    verifyIsArray(element);
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
 
-    // Parse the array of chassis objects
-    return parseChassisArray(element, services);
+    // Required chassis property
+    const json& chassisElement = getRequiredProperty(element, "chassis");
+    std::vector<std::unique_ptr<Chassis>> chassis =
+        parseChassisArray(chassisElement, services);
+    ++propertyCount;
+
+    // Optional status_monitoring property
+    ChassisStatusMonitorOptions monitorOptions{};
+    auto statusMonitoringIt = element.find("status_monitoring");
+    if (statusMonitoringIt != element.end())
+    {
+        monitorOptions = parseStatusMonitoring(*statusMonitoringIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_tuple(std::move(chassis), monitorOptions);
 }
 
 } // namespace internal

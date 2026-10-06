@@ -71,31 +71,40 @@ The config file is a text file in the
 
 ## Contents
 
-The JSON file will have an overall format of an array for the system with 1 to N
-chassis. The Chassis will have the format outlined in [chassis](chassis.md).
+The JSON file is an object with the following properties:
+
+| Name              | Required | Type                           | Description                                                                                |
+| :---------------- | :------: | :----------------------------- | :----------------------------------------------------------------------------------------- |
+| status_monitoring |    no    | [object](status_monitoring.md) | Specifies what system status properties are monitored. Defaults to no optional monitoring. |
+| chassis           |   yes    | array of [chassis](chassis.md) | The system chassis, 1 to N. Each element has the format outlined in chassis.md.            |
 
 ## Example
 
 ```json
-[
-  {
-    "ChassisNumber": 1,
-    "PresenceGpio": {
-      "Name": "presence-chassis1",
-      "Direction": "Input",
-      "Polarity": "Low"
-    }
+{
+  "status_monitoring": {
+    "is_available_monitored": true
   },
-  {
-    "ChassisNumber": 2,
-    "PresenceGpio": {
-      "Name": "presence-chassis2",
-      "Direction": "Input",
-      "Polarity": "Low",
-      "DefaultValue": 0
+  "chassis": [
+    {
+      "ChassisNumber": 1,
+      "PresenceGpio": {
+        "Name": "presence-chassis1",
+        "Direction": "Input",
+        "Polarity": "Low"
+      }
+    },
+    {
+      "ChassisNumber": 2,
+      "PresenceGpio": {
+        "Name": "presence-chassis2",
+        "Direction": "Input",
+        "Polarity": "Low",
+        "DefaultValue": 0
+      }
     }
-  }
-]
+  ]
+}
 ```
 
 [1]:

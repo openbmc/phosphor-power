@@ -23,6 +23,7 @@
 
 #include <filesystem>
 #include <string>
+#include <tuple>
 #include <vector>
 
 namespace phosphor::power::chassis::config_file_parser
@@ -31,16 +32,17 @@ namespace phosphor::power::chassis::config_file_parser
 /**
  * Parses the specified JSON configuration file.
  *
- * Returns vector of C++ Chassis objects.
+ * Returns the Chassis objects and system status monitor options.
  *
  * Throws a ConfigFileParserError if an error occurs.
  *
  * @param pathName configuration file path name
  * @param services Services object
- * @return vector of C++ Chassis objects
+ * @return tuple containing vector of Chassis objects and status monitor
+ *         options
  */
-std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services);
+std::tuple<std::vector<std::unique_ptr<Chassis>>, ChassisStatusMonitorOptions>
+    parse(const std::filesystem::path& pathName, Services& services);
 
 /*
  * Internal implementation details for parse()
@@ -90,6 +92,19 @@ std::unique_ptr<Gpio> parseGpio(const nlohmann::json& element,
                                 Services& services);
 
 /**
+ * Parses a JSON element containing the status_monitoring object.
+ *
+ * Returns the corresponding C++ ChassisStatusMonitorOptions object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @return ChassisStatusMonitorOptions object
+ */
+ChassisStatusMonitorOptions parseStatusMonitoring(
+    const nlohmann::json& element);
+
+/**
  * Parses a JSON element containing an absolute presence path.
  *
  * Returns the corresponding C++ string containing the absolute presence path.
@@ -122,16 +137,17 @@ GpioPolarity parsePolarity(const std::string& polarityStr);
 /**
  * Parses the JSON root element of the entire configuration file.
  *
- * Returns the corresponding C++ Chassis objects.
+ * Returns the corresponding C++ Chassis objects and monitor options.
  *
  * Throws an exception if parsing fails.
  *
  * @param element JSON element
  * @param services Services object
- * @return vectors of Chassis objects
+ * @return tuple containing vector of Chassis objects and status monitor
+ *         options
  */
-std::vector<std::unique_ptr<Chassis>> parseRoot(const nlohmann::json& element,
-                                                Services& services);
+std::tuple<std::vector<std::unique_ptr<Chassis>>, ChassisStatusMonitorOptions>
+    parseRoot(const nlohmann::json& element, Services& services);
 
 } // namespace internal
 
