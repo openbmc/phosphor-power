@@ -339,6 +339,13 @@ class Chassis
     std::unique_ptr<phosphor::power::util::ChassisStatusMonitor> statusMonitor;
 
     /**
+     * Checks if the system is available.
+     *
+     * @return true if the system is available, false otherwise
+     */
+    bool isSystemAvailable() const;
+
+    /**
      * Reads the current and previous GPIO values, applies deglitching logic,
      * and updates the cached value if it has changed.
      *

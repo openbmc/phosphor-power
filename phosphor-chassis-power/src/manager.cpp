@@ -197,9 +197,12 @@ void Manager::loadConfigFile()
             lg2::info("Loading configuration file {PATH}", "PATH",
                       pathName.string());
 
-            auto chassis = config_file_parser::parse(pathName, services);
+            // Parse the config file
+            auto [chassis, monitorOptions] =
+                config_file_parser::parse(pathName, services);
 
-            system = std::make_unique<System>(std::move(chassis), services);
+            system = std::make_unique<System>(std::move(chassis), services,
+                                              monitorOptions);
 
             lg2::info("Parsed {NUMBER} chassis", "NUMBER",
                       system->getChassis().size());
