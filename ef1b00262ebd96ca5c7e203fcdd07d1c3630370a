@@ -332,6 +332,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faf951d6_5327840f",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-06T14:22:13Z",
+      "side": 1,
+      "message": "After talk, working on implementing.",
+      "parentUuid": "ef33c766_082c4275",
+      "range": {
+        "startLine": 199,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 73
+      },
+      "revId": "ef1b00262ebd96ca5c7e203fcdd07d1c3630370a",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35538b5a_684f8141",
         "filename": "phosphor-chassis-power/src/manager.hpp",
         "patchSetId": 10
