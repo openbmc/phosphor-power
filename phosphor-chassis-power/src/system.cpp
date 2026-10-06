@@ -124,10 +124,11 @@ void System::initializeStatusMonitors()
     try
     {
         phosphor::power::util::ChassisStatusMonitorOptions options;
+        options.isAvailableMonitored = true;
         options.isPowerGoodMonitored = true;
 
         std::string systemInventoryPath =
-            "/xyz/openbmc_project/inventory/system/chassis";
+            "/xyz/openbmc_project/inventory/system/chassis0";
 
         systemMonitor = services.createChassisStatusMonitor(
             0, systemInventoryPath, options);

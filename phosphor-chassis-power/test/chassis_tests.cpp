@@ -66,6 +66,24 @@ void expectPresenceGpio(Chassis& chassis, int value, int prevValue)
 }
 
 /**
+ * Helper to create a mock ChassisStatusMonitor and attach it to a chassis.
+ *
+ * @param services MockServices used to create the monitor
+ * @param chassis Chassis to attach the monitor to
+ * @return Pointer to the attached monitor, owned by the chassis
+ */
+MockChassisStatusMonitor* createMockChassisStatusMonitor(MockServices& services,
+                                                         Chassis& chassis)
+{
+    auto monitor = services.createChassisStatusMonitor(
+        0, "/xyz/openbmc_project/inventory/system/chassis",
+        ChassisStatusMonitorOptions{});
+    chassis.setSystemStatusMonitor(std::move(monitor));
+    return static_cast<MockChassisStatusMonitor*>(
+        chassis.getSystemMonitor().get());
+}
+
+/**
  * Helper to set repeated GPIO read expectations for presence detection.
  *
  * @param chassis Chassis containing the GPIO
@@ -365,6 +383,9 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
         chassis.initializePresence();
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -394,6 +415,9 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
         chassis.initializePresence();
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -423,6 +447,9 @@ TEST_F(ChassisTests, SetPowerSystemInputsStatus)
                                 GpioDirection::Input, GpioPolarity::Low));
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
         chassis.initializePresence();
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.initializePowerSystemInputsInterface(
             PowerSystemInputs::Status::Good);
@@ -452,6 +479,9 @@ TEST_F(ChassisTests, Monitor)
     {
         MockServices services{};
         Chassis chassis{1, services};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
         chassis.monitor();
     }
 
@@ -463,6 +493,9 @@ TEST_F(ChassisTests, Monitor)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(false));
@@ -480,6 +513,9 @@ TEST_F(ChassisTests, Monitor)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -512,6 +548,9 @@ TEST_F(ChassisTests, Monitor)
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
         chassis.initializePresence();
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Setup expectations for presence GPIO
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -562,6 +601,9 @@ TEST_F(ChassisTests, Monitor)
                                 GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -571,6 +613,61 @@ TEST_F(ChassisTests, Monitor)
         chassis.monitor();
 
         EXPECT_EQ(chassis.getFaultUnlatchedValue(), std::nullopt);
+    }
+
+    // Test that monitor() skips GPIO access when isSystemAvailable() returns
+    // false
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(false));
+
+        // No GPIO methods should be called when chassis is not available
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine()).Times(0);
+
+        chassis.monitor();
+
+        EXPECT_FALSE(chassis.getPresenceGPIOValue().has_value());
+    }
+
+    // Test that monitor() resumes GPIO access after availability returns true
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+
+        // First call: not available — no GPIO access
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillOnce(testing::Return(false))
+            .WillOnce(testing::Return(true));
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine()).Times(0);
+        chassis.monitor();
+        EXPECT_FALSE(chassis.getPresenceGPIOValue().has_value());
+
+        // Second call: available — GPIO is read
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillOnce(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), release()).Times(1);
+
+        chassis.monitor();
+        EXPECT_EQ(chassis.getPresenceGPIOValue(), 1);
     }
 }
 
@@ -585,6 +682,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -610,6 +710,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -634,6 +737,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Get reference to mock GPIO
         MockGpio& mockGpio = getMockGpio(chassis, 0);
@@ -664,6 +770,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -688,6 +797,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Setup expectations for 2 monitor() calls
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -716,6 +828,9 @@ TEST_F(ChassisTests, gpioValueChanged)
             "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Setup expectations for 3 monitor() calls
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -761,10 +876,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
         Chassis chassis{1, services, tempFile.getPath().string(),
                         std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 1, 1);
 
@@ -789,15 +903,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         chassis.initializePresence();
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 0, 0);
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
 
         EXPECT_CALL(services, logError).Times(0);
@@ -821,17 +932,14 @@ TEST_F(ChassisTests, HandlePresenceChange)
         Chassis chassis{1, services, tempFile.getPath().string(),
                         std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.initializePresence();
 
         expectPresenceGpioRepeated(chassis, 0, 0);
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(1));
 
         EXPECT_CALL(services, logError("xyz.openbmc_project.Power.Chassis."
@@ -854,10 +962,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 1, 1);
 
@@ -879,15 +986,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         chassis.initializePresence();
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 0, 0);
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
 
         EXPECT_CALL(services, logError).Times(0);
@@ -908,10 +1012,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.initializePresence();
 
@@ -920,8 +1023,6 @@ TEST_F(ChassisTests, HandlePresenceChange)
             .WillOnce(testing::Return(1))
             .WillOnce(testing::Return(0));
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(1));
         EXPECT_CALL(
             services,
@@ -950,10 +1051,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 1, 1);
 
@@ -979,15 +1079,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         chassis.initializePresence();
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 0, 0);
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
 
         EXPECT_CALL(services, logError).Times(0);
@@ -1013,15 +1110,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         chassis.initializePresence();
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         expectPresenceGpio(chassis, 0, 0);
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(1));
 
         EXPECT_CALL(
@@ -1048,10 +1142,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
         Chassis chassis{1, services, tempFile.getPath().string(),
                         std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.initializePresence();
 
@@ -1065,8 +1158,6 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_CALL(getMockGpio(chassis, 0), release())
             .WillRepeatedly(testing::Return());
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood())
             .WillRepeatedly(testing::Return(0));
 
@@ -1086,10 +1177,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
 
-        auto monitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(monitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.initializePresence();
 
@@ -1102,8 +1192,6 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_CALL(getMockGpio(chassis, 0), release())
             .WillOnce(testing::Return());
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
 
         EXPECT_CALL(services, logError).Times(0);
@@ -1120,10 +1208,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
         MockServices services{};
         Chassis chassis{1, services, tempFile.getPath().string()};
 
-        auto statusMonitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(statusMonitor));
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         chassis.monitor();
 
@@ -1138,15 +1225,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         MockServices services{};
         Chassis chassis{1, services, missingPath.string()};
 
-        auto statusMonitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(statusMonitor));
-
         chassis.initializePresence();
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
+
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
 
         EXPECT_CALL(services, logError).Times(0);
@@ -1165,15 +1249,12 @@ TEST_F(ChassisTests, HandlePresenceChange)
         MockServices services{};
         Chassis chassis{1, services, missingPath.string()};
 
-        auto statusMonitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(statusMonitor));
-
         chassis.initializePresence();
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
+
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(1));
 
         EXPECT_CALL(
@@ -1195,10 +1276,9 @@ TEST_F(ChassisTests, HandlePresenceChange)
         MockServices services{};
         Chassis chassis{1, services, tempFile.getPath().string()};
 
-        auto statusMonitor = services.createChassisStatusMonitor(
-            0, "/xyz/openbmc_project/inventory/system/chassis",
-            ChassisStatusMonitorOptions{});
-        chassis.setSystemStatusMonitor(std::move(statusMonitor));
+        auto* mockMonitor = createMockChassisStatusMonitor(services, chassis);
+        EXPECT_CALL(*mockMonitor, isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // First monitor: path present → chassis becomes present
         chassis.monitor();
@@ -1207,8 +1287,6 @@ TEST_F(ChassisTests, HandlePresenceChange)
         // Simulate path disappearing
         tempFile.remove();
 
-        auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
-            chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(1));
 
         EXPECT_CALL(
@@ -1237,6 +1315,9 @@ TEST_F(ChassisTests, CheckLatchedFault)
                                 GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -1267,6 +1348,9 @@ TEST_F(ChassisTests, CheckLatchedFault)
                                 GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Prime the cached value to 0 via monitor()
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
@@ -1297,6 +1381,9 @@ TEST_F(ChassisTests, CheckLatchedFault)
                                 GpioDirection::Output, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -1340,6 +1427,9 @@ TEST_F(ChassisTests, HandleLatchedFault)
                                 GpioDirection::Input, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
@@ -1375,6 +1465,9 @@ TEST_F(ChassisTests, HandleLatchedFault)
                                 GpioDirection::Output, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true))
@@ -1421,6 +1514,9 @@ TEST_F(ChassisTests, HandleLatchedFault)
                                 GpioDirection::Output, GpioPolarity::Low));
 
         Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
             .WillOnce(testing::Return(true));
