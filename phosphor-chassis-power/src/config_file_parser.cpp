@@ -33,8 +33,7 @@ using namespace phosphor::power::json_parser_utils;
 namespace phosphor::power::chassis::config_file_parser
 {
 
-std::vector<std::unique_ptr<Chassis>> parse(
-    const std::filesystem::path& pathName, Services& services)
+ParsedConfig parse(const std::filesystem::path& pathName, Services& services)
 {
     try
     {
@@ -184,6 +183,28 @@ std::unique_ptr<Gpio> parseGpio(const json& element, Services& services)
     return services.createGPIO(name, direction, polarity, defaultValue);
 }
 
+ChassisStatusMonitorOptions parseStatusMonitoring(const json& element)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Note: all ChassisStatusMonitorOptions fields default to false
+    ChassisStatusMonitorOptions options;
+
+    // Optional is_available_monitored property
+    auto propIt = element.find("is_available_monitored");
+    if (propIt != element.end())
+    {
+        options.isAvailableMonitored = parseBoolean(*propIt, NO_VARIABLES);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return options;
+}
+
 std::string parsePresencePath(const json& element)
 {
     std::string presencePath = parseString(element);
@@ -231,13 +252,30 @@ GpioPolarity parsePolarity(const std::string& polarityStr)
     }
 }
 
-std::vector<std::unique_ptr<Chassis>> parseRoot(const json& element,
-                                                Services& services)
+ParsedConfig parseRoot(const json& element, Services& services)
 {
-    verifyIsArray(element);
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
 
-    // Parse the array of chassis objects
-    return parseChassisArray(element, services);
+    ParsedConfig config;
+
+    // Required chassis property
+    const json& chassisElement = getRequiredProperty(element, "chassis");
+    config.chassis = parseChassisArray(chassisElement, services);
+    ++propertyCount;
+
+    // Optional status_monitoring property
+    auto statusMonitoringIt = element.find("status_monitoring");
+    if (statusMonitoringIt != element.end())
+    {
+        config.monitorOptions = parseStatusMonitoring(*statusMonitoringIt);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return config;
 }
 
 } // namespace internal

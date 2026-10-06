@@ -1,258 +1,263 @@
-[
-    {
-        "ChassisNumber": 1,
-        "PresenceGpio": {
-            "Name": "presence-chassis1",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs1-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs1-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs1-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs1-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-159"
+{
+    "status_monitoring": {
+        "is_available_monitored": true
     },
-    {
-        "ChassisNumber": 2,
-        "PresenceGpio": {
-            "Name": "presence-chassis2",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
+    "chassis": [
+        {
+            "ChassisNumber": 1,
+            "PresenceGpio": {
+                "Name": "presence-chassis1",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs1-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs1-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs1-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs1-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-159"
         },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs2-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
+        {
+            "ChassisNumber": 2,
+            "PresenceGpio": {
+                "Name": "presence-chassis2",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs2-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs2-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs2-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs2-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-259"
         },
-        "FaultLatchedGpio": {
-            "Name": "power-chs2-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
+        {
+            "ChassisNumber": 3,
+            "PresenceGpio": {
+                "Name": "presence-chassis3",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs3-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs3-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs3-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs3-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-359"
         },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs2-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
+        {
+            "ChassisNumber": 4,
+            "PresenceGpio": {
+                "Name": "presence-chassis4",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs4-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs4-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs4-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs4-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-459"
         },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs2-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
+        {
+            "ChassisNumber": 5,
+            "PresenceGpio": {
+                "Name": "presence-chassis5",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs5-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs5-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs5-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs5-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-559"
         },
-        "PresencePath": "/dev/i2c-259"
-    },
-    {
-        "ChassisNumber": 3,
-        "PresenceGpio": {
-            "Name": "presence-chassis3",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
+        {
+            "ChassisNumber": 6,
+            "PresenceGpio": {
+                "Name": "presence-chassis6",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs6-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs6-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs6-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs6-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-659"
         },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs3-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
+        {
+            "ChassisNumber": 7,
+            "PresenceGpio": {
+                "Name": "presence-chassis7",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs7-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs7-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs7-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs7-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-759"
         },
-        "FaultLatchedGpio": {
-            "Name": "power-chs3-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs3-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs3-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-359"
-    },
-    {
-        "ChassisNumber": 4,
-        "PresenceGpio": {
-            "Name": "presence-chassis4",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs4-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs4-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs4-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs4-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-459"
-    },
-    {
-        "ChassisNumber": 5,
-        "PresenceGpio": {
-            "Name": "presence-chassis5",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs5-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs5-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs5-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs5-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-559"
-    },
-    {
-        "ChassisNumber": 6,
-        "PresenceGpio": {
-            "Name": "presence-chassis6",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs6-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs6-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs6-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs6-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-659"
-    },
-    {
-        "ChassisNumber": 7,
-        "PresenceGpio": {
-            "Name": "presence-chassis7",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs7-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs7-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs7-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs7-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-759"
-    },
-    {
-        "ChassisNumber": 8,
-        "PresenceGpio": {
-            "Name": "presence-chassis8",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultUnlatchedGpio": {
-            "Name": "power-chs8-sb-fault-unlatched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchedGpio": {
-            "Name": "power-chs8-sb-fault-latched",
-            "Direction": "Input",
-            "Polarity": "Low",
-            "DefaultValue": 0
-        },
-        "FaultLatchResetGpio": {
-            "Name": "power-chs8-sb-fault-reset",
-            "Direction": "Output",
-            "Polarity": "Low"
-        },
-        "EnableSystemResetGpio": {
-            "Name": "reset-enable-chs8-sb-power",
-            "Direction": "Output",
-            "Polarity": "High"
-        },
-        "PresencePath": "/dev/i2c-859"
-    }
-]
+        {
+            "ChassisNumber": 8,
+            "PresenceGpio": {
+                "Name": "presence-chassis8",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultUnlatchedGpio": {
+                "Name": "power-chs8-sb-fault-unlatched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchedGpio": {
+                "Name": "power-chs8-sb-fault-latched",
+                "Direction": "Input",
+                "Polarity": "Low",
+                "DefaultValue": 0
+            },
+            "FaultLatchResetGpio": {
+                "Name": "power-chs8-sb-fault-reset",
+                "Direction": "Output",
+                "Polarity": "Low"
+            },
+            "EnableSystemResetGpio": {
+                "Name": "reset-enable-chs8-sb-power",
+                "Direction": "Output",
+                "Polarity": "High"
+            },
+            "PresencePath": "/dev/i2c-859"
+        }
+    ]
+}

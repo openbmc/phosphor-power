@@ -47,11 +47,14 @@ class System
     /**
      * Constructor.
      *
-     * @param chassis  Chassis in the system
-     * @param services Platform services provider
+     * @param chassis        Chassis in the system
+     * @param services       Platform services provider
+     * @param monitorOptions Options for the system-level status monitor
      */
-    System(std::vector<std::unique_ptr<Chassis>> chassis, Services& services) :
-        chassis{std::move(chassis)}, services{services}
+    System(std::vector<std::unique_ptr<Chassis>> chassis, Services& services,
+           const ChassisStatusMonitorOptions& monitorOptions) :
+        chassis{std::move(chassis)}, services{services},
+        monitorOptions{monitorOptions}
     {}
 
     /**
@@ -133,6 +136,14 @@ class System
      * System services (D-Bus, GPIO, etc.).
      */
     Services& services;
+
+    /**
+     * Options for the system-level status monitor.
+     *
+     * Read from the config file. Power good monitoring is always enabled and
+     * is not part of these options.
+     */
+    ChassisStatusMonitorOptions monitorOptions{};
 };
 
 } // namespace phosphor::power::chassis
