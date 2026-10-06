@@ -88,16 +88,18 @@ class ManagerTests : public ::testing::Test
 
         // Create test config file with minimal valid JSON
         fs::path configPath = testConfigDir / fileName;
-        constexpr const char* configJson = R"([
-            {
-                "ChassisNumber": 1,
-                "PresenceGpio": {
-                    "Name": "presence-chassis1",
-                    "Direction": "Input",
-                    "Polarity": "Low"
+        constexpr const char* configJson = R"({
+            "chassis": [
+                {
+                    "ChassisNumber": 1,
+                    "PresenceGpio": {
+                        "Name": "presence-chassis1",
+                        "Direction": "Input",
+                        "Polarity": "Low"
+                    }
                 }
-            }
-        ])";
+            ]
+        })";
 
         writeConfigFile(configPath, configJson);
 
@@ -284,17 +286,19 @@ TEST_F(ManagerTests, LoadConfigFile)
         fs::create_directories(testConfigDir);
 
         const std::string configFileContents = R"(
-            [
-              {
-                "ChassisNumber": 1,
-                "PresencePath": "/dev/i2c-159",
-                "PresenceGpio": {
-                  "Name": "presence-chassis1",
-                  "Direction": "Input",
-                  "Polarity": "Invalid"
+            {
+              "chassis": [
+                {
+                  "ChassisNumber": 1,
+                  "PresencePath": "/dev/i2c-159",
+                  "PresenceGpio": {
+                    "Name": "presence-chassis1",
+                    "Direction": "Input",
+                    "Polarity": "Invalid"
+                  }
                 }
-              }
-            ]
+              ]
+            }
         )";
         writeConfigFile(configPath, configFileContents);
 
@@ -316,17 +320,19 @@ TEST_F(ManagerTests, LoadConfigFile)
         fs::create_directories(testConfigDir);
 
         const std::string configFileContents = R"(
-            [
-              {
-                "ChassisNumber": -1,
-                "PresencePath": "/dev/i2c-159",
-                "PresenceGpio": {
-                  "Name": "presence-chassis1",
-                  "Direction": "Input",
-                  "Polarity": "Low"
+            {
+              "chassis": [
+                {
+                  "ChassisNumber": -1,
+                  "PresencePath": "/dev/i2c-159",
+                  "PresenceGpio": {
+                    "Name": "presence-chassis1",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  }
                 }
-              }
-            ]
+              ]
+            }
         )";
         writeConfigFile(configPath, configFileContents);
 
@@ -348,17 +354,19 @@ TEST_F(ManagerTests, LoadConfigFile)
         fs::create_directories(testConfigDir);
 
         const std::string configFileContents = R"(
-            [
-              {
-                "ChassisNumber": 1,
-                "PresencePath": "dev/i2c-159",
-                "PresenceGpio": {
-                  "Name": "presence-chassis1",
-                  "Direction": "Input",
-                  "Polarity": "Low"
+            {
+              "chassis": [
+                {
+                  "ChassisNumber": 1,
+                  "PresencePath": "dev/i2c-159",
+                  "PresenceGpio": {
+                    "Name": "presence-chassis1",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  }
                 }
-              }
-            ]
+              ]
+            }
         )";
         writeConfigFile(configPath, configFileContents);
 
@@ -380,17 +388,19 @@ TEST_F(ManagerTests, LoadConfigFile)
         fs::create_directories(testConfigDir);
 
         const std::string configFileContents = R"(
-            [
-              {
-                "ChassisNumber": 1,,
-                "PresencePath": "/dev/i2c-159",
-                "PresenceGpio": {
-                  "Name": "presence-chassis1",
-                  "Direction": "Input",
-                  "Polarity": "Low"
+            {
+              "chassis": [
+                {
+                  "ChassisNumber": 1,,
+                  "PresencePath": "/dev/i2c-159",
+                  "PresenceGpio": {
+                    "Name": "presence-chassis1",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  }
                 }
-              }
-            ]
+              ]
+            }
         )";
         writeConfigFile(configPath, configFileContents);
 

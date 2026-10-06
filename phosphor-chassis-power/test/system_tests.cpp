@@ -63,11 +63,13 @@ class SystemTests : public ::testing::Test
 
 TEST_F(SystemTests, Constructor)
 {
+    ChassisStatusMonitorOptions monitorOptions{};
+
     // Test with single chassis
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
         chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
-        System system{std::move(chassis), services};
+        System system{std::move(chassis), services, monitorOptions};
 
         EXPECT_EQ(system.getChassis().size(), 1);
         EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
@@ -80,7 +82,7 @@ TEST_F(SystemTests, Constructor)
         chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
         chassis.emplace_back(createChassis(2, services, "/dev/i2c-160"));
         chassis.emplace_back(createChassis(3, services, std::nullopt));
-        System system{std::move(chassis), services};
+        System system{std::move(chassis), services, monitorOptions};
 
         EXPECT_EQ(system.getChassis().size(), 3);
         EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);
@@ -94,9 +96,38 @@ TEST_F(SystemTests, Constructor)
     // Test with empty chassis vector
     {
         std::vector<std::unique_ptr<Chassis>> chassis;
-        System system{std::move(chassis), services};
+        System system{std::move(chassis), services, monitorOptions};
 
         EXPECT_EQ(system.getChassis().size(), 0);
+    }
+}
+
+TEST_F(SystemTests, InitializeStatusMonitors)
+{
+    // Test where is_available_monitored is true; power good always monitored
+    {
+        ChassisStatusMonitorOptions monitorOptions{};
+        monitorOptions.isAvailableMonitored = true;
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        System system{std::move(chassis), services, monitorOptions};
+
+        system.initializeStatusMonitors();
+
+        EXPECT_TRUE(services.monitorOptions.isAvailableMonitored);
+        EXPECT_TRUE(services.monitorOptions.isPowerGoodMonitored);
+    }
+
+    // Test where is_available_monitored is false; power good always monitored
+    {
+        ChassisStatusMonitorOptions monitorOptions{};
+        monitorOptions.isAvailableMonitored = false;
+        std::vector<std::unique_ptr<Chassis>> chassis;
+        System system{std::move(chassis), services, monitorOptions};
+
+        system.initializeStatusMonitors();
+
+        EXPECT_FALSE(services.monitorOptions.isAvailableMonitored);
+        EXPECT_TRUE(services.monitorOptions.isPowerGoodMonitored);
     }
 }
 
@@ -106,7 +137,7 @@ TEST_F(SystemTests, GetChassis)
     chassis.emplace_back(createChassis(1, services, "/dev/i2c-159"));
     chassis.emplace_back(createChassis(3, services, "/dev/i2c-161"));
     chassis.emplace_back(createChassis(7, services, std::nullopt));
-    System system{std::move(chassis), services};
+    System system{std::move(chassis), services, ChassisStatusMonitorOptions{}};
 
     EXPECT_EQ(system.getChassis().size(), 3);
     EXPECT_EQ(system.getChassis()[0]->getNumber(), 1);

@@ -69,72 +69,79 @@ TEST_F(ConfigFileParserTests, Parse)
     // Test where works: Minimal chassis (only ChassisNumber)
     {
         const json configFileContents = R"(
-            [
-              { "ChassisNumber": 1 },
-              { "ChassisNumber": 2 },
-              { "ChassisNumber": 3 }
-            ]
+            {
+              "chassis": [
+                { "ChassisNumber": 1 },
+                { "ChassisNumber": 2 },
+                { "ChassisNumber": 3 }
+              ]
+            }
         )"_json;
 
         TemporaryFile configFile;
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+        ParsedConfig config = parse(pathName, services);
 
-        EXPECT_EQ(chassis.size(), 3);
-        EXPECT_EQ(chassis[0]->getNumber(), 1);
-        EXPECT_EQ(chassis[1]->getNumber(), 2);
-        EXPECT_EQ(chassis[2]->getNumber(), 3);
+        EXPECT_EQ(config.chassis.size(), 3);
+        EXPECT_EQ(config.chassis[0]->getNumber(), 1);
+        EXPECT_EQ(config.chassis[1]->getNumber(), 2);
+        EXPECT_EQ(config.chassis[2]->getNumber(), 3);
+        EXPECT_FALSE(config.monitorOptions.isAvailableMonitored);
     }
 
     // Test where works: Chassis with all optional properties
     {
         const json configFileContents = R"(
-            [
-              {
-                "ChassisNumber": 1,
-                "PresencePath": "/dev/i2c-159",
-                "PresenceGpio": {
-                  "Name": "presence-chassis1",
-                  "Direction": "Input",
-                  "Polarity": "Low"
-                },
-                "FaultUnlatchedGpio": {
-                  "Name": "power-chassis1-standby-fault-unlatched",
-                  "Direction": "Input",
-                  "Polarity": "Low"
-                },
-                "FaultLatchedGpio": {
-                  "Name": "power-chassis1-standby-fault-latched",
-                  "Direction": "Input",
-                  "Polarity": "Low"
-                },
-                "FaultLatchResetGpio": {
-                  "Name": "power-chassis1-standby-fault-reset",
-                  "Direction": "Output",
-                  "Polarity": "Low"
-                },
-                "EnableSystemResetGpio": {
-                  "Name": "reset-enable-chassis1-standby-power",
-                  "Direction": "Output",
-                  "Polarity": "Low"
+            {
+              "status_monitoring": {
+                "is_available_monitored": true
+              },
+              "chassis": [
+                {
+                  "ChassisNumber": 1,
+                  "PresencePath": "/dev/i2c-159",
+                  "PresenceGpio": {
+                    "Name": "presence-chassis1",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  },
+                  "FaultUnlatchedGpio": {
+                    "Name": "power-chassis1-standby-fault-unlatched",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  },
+                  "FaultLatchedGpio": {
+                    "Name": "power-chassis1-standby-fault-latched",
+                    "Direction": "Input",
+                    "Polarity": "Low"
+                  },
+                  "FaultLatchResetGpio": {
+                    "Name": "power-chassis1-standby-fault-reset",
+                    "Direction": "Output",
+                    "Polarity": "Low"
+                  },
+                  "EnableSystemResetGpio": {
+                    "Name": "reset-enable-chassis1-standby-power",
+                    "Direction": "Output",
+                    "Polarity": "Low"
+                  }
                 }
-              }
-            ]
+              ]
+            }
         )"_json;
 
         TemporaryFile configFile;
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
-        std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+        ParsedConfig config = parse(pathName, services);
 
-        EXPECT_EQ(chassis.size(), 1);
-        EXPECT_EQ(chassis[0]->getNumber(), 1);
-        EXPECT_EQ(chassis[0]->getGpios().size(), 5);
+        EXPECT_EQ(config.chassis.size(), 1);
+        EXPECT_EQ(config.chassis[0]->getNumber(), 1);
+        EXPECT_EQ(config.chassis[0]->getGpios().size(), 5);
+        EXPECT_TRUE(config.monitorOptions.isAvailableMonitored);
     }
 
     // Test where fails: File does not exist
@@ -153,9 +160,11 @@ TEST_F(ConfigFileParserTests, Parse)
     try
     {
         const json configFileContents = R"(
-            [
-              { "ChassisNumber": 1 }
-            ]
+            {
+              "chassis": [
+                { "ChassisNumber": 1 }
+              ]
+            }
         )"_json;
 
         TemporaryFile configFile;
@@ -763,44 +772,166 @@ TEST_F(ConfigFileParserTests, parsePresencePath)
     }
 }
 
+TEST_F(ConfigFileParserTests, ParseStatusMonitoring)
+{
+    // Test where works: Empty object; all options default to false
+    {
+        const json element = R"( {} )"_json;
+        ChassisStatusMonitorOptions options = parseStatusMonitoring(element);
+        EXPECT_FALSE(options.isPresentMonitored);
+        EXPECT_FALSE(options.isAvailableMonitored);
+        EXPECT_FALSE(options.isEnabledMonitored);
+        EXPECT_FALSE(options.isPowerStateMonitored);
+        EXPECT_FALSE(options.isPowerGoodMonitored);
+        EXPECT_FALSE(options.isInputPowerStatusMonitored);
+        EXPECT_FALSE(options.isPowerSuppliesStatusMonitored);
+    }
+
+    // Test where works: is_available_monitored is true
+    {
+        const json element = R"(
+            {
+              "is_available_monitored": true
+            }
+        )"_json;
+        ChassisStatusMonitorOptions options = parseStatusMonitoring(element);
+        EXPECT_TRUE(options.isAvailableMonitored);
+    }
+
+    // Test where works: is_available_monitored is false
+    {
+        const json element = R"(
+            {
+              "is_available_monitored": false
+            }
+        )"_json;
+        ChassisStatusMonitorOptions options = parseStatusMonitoring(element);
+        EXPECT_FALSE(options.isAvailableMonitored);
+    }
+
+    // Test where fails: Element is not an object
+    try
+    {
+        const json element = R"( [ true ] )"_json;
+        parseStatusMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not an object");
+    }
+
+    // Test where fails: is_available_monitored value is not a boolean
+    try
+    {
+        const json element = R"(
+            {
+              "is_available_monitored": 1
+            }
+        )"_json;
+        parseStatusMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a boolean");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "is_available_monitored": true,
+              "foo": true
+            }
+        )"_json;
+        parseStatusMonitoring(element);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+}
+
 TEST_F(ConfigFileParserTests, ParseRoot)
 {
-    // Test where works: Array with one chassis
+    // Test where works: One chassis; status_monitoring not specified
+    {
+        const json element = R"(
+            {
+              "chassis": [
+                { "ChassisNumber": 1 }
+              ]
+            }
+        )"_json;
+        ParsedConfig config = parseRoot(element, services);
+        EXPECT_EQ(config.chassis.size(), 1);
+        EXPECT_EQ(config.chassis[0]->getNumber(), 1);
+        EXPECT_FALSE(config.monitorOptions.isAvailableMonitored);
+    }
+
+    // Test where works: Multiple chassis; status_monitoring specified
+    {
+        const json element = R"(
+            {
+              "status_monitoring": {
+                "is_available_monitored": true
+              },
+              "chassis": [
+                { "ChassisNumber": 1 },
+                { "ChassisNumber": 2 },
+                { "ChassisNumber": 3 }
+              ]
+            }
+        )"_json;
+        ParsedConfig config = parseRoot(element, services);
+        EXPECT_EQ(config.chassis.size(), 3);
+        EXPECT_EQ(config.chassis[0]->getNumber(), 1);
+        EXPECT_EQ(config.chassis[1]->getNumber(), 2);
+        EXPECT_EQ(config.chassis[2]->getNumber(), 3);
+        EXPECT_TRUE(config.monitorOptions.isAvailableMonitored);
+    }
+
+    // Test where fails: Element is not an object
+    try
     {
         const json element = R"(
             [
               { "ChassisNumber": 1 }
             ]
         )"_json;
-        std::vector<std::unique_ptr<Chassis>> chassis =
-            parseRoot(element, services);
-        EXPECT_EQ(chassis.size(), 1);
-        EXPECT_EQ(chassis[0]->getNumber(), 1);
+        parseRoot(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
     }
-
-    // Test where works: Array with multiple chassis
+    catch (const std::invalid_argument& e)
     {
-        const json element = R"(
-            [
-              { "ChassisNumber": 1 },
-              { "ChassisNumber": 2 },
-              { "ChassisNumber": 3 }
-            ]
-        )"_json;
-        std::vector<std::unique_ptr<Chassis>> chassis =
-            parseRoot(element, services);
-        EXPECT_EQ(chassis.size(), 3);
-        EXPECT_EQ(chassis[0]->getNumber(), 1);
-        EXPECT_EQ(chassis[1]->getNumber(), 2);
-        EXPECT_EQ(chassis[2]->getNumber(), 3);
+        EXPECT_STREQ(e.what(), "Element is not an object");
     }
 
-    // Test where fails: Element is not an array
+    // Test where fails: Required chassis property not specified
     try
     {
         const json element = R"(
             {
-              "foo": "bar"
+              "status_monitoring": {}
+            }
+        )"_json;
+        parseRoot(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Required property missing: chassis");
+    }
+
+    // Test where fails: chassis value is not an array
+    try
+    {
+        const json element = R"(
+            {
+              "chassis": { "ChassisNumber": 1 }
             }
         )"_json;
         parseRoot(element, services);
@@ -811,10 +942,48 @@ TEST_F(ConfigFileParserTests, ParseRoot)
         EXPECT_STREQ(e.what(), "Element is not an array");
     }
 
+    // Test where fails: status_monitoring is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "status_monitoring": { "foo": true },
+              "chassis": [
+                { "ChassisNumber": 1 }
+              ]
+            }
+        )"_json;
+        parseRoot(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
+    // Test where fails: Invalid property specified
+    try
+    {
+        const json element = R"(
+            {
+              "chassis": [
+                { "ChassisNumber": 1 }
+              ],
+              "foo": "bar"
+            }
+        )"_json;
+        parseRoot(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an invalid property");
+    }
+
     // Test where works: multi Chassis with all optional properties
     {
         const json configFileContents = R"(
-            [
+            { "chassis": [
               {
                 "ChassisNumber": 1,
                 "PresencePath": "/dev/i2c-159",
@@ -980,7 +1149,7 @@ TEST_F(ConfigFileParserTests, ParseRoot)
                 "ChassisNumber": 10,
                 "PresencePath": "/dev/i2c-1059"
               }
-            ]
+            ] }
         )"_json;
 
         std::vector<int> gpiosPerChassis = {1, 2, 3, 4, 5, 4, 3, 2, 1, 0};
@@ -1061,8 +1230,9 @@ TEST_F(ConfigFileParserTests, ParseRoot)
         std::filesystem::path pathName{configFile.getPath()};
         writeConfigFile(pathName, configFileContents);
 
+        ParsedConfig config = parse(pathName, services);
         std::vector<std::unique_ptr<Chassis>> chassis =
-            parse(pathName, services);
+            std::move(config.chassis);
 
         EXPECT_EQ(chassis.size(), 10);
 

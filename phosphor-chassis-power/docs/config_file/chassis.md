@@ -34,24 +34,26 @@ says the chassis is absent and the path says it is present.
 ## Examples
 
 ```json
-[
-  {
-    "ChassisNumber": 1,
-    "PresenceGpio": {},
-    "FaultUnlatchedGpio": {},
-    "FaultLatchedGpio": {},
-    "FaultLatchResetGpio": {},
-    "EnableSystemResetGpio": {},
-    "PresencePath": "/dev/i2c-159"
-  },
-  {
-    "ChassisNumber": 2,
-    "PresenceGpio": {},
-    "FaultUnlatchedGpio": {},
-    "FaultLatchedGpio": {},
-    "FaultLatchResetGpio": {},
-    "EnableSystemResetGpio": {},
-    "PresencePath": "/dev/i2c-159"
-  }
-]
+{
+  "chassis": [
+    {
+      "ChassisNumber": 1,
+      "PresenceGpio": {},
+      "FaultUnlatchedGpio": {},
+      "FaultLatchedGpio": {},
+      "FaultLatchResetGpio": {},
+      "EnableSystemResetGpio": {},
+      "PresencePath": "/dev/i2c-159"
+    },
+    {
+      "ChassisNumber": 2,
+      "PresenceGpio": {},
+      "FaultUnlatchedGpio": {},
+      "FaultLatchedGpio": {},
+      "FaultLatchResetGpio": {},
+      "EnableSystemResetGpio": {},
+      "PresencePath": "/dev/i2c-159"
+    }
+  ]
+}
 ```
