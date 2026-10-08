@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7655793_8c7f23b8",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "Why not just cache the value in the callback?",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 1
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4795cf4c_ccded688",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "I don\u0027t think changed is needed here.",
+      "range": {
+        "startLine": 242,
+        "startChar": 18,
+        "endLine": 242,
+        "endChar": 73
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8c26ece_e713dea7",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "I believe this needs to check if system is on.",
+      "range": {
+        "startLine": 511,
+        "startChar": 3,
+        "endLine": 511,
+        "endChar": 23
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aadc4b9c_80be0996",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "I believe this needs to check if system is on.",
+      "range": {
+        "startLine": 578,
+        "startChar": 12,
+        "endLine": 578,
+        "endChar": 34
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7fe4775_f173ca97",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "NIT: chassis",
+      "range": {
+        "startLine": 619,
+        "startChar": 61,
+        "endLine": 619,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16a14780_d2225058",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be here",
+      "range": {
+        "startLine": 637,
+        "startChar": 28,
+        "endLine": 637,
+        "endChar": 39
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e807e7a_09842ef3",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "Should say latched",
+      "range": {
+        "startLine": 156,
+        "startChar": 26,
+        "endLine": 156,
+        "endChar": 35
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38e21590_0d2c5a5a",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like this is used.",
+      "range": {
+        "startLine": 283,
+        "startChar": 29,
+        "endLine": 283,
+        "endChar": 41
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c24a15c8_8154adbb",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "Was this a formatter change?",
+      "range": {
+        "startLine": 535,
+        "startChar": 3,
+        "endLine": 535,
+        "endChar": 74
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51509098_cbf9cfa3",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-08T21:40:32Z",
+      "side": 1,
+      "message": "What is this for?",
+      "range": {
+        "startLine": 545,
+        "startChar": 4,
+        "endLine": 545,
+        "endChar": 28
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
