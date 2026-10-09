@@ -4,7 +4,8 @@ A tool that enables a user to view the status of a system in regard to chassis
 status properties including: Presence, Availability, Enabled/Disabled, Power
 State, Power Good, Input Power Status, and Power Supply Status. Optionally
 includes PLDM state sensor data (Availability, Presence, Power State, and
-Operational Fault Status).
+Operational Fault Status) and per-PSU inventory data (Presence, Model, and Input
+Voltage Rating).
 
 ## Intention
 
@@ -45,6 +46,10 @@ OPTIONS
       PDRs from pldmd via D-Bus and sensor values directly over MCTP. PLDM
       properties displayed:
         Availability, Present, Power State, Operational Fault Status
+
+--psu
+    - Include PSU configuration properties (Present, Model, Input Voltage
+      Rating) per PSU for each chassis.
 
 -m, --mctp_eid <INT>
     - MCTP endpoint ID. Must be used with --pldm. Defaults to 8.
@@ -187,4 +192,41 @@ PLDM
        sensorID: 8  TID: 8
        Serial Number (PLDM):      ABC123
        Serial Number (Inventory): ABC123
+```
+
+- Display a single chassis with the per-PSU configuration properties (Present,
+  Model, and Input Voltage Rating) included:
+
+```text
+$ chassis-status-tool -c 1 --psu
+
+Chassis 1
+    Present: True
+    ...
+    Power Supply Status: Good
+    Power Supply 0:
+       Present: True
+       Model: XXXX
+       Input Voltage Rating: 220 V
+    Power Supply 1:
+       Present: True
+       Model: XXXX
+       Input Voltage Rating: 220 V
+```
+
+- Display only the PSU model and input voltage rating for one chassis, with
+  verbose output showing the D-Bus object paths and interfaces:
+
+```text
+$ chassis-status-tool -c 1 -p Model Voltage -v
+
+Chassis 1
+    Power Supply 0:
+       Model: XXXX
+          Object Path: /xyz/openbmc_project/inventory/system/chassis1/motherboard/powersupply0
+          Interface: xyz.openbmc_project.Inventory.Decorator.Asset
+       Input Voltage Rating: 220 V
+          Object Path: /xyz/openbmc_project/sensors/voltage/chassis1_ps0_input_voltage_rating
+          Interface: xyz.openbmc_project.Sensor.Value
+
 ```

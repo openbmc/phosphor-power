@@ -2,6 +2,7 @@ chassisstatustool = executable(
     'chassis-status-tool',
     'chassis-status-tool.cpp',
     'pldm-fetcher.cpp',
+    'psu-fetcher.cpp',
     dependencies: [
         cli11_dep,
         libpldm_dep,
