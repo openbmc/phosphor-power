@@ -16,6 +16,7 @@
 
 #include "chassis_status_monitor.hpp"
 #include "pldm-fetcher.hpp"
+#include "psu-fetcher.hpp"
 
 #include <CLI/CLI.hpp>
 #include <sdbusplus/bus.hpp>
@@ -23,7 +24,7 @@
 #include <memory>
 #include <print>
 
-constexpr auto numProperties = 8;
+constexpr auto numProperties = 11;
 constexpr auto smallIndent = "    ";
 constexpr auto largeIndent = "       ";
 
@@ -54,9 +55,6 @@ void display(sdbusplus::bus_t& bus, int chassisNumber,
     {
         return;
     }
-
-    std::println("");
-    std::println("Chassis {}", chassisNumber);
 
     if (propMap.at("Present"))
     {
@@ -248,8 +246,9 @@ void display(sdbusplus::bus_t& bus, int chassisNumber,
 
 void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
                 const std::map<std::string, bool>& propMap,
-                const std::map<std::string, bool>& pldmPropMap, bool isVerbose,
-                bool includePldm, uint8_t mctpEid)
+                const std::map<std::string, bool>& pldmPropMap,
+                const std::map<std::string, bool>& psuPropMap, bool isVerbose,
+                bool includePldm, bool includePsu, uint8_t mctpEid)
 {
     std::unique_ptr<PldmFetcher> pldmFetcher;
     if (includePldm)
@@ -257,6 +256,14 @@ void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
         auto pldmScanLimit = (chassisNumber > -1) ? chassisNumber : numChassis;
         pldmFetcher = std::make_unique<PldmFetcher>(
             bus, isVerbose, pldmScanLimit, mctpEid, pldmPropMap);
+    }
+
+    std::unique_ptr<PsuFetcher> psuFetcher;
+    if (includePsu || std::ranges::any_of(psuPropMap, [](const auto& entry) {
+            return entry.second;
+        }))
+    {
+        psuFetcher = std::make_unique<PsuFetcher>(bus, isVerbose, psuPropMap);
     }
 
     if (pldmFetcher && !pldmFetcher->isTransportOpen() && isVerbose)
@@ -267,7 +274,14 @@ void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
 
     if (chassisNumber > -1)
     {
+        std::println("");
+        std::println("Chassis {}", chassisNumber);
+
         display(bus, chassisNumber, propMap, isVerbose);
+        if (psuFetcher && psuFetcher->hasEnabledProperties())
+        {
+            psuFetcher->display(chassisNumber);
+        }
         if (pldmFetcher && pldmFetcher->isTransportOpen())
         {
             pldmFetcher->display(chassisNumber);
@@ -277,7 +291,14 @@ void runDisplay(sdbusplus::bus_t& bus, int chassisNumber, int numChassis,
     {
         for (int i = 0; i < numChassis; i++)
         {
+            std::println("");
+            std::println("Chassis {}", i);
+
             display(bus, i, propMap, isVerbose);
+            if (psuFetcher && psuFetcher->hasEnabledProperties())
+            {
+                psuFetcher->display(i);
+            }
             if (pldmFetcher && pldmFetcher->isTransportOpen())
             {
                 pldmFetcher->display(i);
@@ -294,6 +315,7 @@ int main(int argc, char** argv)
     std::vector<std::string> propertyNames;
     auto isVerbose = false;
     auto includePldm = false;
+    auto includePsu = false;
     uint8_t mctpEid = PldmFetcher::defaultMctpEid;
     std::map<std::string, bool> propMap = {
         {"Present", false},          {"Available", false},
@@ -305,10 +327,12 @@ int main(int argc, char** argv)
         {"Available", false},
         {"PowerState", false},
         {"OperationalFaultStatus", false}};
+    std::map<std::string, bool> psuPropMap = {
+        {"Present", false}, {"Model", false}, {"Voltage", false}};
 
     CLI::App app{"Chassis status tool"};
     app.footer(
-        "D-Bus properties:\n"
+        "D-Bus Chassis properties:\n"
         "  * Present\n"
         "  * Available\n"
         "  * Enabled\n"
@@ -316,6 +340,10 @@ int main(int argc, char** argv)
         "  * PowerGood\n"
         "  * InputPowerStatus\n"
         "  * PowerSupplyStatus\n"
+        "D-Bus PSU properties:\n"
+        "  * Present\n"
+        "  * Model\n"
+        "  * Voltage\n"
         "PLDM properties:\n"
         "  * Present\n"
         "  * Available\n"
@@ -348,6 +376,10 @@ int main(int argc, char** argv)
     app.add_flag("--pldm", includePldm,
                  "Includes PLDM chassis status properties in output")
         ->expected(0);
+    app.add_flag(
+           "--psu", includePsu,
+           "Includes PSU config properties (Present, Model, Input Voltage Rating) in output")
+        ->expected(0);
     app.add_option("-m,--mctp_eid", mctpEid,
                    "MCTP endpoint ID. Must be used "
                    "with --pldm. (default: 8)")
@@ -375,11 +407,18 @@ int main(int argc, char** argv)
         {
             value = true;
         }
+        if (includePsu)
+        {
+            for (auto& [name, value] : psuPropMap)
+            {
+                value = true;
+            }
+        }
     }
     else
     {
         // Set only the specified properties to true in whichever map(s)
-        // contain the name. A name may appear in both (e.g. Present).
+        // contain the name. A name may appear in multiple maps.
         for (const auto& prop : propertyNames)
         {
             bool found = false;
@@ -393,6 +432,11 @@ int main(int argc, char** argv)
                 pldmPropMap[prop] = true;
                 found = true;
             }
+            if (psuPropMap.contains(prop))
+            {
+                psuPropMap[prop] = true;
+                found = true;
+            }
             if (!found)
             {
                 std::println(stderr, "Error: Unknown property '{}'", prop);
@@ -404,7 +448,7 @@ int main(int argc, char** argv)
     if (app.got_subcommand("display") || app.get_subcommands().empty())
     {
         runDisplay(bus, chassisNumber, numChassis, propMap, pldmPropMap,
-                   isVerbose, includePldm, mctpEid);
+                   psuPropMap, isVerbose, includePldm, includePsu, mctpEid);
     }
 
     std::println("");
