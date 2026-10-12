@@ -229,6 +229,374 @@
       },
       "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d389c4c_61583c13",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Why was previous value changed to optional here? I feel like this could generate confusion about how the previousValue is handled.",
+      "range": {
+        "startLine": 54,
+        "startChar": 40,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8b67ca_db52ab4f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This should probably just say build chassis.",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 25
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01869aae_c9fdaba8",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "I think this is a repeat helper.",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 55
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e959d84_3c1e8c03",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "I don\u0027t like this commenting style here, the rest of the file does not use it.",
+      "range": {
+        "startLine": 1908,
+        "startChar": 0,
+        "endLine": 1910,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b64b282_d6494777",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This comment style seems excessive here",
+      "range": {
+        "startLine": 1920,
+        "startChar": 5,
+        "endLine": 1922,
+        "endChar": 76
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f57a5d8_02a137fc",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "NIT: comment not needed.",
+      "range": {
+        "startLine": 1929,
+        "startChar": 8,
+        "endLine": 1929,
+        "endChar": 59
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be2841c4_de4befd9",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2002,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Did you mean to put this next to the monitor call?",
+      "range": {
+        "startLine": 1999,
+        "startChar": 0,
+        "endLine": 2002,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab06b2b9_bc29d9b6",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2119,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "I don\u0027t like these dividers, I think they\u0027re a little confusing.",
+      "range": {
+        "startLine": 2119,
+        "startChar": 8,
+        "endLine": 2119,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59b097cb_9039fa59",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Extra \u0027//\u0027",
+      "range": {
+        "startLine": 2138,
+        "startChar": 10,
+        "endLine": 2138,
+        "endChar": 13
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b9a73bc_d75a7a6f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Extra \u0027//\u0027, there are quite a few of these in the change.",
+      "range": {
+        "startLine": 2360,
+        "startChar": 8,
+        "endLine": 2360,
+        "endChar": 16
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3407d7_ab5f9618",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t test that its missing.",
+      "range": {
+        "startLine": 2451,
+        "startChar": 0,
+        "endLine": 2455,
+        "endChar": 5
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09b86af6_785598ea",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t test handlePowerStateChange.",
+      "range": {
+        "startLine": 2460,
+        "startChar": 0,
+        "endLine": 2466,
+        "endChar": 5
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "238bab12_12c0bc05",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2500,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Why is the latched gpio getting set?",
+      "range": {
+        "startLine": 2491,
+        "startChar": 0,
+        "endLine": 2500,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65367c81_6af0fc5b",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This function doesn\u0027t use the latched gpio.",
+      "range": {
+        "startLine": 2549,
+        "startChar": 4,
+        "endLine": 2558,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c52a321b_83ea5b97",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "This does not reflect the test case.",
+      "range": {
+        "startLine": 2595,
+        "startChar": 7,
+        "endLine": 2595,
+        "endChar": 51
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83673814_3d1b2aea",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-12T15:30:07Z",
+      "side": 1,
+      "message": "Why does this initialize presence.",
+      "range": {
+        "startLine": 2597,
+        "startChar": 0,
+        "endLine": 2598,
+        "endChar": 37
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
