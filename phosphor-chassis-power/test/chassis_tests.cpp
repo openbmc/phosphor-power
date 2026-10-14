@@ -868,6 +868,29 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_TRUE(chassis.getPresenceValue());
     }
 
+    // GPIO off, Presence path not defined, not previously present — no PEL
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        auto monitor = services.createChassisStatusMonitor(
+            0, "/xyz/openbmc_project/inventory/system/chassis",
+            ChassisStatusMonitorOptions{});
+        chassis.setSystemStatusMonitor(std::move(monitor));
+
+        expectPresenceGpio(chassis, 0, 0);
+
+        EXPECT_CALL(services, logError).Times(0);
+
+        chassis.monitor();
+
+        EXPECT_FALSE(chassis.getPresenceValue());
+    }
+
     // GPIO off and Presence Path not specified, system off
     {
         MockServices services{};
@@ -964,6 +987,33 @@ TEST_F(ChassisTests, HandlePresenceChange)
         EXPECT_TRUE(chassis.getPresenceValue());
     }
 
+    // GPIO off and Presence path missing, not previously present — no PEL
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        auto tempPath =
+            std::filesystem::temp_directory_path() / "test_presence_off";
+        std::filesystem::remove(tempPath);
+
+        Chassis chassis{1, services, tempPath.string(), std::move(gpios)};
+
+        auto monitor = services.createChassisStatusMonitor(
+            0, "/xyz/openbmc_project/inventory/system/chassis",
+            ChassisStatusMonitorOptions{});
+        chassis.setSystemStatusMonitor(std::move(monitor));
+
+        expectPresenceGpio(chassis, 0, 0);
+
+        EXPECT_CALL(services, logError).Times(0);
+
+        chassis.monitor();
+
+        EXPECT_FALSE(chassis.getPresenceValue());
+    }
+
     // GPIO off and Presence path missing, system off — both defined and false
     {
         MockServices services{};
@@ -1030,6 +1080,36 @@ TEST_F(ChassisTests, HandlePresenceChange)
                 "xyz.openbmc_project.Power.Chassis.Missing.ShouldBePresent",
                 Entry::Level::Error, _))
             .Times(1);
+
+        chassis.monitor();
+
+        EXPECT_FALSE(chassis.getPresenceValue());
+    }
+    // GPIO read failure, Presence path not specified, not previously present —
+    // no PEL
+    {
+        MockServices services{};
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(services.createGPIO(
+            "presence-chassis1", GpioDirection::Input, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        auto monitor = services.createChassisStatusMonitor(
+            0, "/xyz/openbmc_project/inventory/system/chassis",
+            ChassisStatusMonitorOptions{});
+        chassis.setSystemStatusMonitor(std::move(monitor));
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillOnce(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillOnce(testing::Throw(std::runtime_error("GPIO read failure")));
+        EXPECT_CALL(getMockGpio(chassis, 0), release())
+            .WillOnce(testing::Return());
+
+        EXPECT_CALL(services, logError).Times(0);
 
         chassis.monitor();
 
@@ -1148,6 +1228,27 @@ TEST_F(ChassisTests, HandlePresenceChange)
         auto* mockMonitor = static_cast<MockChassisStatusMonitor*>(
             chassis.getSystemMonitor().get());
         EXPECT_CALL(*mockMonitor, getPowerGood()).WillOnce(testing::Return(0));
+
+        EXPECT_CALL(services, logError).Times(0);
+
+        chassis.monitor();
+
+        EXPECT_FALSE(chassis.getPresenceValue());
+    }
+
+    // No GPIO configured, presence path absent — chassis absent,
+    // not previously present don't log PEL
+    {
+        auto missingPath = std::filesystem::temp_directory_path() / "test";
+        std::filesystem::remove(missingPath);
+
+        MockServices services{};
+        Chassis chassis{1, services, missingPath.string()};
+
+        auto statusMonitor = services.createChassisStatusMonitor(
+            0, "/xyz/openbmc_project/inventory/system/chassis",
+            ChassisStatusMonitorOptions{});
+        chassis.setSystemStatusMonitor(std::move(statusMonitor));
 
         EXPECT_CALL(services, logError).Times(0);
 

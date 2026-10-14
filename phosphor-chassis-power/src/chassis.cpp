@@ -425,7 +425,7 @@ void Chassis::handlePresenceChange(bool readFailure)
 
         if (presenceValue && isSystemPoweredOn())
         {
-            // Only log error if system is on and chassis is present,
+            // Only log error if system is on and chassis was present,
             // to avoid flooding the error log on a powered-off system.
             std::map<std::string, std::string> data;
             data["CHASSIS_NUMBER"] = std::to_string(number);
@@ -449,7 +449,7 @@ void Chassis::handlePresenceChange(bool readFailure)
     {
         if (presenceValue && isSystemPoweredOn())
         {
-            // Only log error if system is on and chassis is present,
+            // Only log error if system is on and chassis was present,
             // to avoid flooding the error log on a powered-off system.
             std::map<std::string, std::string> data;
             data["CHASSIS_NUMBER"] = std::to_string(number);
@@ -474,8 +474,9 @@ void Chassis::handlePresenceChange(bool readFailure)
     else if (!presenceGPIOValue.has_value())
     {
         newPresence = presencePathValue.value();
-        if (!presencePathValue.value() && isSystemPoweredOn())
+        if (!presencePathValue.value() && presenceValue && isSystemPoweredOn())
         {
+            // Only log error if system is on and chassis was present
             std::map<std::string, std::string> data;
             data["CHASSIS_NUMBER"] = std::to_string(number);
 
