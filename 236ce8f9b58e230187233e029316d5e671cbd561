@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "29205b78_a3e3b404",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "Nit: The capitalization is kind of confusing. The tool name is in all lower case. So I\u0027d suggest either having the executable name \u0027chassis-status-tool\u0027 or a general title like \u0027Chassis Status Tool\u0027. The former seems clearer, but either is fine.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c175e3bb_39d1de2f",
+        "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "Now that this block of code is becoming non-trivial, it is probably worth making a separate function so it is not duplicated in the else branch.",
+      "range": {
+        "startLine": 275,
+        "startChar": 13,
+        "endLine": 275,
+        "endChar": 14
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7bcf96e2_3af5ecf5",
@@ -20,6 +66,171 @@
         "endLine": 398,
         "endChar": 21
       },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7894327_a242a5ee",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "Can you put parentheses around the two sub-comparisons and the overall expression?\n\nI know it isn\u0027t technically necessary, but it makes things clearer and does not require the reader to try to remember whether !\u003d has a high precedence than \u0026\u0026 in the expression.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9eed481_ff21bbf5",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "We try to use the standard be-verb prefix (is/was/were/has/...) on boolean data members too. Since C++ allows an init list where the data member and parameter have the same name, it would be good if the data member was isVerbose.",
+      "range": {
+        "startLine": 43,
+        "startChar": 14,
+        "endLine": 43,
+        "endChar": 21
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af40c666_8a549166",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "getPSUInventoryPaths() can throw an exception if the D-Bus call fails. Do you need to catch that here (or somewhere)?",
+      "range": {
+        "startLine": 44,
+        "startChar": 36,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b787158_709a75ed",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "This method is really long. As a general rule of thumb, we try to keep methods to a single path of code or so, unless it is a special scenario like a state machine case statement. So I\u0027d recommend breaking this into some smaller helper/common methods.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d62c525_2f593517",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "Why is a check on the path needed in a single-chassis system? Is this to avoid PSU paths from non-system chassis (like I/O chassis)?",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29fb8465_5eac4ba6",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "This assumes a max of 9 or 10 PSUs in a chassis depending on whether they are 0-indexed.\n\nIt would be safer to extract whatever numeric suffix is present, regardless of number of digits.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e1f38f8_a722b9f8",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "You might consider breaking this into some helper or common methods as well. It is simpler code, so it is not as important for readability, but still something to consider.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5faf6e4_98b464a6",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "I think you need to add the PSU properties here right?",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd6de925_e13171e2",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-16T23:26:04Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be clearer if it were InputVoltageRating so the property name matches the output title? Similar to InputPowerStatus, where we just remove the spaces.",
       "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
