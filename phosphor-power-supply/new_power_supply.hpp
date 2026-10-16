@@ -9,6 +9,7 @@
 #include <sdbusplus/bus/match.hpp>
 #include <xyz/openbmc_project/Association/Definitions/server.hpp>
 #include <xyz/openbmc_project/Sensor/Value/server.hpp>
+#include <xyz/openbmc_project/Software/Version/server.hpp>
 #include <xyz/openbmc_project/State/Decorator/Availability/server.hpp>
 #include <xyz/openbmc_project/State/Decorator/OperationalStatus/server.hpp>
 
@@ -67,6 +68,10 @@ using SensorObject = sdbusplus::server::object_t<SensorInterface>;
 using PowerSensorObject =
     sdbusplus::server::object_t<SensorInterface, OperationalStatusInterface,
                                 AvailabilityInterface, AssocDefInterface>;
+using SoftwareVersionInterface =
+    sdbusplus::xyz::openbmc_project::Software::server::Version;
+using SoftwareVersionObject =
+    sdbusplus::server::object_t<SoftwareVersionInterface, AssocDefInterface>;
 
 using AssociationTuple = std::tuple<std::string, std::string, std::string>;
 
@@ -792,6 +797,17 @@ class PowerSupply
     void setSensorsNotAvailable();
 
     /**
+     * @brief Publishes the PSU firmware version as a Software.Version D-Bus
+     *        object under /xyz/openbmc_project/software/ with a
+     *        "running"/"ran_on" association back to the inventory item.
+     *
+     * This keeps Software.Version off the PIM Notify call (PIM does not
+     * recognise it) while still making the firmware version queryable at the
+     * correct location on D-Bus.
+     */
+    void publishSoftwareVersion();
+
+    /**
      * @brief Returns the associations to create for a sensor on this
      *        power supply.
      */
@@ -1074,6 +1090,16 @@ class PowerSupply
      * @brief The D-Bus object for the peak input power sensor.
      */
     std::unique_ptr<PowerSensorObject> peakInputPowerSensor;
+
+    /**
+     * @brief The D-Bus object for the PSU firmware Software.Version.
+     *
+     * Published under /xyz/openbmc_project/software/<id> with a
+     * "running"/"ran_on" association back to the inventory item, so
+     * phosphor-inventory-manager never receives the interface and will
+     * no longer log "Software.Version unrecognized".
+     */
+    std::unique_ptr<SoftwareVersionObject> softwareVersionObject;
 
     /**
      * @brief The device driver name
