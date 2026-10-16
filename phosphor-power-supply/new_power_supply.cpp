@@ -953,7 +953,6 @@ void PowerSupply::updateInventory()
     PropertyMap assetProps;
     PropertyMap operProps;
     PropertyMap powerAttrsProps;
-    PropertyMap versionProps;
     PropertyMap ipzvpdDINFProps;
     PropertyMap ipzvpdVINIProps;
     using InterfaceMap = std::map<std::string, PropertyMap>;
@@ -979,7 +978,6 @@ void PowerSupply::updateInventory()
             assetProps.emplace(SN_PROP, sn);
             fwVersion = readVPDValue(FW_VERSION, Type::Debug,
                                      ACBEL_FSG032_FW_VERSION_SIZE);
-            versionProps.emplace(VERSION_PROP, fwVersion);
         }
         else
         {
@@ -992,7 +990,6 @@ void PowerSupply::updateInventory()
             assetProps.emplace(SN_PROP, header + sn);
             fwVersion = readVPDValue(FW_VERSION, Type::HwmonDeviceDebug,
                                      IBMCFFPS_FW_VERSION_SIZE);
-            versionProps.emplace(VERSION_PROP, fwVersion);
         }
 
         assetProps.emplace(MODEL_PROP, modelName);
@@ -1035,9 +1032,14 @@ void PowerSupply::updateInventory()
 
         powerAttrsProps.emplace(POWER_CAPACITY_PROP, getMaxPowerOut());
 
+        // NOTE: VERSION_IFACE (Software.Version) is intentionally NOT included
+        // in the PIM Notify call here. PIM only manages Inventory.* interfaces
+        // and logs "unrecognized" for Software.Version. Instead, the firmware
+        // version is published as a separate D-Bus object under
+        // /xyz/openbmc_project/software/ with a "running" association back to
+        // the inventory item – see publishSoftwareVersion() below.
         interfaces.emplace(ASSET_IFACE, std::move(assetProps));
         interfaces.emplace(POWER_ATTRS_IFACE, std::move(powerAttrsProps));
-        interfaces.emplace(VERSION_IFACE, std::move(versionProps));
         interfaces.emplace(DINF_IFACE, std::move(ipzvpdDINFProps));
         interfaces.emplace(VINI_IFACE, std::move(ipzvpdVINIProps));
 
@@ -1076,7 +1078,91 @@ void PowerSupply::updateInventory()
                 "CHASSIS_NAME", chassisName, "ERROR", e, "INVENTORY_PATH",
                 inventoryPath);
         }
+
+        // Publish the PSU firmware version as a Software.Version object under
+        // /xyz/openbmc_project/software/ with a "running"/"ran_on" association
+        // back to the inventory item. This is the correct place for
+        // Software.Version per the interface specification.
+        publishSoftwareVersion();
 #endif
+    }
+    else
+    {
+        // PSU no longer present – remove the software version object so stale
+        // version data is not left on the bus.
+        softwareVersionObject.reset();
+    }
+}
+
+void PowerSupply::publishSoftwareVersion()
+{
+    if (fwVersion.empty())
+    {
+        return;
+    }
+
+    // Derive an 8-character ID from the first 8 chars of the fwVersion string.
+    // This gives a stable, unique-enough path per PSU firmware build.
+    // A sha512sum of the version would be more robust but adds a dependency;
+    // for PSU firmware the version string itself is compact and stable.
+    std::string versionId = shortName + "_" + fwVersion.substr(0, 8);
+    if (isMultiChassis)
+    {
+        versionId = chassisName + "_" + versionId;
+    }
+
+    // Replace any characters that are not valid in a D-Bus path segment.
+    std::replace_if(
+        versionId.begin(), versionId.end(),
+        [](char c) { return !std::isalnum(c) && c != '_'; }, '_');
+
+    std::string softwarePath =
+        std::string("/xyz/openbmc_project/software/") + versionId;
+
+    // Only create the object if it does not already exist or the version
+    // string has changed (i.e. firmware was updated while running).
+    if (softwareVersionObject)
+    {
+        if (softwareVersionObject->version() == fwVersion)
+        {
+            // nothing to do.
+            return;
+        }
+        // Version changed – remove old object before creating new one.
+        softwareVersionObject.reset();
+    }
+
+    try
+    {
+        softwareVersionObject = std::make_unique<SoftwareVersionObject>(
+            bus, softwarePath.c_str(),
+            SoftwareVersionObject::action::defer_emit);
+
+        softwareVersionObject->version(fwVersion, true);
+        softwareVersionObject->purpose(
+            SoftwareVersionInterface::VersionPurpose::PSU, true);
+
+        // Create a "running"/"ran_on" association from this software version
+        // object back to the PSU inventory item, as required by the
+        // Software.Version interface specification.
+        std::vector<AssociationTuple> associations{
+            {"running", "ran_on", inventoryPath}};
+        softwareVersionObject->associations(associations, true);
+
+        softwareVersionObject->emit_object_added();
+
+        lg2::debug("{CHASSIS_NAME}: {SHORT_NAME} published Software.Version "
+                   "{FW_VERSION} at {PATH}",
+                   "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName,
+                   "FW_VERSION", fwVersion, "PATH", softwarePath);
+    }
+    catch (const std::exception& e)
+    {
+        lg2::error(
+            "{CHASSIS_NAME}: {SHORT_NAME} failed to publish Software.Version: "
+            "{ERROR}",
+            "CHASSIS_NAME", chassisName, "SHORT_NAME", shortName, "ERROR", e);
+        softwareVersionObject.reset();
     }
 }
 
