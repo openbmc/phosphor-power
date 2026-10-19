@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dcba105_48d72342",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29205b78_a3e3b404",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c175e3bb_39d1de2f",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-10-16T23:26:04Z",
       "side": 1,
       "message": "Now that this block of code is becoming non-trivial, it is probably worth making a separate function so it is not duplicated in the else branch.",
+      "range": {
+        "startLine": 275,
+        "startChar": 13,
+        "endLine": 275,
+        "endChar": 14
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0903a3_2d08e75e",
+        "filename": "tools/chassis-status-tool/chassis-status-tool.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c175e3bb_39d1de2f",
       "range": {
         "startLine": 275,
         "startChar": 13,
@@ -87,6 +135,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd987ee_ffcdaf21",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7894327_a242a5ee",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9eed481_ff21bbf5",
@@ -100,6 +166,30 @@
       "writtenOn": "2026-10-16T23:26:04Z",
       "side": 1,
       "message": "We try to use the standard be-verb prefix (is/was/were/has/...) on boolean data members too. Since C++ allows an init list where the data member and parameter have the same name, it would be good if the data member was isVerbose.",
+      "range": {
+        "startLine": 43,
+        "startChar": 14,
+        "endLine": 43,
+        "endChar": 21
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7621f761_6d5ab992",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9eed481_ff21bbf5",
       "range": {
         "startLine": 43,
         "startChar": 14,
@@ -133,6 +223,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0862b44d_95a6060f",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "af40c666_8a549166",
+      "range": {
+        "startLine": 44,
+        "startChar": 36,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b787158_709a75ed",
@@ -146,6 +260,24 @@
       "writtenOn": "2026-10-16T23:26:04Z",
       "side": 1,
       "message": "This method is really long. As a general rule of thumb, we try to keep methods to a single path of code or so, unless it is a special scenario like a state machine case statement. So I\u0027d recommend breaking this into some smaller helper/common methods.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e875e18_5df2bc09",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b787158_709a75ed",
       "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -167,6 +299,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7de035cf_20fda645",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Incase someone wanted to run it on a single chassis system, it would pick up the path.",
+      "parentUuid": "6d62c525_2f593517",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29fb8465_5eac4ba6",
@@ -180,6 +330,24 @@
       "writtenOn": "2026-10-16T23:26:04Z",
       "side": 1,
       "message": "This assumes a max of 9 or 10 PSUs in a chassis depending on whether they are 0-indexed.\n\nIt would be safer to extract whatever numeric suffix is present, regardless of number of digits.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a6c922_e8a234a9",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29fb8465_5eac4ba6",
       "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -201,6 +369,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad07a518_0a30b95d",
+        "filename": "tools/chassis-status-tool/psu-fetcher.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e1f38f8_a722b9f8",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5faf6e4_98b464a6",
@@ -218,6 +404,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f021807_cb562ccc",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5faf6e4_98b464a6",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd6de925_e13171e2",
@@ -231,6 +435,24 @@
       "writtenOn": "2026-10-16T23:26:04Z",
       "side": 1,
       "message": "Wouldn\u0027t it be clearer if it were InputVoltageRating so the property name matches the output title? Similar to InputPowerStatus, where we just remove the spaces.",
+      "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12b1edc6_ec180eba",
+        "filename": "tools/docs/chassis-status-tool.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-19T21:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd6de925_e13171e2",
       "revId": "236ce8f9b58e230187233e029316d5e671cbd561",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
