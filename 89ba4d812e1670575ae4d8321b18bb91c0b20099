@@ -1034,6 +1034,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f6a4862_3ea3cd6e",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2500,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:21:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae7c5bf2_39861f0c",
+      "range": {
+        "startLine": 2491,
+        "startChar": 0,
+        "endLine": 2500,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65367c81_6af0fc5b",
@@ -1071,6 +1095,30 @@
       "side": 1,
       "message": "this is for the monitor() that does have a check for Latched GPIO.\nI did miss adding the unExpectSbLatch() for the handlePowerStateChange().",
       "parentUuid": "65367c81_6af0fc5b",
+      "range": {
+        "startLine": 2549,
+        "startChar": 4,
+        "endLine": 2558,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "136ae3f5_a27ee90f",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:21:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "326e011a_053689c9",
       "range": {
         "startLine": 2549,
         "startChar": 4,
