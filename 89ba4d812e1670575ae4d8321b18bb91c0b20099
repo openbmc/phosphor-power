@@ -47,6 +47,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0743a2_c775c037",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4795cf4c_ccded688",
+      "range": {
+        "startLine": 242,
+        "startChar": 18,
+        "endLine": 242,
+        "endChar": 73
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8c26ece_e713dea7",
@@ -60,6 +84,30 @@
       "writtenOn": "2026-10-08T21:40:32Z",
       "side": 1,
       "message": "I believe this needs to check if system is on.",
+      "range": {
+        "startLine": 511,
+        "startChar": 3,
+        "endLine": 511,
+        "endChar": 23
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8e32595_fd5566a4",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "are you saying the check for \"not present\" would need to check power state.\nif powered on \"NEW PROCEDURE\" and if powered off do this procedure?",
+      "parentUuid": "d8c26ece_e713dea7",
       "range": {
         "startLine": 511,
         "startChar": 3,
@@ -95,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b579c321_e6250622",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "not sure, the else leg is the power on.\nI can write as an else if (powerStatus.value())",
+      "parentUuid": "aadc4b9c_80be0996",
+      "range": {
+        "startLine": 578,
+        "startChar": 12,
+        "endLine": 578,
+        "endChar": 34
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7fe4775_f173ca97",
         "filename": "phosphor-chassis-power/src/chassis.cpp",
         "patchSetId": 19
@@ -106,6 +178,30 @@
       "writtenOn": "2026-10-08T21:40:32Z",
       "side": 1,
       "message": "NIT: chassis",
+      "range": {
+        "startLine": 619,
+        "startChar": 61,
+        "endLine": 619,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1c5b16_d68d22b0",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7fe4775_f173ca97",
       "range": {
         "startLine": 619,
         "startChar": 61,
@@ -139,6 +235,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18cc95d_11814da4",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a14780_d2225058",
+      "range": {
+        "startLine": 637,
+        "startChar": 28,
+        "endLine": 637,
+        "endChar": 39
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e807e7a_09842ef3",
@@ -152,6 +272,30 @@
       "writtenOn": "2026-10-08T21:40:32Z",
       "side": 1,
       "message": "Should say latched",
+      "range": {
+        "startLine": 156,
+        "startChar": 26,
+        "endLine": 156,
+        "endChar": 35
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4934863f_dbb40d9a",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e807e7a_09842ef3",
       "range": {
         "startLine": 156,
         "startChar": 26,
@@ -185,6 +329,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e157fa2b_e7a69bd4",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38e21590_0d2c5a5a",
+      "range": {
+        "startLine": 283,
+        "startChar": 29,
+        "endLine": 283,
+        "endChar": 41
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c24a15c8_8154adbb",
@@ -198,6 +366,30 @@
       "writtenOn": "2026-10-08T21:40:32Z",
       "side": 1,
       "message": "Was this a formatter change?",
+      "range": {
+        "startLine": 535,
+        "startChar": 3,
+        "endLine": 535,
+        "endChar": 74
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be36dab6_f00edfc4",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Looks like somehow a new line was inserted that caused the * to be moved \none to the left.  not sure why this would have been changed.",
+      "parentUuid": "c24a15c8_8154adbb",
       "range": {
         "startLine": 535,
         "startChar": 3,
@@ -231,6 +423,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "427598d8_986e73f9",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "I have no idea, bet guest is BOB wanted to do something that I rejected.",
+      "parentUuid": "51509098_cbf9cfa3",
+      "range": {
+        "startLine": 545,
+        "startChar": 4,
+        "endLine": 545,
+        "endChar": 28
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d389c4c_61583c13",
@@ -244,6 +460,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "Why was previous value changed to optional here? I feel like this could generate confusion about how the previousValue is handled.",
+      "range": {
+        "startLine": 54,
+        "startChar": 40,
+        "endLine": 55,
+        "endChar": 43
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccda2e78_77817e25",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d389c4c_61583c13",
       "range": {
         "startLine": 54,
         "startChar": 40,
@@ -277,6 +517,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d953a81a_b861764a",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af8b67ca_db52ab4f",
+      "range": {
+        "startLine": 397,
+        "startChar": 8,
+        "endLine": 397,
+        "endChar": 25
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01869aae_c9fdaba8",
@@ -290,6 +554,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "I think this is a repeat helper.",
+      "range": {
+        "startLine": 479,
+        "startChar": 0,
+        "endLine": 481,
+        "endChar": 55
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0084a76_3e6e4770",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01869aae_c9fdaba8",
       "range": {
         "startLine": 479,
         "startChar": 0,
@@ -323,6 +611,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42cb3079_9dc4b1c3",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e959d84_3c1e8c03",
+      "range": {
+        "startLine": 1908,
+        "startChar": 0,
+        "endLine": 1910,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b64b282_d6494777",
@@ -336,6 +648,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "This comment style seems excessive here",
+      "range": {
+        "startLine": 1920,
+        "startChar": 5,
+        "endLine": 1922,
+        "endChar": 76
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806b4271_43a75350",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b64b282_d6494777",
       "range": {
         "startLine": 1920,
         "startChar": 5,
@@ -369,6 +705,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d722e8_b530f914",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f57a5d8_02a137fc",
+      "range": {
+        "startLine": 1929,
+        "startChar": 8,
+        "endLine": 1929,
+        "endChar": 59
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be2841c4_de4befd9",
@@ -382,6 +742,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "Did you mean to put this next to the monitor call?",
+      "range": {
+        "startLine": 1999,
+        "startChar": 0,
+        "endLine": 2002,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e281d1b3_dd8af2fa",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2002,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be2841c4_de4befd9",
       "range": {
         "startLine": 1999,
         "startChar": 0,
@@ -415,6 +799,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec2059a7_d4ea6d14",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2119,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab06b2b9_bc29d9b6",
+      "range": {
+        "startLine": 2119,
+        "startChar": 8,
+        "endLine": 2119,
+        "endChar": 77
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59b097cb_9039fa59",
@@ -438,6 +846,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58010938_f9f39f48",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59b097cb_9039fa59",
+      "range": {
+        "startLine": 2138,
+        "startChar": 10,
+        "endLine": 2138,
+        "endChar": 13
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b9a73bc_d75a7a6f",
@@ -451,6 +883,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "Extra \u0027//\u0027, there are quite a few of these in the change.",
+      "range": {
+        "startLine": 2360,
+        "startChar": 8,
+        "endLine": 2360,
+        "endChar": 16
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e1b297_6b69eb54",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b9a73bc_d75a7a6f",
       "range": {
         "startLine": 2360,
         "startChar": 8,
@@ -507,6 +963,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c62009_fad24dde",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09b86af6_785598ea",
+      "range": {
+        "startLine": 2460,
+        "startChar": 0,
+        "endLine": 2466,
+        "endChar": 5
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "238bab12_12c0bc05",
@@ -520,6 +1000,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "Why is the latched gpio getting set?",
+      "range": {
+        "startLine": 2491,
+        "startChar": 0,
+        "endLine": 2500,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae7c5bf2_39861f0c",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2500,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "this is for the monitor() that does have a check for Latched GPIO.\nI did miss adding the unExpectSbLatch() for the handlePowerStateChange().",
+      "parentUuid": "238bab12_12c0bc05",
       "range": {
         "startLine": 2491,
         "startChar": 0,
@@ -555,6 +1059,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "326e011a_053689c9",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "this is for the monitor() that does have a check for Latched GPIO.\nI did miss adding the unExpectSbLatch() for the handlePowerStateChange().",
+      "parentUuid": "65367c81_6af0fc5b",
+      "range": {
+        "startLine": 2549,
+        "startChar": 4,
+        "endLine": 2558,
+        "endChar": 65
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c52a321b_83ea5b97",
         "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
         "patchSetId": 19
@@ -566,6 +1094,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "This does not reflect the test case.",
+      "range": {
+        "startLine": 2595,
+        "startChar": 7,
+        "endLine": 2595,
+        "endChar": 51
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "928da68f_9669cba2",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2595,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c52a321b_83ea5b97",
       "range": {
         "startLine": 2595,
         "startChar": 7,
@@ -589,6 +1141,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "Why does this initialize presence.",
+      "range": {
+        "startLine": 2597,
+        "startChar": 0,
+        "endLine": 2598,
+        "endChar": 37
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae665699_94a53df3",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 1,
+      "message": "that is the way 23 other test cases make the chassis present.\ndid we want to do it a different way?",
+      "parentUuid": "83673814_3d1b2aea",
       "range": {
         "startLine": 2597,
         "startChar": 0,

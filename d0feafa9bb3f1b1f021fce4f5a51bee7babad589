@@ -22,6 +22,30 @@
       },
       "revId": "d0feafa9bb3f1b1f021fce4f5a51bee7babad589",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88035eb3_cedac2d7",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-19T22:20:37Z",
+      "side": 0,
+      "message": "looks like it was in another include like chassis.hpp,",
+      "parentUuid": "1cf07308_e4f9b473",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "d0feafa9bb3f1b1f021fce4f5a51bee7babad589",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
