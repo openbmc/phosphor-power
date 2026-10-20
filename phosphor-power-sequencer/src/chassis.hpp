@@ -334,8 +334,26 @@ class Chassis
     /**
      * Returns whether the chassis can be set to the specified power state.
      *
-     * Determined based on the current chassis status. For example, the chassis
-     * cannot be powered on if it is not present.
+     * Determined based on the current chassis status.
+     *
+     * The chassis cannot be powered on if any of the status properties are
+     * invalid, such as the chassis is not present.
+     *
+     * The chassis can be powered off in most cases:
+     * - If the chassis is not enabled or has faulty PSU power, it can still be
+     *   powered off.
+     * - If the chassis is not present or has no input power, the power good is
+     *   already off. However, if the chassis was powered on before the status
+     *   changed, then the desired state will still be on. Allow the power off
+     *   so that the state is set to off both within this application and in the
+     *   broader BMC environment.
+     * - Checking the available property is more complex. The present and input
+     *   power properties may affect the available property. For example, if the
+     *   chassis has no input power, then available may be set to false. For
+     *   this reason, we cannot check only available. If the chassis is present
+     *   and has input power, but it is not available, then a power off is not
+     *   allowed. We cannot communicate with the power sequencer device for some
+     *   other reason.
      *
      * Throws an exception if chassis monitoring has not been initialized.
      *
