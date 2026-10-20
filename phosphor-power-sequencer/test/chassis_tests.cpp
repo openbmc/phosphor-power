@@ -633,22 +633,7 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_STREQ(e.what(), "Monitoring not initialized for chassis 1");
     }
 
-    // Test where true: All chassis status values good
-    // Initial power state not set
-    {
-        std::unique_ptr<Chassis> chassis = createChassis(1);
-        MockServices services;
-
-        chassis->initializeMonitoring(services);
-        setChassisStatusToGood(*chassis);
-
-        auto [canSet,
-              reason] = chassis->canSetPowerState(PowerState::on, services);
-        EXPECT_TRUE(canSet);
-        EXPECT_TRUE(reason.empty());
-    }
-
-    // Test where false: Chassis is already at the requested state
+    // Test where false: Chassis is already at the requested state: On
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -674,7 +659,135 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_EQ(reason, "Chassis is already at requested state");
     }
 
-    // Test where false: Chassis is not present and request is on
+    // Test where false: Chassis is already at the requested state: Off
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        setChassisStatusToGood(*chassis);
+
+        auto& device = getMockDevice(*chassis, 0);
+        EXPECT_CALL(device, isOpen).WillOnce(Return(true));
+        EXPECT_CALL(device, getPowerGood).WillOnce(Return(false));
+
+        EXPECT_CALL(
+            services,
+            logInfoMsg("Chassis 1 power state is off and power good is off"))
+            .Times(1);
+
+        chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::off, services);
+        EXPECT_FALSE(canSet);
+        EXPECT_EQ(reason, "Chassis is already at requested state");
+    }
+
+    // Test power off: Returns true: Chassis is not present.
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isPresent).WillOnce(Return(false));
+        EXPECT_CALL(monitor, isInputPowerGood).Times(0);
+        EXPECT_CALL(monitor, isAvailable).Times(0);
+        EXPECT_CALL(monitor, isEnabled).Times(0);
+        EXPECT_CALL(monitor, isPowerSuppliesPowerGood).Times(0);
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::off, services);
+        EXPECT_TRUE(canSet);
+        EXPECT_TRUE(reason.empty());
+    }
+
+    // Test power off: Returns true: Chassis is present but does not have input
+    // power.
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isPresent).WillOnce(Return(true));
+        EXPECT_CALL(monitor, isInputPowerGood).WillOnce(Return(false));
+        EXPECT_CALL(monitor, isAvailable).Times(0);
+        EXPECT_CALL(monitor, isEnabled).Times(0);
+        EXPECT_CALL(monitor, isPowerSuppliesPowerGood).Times(0);
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::off, services);
+        EXPECT_TRUE(canSet);
+        EXPECT_TRUE(reason.empty());
+    }
+
+    // Test power off: Returns true: Chassis is present, has input power, and is
+    // available. All other chassis status properties are bad.
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isPresent).WillOnce(Return(true));
+        EXPECT_CALL(monitor, isInputPowerGood).WillOnce(Return(true));
+        EXPECT_CALL(monitor, isAvailable).WillOnce(Return(true));
+        EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(false));
+        EXPECT_CALL(monitor, isPowerSuppliesPowerGood)
+            .WillRepeatedly(Return(false));
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::off, services);
+        EXPECT_TRUE(canSet);
+        EXPECT_TRUE(reason.empty());
+    }
+
+    // Test power off: Returns false: Chassis is not available: Should log
+    // error.
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        setChassisStatusToGoodExceptIsAvailable(*chassis);
+        auto& monitor = getMockStatusMonitor(*chassis);
+        EXPECT_CALL(monitor, isAvailable).WillOnce(Return(false));
+
+        std::string error{
+            "xyz.openbmc_project.Power.PowerSequencer.UnexpectedChassisStatus"};
+        std::map<std::string, std::string> additionalData{
+            {"CHASSIS_NUMBER", "1"},
+            {"UNEXPECTED_CHASSIS_STATUS", "Chassis is not available"},
+            {"POWER_STATE", "Unknown"},
+            {"NEW_POWER_STATE", "off"}};
+        EXPECT_CALL(services, logError(error, Entry::Level::Informational,
+                                       additionalData))
+            .Times(1);
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::off, services);
+        EXPECT_FALSE(canSet);
+        EXPECT_EQ(reason, "Chassis is not available");
+    }
+
+    // Test power on: Returns true: All chassis status properties are good.
+    {
+        std::unique_ptr<Chassis> chassis = createChassis(1);
+        MockServices services;
+
+        chassis->initializeMonitoring(services);
+        setChassisStatusToGood(*chassis);
+
+        auto [canSet,
+              reason] = chassis->canSetPowerState(PowerState::on, services);
+        EXPECT_TRUE(canSet);
+        EXPECT_TRUE(reason.empty());
+    }
+
+    // Test power on: Returns false: Chassis is not present
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -690,73 +803,7 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_EQ(reason, "Chassis is not present");
     }
 
-    // Test where true: Chassis is not present, but request is off
-    {
-        std::unique_ptr<Chassis> chassis = createChassis(1);
-        MockServices services;
-
-        chassis->initializeMonitoring(services);
-        setChassisStatusToGoodExceptIsPresent(*chassis);
-        auto& monitor = getMockStatusMonitor(*chassis);
-        EXPECT_CALL(monitor, isPresent)
-            .WillOnce(Return(true))         // updatePowerGood()
-            .WillOnce(Return(true))         // updatePowerGood() again
-            .WillOnce(Return(true))         // checkForPowerGoodError()
-            .WillOnce(Return(true))         // checkForUnexpectedStatus()
-            .WillOnce(Return(true))         // closeDevicesIfNeeded()
-            .WillRepeatedly(Return(false)); // canSetPowerState()
-
-        auto& device = getMockDevice(*chassis, 0);
-        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
-        EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
-
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Chassis 1 power state is on and power good is on"))
-            .Times(1);
-
-        // Monitor to set initial power state to on
-        chassis->monitor(services);
-        EXPECT_EQ(chassis->getPowerState(), PowerState::on);
-
-        // Now simulate chassis disappearing: power off should be allowed
-        auto [canSet,
-              reason] = chassis->canSetPowerState(PowerState::off, services);
-        EXPECT_TRUE(canSet);
-        EXPECT_TRUE(reason.empty());
-    }
-
-    // Test where true: Chassis is not enabled, but request is off
-    {
-        std::unique_ptr<Chassis> chassis = createChassis(1);
-        MockServices services;
-
-        chassis->initializeMonitoring(services);
-        setChassisStatusToGoodExceptIsEnabled(*chassis);
-        auto& monitor = getMockStatusMonitor(*chassis);
-        EXPECT_CALL(monitor, isEnabled).WillRepeatedly(Return(false));
-
-        auto& device = getMockDevice(*chassis, 0);
-        EXPECT_CALL(device, isOpen).WillOnce(Return(false));
-        EXPECT_CALL(device, open).Times(1);
-        EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
-
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Chassis 1 power state is on and power good is on"))
-            .Times(1);
-
-        chassis->monitor(services);
-        EXPECT_EQ(chassis->getPowerState(), PowerState::on);
-
-        auto [canSet,
-              reason] = chassis->canSetPowerState(PowerState::off, services);
-        EXPECT_TRUE(canSet);
-        EXPECT_TRUE(reason.empty());
-    }
-
-    // Test where false: Chassis is not enabled and request is on: Should log
-    // error.
+    // Test power on: Returns false: Chassis is not enabled: Should log error.
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -783,8 +830,8 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_EQ(reason, "Chassis is not enabled");
     }
 
-    // Test where false: Chassis does not have input power and request is on:
-    // Should log error.
+    // Test power on: Returns false: Chassis does not have input power: Should
+    // log error.
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -811,44 +858,8 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_EQ(reason, "Chassis does not have input power");
     }
 
-    // Test where true: Chassis does not have input power, but request is off
-    {
-        std::unique_ptr<Chassis> chassis = createChassis(1);
-        MockServices services;
-
-        chassis->initializeMonitoring(services);
-        setChassisStatusToGoodExceptIsInputPowerGood(*chassis);
-        auto& monitor = getMockStatusMonitor(*chassis);
-        EXPECT_CALL(monitor, isInputPowerGood)
-            .WillOnce(Return(true))         // updatePowerGood()
-            .WillOnce(Return(true))         // updatePowerGood() again
-            .WillOnce(Return(true))         // checkForPowerGoodError()
-            .WillOnce(Return(true))         // checkForUnexpectedStatus()
-            .WillOnce(Return(true))         // closeDevicesIfNeeded()
-            .WillRepeatedly(Return(false)); // canSetPowerState()
-
-        auto& device = getMockDevice(*chassis, 0);
-        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
-        EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
-
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Chassis 1 power state is on and power good is on"))
-            .Times(1);
-
-        // Monitor to set initial power state to on
-        chassis->monitor(services);
-        EXPECT_EQ(chassis->getPowerState(), PowerState::on);
-
-        // Now simulate loss of input power: power off should be allowed
-        auto [canSet,
-              reason] = chassis->canSetPowerState(PowerState::off, services);
-        EXPECT_TRUE(canSet);
-        EXPECT_TRUE(reason.empty());
-    }
-
-    // Test where false: Brownout (PSU power not good) and request is on:
-    // Should log error.
+    // Test power on: Returns false: Brownout (PSU power not good): Should log
+    // error.
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -875,37 +886,7 @@ TEST(ChassisTests, CanSetPowerState)
         EXPECT_EQ(reason, "Chassis is experiencing a brownout");
     }
 
-    // Test where true: Brownout (PSU power not good) and request is off:
-    // No error logged.
-    {
-        std::unique_ptr<Chassis> chassis = createChassis(1);
-        MockServices services;
-
-        chassis->initializeMonitoring(services);
-        setChassisStatusToGoodExceptIsPowerSuppliesPowerGood(*chassis);
-        auto& monitor = getMockStatusMonitor(*chassis);
-        EXPECT_CALL(monitor, isPowerSuppliesPowerGood).WillOnce(Return(false));
-
-        auto& device = getMockDevice(*chassis, 0);
-        EXPECT_CALL(device, isOpen).WillOnce(Return(false));
-        EXPECT_CALL(device, open).Times(1);
-        EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
-
-        EXPECT_CALL(
-            services,
-            logInfoMsg("Chassis 1 power state is on and power good is on"))
-            .Times(1);
-
-        chassis->monitor(services);
-        EXPECT_EQ(chassis->getPowerState(), PowerState::on);
-
-        auto [canSet,
-              reason] = chassis->canSetPowerState(PowerState::off, services);
-        EXPECT_TRUE(canSet);
-        EXPECT_TRUE(reason.empty());
-    }
-
-    // Test where false: Chassis is not available: Should log error.
+    // Test power on: Returns false: Chassis is not available: Should log error.
     {
         std::unique_ptr<Chassis> chassis = createChassis(1);
         MockServices services;
@@ -1191,6 +1172,7 @@ TEST(ChassisTests, SetPowerState)
 
         // Call monitor to set initial power state to on
         chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_FALSE(chassis->isInPowerStateTransition());
 
@@ -1199,6 +1181,13 @@ TEST(ChassisTests, SetPowerState)
         chassis->setPowerState(PowerState::off, services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
         EXPECT_TRUE(chassis->isInPowerStateTransition());
+
+        // Call monitor again. Should set pgood to false without reading from
+        // device. No longer in transition.
+        chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
+        EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+        EXPECT_FALSE(chassis->isInPowerStateTransition());
     }
 
     // Test where works: Power off: No input power; skips hardware powerOff
@@ -1230,6 +1219,7 @@ TEST(ChassisTests, SetPowerState)
 
         // Call monitor to set initial power state to on
         chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerGood(), PowerGood::on);
         EXPECT_EQ(chassis->getPowerState(), PowerState::on);
         EXPECT_FALSE(chassis->isInPowerStateTransition());
 
@@ -1238,6 +1228,13 @@ TEST(ChassisTests, SetPowerState)
         chassis->setPowerState(PowerState::off, services);
         EXPECT_EQ(chassis->getPowerState(), PowerState::off);
         EXPECT_TRUE(chassis->isInPowerStateTransition());
+
+        // Call monitor again. Should set pgood to false without reading from
+        // device. No longer in transition.
+        chassis->monitor(services);
+        EXPECT_EQ(chassis->getPowerGood(), PowerGood::off);
+        EXPECT_EQ(chassis->getPowerState(), PowerState::off);
+        EXPECT_FALSE(chassis->isInPowerStateTransition());
     }
 }
 
@@ -4480,18 +4477,17 @@ TEST(ChassisTests, LogUnexpectedStatusError)
 
         chassis->initializeMonitoring(services);
         auto& monitor = getMockStatusMonitor(*chassis);
-        setChassisStatusToGoodExceptIsPresent(*chassis);
-        EXPECT_CALL(monitor, isPresent)
+        setChassisStatusToGoodExceptIsAvailable(*chassis);
+        EXPECT_CALL(monitor, isAvailable)
             .WillOnce(Return(true)) // updatePowerGood()
-            .WillOnce(Return(true)) // updatePowerGood() again
             .WillOnce(Return(true)) // checkForPowerGoodError()
             .WillOnce(Return(true)) // checkForUnexpectedStatus()
             .WillOnce(Return(true)) // closeDevicesIfNeeded()
             .WillOnce(Throw(std::runtime_error{
-                "Present property value could not be obtained."}));
+                "Available property value could not be obtained."}));
 
         auto& device = getMockDevice(*chassis, 0);
-        EXPECT_CALL(device, isOpen).WillOnce(Return(true));
+        EXPECT_CALL(device, isOpen).WillRepeatedly(Return(true));
         EXPECT_CALL(device, getPowerGood).WillOnce(Return(true));
 
         EXPECT_CALL(
@@ -4503,7 +4499,7 @@ TEST(ChassisTests, LogUnexpectedStatusError)
         std::map<std::string, std::string> additionalData{
             {"CHASSIS_NUMBER", "1"},
             {"UNEXPECTED_CHASSIS_STATUS",
-             "Unable to determine chassis status: Present property value could not be obtained."},
+             "Unable to determine chassis status: Available property value could not be obtained."},
             {"POWER_STATE", "on"},
             {"NEW_POWER_STATE", "off"}};
         EXPECT_CALL(services, logError(error, Entry::Level::Informational,
@@ -4521,6 +4517,6 @@ TEST(ChassisTests, LogUnexpectedStatusError)
         EXPECT_FALSE(canSet);
         EXPECT_EQ(
             reason,
-            "Unable to determine chassis status: Present property value could not be obtained.");
+            "Unable to determine chassis status: Available property value could not be obtained.");
     }
 }

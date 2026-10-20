@@ -77,36 +77,42 @@ std::tuple<bool, std::string> Chassis::canSetPowerState(
         {
             unexpectedStatusType = UnexpectedStatusType::alreadyAtState;
         }
-        // Do not allow power on if chassis is not present; power off OK
-        else if (!isPresent() && (newPowerState == PowerState::on))
+        else if (newPowerState == PowerState::off)
         {
-            unexpectedStatusType = UnexpectedStatusType::notPresent;
+            if (isPresent() && isInputPowerGood() && !isAvailable())
+            {
+                unexpectedStatusType = UnexpectedStatusType::notAvailable;
+                logError = true;
+            }
         }
-        // Do not allow power on for chassis in hardware isolation; power off OK
-        else if (!isEnabled() && (newPowerState == PowerState::on))
+        else // newPowerState == on
         {
-            unexpectedStatusType = UnexpectedStatusType::notEnabled;
-            logError = true;
-        }
-        // Do not allow power on if chassis has no input power; power off OK
-        else if (!isInputPowerGood() && (newPowerState == PowerState::on))
-        {
-            unexpectedStatusType = UnexpectedStatusType::noInputPower;
-            logError = true;
-        }
-        // Check for brownout (PSU power not good). Only a concern for power on.
-        else if (!isPowerSuppliesPowerGood() &&
-                 (newPowerState == PowerState::on))
-        {
-            unexpectedStatusType = UnexpectedStatusType::psuPowerNotGood;
-            logError = true;
-        }
-        // Check Available last. This D-Bus property is based on a list of
-        // factors including some of the preceding properties.
-        else if (!isAvailable())
-        {
-            unexpectedStatusType = UnexpectedStatusType::notAvailable;
-            logError = true;
+            if (!isPresent())
+            {
+                unexpectedStatusType = UnexpectedStatusType::notPresent;
+            }
+            else if (!isEnabled())
+            {
+                unexpectedStatusType = UnexpectedStatusType::notEnabled;
+                logError = true;
+            }
+            else if (!isInputPowerGood())
+            {
+                unexpectedStatusType = UnexpectedStatusType::noInputPower;
+                logError = true;
+            }
+            else if (!isPowerSuppliesPowerGood())
+            {
+                unexpectedStatusType = UnexpectedStatusType::psuPowerNotGood;
+                logError = true;
+            }
+            // Check Available last. This D-Bus property is based on a list of
+            // factors including some of the preceding properties.
+            else if (!isAvailable())
+            {
+                unexpectedStatusType = UnexpectedStatusType::notAvailable;
+                logError = true;
+            }
         }
     }
     catch (const std::exception& e)
@@ -508,7 +514,7 @@ std::string Chassis::findPowerGoodFaultInRail(
 
 void Chassis::checkForUnexpectedStatus(Services& services)
 {
-    // If the requested  power state is on, check for unexpected chassis status.
+    // If the requested power state is on, check for unexpected chassis status.
     // Check Available last since it is based on some of the other properties.
     if (powerState == PowerState::on)
     {
