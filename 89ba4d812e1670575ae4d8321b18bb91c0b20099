@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d92bcae9_79940ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-20T13:25:53Z",
+      "side": 1,
+      "message": "removed test case for old interface that I missed.",
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7655793_8c7f23b8",
@@ -930,6 +947,30 @@
       "writtenOn": "2026-10-12T15:30:07Z",
       "side": 1,
       "message": "This doesn\u0027t test that its missing.",
+      "range": {
+        "startLine": 2451,
+        "startChar": 0,
+        "endLine": 2455,
+        "endChar": 5
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b007cf3_4e42464a",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-20T13:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb3407d7_ab5f9618",
       "range": {
         "startLine": 2451,
         "startChar": 0,
