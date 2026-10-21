@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ca23215_19c2a499",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-21T21:53:34Z",
+      "side": 1,
+      "message": "This sentence is really long and hard to understand. Can you break it up into several smaller ones?",
+      "revId": "2cc506acde344596c0929305cdb677ca471003d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56faa111_ce1d2151",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-21T21:53:34Z",
+      "side": 1,
+      "message": "chassis?",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "2cc506acde344596c0929305cdb677ca471003d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a925f146_5478b2d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-21T21:53:34Z",
+      "side": 1,
+      "message": "Code changes look good to me. Just some commit message comments.",
+      "revId": "2cc506acde344596c0929305cdb677ca471003d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
