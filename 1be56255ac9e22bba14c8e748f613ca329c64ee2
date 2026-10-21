@@ -18,6 +18,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc49b01_c6898758",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-21T18:53:43Z",
+      "side": 1,
+      "message": "Chassis Availability Monitor Should set it true or false. However it appears to be optional.",
+      "parentUuid": "b66f5323_042b3a47",
+      "revId": "1be56255ac9e22bba14c8e748f613ca329c64ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e8e5e5_c690215a",
@@ -41,6 +59,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "baa5aa25_75f77b82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-21T18:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7e8e5e5_c690215a",
+      "range": {
+        "startLine": 15,
+        "startChar": 22,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "1be56255ac9e22bba14c8e748f613ca329c64ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b6ea11e_c7bd6d00",
@@ -54,6 +96,24 @@
       "writtenOn": "2026-10-19T16:02:47Z",
       "side": 1,
       "message": "gmock does not support interleaving EXPECT statements and then calls to the mock. This may work now, but it might break unexpectedly in the future.\n\nIf possible, do all your EXPECT statements before any production code.\n\nIf this can\u0027t be done, consider replacing the mock with a fresh one before the second set of calls from production code.",
+      "revId": "1be56255ac9e22bba14c8e748f613ca329c64ee2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc08e8a_7270dbcc",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-21T18:53:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b6ea11e_c7bd6d00",
       "revId": "1be56255ac9e22bba14c8e748f613ca329c64ee2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
