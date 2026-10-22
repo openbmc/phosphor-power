@@ -18,9 +18,7 @@
 #include "action.hpp"
 #include "action_environment.hpp"
 
-#include <cstdint>
 #include <string>
-#include <vector>
 
 namespace phosphor::power::regulators
 {
@@ -49,12 +47,12 @@ class CompareVPDAction : public Action
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
      * @param keyword VPD keyword. Specify one of the following: "CCIN",
-     *                "Manufacturer", "Model", "PartNumber".
+     *                "Manufacturer", "Model", "PartNumber", "HW".
      * @param value Expected value
      */
     explicit CompareVPDAction(const std::string& fru,
                               const std::string& keyword,
-                              const std::vector<uint8_t>& value) :
+                              const std::string& value) :
         fru{fru}, keyword{keyword}, value{value}
     {}
 
@@ -96,7 +94,7 @@ class CompareVPDAction : public Action
      *
      * @return value
      */
-    const std::vector<uint8_t>& getValue() const
+    const std::string& getValue() const
     {
         return value;
     }
@@ -124,7 +122,7 @@ class CompareVPDAction : public Action
     /**
      * Expected value.
      */
-    const std::vector<uint8_t> value{};
+    const std::string value{};
 };
 
 } // namespace phosphor::power::regulators
