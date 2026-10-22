@@ -43,6 +43,48 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "80b8dfcf_cdad5fc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-22T14:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ca23215_19c2a499",
+      "revId": "2cc506acde344596c0929305cdb677ca471003d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "077771b6_3ec57b0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-22T14:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56faa111_ce1d2151",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 49
+      },
+      "revId": "2cc506acde344596c0929305cdb677ca471003d9",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a925f146_5478b2d4",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
