@@ -126,7 +126,7 @@ const json validConfigFile = R"(
                   {
                     "or": [
                       { "compare_presence": { "fru": "system/chassis/motherboard/cpu1", "value": "${presence_value}" } },
-                      { "compare_vpd": { "fru": "system/chassis/motherboard", "keyword": "${vpd_keyword}", "value": "${vpd_val2}" } },
+                      { "compare_vpd_bytes": { "fru": "system/chassis/motherboard", "keyword": "${vpd_keyword}", "values": ["0x32", "${vpd_byte_val}"] } },
                       { "compare_vpd": { "fru": "system/chassis/disk_backplane", "keyword": "CCIN", "value": "${vpd_val}" } },
                       { "run_rule": "${rule_name}" }
                     ]
@@ -857,7 +857,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     {
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][1]["compare_vpd"]
+                  ["actions"][0]["or"][2]["compare_vpd"]
                       .erase("fru");
         EXPECT_JSON_INVALID(configFile, "'fru' is a required property");
     }
@@ -866,7 +866,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     {
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][1]["compare_vpd"]
+                  ["actions"][0]["or"][2]["compare_vpd"]
                       .erase("keyword");
         EXPECT_JSON_INVALID(configFile, "'keyword' is a required property");
     }
@@ -912,6 +912,112 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
                   ["actions"][0]["or"][2]["compare_vpd"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Valid: some property values contain variables
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+}
+
+TEST(ValidateRegulatorsConfigTest, CompareVpdBytes)
+{
+    // Valid: required properties only.
+    {
+        json configFile = validConfigFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: all properties specified.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["masks"] = {
+                      "0x7E", "0x3C"};
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: values is an empty array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["values"] =
+                      json::array();
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: no FRU property.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]
+                      .erase("fru");
+        EXPECT_JSON_INVALID(configFile, "'fru' is a required property");
+    }
+
+    // Invalid: no keyword property.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]
+                      .erase("keyword");
+        EXPECT_JSON_INVALID(configFile, "'keyword' is a required property");
+    }
+
+    // Invalid: no values property.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]
+                      .erase("values");
+        EXPECT_JSON_INVALID(configFile, "'values' is a required property");
+    }
+
+    // Invalid: property FRU wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property FRU is string less than 1.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
+    }
+
+    // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
+    // "PartNumber", "HW"
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["keyword"] =
+                      "Number";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property values is not an array.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["values"] =
+                      "0x50";
+        EXPECT_JSON_INVALID(configFile, "'0x50' is not of type 'array'");
+    }
+
+    // Invalid: invalid property specified.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["foo"] = true;
+        EXPECT_JSON_INVALID(
+            configFile,
+            "Additional properties are not allowed ('foo' was unexpected)");
     }
 
     // Valid: some property values contain variables

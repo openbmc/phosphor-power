@@ -55,6 +55,9 @@
                     "$ref": "#/definitions/compare_presence"
                 },
                 "compare_vpd": { "$ref": "#/definitions/compare_vpd" },
+                "compare_vpd_bytes": {
+                    "$ref": "#/definitions/compare_vpd_bytes"
+                },
                 "i2c_capture_bytes": {
                     "$ref": "#/definitions/i2c_capture_bytes"
                 },
@@ -82,6 +85,7 @@
                 { "required": ["and"] },
                 { "required": ["compare_presence"] },
                 { "required": ["compare_vpd"] },
+                { "required": ["compare_vpd_bytes"] },
                 { "required": ["i2c_capture_bytes"] },
                 { "required": ["i2c_compare_bit"] },
                 { "required": ["i2c_compare_byte"] },
@@ -141,6 +145,18 @@
                 "value": { "$ref": "#/definitions/string_value" }
             },
             "required": ["fru", "keyword", "value"],
+            "additionalProperties": false
+        },
+
+        "compare_vpd_bytes": {
+            "type": "object",
+            "properties": {
+                "fru": { "$ref": "#/definitions/inventory_path" },
+                "keyword": { "$ref": "#/definitions/keyword" },
+                "values": { "$ref": "#/definitions/byte_values_min0" },
+                "masks": { "$ref": "#/definitions/byte_masks" }
+            },
+            "required": ["fru", "keyword", "values"],
             "additionalProperties": false
         },
 
