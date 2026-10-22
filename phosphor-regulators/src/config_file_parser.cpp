@@ -86,6 +86,11 @@ std::unique_ptr<Action> parseAction(
         action = parseCompareVPD(element["compare_vpd"], variables);
         ++propertyCount;
     }
+    else if (element.contains("compare_vpd_bytes"))
+    {
+        action = parseCompareVPDBytes(element["compare_vpd_bytes"], variables);
+        ++propertyCount;
+    }
     else if (element.contains("i2c_capture_bytes"))
     {
         action = parseI2CCaptureBytes(element["i2c_capture_bytes"], variables);
@@ -435,6 +440,52 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<CompareVPDAction>(fru, keyword, value);
+}
+
+std::unique_ptr<CompareVPDBytesAction> parseCompareVPDBytes(
+    const json& element, const std::map<std::string, std::string>& variables)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required fru property
+    const json& fruElement = getRequiredProperty(element, "fru");
+    std::string fru = parseInventoryPath(fruElement, variables);
+    ++propertyCount;
+
+    // Required keyword property
+    const json& keywordElement = getRequiredProperty(element, "keyword");
+    std::string keyword = parseString(keywordElement, false, variables);
+    ++propertyCount;
+
+    // Required values property
+    const json& valuesElement = getRequiredProperty(element, "values");
+    std::vector<uint8_t> values = parseHexByteArray(valuesElement, variables);
+    ++propertyCount;
+
+    // Optional masks property
+    std::vector<uint8_t> masks{};
+    auto masksIt = element.find("masks");
+    if (masksIt != element.end())
+    {
+        masks = parseHexByteArray(*masksIt, variables);
+        ++propertyCount;
+    }
+
+    // Verify masks array (if specified) was same size as values array
+    if ((!masks.empty()) && (masks.size() != values.size()))
+    {
+        throw std::invalid_argument{"Invalid number of elements in masks"};
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    if (masks.empty())
+    {
+        return std::make_unique<CompareVPDBytesAction>(fru, keyword, values);
+    }
+    return std::make_unique<CompareVPDBytesAction>(fru, keyword, values, masks);
 }
 
 std::unique_ptr<Configuration> parseConfiguration(

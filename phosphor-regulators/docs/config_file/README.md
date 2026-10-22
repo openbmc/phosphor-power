@@ -123,6 +123,7 @@ The following JSON object types are supported:
 - [chassis_template](chassis_template.md)
 - [compare_presence](compare_presence.md)
 - [compare_vpd](compare_vpd.md)
+- [compare_vpd_bytes](compare_vpd_bytes.md)
 - [config_file](config_file.md)
 - [configuration](configuration.md)
 - [device](device.md)
