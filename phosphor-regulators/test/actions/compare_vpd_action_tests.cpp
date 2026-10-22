@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -36,30 +37,28 @@ using namespace phosphor::power::regulators;
 
 TEST(CompareVPDActionTests, Constructor)
 {
-    // Value vector is not empty
+    // Value is not empty
     {
-        std::vector<uint8_t> value{0x32, 0x44, 0x33, 0x35}; // "2D35"
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", value};
+            "CCIN", "2D35"};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action.getKeyword(), "CCIN");
-        EXPECT_EQ(action.getValue(), value);
+        EXPECT_EQ(action.getValue(), "2D35");
     }
 
-    // Value vector is empty
+    // Value is empty
     {
-        std::vector<uint8_t> value{};
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", value};
+            "CCIN", ""};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action.getKeyword(), "CCIN");
-        EXPECT_EQ(action.getValue(), value);
+        EXPECT_EQ(action.getValue(), "");
     }
 }
 
@@ -84,20 +83,19 @@ TEST(CompareVPDActionTests, Execute)
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, abcdValue};
+            CompareVPDAction action{fru, keyword, "ABCD"};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword,
-                                    std::vector<uint8_t>{1, 2, 3, 4}};
+            CompareVPDAction action{fru, keyword, "ABCd"};
             EXPECT_FALSE(action.execute(environment));
         }
 
         // Test where returns false: expected value is empty
         {
-            CompareVPDAction action{fru, keyword, std::vector<uint8_t>{}};
+            CompareVPDAction action{fru, keyword, ""};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -121,14 +119,13 @@ TEST(CompareVPDActionTests, Execute)
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, emptyValue};
+            CompareVPDAction action{fru, keyword, ""};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword,
-                                    std::vector<uint8_t>{1, 2, 3}};
+            CompareVPDAction action{fru, keyword, "ABC"};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -151,17 +148,15 @@ TEST(CompareVPDActionTests, Execute)
 
         try
         {
-            CompareVPDAction action{fru, keyword,
-                                    std::vector<uint8_t>{1, 2, 3}};
+            CompareVPDAction action{fru, keyword, "ABC"};
             action.execute(environment);
             ADD_FAILURE() << "Should not have reached this line.";
         }
         catch (const ActionError& e)
         {
-            EXPECT_STREQ(e.what(),
-                         "ActionError: compare_vpd: { fru: "
-                         "/xyz/openbmc_project/inventory/system, "
-                         "keyword: Model, value: [ 0x1, 0x2, 0x3 ] }");
+            EXPECT_STREQ(e.what(), "ActionError: compare_vpd: { fru: "
+                                   "/xyz/openbmc_project/inventory/system, "
+                                   "keyword: Model, value: \"ABC\" }");
             try
             {
                 // Re-throw inner exception
@@ -188,7 +183,7 @@ TEST(CompareVPDActionTests, GetFRU)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        std::vector<uint8_t>{1, 2, 3, 4}};
+        "2D35"};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
 }
@@ -197,7 +192,7 @@ TEST(CompareVPDActionTests, GetKeyword)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        std::vector<uint8_t>{1, 2, 3, 4}};
+        "2D35"};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
@@ -205,33 +200,33 @@ TEST(CompareVPDActionTests, GetValue)
 {
     CompareVPDAction action{
         "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        std::vector<uint8_t>{1, 2, 3, 4}};
-    EXPECT_EQ(action.getValue(), (std::vector<uint8_t>{0x1, 0x2, 0x3, 0x4}));
+        "2D35"};
+    EXPECT_EQ(action.getValue(), "2D35");
 }
 
 TEST(CompareVPDActionTests, ToString)
 {
-    // Test where value vector is not empty
+    // Test where value is not empty
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", std::vector<uint8_t>{0x01, 0xA3, 0x0, 0xFF}};
+            "CCIN", "2D35"};
         EXPECT_EQ(action.toString(),
                   "compare_vpd: { fru: "
                   "/xyz/openbmc_project/inventory/system/"
                   "chassis/disk_backplane, keyword: "
-                  "CCIN, value: [ 0x1, 0xA3, 0x0, 0xFF ] }");
+                  "CCIN, value: \"2D35\" }");
     }
 
-    // Test where value vector is empty
+    // Test where value is empty
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", std::vector<uint8_t>{}};
+            "CCIN", ""};
         EXPECT_EQ(action.toString(),
                   "compare_vpd: { fru: "
                   "/xyz/openbmc_project/inventory/system/"
                   "chassis/disk_backplane, keyword: "
-                  "CCIN, value: [  ] }");
+                  "CCIN, value: \"\" }");
     }
 }

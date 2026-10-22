@@ -126,7 +126,7 @@ const json validConfigFile = R"(
                   {
                     "or": [
                       { "compare_presence": { "fru": "system/chassis/motherboard/cpu1", "value": "${presence_value}" } },
-                      { "compare_vpd": { "fru": "system/chassis/motherboard", "keyword": "${vpd_keyword}", "byte_values": ["0x32", "${vpd_byte_val}"] } },
+                      { "compare_vpd": { "fru": "system/chassis/motherboard", "keyword": "${vpd_keyword}", "value": "${vpd_val2}" } },
                       { "compare_vpd": { "fru": "system/chassis/disk_backplane", "keyword": "CCIN", "value": "${vpd_val}" } },
                       { "run_rule": "${rule_name}" }
                     ]
@@ -853,21 +853,6 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         EXPECT_JSON_VALID(configFile);
     }
 
-    // Valid: byte_values property: not empty.
-    {
-        json configFile = validConfigFile;
-        EXPECT_JSON_VALID(configFile);
-    }
-
-    // Valid: byte_values property: empty.
-    {
-        json configFile = validConfigFile;
-        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][1]["compare_vpd"]["byte_values"] =
-                      json::array();
-        EXPECT_JSON_VALID(configFile);
-    }
-
     // Invalid: no FRU property.
     {
         json configFile = validConfigFile;
@@ -892,8 +877,7 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
                   ["actions"][0]["or"][2]["compare_vpd"]
                       .erase("value");
-        EXPECT_JSON_INVALID(configFile,
-                            "is not valid under any of the given schemas");
+        EXPECT_JSON_INVALID(configFile, "'value' is a required property");
     }
 
     // Invalid: property FRU wrong type.
@@ -928,24 +912,6 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
                   ["actions"][0]["or"][2]["compare_vpd"]["value"] = 1;
         EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
-    }
-
-    // Invalid: property byte_values has wrong type
-    {
-        json configFile = validConfigFile;
-        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][1]["compare_vpd"]["byte_values"] =
-                      "0x50";
-        EXPECT_JSON_INVALID(configFile, "'0x50' is not of type 'array'");
-    }
-
-    // Invalid: properties byte_values and value both exist
-    {
-        json configFile = validConfigFile;
-        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][2]["compare_vpd"]["byte_values"] = {
-                      "0x01", "0x02"};
-        EXPECT_JSON_INVALID(configFile, "is valid under each of");
     }
 
     // Valid: some property values contain variables

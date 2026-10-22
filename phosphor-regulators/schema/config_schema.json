@@ -138,14 +138,9 @@
             "properties": {
                 "fru": { "$ref": "#/definitions/inventory_path" },
                 "keyword": { "$ref": "#/definitions/keyword" },
-                "value": { "$ref": "#/definitions/string_value" },
-                "byte_values": { "$ref": "#/definitions/byte_values_min0" }
+                "value": { "$ref": "#/definitions/string_value" }
             },
-            "required": ["fru", "keyword"],
-            "oneOf": [
-                { "required": ["value"] },
-                { "required": ["byte_values"] }
-            ],
+            "required": ["fru", "keyword", "value"],
             "additionalProperties": false
         },
 

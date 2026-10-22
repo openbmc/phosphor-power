@@ -426,26 +426,10 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
     std::string keyword = parseString(keywordElement, false, variables);
     ++propertyCount;
 
-    // Either value or byte_values required property
-    auto valueIt = element.find("value");
-    std::vector<uint8_t> value{};
-    auto byteValuesIt = element.find("byte_values");
-    if ((valueIt != element.end()) && (byteValuesIt == element.end()))
-    {
-        std::string stringValue = parseString(*valueIt, true, variables);
-        value.insert(value.begin(), stringValue.begin(), stringValue.end());
-        ++propertyCount;
-    }
-    else if ((valueIt == element.end()) && (byteValuesIt != element.end()))
-    {
-        value = parseHexByteArray(*byteValuesIt, variables);
-        ++propertyCount;
-    }
-    else
-    {
-        throw std::invalid_argument{
-            "Invalid property: Must contain either value or byte_values"};
-    }
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    std::string value = parseString(valueElement, true, variables);
+    ++propertyCount;
 
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);

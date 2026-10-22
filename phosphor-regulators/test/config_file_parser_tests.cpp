@@ -1855,8 +1855,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(),
-                  (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
+        EXPECT_EQ(action->getValue(), "2D35");
     }
 
     // Test where works: value property: Empty
@@ -1875,45 +1874,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{}));
-    }
-
-    // Test where works: byte_values property: Not empty
-    {
-        const json element = R"(
-            {
-              "fru": "system/chassis/disk_backplane",
-              "keyword": "CCIN",
-              "byte_values": ["0x11", "0x22", "0x33"]
-            }
-        )"_json;
-        std::map<std::string, std::string> variables{};
-        std::unique_ptr<CompareVPDAction> action =
-            parseCompareVPD(element, variables);
-        EXPECT_EQ(
-            action->getFRU(),
-            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
-        EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{0x11, 0x22, 0x33}));
-    }
-
-    // Test where works: byte_values property: Empty
-    {
-        const json element = R"(
-            {
-              "fru": "system/chassis/disk_backplane",
-              "keyword": "CCIN",
-              "byte_values": []
-            }
-        )"_json;
-        std::map<std::string, std::string> variables{};
-        std::unique_ptr<CompareVPDAction> action =
-            parseCompareVPD(element, variables);
-        EXPECT_EQ(
-            action->getFRU(),
-            "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
-        EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(), (std::vector<uint8_t>{}));
+        EXPECT_EQ(action->getValue(), "");
     }
 
     // Test where works: Variables specified
@@ -1935,8 +1896,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
         EXPECT_EQ(action->getKeyword(), "CCIN");
-        EXPECT_EQ(action->getValue(),
-                  (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
+        EXPECT_EQ(action->getValue(), "2D35");
     }
 
     // Test where fails: Element is not an object
@@ -2023,29 +1983,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Invalid property: Must contain "
-                               "either value or byte_values");
-    }
-
-    // Test where fails: both value and byte_values specified
-    try
-    {
-        const json element = R"(
-            {
-              "fru": "system/chassis/disk_backplane",
-              "keyword": "CCIN",
-              "value": "2D35",
-              "byte_values": [ "0x01", "0x02" ]
-            }
-        )"_json;
-        std::map<std::string, std::string> variables{};
-        parseCompareVPD(element, variables);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Invalid property: Must contain "
-                               "either value or byte_values");
+        EXPECT_STREQ(e.what(), "Required property missing: value");
     }
 
     // Test where fails: fru value is invalid
@@ -2105,43 +2043,23 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         EXPECT_STREQ(e.what(), "Element is not a string");
     }
 
-    // Test where fails: byte_values is wrong format
-    try
-    {
-        const json element = R"(
-            {
-              "fru": "system/chassis/disk_backplane",
-              "keyword": "CCIN",
-              "byte_values": [1, 2, 3]
-            }
-        )"_json;
-        std::map<std::string, std::string> variables{};
-        parseCompareVPD(element, variables);
-        ADD_FAILURE() << "Should not have reached this line.";
-    }
-    catch (const std::invalid_argument& e)
-    {
-        EXPECT_STREQ(e.what(), "Element is not a string");
-    }
-
     // Test where fails: Invalid variable value specified
     try
     {
         const json element = R"(
             {
               "fru": "system/chassis/disk_backplane",
-              "keyword": "CCIN",
-              "byte_values": ["${byte1}", "${byte2}"]
+              "keyword": "${keyword}",
+              "value": "2D35"
             }
         )"_json;
-        std::map<std::string, std::string> variables{{"byte1", "0xZZ"},
-                                                     {"byte2", "0x22"}};
+        std::map<std::string, std::string> variables{{"keyword", ""}};
         parseCompareVPD(element, variables);
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
     {
-        EXPECT_STREQ(e.what(), "Element is not hexadecimal string");
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 }
 
