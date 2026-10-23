@@ -11,6 +11,7 @@ phosphor_chassis_power_library = static_library(
     'system.cpp',
     implicit_include_directories: false,
     dependencies: [
+        libgpiodcxx,
         phosphor_dbus_interfaces,
         phosphor_logging,
         sdbusplus,
