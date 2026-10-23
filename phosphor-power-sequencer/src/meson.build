@@ -17,6 +17,7 @@ phosphor_power_sequencer_library = static_library(
     'ucd90x_device.cpp',
     implicit_include_directories: false,
     dependencies: [
+        libgpiodcxx,
         nlohmann_json_dep,
         phosphor_dbus_interfaces,
         phosphor_logging,
