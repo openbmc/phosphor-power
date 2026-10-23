@@ -41,6 +41,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d21abf_a74e08c2",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-23T19:30:55Z",
+      "side": 1,
+      "message": "Out talk this this on possible future work if needed.",
+      "parentUuid": "a7655793_8c7f23b8",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 1
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4795cf4c_ccded688",
@@ -137,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56f50566_c22ba34a",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-23T19:30:55Z",
+      "side": 1,
+      "message": "TODO: write a check for system power in the check for presence.\nAfter BMC reset, if system on, for sleds off or missing:\n  disable bmc reset\n  disable latching",
+      "parentUuid": "f8e32595_fd5566a4",
+      "range": {
+        "startLine": 511,
+        "startChar": 3,
+        "endLine": 511,
+        "endChar": 23
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aadc4b9c_80be0996",
         "filename": "phosphor-chassis-power/src/chassis.cpp",
         "patchSetId": 19
@@ -172,6 +220,30 @@
       "side": 1,
       "message": "not sure, the else leg is the power on.\nI can write as an else if (powerStatus.value())",
       "parentUuid": "aadc4b9c_80be0996",
+      "range": {
+        "startLine": 578,
+        "startChar": 12,
+        "endLine": 578,
+        "endChar": 34
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65927586_d3406fcd",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-23T19:30:55Z",
+      "side": 1,
+      "message": "// SHELDON: https://ibm-systems-power.slack.com/archives/GKJC39Q0M/p1787080449416229?thread_ts\u003d1786039956.678959\u0026cid\u003dGKJC39Q0M\n        // After BMC reset, if system off, for all possible sleds:\n        // disable bmc reset\n        // leave latching alone\n        // if/when blackout target ran:\n        // log 74F1 SRC if latched gpio is on\n        // disable latching",
+      "parentUuid": "b579c321_e6250622",
       "range": {
         "startLine": 578,
         "startChar": 12,
