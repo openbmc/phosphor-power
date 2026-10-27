@@ -475,7 +475,9 @@ void Chassis::logPowerGoodFault(Services& services)
     }
 
     additionalData.emplace("CHASSIS_NUMBER", std::to_string(number));
-    services.logError(error, Entry::Level::Critical, additionalData);
+
+    powerGoodFault->eventPath =
+        services.logError(error, Entry::Level::Critical, additionalData);
     powerGoodFault->wasLogged = true;
 }
 

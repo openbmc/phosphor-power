@@ -68,6 +68,14 @@ struct PowerGoodFault
     bool wasLogged{false};
 
     /**
+     * D-Bus object path of the latest error log entry created for the fault.
+     *
+     * Used to link a BMC dump to the error. Empty if an error has not been
+     * logged or logging failed.
+     */
+    std::string eventPath;
+
+    /**
      * Specifies the time when an error should be logged.
      *
      * Only used when an error is not logged until a delay time has elapsed.

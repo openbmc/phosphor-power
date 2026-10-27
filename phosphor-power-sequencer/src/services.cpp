@@ -30,8 +30,9 @@
 namespace phosphor::power::sequencer
 {
 
-void BMCServices::logError(const std::string& message, Entry::Level severity,
-                           std::map<std::string, std::string>& additionalData)
+std::string BMCServices::logError(
+    const std::string& message, Entry::Level severity,
+    std::map<std::string, std::string>& additionalData)
 {
     try
     {
@@ -48,13 +49,18 @@ void BMCServices::logError(const std::string& message, Entry::Level severity,
             "xyz.openbmc_project.Logging", "/xyz/openbmc_project/logging",
             "xyz.openbmc_project.Logging.Create", "Create");
         method.append(message, severity, additionalData);
-        bus.call_noreply(method);
+        auto reply = bus.call(method);
+
+        sdbusplus::object_path entryPath;
+        reply.read(entryPath);
+        return entryPath.str;
     }
     catch (const std::exception& e)
     {
         lg2::error("Unable to log error {ERROR}: {EXCEPTION}", "ERROR", message,
                    "EXCEPTION", e);
     }
+    return std::string{};
 }
 
 bool BMCServices::isPresent(const std::string& inventoryPath)
@@ -169,16 +175,22 @@ void BMCServices::hardPowerCycle()
     bus.call_noreply(method);
 }
 
-void BMCServices::createBMCDump()
+void BMCServices::createBMCDump(const std::string& eventPath)
 {
     try
     {
         auto method = bus.new_method_call(
             "xyz.openbmc_project.Dump.Manager", "/xyz/openbmc_project/dump/bmc",
             "xyz.openbmc_project.Dump.Create", "CreateDump");
-        method.append(
-            std::vector<
-                std::pair<std::string, std::variant<std::string, uint64_t>>>());
+        std::vector<std::pair<std::string, std::variant<std::string, uint64_t>>>
+            dumpParameters{};
+        if (!eventPath.empty())
+        {
+            dumpParameters.emplace_back(
+                "xyz.openbmc_project.Dump.Create.CreateParameters.EventId",
+                eventPath);
+        }
+        method.append(dumpParameters);
         bus.call_noreply(method);
     }
     catch (const std::exception& e)
