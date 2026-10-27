@@ -739,10 +739,14 @@ TEST(SystemTests, SetPowerState)
             .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(2);
+        std::string eventPath1{"/xyz/openbmc_project/logging/entry/1"};
+        std::string eventPath2{"/xyz/openbmc_project/logging/entry/2"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(2);
-        EXPECT_CALL(services, createBMCDump).Times(2);
+            .WillOnce(Return(eventPath1))
+            .WillOnce(Return(eventPath2));
+        EXPECT_CALL(services, createBMCDump(eventPath1)).Times(1);
+        EXPECT_CALL(services, createBMCDump(eventPath2)).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(2);
         EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
@@ -1174,11 +1178,12 @@ TEST(SystemTests, Monitor)
             {"UNEXPECTED_CHASSIS_STATUS", "Chassis is not present"},
             {"POWER_STATE", "on"},
             {"NEW_POWER_STATE", "on"}};
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services, logError(error, Entry::Level::Informational,
                                        additionalData))
-            .Times(1);
+            .WillOnce(Return(eventPath));
 
-        EXPECT_CALL(services, createBMCDump).Times(1);
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(1);
 
         // Initial monitor. System is off.
@@ -3245,10 +3250,11 @@ TEST(SystemTests, CheckForPowerGoodFaults)
             .Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+            .WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off system")).Times(1);
         EXPECT_CALL(services, logInfoMsg("Powering off chassis 1")).Times(1);
@@ -3600,10 +3606,11 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+            .WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(0);
 
@@ -3715,10 +3722,11 @@ TEST(SystemTests, CheckForPowerGoodFaults)
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 2"))
             .Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+            .WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(0);
 
@@ -4056,8 +4064,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             logErrorMsg(
                 "Chassis 1 requested power state is on: Chassis is not present"))
             .Times(1);
-        EXPECT_CALL(services, logError).Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
+        EXPECT_CALL(services, logError).WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 
         // Monitor. Both chassis are present and powered off. Both should be
@@ -4144,8 +4153,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             logErrorMsg(
                 "Chassis 2 requested power state is on: Chassis is not available"))
             .Times(1);
-        EXPECT_CALL(services, logError).Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
+        EXPECT_CALL(services, logError).WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 
         // Monitor. Both chassis are available and powered off. Both should be
@@ -4233,8 +4243,9 @@ TEST(SystemTests, CheckForInvalidChassisStatus)
             logErrorMsg(
                 "Chassis 1 requested power state is on: Chassis does not have input power"))
             .Times(1);
-        EXPECT_CALL(services, logError).Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
+        EXPECT_CALL(services, logError).WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerCycle).Times(1);
 
         // Monitor. Both chassis have good input power and powered off. Both
@@ -4306,10 +4317,11 @@ TEST(SystemTests, HardPowerOff)
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 1")).Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 1"))
             .Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(2);
+            .WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(2);
         EXPECT_CALL(services, hardPowerOff).Times(2);
         EXPECT_CALL(services, hardPowerCycle).Times(0);
 
@@ -4419,10 +4431,11 @@ TEST(SystemTests, HardPowerOff)
         EXPECT_CALL(services, logInfoMsg("Powering on chassis 2")).Times(1);
         EXPECT_CALL(services, logErrorMsg("Power good fault in chassis 2"))
             .Times(1);
+        std::string eventPath{"/xyz/openbmc_project/logging/entry/1"};
         EXPECT_CALL(services,
                     logError(error, Entry::Level::Critical, additionalData))
-            .Times(1);
-        EXPECT_CALL(services, createBMCDump).Times(1);
+            .WillOnce(Return(eventPath));
+        EXPECT_CALL(services, createBMCDump(eventPath)).Times(1);
         EXPECT_CALL(services, hardPowerOff).Times(0);
         EXPECT_CALL(services, hardPowerCycle)
             .WillOnce(Throw(std::runtime_error{"Target not found"}));

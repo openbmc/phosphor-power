@@ -55,7 +55,7 @@ class MockServices : public Services
 
     MOCK_METHOD(void, logErrorMsg, (const std::string& message), (override));
     MOCK_METHOD(void, logInfoMsg, (const std::string& message), (override));
-    MOCK_METHOD(void, logError,
+    MOCK_METHOD(std::string, logError,
                 (const std::string& message, Entry::Level severity,
                  (std::map<std::string, std::string> & additionalData)),
                 (override));
@@ -84,7 +84,8 @@ class MockServices : public Services
 
     MOCK_METHOD(void, hardPowerOff, (), (override));
     MOCK_METHOD(void, hardPowerCycle, (), (override));
-    MOCK_METHOD(void, createBMCDump, (), (override));
+    MOCK_METHOD(void, createBMCDump, (const std::string& eventPath),
+                (override));
     MOCK_METHOD(void, clearCache, (), (override));
 
   private:
