@@ -1,6 +1,6 @@
 #include "config.h"
 
-#include "new_power_supply.hpp"
+#include "power_supply.hpp"
 
 #include "types.hpp"
 #include "util.hpp"

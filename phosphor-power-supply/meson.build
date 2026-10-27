@@ -6,10 +6,10 @@ install_subdir(
 
 phosphor_psu_monitor = executable(
     'phosphor-psu-monitor',
-    'new_main.cpp',
+    'main.cpp',
     'chassis_manager.cpp',
     'chassis.cpp',
-    'new_power_supply.cpp',
+    'power_supply.cpp',
     'util.cpp',
     dependencies: [
         cli11_dep,
