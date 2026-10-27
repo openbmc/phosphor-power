@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a40e8a_cfa24716",
+        "filename": "phosphor-chassis-power/docs/config_file/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-27T20:04:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65a07136_c9ed3ed9",
+      "range": {
+        "startLine": 78,
+        "startChar": 66,
+        "endLine": 78,
+        "endChar": 116
+      },
+      "revId": "dd7e0d6543a67a91a613f9068a23cb63a7fd7015",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8c685b9_ef595eff",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-10-27T15:03:55Z",
       "side": 1,
       "message": "Same comment as in the previous .md file.",
+      "range": {
+        "startLine": 5,
+        "startChar": 31,
+        "endLine": 6,
+        "endChar": 32
+      },
+      "revId": "dd7e0d6543a67a91a613f9068a23cb63a7fd7015",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf052ba_86342c5f",
+        "filename": "phosphor-chassis-power/docs/config_file/status_monitoring.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-27T20:04:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8c685b9_ef595eff",
       "range": {
         "startLine": 5,
         "startChar": 31,
@@ -64,6 +112,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28ba616e_bf524354",
+        "filename": "phosphor-chassis-power/src/config_file_parser.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-27T20:04:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0885abe5_b1c4275b",
+      "revId": "dd7e0d6543a67a91a613f9068a23cb63a7fd7015",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f977ca07_e4f2fdc0",
@@ -77,6 +143,24 @@
       "writtenOn": "2026-10-27T15:03:55Z",
       "side": 1,
       "message": "Do you need to add a new test where availability monitoring is turned off, to verify it ignores the Available property?",
+      "revId": "dd7e0d6543a67a91a613f9068a23cb63a7fd7015",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3446260d_8a815053",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-27T20:04:41Z",
+      "side": 1,
+      "message": "No, because chassis doesn\u0027t have any knowledge of if availability monitoring is on, and chassis-stats-monitor will return true for isAvailable when monitoring is turned off.",
+      "parentUuid": "f977ca07_e4f2fdc0",
       "revId": "dd7e0d6543a67a91a613f9068a23cb63a7fd7015",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
