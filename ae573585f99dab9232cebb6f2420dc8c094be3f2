@@ -16,6 +16,23 @@
       "message": "You did not actually rename these files. The old names are still present, and git shows new files with the new names as well.\n\nPlease retry using \u0027git mv\u0027 so that it does a rename in a way that git understands.",
       "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2a2a9ce_31e96e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-27T15:30:26Z",
+      "side": 1,
+      "message": "```\n$ cd phosphor-power-supply/\n$ ls\nREADME.md    chassis.hpp          chassis_manager.hpp  docs      meson.build   new_power_supply.cpp  power_supply.cpp  util.cpp  util_base.hpp\nchassis.cpp  chassis_manager.cpp  configurations       main.cpp  new_main.cpp  new_power_supply.hpp  power_supply.hpp  util.hpp\n```",
+      "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
