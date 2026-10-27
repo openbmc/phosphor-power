@@ -585,8 +585,10 @@ class System
      * Does nothing if a dump has already been requested.
      *
      * @param services System services like hardware presence and the journal
+     * @param eventPath D-Bus object path of the latest error log entry that
+     *                  triggered the dump; empty if there is no such entry
      */
-    void createBMCDump(Services& services);
+    void createBMCDump(Services& services, const std::string& eventPath);
 
     /**
      * Performs a hard power off of the system using systemd.

@@ -68,11 +68,34 @@ struct PowerGoodFault
     bool wasLogged{false};
 
     /**
+     * D-Bus object path of the error log entry created for the fault.
+     *
+     * Empty if an error has not been logged or logging failed.
+     */
+    std::string eventPath;
+
+    /**
      * Specifies the time when an error should be logged.
      *
      * Only used when an error is not logged until a delay time has elapsed.
      */
     std::chrono::time_point<std::chrono::steady_clock> logTime;
+};
+
+/**
+ * @struct UnexpectedStatusFault
+ *
+ * Unexpected chassis status fault detected for the chassis for the current
+ * power on attempt.
+ */
+struct UnexpectedStatusFault
+{
+    /**
+     * D-Bus object path of the error log entry created for the fault.
+     *
+     * Empty if an error has not been logged or logging failed.
+     */
+    std::string eventPath;
 };
 
 /**
@@ -458,6 +481,19 @@ class Chassis
     }
 
     /**
+     * Returns whether an unexpected status fault has been detected.
+     *
+     * Unexpected status fault history is cleared when a new power on attempt
+     * occurs.
+     *
+     * @return true if an unexpected status fault was found, false otherwise
+     */
+    bool hasUnexpectedStatusFault()
+    {
+        return unexpectedStatusFault.has_value();
+    }
+
+    /**
      * Returns the power good fault that was detected.
      *
      * See hasPowerGoodFault() for more information on power good faults.
@@ -477,6 +513,16 @@ class Chassis
     }
 
     /**
+     * Returns the unexpected status fault that was detected, if any.
+     *
+     * @return unexpected status fault, or std::nullopt if none detected
+     */
+    const std::optional<UnexpectedStatusFault>& getUnexpectedStatusFault() const
+    {
+        return unexpectedStatusFault;
+    }
+
+    /**
      * Closes all power sequencer devices that are open.
      *
      * Does not throw exceptions. This method may be called because the chassis
@@ -493,6 +539,7 @@ class Chassis
     {
         powerSupplyError.clear();
         powerGoodFault.reset();
+        unexpectedStatusFault.reset();
         loggedUnexpectedStatusTypes.clear();
     }
 
@@ -957,6 +1004,12 @@ class Chassis
      * See hasPowerGoodFault() for more information.
      */
     std::optional<PowerGoodFault> powerGoodFault{};
+
+    /**
+     * Unexpected status fault detected during the current power on attempt,
+     * if any.
+     */
+    std::optional<UnexpectedStatusFault> unexpectedStatusFault{};
 
     /**
      * Timeout that indicates a power state change has taken too much time and
