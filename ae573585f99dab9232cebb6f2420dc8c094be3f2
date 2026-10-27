@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1a94eca_743c5d56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-10-27T15:30:05Z",
+      "side": 1,
+      "message": "You did not actually rename these files. The old names are still present, and git shows new files with the new names as well.\n\nPlease retry using \u0027git mv\u0027 so that it does a rename in a way that git understands.",
+      "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
