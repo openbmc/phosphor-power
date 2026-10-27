@@ -475,7 +475,9 @@ void Chassis::logPowerGoodFault(Services& services)
     }
 
     additionalData.emplace("CHASSIS_NUMBER", std::to_string(number));
-    services.logError(error, Entry::Level::Critical, additionalData);
+
+    powerGoodFault->eventPath =
+        services.logError(error, Entry::Level::Critical, additionalData);
     powerGoodFault->wasLogged = true;
 }
 
@@ -565,8 +567,11 @@ void Chassis::logUnexpectedStatusError(
     additionalData.emplace("POWER_STATE", powerStateStr);
     additionalData.emplace("NEW_POWER_STATE",
                            PowerInterface::toString(newPowerState));
-    services.logError(unexpectedChassisStatusError, Entry::Level::Informational,
-                      additionalData);
+    unexpectedStatusFault = UnexpectedStatusFault{};
+    unexpectedStatusFault->eventPath =
+        services.logError(unexpectedChassisStatusError,
+                          Entry::Level::Informational, additionalData);
+    unexpectedStatusFault->wasLogged = true;
 }
 
 } // namespace phosphor::power::sequencer
