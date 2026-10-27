@@ -91,8 +91,10 @@ class Services
      * @param message Message property of the error log entry
      * @param severity Severity property of the error log entry
      * @param additionalData AdditionalData property of the error log entry
+     * @return D-Bus object path of the new error log entry (the latest error),
+     *         or an empty string if logging failed
      */
-    virtual void logError(
+    virtual std::string logError(
         const std::string& message, Entry::Level severity,
         std::map<std::string, std::string>& additionalData) = 0;
 
@@ -180,8 +182,11 @@ class Services
 
     /**
      * Creates a BMC dump.
+     *
+     * @param eventPath D-Bus object path of the error log entry that triggered
+     *                  the dump; if empty, the dump is not linked to an event
      */
-    virtual void createBMCDump() = 0;
+    virtual void createBMCDump(const std::string& eventPath) = 0;
 
     /**
      * Clear any cached data.
@@ -235,7 +240,7 @@ class BMCServices : public Services
     }
 
     /** @copydoc Services::logError() */
-    virtual void logError(
+    virtual std::string logError(
         const std::string& message, Entry::Level severity,
         std::map<std::string, std::string>& additionalData) override;
 
@@ -278,7 +283,7 @@ class BMCServices : public Services
     virtual void hardPowerCycle() override;
 
     /** @copydoc Services::createBMCDump() */
-    virtual void createBMCDump() override;
+    virtual void createBMCDump(const std::string& eventPath) override;
 
     /** @copydoc Services::clearCache() */
     virtual void clearCache() override
