@@ -402,7 +402,7 @@ void System::checkForPowerGoodFaults(Services& services)
                     auto& fault = curChassis->getPowerGoodFault();
                     if (!fault.wasTimeout && fault.wasLogged)
                     {
-                        createBMCDump(services);
+                        createBMCDump(services, fault.eventPath);
                         hardPowerOff(services);
                         break;
                     }
@@ -428,7 +428,14 @@ void System::checkForInvalidChassisStatus(Services& services)
                         !curChassis->isAvailable() ||
                         !curChassis->isInputPowerGood())
                     {
-                        createBMCDump(services);
+                        std::string eventPath;
+                        const auto& fault =
+                            curChassis->getUnexpectedStatusFault();
+                        if (fault && fault->wasLogged)
+                        {
+                            eventPath = fault->eventPath;
+                        }
+                        createBMCDump(services, eventPath);
                         hardPowerOff(services);
                         break;
                     }
@@ -442,12 +449,12 @@ void System::checkForInvalidChassisStatus(Services& services)
     }
 }
 
-void System::createBMCDump(Services& services)
+void System::createBMCDump(Services& services, const std::string& eventPath)
 {
     if (!hasRequestedDump)
     {
         hasRequestedDump = true;
-        services.createBMCDump();
+        services.createBMCDump(eventPath);
     }
 }
 
