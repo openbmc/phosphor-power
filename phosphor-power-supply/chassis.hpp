@@ -1,5 +1,5 @@
 #pragma once
-#include "new_power_supply.hpp"
+#include "power_supply.hpp"
 #include "types.hpp"
 #include "utility.hpp"
 
