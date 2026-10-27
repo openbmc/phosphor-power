@@ -33,6 +33,42 @@
       "message": "```\n$ cd phosphor-power-supply/\n$ ls\nREADME.md    chassis.hpp          chassis_manager.hpp  docs      meson.build   new_power_supply.cpp  power_supply.cpp  util.cpp  util_base.hpp\nchassis.cpp  chassis_manager.cpp  configurations       main.cpp  new_main.cpp  new_power_supply.hpp  power_supply.hpp  util.hpp\n```",
       "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa25f051_2a18fbc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-10-27T16:48:44Z",
+      "side": 1,
+      "message": "I did",
+      "parentUuid": "a1a94eca_743c5d56",
+      "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "152c608b_4c6ee5e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-10-27T16:48:44Z",
+      "side": 1,
+      "message": "I did `git mv ...`\nfaisal@pfw600:~/OpenBmc/phosphor-power/phosphor-power-supply$ \u003e git status\nOn branch Merge\nYour branch is ahead of \u0027gerrit/master\u0027 by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nChanges to be committed:\n  (use \"git restore --staged \u003cfile\u003e...\" to unstage)\n        renamed:    new_main.cpp -\u003e main.cpp\n        renamed:    new_power_supply.cpp -\u003e power_supply.cpp\n        renamed:    new_power_supply.hpp -\u003e power_supply.hpp\n\nChanges not staged for commit:\n  (use \"git add \u003cfile\u003e...\" to update what will be committed)\n  (use \"git restore \u003cfile\u003e...\" to discard changes in working directory)\n        modified:   chassis.hpp\n        modified:   meson.build\n        modified:   power_supply.cpp",
+      "parentUuid": "d2a2a9ce_31e96e76",
+      "revId": "ae573585f99dab9232cebb6f2420dc8c094be3f2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
