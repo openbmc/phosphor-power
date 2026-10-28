@@ -22,12 +22,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs1-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs1-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-159"
     },
@@ -54,12 +56,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs2-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs2-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-259"
     },
@@ -86,12 +90,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs3-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs3-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-359"
     },
@@ -118,12 +124,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs4-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs4-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-459"
     },
@@ -150,12 +158,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs5-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs5-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-559"
     },
@@ -182,12 +192,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs6-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs6-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-659"
     },
@@ -214,12 +226,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs7-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs7-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-759"
     },
@@ -246,12 +260,14 @@
         "FaultLatchResetGpio": {
             "Name": "power-chs8-sb-fault-reset",
             "Direction": "Output",
-            "Polarity": "Low"
+            "Polarity": "Low",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "EnableSystemResetGpio": {
             "Name": "reset-enable-chs8-sb-power",
             "Direction": "Output",
-            "Polarity": "High"
+            "Polarity": "High",
+            "DevicePath": "/sys/bus/i2c/devices/9-0073"
         },
         "PresencePath": "/dev/i2c-859"
     }
