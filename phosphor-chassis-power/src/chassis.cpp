@@ -116,6 +116,8 @@ void Chassis::checkLatchedFault()
 
 void Chassis::clearErrorHistory()
 {
+    writeFailurePELLogged = false;
+
     for (const auto& gpio : gpios)
     {
         gpio->clearErrorHistory();
@@ -190,7 +192,6 @@ void Chassis::monitor()
                 {
                     // Handle gpio read fail
                 }
-
                 if (changed)
                 {
                     // Handle fault unlatched change
@@ -252,7 +253,10 @@ bool Chassis::writeGPIO(Gpio& gpio, int value)
 {
     if (!gpio.foundLine())
     {
-        gpio.findLine();
+        if (!gpio.findLine())
+        {
+            return false;
+        }
     }
 
     if (gpio.requestWrite(value))
@@ -263,10 +267,46 @@ bool Chassis::writeGPIO(Gpio& gpio, int value)
             return true;
         }
         catch (...)
-        {}
+        {
+            if (gpio.hasReachedReadWriteThreshold())
+            {
+                logGPIOWriteFailure(gpio);
+            }
+        }
+    }
+    else
+    {
+        if (gpio.hasReachedRequestThreshold())
+        {
+            logGPIOWriteFailure(gpio);
+        }
     }
 
     return false;
+}
+
+void Chassis::logGPIOWriteFailure(const Gpio& gpio)
+{
+    // Only one PEL per chassis, regardless of which output GPIO failed.
+    if (writeFailurePELLogged)
+    {
+        return;
+    }
+    std::map<std::string, std::string> additionalData{
+        {"CHASSIS_NUMBER", std::to_string(number)},
+        {"GPIO_NAME", gpio.getName()}};
+
+    // Call out the device providing the GPIO, if the config file specifies it
+    auto devicePath = gpio.getDevicePath();
+    if (devicePath.has_value())
+    {
+        additionalData["CALLOUT_DEVICE_PATH"] = devicePath.value();
+    }
+
+    services.logError("xyz.openbmc_project.Power.GPIOFailureToWrite",
+                      Entry::Level::Error, additionalData);
+
+    writeFailurePELLogged = true;
 }
 
 Gpio* Chassis::getGpioByName(std::string_view name) const
@@ -447,10 +487,10 @@ void Chassis::handlePresenceChange(bool readFailure)
     else if ((presenceGPIOValue == 0 || readFailure) &&
              presencePathValue.value())
     {
-        if (presenceValue && isSystemPoweredOn())
+        if (isSystemPoweredOn())
         {
-            // Only log error if system is on and chassis was present,
-            // to avoid flooding the error log on a powered-off system.
+            // log error if system is on regardless chassis was present,
+            // as missmatching values means an error
             std::map<std::string, std::string> data;
             data["CHASSIS_NUMBER"] = std::to_string(number);
             if (presencePath.has_value())
