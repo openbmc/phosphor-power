@@ -487,6 +487,53 @@ TEST_F(ConfigFileParserTests, ParseGPIOs)
         EXPECT_EQ(gpio->getDefaultValue().value(), 1);
     }
 
+    // Test where works: DevicePath specified
+    {
+        const json element = R"(
+            {
+              "Name": "power-chassis1-standby-fault-reset",
+              "Direction": "Output",
+              "Polarity": "High",
+              "DevicePath": "/sys/devices/test"
+            }
+        )"_json;
+        std::unique_ptr<Gpio> gpio = parseGpio(element, services);
+        ASSERT_TRUE(gpio->getDevicePath().has_value());
+        EXPECT_EQ(gpio->getDevicePath().value(), "/sys/devices/test");
+    }
+
+    // Test where works: DevicePath not specified
+    {
+        const json element = R"(
+            {
+              "Name": "power-chassis1-standby-fault-reset",
+              "Direction": "Output",
+              "Polarity": "High"
+            }
+        )"_json;
+        std::unique_ptr<Gpio> gpio = parseGpio(element, services);
+        EXPECT_FALSE(gpio->getDevicePath().has_value());
+    }
+
+    // Test where fails: DevicePath is not an absolute path
+    try
+    {
+        const json element = R"(
+            {
+              "Name": "power-chassis1-standby-fault-reset",
+              "Direction": "Output",
+              "Polarity": "High",
+              "DevicePath": "sys/devices/test"
+            }
+        )"_json;
+        parseGpio(element, services);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Invalid absolute path");
+    }
+
     // Test where fails: Output direction, Default property with High value
     try
     {

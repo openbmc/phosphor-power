@@ -15,6 +15,7 @@ GPIO values are read using the libgpiod interface.
 | Direction    | Yes      | string | Either "Input" or "Output"                                                                                                          |
 | Polarity     | Yes      | string | Either "Low" (active low) or "High" (active high)                                                                                   |
 | DefaultValue | no       | number | Default GPIO value (0 or 1). Only used if the first attempt to read GPIO fails. Only valid for GPIOs with Direction set to "Input". |
+| DevicePath   | no       | string | Absolute sysfs path of the device providing the GPIO. Used to call out the device in the error log if a GPIO error occurs.          |
 
 ## Example
 
@@ -28,6 +29,7 @@ GPIO values are read using the libgpiod interface.
 "FaultLatchResetGpio": {
     "Name": "power-chassis1-standby-fault-reset",
     "Direction": "Output",
-    "Polarity": "Low"
+    "Polarity": "Low",
+    "DevicePath": "/sys/bus/i2c/devices/9-0073"
 }
 ```

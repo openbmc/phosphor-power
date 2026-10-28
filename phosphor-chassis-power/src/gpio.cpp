@@ -20,14 +20,16 @@
 
 #include <exception>
 #include <stdexcept>
+#include <utility>
 
 namespace phosphor::power::chassis
 {
 
 BMCGpio::BMCGpio(const std::string& name, GpioDirection direction,
-                 GpioPolarity polarity, std::optional<uint8_t> defaultValue) :
+                 GpioPolarity polarity, std::optional<uint8_t> defaultValue,
+                 std::optional<std::string> devicePath) :
     name{name}, direction{direction}, polarity{polarity},
-    defaultValue{defaultValue},
+    defaultValue{defaultValue}, devicePath{std::move(devicePath)},
     requestFlags{(polarity == GpioPolarity::Low)
                      ? gpiod::line_request::FLAG_ACTIVE_LOW
                      : 0}
@@ -247,6 +249,16 @@ bool BMCGpio::shouldSuppressError(int& counter)
 
     ++counter;
     return false;
+}
+
+bool BMCGpio::hasReachedRequestThreshold()
+{
+    return requestFailureCount >= failureThreshold;
+}
+
+bool BMCGpio::hasReachedReadWriteThreshold()
+{
+    return readWriteFailureCount >= failureThreshold;
 }
 
 } // namespace phosphor::power::chassis

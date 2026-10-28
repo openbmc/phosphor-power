@@ -1220,8 +1220,7 @@ TEST_F(ChassisTests, HandlePresenceChange)
             0, "/xyz/openbmc_project/inventory/system/chassis",
             ChassisStatusMonitorOptions{});
         chassis.setSystemStatusMonitor(std::move(monitor));
-
-        chassis.initializePresence();
+        // Presence does not need to be initalized for this error
 
         expectResetEnable(chassis, 0);
         expectFaultReset(chassis, 1);
@@ -2014,6 +2013,100 @@ TEST_F(ChassisTests, HandleLatchedFault)
             .Times(1);
 
         chassis.startLatchedFaultCheck();
+        chassis.monitor();
+    }
+
+    // Test where reset GPIO requestWrite fails, reaches threshold, and logs
+    // the GPIO write failure PEL once
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-reset",
+                                GpioDirection::Output, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillRepeatedly(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillRepeatedly(testing::Return(1));
+
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(1))
+            .WillRepeatedly(testing::Return(false));
+        EXPECT_CALL(getMockGpio(chassis, 1), hasReachedRequestThreshold())
+            .WillRepeatedly(testing::Return(true));
+
+        EXPECT_CALL(
+            services,
+            logError(
+                "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+                Entry::Level::Error, testing::_))
+            .Times(1);
+        EXPECT_CALL(services,
+                    logError("xyz.openbmc_project.Power.GPIOWriteFailure",
+                             Entry::Level::Error, testing::_))
+            .Times(1);
+
+        chassis.startLatchedFaultCheck();
+        chassis.monitor();
+        chassis.monitor();
+    }
+
+    // Test where reset GPIO setValue throws, reaches threshold, and logs the
+    // GPIO write failure PEL once
+    {
+        MockServices services;
+        std::vector<std::unique_ptr<Gpio>> gpios{};
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-latched",
+                                GpioDirection::Input, GpioPolarity::Low));
+        gpios.emplace_back(
+            services.createGPIO("power-chs1-sb-fault-reset",
+                                GpioDirection::Output, GpioPolarity::Low));
+
+        Chassis chassis{1, services, std::nullopt, std::move(gpios)};
+
+        EXPECT_CALL(getMockGpio(chassis, 0), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), requestRead())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 0), getValue())
+            .WillRepeatedly(testing::Return(1));
+        EXPECT_CALL(getMockGpio(chassis, 0), getPreviousValue())
+            .WillRepeatedly(testing::Return(1));
+
+        EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(1))
+            .WillRepeatedly(testing::Return(true));
+        EXPECT_CALL(getMockGpio(chassis, 1), setValue(1))
+            .WillRepeatedly(testing::Throw(std::runtime_error("Write error")));
+        EXPECT_CALL(getMockGpio(chassis, 1), hasReachedReadWriteThreshold())
+            .WillRepeatedly(testing::Return(true));
+
+        EXPECT_CALL(
+            services,
+            logError(
+                "xyz.openbmc_project.Power.BMC.Reset.ChassisPreviouslyLostPower",
+                Entry::Level::Error, testing::_))
+            .Times(1);
+        EXPECT_CALL(services,
+                    logError("xyz.openbmc_project.Power.GPIOWriteFailure",
+                             Entry::Level::Error, testing::_))
+            .Times(1);
+
+        chassis.startLatchedFaultCheck();
+        chassis.monitor();
         chassis.monitor();
     }
 }
