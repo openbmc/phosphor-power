@@ -178,10 +178,24 @@ std::unique_ptr<Gpio> parseGpio(const json& element, Services& services)
         }
     }
 
+    // Optional DevicePath property
+    std::optional<std::string> devicePath{};
+    auto devicePathElement = element.find("DevicePath");
+    if (devicePathElement != element.end())
+    {
+        devicePath = parseString(*devicePathElement);
+        if (!devicePath->starts_with('/'))
+        {
+            throw std::invalid_argument{"Invalid absolute path"};
+        }
+        ++propertyCount;
+    }
+
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return services.createGPIO(name, direction, polarity, defaultValue);
+    return services.createGPIO(name, direction, polarity, defaultValue,
+                               std::move(devicePath));
 }
 
 std::string parsePresencePath(const json& element)
