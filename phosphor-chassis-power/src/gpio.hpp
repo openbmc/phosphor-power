@@ -154,6 +154,15 @@ class Gpio
     virtual GpioPolarity getPolarity() const = 0;
 
     /**
+     * Returns the sysfs path of the device that provides this GPIO.
+     *
+     * The path comes from the config file and is used for device callouts.
+     *
+     * @return sysfs path, or std::nullopt if not specified in the config file
+     */
+    virtual std::optional<std::string> getDevicePath() const = 0;
+
+    /**
      * Returns the default value of this GPIO.
      *
      * @return optional GPIO default value, or std::nullopt if not set
@@ -185,6 +194,27 @@ class Gpio
      * @return Current failure count
      */
     virtual int getReadWriteFailureCount() const = 0;
+
+    /**
+     * Gets the current request failure count.
+     *
+     * @return Current failure count
+     */
+    virtual bool hasReachedLineNotFoundThreshold() = 0;
+
+    /**
+     * Gets the current line not found failure count.
+     *
+     * @return Current failure count
+     */
+    virtual bool hasReachedRequestThreshold() = 0;
+
+    /**
+     * Gets the current read/write failure count.
+     *
+     * @return Current failure count
+     */
+    virtual bool hasReachedReadWriteThreshold() = 0;
 };
 
 /**
@@ -210,10 +240,12 @@ class BMCGpio : public Gpio
      * @param direction GPIO direction
      * @param polarity GPIO polarity
      * @param defaultValue optional default value for deglitching GPIO
+     * @param devicePath optional sysfs path of the device providing the GPIO
      */
     explicit BMCGpio(const std::string& name, GpioDirection direction,
                      GpioPolarity polarity,
-                     std::optional<uint8_t> defaultValue = std::nullopt);
+                     std::optional<uint8_t> defaultValue = std::nullopt,
+                     std::optional<std::string> devicePath = std::nullopt);
 
     /** @copydoc Gpio::findLine() */
     virtual bool findLine() override;
@@ -254,6 +286,12 @@ class BMCGpio : public Gpio
         return polarity;
     }
 
+    /** @copydoc Gpio::getDevicePath() */
+    std::optional<std::string> getDevicePath() const override
+    {
+        return devicePath;
+    }
+
     /**
      * Returns the default value of this GPIO.
      *
@@ -291,6 +329,15 @@ class BMCGpio : public Gpio
         return lineFound;
     }
 
+    /** @copydoc Gpio::hasReachedLineNotFoundThreshold() */
+    bool hasReachedLineNotFoundThreshold() override;
+
+    /** @copydoc Gpio::hasReachedRequestThreshold() */
+    bool hasReachedRequestThreshold() override;
+
+    /** @copydoc Gpio:: hasReachedReadWriteThreshold() */
+    bool hasReachedReadWriteThreshold() override;
+
   private:
     /**
      * Increments a failure counter and determines if error should be suppressed
@@ -319,6 +366,11 @@ class BMCGpio : public Gpio
      * Optional default value of GPIO pin.
      */
     const std::optional<uint8_t> defaultValue{};
+
+    /**
+     * Optional sysfs path of the device providing this GPIO.
+     */
+    const std::optional<std::string> devicePath{};
 
     /**
      * Consumer value specified when requesting the GPIO line.
