@@ -322,6 +322,13 @@ class Chassis
     bool writeGPIO(Gpio& gpio, int value);
 
     /**
+     * Logs a GPIO write failure PEL, at most once per chassis.
+     *
+     * @param gpio output GPIO that failed
+     */
+    void logGPIOWriteFailure(const Gpio& gpio);
+
+    /**
      * Writes a value to a GPIO and releases the line.
      *
      * @param gpio GPIO object to write to
@@ -417,6 +424,12 @@ class Chassis
      * Prevents duplicate PELs across multiple write retries.
      */
     bool latchedFaultPELLogged{false};
+
+    /**
+     * Indicates whether a PEL has already been logged for a failure to write
+     * any output GPIO (request or write failure).
+     */
+    bool writeFailurePELLogged{false};
 
     /**
      * Indicates whether the initial presence state has been pushed to PIM.

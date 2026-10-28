@@ -33,9 +33,10 @@ class MockGpio : public Gpio
   public:
     MockGpio(const std::string& name, GpioDirection direction,
              GpioPolarity polarity,
-             std::optional<uint8_t> defaultValue = std::nullopt) :
+             std::optional<uint8_t> defaultValue = std::nullopt,
+             std::optional<std::string> devicePath = std::nullopt) :
         name{name}, direction{direction}, polarity{polarity},
-        defaultValue{defaultValue}
+        defaultValue{defaultValue}, devicePath{std::move(devicePath)}
     {
         ON_CALL(*this, getName()).WillByDefault(testing::ReturnRef(this->name));
         ON_CALL(*this, getDirection())
@@ -44,6 +45,8 @@ class MockGpio : public Gpio
             .WillByDefault(testing::Return(this->polarity));
         ON_CALL(*this, getDefaultValue())
             .WillByDefault(testing::Return(this->defaultValue));
+        ON_CALL(*this, getDevicePath())
+            .WillByDefault(testing::Return(this->devicePath));
     }
 
     ~MockGpio() override = default;
@@ -59,17 +62,22 @@ class MockGpio : public Gpio
     MOCK_METHOD(const std::string&, getName, (), (const, override));
     MOCK_METHOD(GpioDirection, getDirection, (), (const, override));
     MOCK_METHOD(GpioPolarity, getPolarity, (), (const, override));
+    MOCK_METHOD(std::optional<std::string>, getDevicePath, (),
+                (const, override));
     MOCK_METHOD(std::optional<uint8_t>, getDefaultValue, (), (const, override));
     MOCK_METHOD(void, clearErrorHistory, (), (override));
     MOCK_METHOD(int, getRequestFailureCount, (), (const, override));
     MOCK_METHOD(int, getLineNotFoundCount, (), (const, override));
     MOCK_METHOD(int, getReadWriteFailureCount, (), (const, override));
+    MOCK_METHOD(bool, hasReachedRequestThreshold, (), (override));
+    MOCK_METHOD(bool, hasReachedReadWriteThreshold, (), (override));
 
   private:
     const std::string name;
     const GpioDirection direction;
     const GpioPolarity polarity;
     const std::optional<uint8_t> defaultValue;
+    const std::optional<std::string> devicePath;
 };
 
 } // namespace phosphor::power::chassis

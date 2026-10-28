@@ -53,10 +53,11 @@ class MockServices : public Services
 
     std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
-        std::optional<uint8_t> defaultValue = std::nullopt) override
+        std::optional<uint8_t> defaultValue = std::nullopt,
+        std::optional<std::string> devicePath = std::nullopt) override
     {
         return std::make_unique<testing::NiceMock<MockGpio>>(
-            name, direction, polarity, defaultValue);
+            name, direction, polarity, defaultValue, std::move(devicePath));
     }
 
     std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(

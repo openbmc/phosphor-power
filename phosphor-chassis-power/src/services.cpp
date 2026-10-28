@@ -41,10 +41,10 @@ void BMCServices::subscribeToSystemdSignals()
 
 std::unique_ptr<Gpio> BMCServices::createGPIO(
     const std::string& name, GpioDirection direction, GpioPolarity polarity,
-    std::optional<uint8_t> defaultValue)
+    std::optional<uint8_t> defaultValue, std::optional<std::string> devicePath)
 {
-    auto gpio =
-        std::make_unique<BMCGpio>(name, direction, polarity, defaultValue);
+    auto gpio = std::make_unique<BMCGpio>(name, direction, polarity,
+                                          defaultValue, std::move(devicePath));
 
     return gpio;
 }

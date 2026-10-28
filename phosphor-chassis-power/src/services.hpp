@@ -68,11 +68,13 @@ class Services
      * @param direction GPIO direction
      * @param polarity GPIO polarity
      * @param defaultValue optional default value
+     * @param devicePath optional sysfs path of the device providing the GPIO
      * @return unique pointer to Gpio
      */
     virtual std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
-        std::optional<uint8_t> defaultValue = std::nullopt) = 0;
+        std::optional<uint8_t> defaultValue = std::nullopt,
+        std::optional<std::string> devicePath = std::nullopt) = 0;
 
     /**
      * Creates object for monitoring the status of a chassis using D-Bus
@@ -141,7 +143,8 @@ class BMCServices : public Services
     /** @copydoc Services::createGPIO() */
     std::unique_ptr<Gpio> createGPIO(
         const std::string& name, GpioDirection direction, GpioPolarity polarity,
-        std::optional<uint8_t> defaultValue = std::nullopt) override;
+        std::optional<uint8_t> defaultValue = std::nullopt,
+        std::optional<std::string> devicePath = std::nullopt) override;
 
     /** @copydoc Services::createChassisStatusMonitor() */
     std::unique_ptr<ChassisStatusMonitor> createChassisStatusMonitor(
