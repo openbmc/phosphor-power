@@ -21,6 +21,7 @@
 #include "chassis_status_monitor.hpp"
 #include "compare_presence_action.hpp"
 #include "compare_vpd_action.hpp"
+#include "compare_vpd_byte_action.hpp"
 #include "compare_vpd_bytes_action.hpp"
 #include "configuration.hpp"
 #include "device.hpp"
@@ -241,6 +242,21 @@ std::unique_ptr<ComparePresenceAction> parseComparePresence(
  * @return CompareVPDAction object
  */
 std::unique_ptr<CompareVPDAction> parseCompareVPD(
+    const nlohmann::json& element,
+    const std::map<std::string, std::string>& variables);
+
+/**
+ * Parses a JSON element containing a compare_vpd_byte action.
+ *
+ * Returns the corresponding C++ CompareVPDByteAction object.
+ *
+ * Throws an exception if parsing fails.
+ *
+ * @param element JSON element
+ * @param variables variables map used to expand variables in element value
+ * @return CompareVPDByteAction object
+ */
+std::unique_ptr<CompareVPDByteAction> parseCompareVPDByte(
     const nlohmann::json& element,
     const std::map<std::string, std::string>& variables);
 

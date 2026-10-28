@@ -55,6 +55,9 @@
                     "$ref": "#/definitions/compare_presence"
                 },
                 "compare_vpd": { "$ref": "#/definitions/compare_vpd" },
+                "compare_vpd_byte": {
+                    "$ref": "#/definitions/compare_vpd_byte"
+                },
                 "compare_vpd_bytes": {
                     "$ref": "#/definitions/compare_vpd_bytes"
                 },
@@ -85,6 +88,7 @@
                 { "required": ["and"] },
                 { "required": ["compare_presence"] },
                 { "required": ["compare_vpd"] },
+                { "required": ["compare_vpd_byte"] },
                 { "required": ["compare_vpd_bytes"] },
                 { "required": ["i2c_capture_bytes"] },
                 { "required": ["i2c_compare_bit"] },
@@ -145,6 +149,19 @@
                 "value": { "$ref": "#/definitions/string_value" }
             },
             "required": ["fru", "keyword", "value"],
+            "additionalProperties": false
+        },
+
+        "compare_vpd_byte": {
+            "type": "object",
+            "properties": {
+                "fru": { "$ref": "#/definitions/inventory_path" },
+                "keyword": { "$ref": "#/definitions/keyword" },
+                "position": { "$ref": "#/definitions/byte_position" },
+                "value": { "$ref": "#/definitions/byte_value" },
+                "mask": { "$ref": "#/definitions/byte_mask" }
+            },
+            "required": ["fru", "keyword", "position", "value"],
             "additionalProperties": false
         },
 
@@ -259,6 +276,16 @@
                 {
                     "type": "string",
                     "pattern": "^0x[0-9A-Fa-f]{2}$"
+                },
+                { "$ref": "#/definitions/string_with_variables" }
+            ]
+        },
+
+        "byte_position": {
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 0
                 },
                 { "$ref": "#/definitions/string_with_variables" }
             ]

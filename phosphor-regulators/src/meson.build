@@ -26,6 +26,7 @@ phosphor_regulators_library_source_files = [
     'vpd.cpp',
     'actions/compare_presence_action.cpp',
     'actions/compare_vpd_action.cpp',
+    'actions/compare_vpd_byte_action.cpp',
     'actions/compare_vpd_bytes_action.cpp',
     'actions/if_action.cpp',
     'actions/i2c_capture_bytes_action.cpp',

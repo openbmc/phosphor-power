@@ -31,6 +31,7 @@ phosphor_regulators_tests_source_files = [
     'actions/and_action_tests.cpp',
     'actions/compare_presence_action_tests.cpp',
     'actions/compare_vpd_action_tests.cpp',
+    'actions/compare_vpd_byte_action_tests.cpp',
     'actions/compare_vpd_bytes_action_tests.cpp',
     'actions/i2c_action_tests.cpp',
     'actions/i2c_capture_bytes_action_tests.cpp',

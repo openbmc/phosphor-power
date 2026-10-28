@@ -16,6 +16,7 @@ version of a processor.
 ## Supported Actions
 
 - [compare_vpd](compare_vpd.md)
+- [compare_vpd_byte](compare_vpd_byte.md)
 - [compare_vpd_bytes](compare_vpd_bytes.md)
 
 ## Supported Keywords
@@ -40,6 +41,9 @@ A keyword value may be unavailable if:
 If the keyword value is unavailable, it will be treated as an empty value:
 
 - [compare_vpd](compare_vpd.md) treats it as an empty string (`""`).
+- [compare_vpd_byte](compare_vpd_byte.md) treats it as an empty byte array
+  (`[]`). Since any byte position is past the end of the array, the comparison
+  will return false.
 - [compare_vpd_bytes](compare_vpd_bytes.md) treats it as an empty byte array
   (`[]`).
 

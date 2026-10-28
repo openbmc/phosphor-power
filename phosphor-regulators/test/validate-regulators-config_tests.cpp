@@ -921,6 +921,222 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
     }
 }
 
+TEST(ValidateRegulatorsConfigTest, CompareVpdByte)
+{
+    json compareVpdByteFile = validConfigFile;
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]["fru"] =
+        "system/chassis/motherboard";
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]
+                      ["keyword"] = "CCIN";
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]
+                      ["position"] = 0;
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] =
+        "0x32";
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] =
+        "0xFF";
+
+    // Valid: all properties specified.
+    {
+        json configFile = compareVpdByteFile;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: required properties only (mask omitted).
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase("mask");
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Valid: position is > 0.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["position"] =
+            1;
+        EXPECT_JSON_VALID(configFile);
+    }
+
+    // Invalid: no fru property.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase("fru");
+        EXPECT_JSON_INVALID(configFile, "'fru' is a required property");
+    }
+
+    // Invalid: no keyword property.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase(
+            "keyword");
+        EXPECT_JSON_INVALID(configFile, "'keyword' is a required property");
+    }
+
+    // Invalid: no position property.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase(
+            "position");
+        EXPECT_JSON_INVALID(configFile, "'position' is a required property");
+    }
+
+    // Invalid: no value property.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase("value");
+        EXPECT_JSON_INVALID(configFile, "'value' is a required property");
+    }
+
+    // Invalid: property fru wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["fru"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property fru is empty string.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
+    }
+
+    // Invalid: property keyword is invalid.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["keyword"] =
+            "Number";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property position wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["position"] =
+            3.1;
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property position less than 0.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["position"] =
+            -1;
+        EXPECT_JSON_INVALID(configFile, "-1 is less than the minimum of 0");
+    }
+
+    // Invalid: property value wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] = 1;
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property value more than 2 hex digits.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] =
+            "0x820";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property value less than 2 hex digits.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] =
+            "0x8";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property value no leading 0x.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] =
+            "82";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property value invalid hex digit.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["value"] =
+            "0x8G";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property mask wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] = 1;
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property mask more than 2 hex digits.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] =
+            "0x7F0";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property mask less than 2 hex digits.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] =
+            "0x7";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property mask no leading 0x.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] = "7F";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: property mask invalid hex digit.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["mask"] =
+            "0x7G";
+        EXPECT_JSON_INVALID(configFile,
+                            "is not valid under any of the given schemas");
+    }
+
+    // Invalid: unexpected property specified.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["foo"] = true;
+        EXPECT_JSON_INVALID(
+            configFile,
+            "Additional properties are not allowed ('foo' was unexpected)");
+    }
+
+    // Valid: property values contain variables.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1] = {
+                      {"compare_vpd_byte",
+                       {{"fru", "system/chassis${chassis_number}/motherboard"},
+                        {"keyword", "${vpd_keyword}"},
+                        {"position", "${bit_pos}"},
+                        {"value", "${vpd_byte_val}"},
+                        {"mask", "${byte_mask}"}}}};
+        EXPECT_JSON_VALID(configFile);
+    }
+}
+
 TEST(ValidateRegulatorsConfigTest, CompareVpdBytes)
 {
     // Valid: required properties only.

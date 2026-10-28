@@ -86,6 +86,11 @@ std::unique_ptr<Action> parseAction(
         action = parseCompareVPD(element["compare_vpd"], variables);
         ++propertyCount;
     }
+    else if (element.contains("compare_vpd_byte"))
+    {
+        action = parseCompareVPDByte(element["compare_vpd_byte"], variables);
+        ++propertyCount;
+    }
     else if (element.contains("compare_vpd_bytes"))
     {
         action = parseCompareVPDBytes(element["compare_vpd_bytes"], variables);
@@ -440,6 +445,48 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
     verifyPropertyCount(element, propertyCount);
 
     return std::make_unique<CompareVPDAction>(fru, keyword, value);
+}
+
+std::unique_ptr<CompareVPDByteAction> parseCompareVPDByte(
+    const json& element, const std::map<std::string, std::string>& variables)
+{
+    verifyIsObject(element);
+    unsigned int propertyCount{0};
+
+    // Required fru property
+    const json& fruElement = getRequiredProperty(element, "fru");
+    std::string fru = parseInventoryPath(fruElement, variables);
+    ++propertyCount;
+
+    // Required keyword property
+    const json& keywordElement = getRequiredProperty(element, "keyword");
+    std::string keyword = parseString(keywordElement, false, variables);
+    ++propertyCount;
+
+    // Required position property
+    const json& positionElement = getRequiredProperty(element, "position");
+    unsigned int position = parseUnsignedInteger(positionElement, variables);
+    ++propertyCount;
+
+    // Required value property
+    const json& valueElement = getRequiredProperty(element, "value");
+    uint8_t value = parseHexByte(valueElement, variables);
+    ++propertyCount;
+
+    // Optional mask property
+    uint8_t mask{0xFF};
+    auto maskIt = element.find("mask");
+    if (maskIt != element.end())
+    {
+        mask = parseHexByte(*maskIt, variables);
+        ++propertyCount;
+    }
+
+    // Verify no invalid properties exist
+    verifyPropertyCount(element, propertyCount);
+
+    return std::make_unique<CompareVPDByteAction>(fru, keyword, position, value,
+                                                  mask);
 }
 
 std::unique_ptr<CompareVPDBytesAction> parseCompareVPDBytes(
