@@ -183,6 +183,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfa73e42_eb018dd6",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-29T21:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56f50566_c22ba34a",
+      "range": {
+        "startLine": 511,
+        "startChar": 3,
+        "endLine": 511,
+        "endChar": 23
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aadc4b9c_80be0996",
@@ -244,6 +268,30 @@
       "side": 1,
       "message": "// SHELDON: https://ibm-systems-power.slack.com/archives/GKJC39Q0M/p1787080449416229?thread_ts\u003d1786039956.678959\u0026cid\u003dGKJC39Q0M\n        // After BMC reset, if system off, for all possible sleds:\n        // disable bmc reset\n        // leave latching alone\n        // if/when blackout target ran:\n        // log 74F1 SRC if latched gpio is on\n        // disable latching",
       "parentUuid": "b579c321_e6250622",
+      "range": {
+        "startLine": 578,
+        "startChar": 12,
+        "endLine": 578,
+        "endChar": 34
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "102f0b05_192923e7",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-29T21:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65927586_d3406fcd",
       "range": {
         "startLine": 578,
         "startChar": 12,
@@ -1326,6 +1374,30 @@
       "side": 1,
       "message": "that is the way 23 other test cases make the chassis present.\ndid we want to do it a different way?",
       "parentUuid": "83673814_3d1b2aea",
+      "range": {
+        "startLine": 2597,
+        "startChar": 0,
+        "endLine": 2598,
+        "endChar": 37
+      },
+      "revId": "89ba4d812e1670575ae4d8321b18bb91c0b20099",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc2fd3b_b2cbc33e",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2598,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-10-29T21:29:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae665699_94a53df3",
       "range": {
         "startLine": 2597,
         "startChar": 0,
