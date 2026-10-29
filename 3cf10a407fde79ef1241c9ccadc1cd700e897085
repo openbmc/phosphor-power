@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5b2b3cc_7523e4e6",
+        "filename": "phosphor-power-sequencer/src/system.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-10-29T15:04:46Z",
+      "side": 1,
+      "message": "I can make this look more like checkForPowerGoodFaults when I made the changes locally it affected the unit tests, which is why I didn\u0027t.",
+      "range": {
+        "startLine": 427,
+        "startChar": 19,
+        "endLine": 440,
+        "endChar": 30
+      },
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
