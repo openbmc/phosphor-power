@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa4b85d_8d7b2c06",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_bytes_action.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-11-03T22:28:17Z",
+      "side": 1,
+      "message": "is your rule of thumb to just put explicit on all constructors?  I don\u0027t really see a chance of this being implicitly converted from anything.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 13
+      },
+      "revId": "8742c192206f403d6455b60d53414250a0d14b4e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
