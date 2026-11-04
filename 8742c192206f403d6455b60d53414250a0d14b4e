@@ -46,6 +46,30 @@
       },
       "revId": "8742c192206f403d6455b60d53414250a0d14b4e",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ae2746d_ff4524f9",
+        "filename": "phosphor-regulators/src/actions/compare_vpd_bytes_action.hpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000008
+      },
+      "writtenOn": "2026-11-04T16:49:32Z",
+      "side": 1,
+      "message": "i don\u0027t.",
+      "parentUuid": "91eca8a6_4fd93aec",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 13
+      },
+      "revId": "8742c192206f403d6455b60d53414250a0d14b4e",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
