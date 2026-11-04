@@ -1,6 +1,126 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cc89769_242be27d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "Looks pretty good. Had a few comments.\n\nWe should probably update at least one of the System test cases for this right? To verify that the string event id passed back from Services.logError() gets passed to Services.createBMCDump()?",
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "964ffc23_cba956eb",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "This implies multiple are logged. Is that what you meant?",
+      "range": {
+        "startLine": 71,
+        "startChar": 32,
+        "endLine": 71,
+        "endChar": 39
+      },
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dbbbbdf_e31ec8dd",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "I think you can delete this sentence for this fault and the one below.\n\nThe sentence makes assumptions about what other classes are doing. I\u0027d prefer to have the classes be loosely tied together without knowing about each other\u0027s internal details.",
+      "range": {
+        "startLine": 73,
+        "startChar": 7,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a581b4_ea8a4b3f",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this data member, right?\n\nFor some PowerGoodFaults, the error is detected right away, but an error log is only created after a wait period. So we need the wasLogged data member to know if the error has been logged.\n\nThe UnexpectedStatusFault is logged right away. So if this object exists, then it has been logged.",
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45d63c98_d034e5dc",
+        "filename": "phosphor-power-sequencer/src/chassis.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "Can you add a hasUnexpectedStatusFault() method and then have this method act the same as getPowerGoodFault()?\n\nI think the reason I made it two functions was to not leak the internal detail of using a std::optional outside the class. It is not a big difference, but it would be better if these two faults had the same interface for access.",
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6ce151b_32ffeb36",
+        "filename": "phosphor-power-sequencer/src/services.hpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-04T22:12:06Z",
+      "side": 1,
+      "message": "What does this mean? Only one error is created by this API, right?",
+      "range": {
+        "startLine": 94,
+        "startChar": 60,
+        "endLine": 94,
+        "endChar": 78
+      },
+      "revId": "3cf10a407fde79ef1241c9ccadc1cd700e897085",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5b2b3cc_7523e4e6",
