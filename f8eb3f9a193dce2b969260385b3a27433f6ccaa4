@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a6f1f55_da792105",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-05T16:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd340f14_b8b73ee3",
+      "range": {
+        "startLine": 188,
+        "startChar": 31,
+        "endLine": 188,
+        "endChar": 49
+      },
+      "revId": "f8eb3f9a193dce2b969260385b3a27433f6ccaa4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "398ada01_14b7e05a",
@@ -47,6 +71,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "610245e1_d1753074",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-05T16:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "398ada01_14b7e05a",
+      "range": {
+        "startLine": 252,
+        "startChar": 31,
+        "endLine": 252,
+        "endChar": 49
+      },
+      "revId": "f8eb3f9a193dce2b969260385b3a27433f6ccaa4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14d4588d_6c97eec4",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-11-03T20:19:03Z",
       "side": 1,
       "message": "debug comment",
+      "range": {
+        "startLine": 2243,
+        "startChar": 11,
+        "endLine": 2243,
+        "endChar": 18
+      },
+      "revId": "f8eb3f9a193dce2b969260385b3a27433f6ccaa4",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9854dbed_b27dc5c1",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 2243,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-05T16:58:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14d4588d_6c97eec4",
       "range": {
         "startLine": 2243,
         "startChar": 11,
