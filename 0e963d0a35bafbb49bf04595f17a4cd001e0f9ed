@@ -24,6 +24,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c507b645_c045613d",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-06T17:14:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "751feb69_d4b489ac",
+      "range": {
+        "startLine": 598,
+        "startChar": 7,
+        "endLine": 600,
+        "endChar": 63
+      },
+      "revId": "0e963d0a35bafbb49bf04595f17a4cd001e0f9ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73ad38a4_88b31d6e",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-11-06T15:57:48Z",
       "side": 1,
       "message": "Why is this commented out.",
+      "range": {
+        "startLine": 113,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 41
+      },
+      "revId": "0e963d0a35bafbb49bf04595f17a4cd001e0f9ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aceb2e51_df52ffad",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-06T17:14:04Z",
+      "side": 1,
+      "message": "as discussed going to put in optional",
+      "parentUuid": "73ad38a4_88b31d6e",
       "range": {
         "startLine": 113,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de6e0161_c00c4761",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-06T17:14:04Z",
+      "side": 1,
+      "message": "as a repeated setup this one does not make sense for previous.",
+      "parentUuid": "c5000b66_fa355934",
+      "range": {
+        "startLine": 134,
+        "startChar": 1,
+        "endLine": 135,
+        "endChar": 41
+      },
+      "revId": "0e963d0a35bafbb49bf04595f17a4cd001e0f9ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe75b88f_9f9e8bc1",
@@ -93,6 +165,30 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98edf0dd_29e67f21",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-06T17:14:04Z",
+      "side": 1,
+      "message": "as discussed going to put in optional",
+      "parentUuid": "fe75b88f_9f9e8bc1",
+      "range": {
+        "startLine": 192,
+        "startChar": 2,
+        "endLine": 193,
+        "endChar": 41
+      },
+      "revId": "0e963d0a35bafbb49bf04595f17a4cd001e0f9ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45c7aa71_b7a40718",
@@ -106,6 +202,30 @@
       "writtenOn": "2026-11-06T15:57:48Z",
       "side": 1,
       "message": "Why is this commented out.",
+      "range": {
+        "startLine": 213,
+        "startChar": 3,
+        "endLine": 214,
+        "endChar": 47
+      },
+      "revId": "0e963d0a35bafbb49bf04595f17a4cd001e0f9ed",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c3e3c2_0bdc05a3",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-06T17:14:04Z",
+      "side": 1,
+      "message": "as a repeated setup this one does not make sense for previous.",
+      "parentUuid": "45c7aa71_b7a40718",
       "range": {
         "startLine": 213,
         "startChar": 3,
