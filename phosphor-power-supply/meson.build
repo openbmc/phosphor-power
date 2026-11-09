@@ -24,3 +24,9 @@ phosphor_psu_monitor = executable(
     install: true,
     link_with: [libpower],
 )
+
+power_supply = phosphor_psu_monitor.extract_objects('power_supply.cpp')
+
+if get_option('tests').allowed()
+    subdir('test')
+endif
