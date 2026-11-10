@@ -48,8 +48,7 @@ class CompareVPDByteAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
-     * @param keyword VPD keyword. Specify one of the following: "CCIN",
-     *                "Manufacturer", "Model", "PartNumber", "HW".
+     * @param keyword VPD keyword.
      * @param position Zero-based byte position within the VPD keyword value.
      *                 Position 0 is the first byte.
      * @param value Expected byte value.

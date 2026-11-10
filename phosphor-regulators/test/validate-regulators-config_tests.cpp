@@ -896,14 +896,20 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
-    // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
-    // "PartNumber", "HW"
+    // Invalid: property keyword wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][2]["compare_vpd"]["keyword"] = "Number";
-        EXPECT_JSON_INVALID(configFile,
-                            "is not valid under any of the given schemas");
+                  ["actions"][0]["or"][2]["compare_vpd"]["keyword"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property keyword is empty string.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][2]["compare_vpd"]["keyword"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
     // Invalid: property value wrong type.
@@ -1000,13 +1006,19 @@ TEST(ValidateRegulatorsConfigTest, CompareVpdByte)
         EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
-    // Invalid: property keyword is invalid.
+    // Invalid: property keyword wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["keyword"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property keyword is empty string.
     {
         json configFile = compareVpdByteFile;
         configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["keyword"] =
-            "Number";
-        EXPECT_JSON_INVALID(configFile,
-                            "is not valid under any of the given schemas");
+            "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
     // Invalid: property position wrong type.
@@ -1206,15 +1218,20 @@ TEST(ValidateRegulatorsConfigTest, CompareVpdBytes)
         EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
-    // Invalid: property keyword is not "CCIN", "Manufacturer", "Model",
-    // "PartNumber", "HW"
+    // Invalid: property keyword wrong type.
     {
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
-                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["keyword"] =
-                      "Number";
-        EXPECT_JSON_INVALID(configFile,
-                            "is not valid under any of the given schemas");
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["keyword"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property keyword is empty string.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][1]["compare_vpd_bytes"]["keyword"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 
     // Invalid: property values is not an array.
