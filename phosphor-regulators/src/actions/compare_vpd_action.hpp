@@ -46,8 +46,7 @@ class CompareVPDAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
-     * @param keyword VPD keyword. Specify one of the following: "CCIN",
-     *                "Manufacturer", "Model", "PartNumber", "HW".
+     * @param keyword VPD keyword.
      * @param value Expected value
      */
     explicit CompareVPDAction(const std::string& fru,

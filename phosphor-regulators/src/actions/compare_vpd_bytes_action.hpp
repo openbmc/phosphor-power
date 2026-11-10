@@ -52,8 +52,7 @@ class CompareVPDBytesAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
-     * @param keyword VPD keyword. Specify one of the following: "CCIN",
-     *                "Manufacturer", "Model", "PartNumber", "HW".
+     * @param keyword VPD keyword.
      * @param values Zero or more expected byte values.
      */
     explicit CompareVPDBytesAction(const std::string& fru,
@@ -70,8 +69,7 @@ class CompareVPDBytesAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
-     * @param keyword VPD keyword. Specify one of the following: "CCIN",
-     *                "Manufacturer", "Model", "PartNumber", "HW".
+     * @param keyword VPD keyword.
      * @param values Zero or more expected byte values.
      * @param masks Zero or more bit masks. The number of bit masks must match
      *              the number of expected byte values. Each mask specifies

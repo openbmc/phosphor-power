@@ -19,16 +19,6 @@ version of a processor.
 - [compare_vpd_byte](compare_vpd_byte.md)
 - [compare_vpd_bytes](compare_vpd_bytes.md)
 
-## Supported Keywords
-
-The following VPD keywords are currently supported:
-
-- CCIN
-- Manufacturer
-- Model
-- PartNumber
-- HW
-
 ## Unavailable Keyword Values
 
 A keyword value may be unavailable if:

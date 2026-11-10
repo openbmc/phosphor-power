@@ -178,19 +178,8 @@
         },
 
         "keyword": {
-            "oneOf": [
-                {
-                    "type": "string",
-                    "enum": [
-                        "CCIN",
-                        "Manufacturer",
-                        "Model",
-                        "PartNumber",
-                        "HW"
-                    ]
-                },
-                { "$ref": "#/definitions/string_with_variables" }
-            ]
+            "type": "string",
+            "minLength": 1
         },
 
         "string_value": {
