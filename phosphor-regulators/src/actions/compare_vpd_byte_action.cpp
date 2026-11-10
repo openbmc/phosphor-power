@@ -17,6 +17,7 @@
 #include "compare_vpd_byte_action.hpp"
 
 #include "action_error.hpp"
+#include "types.hpp"
 
 #include <exception>
 #include <ios>
@@ -33,7 +34,8 @@ bool CompareVPDByteAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword byte values
         std::vector<uint8_t> actualValues =
-            environment.getServices().getVPD().getValue(fru, keyword);
+            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+                                                        keyword);
 
         // Position must be within actual byte values
         if (position < actualValues.size())

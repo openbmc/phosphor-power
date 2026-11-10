@@ -17,6 +17,7 @@
 #include "compare_vpd_action.hpp"
 
 #include "action_error.hpp"
+#include "types.hpp"
 
 #include <exception>
 #include <sstream>
@@ -32,7 +33,8 @@ bool CompareVPDAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword value
         std::vector<uint8_t> actualValue =
-            environment.getServices().getVPD().getValue(fru, keyword);
+            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+                                                        keyword);
 
         // Convert expected string value to bytes for comparison
         std::vector<uint8_t> expectedValue(value.begin(), value.end());

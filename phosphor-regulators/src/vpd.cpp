@@ -19,10 +19,13 @@
 #include "types.hpp"
 #include "utility.hpp"
 
+#include <variant>
+
 namespace phosphor::power::regulators
 {
 
 std::vector<uint8_t> DBusVPD::getValue(const std::string& inventoryPath,
+                                       const std::string& interface,
                                        const std::string& keyword)
 {
     std::vector<uint8_t> value{};
@@ -30,8 +33,9 @@ std::vector<uint8_t> DBusVPD::getValue(const std::string& inventoryPath,
     // Get cached keywords for the inventory path
     KeywordMap& cachedKeywords = cache[inventoryPath];
 
-    // Check if the keyword value is already cached
-    auto it = cachedKeywords.find(keyword);
+    // Check if the keyword value from this interface is already cached
+    auto key = std::make_pair(interface, keyword);
+    auto it = cachedKeywords.find(key);
     if (it != cachedKeywords.end())
     {
         // Get keyword value from cache
@@ -40,31 +44,50 @@ std::vector<uint8_t> DBusVPD::getValue(const std::string& inventoryPath,
     else
     {
         // Get keyword value from D-Bus interface/property
-        getDBusProperty(inventoryPath, keyword, value);
+        getDBusProperty(inventoryPath, interface, keyword, value);
 
         // Cache keyword value
-        cachedKeywords[keyword] = value;
+        cachedKeywords[key] = value;
     }
 
     return value;
 }
 
-void DBusVPD::getDBusProperty(const std::string& inventoryPath,
-                              const std::string& keyword,
-                              std::vector<uint8_t>& value)
+void DBusVPD::getDBusProperty(
+    const std::string& inventoryPath, const std::string& interface,
+    const std::string& keyword, std::vector<uint8_t>& value)
 {
     // Determine the D-Bus property name.  Normally this is the same as the VPD
-    // keyword name.  However, the CCIN keyword is stored in the Model property.
-    std::string property{(keyword == "CCIN") ? "Model" : keyword};
+    // keyword name.  However, the CCIN keyword is stored in the Model property
+    // of the standard Asset interface.
+    std::string property{keyword};
+    if ((interface == ASSET_IFACE) && (keyword == "CCIN"))
+    {
+        property = "Model";
+    }
 
     value.clear();
     try
     {
-        // Properties are in the standard Asset interface and have string value
-        std::string stringValue;
-        util::getProperty(ASSET_IFACE, property, inventoryPath,
-                          INVENTORY_MGR_IFACE, bus, stringValue);
-        value.insert(value.begin(), stringValue.begin(), stringValue.end());
+        // Property value can be either a string or an array of bytes
+        std::variant<std::string, std::vector<uint8_t>> propertyValue;
+        auto method =
+            bus.new_method_call(INVENTORY_MGR_IFACE, inventoryPath.c_str(),
+                                util::PROPERTY_INTF, "Get");
+        method.append(interface, property);
+        auto reply = bus.call(method);
+        reply.read(propertyValue);
+
+        if (std::holds_alternative<std::string>(propertyValue))
+        {
+            const std::string& stringValue =
+                std::get<std::string>(propertyValue);
+            value.assign(stringValue.begin(), stringValue.end());
+        }
+        else
+        {
+            value = std::get<std::vector<uint8_t>>(propertyValue);
+        }
     }
     catch (const sdbusplus::exception_t& e)
     {

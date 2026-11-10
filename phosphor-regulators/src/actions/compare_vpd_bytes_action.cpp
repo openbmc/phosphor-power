@@ -17,6 +17,7 @@
 #include "compare_vpd_bytes_action.hpp"
 
 #include "action_error.hpp"
+#include "types.hpp"
 
 #include <exception>
 #include <ios>
@@ -32,7 +33,8 @@ bool CompareVPDBytesAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword byte values
         std::vector<uint8_t> actualValues =
-            environment.getServices().getVPD().getValue(fru, keyword);
+            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+                                                        keyword);
 
         // Actual and expected number of bytes must be equal
         if (values.size() != actualValues.size())
