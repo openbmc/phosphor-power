@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace phosphor::power::regulators
@@ -60,10 +61,12 @@ class VPD
      * value.
      *
      * @param inventoryPath D-Bus inventory path of the hardware
+     * @param interface D-Bus interface that provides the VPD keyword
      * @param keyword VPD keyword
      * @return VPD keyword value
      */
     virtual std::vector<uint8_t> getValue(const std::string& inventoryPath,
+                                          const std::string& interface,
                                           const std::string& keyword) = 0;
 };
 
@@ -98,6 +101,7 @@ class DBusVPD : public VPD
 
     /** @copydoc VPD::getValue() */
     virtual std::vector<uint8_t> getValue(const std::string& inventoryPath,
+                                          const std::string& interface,
                                           const std::string& keyword) override;
 
   private:
@@ -105,14 +109,18 @@ class DBusVPD : public VPD
      * Gets the value of the specified VPD keyword from a D-Bus interface and
      * property.
      *
+     * The D-Bus property value can be a string or an array of bytes.
+     *
      * Throws an exception if an error occurs while obtaining the VPD
      * value.
      *
      * @param inventoryPath D-Bus inventory path of the hardware
+     * @param interface D-Bus interface that provides the VPD keyword
      * @param keyword VPD keyword
      * @param value the resulting keyword value
      */
     void getDBusProperty(const std::string& inventoryPath,
+                         const std::string& interface,
                          const std::string& keyword,
                          std::vector<uint8_t>& value);
 
@@ -128,9 +136,13 @@ class DBusVPD : public VPD
     bool isUnknownPropertyException(const sdbusplus::exception_t& e);
 
     /**
-     * Type alias for map from keyword names to values.
+     * Type alias for map from D-Bus interface/keyword pairs to values.
+     *
+     * The interface is part of the key because the same keyword name could be
+     * provided by different D-Bus interfaces.
      */
-    using KeywordMap = std::map<std::string, std::vector<uint8_t>>;
+    using KeywordMap =
+        std::map<std::pair<std::string, std::string>, std::vector<uint8_t>>;
 
     /**
      * D-Bus bus object.
@@ -140,7 +152,8 @@ class DBusVPD : public VPD
     /**
      * Cached VPD keyword values.
      *
-     * Map from inventory paths to VPD keywords.
+     * Map from inventory paths to VPD keywords (identified by D-Bus interface
+     * and keyword name).
      */
     std::map<std::string, KeywordMap> cache{};
 };

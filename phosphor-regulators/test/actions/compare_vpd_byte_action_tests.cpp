@@ -19,6 +19,7 @@
 #include "id_map.hpp"
 #include "mock_services.hpp"
 #include "mock_vpd.hpp"
+#include "types.hpp"
 
 #include <cstdint>
 #include <exception>
@@ -77,7 +78,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -100,7 +101,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -123,7 +124,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -142,7 +143,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -161,7 +162,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -180,7 +181,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -198,7 +199,7 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, keyword))
+        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
             .Times(1)
             .WillOnce(
                 Throw(std::runtime_error{"D-Bus error: Invalid object path"}));
