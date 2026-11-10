@@ -60,20 +60,11 @@ void DBusVPD::getDBusProperty(const std::string& inventoryPath,
     value.clear();
     try
     {
-        if (property == "HW")
-        {
-            // HW property in non-standard interface and has byte vector value
-            util::getProperty("com.ibm.ipzvpd.VINI", property, inventoryPath,
-                              INVENTORY_MGR_IFACE, bus, value);
-        }
-        else
-        {
-            // Other properties in standard interface and have string value
-            std::string stringValue;
-            util::getProperty(ASSET_IFACE, property, inventoryPath,
-                              INVENTORY_MGR_IFACE, bus, stringValue);
-            value.insert(value.begin(), stringValue.begin(), stringValue.end());
-        }
+        // Properties are in the standard Asset interface and have string value
+        std::string stringValue;
+        util::getProperty(ASSET_IFACE, property, inventoryPath,
+                          INVENTORY_MGR_IFACE, bus, stringValue);
+        value.insert(value.begin(), stringValue.begin(), stringValue.end());
     }
     catch (const sdbusplus::exception_t& e)
     {
