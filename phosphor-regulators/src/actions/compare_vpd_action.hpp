@@ -46,13 +46,15 @@ class CompareVPDAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
+     * @param interface D-Bus interface that provides the VPD keyword.
      * @param keyword VPD keyword.
      * @param value Expected value
      */
     explicit CompareVPDAction(const std::string& fru,
+                              const std::string& interface,
                               const std::string& keyword,
                               const std::string& value) :
-        fru{fru}, keyword{keyword}, value{value}
+        fru{fru}, interface{interface}, keyword{keyword}, value{value}
     {}
 
     /**
@@ -76,6 +78,16 @@ class CompareVPDAction : public Action
     const std::string& getFRU() const
     {
         return fru;
+    }
+
+    /**
+     * Returns the D-Bus interface that provides the VPD keyword.
+     *
+     * @return interface
+     */
+    const std::string& getInterface() const
+    {
+        return interface;
     }
 
     /**
@@ -112,6 +124,11 @@ class CompareVPDAction : public Action
      * The D-Bus inventory path of the FRU.
      */
     const std::string fru{};
+
+    /**
+     * D-Bus interface that provides the VPD keyword.
+     */
+    const std::string interface{};
 
     /**
      * VPD keyword.

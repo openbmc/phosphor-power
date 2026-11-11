@@ -20,6 +20,7 @@
 #include "i2c_interface.hpp"
 #include "json_parser_utils.hpp"
 #include "pmbus_utils.hpp"
+#include "types.hpp"
 
 #include <cstdint>
 #include <exception>
@@ -431,6 +432,15 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
     std::string fru = parseInventoryPath(fruElement, variables);
     ++propertyCount;
 
+    // Optional interface property
+    std::string interface{ASSET_IFACE};
+    auto interfaceIt = element.find("interface");
+    if (interfaceIt != element.end())
+    {
+        interface = parseString(*interfaceIt, false, variables);
+        ++propertyCount;
+    }
+
     // Required keyword property
     const json& keywordElement = getRequiredProperty(element, "keyword");
     std::string keyword = parseString(keywordElement, false, variables);
@@ -444,7 +454,7 @@ std::unique_ptr<CompareVPDAction> parseCompareVPD(
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<CompareVPDAction>(fru, keyword, value);
+    return std::make_unique<CompareVPDAction>(fru, interface, keyword, value);
 }
 
 std::unique_ptr<CompareVPDByteAction> parseCompareVPDByte(

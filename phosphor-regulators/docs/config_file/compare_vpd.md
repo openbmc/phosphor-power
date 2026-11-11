@@ -12,11 +12,12 @@ regulators with a specific Model number.
 
 ## Properties
 
-| Name    | Required | Type   | Description                                                                                                                                                                                                                                                             |
-| :------ | :------: | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| fru     |   yes    | string | Field-Replaceable Unit (FRU) that contains the VPD. Specify the relative D-Bus inventory path of the FRU. Full inventory paths begin with the root "/xyz/openbmc_project/inventory". Specify the relative path below the root, such as "system/chassis/disk_backplane". |
-| keyword |   yes    | string | VPD keyword.                                                                                                                                                                                                                                                            |
-| value   |   yes    | string | Expected value.                                                                                                                                                                                                                                                         |
+| Name      | Required | Type   | Description                                                                                                                                                                                                                                                             |
+| :-------- | :------: | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fru       |   yes    | string | Field-Replaceable Unit (FRU) that contains the VPD. Specify the relative D-Bus inventory path of the FRU. Full inventory paths begin with the root "/xyz/openbmc_project/inventory". Specify the relative path below the root, such as "system/chassis/disk_backplane". |
+| interface |    no    | string | D-Bus interface that provides the VPD keyword. The default value is "xyz.openbmc_project.Inventory.Decorator.Asset".                                                                                                                                                    |
+| keyword   |   yes    | string | VPD keyword.                                                                                                                                                                                                                                                            |
+| value     |   yes    | string | Expected value.                                                                                                                                                                                                                                                         |
 
 ## Return Value
 

@@ -42,10 +42,12 @@ TEST(CompareVPDActionTests, Constructor)
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", "2D35"};
+            "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(),
+                  "xyz.openbmc_project.Inventory.Decorator.Asset");
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getValue(), "2D35");
     }
@@ -54,10 +56,11 @@ TEST(CompareVPDActionTests, Constructor)
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", ""};
+            "com.acme.vpd", "CCIN", ""};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(), "com.acme.vpd");
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getValue(), "");
     }
@@ -68,6 +71,7 @@ TEST(CompareVPDActionTests, Execute)
     // Test where works: Actual VPD value is not empty
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
         std::vector<uint8_t> abcdValue{0x41, 0x42, 0x43, 0x44};
 
@@ -75,7 +79,7 @@ TEST(CompareVPDActionTests, Execute)
         // value 3 times.
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(3)
             .WillRepeatedly(Return(abcdValue));
 
@@ -84,19 +88,19 @@ TEST(CompareVPDActionTests, Execute)
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, "ABCD"};
+            CompareVPDAction action{fru, interface, keyword, "ABCD"};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword, "ABCd"};
+            CompareVPDAction action{fru, interface, keyword, "ABCd"};
             EXPECT_FALSE(action.execute(environment));
         }
 
         // Test where returns false: expected value is empty
         {
-            CompareVPDAction action{fru, keyword, ""};
+            CompareVPDAction action{fru, interface, keyword, ""};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -104,6 +108,7 @@ TEST(CompareVPDActionTests, Execute)
     // Test where works: Actual VPD value is empty
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
         std::vector<uint8_t> emptyValue{};
 
@@ -111,7 +116,7 @@ TEST(CompareVPDActionTests, Execute)
         // 2 times.
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(2)
             .WillRepeatedly(Return(emptyValue));
 
@@ -120,13 +125,13 @@ TEST(CompareVPDActionTests, Execute)
 
         // Test where returns true: actual value == expected value
         {
-            CompareVPDAction action{fru, keyword, ""};
+            CompareVPDAction action{fru, interface, keyword, ""};
             EXPECT_TRUE(action.execute(environment));
         }
 
         // Test where returns false: actual value != expected value
         {
-            CompareVPDAction action{fru, keyword, "ABC"};
+            CompareVPDAction action{fru, interface, keyword, "ABC"};
             EXPECT_FALSE(action.execute(environment));
         }
     }
@@ -134,12 +139,13 @@ TEST(CompareVPDActionTests, Execute)
     // Test where fails: Exception thrown when trying to get actual VPD value
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
 
         // Create MockServices object.  VPD service will throw an exception.
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(
                 Throw(std::runtime_error{"D-Bus error: Invalid object path"}));
@@ -149,15 +155,18 @@ TEST(CompareVPDActionTests, Execute)
 
         try
         {
-            CompareVPDAction action{fru, keyword, "ABC"};
+            CompareVPDAction action{fru, interface, keyword, "ABC"};
             action.execute(environment);
             ADD_FAILURE() << "Should not have reached this line.";
         }
         catch (const ActionError& e)
         {
-            EXPECT_STREQ(e.what(), "ActionError: compare_vpd: { fru: "
-                                   "/xyz/openbmc_project/inventory/system, "
-                                   "keyword: Model, value: \"ABC\" }");
+            EXPECT_STREQ(e.what(),
+                         "ActionError: compare_vpd: { fru: "
+                         "/xyz/openbmc_project/inventory/system, "
+                         "interface: "
+                         "xyz.openbmc_project.Inventory.Decorator.Asset, "
+                         "keyword: Model, value: \"ABC\" }");
             try
             {
                 // Re-throw inner exception
@@ -183,25 +192,34 @@ TEST(CompareVPDActionTests, Execute)
 TEST(CompareVPDActionTests, GetFRU)
 {
     CompareVPDAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+}
+
+TEST(CompareVPDActionTests, GetInterface)
+{
+    CompareVPDAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
+    EXPECT_EQ(action.getInterface(),
+              "xyz.openbmc_project.Inventory.Decorator.Asset");
 }
 
 TEST(CompareVPDActionTests, GetKeyword)
 {
     CompareVPDAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
 TEST(CompareVPDActionTests, GetValue)
 {
     CompareVPDAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        "2D35"};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
     EXPECT_EQ(action.getValue(), "2D35");
 }
 
@@ -211,11 +229,12 @@ TEST(CompareVPDActionTests, ToString)
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", "2D35"};
+            "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", "2D35"};
         EXPECT_EQ(action.toString(),
                   "compare_vpd: { fru: "
                   "/xyz/openbmc_project/inventory/system/"
-                  "chassis/disk_backplane, keyword: "
+                  "chassis/disk_backplane, interface: "
+                  "xyz.openbmc_project.Inventory.Decorator.Asset, keyword: "
                   "CCIN, value: \"2D35\" }");
     }
 
@@ -223,11 +242,12 @@ TEST(CompareVPDActionTests, ToString)
     {
         CompareVPDAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", ""};
+            "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", ""};
         EXPECT_EQ(action.toString(),
                   "compare_vpd: { fru: "
                   "/xyz/openbmc_project/inventory/system/"
-                  "chassis/disk_backplane, keyword: "
+                  "chassis/disk_backplane, interface: "
+                  "xyz.openbmc_project.Inventory.Decorator.Asset, keyword: "
                   "CCIN, value: \"\" }");
     }
 }
