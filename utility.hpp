@@ -53,7 +53,7 @@ std::string getService(const std::string& path, const std::string& interface,
  * @brief Read a D-Bus property
  *
  * @param[in] interface - the interface the property is on
- * @param[in] propertName - the name of the property
+ * @param[in] propertyName - the name of the property
  * @param[in] path - the D-Bus path
  * @param[in] service - the D-Bus service
  * @param[in] bus - the D-Bus object
@@ -81,7 +81,7 @@ void getProperty(const std::string& interface, const std::string& propertyName,
  * @brief Write a D-Bus property
  *
  * @param[in] interface - the interface the property is on
- * @param[in] propertName - the name of the property
+ * @param[in] propertyName - the name of the property
  * @param[in] path - the D-Bus path
  * @param[in] service - the D-Bus service
  * @param[in] bus - the D-Bus object

@@ -79,7 +79,7 @@ DBusSensor::DBusSensor(sdbusplus::bus_t& bus, const std::string& name,
     getTypeBasedProperties(objectPath, unit, minValue, maxValue);
 
     // Get the D-Bus associations to create for this sensor
-    std::vector<AssocationTuple> associations =
+    std::vector<AssociationTuple> associations =
         getAssociations(deviceInventoryPath, chassisInventoryPath);
 
     // Create the sdbusplus object that implements the D-Bus sensor interfaces.
@@ -152,11 +152,11 @@ void DBusSensor::setValue(double value)
     setLastUpdateTime();
 }
 
-std::vector<AssocationTuple> DBusSensor::getAssociations(
+std::vector<AssociationTuple> DBusSensor::getAssociations(
     const std::string& deviceInventoryPath,
     const std::string& chassisInventoryPath)
 {
-    std::vector<AssocationTuple> associations{};
+    std::vector<AssociationTuple> associations{};
 
     // Add an association between the sensor and the chassis.  This is used by
     // the Redfish support to find all the sensors in a chassis.

@@ -77,7 +77,7 @@ using Unit = sdbusplus::xyz::openbmc_project::Sensor::server::Value::Unit;
 /**
  * Define simple name for the tuple used to create D-Bus associations.
  */
-using AssocationTuple = std::tuple<std::string, std::string, std::string>;
+using AssociationTuple = std::tuple<std::string, std::string, std::string>;
 
 /**
  * Root object path for sensors.
@@ -268,7 +268,7 @@ class DBusSensor
      * @param chassisInventoryPath D-Bus inventory path of the chassis that
      *                             contains the voltage regulator device
      */
-    std::vector<AssocationTuple> getAssociations(
+    std::vector<AssociationTuple> getAssociations(
         const std::string& deviceInventoryPath,
         const std::string& chassisInventoryPath);
 

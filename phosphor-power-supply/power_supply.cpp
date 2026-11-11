@@ -770,7 +770,7 @@ void PowerSupply::onOffConfig(uint8_t data)
 void PowerSupply::clearVinUVFault()
 {
     // Read in1_lcrit_alarm to clear bits 3 and 4 of STATUS_INPUT.
-    // The fault bits in STAUTS_INPUT roll-up to STATUS_WORD. Clearing those
+    // The fault bits in STATUS_INPUT roll-up to STATUS_WORD. Clearing those
     // bits in STATUS_INPUT should result in the corresponding STATUS_WORD bits
     // also clearing.
     //

@@ -203,7 +203,7 @@ int BMCGpio::getPreviousValue()
     }
     throw std::logic_error(
         "Cannot get previous value on GPIO '" + name +
-        "' before getValue() has been succesfully called at least once");
+        "' before getValue() has been successfully called at least once");
 }
 
 void BMCGpio::setValue(int value)

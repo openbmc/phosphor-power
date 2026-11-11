@@ -404,7 +404,7 @@ TEST_F(ManagerTests, LoadConfigFile)
         manager.clearCompatibleSystemTypes();
     }
 
-    // Config file found - system should succesfully load
+    // Config file found - system should successfully load
     {
         fs::remove_all(testConfigDir);
 
