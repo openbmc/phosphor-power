@@ -1876,7 +1876,7 @@ TEST(ConfigFileParserTests, ParseComparePresence)
 
 TEST(ConfigFileParserTests, ParseCompareVPD)
 {
-    // Test where works: value property: Not empty
+    // Test where works: interface not specified: value property not empty
     {
         const json element = R"(
             {
@@ -1891,15 +1891,18 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getInterface(),
+                  "xyz.openbmc_project.Inventory.Decorator.Asset");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), "2D35");
     }
 
-    // Test where works: value property: Empty
+    // Test where works: interface specified: value property empty
     {
         const json element = R"(
             {
               "fru": "system/chassis/disk_backplane",
+              "interface": "com.acme.vpd",
               "keyword": "CCIN",
               "value": ""
             }
@@ -1910,6 +1913,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getInterface(), "com.acme.vpd");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), "");
     }
@@ -1919,12 +1923,14 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         const json element = R"(
             {
               "fru": "system/chassis/${component}",
+              "interface": "${interface}",
               "keyword": "${keyword}",
               "value": "${value}"
             }
         )"_json;
         std::map<std::string, std::string> variables{
             {"component", "disk_backplane"},
+            {"interface", "com.acme.vpd"},
             {"keyword", "CCIN"},
             {"value", "2D35"}};
         std::unique_ptr<CompareVPDAction> action =
@@ -1932,6 +1938,7 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getInterface(), "com.acme.vpd");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValue(), "2D35");
     }
@@ -2040,6 +2047,46 @@ TEST(ConfigFileParserTests, ParseCompareVPD)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: interface value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "interface": 1,
+              "keyword": "CCIN",
+              "value": "2D35"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: interface value is empty
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "interface": "",
+              "keyword": "CCIN",
+              "value": "2D35"
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseCompareVPD(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 
     // Test where fails: keyword value is invalid

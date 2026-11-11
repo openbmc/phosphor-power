@@ -853,6 +853,15 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         EXPECT_JSON_VALID(configFile);
     }
 
+    // Valid: interface property specified.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][2]["compare_vpd"]["interface"] =
+                      "com.acme.vpd";
+        EXPECT_JSON_VALID(configFile);
+    }
+
     // Invalid: no FRU property.
     {
         json configFile = validConfigFile;
@@ -893,6 +902,22 @@ TEST(ValidateRegulatorsConfigTest, CompareVpd)
         json configFile = validConfigFile;
         configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
                   ["actions"][0]["or"][2]["compare_vpd"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
+    }
+
+    // Invalid: property interface wrong type.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][2]["compare_vpd"]["interface"] = 1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property interface is empty string.
+    {
+        json configFile = validConfigFile;
+        configFile["chassis_templates"][0]["devices"][1]["presence_detection"]
+                  ["actions"][0]["or"][2]["compare_vpd"]["interface"] = "";
         EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 

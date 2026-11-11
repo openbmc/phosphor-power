@@ -145,6 +145,7 @@
             "type": "object",
             "properties": {
                 "fru": { "$ref": "#/definitions/inventory_path" },
+                "interface": { "$ref": "#/definitions/dbus_interface" },
                 "keyword": { "$ref": "#/definitions/keyword" },
                 "value": { "$ref": "#/definitions/string_value" }
             },
@@ -175,6 +176,11 @@
             },
             "required": ["fru", "keyword", "values"],
             "additionalProperties": false
+        },
+
+        "dbus_interface": {
+            "type": "string",
+            "minLength": 1
         },
 
         "keyword": {

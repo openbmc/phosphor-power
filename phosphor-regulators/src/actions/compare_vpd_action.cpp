@@ -17,7 +17,6 @@
 #include "compare_vpd_action.hpp"
 
 #include "action_error.hpp"
-#include "types.hpp"
 
 #include <exception>
 #include <sstream>
@@ -33,7 +32,7 @@ bool CompareVPDAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword value
         std::vector<uint8_t> actualValue =
-            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+            environment.getServices().getVPD().getValue(fru, interface,
                                                         keyword);
 
         // Convert expected string value to bytes for comparison
@@ -56,6 +55,7 @@ std::string CompareVPDAction::toString() const
     std::ostringstream ss;
     ss << "compare_vpd: { ";
     ss << "fru: " << fru << ", ";
+    ss << "interface: " << interface << ", ";
     ss << "keyword: " << keyword << ", ";
     ss << "value: \"" << value << "\" }";
     return ss.str();
