@@ -19,7 +19,6 @@
 #include "id_map.hpp"
 #include "mock_services.hpp"
 #include "mock_vpd.hpp"
-#include "types.hpp"
 
 #include <cstdint>
 #include <exception>
@@ -43,10 +42,12 @@ TEST(CompareVPDByteActionTests, Constructor)
     {
         CompareVPDByteAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", 0, 0x32};
+            "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(),
+                  "xyz.openbmc_project.Inventory.Decorator.Asset");
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getPosition(), 0);
         EXPECT_EQ(action.getValue(), 0x32);
@@ -57,10 +58,15 @@ TEST(CompareVPDByteActionTests, Constructor)
     {
         CompareVPDByteAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "HW", 1, 0x02, 0x7F};
+            "com.acme.vpd",
+            "HW",
+            1,
+            0x02,
+            0x7F};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(), "com.acme.vpd");
         EXPECT_EQ(action.getKeyword(), "HW");
         EXPECT_EQ(action.getPosition(), 1);
         EXPECT_EQ(action.getValue(), 0x02);
@@ -73,25 +79,27 @@ TEST(CompareVPDByteActionTests, Execute)
     // Test where works: Equal: Position 0: No mask
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
         std::vector<uint8_t> actualValue{0x41, 0x42, 0x43, 0x44};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 0, 0x41};
+        CompareVPDByteAction action{fru, interface, keyword, 0, 0x41};
         EXPECT_TRUE(action.execute(environment));
     }
 
     // Test where works: Equal: Position > 0: Mask
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x00, 0x12, 0xD7};
         // Actual byte at position 2: 0xD7 = 1101 0111
@@ -101,20 +109,21 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 2, 0x56, 0x7E};
+        CompareVPDByteAction action{fru, interface, keyword, 2, 0x56, 0x7E};
         EXPECT_TRUE(action.execute(environment));
     }
 
     // Test where works: Not equal: Position 0: Mask
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
         std::vector<uint8_t> actualValue{0xD7, 0x00, 0x12};
         // Actual byte at position 0: 0xD7 = 1101 0111
@@ -124,82 +133,86 @@ TEST(CompareVPDByteActionTests, Execute)
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 0, 0x16, 0x7E};
+        CompareVPDByteAction action{fru, interface, keyword, 0, 0x16, 0x7E};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where works: Not equal: Position > 0: No mask
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x00, 0x12, 0xD7};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 1, 0x11};
+        CompareVPDByteAction action{fru, interface, keyword, 1, 0x11};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where works: Not equal: Position past end of actual byte array
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x41, 0x42};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 2, 0x42};
+        CompareVPDByteAction action{fru, interface, keyword, 2, 0x42};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where works: Not equal: Actual byte array is empty
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
         IDMap idMap{};
         ActionEnvironment environment{idMap, "", services};
 
-        CompareVPDByteAction action{fru, keyword, 0, 0x41};
+        CompareVPDByteAction action{fru, interface, keyword, 0, 0x41};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where fails: Exception thrown when trying to get actual VPD value
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"xyz.openbmc_project.Inventory.Decorator.Asset"};
         std::string keyword{"Model"};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(
                 Throw(std::runtime_error{"D-Bus error: Invalid object path"}));
@@ -209,16 +222,19 @@ TEST(CompareVPDByteActionTests, Execute)
 
         try
         {
-            CompareVPDByteAction action{fru, keyword, 0, 0x41};
+            CompareVPDByteAction action{fru, interface, keyword, 0, 0x41};
             action.execute(environment);
             ADD_FAILURE() << "Should not have reached this line.";
         }
         catch (const ActionError& e)
         {
-            EXPECT_STREQ(e.what(), "ActionError: compare_vpd_byte: { fru: "
-                                   "/xyz/openbmc_project/inventory/system, "
-                                   "keyword: Model, position: 0, value: 0x41, "
-                                   "mask: 0xFF }");
+            EXPECT_STREQ(e.what(),
+                         "ActionError: compare_vpd_byte: { fru: "
+                         "/xyz/openbmc_project/inventory/system, "
+                         "interface: "
+                         "xyz.openbmc_project.Inventory.Decorator.Asset, "
+                         "keyword: Model, position: 0, value: 0x41, "
+                         "mask: 0xFF }");
             try
             {
                 // Re-throw inner exception
@@ -244,33 +260,42 @@ TEST(CompareVPDByteActionTests, Execute)
 TEST(CompareVPDByteActionTests, GetFRU)
 {
     CompareVPDByteAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        0, 0x32};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+}
+
+TEST(CompareVPDByteActionTests, GetInterface)
+{
+    CompareVPDByteAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
+    EXPECT_EQ(action.getInterface(),
+              "xyz.openbmc_project.Inventory.Decorator.Asset");
 }
 
 TEST(CompareVPDByteActionTests, GetKeyword)
 {
     CompareVPDByteAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        0, 0x32};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
 TEST(CompareVPDByteActionTests, GetPosition)
 {
     CompareVPDByteAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        1, 0x32};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 1, 0x32};
     EXPECT_EQ(action.getPosition(), 1);
 }
 
 TEST(CompareVPDByteActionTests, GetValue)
 {
     CompareVPDByteAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        0, 0x32};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
     EXPECT_EQ(action.getValue(), 0x32);
 }
 
@@ -280,7 +305,7 @@ TEST(CompareVPDByteActionTests, GetMask)
     {
         CompareVPDByteAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", 0, 0x32};
+            "xyz.openbmc_project.Inventory.Decorator.Asset", "CCIN", 0, 0x32};
         EXPECT_EQ(action.getMask(), 0xFF);
     }
 
@@ -288,7 +313,11 @@ TEST(CompareVPDByteActionTests, GetMask)
     {
         CompareVPDByteAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", 1, 0x32, 0x7E};
+            "xyz.openbmc_project.Inventory.Decorator.Asset",
+            "CCIN",
+            1,
+            0x32,
+            0x7E};
         EXPECT_EQ(action.getMask(), 0x7E);
     }
 }
@@ -296,11 +325,16 @@ TEST(CompareVPDByteActionTests, GetMask)
 TEST(CompareVPDByteActionTests, ToString)
 {
     CompareVPDByteAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "HW", 1,
-        0x02, 0x7F};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "com.acme.vpd",
+        "HW",
+        1,
+        0x02,
+        0x7F};
     EXPECT_EQ(action.toString(),
               "compare_vpd_byte: { fru: "
               "/xyz/openbmc_project/inventory/system/"
-              "chassis/disk_backplane, keyword: HW, "
+              "chassis/disk_backplane, interface: "
+              "com.acme.vpd, keyword: HW, "
               "position: 1, value: 0x2, mask: 0x7F }");
 }

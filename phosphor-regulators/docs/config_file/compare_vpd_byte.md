@@ -20,13 +20,14 @@ the mask will be compared. Otherwise all bits are compared.
 
 ## Properties
 
-| Name     | Required | Type   | Description                                                                                                                                                                                                                                                             |
-| :------- | :------: | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| fru      |   yes    | string | Field-Replaceable Unit (FRU) that contains the VPD. Specify the relative D-Bus inventory path of the FRU. Full inventory paths begin with the root "/xyz/openbmc_project/inventory". Specify the relative path below the root, such as "system/chassis/disk_backplane". |
-| keyword  |   yes    | string | VPD keyword.                                                                                                                                                                                                                                                            |
-| position |   yes    | number | Byte position within the VPD keyword value. Zero-based; 0 indicates the first byte.                                                                                                                                                                                     |
-| value    |   yes    | string | Expected byte value expressed in hexadecimal. Must be prefixed with 0x and surrounded by double quotes.                                                                                                                                                                 |
-| mask     |    no    | string | Bit mask expressed in hexadecimal. Must be prefixed with 0x and surrounded by double quotes. Specifies which bits should be compared within the byte value. Only the bits with a value of 1 in the mask will be compared.                                               |
+| Name      | Required | Type   | Description                                                                                                                                                                                                                                                             |
+| :-------- | :------: | :----- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fru       |   yes    | string | Field-Replaceable Unit (FRU) that contains the VPD. Specify the relative D-Bus inventory path of the FRU. Full inventory paths begin with the root "/xyz/openbmc_project/inventory". Specify the relative path below the root, such as "system/chassis/disk_backplane". |
+| interface |    no    | string | D-Bus interface that provides the VPD keyword. The default value is "xyz.openbmc_project.Inventory.Decorator.Asset".                                                                                                                                                    |
+| keyword   |   yes    | string | VPD keyword.                                                                                                                                                                                                                                                            |
+| position  |   yes    | number | Byte position within the VPD keyword value. Zero-based; 0 indicates the first byte.                                                                                                                                                                                     |
+| value     |   yes    | string | Expected byte value expressed in hexadecimal. Must be prefixed with 0x and surrounded by double quotes.                                                                                                                                                                 |
+| mask      |    no    | string | Bit mask expressed in hexadecimal. Must be prefixed with 0x and surrounded by double quotes. Specifies which bits should be compared within the byte value. Only the bits with a value of 1 in the mask will be compared.                                               |
 
 ## Return Value
 
@@ -55,6 +56,7 @@ returns false.
   ],
   "compare_vpd_byte": {
     "fru": "system/chassis/disk_backplane",
+    "interface": "com.acme.vpd",
     "keyword": "HW",
     "position": 1,
     "value": "0x02",

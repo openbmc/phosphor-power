@@ -157,6 +157,7 @@
             "type": "object",
             "properties": {
                 "fru": { "$ref": "#/definitions/inventory_path" },
+                "interface": { "$ref": "#/definitions/dbus_interface" },
                 "keyword": { "$ref": "#/definitions/keyword" },
                 "position": { "$ref": "#/definitions/byte_position" },
                 "value": { "$ref": "#/definitions/byte_value" },
