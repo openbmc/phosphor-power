@@ -19,6 +19,33 @@ version of a processor.
 - [compare_vpd_byte](compare_vpd_byte.md)
 - [compare_vpd_bytes](compare_vpd_bytes.md)
 
+## D-Bus interface
+
+### Default interface
+
+The default D-Bus interface used to find the VPD keyword is
+[xyz.openbmc_project.Inventory.Decorator.Asset](https://github.com/openbmc/phosphor-dbus-interfaces/blob/master/yaml/xyz/openbmc_project/Inventory/Decorator/Asset.interface.yaml)
+
+This interface provides the following VPD keywords:
+
+- PartNumber
+- SerialNumber
+- Manufacturer
+- BuildDate
+- Model
+- SubModel
+- SparePartNumber
+- SKU
+
+The "CCIN" keyword can also be used with this interface; it is another name for
+the "Model" keyword.
+
+### Other D-Bus interfaces
+
+The desired VPD keyword may be published on a different interface, such as
+"com.acme.vpd". Use the "interface" JSON property to specify the D-Bus
+interface.
+
 ## Unavailable Keyword Values
 
 A keyword value may be unavailable if:

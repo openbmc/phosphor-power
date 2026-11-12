@@ -4,7 +4,7 @@
 
 Compares a VPD (Vital Product Data) keyword value to an expected value. See
 [Compare VPD Overview](compare_vpd_overview.md) for more information on VPD,
-supported keywords, and unavailable keyword values.
+D-Bus interfaces, and unavailable keyword values.
 
 This action can be used in an [if](if.md) condition to execute actions based on
 a VPD keyword value. For example, you could set the output voltage only for

@@ -33,7 +33,7 @@ bool CompareVPDBytesAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword byte values
         std::vector<uint8_t> actualValues =
-            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+            environment.getServices().getVPD().getValue(fru, interface,
                                                         keyword);
 
         // Actual and expected number of bytes must be equal
@@ -68,6 +68,7 @@ std::string CompareVPDBytesAction::toString() const
     std::ostringstream ss;
     ss << "compare_vpd_bytes: { ";
     ss << "fru: " << fru << ", ";
+    ss << "interface: " << interface << ", ";
     ss << "keyword: " << keyword << ", ";
     ss << "values: [ ";
     ss << std::hex << std::uppercase;

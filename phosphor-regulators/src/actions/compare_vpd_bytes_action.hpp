@@ -52,13 +52,14 @@ class CompareVPDBytesAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
+     * @param interface D-Bus interface that provides the VPD keyword.
      * @param keyword VPD keyword.
      * @param values Zero or more expected byte values.
      */
-    explicit CompareVPDBytesAction(const std::string& fru,
-                                   const std::string& keyword,
-                                   const std::vector<uint8_t>& values) :
-        CompareVPDBytesAction(fru, keyword, values,
+    explicit CompareVPDBytesAction(
+        const std::string& fru, const std::string& interface,
+        const std::string& keyword, const std::vector<uint8_t>& values) :
+        CompareVPDBytesAction(fru, interface, keyword, values,
                               std::vector<uint8_t>(values.size(), 0xFF))
     {}
 
@@ -69,6 +70,7 @@ class CompareVPDBytesAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
+     * @param interface D-Bus interface that provides the VPD keyword.
      * @param keyword VPD keyword.
      * @param values Zero or more expected byte values.
      * @param masks Zero or more bit masks. The number of bit masks must match
@@ -78,9 +80,11 @@ class CompareVPDBytesAction : public Action
      *              compared.
      */
     explicit CompareVPDBytesAction(
-        const std::string& fru, const std::string& keyword,
-        const std::vector<uint8_t>& values, const std::vector<uint8_t>& masks) :
-        fru{fru}, keyword{keyword}, values{values}, masks{masks}
+        const std::string& fru, const std::string& interface,
+        const std::string& keyword, const std::vector<uint8_t>& values,
+        const std::vector<uint8_t>& masks) :
+        fru{fru}, interface{interface}, keyword{keyword}, values{values},
+        masks{masks}
     {
         // Masks vector must have same size as values vector
         if (masks.size() != values.size())
@@ -112,6 +116,16 @@ class CompareVPDBytesAction : public Action
     const std::string& getFRU() const
     {
         return fru;
+    }
+
+    /**
+     * Returns the D-Bus interface that provides the VPD keyword.
+     *
+     * @return interface
+     */
+    const std::string& getInterface() const
+    {
+        return interface;
     }
 
     /**
@@ -162,6 +176,11 @@ class CompareVPDBytesAction : public Action
      * The D-Bus inventory path of the FRU.
      */
     const std::string fru{};
+
+    /**
+     * D-Bus interface that provides the VPD keyword.
+     */
+    const std::string interface{};
 
     /**
      * VPD keyword.

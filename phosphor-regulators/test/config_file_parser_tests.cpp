@@ -2523,6 +2523,8 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getInterface(),
+                  "xyz.openbmc_project.Inventory.Decorator.Asset");
         EXPECT_EQ(action->getKeyword(), "CCIN");
         EXPECT_EQ(action->getValues(),
                   (std::vector<uint8_t>{0x32, 0x44, 0x33, 0x35}));
@@ -2535,6 +2537,7 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
         const json element = R"(
             {
               "fru": "system/chassis/disk_backplane",
+              "interface": "com.acme.vpd",
               "keyword": "HW",
               "values": ["0x11", "0x22"],
               "masks": ["0x7E", "0x3C"]
@@ -2546,6 +2549,7 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action->getInterface(), "com.acme.vpd");
         EXPECT_EQ(action->getKeyword(), "HW");
         EXPECT_EQ(action->getValues(), (std::vector<uint8_t>{0x11, 0x22}));
         EXPECT_EQ(action->getMasks(), (std::vector<uint8_t>{0x7E, 0x3C}));
@@ -2556,13 +2560,15 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
         const json element = R"(
             {
               "fru": "system/chassis/${component}",
+              "interface": "${interface}",
               "keyword": "${keyword}",
               "values": ["${byte1}", "${byte2}"]
             }
         )"_json;
         std::map<std::string, std::string> variables{
             {"component", "disk_backplane"},
-            {"keyword", "CCIN"},
+            {"interface", "com.acme.vpd"},
+            {"keyword", "HW"},
             {"byte1", "0x11"},
             {"byte2", "0x22"}};
         std::unique_ptr<CompareVPDBytesAction> action =
@@ -2570,7 +2576,8 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
         EXPECT_EQ(
             action->getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
-        EXPECT_EQ(action->getKeyword(), "CCIN");
+        EXPECT_EQ(action->getInterface(), "com.acme.vpd");
+        EXPECT_EQ(action->getKeyword(), "HW");
         EXPECT_EQ(action->getValues(), (std::vector<uint8_t>{0x11, 0x22}));
     }
 
@@ -2678,6 +2685,46 @@ TEST(ConfigFileParserTests, ParseCompareVPDBytes)
     catch (const std::invalid_argument& e)
     {
         EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: interface value is invalid
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "interface": 1,
+              "keyword": "CCIN",
+              "values": ["0x11", "0x22"]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseCompareVPDBytes(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element is not a string");
+    }
+
+    // Test where fails: interface value is empty
+    try
+    {
+        const json element = R"(
+            {
+              "fru": "system/chassis/disk_backplane",
+              "interface": "",
+              "keyword": "CCIN",
+              "values": ["0x11", "0x22"]
+            }
+        )"_json;
+        std::map<std::string, std::string> variables{};
+        parseCompareVPDBytes(element, variables);
+        ADD_FAILURE() << "Should not have reached this line.";
+    }
+    catch (const std::invalid_argument& e)
+    {
+        EXPECT_STREQ(e.what(), "Element contains an empty string");
     }
 
     // Test where fails: keyword value is invalid

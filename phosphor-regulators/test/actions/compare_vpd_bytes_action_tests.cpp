@@ -37,7 +37,7 @@ using ::testing::Throw;
 
 using namespace phosphor::power::regulators;
 
-// Test for CompareVPDBytesAction(fru, keyword, values)
+// Test for CompareVPDBytesAction(fru, interface, keyword, values)
 TEST(CompareVPDBytesActionTests, Constructor1)
 {
     // Test where works: non-empty values vector
@@ -45,10 +45,11 @@ TEST(CompareVPDBytesActionTests, Constructor1)
         std::vector<uint8_t> values{0x32, 0x44, 0x33, 0x35};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values};
+            ASSET_IFACE, "CCIN", values};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(), ASSET_IFACE);
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getValues().size(), 4);
         EXPECT_EQ(action.getValues()[0], 0x32);
@@ -67,17 +68,18 @@ TEST(CompareVPDBytesActionTests, Constructor1)
         std::vector<uint8_t> values{};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values};
+            ASSET_IFACE, "CCIN", values};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(), ASSET_IFACE);
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getValues().size(), 0);
         EXPECT_EQ(action.getMasks().size(), 0);
     }
 }
 
-// Test for CompareVPDBytesAction(fru, keyword, values, masks)
+// Test for CompareVPDBytesAction(fru, interface, keyword, values, masks)
 TEST(CompareVPDBytesActionTests, Constructor2)
 {
     // Test where works: non-empty values vector
@@ -86,11 +88,12 @@ TEST(CompareVPDBytesActionTests, Constructor2)
         std::vector<uint8_t> masks{0x7E, 0x3C};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "Model", values, masks};
+            "com.acme.vpd", "HW", values, masks};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
-        EXPECT_EQ(action.getKeyword(), "Model");
+        EXPECT_EQ(action.getInterface(), "com.acme.vpd");
+        EXPECT_EQ(action.getKeyword(), "HW");
         EXPECT_EQ(action.getValues().size(), 2);
         EXPECT_EQ(action.getValues()[0], 0x56);
         EXPECT_EQ(action.getValues()[1], 0x14);
@@ -105,10 +108,11 @@ TEST(CompareVPDBytesActionTests, Constructor2)
         std::vector<uint8_t> masks{};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values, masks};
+            ASSET_IFACE, "CCIN", values, masks};
         EXPECT_EQ(
             action.getFRU(),
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+        EXPECT_EQ(action.getInterface(), ASSET_IFACE);
         EXPECT_EQ(action.getKeyword(), "CCIN");
         EXPECT_EQ(action.getValues().size(), 0);
         EXPECT_EQ(action.getMasks().size(), 0);
@@ -121,7 +125,7 @@ TEST(CompareVPDBytesActionTests, Constructor2)
         std::vector<uint8_t> masks{0x7E, 0x3C};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values, masks};
+            ASSET_IFACE, "CCIN", values, masks};
         ADD_FAILURE() << "Should not have reached this line.";
     }
     catch (const std::invalid_argument& e)
@@ -152,19 +156,20 @@ TEST(CompareVPDBytesActionTests, Execute)
         ActionEnvironment environment{idMap, "", services};
 
         std::vector<uint8_t> values{};
-        CompareVPDBytesAction action{fru, keyword, values};
+        CompareVPDBytesAction action{fru, ASSET_IFACE, keyword, values};
         EXPECT_TRUE(action.execute(environment));
     }
 
     // Test where works: Equal: No masks
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
-        std::string keyword{"Model"};
+        std::string interface{"com.acme.vpd"};
+        std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x41, 0x42, 0x43, 0x44};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -172,7 +177,7 @@ TEST(CompareVPDBytesActionTests, Execute)
         ActionEnvironment environment{idMap, "", services};
 
         std::vector<uint8_t> values{0x41, 0x42, 0x43, 0x44};
-        CompareVPDBytesAction action{fru, keyword, values};
+        CompareVPDBytesAction action{fru, interface, keyword, values};
         EXPECT_TRUE(action.execute(environment));
     }
 
@@ -196,7 +201,7 @@ TEST(CompareVPDBytesActionTests, Execute)
         // Results: 0x56 = 0101 0110, 0x14 = 0001 0100
         std::vector<uint8_t> values{0x56, 0x14};
         std::vector<uint8_t> masks{0x7E, 0x3C};
-        CompareVPDBytesAction action{fru, keyword, values, masks};
+        CompareVPDBytesAction action{fru, ASSET_IFACE, keyword, values, masks};
         EXPECT_TRUE(action.execute(environment));
     }
 
@@ -216,19 +221,20 @@ TEST(CompareVPDBytesActionTests, Execute)
         ActionEnvironment environment{idMap, "", services};
 
         std::vector<uint8_t> values{0x41, 0x42, 0x43, 0x45};
-        CompareVPDBytesAction action{fru, keyword, values};
+        CompareVPDBytesAction action{fru, ASSET_IFACE, keyword, values};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where works: Not equal: actual value has more bytes than expected
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x41, 0x42, 0x43, 0x44};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -236,19 +242,20 @@ TEST(CompareVPDBytesActionTests, Execute)
         ActionEnvironment environment{idMap, "", services};
 
         std::vector<uint8_t> values{0x41, 0x42, 0x43};
-        CompareVPDBytesAction action{fru, keyword, values};
+        CompareVPDBytesAction action{fru, interface, keyword, values};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where works: Not equal: actual value has fewer bytes than expected
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
+        std::string interface{"com.acme.vpd"};
         std::string keyword{"HW"};
         std::vector<uint8_t> actualValue{0x41};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(Return(actualValue));
 
@@ -256,18 +263,19 @@ TEST(CompareVPDBytesActionTests, Execute)
         ActionEnvironment environment{idMap, "", services};
 
         std::vector<uint8_t> values{0x41, 0x42};
-        CompareVPDBytesAction action{fru, keyword, values};
+        CompareVPDBytesAction action{fru, interface, keyword, values};
         EXPECT_FALSE(action.execute(environment));
     }
 
     // Test where fails: Exception thrown when trying to get actual VPD value
     {
         std::string fru{"/xyz/openbmc_project/inventory/system"};
-        std::string keyword{"Model"};
+        std::string interface{"com.acme.vpd"};
+        std::string keyword{"HW"};
 
         MockServices services{};
         MockVPD& vpd = services.getMockVPD();
-        EXPECT_CALL(vpd, getValue(fru, ASSET_IFACE, keyword))
+        EXPECT_CALL(vpd, getValue(fru, interface, keyword))
             .Times(1)
             .WillOnce(
                 Throw(std::runtime_error{"D-Bus error: Invalid object path"}));
@@ -278,7 +286,7 @@ TEST(CompareVPDBytesActionTests, Execute)
         try
         {
             std::vector<uint8_t> values{0x41, 0x42};
-            CompareVPDBytesAction action{fru, keyword, values};
+            CompareVPDBytesAction action{fru, interface, keyword, values};
             action.execute(environment);
             ADD_FAILURE() << "Should not have reached this line.";
         }
@@ -286,7 +294,8 @@ TEST(CompareVPDBytesActionTests, Execute)
         {
             EXPECT_STREQ(e.what(), "ActionError: compare_vpd_bytes: { fru: "
                                    "/xyz/openbmc_project/inventory/system, "
-                                   "keyword: Model, values: [ 0x41, 0x42 ], "
+                                   "interface: com.acme.vpd, "
+                                   "keyword: HW, values: [ 0x41, 0x42 ], "
                                    "masks: [ 0xFF, 0xFF ] }");
             try
             {
@@ -314,18 +323,27 @@ TEST(CompareVPDBytesActionTests, GetFRU)
 {
     std::vector<uint8_t> values{0x32, 0x44, 0x33, 0x35};
     CompareVPDBytesAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        values};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        ASSET_IFACE, "CCIN", values};
     EXPECT_EQ(action.getFRU(),
               "/xyz/openbmc_project/inventory/system/chassis/disk_backplane");
+}
+
+TEST(CompareVPDBytesActionTests, GetInterface)
+{
+    std::vector<uint8_t> values{0x32, 0x44, 0x33, 0x35};
+    CompareVPDBytesAction action{
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "com.acme.vpd", "CCIN", values};
+    EXPECT_EQ(action.getInterface(), "com.acme.vpd");
 }
 
 TEST(CompareVPDBytesActionTests, GetKeyword)
 {
     std::vector<uint8_t> values{0x32, 0x44, 0x33, 0x35};
     CompareVPDBytesAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        values};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        ASSET_IFACE, "CCIN", values};
     EXPECT_EQ(action.getKeyword(), "CCIN");
 }
 
@@ -334,8 +352,8 @@ TEST(CompareVPDBytesActionTests, GetValues)
     std::vector<uint8_t> values{0x56, 0x14};
     std::vector<uint8_t> masks{0x7E, 0x3C};
     CompareVPDBytesAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        values, masks};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        ASSET_IFACE, "CCIN", values, masks};
     EXPECT_EQ(action.getValues().size(), 2);
     EXPECT_EQ(action.getValues()[0], 0x56);
     EXPECT_EQ(action.getValues()[1], 0x14);
@@ -348,7 +366,7 @@ TEST(CompareVPDBytesActionTests, GetMasks)
         std::vector<uint8_t> values{0x56, 0x14, 0xDA};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values};
+            ASSET_IFACE, "CCIN", values};
         EXPECT_EQ(action.getMasks().size(), 3);
         EXPECT_EQ(action.getMasks()[0], 0xFF);
         EXPECT_EQ(action.getMasks()[1], 0xFF);
@@ -361,7 +379,7 @@ TEST(CompareVPDBytesActionTests, GetMasks)
         std::vector<uint8_t> masks{0x7E, 0x3C};
         CompareVPDBytesAction action{
             "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
-            "CCIN", values, masks};
+            ASSET_IFACE, "CCIN", values, masks};
         EXPECT_EQ(action.getMasks().size(), 2);
         EXPECT_EQ(action.getMasks()[0], 0x7E);
         EXPECT_EQ(action.getMasks()[1], 0x3C);
@@ -373,11 +391,12 @@ TEST(CompareVPDBytesActionTests, ToString)
     std::vector<uint8_t> values{0x56, 0x14};
     std::vector<uint8_t> masks{0x7E, 0x3C};
     CompareVPDBytesAction action{
-        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane", "CCIN",
-        values, masks};
+        "/xyz/openbmc_project/inventory/system/chassis/disk_backplane",
+        "com.acme.vpd", "HW", values, masks};
     EXPECT_EQ(action.toString(),
               "compare_vpd_bytes: { fru: "
               "/xyz/openbmc_project/inventory/system/"
-              "chassis/disk_backplane, keyword: CCIN, "
+              "chassis/disk_backplane, interface: com.acme.vpd, "
+              "keyword: HW, "
               "values: [ 0x56, 0x14 ], masks: [ 0x7E, 0x3C ] }");
 }

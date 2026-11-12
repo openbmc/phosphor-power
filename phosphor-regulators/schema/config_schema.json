@@ -171,6 +171,7 @@
             "type": "object",
             "properties": {
                 "fru": { "$ref": "#/definitions/inventory_path" },
+                "interface": { "$ref": "#/definitions/dbus_interface" },
                 "keyword": { "$ref": "#/definitions/keyword" },
                 "values": { "$ref": "#/definitions/byte_values_min0" },
                 "masks": { "$ref": "#/definitions/byte_masks" }
