@@ -958,6 +958,8 @@ TEST(ValidateRegulatorsConfigTest, CompareVpdByte)
     compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]["fru"] =
         "system/chassis/motherboard";
     compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]
+                      ["interface"] = "com.acme.vpd";
+    compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]
                       ["keyword"] = "CCIN";
     compareVpdByteFile["rules"][0]["actions"][1]["compare_vpd_byte"]
                       ["position"] = 0;
@@ -972,9 +974,11 @@ TEST(ValidateRegulatorsConfigTest, CompareVpdByte)
         EXPECT_JSON_VALID(configFile);
     }
 
-    // Valid: required properties only (mask omitted).
+    // Valid: required properties only
     {
         json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase(
+            "interface");
         configFile["rules"][0]["actions"][1]["compare_vpd_byte"].erase("mask");
         EXPECT_JSON_VALID(configFile);
     }
@@ -1028,6 +1032,22 @@ TEST(ValidateRegulatorsConfigTest, CompareVpdByte)
     {
         json configFile = compareVpdByteFile;
         configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["fru"] = "";
+        EXPECT_JSON_INVALID(configFile, "'' is too short");
+    }
+
+    // Invalid: property interface wrong type.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["interface"] =
+            1;
+        EXPECT_JSON_INVALID(configFile, "1 is not of type 'string'");
+    }
+
+    // Invalid: property interface is empty string.
+    {
+        json configFile = compareVpdByteFile;
+        configFile["rules"][0]["actions"][1]["compare_vpd_byte"]["interface"] =
+            "";
         EXPECT_JSON_INVALID(configFile, "'' is too short");
     }
 

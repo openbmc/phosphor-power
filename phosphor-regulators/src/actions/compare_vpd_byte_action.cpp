@@ -17,7 +17,6 @@
 #include "compare_vpd_byte_action.hpp"
 
 #include "action_error.hpp"
-#include "types.hpp"
 
 #include <exception>
 #include <ios>
@@ -34,7 +33,7 @@ bool CompareVPDByteAction::execute(ActionEnvironment& environment)
     {
         // Get actual VPD keyword byte values
         std::vector<uint8_t> actualValues =
-            environment.getServices().getVPD().getValue(fru, ASSET_IFACE,
+            environment.getServices().getVPD().getValue(fru, interface,
                                                         keyword);
 
         // Position must be within actual byte values
@@ -61,6 +60,7 @@ std::string CompareVPDByteAction::toString() const
     std::ostringstream ss;
     ss << "compare_vpd_byte: { ";
     ss << "fru: " << fru << ", ";
+    ss << "interface: " << interface << ", ";
     ss << "keyword: " << keyword << ", ";
     ss << "position: " << position << ", ";
     ss << "value: 0x" << std::hex << std::uppercase

@@ -48,6 +48,7 @@ class CompareVPDByteAction : public Action
      *
      * @param fru Field-Replaceable Unit (FRU). Specify the D-Bus inventory path
      *            of the FRU.
+     * @param interface D-Bus interface that provides the VPD keyword.
      * @param keyword VPD keyword.
      * @param position Zero-based byte position within the VPD keyword value.
      *                 Position 0 is the first byte.
@@ -58,9 +59,11 @@ class CompareVPDByteAction : public Action
      *             that all bits will be compared.
      */
     explicit CompareVPDByteAction(
-        const std::string& fru, const std::string& keyword,
-        unsigned int position, uint8_t value, uint8_t mask = 0xFF) :
-        fru{fru}, keyword{keyword}, position{position}, value{value}, mask{mask}
+        const std::string& fru, const std::string& interface,
+        const std::string& keyword, unsigned int position, uint8_t value,
+        uint8_t mask = 0xFF) :
+        fru{fru}, interface{interface}, keyword{keyword}, position{position},
+        value{value}, mask{mask}
     {}
 
     /**
@@ -88,6 +91,16 @@ class CompareVPDByteAction : public Action
     const std::string& getFRU() const
     {
         return fru;
+    }
+
+    /**
+     * Returns the D-Bus interface that provides the VPD keyword.
+     *
+     * @return interface
+     */
+    const std::string& getInterface() const
+    {
+        return interface;
     }
 
     /**
@@ -147,6 +160,11 @@ class CompareVPDByteAction : public Action
      * The D-Bus inventory path of the FRU.
      */
     const std::string fru{};
+
+    /**
+     * D-Bus interface that provides the VPD keyword.
+     */
+    const std::string interface{};
 
     /**
      * VPD keyword.

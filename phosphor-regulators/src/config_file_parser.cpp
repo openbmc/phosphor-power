@@ -468,6 +468,15 @@ std::unique_ptr<CompareVPDByteAction> parseCompareVPDByte(
     std::string fru = parseInventoryPath(fruElement, variables);
     ++propertyCount;
 
+    // Optional interface property
+    std::string interface{ASSET_IFACE};
+    auto interfaceIt = element.find("interface");
+    if (interfaceIt != element.end())
+    {
+        interface = parseString(*interfaceIt, false, variables);
+        ++propertyCount;
+    }
+
     // Required keyword property
     const json& keywordElement = getRequiredProperty(element, "keyword");
     std::string keyword = parseString(keywordElement, false, variables);
@@ -495,8 +504,8 @@ std::unique_ptr<CompareVPDByteAction> parseCompareVPDByte(
     // Verify no invalid properties exist
     verifyPropertyCount(element, propertyCount);
 
-    return std::make_unique<CompareVPDByteAction>(fru, keyword, position, value,
-                                                  mask);
+    return std::make_unique<CompareVPDByteAction>(fru, interface, keyword,
+                                                  position, value, mask);
 }
 
 std::unique_ptr<CompareVPDBytesAction> parseCompareVPDBytes(
