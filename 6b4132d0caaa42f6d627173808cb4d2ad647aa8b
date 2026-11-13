@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816286a8_d951adc8",
+        "filename": "phosphor-chassis-power/config_files/Huygens.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "Are the other GPIOs that don\u0027t have a DevicePath property on a different device, or do you just not log errors for them?",
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46bdef10_d4dd3529",
+        "filename": "phosphor-chassis-power/docs/config_file/gpio.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "Since this is an example, you should probably put in actual values here. You could precede the example with a comment, if necessary, stating the device is at bus 8, address 0x38 (7-bit) or whatever.",
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd7884ff_0056e65b",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "Note: In the PEL documentation, it states that you also need to specify the errno from the failed write.\n\nhttps://github.com/openbmc/phosphor-logging/blob/master/extensions/openpower-pels/README.md#passing-callouts-in-with-the-additionaldata-property\n\nI\u0027m not sure if that is always the case. I remember you discussing in your case you might put the device path to a related MUX, so I\u0027m not sure any errno from that would be relevant? I\u0027d suggest asking @spinler@us.ibm.com.",
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb5dd5c_0f470f95",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "Nit: Your other comments start with a capital letter. Also, I think you are missing a word after regardless?",
+      "range": {
+        "startLine": 492,
+        "startChar": 15,
+        "endLine": 492,
+        "endChar": 16
+      },
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa440513_d2e8b6cd",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "nit: Spelling",
+      "range": {
+        "startLine": 493,
+        "startChar": 18,
+        "endLine": 493,
+        "endChar": 31
+      },
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b0ba05c_1542cc94",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "I think you can leave this sentence out. I\u0027d suggest keeping the parser/config file separate from the classes that it produces. In the future we might get data from EntityManager instead, or some other source.\n\nAlso, it might be used for other reasons (besides callouts) in the future.",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 75
+      },
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bb33e02_416f3d0b",
+        "filename": "phosphor-chassis-power/src/gpio.hpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T21:48:41Z",
+      "side": 1,
+      "message": "I would leave this off too for the same reason. Keep classes independent of each other.",
+      "range": {
+        "startLine": 161,
+        "startChar": 59,
+        "endLine": 161,
+        "endChar": 78
+      },
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    }
+  ]
+}
