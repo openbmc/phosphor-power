@@ -441,6 +441,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d22311f_6795a08e",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T20:59:35Z",
+      "side": 1,
+      "message": "I think renaming it would be good if it needs to be called every time the app starts. Usually methods like initializeXYZ() are called when an app starts, but I don\u0027t have a strong opinion.",
+      "parentUuid": "01fbfb80_6e001a8c",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4cb9472_649287a4",
         "filename": "phosphor-chassis-power/src/manager.hpp",
         "patchSetId": 24
@@ -505,6 +523,23 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "fa452d85_c016bb74",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa680366_7cac77f8",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T20:59:35Z",
+      "side": 1,
+      "message": "Did you mean to remove this? Seems like you need doxygen for this parameter.",
       "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
@@ -622,6 +657,24 @@
       "side": 1,
       "message": "Brendan updated all the other temp paths usages, but left this one with the delete below to do test case on GPIO present but path not present test case.",
       "parentUuid": "060558f9_8cd611a0",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc4a88c_eee0cce2",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-13T20:59:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d151a145_34a47a62",
       "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
