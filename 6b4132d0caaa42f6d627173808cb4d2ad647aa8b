@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "928e0b62_4f6ac84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000318
+      },
+      "writtenOn": "2026-11-16T16:15:59Z",
+      "side": 1,
+      "message": "Looks like the gpios are on the mcu on bus 9, not 8",
+      "revId": "6b4132d0caaa42f6d627173808cb4d2ad647aa8b",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "816286a8_d951adc8",
