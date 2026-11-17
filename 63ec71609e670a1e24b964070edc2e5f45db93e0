@@ -16,6 +16,24 @@
       "message": "Did you mean to leave these TEST CASE comments in?",
       "revId": "63ec71609e670a1e24b964070edc2e5f45db93e0",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3adf0a8f_9bf90b48",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-17T20:47:04Z",
+      "side": 1,
+      "message": "Yes I did, talked to Brendan and this helps to know where it is being tested.",
+      "parentUuid": "b0d1a3aa_6fabe19d",
+      "revId": "63ec71609e670a1e24b964070edc2e5f45db93e0",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }

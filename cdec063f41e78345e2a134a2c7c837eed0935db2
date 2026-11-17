@@ -182,6 +182,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd29dd16_ff1823d4",
+        "filename": "phosphor-chassis-power/src/chassis.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-17T20:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e8b1753_680632db",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1704662_2fb9eb42",
@@ -457,6 +475,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "355aa6f3_552cc7f3",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-17T20:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d22311f_6795a08e",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4cb9472_649287a4",
@@ -540,6 +576,24 @@
       "writtenOn": "2026-11-13T20:59:35Z",
       "side": 1,
       "message": "Did you mean to remove this? Seems like you need doxygen for this parameter.",
+      "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e50da99f_ac41198c",
+        "filename": "phosphor-chassis-power/test/chassis_tests.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001035
+      },
+      "writtenOn": "2026-11-17T20:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa680366_7cac77f8",
       "revId": "cdec063f41e78345e2a134a2c7c837eed0935db2",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
