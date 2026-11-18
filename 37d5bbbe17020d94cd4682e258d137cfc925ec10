@@ -88,6 +88,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4f275f_d5d6c1e5",
+        "filename": "phosphor-chassis-power/src/manager.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000331
+      },
+      "writtenOn": "2026-11-18T17:09:54Z",
+      "side": 1,
+      "message": "Sorry, my comment was on line 210 not line 207. You changed the method name since it applies to app restart too and not just BMC reset. So the comment probably shouldn\u0027t state for BMC reset.",
+      "parentUuid": "dded8111_b2f0fdae",
+      "revId": "37d5bbbe17020d94cd4682e258d137cfc925ec10",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a91195fd_8a80dd9e",
