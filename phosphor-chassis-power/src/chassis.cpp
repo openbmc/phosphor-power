@@ -252,10 +252,15 @@ void Chassis::monitor()
             {
                 try
                 {
-                    gpioValueChanged(*gpio, faultLatchedValue);
+                    changed = gpioValueChanged(*gpio, faultLatchedValue);
                 }
                 catch (...)
                 {}
+                if (presenceValue && changed && faultLatchedValue == 1)
+                {
+                    lg2::info("Chassis {CHASSIS} latched fault detected",
+                              "CHASSIS", number);
+                }
                 if (checkLatchedFaultPending)
                 {
                     checkLatchedFault();
@@ -329,7 +334,7 @@ bool Chassis::handleLatchedFault()
         return true;
     }
 
-    return (writeGPIO(*gpio, 1) && writeAndReleaseGPIO(*gpio, 0));
+    return (writeGPIO(*gpio, 1));
 }
 
 bool Chassis::writeAndReleaseGPIO(Gpio& gpio, int value)
@@ -713,6 +718,12 @@ void Chassis::handlePowerStateChange(bool powerOn)
             writeGpioByName("fault-reset", 0);
         }
     }
+    else
+    {
+        // Chassis turned off
+        writeGpioByName("reset-enable", 0);
+        writeGpioByName("fault-reset", 1);
+    }
 
     previousPowerState = powerOn;
 }
@@ -777,9 +788,7 @@ void Chassis::handlePresenceChange(bool readFailure)
 
         if (!newPresence && presenceValue && isSystemPoweredOn())
         {
-            // TEST CASE:
             // GPIO off and Presence Path not specified, system on
-            //
             std::map<std::string, std::string> data;
             data["CHASSIS_NUMBER"] = std::to_string(number);
 
@@ -805,10 +814,6 @@ void Chassis::handlePresenceChange(bool readFailure)
 
         if (presenceValue && isSystemPoweredOn())
         {
-            // TEST CASE:
-            // GPIO off and Presence path missing, system on — both defined and
-            // false, PEL logged
-            //
             // Only log error if system is on and chassis was present,
             // to avoid flooding the error log on a powered-off system.
             std::map<std::string, std::string> data;
@@ -836,8 +841,6 @@ void Chassis::handlePresenceChange(bool readFailure)
     {
         if (isSystemPoweredOn())
         {
-            // GPIO off, Presence path exists, system on
-            //
             // Log error if system is on regardless if chassis was present,
             // as mismatching values means an error
 
@@ -869,13 +872,6 @@ void Chassis::handlePresenceChange(bool readFailure)
         newPresence = presencePathValue.value();
         if (!presencePathValue.value() && presenceValue && isSystemPoweredOn())
         {
-            // TEST CASE:
-            // No GPIO configured, presence path absent, system on — chassis
-            // absent log PEL
-            //
-            // No GPIO configured, presence path disappears while system is on —
-            // chassis becomes absent and PEL logged
-            //
             // Only log error if system is on and chassis was present
 
             std::map<std::string, std::string> data;
