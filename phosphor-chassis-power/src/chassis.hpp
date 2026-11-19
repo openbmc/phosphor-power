@@ -554,7 +554,7 @@ class Chassis
      * D-Bus match object for monitoring power state changes.
      * Subscribes to PropertiesChanged signals on the power interface.
      */
-    std::unique_ptr<sdbusplus::bus::match_t> powerStateMatch{};
+    std::unique_ptr<sdbusplus::match> powerStateMatch{};
 };
 
 } // namespace phosphor::power::chassis

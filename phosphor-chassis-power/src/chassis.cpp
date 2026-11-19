@@ -134,10 +134,10 @@ bool Chassis::initChassisPowerCallback(sdbusplus::bus_t& bus)
         // Set up D-Bus subscription for power state changes
         auto chassisPowerPath = std::format(CHASSIS_POWER_PATH, number);
 
-        auto matchRule = sdbusplus::bus::match::rules::propertiesChanged(
+        auto matchRule = sdbusplus::match_rules::propertiesChanged(
             chassisPowerPath, POWER_IFACE);
 
-        powerStateMatch = std::make_unique<sdbusplus::bus::match_t>(
+        powerStateMatch = std::make_unique<sdbusplus::match>(
             bus, matchRule, [this](sdbusplus::message_t& msg) {
                 this->powerStateChangeCallback(msg);
             });
