@@ -33,6 +33,24 @@
       "message": "The next three methods show as new additions. Did you add them, or the rebase added them and diff is confused, or ?",
       "revId": "46547dd1027c634dc50f21c77367297e38f1d54f",
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "535fe979_8fed0126",
+        "filename": "phosphor-chassis-power/src/chassis.hpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1002833
+      },
+      "writtenOn": "2026-11-19T17:20:49Z",
+      "side": 1,
+      "message": "The rebase added them, the diff formatting seems to be really odd in-between the patch sets with the rebases, however when I compare to base they look correct.",
+      "parentUuid": "861650b3_ececd9ef",
+      "revId": "46547dd1027c634dc50f21c77367297e38f1d54f",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     }
   ]
 }
