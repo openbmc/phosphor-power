@@ -2249,6 +2249,10 @@ TEST_F(ChassisTests, initializeChassisGpios)
         MockServices services{};
         Chassis chassis = buildChassis(services);
 
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
+
         expectPresenceGpioRepeated(chassis, 0, 0);
         expectResetEnableRepeated(chassis, 0);
 
@@ -2561,10 +2565,14 @@ TEST_F(ChassisTests, handlePowerStateChange)
 
 TEST_F(ChassisTests, handleSystemPoweredOff)
 {
-    // Standard power off.
+    // System available: GPIOs are written on power off.
     {
         MockServices services{};
         Chassis chassis = buildChassis(services);
+
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(true));
 
         // Present
         expectPresenceGpioRepeated(chassis, 1, 0);
@@ -2572,6 +2580,21 @@ TEST_F(ChassisTests, handleSystemPoweredOff)
 
         expectResetEnable(chassis, 0);
         expectFaultReset(chassis, 1);
+
+        chassis.handleSystemPoweredOff();
+    }
+
+    // System not available: GPIO writes are skipped on power off.
+    {
+        MockServices services{};
+        Chassis chassis = buildChassis(services);
+
+        EXPECT_CALL(*createMockChassisStatusMonitor(services, chassis),
+                    isAvailable())
+            .WillRepeatedly(testing::Return(false));
+
+        unExpectResetEnable(chassis);
+        unExpectFaultReset(chassis);
 
         chassis.handleSystemPoweredOff();
     }
