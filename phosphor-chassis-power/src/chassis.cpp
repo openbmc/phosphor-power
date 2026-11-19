@@ -344,34 +344,37 @@ bool Chassis::writeAndReleaseGPIO(Gpio& gpio, int value)
 
 bool Chassis::writeGPIO(Gpio& gpio, int value)
 {
-    if (!gpio.foundLine())
+    if (isSystemAvailable())
     {
-        if (!gpio.findLine())
+        if (!gpio.foundLine())
         {
-            return false;
+            if (!gpio.findLine())
+            {
+                return false;
+            }
         }
-    }
 
-    if (gpio.requestWrite(value))
-    {
-        try
+        if (gpio.requestWrite(value))
         {
-            gpio.setValue(value);
-            return true;
+            try
+            {
+                gpio.setValue(value);
+                return true;
+            }
+            catch (...)
+            {
+                if (gpio.hasReachedReadWriteThreshold())
+                {
+                    logGPIOWriteFailure(gpio);
+                }
+            }
         }
-        catch (...)
+        else
         {
-            if (gpio.hasReachedReadWriteThreshold())
+            if (gpio.hasReachedRequestThreshold())
             {
                 logGPIOWriteFailure(gpio);
             }
-        }
-    }
-    else
-    {
-        if (gpio.hasReachedRequestThreshold())
-        {
-            logGPIOWriteFailure(gpio);
         }
     }
 
