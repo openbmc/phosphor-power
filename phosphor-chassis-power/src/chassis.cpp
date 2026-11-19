@@ -228,10 +228,15 @@ void Chassis::monitor()
             {
                 try
                 {
-                    gpioValueChanged(*gpio, faultLatchedValue);
+                    changed = gpioValueChanged(*gpio, faultLatchedValue);
                 }
                 catch (...)
                 {}
+                if (changed && faultLatchedValue == 1)
+                {
+                    lg2::info("Chassis {CHASSIS} latched fault detected",
+                              "CHASSIS", number);
+                }
                 if (checkLatchedFaultPending)
                 {
                     checkLatchedFault();
@@ -306,7 +311,7 @@ bool Chassis::handleLatchedFault()
         return true;
     }
 
-    return (writeGPIO(*gpio, 1) && writeAndReleaseGPIO(*gpio, 0));
+    return (writeGPIO(*gpio, 1));
 }
 
 bool Chassis::writeAndReleaseGPIO(Gpio& gpio, int value)
@@ -650,6 +655,12 @@ void Chassis::handlePowerStateChange(bool powerOn)
             writeGpioByName("reset-enable", 1);
             writeGpioByName("fault-reset", 0);
         }
+    }
+    else
+    {
+        // Chassis turned off
+        writeGpioByName("reset-enable", 0);
+        writeGpioByName("fault-reset", 1);
     }
 
     previousPowerState = powerOn;

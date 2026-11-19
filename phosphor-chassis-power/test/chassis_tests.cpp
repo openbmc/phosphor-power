@@ -1876,15 +1876,13 @@ TEST_F(ChassisTests, CheckLatchedFault)
         chassis.monitor();
         ASSERT_EQ(chassis.getFaultLatchedValue(), 1);
 
+        // fault-reset is driven high and left asserted, not cleared/released
         EXPECT_CALL(getMockGpio(chassis, 1), foundLine())
             .WillRepeatedly(testing::Return(true));
         EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(1))
             .WillOnce(testing::Return(true));
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
-            .WillOnce(testing::Return(true));
-        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0)).Times(0);
         EXPECT_CALL(
             services,
             logError(
@@ -1961,10 +1959,8 @@ TEST_F(ChassisTests, HandleLatchedFault)
             .WillOnce(testing::Return(false))
             .WillOnce(testing::Return(true));
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
-            .WillOnce(testing::Return(true));
-        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0)).Times(0);
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
         EXPECT_CALL(
             services,
             logError(
@@ -2002,10 +1998,8 @@ TEST_F(ChassisTests, HandleLatchedFault)
         EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(1))
             .WillOnce(testing::Return(true));
         EXPECT_CALL(getMockGpio(chassis, 1), setValue(1)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0))
-            .WillOnce(testing::Return(true));
-        EXPECT_CALL(getMockGpio(chassis, 1), setValue(0)).Times(1);
-        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(1);
+        EXPECT_CALL(getMockGpio(chassis, 1), requestWrite(0)).Times(0);
+        EXPECT_CALL(getMockGpio(chassis, 1), release()).Times(0);
         EXPECT_CALL(
             services,
             logError(
@@ -2337,6 +2331,21 @@ TEST_F(ChassisTests, handlePowerStateChange)
         // Validate PowerSystemInputs D-Bus interface set:
         EXPECT_EQ(chassis.getPowerSystemInputsInterface()->status(),
                   PowerSystemInputs::Status::Fault);
+    }
+
+    // Present - Power Off: reset latching disabled, fault-reset held high
+    {
+        MockServices services{};
+        Chassis chassis = buildChassis(services);
+
+        expectPresenceGpioRepeated(chassis, 1, 0);
+        chassis.initializePresence();
+
+        expectResetEnable(chassis, 0);
+        expectFaultReset(chassis, 1);
+        EXPECT_CALL(services, logError).Times(0);
+
+        chassis.handlePowerStateChange(false);
     }
 }
 
