@@ -35,6 +35,24 @@
       "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71c5681_b4cdd9d0",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-11-20T20:20:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "22867a21_8a61007b",
+      "revId": "1414219d5dff3326d9c3a68d110581438430ded8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "609ff374_80c9272f",
@@ -48,6 +66,30 @@
       "writtenOn": "2026-11-12T16:35:38Z",
       "side": 1,
       "message": "It is not supported in gmock to do the following:\n* Set some expectations with EXPECT_CALL statements\n* Call some of the production code\n* Set more/new expectations with more EXPECT_CALL statements\n* Call more production code.\n\nIt may work right now, but it could stop working next time we move to a new version of gmock.\n\nYou should do all your EXPECT_CALL statements before calling any production code that exercises those mocks.",
+      "range": {
+        "startLine": 414,
+        "startChar": 9,
+        "endLine": 414,
+        "endChar": 10
+      },
+      "revId": "1414219d5dff3326d9c3a68d110581438430ded8",
+      "serverId": "adbd0a64-1f21-4d83-b585-671fe73cb6e4"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ee7f1b_a8a1a1d8",
+        "filename": "phosphor-power-supply/test/power_supply_tests.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1001630
+      },
+      "writtenOn": "2026-11-20T20:20:19Z",
+      "side": 1,
+      "message": "Will modify the code ensuring all EXPECT_CALL statements are declared prior to invoking any production code that exercises those mocks",
+      "parentUuid": "609ff374_80c9272f",
       "range": {
         "startLine": 414,
         "startChar": 9,
